@@ -1,0 +1,54 @@
+# WordPress defaults
+.DS_Store
+*.log
+wp-config.php
+wp-content/uploads/
+
+# IDE / Editor
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+.settings/
+.project
+.classpath
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Dependency directories
+/node_modules/
+/vendor/
+
+# Lock files (optional: commit these if you want reproducible builds, ignore if library)
+# package-lock.json
+# composer.lock
+
+# Build / Temp
+_temp/
+/dist/
+*.zip
+*.tar.gz
+*.bak
+*.tmp
+
+# SASS / CSS
+.sass-cache/
+*.css.map
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Plugin specific
+migrate.php
+.claude/

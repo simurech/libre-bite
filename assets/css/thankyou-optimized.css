@@ -1,0 +1,334 @@
+/**
+ * Open Order System - Optimierte Bestätigungsseite
+ *
+ * CSS-Variablen für Theme-Anpassung:
+ * --lb-color-primary: Hauptfarbe (Standard: #0073aa)
+ * --lb-color-secondary: Sekundärfarbe (Standard: #23282d)
+ * --lb-color-accent: Akzentfarbe für Erfolg (Standard: #00a32a)
+ * --lb-color-background: Hintergrund (Standard: #f8f9fa)
+ * --lb-color-border: Rahmenfarbe (Standard: #e0e0e0)
+ * --lb-border-radius: Eckenradius (Standard: 8px)
+ *
+ * @package OpenOrderSystem
+ */
+
+/* WooCommerce Standard-Elemente ausblenden */
+.woocommerce-order-received .woocommerce-notice,
+.woocommerce-order-received .woocommerce-thankyou-order-received,
+.woocommerce-order-received > p:first-of-type,
+.woocommerce-order-details,
+.woocommerce-customer-details,
+.woocommerce-order-overview,
+.woocommerce-thankyou-order-details,
+.woocommerce-table--order-details,
+.wc-block-order-confirmation-summary,
+.wc-block-order-confirmation-totals,
+.wc-block-order-confirmation-downloads,
+.wc-block-order-confirmation-billing-address,
+.wc-block-order-confirmation-shipping-address,
+.wc-block-order-confirmation-additional-information,
+ul.woocommerce-order-overview,
+section.woocommerce-order-details,
+section.woocommerce-customer-details,
+.woocommerce-order-received .woocommerce > p {
+	display: none;
+}
+
+/* Main Container */
+.lb-thankyou-optimized {
+	max-width: 500px;
+	margin: 0 auto;
+	padding: 30px 20px;
+	text-align: center;
+}
+
+.lb-thankyou-optimized * {
+	box-sizing: border-box;
+}
+
+/* Logo */
+.lb-thankyou-logo {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.lb-thankyou-logo img {
+	max-width: 150px;
+	height: auto;
+	display: inline-block;
+}
+
+/* Success Section */
+.lb-thankyou-success {
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.lb-thankyou-icon-wrapper {
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+.lb-thankyou-icon-svg {
+	width: 60px;
+	height: 60px;
+	color: var(--lb-color-accent, #00a32a);
+	display: inline-block;
+}
+
+.lb-thankyou-success h1 {
+	margin: 0 0 10px 0;
+	font-size: 28px;
+	color: var(--lb-color-secondary, #23282d);
+	text-align: center;
+}
+
+.lb-thankyou-greeting {
+	font-size: 18px;
+	color: #666;
+	margin: 0;
+	text-align: center;
+}
+
+/* Pickup Number */
+.lb-thankyou-pickup-number {
+	background: var(--lb-color-primary, #0073aa);
+	color: #fff;
+	padding: 25px 30px;
+	border-radius: calc(var(--lb-border-radius, 8px) + 4px);
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.lb-pickup-label {
+	display: block;
+	font-size: 14px;
+	opacity: 0.9;
+	margin-bottom: 8px;
+}
+
+.lb-pickup-number {
+	display: block;
+	font-size: 52px;
+	font-weight: bold;
+	letter-spacing: 8px;
+	line-height: 1.2;
+}
+
+/* Details Section */
+.lb-thankyou-details {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	margin-bottom: 30px;
+}
+
+.lb-thankyou-detail {
+	display: flex;
+	align-items: flex-start;
+	gap: 15px;
+	text-align: left;
+	padding: 15px 20px;
+	background: var(--lb-color-background, #f8f9fa);
+	border-radius: var(--lb-border-radius, 8px);
+}
+
+.lb-detail-icon-svg {
+	width: 24px;
+	height: 24px;
+	color: var(--lb-color-primary, #0073aa);
+	flex-shrink: 0;
+	margin-top: 2px;
+}
+
+.lb-detail-content {
+	flex: 1;
+}
+
+.lb-detail-label {
+	display: block;
+	font-size: 11px;
+	color: #888;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-bottom: 2px;
+}
+
+.lb-detail-value {
+	display: block;
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--lb-color-secondary, #23282d);
+}
+
+.lb-detail-sub {
+	display: block;
+	font-size: 14px;
+	color: #666;
+	margin-top: 3px;
+}
+
+/* Google Maps Link */
+a.lb-maps-link {
+	color: var(--lb-color-primary, #0073aa);
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+a.lb-maps-link:hover {
+	text-decoration: underline;
+}
+
+.lb-external-link-icon {
+	width: 12px;
+	height: 12px;
+	flex-shrink: 0;
+}
+
+/* Order Section */
+.lb-thankyou-order {
+	text-align: left;
+	margin-bottom: 30px;
+	padding: 20px;
+	background: #fff;
+	border: 1px solid var(--lb-color-border, #e0e0e0);
+	border-radius: var(--lb-border-radius, 8px);
+}
+
+.lb-thankyou-order h3 {
+	margin: 0 0 15px 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--lb-color-secondary, #23282d);
+	text-align: left;
+}
+
+.lb-order-items {
+	width: 100%;
+	border-collapse: collapse;
+	border: none;
+}
+
+.lb-order-items tbody tr {
+	border-bottom: 1px solid var(--lb-color-border, #e0e0e0);
+}
+
+.lb-order-items tbody tr:last-child {
+	border-bottom: 1px solid var(--lb-color-border, #e0e0e0);
+}
+
+.lb-order-items td {
+	padding: 12px 8px;
+	vertical-align: top;
+	border: none;
+}
+
+.lb-item-qty {
+	width: 35px;
+	color: #888;
+	font-weight: 500;
+	text-align: left;
+}
+
+.lb-item-name {
+	text-align: left;
+	color: var(--lb-color-secondary, #23282d);
+}
+
+.lb-item-meta {
+	display: block;
+	font-size: 12px;
+	color: #888;
+	margin-top: 4px;
+	font-style: italic;
+}
+
+.lb-item-total {
+	text-align: right;
+	white-space: nowrap;
+	font-weight: 500;
+	color: var(--lb-color-secondary, #23282d);
+}
+
+.lb-order-items tfoot tr {
+	border: none;
+}
+
+.lb-order-items tfoot td {
+	padding: 8px;
+	border: none;
+}
+
+.lb-subtotal-row td {
+	color: #666;
+	font-size: 14px;
+	padding-top: 12px;
+}
+
+.lb-subtotal-row td:last-child {
+	text-align: right;
+}
+
+.lb-fee-row td,
+.lb-coupon-row td,
+.lb-shipping-row td,
+.lb-tax-row td {
+	color: #666;
+	font-size: 14px;
+}
+
+.lb-fee-row td:last-child,
+.lb-coupon-row td:last-child,
+.lb-shipping-row td:last-child,
+.lb-tax-row td:last-child {
+	text-align: right;
+}
+
+.lb-coupon-row td:last-child {
+	color: var(--lb-color-accent, #00a32a);
+}
+
+.lb-total-row td {
+	font-size: 18px;
+	padding-top: 12px;
+	border-top: 2px solid var(--lb-color-secondary, #23282d);
+}
+
+.lb-total-row td:first-child {
+	text-align: left;
+}
+
+.lb-total-row td:last-child {
+	text-align: right;
+}
+
+/* Footer */
+.lb-thankyou-footer {
+	padding-top: 20px;
+	border-top: 1px solid var(--lb-color-border, #e0e0e0);
+	color: #888;
+	font-size: 14px;
+	text-align: center;
+}
+
+.lb-thankyou-footer p {
+	margin: 5px 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+	.lb-thankyou-optimized {
+		padding: 20px 15px;
+	}
+
+	.lb-pickup-number {
+		font-size: 40px;
+		letter-spacing: 5px;
+	}
+
+	.lb-thankyou-success h1 {
+		font-size: 24px;
+	}
+}
