@@ -1,5 +1,4 @@
 # WordPress defaults
-.DS_Store
 *.log
 wp-config.php
 wp-content/uploads/
@@ -51,4 +50,20 @@ yarn-error.log*
 
 # Plugin specific
 migrate.php
+
+# Internal Docs
+MASSNAHMENPLAN.md
+
+# Lokale Hilfs- und Konfigdateien
 .claude/
+.aider*
+.cursor/
+.cursor-rules/
+.chatgpt/
+.openai/
+.anthropic/
+.deepseek/
+.codeium/
+.windsurf/
+.cursor-tasks/
+.llm-cache/
