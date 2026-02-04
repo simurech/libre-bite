@@ -16,6 +16,40 @@
  * WC tested up to: 9.0
  */
 
+if ( ! function_exists( 'lb_freemius' ) ) {
+	// Create a helper function for easy SDK access.
+	function lb_freemius() {
+		global $lb_freemius;
+
+		if ( ! isset( $lb_freemius ) ) {
+			// Include Freemius SDK.
+			require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
+
+			$lb_freemius = fs_dynamic_init( array(
+				'id'             => '23812',
+				'slug'           => 'librebite',
+				'type'           => 'plugin',
+				'public_key'     => 'pk_ce29dda57055eecde2de784d17506',
+				'is_premium'     => false,
+				'has_addons'     => false,
+				'has_paid_plans' => false,
+				'menu'           => array(
+					'slug'       => 'libre-bite',	
+					'contact' 	=> false,
+					'support'	=> false,
+				),
+			) );
+		}
+
+		return $lb_freemius;
+	}
+
+	// Init Freemius.
+	lb_freemius();
+	// Signal that SDK was initiated.
+	do_action( 'lb_freemius_loaded' );
+}
+
 // Direkten Zugriff verhindern
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

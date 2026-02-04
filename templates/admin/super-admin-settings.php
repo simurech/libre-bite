@@ -208,7 +208,7 @@ $feature_groups = array(
 										<label for="<?php echo esc_attr( $feature_key ); ?>">
 											<?php echo esc_html( $feature['label'] ); ?>
 											<?php if ( $is_premium ) : ?>
-												<span class="lb-premium-badge" title="<?php esc_attr_e( 'Premium-Feature (geplant)', 'libre-bite' ); ?>">Premium</span>
+												<span class="lb-premium-badge" title="<?php esc_attr_e( 'Premium-Feature', 'libre-bite' ); ?>">Premium</span>
 											<?php endif; ?>
 										</label>
 									</th>
@@ -236,6 +236,18 @@ $feature_groups = array(
 			<span class="lb-save-status"></span>
 		</p>
 	</form>
+
+	<div class="lb-developer-info" style="margin-top: 40px; padding: 20px; background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #72aee6; border-radius: 4px;">
+		<h3><?php esc_html_e( 'Entwickler-Informationen', 'libre-bite' ); ?></h3>
+		<p>
+			<?php esc_html_e( 'Einige Funktionen sind als Premium markiert. Diese erfordern normalerweise ein aktives Freemius-Abonnement.', 'libre-bite' ); ?>
+		</p>
+		<p>
+			<strong><?php esc_html_e( 'Pro-Modus erzwingen:', 'libre-bite' ); ?></strong><br>
+			<?php esc_html_e( 'Um alle Premium-Funktionen zu Testzwecken freizuschalten, fügen Sie folgende Zeile in Ihre', 'libre-bite' ); ?> <code>wp-config.php</code> <?php esc_html_e( 'ein:', 'libre-bite' ); ?><br>
+			<code>define( 'LB_PREMIUM_OVERRIDE', true );</code>
+		</p>
+	</div>
 </div>
 
 <style>

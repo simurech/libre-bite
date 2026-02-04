@@ -247,6 +247,31 @@ class LB_Features {
 		// Filter für externe Steuerung
 		$enabled = isset( $this->features[ $feature ] ) ? $this->features[ $feature ] : false;
 
+		// Wenn das Feature generell deaktiviert ist, direkt false zurückgeben
+		if ( ! $enabled ) {
+			return apply_filters( 'lb_feature_enabled', false, $feature );
+		}
+
+		// Premium-Check
+		$is_premium_feature = isset( self::$feature_definitions[ $feature ]['premium'] ) && self::$feature_definitions[ $feature ]['premium'];
+
+		if ( $is_premium_feature ) {
+			// 1. Check auf Entwickler-Override via Konstante
+			if ( defined( 'LB_PREMIUM_OVERRIDE' ) && LB_PREMIUM_OVERRIDE ) {
+				return apply_filters( 'lb_feature_enabled', true, $feature );
+			}
+
+			// 2. Check via Freemius SDK
+			if ( function_exists( 'lb_freemius' ) ) {
+				if ( ! lb_freemius()->is_premium() ) {
+					return apply_filters( 'lb_feature_enabled', false, $feature );
+				}
+			} else {
+				// Falls Freemius nicht geladen ist (Sicherheits-Fallback)
+				return apply_filters( 'lb_feature_enabled', false, $feature );
+			}
+		}
+
 		/**
 		 * Filter zum Überschreiben des Feature-Status
 		 *
