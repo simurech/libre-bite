@@ -204,4 +204,59 @@ class LB_Installer {
 			update_option( 'lb_version', LB_VERSION );
 		}
 	}
+
+	/**
+	 * Vollständige Daten-Bereinigung bei Deinstallation
+	 */
+	public static function uninstall_cleanup() {
+		// Check if data deletion is enabled.
+		$delete_data = get_option( 'lb_delete_data_on_uninstall', false ) || get_option( 'oos_delete_data_on_uninstall', false );
+
+		if ( ! $delete_data ) {
+			return;
+		}
+
+		global $wpdb;
+
+		// 1. Delete CPTs.
+		$post_types = array( 'lb_location', 'oos_location', 'lb_product_option', 'oos_product_option' );
+		foreach ( $post_types as $post_type ) {
+			$posts = get_posts( array( 'post_type' => $post_type, 'posts_per_page' => -1, 'fields' => 'ids', 'post_status' => 'any' ) );
+			foreach ( $posts as $post_id ) {
+				wp_delete_post( $post_id, true );
+			}
+		}
+
+		// 2. Delete Options.
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s", $wpdb->esc_like( 'lb_' ) . '%', $wpdb->esc_like( 'oos_' ) . '%' ) );
+
+		// 3. Delete Meta.
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE %s OR meta_key LIKE %s", $wpdb->esc_like( '_lb_' ) . '%', $wpdb->esc_like( '_oos_' ) . '%' ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE %s OR meta_key LIKE %s", $wpdb->esc_like( 'lb_' ) . '%', $wpdb->esc_like( 'oos_' ) . '%' ) );
+
+		// 4. Roles & Caps.
+		remove_role( 'lb_staff' );
+		remove_role( 'lb_admin' );
+		remove_role( 'oos_staff' );
+		remove_role( 'oos_admin' );
+
+		$roles = array( 'administrator', 'shop_manager', 'editor' );
+		$caps  = array( 'lb_view_dashboard', 'lb_view_orders', 'lb_manage_orders', 'lb_use_pos', 'lb_manage_locations', 'lb_manage_products', 'lb_manage_options', 'lb_manage_checkout', 'lb_manage_settings', 'lb_manage_features', 'lb_manage_roles', 'lb_manage_support', 'lb_view_debug' );
+
+		foreach ( $roles as $role_name ) {
+			$role = get_role( $role_name );
+			if ( $role ) {
+				foreach ( $caps as $cap ) { $role->remove_cap( $cap ); }
+			}
+		}
+
+		// 5. Cron Jobs.
+		$cron_hooks = array( 'lb_check_scheduled_orders', 'lb_send_pickup_reminders' );
+		foreach ( $cron_hooks as $hook ) {
+			wp_clear_scheduled_hook( $hook );
+		}
+
+		// 6. Transients.
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s", $wpdb->esc_like( '_transient_lb_' ) . '%', $wpdb->esc_like( '_transient_timeout_lb_' ) . '%' ) );
+	}
 }

@@ -256,14 +256,18 @@ class LB_Features {
 		$is_premium_feature = isset( self::$feature_definitions[ $feature ]['premium'] ) && self::$feature_definitions[ $feature ]['premium'];
 
 		if ( $is_premium_feature ) {
-			// 1. Check auf Entwickler-Override via Konstante
+			// 1. Check auf Entwickler-Override via Konstante (Immer Priorität)
 			if ( defined( 'LB_PREMIUM_OVERRIDE' ) && LB_PREMIUM_OVERRIDE ) {
 				return apply_filters( 'lb_feature_enabled', true, $feature );
 			}
 
 			// 2. Check via Freemius SDK
 			if ( function_exists( 'lb_freemius' ) ) {
-				if ( ! lb_freemius()->is_premium() ) {
+				/**
+				 * Wir nutzen hier can_use_premium_code__premium_only().
+				 * Dieser Block wird vom Freemius-Generator in der Gratis-Version automatisch entfernt.
+				 */
+				if ( ! lb_freemius()->can_use_premium_code__premium_only() ) {
 					return apply_filters( 'lb_feature_enabled', false, $feature );
 				}
 			} else {
