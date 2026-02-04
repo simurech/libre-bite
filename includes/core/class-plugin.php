@@ -52,7 +52,6 @@ class LB_Plugin {
 	 */
 	private function __construct() {
 		$this->load_dependencies();
-		$this->set_locale();
 		$this->init_modules();
 		$this->loader->run();
 	}
@@ -63,25 +62,6 @@ class LB_Plugin {
 	private function load_dependencies() {
 		require_once LB_PLUGIN_DIR . 'includes/core/class-loader.php';
 		$this->loader = new LB_Loader();
-	}
-
-	/**
-	 * Textdomain für Übersetzungen laden
-	 */
-	private function set_locale() {
-		$this->loader->add_action( 'plugins_loaded', $this, 'load_plugin_textdomain' );
-	}
-
-	/**
-	 * Textdomain laden
-	 */
-	public function load_plugin_textdomain() {
-		// phpcs:ignore WordPress.WP.DeprecatedParameters.Load_plugin_textdomainParam2Found -- false is required for relative path.
-		load_plugin_textdomain(
-			'libre-bite',
-			false,
-			dirname( LB_PLUGIN_BASENAME ) . '/languages/'
-		);
 	}
 
 	/**
