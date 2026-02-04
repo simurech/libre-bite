@@ -101,15 +101,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="lb-modal-overlay"></div>
 		<div class="lb-modal-content">
 			<div class="lb-modal-header">
-				<h2 id="lb-modal-product-name">Produkt konfigurieren</h2>
+				<h2 id="lb-modal-product-name"><?php esc_html_e( 'Produkt konfigurieren', 'libre-bite' ); ?></h2>
 				<button type="button" class="lb-modal-close">&times;</button>
 			</div>
 			<div class="lb-modal-body" id="lb-modal-body">
 				<!-- Wird dynamisch gefüllt -->
 			</div>
 			<div class="lb-modal-footer">
-				<button type="button" class="button button-large" id="lb-modal-cancel">Abbrechen</button>
-				<button type="button" class="button button-primary button-large" id="lb-modal-add">Hinzufügen</button>
+				<button type="button" class="button button-large" id="lb-modal-cancel"><?php esc_html_e( 'Abbrechen', 'libre-bite' ); ?></button>
+				<button type="button" class="button button-primary button-large" id="lb-modal-add"><?php esc_html_e( 'Hinzufügen', 'libre-bite' ); ?></button>
 			</div>
 		</div>
 	</div>
