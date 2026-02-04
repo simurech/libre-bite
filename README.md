@@ -6,7 +6,7 @@
 
 **WooCommerce-Erweiterung für Gastronomie und Food-Business**
 
-[![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/simurech/libre-bite)
+[![Version](https://img.shields.io/badge/version-1.0.2-blue.svg)](https://github.com/simurech/libre-bite)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.0%2B-96588a.svg)](https://woocommerce.com/)
 [![License](https://img.shields.io/badge/License-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
