@@ -579,34 +579,73 @@ class LB_Admin {
 	public function ajax_pos_create_order() {
 		check_ajax_referer( 'lb_pos_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lb_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON needs sanitize_text_field after wp_unslash.
-		$cart_items = isset( $_POST['cart_items'] ) ? json_decode( sanitize_text_field( wp_unslash( $_POST['cart_items'] ) ), true ) : array();
-		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
-		$order_type = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
-		$pickup_time = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
-		$customer_name = isset( $_POST['customer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_name'] ) ) : '';
+		// Rohes JSON laden und validieren.
+		// phpcs:ignore WordPress.Security.NonceVerification -- Nonce wurde bereits oben geprüft.
+		$cart_items_raw = isset( $_POST['cart_items'] ) ? wp_unslash( $_POST['cart_items'] ) : '';
+
+		if ( empty( $cart_items_raw ) ) {
+			wp_send_json_error( array( 'message' => __( 'Warenkorb ist leer', 'libre-bite' ) ) );
+		}
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON wird nach dem Decode Feld für Feld validiert.
+		$cart_items_decoded = json_decode( $cart_items_raw, true );
+
+		if ( ! is_array( $cart_items_decoded ) ) {
+			wp_send_json_error( array( 'message' => __( 'Ungültige Warenkorbdaten', 'libre-bite' ) ) );
+		}
+
+		$cart_items = array();
+
+		foreach ( $cart_items_decoded as $raw_item ) {
+			if ( ! is_array( $raw_item ) ) {
+				continue;
+			}
+
+			$product_id = isset( $raw_item['id'] ) ? absint( $raw_item['id'] ) : 0;
+			$quantity   = isset( $raw_item['quantity'] ) ? (int) $raw_item['quantity'] : 0;
+			$price      = isset( $raw_item['price'] ) ? floatval( $raw_item['price'] ) : 0.0;
+			$meta       = isset( $raw_item['meta'] ) ? sanitize_text_field( $raw_item['meta'] ) : '';
+
+			if ( ! $product_id || $quantity <= 0 ) {
+				continue;
+			}
+
+			$cart_items[] = array(
+				'id'       => $product_id,
+				'quantity' => $quantity,
+				'price'    => $price,
+				'meta'     => $meta,
+			);
+		}
 
 		if ( empty( $cart_items ) ) {
 			wp_send_json_error( array( 'message' => __( 'Warenkorb ist leer', 'libre-bite' ) ) );
 		}
+
+		$location_id   = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$order_type    = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
+		$pickup_time   = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
+		$customer_name = isset( $_POST['customer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_name'] ) ) : '';
 
 		if ( ! $location_id ) {
 			wp_send_json_error( array( 'message' => __( 'Kein Standort ausgewählt', 'libre-bite' ) ) );
 		}
 
 		try {
-			// WooCommerce-Bestellung erstellen
+			// WooCommerce-Bestellung erstellen.
 			$order = wc_create_order();
 
-			// Produkte hinzufügen
+			// Produkte hinzufügen.
 			foreach ( $cart_items as $item ) {
 				$product = wc_get_product( $item['id'] );
-				if ( $product ) {
-					// Produkt zur Bestellung hinzufügen
+				if ( ! $product ) {
+					continue;
+				}
+
 				$order_item_id = $order->add_product(
 					$product,
 					$item['quantity'],
@@ -616,7 +655,7 @@ class LB_Admin {
 					)
 				);
 
-				// Meta-Daten (Varianten & Optionen) hinzufügen
+				// Meta-Daten (Varianten & Optionen) hinzufügen.
 				if ( ! empty( $item['meta'] ) && $order_item_id ) {
 					$order_item = $order->get_item( $order_item_id );
 					if ( $order_item ) {
@@ -624,33 +663,33 @@ class LB_Admin {
 						$order_item->save();
 					}
 				}
-				}
 			}
 
-			// Bestellmeta setzen
+			// Bestellmeta setzen.
 			$order->update_meta_data( '_lb_location_id', $location_id );
-			// Standort-Name speichern
-		$location = get_post( $location_id );
-		if ( $location ) {
-			$order->update_meta_data( '_lb_location_name', $location->post_title );
-		}
 
-		$order->update_meta_data( '_lb_order_type', $order_type );
+			// Standort-Name speichern.
+			$location = get_post( $location_id );
+			if ( $location ) {
+				$order->update_meta_data( '_lb_location_name', $location->post_title );
+			}
+
+			$order->update_meta_data( '_lb_order_type', $order_type );
 			if ( $pickup_time ) {
 				$order->update_meta_data( '_lb_pickup_time', $pickup_time );
 			}
 			$order->update_meta_data( '_lb_order_source', 'pos' );
 
-			// Kundenname speichern (falls angegeben)
+			// Kundenname speichern (falls angegeben).
 			if ( ! empty( $customer_name ) ) {
 				$order->set_billing_first_name( $customer_name );
 				$order->update_meta_data( '_lb_customer_name', $customer_name );
 			}
 
-			// Berechnen
+			// Berechnen.
 			$order->calculate_totals();
 
-			// Status setzen
+			// Status setzen.
 			$order->update_status( 'processing', __( 'Bestellung über Kassensystem erstellt.', 'libre-bite' ) );
 
 			// Währungssymbol dekodieren (z.B. &#67;&#72;&#70; -> CHF).

@@ -253,6 +253,10 @@ class LB_POS {
 	public function ajax_get_products() {
 		check_ajax_referer( 'lb_pos_nonce', 'nonce' );
 
+		if ( ! current_user_can( 'lb_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+		}
+
 		$category_id = isset( $_POST['category_id'] ) ? intval( wp_unslash( $_POST['category_id'] ) ) : 0;
 
 		$args = array(
@@ -302,25 +306,62 @@ class LB_POS {
 	public function ajax_create_order() {
 		check_ajax_referer( 'lb_pos_nonce', 'nonce' );
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON needs stripslashes before decode.
-		$cart_items   = isset( $_POST['cart_items'] ) ? json_decode( sanitize_text_field( wp_unslash( $_POST['cart_items'] ) ), true ) : array();
-		$location_id  = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
-		$order_type   = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
-		$pickup_time  = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
+		if ( ! current_user_can( 'lb_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+		}
+
+		// Rohes JSON laden und validieren.
+		// phpcs:ignore WordPress.Security.NonceVerification -- Nonce wurde bereits oben geprüft.
+		$cart_items_raw = isset( $_POST['cart_items'] ) ? wp_unslash( $_POST['cart_items'] ) : '';
+
+		if ( empty( $cart_items_raw ) ) {
+			wp_send_json_error( array( 'message' => __( 'Warenkorb ist leer', 'libre-bite' ) ) );
+		}
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON wird nach dem Decode Feld für Feld validiert.
+		$cart_items_decoded = json_decode( $cart_items_raw, true );
+
+		if ( ! is_array( $cart_items_decoded ) ) {
+			wp_send_json_error( array( 'message' => __( 'Ungültige Warenkorbdaten', 'libre-bite' ) ) );
+		}
+
+		$cart_items = array();
+
+		foreach ( $cart_items_decoded as $raw_item ) {
+			if ( ! is_array( $raw_item ) ) {
+				continue;
+			}
+
+			$product_id = isset( $raw_item['id'] ) ? absint( $raw_item['id'] ) : 0;
+			$quantity   = isset( $raw_item['quantity'] ) ? (int) $raw_item['quantity'] : 0;
+
+			if ( ! $product_id || $quantity <= 0 ) {
+				continue;
+			}
+
+			$cart_items[] = array(
+				'id'       => $product_id,
+				'quantity' => $quantity,
+			);
+		}
 
 		if ( empty( $cart_items ) ) {
 			wp_send_json_error( array( 'message' => __( 'Warenkorb ist leer', 'libre-bite' ) ) );
 		}
+
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$order_type  = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
+		$pickup_time = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
 
 		if ( ! $location_id ) {
 			wp_send_json_error( array( 'message' => __( 'Kein Standort gewählt', 'libre-bite' ) ) );
 		}
 
 		try {
-			// Bestellung erstellen
+			// Bestellung erstellen.
 			$order = wc_create_order();
 
-			// Produkte hinzufügen
+			// Produkte hinzufügen.
 			foreach ( $cart_items as $item ) {
 				$product = wc_get_product( $item['id'] );
 				if ( ! $product ) {
@@ -330,7 +371,7 @@ class LB_POS {
 				$order->add_product( $product, $item['quantity'] );
 			}
 
-			// Meta-Daten speichern
+			// Meta-Daten speichern.
 			$order->update_meta_data( '_lb_location_id', $location_id );
 			$order->update_meta_data( '_lb_order_type', $order_type );
 			$order->update_meta_data( '_lb_order_status', 'incoming' );
@@ -340,27 +381,27 @@ class LB_POS {
 				$order->update_meta_data( '_lb_pickup_time', $pickup_time );
 			}
 
-			// Standort-Name speichern
+			// Standort-Name speichern.
 			$location = get_post( $location_id );
 			if ( $location ) {
 				$order->update_meta_data( '_lb_location_name', $location->post_title );
 			}
 
-			// Gesamt berechnen
+			// Gesamt berechnen.
 			$order->calculate_totals();
 
-			// Status setzen
+			// Status setzen.
 			$order->set_status( 'processing', __( 'POS-Bestellung', 'libre-bite' ) );
 
-			// Speichern
+			// Speichern.
 			$order->save();
 
 			wp_send_json_success(
 				array(
-					'message'  => __( 'Bestellung erfolgreich erstellt', 'libre-bite' ),
-					'order_id' => $order->get_id(),
+					'message'      => __( 'Bestellung erfolgreich erstellt', 'libre-bite' ),
+					'order_id'     => $order->get_id(),
 					'order_number' => $order->get_order_number(),
-					'total'    => $order->get_formatted_order_total(),
+					'total'        => $order->get_formatted_order_total(),
 				)
 			);
 

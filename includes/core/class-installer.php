@@ -34,6 +34,15 @@ class LB_Installer {
 		// Support-Einstellungen initialisieren
 		self::set_default_support_settings();
 
+		// Cron-Jobs registrieren, falls noch nicht vorhanden.
+		if ( ! wp_next_scheduled( 'lb_check_scheduled_orders' ) ) {
+			wp_schedule_event( time(), 'every_minute', 'lb_check_scheduled_orders' );
+		}
+
+		if ( ! wp_next_scheduled( 'lb_send_pickup_reminders' ) ) {
+			wp_schedule_event( time(), 'every_minute', 'lb_send_pickup_reminders' );
+		}
+
 		// Flush rewrite rules
 		flush_rewrite_rules();
 

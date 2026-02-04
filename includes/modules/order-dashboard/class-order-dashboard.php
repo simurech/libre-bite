@@ -57,7 +57,7 @@ class LB_Order_Dashboard {
 		$this->loader->add_action( 'wp_ajax_lb_cancel_order', $this, 'ajax_cancel_order' );
 		$this->loader->add_action( 'wp_ajax_lb_load_more_completed', $this, 'ajax_load_more_completed' );
 
-		// Cron für automatische Statusänderungen
+		// Cron für automatische Statusänderungen (Hook wird bei Aktivierung geplant)
 		$this->loader->add_action( 'lb_check_scheduled_orders', $this, 'check_scheduled_orders' );
 
 		// Bestellungs-Meta-Box
@@ -134,6 +134,10 @@ class LB_Order_Dashboard {
 	 */
 	public function ajax_get_orders() {
 		check_ajax_referer( 'lb_dashboard_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lb_view_orders' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
@@ -301,6 +305,10 @@ class LB_Order_Dashboard {
 	public function ajax_update_order_status() {
 		check_ajax_referer( 'lb_dashboard_nonce', 'nonce' );
 
+		if ( ! current_user_can( 'lb_manage_orders' ) && ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+		}
+
 		$order_id   = isset( $_POST['order_id'] ) ? intval( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$new_status = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : '';
 
@@ -399,6 +407,10 @@ class LB_Order_Dashboard {
 	 */
 	public function ajax_load_more_completed() {
 		check_ajax_referer( 'lb_dashboard_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lb_view_orders' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 		$offset      = isset( $_POST['offset'] ) ? intval( wp_unslash( $_POST['offset'] ) ) : 0;

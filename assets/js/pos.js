@@ -5,6 +5,18 @@
 (function($) {
 	'use strict';
 
+	function escapeHtml(str) {
+		if (str === null || str === undefined) {
+			return '';
+		}
+		return String(str)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#039;');
+	}
+
 	const POS = {
 		cart: [],
 		currentCategory: 'all',
@@ -246,8 +258,9 @@
 			$grid.empty();
 
 			products.forEach(product => {
+				const safeName = escapeHtml(product.name);
 				const imageHtml = product.image
-					? `<img src="${product.image}" alt="${product.name}" style="max-width: 100%; height: auto; margin-bottom: 5px;">`
+					? `<img src="${product.image}" alt="${safeName}" style="max-width: 100%; height: auto; margin-bottom: 5px;">`
 					: '';
 
 				const hasConfig = product.has_variations || product.has_options;
@@ -256,7 +269,7 @@
 				const $item = $(`
 					<div class="lb-pos-product-item ${configClass}" data-product-id="${product.id}" data-has-config="${hasConfig}">
 						${imageHtml}
-						<div class="lb-pos-product-name">${product.name}</div>
+						<div class="lb-pos-product-name">${safeName}</div>
 						<div class="lb-pos-product-price">${this.formatPrice(product.price)}</div>
 					</div>
 				`);
@@ -381,7 +394,7 @@
 		if (productData.options && productData.options.length > 0) {
 			productData.options.forEach(option => {
 				html += '<div class="lb-option-group">';
-				html += `<div class="lb-option-group-label">${option.name}${option.required ? ' <span style="color: red;">*</span>' : ''}</div>`;
+				html += `<div class="lb-option-group-label">${escapeHtml(option.name)}${option.required ? ' <span style="color: red;">*</span>' : ''}</div>`;
 
 				option.choices.forEach((choice, choiceIndex) => {
 					const inputType = option.type === 'checkbox' ? 'checkbox' : 'radio';
@@ -390,8 +403,8 @@
 
 					html += `
 						<label class="lb-option-choice" for="${inputId}">
-							<input type="${inputType}" id="${inputId}" name="${inputName}" value="${choice.label}" data-price="${choice.price}" data-option-id="${option.id}">
-							<span class="lb-option-choice-label">${choice.label}</span>
+							<input type="${inputType}" id="${inputId}" name="${inputName}" value="${escapeHtml(choice.label)}" data-price="${choice.price}" data-option-id="${option.id}">
+							<span class="lb-option-choice-label">${escapeHtml(choice.label)}</span>
 							${choice.price > 0 ? `<span class="lb-option-choice-price">+${this.formatPrice(choice.price)}</span>` : ''}
 						</label>
 					`;
@@ -532,12 +545,13 @@
 
 			this.cart.forEach((item, index) => {
 				const itemTotal = item.price * item.quantity;
-				const metaHtml = item.meta ? `<div style="font-size: 0.9em; color: #666; margin-top: 3px;">${item.meta}</div>` : '';
+				const metaHtml = item.meta ? `<div style="font-size: 0.9em; color: #666; margin-top: 3px;">${escapeHtml(item.meta)}</div>` : '';
+				const safeName = escapeHtml(item.name);
 
 				const $item = $(`
 					<div class="lb-pos-cart-item">
 						<div class="lb-pos-cart-item-name">
-							${item.name}
+							${safeName}
 							${metaHtml}
 						</div>
 						<div class="lb-pos-cart-item-qty">

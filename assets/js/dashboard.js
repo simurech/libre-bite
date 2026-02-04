@@ -5,6 +5,18 @@
 (function($) {
 	'use strict';
 
+	function escapeHtml(str) {
+		if (str === null || str === undefined) {
+			return '';
+		}
+		return String(str)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#039;');
+	}
+
 	const Dashboard = {
 		refreshTimer: null,
 		wakeLock: null,
@@ -351,24 +363,26 @@
 		 */
 		createOrderCard: function(order, currentStatus) {
 			const typeLabel = order.type === 'later'
-				? '<span style="color: #f39c12;">⏰ ' + order.pickup_time + '</span>'
+				? '<span style="color: #f39c12;">⏰ ' + escapeHtml(order.pickup_time || '') + '</span>'
 				: '<span style="color: #27ae60;">🔥 Sofort</span>';
 
 			// Kundenname anzeigen
-			const customerName = order.customer && order.customer.trim() ? order.customer.trim() : '';
+			const customerNameRaw = order.customer && order.customer.trim() ? order.customer.trim() : '';
+			const customerName = escapeHtml(customerNameRaw);
 
 			let itemsHtml = '';
 			order.items.forEach(item => {
+				const safeName = escapeHtml(item.name);
 				const meta = item.meta ? '<div style="margin-left: 20px; font-size: 0.9em; color: #666;">' + item.meta + '</div>' : '';
 				itemsHtml += `<div class="lb-kanban-card-item" style="margin-bottom: 8px;">
-					<strong>${item.quantity}x ${item.name}</strong>
+					<strong>${item.quantity}x ${safeName}</strong>
 					${meta}
 				</div>`;
 			});
 
 			const notesHtml = order.notes
 				? `<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee; font-style: italic; color: #666;">
-					📝 ${order.notes}
+					📝 ${escapeHtml(order.notes)}
 				</div>`
 				: '';
 
@@ -408,8 +422,8 @@
 					</h3>
 					<div class="lb-kanban-card-meta" style="margin-bottom: 12px; font-size: 13px; line-height: 1.6;">
 						${typeLabel}
-						<br>🕐 ${order.date}
-						${order.location ? '<br>📍 ' + order.location : ''}
+						<br>🕐 ${escapeHtml(order.date || '')}
+						${order.location ? '<br>📍 ' + escapeHtml(order.location) : ''}
 					</div>
 					<div class="lb-kanban-card-items" style="margin: 12px 0; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
 						${itemsHtml}

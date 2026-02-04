@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/images/librebite-logo.png" alt="Libre Bite Logo" width="200">
+</p>
+
 # Libre Bite
 
 **WooCommerce-Erweiterung für Gastronomie und Food-Business**
