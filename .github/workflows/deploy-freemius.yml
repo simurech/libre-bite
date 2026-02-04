@@ -1,4 +1,4 @@
-name: Release to Freemius
+name: Deploy to Freemius
 
 on:
   push:
@@ -6,29 +6,27 @@ on:
       - 'v*'
 
 jobs:
-  upload:
+  deploy:
+    name: Deploy to Freemius
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build plugin zip
+      - name: Create ZIP
         run: |
-          mkdir build
-          rsync -av \
-            --exclude='.git*' \
-            --exclude='.github' \
-            --exclude='node_modules' \
-            --exclude='*.zip' \
-            ./ build/libre-bite
-          cd build
-          zip -r libre-bite.zip libre-bite
+          zip -r libre-bite.zip . -x "*.git*" ".github*" ".DS_Store" "*.zip"
 
-      - name: Upload to Freemius
-        run: |
-          curl -v -X POST "https://api.freemius.com/v1/developers/${{ secrets.FREEMIUS_DEVELOPER_ID }}/plugins/${{ secrets.FREEMIUS_PLUGIN_ID }}/tags.json" \
-            -u "${{ secrets.FREEMIUS_PUBLIC_KEY }}:${{ secrets.FREEMIUS_SECRET_KEY }}" \
-            -F "file=@build/libre-bite.zip" \
-            -F "add_on_id=${{ secrets.FREEMIUS_PLUGIN_ID }}" \
-            -F "release_mode=released"
+      - name: Deploy on Freemius
+        uses: buttonizer/freemius-deploy@v0.1.3
+        with:
+          file_name: libre-bite.zip
+          release_mode: released
+          version: ${{ github.ref_name }}
+          sandbox: false
+        env:
+          DEV_ID: ${{ secrets.FREEMIUS_DEVELOPER_ID }}
+          PLUGIN_ID: ${{ secrets.FREEMIUS_PLUGIN_ID }}
+          PUBLIC_KEY: ${{ secrets.FREEMIUS_PUBLIC_KEY }}
+          SECRET_KEY: ${{ secrets.FREEMIUS_SECRET_KEY }}
+          PLUGIN_SLUG: librebite
