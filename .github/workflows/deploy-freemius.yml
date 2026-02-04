@@ -20,12 +20,13 @@ jobs:
       - name: Deploy to Freemius
         uses: buttonizer/freemius-deploy@v0.1.2
         with:
-          developer_id: ${{ secrets.FREEMIUS_DEVELOPER_ID }}
-          plugin_id: ${{ secrets.FREEMIUS_PLUGIN_ID }}
-          public_key: ${{ secrets.FREEMIUS_PUBLIC_KEY }}
-          secret_key: ${{ secrets.FREEMIUS_SECRET_KEY }}
-          plugin_slug: librebite
           file_name: libre-bite.zip
           release_mode: released
           version: ${{ github.ref_name }}
           sandbox: false
+        env:
+          PUBLIC_KEY: ${{ secrets.FREEMIUS_PUBLIC_KEY }}
+          DEVELOPER_ID: ${{ secrets.FREEMIUS_DEVELOPER_ID }}
+          SECRET_KEY: ${{ secrets.FREEMIUS_SECRET_KEY }}
+          PLUGIN_SLUG: librebite
+          PLUGIN_ID: ${{ secrets.FREEMIUS_PLUGIN_ID }}
