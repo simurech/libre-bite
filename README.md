@@ -9,108 +9,93 @@
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-777BB4.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/License-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
-> **Beta-Phase:** Dieses Plugin befindet sich in aktiver Entwicklung. Alle Funktionen sind während der Beta kostenlos nutzbar.
+> **Beta-Phase:** Dieses Plugin befindet sich in aktiver Entwicklung.
 
 ---
 
+## Über Libre Bite
+
+Libre Bite verwandelt WooCommerce in ein leistungsfähiges Bestellsystem für Restaurants, Imbisse und Lieferdienste. Es unterstützt lokale Anpassungen wie die Schweizer 5-Rappen-Rundung und bietet workflows für die Küche und den Verkauf vor Ort.
+
 ## Funktionen
 
-- **Standortverwaltung** - Mehrere Filialen mit Adressen und Öffnungszeiten verwalten.
-- **Kanban-Dashboard** - Real-time Bestellübersicht mit Drag & Drop für die Küche.
-- **POS/Kassensystem** - Touch-optimierte Oberfläche für Walk-in-Kunden vor Ort.
-- **Zeitwahl-System** - Kunden können zwischen Sofort-Bestellung oder Vorbestellung mit Zeitslots wählen.
-- **Produkt-Optionen** - Zentrale Add-on-Verwaltung für Extras und Beilagen mit individuellen Preisen.
-- **Trinkgeld-System** - Flexible Prozent-Optionen oder individuelle Beträge im Checkout.
-- **Nährwerte & Allergene** - Hinterlegung von EU-konformen Produktinformationen.
-- **Benachrichtigungen** - Automatische E-Mail-Reminder für Kunden und Sound-Alerts bei Bestelleingang.
-- **5-Rappen-Rundung** - Unterstützung für Schweizer Währungskonventionen.
+### Core Features (Kostenlos)
+
+*   **📍 Standortverwaltung**: Verwalten Sie Ihren Standort inklusive Öffnungszeiten.
+*   **🧑‍🍳 Kanban-Dashboard**: Real-time Bestellübersicht für die Küche (Eingang -> Zubereitung -> Fertig).
+*   **🖥️ POS/Kassensystem**: Touch-optimierte Oberfläche für Walk-in-Kunden vor Ort.
+*   **⏱️ Zeitwahl-System**: Kunden können zwischen Sofort-Bestellung oder Vorbestellung mit Zeitslots wählen.
+*   **🍔 Produkt-Optionen**: Einfache Add-on-Verwaltung für Extras und Beilagen.
+*   **🇨🇭 5-Rappen-Rundung**: Optionale Unterstützung für Schweizer Währungskonventionen.
+*   **📋 Nährwerte & Allergene**: Hinterlegung von EU-konformen Produktinformationen.
+
+### Pro Features (Premium)
+
+*   **🏢 Multi-Standort**: Verwalten Sie unbegrenzt viele Filialen.
+*   **🚀 Optimierter Checkout**: Spezieller Checkout-Flow für Food-Ordering (weniger Klicks).
+*   **💰 Trinkgeld-System**: Flexible Trinkgeld-Optionen direkt im Checkout.
+*   **📧 Abhol-Erinnerungen**: Automatische E-Mail-Reminder kurz vor der Abholzeit.
 
 ---
 
 ## Systemanforderungen
 
-| Komponente | Minimum |
-|------------|---------|
-| WordPress | 6.0+ |
-| WooCommerce | 8.0+ |
-| PHP | 7.4+ |
-| MySQL | 5.6+ / MariaDB 10.0+ |
+| Komponente | Minimum | Empfohlen |
+|------------|---------|-----------|
+| WordPress | 6.0+ | 6.4+ |
+| WooCommerce | 8.0+ | 8.5+ |
+| PHP | 7.4+ | 8.1+ |
+
+---
+
+## Quick Start Guide 🚀
+
+Nach der Installation finden Sie unter **Libre Bite → Quick Start** einen interaktiven Einrichtungs-Assistenten, der Sie durch die ersten Schritte führt:
+
+1.  Standort anlegen
+2.  Produkte konfigurieren
+3.  POS & Dashboard testen
 
 ---
 
 ## Download & Installation
 
-Die stabilen Versionen des Plugins können direkt über die GitHub **Releases** heruntergeladen werden:
-
-👉 **[Download der neuesten Version](https://github.com/simurech/libre-bite/releases)**
-
-1. Laden Sie die `libre-bite.zip` aus dem neuesten Release herunter.
-2. Gehen Sie in Ihrem WordPress-Backend zu **Plugins → Installieren → Plugin hochladen**.
-3. Aktivieren Sie das Plugin nach dem Hochladen.
+1.  Laden Sie die neueste Version von den [GitHub Releases](https://github.com/simurech/libre-bite/releases) herunter.
+2.  Installieren Sie das Plugin in WordPress (**Plugins → Installieren → Plugin hochladen**).
+3.  Aktivieren Sie das Plugin.
 
 ---
 
-## Module im Überblick
-
-### Standortverwaltung
-- Erfassung von Standorten mit individuellen Adressdaten.
-- Definition von Öffnungszeiten pro Wochentag.
-- Zuweisung von Produkten zu spezifischen Standorten.
-- Dynamische Statusanzeige (Offen/Geschlossen) im Frontend.
+## Module im Detail
 
 ### Kanban-Dashboard
-Optimierter Workflow für die Bestellabwicklung:
-1. **Eingang** - Neue Bestellungen (mit Sound-Signal).
-2. **Zubereiten** - Aktive Bearbeitung in der Küche.
-3. **Abholbereit** - Abgeschlossene Zubereitung, Kunde wird ggf. informiert.
-4. **Abgeschlossen** - Archivierte Bestellungen.
+Optimierter Workflow für die Bestellabwicklung ohne Papierchaos:
+1.  **Eingang** - Neue Bestellungen (mit Sound-Signal).
+2.  **Zubereiten** - Aktive Bearbeitung in der Küche.
+3.  **Abholbereit** - Abgeschlossene Zubereitung.
 
 ### POS/Kassensystem
-- Schnelle Bestellerfassung für den Tresen-Verkauf.
-- Kategoriefilter für schnellen Zugriff auf Produkte.
-- Integration der Produkt-Optionen und Add-ons.
-- Direkter Abschluss ohne zwingende Kundendaten-Erfassung.
-
-### Checkout & Zeitwahl
-- Standort-Auswahl via Modal oder Inline-Element.
-- Berechnung valider Zeitslots basierend auf den Öffnungszeiten und der Vorbereitungszeit.
-- Optimierter Checkout-Modus für maximale Conversion.
+Ideal für den Tresen-Verkauf:
+- Schnelle Bestellerfassung.
+- Kategoriefilter.
+- Direkter Abschluss.
 
 ---
 
-## Benutzerrollen
+## Entwicklung & Sicherheit
 
-| Rolle | Zugriff |
-|-------|---------|
-| **Personal** | Zugriff auf das Kanban-Dashboard, Bestellübersicht und POS. |
-| **Admin** | Vollständiger Zugriff auf Standorte, Produkt-Optionen und allgemeine Einstellungen. |
-| **Super-Admin** | Zugriff auf System-Debug-Tools und Feature-Toggles. |
+### Feature-Toggles
+Funktionen können unter **Libre Bite → Feature-Toggles** individuell aktiviert/deaktiviert werden, um das Backend schlank zu halten.
 
----
-
-## Feature-Toggles
-
-Libre Bite ist modular aufgebaut. Funktionen können unter **Libre Bite → Feature-Toggles** individuell aktiviert werden:
-- POS-System & Kanban-Board
-- Optimierter Checkout & Trinkgeld-System
-- 5-Rappen-Rundung (Schweiz)
-- Pickup-Reminder (E-Mail)
-- Nährwert- & Allergenanzeige
-
----
-
-## Architektur & Kompatibilität
-
-- **HPOS Ready:** Vollständige Unterstützung für das WooCommerce High-Performance Order Storage System.
-- **Block Themes:** Nahtlose Integration in moderne WordPress Block-Themes.
-- **Datenschutz:** Optionale Datenlöschung aller Plugin-Einstellungen bei Deinstallation.
+### Sicherheit
+Der Code folgt strikten WordPress Coding Standards. Alle Eingaben werden sanitisiert und Ausgaben escaped. AJAX-Endpunkte sind mit Nonces und Capability-Checks gesichert.
 
 ---
 
 ## Roadmap
 
-- **Tisch-Bestellung (QR-Code):** Kunden scannen einen Code am Tisch und bestellen/bezahlen direkt.
-- **Tisch-Reservierung:** Verwaltung von Reservierungsslots pro Standort.
+- **Tisch-Bestellung (QR-Code)**
+- **Tisch-Reservierung**
 
 ---
 

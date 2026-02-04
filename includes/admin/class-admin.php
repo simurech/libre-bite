@@ -115,6 +115,16 @@ class LB_Admin {
 			56
 		);
 
+		// Quick Start Guide
+		add_submenu_page(
+			'libre-bite',
+			__( 'Quick Start', 'libre-bite' ),
+			__( 'Quick Start', 'libre-bite' ),
+			'manage_options',
+			'lb-quick-start',
+			array( $this, 'render_quick_start_page' )
+		);
+
 		// ============================================
 		// PERSONAL-BEREICH (lb_staff)
 		// ============================================
@@ -257,6 +267,13 @@ class LB_Admin {
 	 */
 	public function render_dashboard_page() {
 		include LB_PLUGIN_DIR . 'templates/admin/dashboard.php';
+	}
+
+	/**
+	 * Quick Start Seite rendern
+	 */
+	public function render_quick_start_page() {
+		include LB_PLUGIN_DIR . 'templates/admin/quick-start.php';
 	}
 
 	/**
@@ -583,8 +600,13 @@ class LB_Admin {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON needs sanitize_text_field after wp_unslash.
-		$cart_items = isset( $_POST['cart_items'] ) ? json_decode( sanitize_text_field( wp_unslash( $_POST['cart_items'] ) ), true ) : array();
+		$cart_items_json = isset( $_POST['cart_items'] ) ? wp_unslash( $_POST['cart_items'] ) : '';
+		$cart_items      = json_decode( $cart_items_json, true );
+
+		if ( ! is_array( $cart_items ) ) {
+			$cart_items = array();
+		}
+
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 		$order_type = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
 		$pickup_time = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
@@ -604,26 +626,31 @@ class LB_Admin {
 
 			// Produkte hinzufügen
 			foreach ( $cart_items as $item ) {
-				$product = wc_get_product( $item['id'] );
+				$product_id = isset( $item['id'] ) ? absint( $item['id'] ) : 0;
+				$quantity   = isset( $item['quantity'] ) ? absint( $item['quantity'] ) : 1;
+				$price      = isset( $item['price'] ) ? floatval( $item['price'] ) : 0.0;
+
+				$product = wc_get_product( $product_id );
 				if ( $product ) {
 					// Produkt zur Bestellung hinzufügen
-				$order_item_id = $order->add_product(
-					$product,
-					$item['quantity'],
-					array(
-						'subtotal' => $item['price'] * $item['quantity'],
-						'total'    => $item['price'] * $item['quantity'],
-					)
-				);
+					$order_item_id = $order->add_product(
+						$product,
+						$quantity,
+						array(
+							'subtotal' => $price * $quantity,
+							'total'    => $price * $quantity,
+						)
+					);
 
-				// Meta-Daten (Varianten & Optionen) hinzufügen
-				if ( ! empty( $item['meta'] ) && $order_item_id ) {
-					$order_item = $order->get_item( $order_item_id );
-					if ( $order_item ) {
-						$order_item->add_meta_data( 'Konfiguration', $item['meta'], true );
-						$order_item->save();
+					// Meta-Daten (Varianten & Optionen) hinzufügen
+					if ( ! empty( $item['meta'] ) && $order_item_id ) {
+						$order_item = $order->get_item( $order_item_id );
+						if ( $order_item ) {
+							$meta_value = is_array( $item['meta'] ) ? array_map( 'sanitize_text_field', $item['meta'] ) : sanitize_text_field( $item['meta'] );
+							$order_item->add_meta_data( 'Konfiguration', $meta_value, true );
+							$order_item->save();
+						}
 					}
-				}
 				}
 			}
 

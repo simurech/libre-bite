@@ -302,8 +302,13 @@ class LB_POS {
 	public function ajax_create_order() {
 		check_ajax_referer( 'lb_pos_nonce', 'nonce' );
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON needs stripslashes before decode.
-		$cart_items   = isset( $_POST['cart_items'] ) ? json_decode( sanitize_text_field( wp_unslash( $_POST['cart_items'] ) ), true ) : array();
+		$cart_items_json = isset( $_POST['cart_items'] ) ? wp_unslash( $_POST['cart_items'] ) : '';
+		$cart_items      = json_decode( $cart_items_json, true );
+
+		if ( ! is_array( $cart_items ) ) {
+			$cart_items = array();
+		}
+
 		$location_id  = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 		$order_type   = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
 		$pickup_time  = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
@@ -322,12 +327,15 @@ class LB_POS {
 
 			// Produkte hinzufügen
 			foreach ( $cart_items as $item ) {
-				$product = wc_get_product( $item['id'] );
+				$product_id = isset( $item['id'] ) ? absint( $item['id'] ) : 0;
+				$quantity   = isset( $item['quantity'] ) ? absint( $item['quantity'] ) : 1;
+
+				$product = wc_get_product( $product_id );
 				if ( ! $product ) {
 					continue;
 				}
 
-				$order->add_product( $product, $item['quantity'] );
+				$order->add_product( $product, $quantity );
 			}
 
 			// Meta-Daten speichern

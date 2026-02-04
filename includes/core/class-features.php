@@ -36,173 +36,188 @@ class LB_Features {
 	 *
 	 * @var array
 	 */
-	private static $feature_definitions = array(
-		// Bestellsystem
-		'enable_pos'                => array(
-			'group'       => 'order_system',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Kassensystem (POS)',
-			'description' => 'Kassensystem für Vor-Ort-Bestellungen aktivieren',
-		),
-		'enable_scheduled_orders'   => array(
-			'group'       => 'order_system',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Vorbestellungen',
-			'description' => 'Kunden können Bestellungen für später aufgeben',
-		),
-		'enable_order_notes'        => array(
-			'group'       => 'order_system',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Kundennotizen',
-			'description' => 'Kunden können Notizen zur Bestellung hinzufügen',
-		),
-		'enable_order_cancellation' => array(
-			'group'       => 'order_system',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Stornierung',
-			'description' => 'Kunden können Bestellungen selbst stornieren',
-		),
+	private static $feature_definitions = array();
 
-		// Checkout
-		'enable_optimized_checkout' => array(
-			'group'       => 'checkout',
-			'default'     => true,
-			'premium'     => true,
-			'label'       => 'Optimierter Checkout',
-			'description' => 'Vereinfachter Checkout-Flow',
-		),
-		'enable_tips'               => array(
-			'group'       => 'checkout',
-			'default'     => true,
-			'premium'     => true,
-			'label'       => 'Trinkgeld-System',
-			'description' => 'Trinkgeld-Optionen im Checkout anzeigen',
-		),
-		'enable_rounding'           => array(
-			'group'       => 'checkout',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => '5-Rappen-Rundung',
-			'description' => 'Beträge auf 5 Rappen runden (Schweiz)',
-		),
-		'enable_guest_checkout'     => array(
-			'group'       => 'checkout',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Gast-Checkout',
-			'description' => 'Checkout ohne Kundenkonto ermöglichen',
-		),
-		'enable_email_field'        => array(
-			'group'       => 'checkout',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'E-Mail-Feld',
-			'description' => 'E-Mail-Adresse im Checkout anzeigen',
-		),
-		'enable_phone_field'        => array(
-			'group'       => 'checkout',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Telefon-Feld',
-			'description' => 'Telefonnummer im Checkout anzeigen',
-		),
+	/**
+	 * Konstruktor
+	 */
+	private function __construct() {
+		$this->init_definitions();
+		$this->load_features();
+	}
 
-		// Standorte
-		'enable_multi_location'     => array(
-			'group'       => 'locations',
-			'default'     => false,
-			'premium'     => true,
-			'label'       => 'Multi-Standort',
-			'description' => 'Mehrere Standorte verwalten',
-		),
-		'enable_location_selector'  => array(
-			'group'       => 'locations',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Standort-Auswahl',
-			'description' => 'Standort-Auswahl im Frontend anzeigen',
-		),
-		'enable_opening_hours'      => array(
-			'group'       => 'locations',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Öffnungszeiten',
-			'description' => 'Öffnungszeiten pro Standort verwalten',
-		),
+	/**
+	 * Definitionen initialisieren (damit Übersetzungen geladen werden können)
+	 */
+	private function init_definitions() {
+		self::$feature_definitions = array(
+			// Bestellsystem
+			'enable_pos'                => array(
+				'group'       => 'order_system',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Kassensystem (POS)', 'libre-bite' ),
+				'description' => __( 'Kassensystem für Vor-Ort-Bestellungen aktivieren', 'libre-bite' ),
+			),
+			'enable_scheduled_orders'   => array(
+				'group'       => 'order_system',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Vorbestellungen', 'libre-bite' ),
+				'description' => __( 'Kunden können Bestellungen für später aufgeben', 'libre-bite' ),
+			),
+			'enable_order_notes'        => array(
+				'group'       => 'order_system',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Kundennotizen', 'libre-bite' ),
+				'description' => __( 'Kunden können Notizen zur Bestellung hinzufügen', 'libre-bite' ),
+			),
+			'enable_order_cancellation' => array(
+				'group'       => 'order_system',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Stornierung', 'libre-bite' ),
+				'description' => __( 'Kunden können Bestellungen selbst stornieren', 'libre-bite' ),
+			),
 
-		// Benachrichtigungen
-		'enable_pickup_reminders'   => array(
-			'group'       => 'notifications',
-			'default'     => true,
-			'premium'     => true,
-			'label'       => 'Abhol-Erinnerungen',
-			'description' => 'E-Mail-Erinnerung vor Abholzeit senden',
-		),
-		'enable_sound_notifications' => array(
-			'group'       => 'notifications',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Sound-Benachrichtigung',
-			'description' => 'Ton bei neuen Bestellungen abspielen',
-		),
-		'enable_admin_email'        => array(
-			'group'       => 'notifications',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Admin-Benachrichtigung',
-			'description' => 'E-Mail an Admin bei neuen Bestellungen',
-		),
+			// Checkout
+			'enable_optimized_checkout' => array(
+				'group'       => 'checkout',
+				'default'     => true,
+				'premium'     => true,
+				'label'       => __( 'Optimierter Checkout', 'libre-bite' ),
+				'description' => __( 'Vereinfachter Checkout-Flow', 'libre-bite' ),
+			),
+			'enable_tips'               => array(
+				'group'       => 'checkout',
+				'default'     => true,
+				'premium'     => true,
+				'label'       => __( 'Trinkgeld-System', 'libre-bite' ),
+				'description' => __( 'Trinkgeld-Optionen im Checkout anzeigen', 'libre-bite' ),
+			),
+			'enable_rounding'           => array(
+				'group'       => 'checkout',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( '5-Rappen-Rundung', 'libre-bite' ),
+				'description' => __( 'Beträge auf 5 Rappen runden (Schweiz)', 'libre-bite' ),
+			),
+			'enable_guest_checkout'     => array(
+				'group'       => 'checkout',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Gast-Checkout', 'libre-bite' ),
+				'description' => __( 'Checkout ohne Kundenkonto ermöglichen', 'libre-bite' ),
+			),
+			'enable_email_field'        => array(
+				'group'       => 'checkout',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'E-Mail-Feld', 'libre-bite' ),
+				'description' => __( 'E-Mail-Adresse im Checkout anzeigen', 'libre-bite' ),
+			),
+			'enable_phone_field'        => array(
+				'group'       => 'checkout',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Telefon-Feld', 'libre-bite' ),
+				'description' => __( 'Telefonnummer im Checkout anzeigen', 'libre-bite' ),
+			),
 
-		// Produkte
-		'enable_product_options'    => array(
-			'group'       => 'products',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Produkt-Optionen',
-			'description' => 'Zusatzoptionen für Produkte (Add-ons)',
-		),
-		'enable_nutritional_info'   => array(
-			'group'       => 'products',
-			'default'     => false,
-			'premium'     => false,
-			'label'       => 'Nährwertangaben',
-			'description' => 'Nährwertinformationen bei Produkten anzeigen',
-		),
-		'enable_allergens'          => array(
-			'group'       => 'products',
-			'default'     => false,
-			'premium'     => false,
-			'label'       => 'Allergene',
-			'description' => 'Allergen-Warnungen bei Produkten anzeigen',
-		),
+			// Standorte
+			'enable_multi_location'     => array(
+				'group'       => 'locations',
+				'default'     => false,
+				'premium'     => true,
+				'label'       => __( 'Multi-Standort', 'libre-bite' ),
+				'description' => __( 'Mehrere Standorte verwalten', 'libre-bite' ),
+			),
+			'enable_location_selector'  => array(
+				'group'       => 'locations',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Standort-Auswahl', 'libre-bite' ),
+				'description' => __( 'Standort-Auswahl im Frontend anzeigen', 'libre-bite' ),
+			),
+			'enable_opening_hours'      => array(
+				'group'       => 'locations',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Öffnungszeiten', 'libre-bite' ),
+				'description' => __( 'Öffnungszeiten pro Standort verwalten', 'libre-bite' ),
+			),
 
-		// Dashboard
-		'enable_kanban_board'       => array(
-			'group'       => 'dashboard',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Kanban-Board',
-			'description' => 'Bestellungen als Kanban-Board anzeigen',
-		),
-		'enable_auto_status_change' => array(
-			'group'       => 'dashboard',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Auto-Status',
-			'description' => 'Automatischer Status-Wechsel bei Zeitüberschreitung',
-		),
-		'enable_fullscreen_mode'    => array(
-			'group'       => 'dashboard',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Fullscreen-Modus',
-			'description' => 'Vollbild-Ansicht für Tablets aktivieren',
-		),
-	);
+			// Benachrichtigungen
+			'enable_pickup_reminders'   => array(
+				'group'       => 'notifications',
+				'default'     => true,
+				'premium'     => true,
+				'label'       => __( 'Abhol-Erinnerungen', 'libre-bite' ),
+				'description' => __( 'E-Mail-Erinnerung vor Abholzeit senden', 'libre-bite' ),
+			),
+			'enable_sound_notifications' => array(
+				'group'       => 'notifications',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Sound-Benachrichtigung', 'libre-bite' ),
+				'description' => __( 'Ton bei neuen Bestellungen abspielen', 'libre-bite' ),
+			),
+			'enable_admin_email'        => array(
+				'group'       => 'notifications',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Admin-Benachrichtigung', 'libre-bite' ),
+				'description' => __( 'E-Mail an Admin bei neuen Bestellungen', 'libre-bite' ),
+			),
+
+			// Produkte
+			'enable_product_options'    => array(
+				'group'       => 'products',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Produkt-Optionen', 'libre-bite' ),
+				'description' => __( 'Zusatzoptionen für Produkte (Add-ons)', 'libre-bite' ),
+			),
+			'enable_nutritional_info'   => array(
+				'group'       => 'products',
+				'default'     => false,
+				'premium'     => false,
+				'label'       => __( 'Nährwertangaben', 'libre-bite' ),
+				'description' => __( 'Nährwertinformationen bei Produkten anzeigen', 'libre-bite' ),
+			),
+			'enable_allergens'          => array(
+				'group'       => 'products',
+				'default'     => false,
+				'premium'     => false,
+				'label'       => __( 'Allergene', 'libre-bite' ),
+				'description' => __( 'Allergen-Warnungen bei Produkten anzeigen', 'libre-bite' ),
+			),
+
+			// Dashboard
+			'enable_kanban_board'       => array(
+				'group'       => 'dashboard',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Kanban-Board', 'libre-bite' ),
+				'description' => __( 'Bestellungen als Kanban-Board anzeigen', 'libre-bite' ),
+			),
+			'enable_auto_status_change' => array(
+				'group'       => 'dashboard',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Auto-Status', 'libre-bite' ),
+				'description' => __( 'Automatischer Status-Wechsel bei Zeitüberschreitung', 'libre-bite' ),
+			),
+			'enable_fullscreen_mode'    => array(
+				'group'       => 'dashboard',
+				'default'     => true,
+				'premium'     => false,
+				'label'       => __( 'Fullscreen-Modus', 'libre-bite' ),
+				'description' => __( 'Vollbild-Ansicht für Tablets aktivieren', 'libre-bite' ),
+			),
+		);
+	}
 
 	/**
 	 * Singleton-Instanz abrufen
@@ -216,12 +231,6 @@ class LB_Features {
 		return self::$instance;
 	}
 
-	/**
-	 * Konstruktor
-	 */
-	private function __construct() {
-		$this->load_features();
-	}
 
 	/**
 	 * Features aus Datenbank laden

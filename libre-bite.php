@@ -76,6 +76,8 @@ spl_autoload_register( function ( $class ) {
  * Hauptklasse des Plugins laden und initialisieren
  */
 function lb_init_plugin() {
+	load_plugin_textdomain( 'libre-bite', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+
 	// WooCommerce Abhängigkeit prüfen
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		add_action( 'admin_notices', 'lb_woocommerce_missing_notice' );
@@ -107,8 +109,10 @@ function lb_woocommerce_missing_notice() {
 	?>
 	<div class="notice notice-error">
 		<p>
-			<strong>Libre Bite</strong> benötigt WooCommerce.
-			Bitte installieren und aktivieren Sie WooCommerce.
+			<?php
+			/* translators: %s: Plugin name */
+			printf( wp_kses_post( __( '<strong>%s</strong> benötigt WooCommerce. Bitte installieren und aktivieren Sie WooCommerce.', 'libre-bite' ) ), 'Libre Bite' );
+			?>
 		</p>
 	</div>
 	<?php
@@ -121,8 +125,10 @@ function lb_woocommerce_version_notice() {
 	?>
 	<div class="notice notice-error">
 		<p>
-			<strong>Libre Bite</strong> benötigt mindestens WooCommerce Version 8.0.
-			Bitte aktualisieren Sie WooCommerce.
+			<?php
+			/* translators: %s: Plugin name */
+			printf( wp_kses_post( __( '<strong>%s</strong> benötigt mindestens WooCommerce Version 8.0. Bitte aktualisieren Sie WooCommerce.', 'libre-bite' ) ), 'Libre Bite' );
+			?>
 		</p>
 	</div>
 	<?php
@@ -136,8 +142,8 @@ function lb_activate_plugin() {
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		wp_die(
-			'Libre Bite benötigt WooCommerce. Bitte installieren und aktivieren Sie WooCommerce zuerst.',
-			'Plugin-Abhängigkeit',
+			esc_html__( 'Libre Bite benötigt WooCommerce. Bitte installieren und aktivieren Sie WooCommerce zuerst.', 'libre-bite' ),
+			esc_html__( 'Plugin-Abhängigkeit', 'libre-bite' ),
 			array( 'back_link' => true )
 		);
 	}
