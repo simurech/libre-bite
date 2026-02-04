@@ -1,0 +1,39 @@
+name: Build & Release ZIP
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Create Plugin ZIP
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Clean ZIP
+        run: |
+          mkdir build
+          mkdir build/libre-bite
+          
+          rsync -av ./ build/libre-bite \
+            --exclude='.git*' \
+            --exclude='.github' \
+            --exclude='.DS_Store' \
+            --exclude='build' \
+            --exclude='*.zip' \
+            --exclude='node_modules'
+
+          cd build
+          zip -r ../libre-bite.zip libre-bite
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: libre-bite.zip
+          generate_release_notes: true
