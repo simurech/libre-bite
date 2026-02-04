@@ -187,6 +187,22 @@ $feature_groups = array(
 	<h1><?php esc_html_e( 'Feature-Toggles', 'libre-bite' ); ?></h1>
 	<p class="description"><?php esc_html_e( 'Aktivieren oder deaktivieren Sie einzelne Funktionen des Libre Bites.', 'libre-bite' ); ?></p>
 
+	<?php if ( function_exists( 'lb_freemius' ) && ! lb_freemius()->is_premium() ) : ?>
+		<div class="lb-upgrade-notice" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 25px; border-radius: 8px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+			<div style="flex: 1;">
+				<h2 style="color: #fff; margin-top: 0; font-size: 22px;"><?php esc_html_e( 'Holen Sie sich Libre Bite Pro!', 'libre-bite' ); ?></h2>
+				<p style="font-size: 16px; opacity: 0.9; margin-bottom: 0;">
+					<?php esc_html_e( 'Schalten Sie Multi-Standort-Verwaltung, Trinkgeld-Optionen, Abhol-Erinnerungen und vieles mehr frei.', 'libre-bite' ); ?>
+				</p>
+			</div>
+			<div style="margin-left: 20px;">
+				<a href="<?php echo esc_url( lb_freemius()->get_upgrade_url() ); ?>" class="button button-primary button-hero" style="background: #fff; color: #764ba2; border: none; font-weight: bold;">
+					<?php esc_html_e( 'Jetzt upgraden', 'libre-bite' ); ?>
+				</a>
+			</div>
+		</div>
+	<?php endif; ?>
+
 	<form id="lb-features-form" method="post">
 		<?php wp_nonce_field( 'lb_admin_nonce', 'lb_nonce' ); ?>
 

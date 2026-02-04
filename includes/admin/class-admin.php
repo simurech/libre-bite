@@ -239,6 +239,18 @@ class LB_Admin {
 			array( $this, 'render_help_page' )
 		);
 
+		// Pricing / Upgrade (Nur wenn nicht Premium)
+		if ( function_exists( 'lb_freemius' ) && ! lb_freemius()->is_premium() ) {
+			add_submenu_page(
+				'libre-bite',
+				__( 'Upgrade auf Pro', 'libre-bite' ),
+				'<span style="color: #f18500; font-weight: bold;">' . __( 'Pricing', 'libre-bite' ) . '</span>',
+				'manage_options',
+				'lb-pricing',
+				array( $this, 'render_pricing_page' )
+			);
+		}
+
 		// Debug (nur wenn WP_DEBUG aktiv und Super-Admin)
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			add_submenu_page(
@@ -342,6 +354,21 @@ class LB_Admin {
 			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
 		}
 		include LB_PLUGIN_DIR . 'templates/admin/debug-info.php';
+	}
+
+	/**
+	 * Pricing-Seite rendern
+	 */
+	public function render_pricing_page() {
+		if ( function_exists( 'lb_freemius' ) ) {
+			lb_freemius()->get_upgrade_url(); // Dies triggert den Freemius Checkout/Pricing Frame
+			
+			// Fallback falls der Frame nicht sofort lädt
+			echo '<div class="wrap"><h1>' . esc_html__( 'Upgrade auf Libre Bite Pro', 'libre-bite' ) . '</h1>';
+			echo '<p>' . esc_html__( 'Schalten Sie alle Premium-Funktionen frei, um das volle Potenzial von Libre Bite zu nutzen.', 'libre-bite' ) . '</p>';
+			echo '<a href="' . esc_url( lb_freemius()->get_upgrade_url() ) . '" class="button button-primary">' . esc_html__( 'Preise anzeigen', 'libre-bite' ) . '</a>';
+			echo '</div>';
+		}
 	}
 
 	/**

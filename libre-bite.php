@@ -26,17 +26,28 @@ if ( ! function_exists( 'lb_freemius' ) ) {
 			require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
 
 			$lb_freemius = fs_dynamic_init( array(
-				'id'             => '23812',
-				'slug'           => 'librebite',
-				'type'           => 'plugin',
-				'public_key'     => 'pk_ce29dda57055eecde2de784d17506',
-				'is_premium'     => false,
-				'has_addons'     => false,
-				'has_paid_plans' => false,
-				'menu'           => array(
-					'slug'       => 'libre-bite',	
-					'contact' 	=> false,
-					'support'	=> false,
+				'id'                  => '23812',
+				'slug'                => 'librebite',
+				'premium_slug'        => 'librebite-pro',
+				'type'                => 'plugin',
+				'public_key'          => 'pk_ce29dda57055eecde2de784d17506',
+				'is_premium'          => true,
+				'premium_suffix'      => 'Pro',
+				// If your plugin is a serviceware, set this option to false.
+				'has_premium_version' => true,
+				'has_addons'          => false,
+				'has_paid_plans'      => true,
+				// Automatically removed in the free version. If you're not using the
+				// auto-generated free version, delete this line before uploading to wp.org.
+				'wp_org_gatekeeper'   => 'OA7#BoRiBNqdf52FvzEf!!074aRLPs8fspif$7K1#4u4Csys1fQlCecVcUTOs2mcpeVHi#C2j9d09fOTvbC0HloPT7fFee5WdS3G',
+				'trial'               => array(
+					'days'               => 7,
+					'is_require_payment' => false,
+				),
+				'menu'                => array(
+					'slug'    => 'libre-bite',
+					'contact' => false,
+					'support' => false,
 				),
 			) );
 		}
