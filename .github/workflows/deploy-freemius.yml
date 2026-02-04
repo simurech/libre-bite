@@ -7,17 +7,31 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to Freemius
+    name: Deploy Plugin to Freemius
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Check Secrets
+        run: |
+          if [ -n "${{ secrets.FREEMIUS_DEVELOPER_ID }}" ]; then echo "DEV_ID is Set"; else echo "DEV_ID is MISSING"; fi
+          if [ -n "${{ secrets.FREEMIUS_PLUGIN_ID }}" ]; then echo "PLUGIN_ID is Set"; else echo "PLUGIN_ID is MISSING"; fi
+
+      - name: Create ZIP
+        run: |
+          zip -r libre-bite.zip . -x "*.git*" ".github*" ".DS_Store" "*.zip"
+
       - name: Deploy to Freemius
-        uses: wp-vulnerability/deploy-on-freemius@v1.2.1
+        uses: buttonizer/freemius-deploy@v0.1.2
         with:
-          freemius-developer-id: ${{ secrets.FREEMIUS_DEVELOPER_ID }}
-          freemius-plugin-id: ${{ secrets.FREEMIUS_PLUGIN_ID }}
-          freemius-public-key: ${{ secrets.FREEMIUS_PUBLIC_KEY }}
-          freemius-secret-key: ${{ secrets.FREEMIUS_SECRET_KEY }}
-          freemius-zip-name: 'libre-bite.zip'
+          file_name: libre-bite.zip
+          release_mode: released
+          version: ${{ github.ref_name }}
+          sandbox: false
+        env:
+          DEV_ID: ${{ secrets.FREEMIUS_DEVELOPER_ID }}
+          PLUGIN_ID: ${{ secrets.FREEMIUS_PLUGIN_ID }}
+          PUBLIC_KEY: ${{ secrets.FREEMIUS_PUBLIC_KEY }}
+          SECRET_KEY: ${{ secrets.FREEMIUS_SECRET_KEY }}
+          PLUGIN_SLUG: librebite
