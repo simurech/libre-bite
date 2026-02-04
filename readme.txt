@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, gastronomy, delivery, food
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.0.1-beta
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,7 +63,7 @@ Yes, the location management module allows you to create and manage multiple res
 
 == Changelog ==
 
-= 1.0.1-beta =
+= 1.0.1 =
 * Improved: Freemius integration for better WordPress.org compliance.
 * Fixed: Uninstall process to allow feedback tracking.
 * Security: Enhanced security checks and escaping.
