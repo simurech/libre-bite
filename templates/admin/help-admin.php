@@ -23,6 +23,7 @@ $billing_note     = isset( $support_settings['support_billing_note'] ) ? $suppor
 $custom_text      = isset( $support_settings['support_custom_text'] ) ? $support_settings['support_custom_text'] : '';
 
 // Aktiver Tab
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Tab-Navigation.
 $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 ?>
 <div class="wrap lb-help-wrap">

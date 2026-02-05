@@ -19,6 +19,7 @@ $support_settings = get_option( 'lb_support_settings', array() );
 $features         = get_option( 'lb_features', array() );
 
 // Aktiver Tab
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Tab-Navigation.
 $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 ?>
 <div class="wrap lb-help-wrap">

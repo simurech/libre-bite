@@ -3,7 +3,7 @@
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://github.com/simurech/libre-bite
  * Description:       Komplettes Bestell- und Standortverwaltungssystem für WooCommerce
- * Version:           1.0.2
+ * Version:           1.0.3
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Simon Urech
@@ -14,6 +14,11 @@
  * WC requires at least: 8.0
  * WC tested up to: 9.0
  */
+
+// Direkten Dateizugriff verhindern.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 if ( function_exists( 'lb_freemius' ) ) {
 	lb_freemius()->set_basename( true, __FILE__ );
@@ -68,13 +73,9 @@ if ( function_exists( 'lb_freemius' ) ) {
 				LB_Installer::uninstall_cleanup();
 			} );
 		}
-	// Direkten Zugriff verhindern
-	if ( ! defined( 'ABSPATH' ) ) {
-		exit;
-	}
 
 	// Plugin-Konstanten definieren
-	define( 'LB_VERSION', '1.0.2' );
+	define( 'LB_VERSION', '1.0.3' );
 	define( 'LB_PLUGIN_FILE', __FILE__ );
 	define( 'LB_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 	define( 'LB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

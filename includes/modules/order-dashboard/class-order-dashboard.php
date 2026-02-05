@@ -288,7 +288,7 @@ class LB_Order_Dashboard {
 			}
 
 			$label = $meta->display_key;
-			$value = strip_tags( $meta->display_value );
+			$value = wp_strip_all_tags( $meta->display_value );
 
 			// HTML Entities dekodieren
 			$value = html_entity_decode( $value, ENT_QUOTES, 'UTF-8' );

@@ -1,11 +1,11 @@
 === Libre Bite ===
 Contributors: simurech
 Donate link: https://github.com/simurech/libre-bite
-Tags: woocommerce, restaurant, pos, gastronomy, delivery, food
+Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,14 @@ Yes, the location management module allows you to create and manage multiple res
 3. Feature Toggles to customize your setup.
 
 == Changelog ==
+
+= 1.0.3 =
+* Fix: Behebe alle WordPress.org Plugin Check Fehler und Warnungen.
+* Fix: Direkter Dateizugriff-Schutz in Hauptdatei korrigiert.
+* Fix: Output Escaping bei wp_die() korrigiert.
+* Fix: strip_tags() durch wp_strip_all_tags() ersetzt.
+* Fix: PHPCS-Ignore-Kommentare für legitime Verwendungen hinzugefügt.
+* Fix: readme.txt Tags auf maximal 5 reduziert.
 
 = 1.0.2 =
 * Fix: Addressed WordPress.org Plugin Check errors (Tested up to tag, Textdomain loading).

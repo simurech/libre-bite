@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Nur Administratoren haben Zugriff
 if ( ! current_user_can( 'manage_options' ) ) {
-	wp_die( __( 'Sie haben keine Berechtigung, auf diese Seite zuzugreifen.', 'libre-bite' ) );
+	wp_die( esc_html__( 'Sie haben keine Berechtigung, auf diese Seite zuzugreifen.', 'libre-bite' ) );
 }
 
 // Aktuelle Einstellungen abrufen
@@ -25,6 +25,7 @@ $all_menu_items = LB_Admin_Settings::get_all_menu_items();
 $all_roles      = LB_Admin_Settings::get_all_roles();
 
 // Debug: Menüs anzeigen (nur für Admins)
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Debug-Ausgabe.
 if ( isset( $_GET['debug_menus'] ) && current_user_can( 'manage_options' ) ) {
 	echo '<div class="notice notice-info"><pre style="max-height: 300px; overflow: auto;">';
 	echo 'Gefundene Menüeinträge (' . count( $all_menu_items ) . '):<br><br>';

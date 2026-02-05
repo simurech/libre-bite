@@ -379,7 +379,9 @@ class LB_Checkout {
 		}
 
 		// Standort via URL-Parameter setzen (?location=123)
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Session.
 		if ( isset( $_GET['location'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Session.
 			$location_id = intval( $_GET['location'] );
 			$location = get_post( $location_id );
 

@@ -311,7 +311,7 @@ class LB_POS {
 		}
 
 		// Rohes JSON laden und validieren.
-		// phpcs:ignore WordPress.Security.NonceVerification -- Nonce wurde bereits oben geprüft.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON wird nach dem Decode Feld für Feld validiert.
 		$cart_items_raw = isset( $_POST['cart_items'] ) ? wp_unslash( $_POST['cart_items'] ) : '';
 
 		if ( empty( $cart_items_raw ) ) {

@@ -228,10 +228,13 @@ class LB_Installer {
 		}
 
 		// 2. Delete Options.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall: Wildcard-Löschung benötigt direkten Query.
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s", $wpdb->esc_like( 'lb_' ) . '%', $wpdb->esc_like( 'oos_' ) . '%' ) );
 
 		// 3. Delete Meta.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall: Wildcard-Löschung benötigt direkten Query.
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE %s OR meta_key LIKE %s", $wpdb->esc_like( '_lb_' ) . '%', $wpdb->esc_like( '_oos_' ) . '%' ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall: Wildcard-Löschung benötigt direkten Query.
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE %s OR meta_key LIKE %s", $wpdb->esc_like( 'lb_' ) . '%', $wpdb->esc_like( 'oos_' ) . '%' ) );
 
 		// 4. Roles & Caps.
@@ -257,6 +260,7 @@ class LB_Installer {
 		}
 
 		// 6. Transients.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall: Wildcard-Löschung benötigt direkten Query.
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s", $wpdb->esc_like( '_transient_lb_' ) . '%', $wpdb->esc_like( '_transient_timeout_lb_' ) . '%' ) );
 	}
 }
