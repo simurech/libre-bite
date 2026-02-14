@@ -1,11 +1,11 @@
 === Libre Bite ===
-Contributors: simurech
+Contributors: simon61
 Donate link: https://github.com/simurech/libre-bite
 Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,14 @@ Yes, the location management module allows you to create and manage multiple res
 3. Feature Toggles to customize your setup.
 
 == Changelog ==
+
+= 1.0.4 =
+* Fix: Prefix von lb_ auf lbite_ geaendert (WordPress.org Namenskonvention).
+* Fix: Inline CSS/JS aus Templates in separate Dateien und wp_enqueue verschoben.
+* Fix: Nonce-Checks in Checkout und Product-Options ergaenzt.
+* Fix: Freemius is_org_compliant Parameter hinzugefuegt.
+* Fix: SortableJS auf Version 1.15.7 aktualisiert.
+* Fix: Contributors in readme.txt korrigiert.
 
 = 1.0.3 =
 * Fix: Behebe alle WordPress.org Plugin Check Fehler und Warnungen.
