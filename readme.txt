@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,9 @@ Yes, the location management module allows you to create and manage multiple res
 3. Feature Toggles to customize your setup.
 
 == Changelog ==
+
+= 1.0.5 =
+* Fix: Heredoc/Nowdoc-Syntax durch externe JS-Dateien ersetzt (WPCS-Konformitaet).
 
 = 1.0.4 =
 * Fix: Prefix von lb_ auf lbite_ geaendert (WordPress.org Namenskonvention).
