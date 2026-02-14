@@ -10,28 +10,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $location = $location_id ? get_post( $location_id ) : null;
-$location_image_id = $location_id ? get_post_meta( $location_id, '_lb_location_image', true ) : '';
+$location_image_id = $location_id ? get_post_meta( $location_id, '_lbite_location_image', true ) : '';
 $location_image_url = $location_image_id ? wp_get_attachment_image_url( $location_image_id, 'thumbnail' ) : '';
 ?>
 
-<div class="lb-checkout-selection">
+<div class="lbite-checkout-selection">
 	<h3><?php esc_html_e( 'Standort & Abholzeit', 'libre-bite' ); ?></h3>
 
 	<!-- Versteckte Felder für das Formular -->
-	<input type="hidden" name="lb_location_id" id="lb_location_id" value="<?php echo esc_attr( $location_id ); ?>" required>
-	<input type="hidden" name="lb_order_type" id="lb_order_type" value="<?php echo esc_attr( $order_type ); ?>" required>
-	<input type="hidden" name="lb_pickup_time" id="lb_pickup_time" value="<?php echo esc_attr( $pickup_time ); ?>">
+	<input type="hidden" name="lbite_location_id" id="lbite_location_id" value="<?php echo esc_attr( $location_id ); ?>" required>
+	<input type="hidden" name="lbite_order_type" id="lbite_order_type" value="<?php echo esc_attr( $order_type ); ?>" required>
+	<input type="hidden" name="lbite_pickup_time" id="lbite_pickup_time" value="<?php echo esc_attr( $pickup_time ); ?>">
 
 	<?php if ( $location ) : ?>
 		<!-- Anzeige der aktuellen Auswahl -->
-		<div class="lb-current-selection">
-			<div class="lb-selection-display">
+		<div class="lbite-current-selection">
+			<div class="lbite-selection-display">
 				<?php if ( $location_image_url ) : ?>
-					<div class="lb-location-image">
+					<div class="lbite-location-image">
 						<img src="<?php echo esc_url( $location_image_url ); ?>" alt="<?php echo esc_attr( $location->post_title ); ?>">
 					</div>
 				<?php else : ?>
-					<div class="lb-location-image lb-location-placeholder">
+					<div class="lbite-location-image lbite-location-placeholder">
 						<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
 							<circle cx="12" cy="10" r="3"></circle>
@@ -39,13 +39,13 @@ $location_image_url = $location_image_id ? wp_get_attachment_image_url( $locatio
 					</div>
 				<?php endif; ?>
 
-				<div class="lb-selection-details">
-					<div class="lb-location-name">
+				<div class="lbite-selection-details">
+					<div class="lbite-location-name">
 						<strong><?php echo esc_html( $location->post_title ); ?></strong>
 					</div>
-					<div class="lb-order-info">
+					<div class="lbite-order-info">
 						<?php if ( 'now' === $order_type ) : ?>
-							<span class="lb-badge lb-badge-now">
+							<span class="lbite-badge lbite-badge-now">
 								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 									<circle cx="12" cy="12" r="10"></circle>
 									<polyline points="12 6 12 12 16 14"></polyline>
@@ -53,7 +53,7 @@ $location_image_url = $location_image_id ? wp_get_attachment_image_url( $locatio
 								<?php esc_html_e( 'Sofort bestellen', 'libre-bite' ); ?>
 							</span>
 						<?php else : ?>
-							<span class="lb-badge lb-badge-later">
+							<span class="lbite-badge lbite-badge-later">
 								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 									<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
 									<line x1="16" y1="2" x2="16" y2="6"></line>
@@ -72,24 +72,24 @@ $location_image_url = $location_image_id ? wp_get_attachment_image_url( $locatio
 					</div>
 				</div>
 
-				<button type="button" class="lb-change-btn" id="lb-change-selection">
+				<button type="button" class="lbite-change-btn" id="lbite-change-selection">
 					<?php esc_html_e( 'Ändern', 'libre-bite' ); ?>
 				</button>
 			</div>
 		</div>
 	<?php else : ?>
-		<div class="lb-no-selection">
+		<div class="lbite-no-selection">
 			<p><?php esc_html_e( 'Bitte wählen Sie einen Standort und eine Abholzeit.', 'libre-bite' ); ?></p>
 		</div>
 	<?php endif; ?>
 
 	<!-- Bearbeitungsformular (zunächst versteckt) -->
-	<div class="lb-edit-form" style="<?php echo $location ? 'display: none;' : ''; ?>">
-		<div class="lb-form-group">
+	<div class="lbite-edit-form" style="<?php echo $location ? 'display: none;' : ''; ?>">
+		<div class="lbite-form-group">
 			<label>
 				<?php esc_html_e( 'Standort', 'libre-bite' ); ?> <span class="required">*</span>
 			</label>
-			<select id="lb_location_select" class="lb-select">
+			<select id="lbite_location_select" class="lbite-select">
 				<option value=""><?php esc_html_e( 'Standort wählen...', 'libre-bite' ); ?></option>
 				<?php foreach ( $locations as $loc ) : ?>
 					<option value="<?php echo esc_attr( $loc->ID ); ?>" <?php selected( $location_id, $loc->ID ); ?>>
@@ -99,50 +99,50 @@ $location_image_url = $location_image_id ? wp_get_attachment_image_url( $locatio
 			</select>
 		</div>
 
-		<div class="lb-form-group">
+		<div class="lbite-form-group">
 			<label>
 				<?php esc_html_e( 'Bestellart', 'libre-bite' ); ?> <span class="required">*</span>
 			</label>
-			<div class="lb-radio-group">
-				<label class="lb-radio-option">
-					<input type="radio" name="lb_order_type_select" value="now" <?php checked( $order_type, 'now' ); ?>>
+			<div class="lbite-radio-group">
+				<label class="lbite-radio-option">
+					<input type="radio" name="lbite_order_type_select" value="now" <?php checked( $order_type, 'now' ); ?>>
 					<span><?php esc_html_e( 'Sofort bestellen', 'libre-bite' ); ?></span>
 				</label>
-				<label class="lb-radio-option">
-					<input type="radio" name="lb_order_type_select" value="later" <?php checked( $order_type, 'later' ); ?>>
+				<label class="lbite-radio-option">
+					<input type="radio" name="lbite_order_type_select" value="later" <?php checked( $order_type, 'later' ); ?>>
 					<span><?php esc_html_e( 'Für später vorbestellen', 'libre-bite' ); ?></span>
 				</label>
 			</div>
 		</div>
 
-		<div class="lb-form-group lb-pickup-time-group" style="display: none;">
+		<div class="lbite-form-group lbite-pickup-time-group" style="display: none;">
 			<label>
 				<?php esc_html_e( 'Abholdatum', 'libre-bite' ); ?> <span class="required">*</span>
 			</label>
-			<input type="date" id="lb_pickup_date_select" class="lb-select" value="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>" min="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>">
-			<div class="lb-date-error" id="lb_date_error" style="display: none;">
+			<input type="date" id="lbite_pickup_date_select" class="lbite-select" value="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>" min="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>">
+			<div class="lbite-date-error" id="lbite_date_error" style="display: none;">
 				<span class="dashicons dashicons-info"></span>
-				<span class="lb-error-message">
-					<span id="lb_next_opening"></span>
+				<span class="lbite-error-message">
+					<span id="lbite_next_opening"></span>
 				</span>
 			</div>
 		</div>
 
-		<div class="lb-form-group lb-pickup-time-group" style="display: none;">
+		<div class="lbite-form-group lbite-pickup-time-group" style="display: none;">
 			<label>
 				<?php esc_html_e( 'Abholzeit', 'libre-bite' ); ?> <span class="required">*</span>
 			</label>
-			<select id="lb_pickup_time_select" class="lb-select">
+			<select id="lbite_pickup_time_select" class="lbite-select">
 				<option value=""><?php esc_html_e( 'Zeit wählen...', 'libre-bite' ); ?></option>
 			</select>
 		</div>
 
-		<div class="lb-form-actions">
-			<button type="button" class="lb-save-btn" id="lb-save-selection">
+		<div class="lbite-form-actions">
+			<button type="button" class="lbite-save-btn" id="lbite-save-selection">
 				<?php esc_html_e( 'Übernehmen', 'libre-bite' ); ?>
 			</button>
 			<?php if ( $location ) : ?>
-				<button type="button" class="lb-cancel-btn" id="lb-cancel-selection">
+				<button type="button" class="lbite-cancel-btn" id="lbite-cancel-selection">
 					<?php esc_html_e( 'Abbrechen', 'libre-bite' ); ?>
 				</button>
 			<?php endif; ?>
@@ -150,60 +150,60 @@ $location_image_url = $location_image_id ? wp_get_attachment_image_url( $locatio
 	</div>
 </div>
 
-<script>
+<?php ob_start(); ?>
 jQuery(document).ready(function($) {
 	// Ändern-Button
-	$('#lb-change-selection').on('click', function() {
-		$('.lb-current-selection').slideUp(300);
-		$('.lb-edit-form').slideDown(300);
+	$('#lbite-change-selection').on('click', function() {
+		$('.lbite-current-selection').slideUp(300);
+		$('.lbite-edit-form').slideDown(300);
 	});
 
 	// Abbrechen-Button
-	$('#lb-cancel-selection').on('click', function() {
-		$('.lb-edit-form').slideUp(300);
-		$('.lb-current-selection').slideDown(300);
+	$('#lbite-cancel-selection').on('click', function() {
+		$('.lbite-edit-form').slideUp(300);
+		$('.lbite-current-selection').slideDown(300);
 	});
 
 	// Bestellart ändern
-	$('input[name="lb_order_type_select"]').on('change', function() {
+	$('input[name="lbite_order_type_select"]').on('change', function() {
 		if ($(this).val() === 'later') {
-			$('.lb-pickup-time-group').slideDown(300);
+			$('.lbite-pickup-time-group').slideDown(300);
 			loadTimeslots();
 		} else {
-			$('.lb-pickup-time-group').slideUp(300);
+			$('.lbite-pickup-time-group').slideUp(300);
 		}
 	});
 
 	// Initial anzeigen wenn "later" gewählt
-	if ($('input[name="lb_order_type_select"]:checked').val() === 'later') {
-		$('.lb-pickup-time-group').show();
-		if ($('#lb_location_select').val()) {
+	if ($('input[name="lbite_order_type_select"]:checked').val() === 'later') {
+		$('.lbite-pickup-time-group').show();
+		if ($('#lbite_location_select').val()) {
 			updateDisabledDates();
 			loadTimeslots();
 		}
 	}
 
 	// Zeitslots laden wenn Standort geändert wird
-	$('#lb_location_select').on('change', function() {
-		if ($('input[name="lb_order_type_select"]:checked').val() === 'later') {
+	$('#lbite_location_select').on('change', function() {
+		if ($('input[name="lbite_order_type_select"]:checked').val() === 'later') {
 			loadTimeslots();
 			updateDisabledDates();
 		}
 	});
 
 	// Zeitslots laden wenn Datum geändert wird
-	$('#lb_pickup_date_select').on('change', function() {
+	$('#lbite_pickup_date_select').on('change', function() {
 		validateSelectedDate();
 		loadTimeslots();
 	});
 
 	// Übernehmen-Button
-	$('#lb-save-selection').on('click', function() {
+	$('#lbite-save-selection').on('click', function() {
 		var $btn = $(this);
-		var locationId = $('#lb_location_select').val();
-		var orderType = $('input[name="lb_order_type_select"]:checked').val();
-		var pickupDate = $('#lb_pickup_date_select').val();
-		var pickupTimeSlot = $('#lb_pickup_time_select').val();
+		var locationId = $('#lbite_location_select').val();
+		var orderType = $('input[name="lbite_order_type_select"]:checked').val();
+		var pickupDate = $('#lbite_pickup_date_select').val();
+		var pickupTimeSlot = $('#lbite_pickup_time_select').val();
 
 		// Validierung
 		if (!locationId) {
@@ -226,11 +226,11 @@ jQuery(document).ready(function($) {
 
 		// AJAX-Anfrage um Session zu aktualisieren
 		$.ajax({
-			url: lbData.ajaxUrl,
+			url: lbiteData.ajaxUrl,
 			type: 'POST',
 			data: {
-				action: 'lb_set_location',
-				nonce: lbData.nonce,
+				action: 'lbite_set_location',
+				nonce: lbiteData.nonce,
 				location_id: locationId,
 				order_type: orderType,
 				pickup_time: pickupTimeSlot
@@ -238,9 +238,9 @@ jQuery(document).ready(function($) {
 			success: function(response) {
 				if (response.success) {
 					// Versteckte Felder aktualisieren
-					$('#lb_location_id').val(locationId);
-					$('#lb_order_type').val(orderType);
-					$('#lb_pickup_time').val(pickupTimeSlot);
+					$('#lbite_location_id').val(locationId);
+					$('#lbite_order_type').val(orderType);
+					$('#lbite_pickup_time').val(pickupTimeSlot);
 
 					// Checkout aktualisieren
 					$('body').trigger('update_checkout');
@@ -260,26 +260,26 @@ jQuery(document).ready(function($) {
 	});
 
 	function loadTimeslots() {
-		var locationId = $('#lb_location_select').val();
-		var selectedDate = $('#lb_pickup_date_select').val() || new Date().toISOString().split('T')[0];
+		var locationId = $('#lbite_location_select').val();
+		var selectedDate = $('#lbite_pickup_date_select').val() || new Date().toISOString().split('T')[0];
 
 		if (!locationId) {
 			return;
 		}
 
 		$.ajax({
-			url: lbData.ajaxUrl,
+			url: lbiteData.ajaxUrl,
 			type: 'POST',
 			data: {
-				action: 'lb_get_timeslots',
-				nonce: lbData.nonce,
+				action: 'lbite_get_timeslots',
+				nonce: lbiteData.nonce,
 				location_id: locationId,
 				date: selectedDate
 			},
 			success: function(response) {
 				if (response.success && response.data.timeslots) {
-					var $select = $('#lb_pickup_time_select');
-					var currentValue = $('#lb_pickup_time').val();
+					var $select = $('#lbite_pickup_time_select');
+					var currentValue = $('#lbite_pickup_time').val();
 					$select.empty();
 					$select.append('<option value=""><?php esc_html_e( 'Zeit wählen...', 'libre-bite' ); ?></option>');
 
@@ -296,17 +296,17 @@ jQuery(document).ready(function($) {
 	var closedDaysCache = [];
 
 	function updateDisabledDates() {
-		var locationId = $('#lb_location_select').val();
+		var locationId = $('#lbite_location_select').val();
 		if (!locationId) {
 			return;
 		}
 
 		$.ajax({
-			url: lbData.ajaxUrl,
+			url: lbiteData.ajaxUrl,
 			type: 'POST',
 			data: {
-				action: 'lb_get_opening_days',
-				nonce: lbData.nonce,
+				action: 'lbite_get_opening_days',
+				nonce: lbiteData.nonce,
 				location_id: locationId
 			},
 			success: function(response) {
@@ -337,7 +337,7 @@ jQuery(document).ready(function($) {
 				var day = ('0' + currentDate.getDate()).slice(-2);
 				var isoDate = year + '-' + month + '-' + day;
 
-				$('#lb_pickup_date_select').val(isoDate);
+				$('#lbite_pickup_date_select').val(isoDate);
 				loadTimeslots();
 				return;
 			}
@@ -349,9 +349,9 @@ jQuery(document).ready(function($) {
 
 	// Ausgewähltes Datum validieren und ggf. korrigieren
 	function validateSelectedDate() {
-		var selectedDate = $('#lb_pickup_date_select').val();
+		var selectedDate = $('#lbite_pickup_date_select').val();
 		if (!selectedDate || closedDaysCache.length === 0) {
-			$('#lb_date_error').slideUp(200);
+			$('#lbite_date_error').slideUp(200);
 			return;
 		}
 
@@ -371,31 +371,31 @@ jQuery(document).ready(function($) {
 				var isoDate = year + '-' + month + '-' + day;
 
 				// Datum setzen
-				$('#lb_pickup_date_select').val(isoDate);
+				$('#lbite_pickup_date_select').val(isoDate);
 
 				// Hinweis anzeigen dass Datum geändert wurde
 				var formattedDate = formatDate(nextOpenDate);
-				$('#lb_next_opening').html('<?php echo esc_js( __( 'Automatisch geändert zu:', 'libre-bite' ) ); ?> <strong>' + formattedDate + '</strong>');
-				$('#lb_date_error').slideDown(300);
-				$('#lb_pickup_date_select').addClass('lb-error-input');
+				$('#lbite_next_opening').html('<?php echo esc_js( __( 'Automatisch geändert zu:', 'libre-bite' ) ); ?> <strong>' + formattedDate + '</strong>');
+				$('#lbite_date_error').slideDown(300);
+				$('#lbite_pickup_date_select').addClass('lbite-error-input');
 
 				// Nach kurzer Zeit Hinweis ausblenden und Timeslots laden
 				setTimeout(function() {
-					$('#lb_date_error').slideUp(200);
-					$('#lb_pickup_date_select').removeClass('lb-error-input');
+					$('#lbite_date_error').slideUp(200);
+					$('#lbite_pickup_date_select').removeClass('lbite-error-input');
 					loadTimeslots();
 				}, 2500);
 			} else {
 				// Kein offener Tag in den nächsten 14 Tagen
-				$('#lb_next_opening').html('<?php echo esc_js( __( 'Kein Öffnungstag in den nächsten 14 Tagen gefunden.', 'libre-bite' ) ); ?>');
-				$('#lb_date_error').slideDown(300);
-				$('#lb_pickup_date_select').addClass('lb-error-input');
+				$('#lbite_next_opening').html('<?php echo esc_js( __( 'Kein Öffnungstag in den nächsten 14 Tagen gefunden.', 'libre-bite' ) ); ?>');
+				$('#lbite_date_error').slideDown(300);
+				$('#lbite_pickup_date_select').addClass('lbite-error-input');
 			}
 		} else {
 			// Fehlermeldung ausblenden wenn gültiges Datum
-			$('#lb_date_error').slideUp(200);
-			$('#lb_pickup_date_select').removeClass('lb-error-input');
-			$('#lb_next_opening').html('');
+			$('#lbite_date_error').slideUp(200);
+			$('#lbite_pickup_date_select').removeClass('lbite-error-input');
+			$('#lbite_next_opening').html('');
 		}
 	}
 
@@ -426,340 +426,5 @@ jQuery(document).ready(function($) {
 		return day + '.' + month + '.' + year;
 	}
 });
-</script>
+<?php wp_add_inline_script( 'lbite-frontend', ob_get_clean() ); ?>
 
-<style>
-.lb-checkout-selection {
-	background: #fff;
-	border: 1px solid #e0e0e0;
-	border-radius: 8px;
-	padding: 20px;
-	margin-bottom: 20px;
-}
-
-.lb-checkout-selection h3 {
-	margin-top: 0;
-	margin-bottom: 15px;
-	font-size: 18px;
-	color: #333;
-}
-
-/* Aktuelle Auswahl Anzeige */
-.lb-selection-display {
-	display: flex;
-	align-items: center;
-	gap: 15px;
-	padding: 15px;
-	background: #f8f9fa;
-	border-radius: 8px;
-	border: 2px solid #e8e8e8;
-}
-
-.lb-location-image {
-	width: 60px;
-	height: 60px;
-	border-radius: 8px;
-	overflow: hidden;
-	flex-shrink: 0;
-}
-
-.lb-location-image img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-}
-
-.lb-location-placeholder {
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #fff;
-}
-
-.lb-selection-details {
-	flex: 1;
-}
-
-.lb-location-name {
-	font-size: 16px;
-	margin-bottom: 5px;
-	color: #333;
-}
-
-.lb-order-info {
-	display: flex;
-	gap: 10px;
-	flex-wrap: wrap;
-}
-
-.lb-badge {
-	display: inline-flex;
-	align-items: center;
-	gap: 5px;
-	padding: 5px 12px;
-	border-radius: 20px;
-	font-size: 13px;
-	font-weight: 500;
-}
-
-.lb-badge svg {
-	width: 16px;
-	height: 16px;
-}
-
-.lb-badge-now {
-	background: #d4edda;
-	color: #155724;
-}
-
-.lb-badge-later {
-	background: #fff3cd;
-	color: #856404;
-}
-
-.lb-change-btn {
-	padding: 8px 20px;
-	background: #0073aa;
-	color: #fff;
-	border: none;
-	border-radius: 6px;
-	cursor: pointer;
-	font-size: 14px;
-	font-weight: 500;
-	transition: background 0.3s;
-	flex-shrink: 0;
-}
-
-.lb-change-btn:hover {
-	background: #005a87;
-}
-
-/* Keine Auswahl */
-.lb-no-selection {
-	text-align: center;
-	padding: 30px;
-	color: #666;
-}
-
-/* Bearbeitungsformular */
-.lb-edit-form {
-	padding-top: 15px;
-}
-
-.lb-form-group {
-	margin-bottom: 20px;
-}
-
-.lb-form-group label {
-	display: block;
-	font-weight: 600;
-	margin-bottom: 8px;
-	color: #333;
-}
-
-.lb-form-group label .required {
-	color: #dc3232;
-}
-
-.lb-select {
-	width: 100%;
-	padding: 10px 12px;
-	border: 1px solid #ddd;
-	border-radius: 6px;
-	font-size: 14px;
-	background: #fff;
-	cursor: pointer;
-	transition: border-color 0.3s;
-}
-
-.lb-select:focus {
-	outline: none;
-	border-color: #0073aa;
-	box-shadow: 0 0 0 1px #0073aa;
-}
-
-.lb-radio-group {
-	display: flex;
-	gap: 15px;
-	flex-wrap: wrap;
-}
-
-.lb-radio-option {
-	flex: 1;
-	min-width: 150px;
-	padding: 12px 15px;
-	border: 2px solid #ddd;
-	border-radius: 8px;
-	cursor: pointer;
-	transition: all 0.3s;
-	display: flex;
-	align-items: center;
-	gap: 10px;
-}
-
-.lb-radio-option:hover {
-	border-color: #999;
-	background: #f8f9fa;
-}
-
-.lb-radio-option input[type="radio"] {
-	margin: 0;
-	cursor: pointer;
-}
-
-.lb-radio-option:has(input[type="radio"]:checked) {
-	border-color: #0073aa;
-	background: #f0f8ff;
-}
-
-.lb-radio-option span {
-	font-weight: 500;
-	color: #333;
-}
-
-.lb-form-actions {
-	display: flex;
-	gap: 10px;
-	margin-top: 20px;
-}
-
-.lb-save-btn,
-.lb-cancel-btn {
-	padding: 10px 24px;
-	border: none;
-	border-radius: 6px;
-	cursor: pointer;
-	font-size: 14px;
-	font-weight: 500;
-	transition: all 0.3s;
-}
-
-.lb-save-btn {
-	background: #0073aa;
-	color: #fff;
-}
-
-.lb-save-btn:hover {
-	background: #005a87;
-}
-
-.lb-cancel-btn {
-	background: #f3f3f3;
-	color: #333;
-}
-
-.lb-cancel-btn:hover {
-	background: #e0e0e0;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-	.lb-selection-display {
-		flex-direction: column;
-		text-align: center;
-	}
-
-	.lb-radio-group {
-		flex-direction: column;
-	}
-
-	.lb-radio-option {
-		min-width: 100%;
-	}
-
-	.lb-form-actions {
-		flex-direction: column;
-	}
-
-	.lb-save-btn,
-	.lb-cancel-btn {
-		width: 100%;
-	}
-}
-
-/* Inline Hinweis für Datum */
-.lb-date-error {
-	display: flex;
-	align-items: flex-start;
-	gap: 8px;
-	margin-top: 8px;
-	padding: 10px 12px;
-	background: #d4edda;
-	border: 1px solid #28a745;
-	border-radius: 6px;
-	color: #155724;
-	font-size: 14px;
-	animation: slideInError 0.3s ease-out;
-	line-height: 1.5;
-}
-
-@keyframes slideInError {
-	from {
-		opacity: 0;
-		transform: translateY(-10px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-.lb-date-error .dashicons {
-	color: #28a745;
-	font-size: 18px;
-	width: 18px;
-	height: 18px;
-	flex-shrink: 0;
-	margin-top: 2px;
-}
-
-.lb-error-message {
-	flex: 1;
-}
-
-.lb-error-message strong {
-	color: #155724;
-	font-weight: 600;
-}
-
-.lb-error-input {
-	border-color: #28a745 !important;
-	background-color: #f0fff4 !important;
-}
-
-/* Fix für abgeschnittenes Dropdown */
-.lb-checkout-selection {
-	overflow: visible !important;
-}
-
-.lb-edit-form {
-	overflow: visible !important;
-}
-
-.lb-form-group {
-	overflow: visible !important;
-	position: relative;
-}
-
-.lb-select {
-	position: relative;
-	z-index: 1;
-}
-
-/* Select Dropdown besser sichtbar */
-select.lb-select {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-	background-repeat: no-repeat;
-	background-position: right 12px center;
-	padding-right: 36px;
-}
-
-/* Sicherstellen dass Optionen sichtbar sind */
-select.lb-select option {
-	padding: 8px 12px;
-}
-</style>

@@ -13,19 +13,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Checkout-Klasse
  */
-class LB_Checkout {
+class LBite_Checkout {
 
 	/**
 	 * Loader-Instanz
 	 *
-	 * @var LB_Loader
+	 * @var LBite_Loader
 	 */
 	private $loader;
 
 	/**
 	 * Konstruktor
 	 *
-	 * @param LB_Loader $loader Loader-Instanz
+	 * @param LBite_Loader $loader Loader-Instanz
 	 */
 	public function __construct( $loader ) {
 		$this->loader = $loader;
@@ -49,15 +49,15 @@ class LB_Checkout {
 		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'maybe_add_hide_shipping_css' );
 
 		// Rundung auf 5 Rappen (Feature-abhängig)
-		if ( lb_feature_enabled( 'enable_rounding' ) ) {
+		if ( lbite_feature_enabled( 'enable_rounding' ) ) {
 			$this->loader->add_action( 'woocommerce_cart_calculate_fees', $this, 'apply_rounding_fee', 999 );
 		}
 
 		// Standort- & Zeitwahl (Feature-abhängig)
-		if ( lb_feature_enabled( 'enable_location_selector' ) ) {
+		if ( lbite_feature_enabled( 'enable_location_selector' ) ) {
 			$this->loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_frontend_assets' );
 			// Modal nur anzeigen wenn explizit aktiviert via Filter
-			if ( apply_filters( 'lb_enable_location_modal', false ) ) {
+			if ( apply_filters( 'lbite_enable_location_modal', false ) ) {
 				$this->loader->add_action( 'wp_footer', $this, 'render_location_modal' );
 			}
 			$this->loader->add_action( 'woocommerce_checkout_before_customer_details', $this, 'render_location_time_selection' );
@@ -65,16 +65,16 @@ class LB_Checkout {
 			$this->loader->add_action( 'woocommerce_checkout_update_order_meta', $this, 'save_location_time_meta' );
 
 			// AJAX-Endpoints
-			$this->loader->add_action( 'wp_ajax_lb_set_location', $this, 'ajax_set_location' );
-			$this->loader->add_action( 'wp_ajax_nopriv_lb_set_location', $this, 'ajax_set_location' );
-			$this->loader->add_action( 'wp_ajax_lb_get_timeslots', $this, 'ajax_get_timeslots' );
-			$this->loader->add_action( 'wp_ajax_nopriv_lb_get_timeslots', $this, 'ajax_get_timeslots' );
-			$this->loader->add_action( 'wp_ajax_lb_get_opening_days', $this, 'ajax_get_opening_days' );
-			$this->loader->add_action( 'wp_ajax_nopriv_lb_get_opening_days', $this, 'ajax_get_opening_days' );
+			$this->loader->add_action( 'wp_ajax_lbite_set_location', $this, 'ajax_set_location' );
+			$this->loader->add_action( 'wp_ajax_nopriv_lbite_set_location', $this, 'ajax_set_location' );
+			$this->loader->add_action( 'wp_ajax_lbite_get_timeslots', $this, 'ajax_get_timeslots' );
+			$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_timeslots', $this, 'ajax_get_timeslots' );
+			$this->loader->add_action( 'wp_ajax_lbite_get_opening_days', $this, 'ajax_get_opening_days' );
+			$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_opening_days', $this, 'ajax_get_opening_days' );
 		}
 
 		// Trinkgeld (Feature-abhängig)
-		if ( lb_feature_enabled( 'enable_tips' ) ) {
+		if ( lbite_feature_enabled( 'enable_tips' ) ) {
 			$this->loader->add_action( 'woocommerce_review_order_before_payment', $this, 'render_tip_selection' );
 			$this->loader->add_action( 'woocommerce_cart_calculate_fees', $this, 'add_tip_fee' );
 			$this->loader->add_action( 'woocommerce_checkout_update_order_meta', $this, 'save_tip_meta' );
@@ -87,7 +87,7 @@ class LB_Checkout {
 		$this->loader->add_action( 'template_redirect', $this, 'process_url_parameters' );
 
 		// Optimierter Checkout-Modus (Feature-abhängig)
-		if ( lb_feature_enabled( 'enable_optimized_checkout' ) ) {
+		if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
 			$this->loader->add_filter( 'wc_get_template', $this, 'maybe_use_optimized_checkout', 10, 2 );
 			$this->loader->add_action( 'woocommerce_thankyou', $this, 'render_optimized_thankyou', 1 );
 			$this->loader->add_action( 'wp', $this, 'maybe_remove_thankyou_actions' );
@@ -103,7 +103,7 @@ class LB_Checkout {
 	 * @return array
 	 */
 	public function customize_checkout_fields( $fields ) {
-		$custom_fields = get_option( 'lb_checkout_fields', array() );
+		$custom_fields = get_option( 'lbite_checkout_fields', array() );
 
 		if ( empty( $custom_fields ) ) {
 			return $fields;
@@ -161,7 +161,7 @@ class LB_Checkout {
 	 * @return bool
 	 */
 	public function maybe_disable_shipping_address( $needs_shipping ) {
-		$custom_fields = get_option( 'lb_checkout_fields', array() );
+		$custom_fields = get_option( 'lbite_checkout_fields', array() );
 
 		// Wenn die Einstellung nicht gesetzt ist oder false ist, Lieferadresse deaktivieren
 		if ( ! isset( $custom_fields['_enable_shipping_address'] ) || ! $custom_fields['_enable_shipping_address'] ) {
@@ -179,7 +179,7 @@ class LB_Checkout {
 			return;
 		}
 
-		$custom_fields = get_option( 'lb_checkout_fields', array() );
+		$custom_fields = get_option( 'lbite_checkout_fields', array() );
 
 		// Prüfen ob "Anmerkungen zur Bestellung" deaktiviert ist
 		$comments_enabled = isset( $custom_fields['_enable_order_comments'] ) ? $custom_fields['_enable_order_comments'] : true;
@@ -211,7 +211,7 @@ class LB_Checkout {
 
 		// Nur den spezifischen String "Rechnungsdetails" überschreiben
 		if ( 'Rechnungsdetails' === $text || 'Billing details' === $text ) {
-			$custom_fields = get_option( 'lb_checkout_fields', array() );
+			$custom_fields = get_option( 'lbite_checkout_fields', array() );
 			$custom_title = isset( $custom_fields['_billing_details_title'] ) ? $custom_fields['_billing_details_title'] : '';
 
 			if ( ! empty( $custom_title ) ) {
@@ -229,7 +229,7 @@ class LB_Checkout {
 	 * @return bool
 	 */
 	public function maybe_hide_shipping( $needs_shipping ) {
-		$custom_fields = get_option( 'lb_checkout_fields', array() );
+		$custom_fields = get_option( 'lbite_checkout_fields', array() );
 
 		// Wenn Versand-Anzeigen NICHT aktiviert ist, Versand ausblenden
 		if ( ! isset( $custom_fields['_show_shipping_info'] ) || ! $custom_fields['_show_shipping_info'] ) {
@@ -246,7 +246,7 @@ class LB_Checkout {
 	 * @return bool
 	 */
 	public function maybe_hide_shipping_calculator( $show_calculator ) {
-		$custom_fields = get_option( 'lb_checkout_fields', array() );
+		$custom_fields = get_option( 'lbite_checkout_fields', array() );
 
 		// Wenn Versand-Anzeigen NICHT aktiviert ist, Versandrechner ausblenden
 		if ( ! isset( $custom_fields['_show_shipping_info'] ) || ! $custom_fields['_show_shipping_info'] ) {
@@ -260,7 +260,7 @@ class LB_Checkout {
 	 * CSS hinzufügen um Versand-Elemente auszublenden
 	 */
 	public function maybe_add_hide_shipping_css() {
-		$custom_fields = get_option( 'lb_checkout_fields', array() );
+		$custom_fields = get_option( 'lbite_checkout_fields', array() );
 
 		// Wenn Versand-Anzeigen NICHT aktiviert ist, CSS zum Ausblenden hinzufügen
 		if ( ! isset( $custom_fields['_show_shipping_info'] ) || ! $custom_fields['_show_shipping_info'] ) {
@@ -293,41 +293,59 @@ class LB_Checkout {
 		}
 
 		wp_enqueue_style(
-			'lb-frontend',
-			LB_PLUGIN_URL . 'assets/css/frontend.css',
+			'lbite-frontend',
+			LBITE_PLUGIN_URL . 'assets/css/frontend.css',
 			array(),
-			LB_VERSION
+			LBITE_VERSION
 		);
 
-		// Optimiertes Checkout CSS laden wenn Feature aktiviert
-		if ( is_checkout() && lb_feature_enabled( 'enable_optimized_checkout' ) ) {
+		// Location Selector CSS
+		wp_enqueue_style(
+			'lbite-location-selector',
+			LBITE_PLUGIN_URL . 'assets/css/location-selector.css',
+			array( 'lbite-frontend' ),
+			LBITE_VERSION
+		);
+
+		// Checkout Templates CSS
+		if ( is_checkout() ) {
 			wp_enqueue_style(
-				'lb-checkout-optimized',
-				LB_PLUGIN_URL . 'assets/css/checkout-optimized.css',
-				array( 'lb-frontend' ),
-				LB_VERSION
+				'lbite-checkout-templates',
+				LBITE_PLUGIN_URL . 'assets/css/checkout-templates.css',
+				array( 'lbite-frontend' ),
+				LBITE_VERSION
+			);
+		}
+
+		// Optimiertes Checkout CSS laden wenn Feature aktiviert
+		if ( is_checkout() && lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
+			wp_enqueue_style(
+				'lbite-checkout-optimized',
+				LBITE_PLUGIN_URL . 'assets/css/checkout-optimized.css',
+				array( 'lbite-frontend' ),
+				LBITE_VERSION
 			);
 
 			wp_enqueue_style(
-				'lb-thankyou-optimized',
-				LB_PLUGIN_URL . 'assets/css/thankyou-optimized.css',
-				array( 'lb-frontend' ),
-				LB_VERSION
+				'lbite-thankyou-optimized',
+				LBITE_PLUGIN_URL . 'assets/css/thankyou-optimized.css',
+				array( 'lbite-frontend' ),
+				LBITE_VERSION
 			);
 		}
 
 		// Branding CSS Custom Properties hinzufügen.
-		$color_primary   = get_option( 'lb_color_primary', '#0073aa' );
-		$color_secondary = get_option( 'lb_color_secondary', '#23282d' );
-		$color_accent    = get_option( 'lb_color_accent', '#00a32a' );
+		$color_primary   = get_option( 'lbite_color_primary', '#0073aa' );
+		$color_secondary = get_option( 'lbite_color_secondary', '#23282d' );
+		$color_accent    = get_option( 'lbite_color_accent', '#00a32a' );
 
 		$custom_css = sprintf(
 			':root {
-				--lb-color-primary: %s;
-				--lb-color-secondary: %s;
-				--lb-color-accent: %s;
-				--lb-color-primary-hover: %s;
-				--lb-color-accent-hover: %s;
+				--lbite-color-primary: %s;
+				--lbite-color-secondary: %s;
+				--lbite-color-accent: %s;
+				--lbite-color-primary-hover: %s;
+				--lbite-color-accent-hover: %s;
 			}',
 			esc_attr( $color_primary ),
 			esc_attr( $color_secondary ),
@@ -336,29 +354,29 @@ class LB_Checkout {
 			esc_attr( $this->adjust_brightness( $color_accent, -20 ) )
 		);
 
-		wp_add_inline_style( 'lb-frontend', $custom_css );
+		wp_add_inline_style( 'lbite-frontend', $custom_css );
 
 		wp_enqueue_script(
-			'lb-frontend',
-			LB_PLUGIN_URL . 'assets/js/frontend.js',
+			'lbite-frontend',
+			LBITE_PLUGIN_URL . 'assets/js/frontend.js',
 			array( 'jquery' ),
-			LB_VERSION,
+			LBITE_VERSION,
 			true
 		);
 
 		wp_localize_script(
-			'lb-frontend',
-			'lbData',
+			'lbite-frontend',
+			'lbiteData',
 			array(
 				'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
-				'nonce'         => wp_create_nonce( 'lb_frontend_nonce' ),
+				'nonce'         => wp_create_nonce( 'lbite_frontend_nonce' ),
 				'strings'       => array(
 					'selectLocation' => __( 'Bitte wählen Sie einen Standort', 'libre-bite' ),
 					'selectTime'     => __( 'Bitte wählen Sie eine Abholzeit', 'libre-bite' ),
 				),
-				'hasLocation'   => ( WC()->session ? ! empty( WC()->session->get( 'lb_location_id' ) ) : false ),
-				'locationId'    => ( WC()->session ? WC()->session->get( 'lb_location_id' ) : null ),
-				'orderType'     => ( WC()->session ? WC()->session->get( 'lb_order_type', 'now' ) : 'now' ),
+				'hasLocation'   => ( WC()->session ? ! empty( WC()->session->get( 'lbite_location_id' ) ) : false ),
+				'locationId'    => ( WC()->session ? WC()->session->get( 'lbite_location_id' ) : null ),
+				'orderType'     => ( WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now' ),
 			)
 		);
 	}
@@ -367,7 +385,7 @@ class LB_Checkout {
 	 * Shortcodes registrieren
 	 */
 	public function register_shortcodes() {
-		add_shortcode( 'lb_location_selector', array( $this, 'shortcode_location_selector' ) );
+		add_shortcode( 'lbite_location_selector', array( $this, 'shortcode_location_selector' ) );
 	}
 
 	/**
@@ -378,23 +396,25 @@ class LB_Checkout {
 			return;
 		}
 
-		// Standort via URL-Parameter setzen (?location=123)
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Session.
+		// Standort via URL-Parameter setzen (?location=123).
+		// Oeffentlicher Deep-Link, keine Nonce moeglich (z.B. QR-Code, Flyer).
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET['location'] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Session.
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$location_id = intval( $_GET['location'] );
 			$location = get_post( $location_id );
 
-			if ( $location && $location->post_type === 'lb_location' && $location->post_status === 'publish' ) {
-				WC()->session->set( 'lb_location_id', $location_id );
+			if ( $location && $location->post_type === 'lbite_location' && $location->post_status === 'publish' ) {
+				WC()->session->set( 'lbite_location_id', $location_id );
 			}
 		}
 
 		// Bestelltyp via URL-Parameter setzen (?order_type=now oder ?order_type=later).
-		// phpcs:ignore WordPress.Security.NonceVerification -- No nonce needed for GET parameter reading.
+		// Oeffentlicher Deep-Link, keine Nonce moeglich.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET['order_type'] ) && in_array( sanitize_text_field( wp_unslash( $_GET['order_type'] ) ), array( 'now', 'later' ), true ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification -- No nonce needed for GET parameter reading.
-			WC()->session->set( 'lb_order_type', sanitize_text_field( wp_unslash( $_GET['order_type'] ) ) );
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			WC()->session->set( 'lbite_order_type', sanitize_text_field( wp_unslash( $_GET['order_type'] ) ) );
 		}
 	}
 
@@ -403,39 +423,39 @@ class LB_Checkout {
 	 */
 	public function shortcode_location_selector( $atts ) {
 		// CSS laden
-		if ( ! wp_style_is( 'lb-frontend', 'enqueued' ) ) {
+		if ( ! wp_style_is( 'lbite-frontend', 'enqueued' ) ) {
 			wp_enqueue_style(
-				'lb-frontend',
-				LB_PLUGIN_URL . 'assets/css/frontend.css',
+				'lbite-frontend',
+				LBITE_PLUGIN_URL . 'assets/css/frontend.css',
 				array(),
-				LB_VERSION
+				LBITE_VERSION
 			);
 		}
 
 		// JavaScript laden
-		if ( ! wp_script_is( 'lb-frontend', 'enqueued' ) ) {
+		if ( ! wp_script_is( 'lbite-frontend', 'enqueued' ) ) {
 			wp_enqueue_script(
-				'lb-frontend',
-				LB_PLUGIN_URL . 'assets/js/frontend.js',
+				'lbite-frontend',
+				LBITE_PLUGIN_URL . 'assets/js/frontend.js',
 				array( 'jquery' ),
-				LB_VERSION,
+				LBITE_VERSION,
 				true
 			);
 
 			// Lokalisierte Daten hinzufügen (wichtig für AJAX!)
 			wp_localize_script(
-				'lb-frontend',
-				'lbData',
+				'lbite-frontend',
+				'lbiteData',
 				array(
 					'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
-					'nonce'         => wp_create_nonce( 'lb_frontend_nonce' ),
+					'nonce'         => wp_create_nonce( 'lbite_frontend_nonce' ),
 					'strings'       => array(
 						'selectLocation' => __( 'Bitte wählen Sie einen Standort', 'libre-bite' ),
 						'selectTime'     => __( 'Bitte wählen Sie eine Abholzeit', 'libre-bite' ),
 					),
-					'hasLocation'   => ( WC()->session ? ! empty( WC()->session->get( 'lb_location_id' ) ) : false ),
-					'locationId'    => ( WC()->session ? WC()->session->get( 'lb_location_id' ) : null ),
-					'orderType'     => ( WC()->session ? WC()->session->get( 'lb_order_type', 'now' ) : 'now' ),
+					'hasLocation'   => ( WC()->session ? ! empty( WC()->session->get( 'lbite_location_id' ) ) : false ),
+					'locationId'    => ( WC()->session ? WC()->session->get( 'lbite_location_id' ) : null ),
+					'orderType'     => ( WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now' ),
 				)
 			);
 		}
@@ -446,26 +466,26 @@ class LB_Checkout {
 				'style'     => 'tiles', // 'tiles' oder 'inline'
 			),
 			$atts,
-			'lb_location_selector'
+			'lbite_location_selector'
 		);
 
-		$locations = LB_Locations::get_all_locations();
+		$locations = LBite_Locations::get_all_locations();
 
 		if ( empty( $locations ) ) {
 			return '<p>' . esc_html__( 'Keine Standorte verfügbar.', 'libre-bite' ) . '</p>';
 		}
 
-		$location_id = WC()->session ? WC()->session->get( 'lb_location_id' ) : null;
-		$order_type = WC()->session ? WC()->session->get( 'lb_order_type', 'now' ) : 'now';
-		$pickup_time = WC()->session ? WC()->session->get( 'lb_pickup_time' ) : null;
+		$location_id = WC()->session ? WC()->session->get( 'lbite_location_id' ) : null;
+		$order_type = WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now';
+		$pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time' ) : null;
 
 		ob_start();
 
 		// Neues Kachel-Layout verwenden (Standard)
 		if ( 'inline' === $atts['style'] ) {
-			include LB_PLUGIN_DIR . 'templates/location-selector-inline.php';
+			include LBITE_PLUGIN_DIR . 'templates/location-selector-inline.php';
 		} else {
-			include LB_PLUGIN_DIR . 'templates/location-selector-tiles.php';
+			include LBITE_PLUGIN_DIR . 'templates/location-selector-tiles.php';
 		}
 
 		return ob_get_clean();
@@ -475,7 +495,7 @@ class LB_Checkout {
 	 * Standort-Modal rendern
 	 *
 	 * Hinweis: Diese Funktion wird nur aufgerufen, wenn das Modal explizit
-	 * via Filter aktiviert wurde: add_filter('lb_enable_location_modal', '__return_true')
+	 * via Filter aktiviert wurde: add_filter('lbite_enable_location_modal', '__return_true')
 	 */
 	public function render_location_modal() {
 		// Nur auf bestimmten Seiten anzeigen
@@ -484,30 +504,30 @@ class LB_Checkout {
 		}
 
 		// Nur anzeigen wenn noch kein Standort gewählt wurde
-		if ( WC()->session && WC()->session->get( 'lb_location_id' ) ) {
+		if ( WC()->session && WC()->session->get( 'lbite_location_id' ) ) {
 			return;
 		}
 
-		$locations = LB_Locations::get_all_locations();
+		$locations = LBite_Locations::get_all_locations();
 
 		if ( empty( $locations ) ) {
 			return;
 		}
 
-		include LB_PLUGIN_DIR . 'templates/location-modal.php';
+		include LBITE_PLUGIN_DIR . 'templates/location-modal.php';
 	}
 
 	/**
 	 * Standort- & Zeitwahl im Checkout anzeigen
 	 */
 	public function render_location_time_selection() {
-		$location_id = WC()->session ? WC()->session->get( 'lb_location_id' ) : null;
-		$order_type  = WC()->session ? WC()->session->get( 'lb_order_type', 'now' ) : 'now';
-		$pickup_time = WC()->session ? WC()->session->get( 'lb_pickup_time' ) : null;
+		$location_id = WC()->session ? WC()->session->get( 'lbite_location_id' ) : null;
+		$order_type  = WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now';
+		$pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time' ) : null;
 
-		$locations = LB_Locations::get_all_locations();
+		$locations = LBite_Locations::get_all_locations();
 
-		include LB_PLUGIN_DIR . 'templates/checkout-location-time.php';
+		include LBITE_PLUGIN_DIR . 'templates/checkout-location-time.php';
 	}
 
 	/**
@@ -515,9 +535,9 @@ class LB_Checkout {
 	 */
 	public function validate_location_time() {
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-		$location_id = isset( $_POST['lb_location_id'] ) ? intval( wp_unslash( $_POST['lb_location_id'] ) ) : 0;
+		$location_id = isset( $_POST['lbite_location_id'] ) ? intval( wp_unslash( $_POST['lbite_location_id'] ) ) : 0;
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-		$order_type  = isset( $_POST['lb_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lb_order_type'] ) ) : '';
+		$order_type  = isset( $_POST['lbite_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_type'] ) ) : '';
 
 		if ( ! $location_id ) {
 			wc_add_notice( __( 'Bitte wählen Sie einen Standort.', 'libre-bite' ), 'error' );
@@ -529,7 +549,7 @@ class LB_Checkout {
 
 		if ( 'later' === $order_type ) {
 			// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-			$pickup_time = isset( $_POST['lb_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lb_pickup_time'] ) ) : '';
+			$pickup_time = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
 			if ( ! $pickup_time ) {
 				wc_add_notice( __( 'Bitte wählen Sie eine Abholzeit.', 'libre-bite' ), 'error' );
 			}
@@ -542,45 +562,48 @@ class LB_Checkout {
 	 * @param int $order_id Bestellungs-ID
 	 */
 	public function save_location_time_meta( $order_id ) {
-		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-		$location_id = isset( $_POST['lb_location_id'] ) ? intval( wp_unslash( $_POST['lb_location_id'] ) ) : 0;
+		// Nonce wird von WooCommerce beim Checkout verifiziert.
+		if ( ! isset( $_POST['woocommerce-process-checkout-nonce'] )
+			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['woocommerce-process-checkout-nonce'] ) ), 'woocommerce-process_checkout' ) ) {
+			return;
+		}
+
+		$location_id = isset( $_POST['lbite_location_id'] ) ? intval( wp_unslash( $_POST['lbite_location_id'] ) ) : 0;
 
 		// Fallback: Session verwenden wenn POST leer.
 		if ( ! $location_id && WC()->session ) {
-			$location_id = WC()->session->get( 'lb_location_id' );
+			$location_id = WC()->session->get( 'lbite_location_id' );
 		}
 
 		if ( $location_id ) {
-			update_post_meta( $order_id, '_lb_location_id', $location_id );
+			update_post_meta( $order_id, '_lbite_location_id', $location_id );
 
 			// Standort-Name speichern.
 			$location = get_post( $location_id );
 			if ( $location ) {
-				update_post_meta( $order_id, '_lb_location_name', $location->post_title );
+				update_post_meta( $order_id, '_lbite_location_name', $location->post_title );
 			}
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-		$order_type = isset( $_POST['lb_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lb_order_type'] ) ) : '';
+		$order_type = isset( $_POST['lbite_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_type'] ) ) : '';
 
 		// Fallback: Session verwenden wenn POST leer.
 		if ( ! $order_type && WC()->session ) {
-			$order_type = WC()->session->get( 'lb_order_type', 'now' );
+			$order_type = WC()->session->get( 'lbite_order_type', 'now' );
 		}
 
 		if ( $order_type ) {
-			update_post_meta( $order_id, '_lb_order_type', $order_type );
+			update_post_meta( $order_id, '_lbite_order_type', $order_type );
 
-			// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-			$pickup_time = isset( $_POST['lb_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lb_pickup_time'] ) ) : '';
+			$pickup_time = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
 
 			// Fallback: Session verwenden.
 			if ( ! $pickup_time && WC()->session ) {
-				$pickup_time = WC()->session->get( 'lb_pickup_time' );
+				$pickup_time = WC()->session->get( 'lbite_pickup_time' );
 			}
 
 			if ( 'later' === $order_type && $pickup_time ) {
-				update_post_meta( $order_id, '_lb_pickup_time', $pickup_time );
+				update_post_meta( $order_id, '_lbite_pickup_time', $pickup_time );
 			}
 		}
 	}
@@ -590,19 +613,19 @@ class LB_Checkout {
 	 */
 	public function render_tip_selection() {
 		// Prüfen ob Trinkgeld-Feature aktiviert ist (standardmäßig aktiviert)
-		$custom_fields = get_option( 'lb_checkout_fields', array() );
+		$custom_fields = get_option( 'lbite_checkout_fields', array() );
 		$tip_enabled = isset( $custom_fields['_enable_tip_selection'] ) ? $custom_fields['_enable_tip_selection'] : true;
 
 		if ( ! $tip_enabled ) {
 			return;
 		}
 
-		$percentage_1 = get_option( 'lb_tip_percentage_1', 5 );
-		$percentage_2 = get_option( 'lb_tip_percentage_2', 10 );
-		$percentage_3 = get_option( 'lb_tip_percentage_3', 15 );
-		$default_selection = get_option( 'lb_tip_default_selection', 'none' );
+		$percentage_1 = get_option( 'lbite_tip_percentage_1', 5 );
+		$percentage_2 = get_option( 'lbite_tip_percentage_2', 10 );
+		$percentage_3 = get_option( 'lbite_tip_percentage_3', 15 );
+		$default_selection = get_option( 'lbite_tip_default_selection', 'none' );
 
-		include LB_PLUGIN_DIR . 'templates/checkout-tip.php';
+		include LBITE_PLUGIN_DIR . 'templates/checkout-tip.php';
 	}
 
 	/**
@@ -613,12 +636,12 @@ class LB_Checkout {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Daten kommen aus update_order_review AJAX (Nonce dort geprueft).
 		if ( ! isset( $_POST['post_data'] ) ) {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Daten kommen aus update_order_review AJAX (Nonce dort geprueft).
 		$post_data_string = sanitize_text_field( wp_unslash( $_POST['post_data'] ) );
 
 		// Sicherere Alternative zu parse_str(): wp_parse_args() verwenden
@@ -633,28 +656,28 @@ class LB_Checkout {
 			}
 		}
 
-		if ( ! isset( $post_data['lb_tip_type'] ) || 'none' === $post_data['lb_tip_type'] ) {
+		if ( ! isset( $post_data['lbite_tip_type'] ) || 'none' === $post_data['lbite_tip_type'] ) {
 			return;
 		}
 
-		$tip_type   = sanitize_text_field( $post_data['lb_tip_type'] );
+		$tip_type   = sanitize_text_field( $post_data['lbite_tip_type'] );
 		$tip_amount = 0;
 
 		// Use gross subtotal (including tax) for tip calculation.
 		$cart       = WC()->cart;
 		$cart_total = $cart->get_subtotal() + $cart->get_subtotal_tax();
 
-		if ( 'percentage' === $tip_type && isset( $post_data['lb_tip_percentage'] ) ) {
-			$percentage = floatval( $post_data['lb_tip_percentage'] );
+		if ( 'percentage' === $tip_type && isset( $post_data['lbite_tip_percentage'] ) ) {
+			$percentage = floatval( $post_data['lbite_tip_percentage'] );
 			$tip_amount = ( $cart_total * $percentage ) / 100;
-		} elseif ( 'custom' === $tip_type && isset( $post_data['lb_tip_custom'] ) ) {
-			$percentage = floatval( $post_data['lb_tip_custom'] );
+		} elseif ( 'custom' === $tip_type && isset( $post_data['lbite_tip_custom'] ) ) {
+			$percentage = floatval( $post_data['lbite_tip_custom'] );
 			$tip_amount = ( $cart_total * $percentage ) / 100;
 		}
 
 		if ( $tip_amount > 0 ) {
 			// Prüfen ob Rundung aktiviert ist.
-			$enable_rounding = get_option( 'lb_enable_rounding', false );
+			$enable_rounding = get_option( 'lbite_enable_rounding', false );
 
 			if ( $enable_rounding ) {
 				// Gesamtbetrag MIT Trinkgeld berechnen (brutto).
@@ -680,7 +703,7 @@ class LB_Checkout {
 		}
 
 		// Prüfen ob Rundung aktiviert ist.
-		$enable_rounding = get_option( 'lb_enable_rounding', false );
+		$enable_rounding = get_option( 'lbite_enable_rounding', false );
 		if ( ! $enable_rounding ) {
 			return;
 		}
@@ -734,22 +757,22 @@ class LB_Checkout {
 	 * @param int $order_id Bestellungs-ID
 	 */
 	public function save_tip_meta( $order_id ) {
-		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-		if ( isset( $_POST['lb_tip_type'] ) && 'none' !== sanitize_text_field( wp_unslash( $_POST['lb_tip_type'] ) ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-			$tip_type = sanitize_text_field( wp_unslash( $_POST['lb_tip_type'] ) );
-			update_post_meta( $order_id, '_lb_tip_type', $tip_type );
+		// Nonce wird von WooCommerce beim Checkout verifiziert.
+		if ( ! isset( $_POST['woocommerce-process-checkout-nonce'] )
+			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['woocommerce-process-checkout-nonce'] ) ), 'woocommerce-process_checkout' ) ) {
+			return;
+		}
 
-			// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-			if ( 'percentage' === $tip_type && isset( $_POST['lb_tip_percentage'] ) ) {
-				// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-				$percentage = floatval( wp_unslash( $_POST['lb_tip_percentage'] ) );
-				update_post_meta( $order_id, '_lb_tip_percentage', $percentage );
-			// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-			} elseif ( 'custom' === $tip_type && isset( $_POST['lb_tip_custom'] ) ) {
-				// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-				$percentage = floatval( wp_unslash( $_POST['lb_tip_custom'] ) );
-				update_post_meta( $order_id, '_lb_tip_percentage', $percentage );
+		if ( isset( $_POST['lbite_tip_type'] ) && 'none' !== sanitize_text_field( wp_unslash( $_POST['lbite_tip_type'] ) ) ) {
+			$tip_type = sanitize_text_field( wp_unslash( $_POST['lbite_tip_type'] ) );
+			update_post_meta( $order_id, '_lbite_tip_type', $tip_type );
+
+			if ( 'percentage' === $tip_type && isset( $_POST['lbite_tip_percentage'] ) ) {
+				$percentage = floatval( wp_unslash( $_POST['lbite_tip_percentage'] ) );
+				update_post_meta( $order_id, '_lbite_tip_percentage', $percentage );
+			} elseif ( 'custom' === $tip_type && isset( $_POST['lbite_tip_custom'] ) ) {
+				$percentage = floatval( wp_unslash( $_POST['lbite_tip_custom'] ) );
+				update_post_meta( $order_id, '_lbite_tip_percentage', $percentage );
 			}
 		}
 	}
@@ -758,7 +781,7 @@ class LB_Checkout {
 	 * AJAX: Standort setzen
 	 */
 	public function ajax_set_location() {
-		check_ajax_referer( 'lb_frontend_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_frontend_nonce', 'nonce' );
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 		$order_type  = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
@@ -779,13 +802,13 @@ class LB_Checkout {
 			WC()->session->set_customer_session_cookie( true );
 		}
 
-		WC()->session->set( 'lb_location_id', $location_id );
-		WC()->session->set( 'lb_order_type', $order_type );
+		WC()->session->set( 'lbite_location_id', $location_id );
+		WC()->session->set( 'lbite_order_type', $order_type );
 
 		if ( 'later' === $order_type && $pickup_time ) {
-			WC()->session->set( 'lb_pickup_time', $pickup_time );
+			WC()->session->set( 'lbite_pickup_time', $pickup_time );
 		} else {
-			WC()->session->__unset( 'lb_pickup_time' );
+			WC()->session->__unset( 'lbite_pickup_time' );
 		}
 
 		$location = get_post( $location_id );
@@ -802,7 +825,7 @@ class LB_Checkout {
 	 * AJAX: Zeitslots abrufen
 	 */
 	public function ajax_get_timeslots() {
-		check_ajax_referer( 'lb_frontend_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_frontend_nonce', 'nonce' );
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 		$date        = isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : current_time( 'Y-m-d' );
@@ -820,7 +843,7 @@ class LB_Checkout {
 	 * AJAX: Geschlossene Tage abrufen
 	 */
 	public function ajax_get_opening_days() {
-		check_ajax_referer( 'lb_frontend_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_frontend_nonce', 'nonce' );
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
@@ -828,7 +851,7 @@ class LB_Checkout {
 			wp_send_json_error( array( 'message' => __( 'Ungültiger Standort', 'libre-bite' ) ) );
 		}
 
-		$opening_hours = LB_Locations::get_opening_hours( $location_id );
+		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
 		$closed_days   = array();
 
 		if ( $opening_hours && is_array( $opening_hours ) ) {
@@ -854,8 +877,8 @@ class LB_Checkout {
 	 * @return array
 	 */
 	private function get_available_timeslots( $location_id, $date ) {
-		$opening_hours = LB_Locations::get_opening_hours( $location_id );
-		$interval      = get_option( 'lb_timeslot_interval', 15 );
+		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
+		$interval      = get_option( 'lbite_timeslot_interval', 15 );
 
 		if ( ! $opening_hours || ! is_array( $opening_hours ) ) {
 			return array();
@@ -879,7 +902,7 @@ class LB_Checkout {
 		$close_timestamp = strtotime( $date . ' ' . $close );
 
 		// Vorbereitungszeit und aktueller Zeitstempel.
-		$prep_time      = get_option( 'lb_preparation_time', 30 );
+		$prep_time      = get_option( 'lbite_preparation_time', 30 );
 		$now            = current_time( 'timestamp' );
 		$earliest_slot  = $now + ( $prep_time * 60 );
 
@@ -940,13 +963,13 @@ class LB_Checkout {
 			return $template;
 		}
 
-		$checkout_mode = get_option( 'lb_checkout_mode', 'standard' );
+		$checkout_mode = get_option( 'lbite_checkout_mode', 'standard' );
 
 		if ( 'optimized' !== $checkout_mode ) {
 			return $template;
 		}
 
-		$custom_template = LB_PLUGIN_DIR . 'templates/checkout-optimized.php';
+		$custom_template = LBITE_PLUGIN_DIR . 'templates/checkout-optimized.php';
 
 		if ( file_exists( $custom_template ) ) {
 			return $custom_template;
@@ -963,7 +986,7 @@ class LB_Checkout {
 			return;
 		}
 
-		$checkout_mode = get_option( 'lb_checkout_mode', 'standard' );
+		$checkout_mode = get_option( 'lbite_checkout_mode', 'standard' );
 
 		if ( 'optimized' !== $checkout_mode ) {
 			return;
@@ -985,7 +1008,7 @@ class LB_Checkout {
 	 * @param int $order_id Bestellungs-ID.
 	 */
 	public function render_optimized_thankyou( $order_id ) {
-		$checkout_mode = get_option( 'lb_checkout_mode', 'standard' );
+		$checkout_mode = get_option( 'lbite_checkout_mode', 'standard' );
 
 		if ( 'optimized' !== $checkout_mode ) {
 			return;
@@ -998,7 +1021,7 @@ class LB_Checkout {
 		}
 
 		// Optimiertes Template laden.
-		include LB_PLUGIN_DIR . 'templates/thankyou-optimized.php';
+		include LBITE_PLUGIN_DIR . 'templates/thankyou-optimized.php';
 	}
 
 	/**
@@ -1008,7 +1031,7 @@ class LB_Checkout {
 	 * @return array
 	 */
 	public function maybe_make_email_optional( $fields ) {
-		$checkout_mode = get_option( 'lb_checkout_mode', 'standard' );
+		$checkout_mode = get_option( 'lbite_checkout_mode', 'standard' );
 
 		if ( 'optimized' !== $checkout_mode ) {
 			return $fields;
@@ -1026,14 +1049,14 @@ class LB_Checkout {
 	 * Platzhalter-E-Mail setzen wenn im optimierten Modus keine E-Mail angegeben
 	 */
 	public function maybe_set_placeholder_email() {
-		$checkout_mode = get_option( 'lb_checkout_mode', 'standard' );
+		$checkout_mode = get_option( 'lbite_checkout_mode', 'standard' );
 
 		if ( 'optimized' !== $checkout_mode ) {
 			return;
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification.
-		$receipt_option = isset( $_POST['lb_receipt_option'] ) ? sanitize_text_field( wp_unslash( $_POST['lb_receipt_option'] ) ) : 'none';
+		$receipt_option = isset( $_POST['lbite_receipt_option'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_receipt_option'] ) ) : 'none';
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification.
 		$billing_email = isset( $_POST['billing_email'] ) ? sanitize_email( wp_unslash( $_POST['billing_email'] ) ) : '';
 

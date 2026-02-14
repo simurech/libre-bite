@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$features = get_option( 'lb_features', array() );
+$features = get_option( 'lbite_features', array() );
 
 // Feature-Gruppen definieren
 $feature_groups = array(
@@ -183,12 +183,12 @@ $feature_groups = array(
 	),
 );
 ?>
-<div class="wrap lb-admin-wrap">
+<div class="wrap lbite-admin-wrap">
 	<h1><?php esc_html_e( 'Feature-Toggles', 'libre-bite' ); ?></h1>
 	<p class="description"><?php esc_html_e( 'Aktivieren oder deaktivieren Sie einzelne Funktionen des Libre Bites.', 'libre-bite' ); ?></p>
 
-	<?php if ( function_exists( 'lb_freemius' ) && ! lb_freemius()->is_premium() ) : ?>
-		<div class="lb-upgrade-notice" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 25px; border-radius: 8px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+	<?php if ( function_exists( 'lbite_freemius' ) && ! lbite_freemius()->is_premium() ) : ?>
+		<div class="lbite-upgrade-notice" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 25px; border-radius: 8px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
 			<div style="flex: 1;">
 				<h2 style="color: #fff; margin-top: 0; font-size: 22px;"><?php esc_html_e( 'Holen Sie sich Libre Bite Pro!', 'libre-bite' ); ?></h2>
 				<p style="font-size: 16px; opacity: 0.9; margin-bottom: 0;">
@@ -196,46 +196,46 @@ $feature_groups = array(
 				</p>
 			</div>
 			<div style="margin-left: 20px;">
-				<a href="<?php echo esc_url( lb_freemius()->get_upgrade_url() ); ?>" class="button button-primary button-hero" style="background: #fff; color: #764ba2; border: none; font-weight: bold;">
+				<a href="<?php echo esc_url( lbite_freemius()->get_upgrade_url() ); ?>" class="button button-primary button-hero" style="background: #fff; color: #764ba2; border: none; font-weight: bold;">
 					<?php esc_html_e( 'Jetzt upgraden', 'libre-bite' ); ?>
 				</a>
 			</div>
 		</div>
 	<?php endif; ?>
 
-	<form id="lb-features-form" method="post">
-		<?php wp_nonce_field( 'lb_admin_nonce', 'lb_nonce' ); ?>
+	<form id="lbite-features-form" method="post">
+		<?php wp_nonce_field( 'lbite_admin_nonce', 'lbite_nonce' ); ?>
 
-		<div class="lb-features-grid">
+		<div class="lbite-features-grid">
 			<?php foreach ( $feature_groups as $group_key => $group ) : ?>
-				<div class="lb-feature-group">
+				<div class="lbite-feature-group">
 					<h2><?php echo esc_html( $group['title'] ); ?></h2>
 					<p class="description"><?php echo esc_html( $group['description'] ); ?></p>
 
-					<table class="form-table lb-features-table">
+					<table class="form-table lbite-features-table">
 						<tbody>
 							<?php foreach ( $group['features'] as $feature_key => $feature ) : ?>
 								<?php
 								$is_enabled = isset( $features[ $feature_key ] ) ? $features[ $feature_key ] : $feature['default'];
 								$is_premium = $feature['premium'];
 								?>
-								<tr class="<?php echo $is_premium ? 'lb-premium-feature' : ''; ?>">
+								<tr class="<?php echo $is_premium ? 'lbite-premium-feature' : ''; ?>">
 									<th scope="row">
 										<label for="<?php echo esc_attr( $feature_key ); ?>">
 											<?php echo esc_html( $feature['label'] ); ?>
 											<?php if ( $is_premium ) : ?>
-												<span class="lb-premium-badge" title="<?php esc_attr_e( 'Premium-Feature', 'libre-bite' ); ?>">Premium</span>
+												<span class="lbite-premium-badge" title="<?php esc_attr_e( 'Premium-Feature', 'libre-bite' ); ?>">Premium</span>
 											<?php endif; ?>
 										</label>
 									</th>
 									<td>
-										<label class="lb-toggle">
+										<label class="lbite-toggle">
 											<input type="checkbox"
 												   id="<?php echo esc_attr( $feature_key ); ?>"
 												   name="features[<?php echo esc_attr( $feature_key ); ?>]"
 												   value="1"
 												   <?php checked( $is_enabled ); ?>>
-											<span class="lb-toggle-slider"></span>
+											<span class="lbite-toggle-slider"></span>
 										</label>
 										<p class="description"><?php echo esc_html( $feature['description'] ); ?></p>
 									</td>
@@ -249,11 +249,11 @@ $feature_groups = array(
 
 		<p class="submit">
 			<button type="submit" class="button button-primary"><?php esc_html_e( 'Einstellungen speichern', 'libre-bite' ); ?></button>
-			<span class="lb-save-status"></span>
+			<span class="lbite-save-status"></span>
 		</p>
 	</form>
 
-	<div class="lb-developer-info" style="margin-top: 40px; padding: 20px; background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #72aee6; border-radius: 4px;">
+	<div class="lbite-developer-info" style="margin-top: 40px; padding: 20px; background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #72aee6; border-radius: 4px;">
 		<h3><?php esc_html_e( 'Entwickler-Informationen', 'libre-bite' ); ?></h3>
 		<p>
 			<?php esc_html_e( 'Einige Funktionen sind als Premium markiert. Diese erfordern normalerweise ein aktives Freemius-Abonnement.', 'libre-bite' ); ?>
@@ -261,133 +261,19 @@ $feature_groups = array(
 		<p>
 			<strong><?php esc_html_e( 'Pro-Modus erzwingen:', 'libre-bite' ); ?></strong><br>
 			<?php esc_html_e( 'Um alle Premium-Funktionen zu Testzwecken freizuschalten, fügen Sie folgende Zeile in Ihre', 'libre-bite' ); ?> <code>wp-config.php</code> <?php esc_html_e( 'ein:', 'libre-bite' ); ?><br>
-			<code>define( 'LB_PREMIUM_OVERRIDE', true );</code>
+			<code>define( 'LBITE_PREMIUM_OVERRIDE', true );</code>
 		</p>
 	</div>
 </div>
 
-<style>
-.lb-features-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-	gap: 20px;
-	margin-top: 20px;
-}
 
-.lb-feature-group {
-	background: #fff;
-	border: 1px solid #c3c4c7;
-	border-radius: 4px;
-	padding: 20px;
-}
-
-.lb-feature-group h2 {
-	margin-top: 0;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #eee;
-}
-
-.lb-features-table {
-	margin-top: 0;
-}
-
-.lb-features-table th {
-	width: 200px;
-	padding: 12px 10px 12px 0;
-	vertical-align: top;
-}
-
-.lb-features-table td {
-	padding: 12px 10px;
-}
-
-.lb-premium-badge {
-	display: inline-block;
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-	color: #fff;
-	font-size: 10px;
-	font-weight: 600;
-	padding: 2px 6px;
-	border-radius: 3px;
-	margin-left: 5px;
-	vertical-align: middle;
-	text-transform: uppercase;
-}
-
-.lb-premium-feature {
-	background: #f9f9ff;
-}
-
-/* Toggle Switch */
-.lb-toggle {
-	position: relative;
-	display: inline-block;
-	width: 50px;
-	height: 26px;
-	vertical-align: middle;
-}
-
-.lb-toggle input {
-	opacity: 0;
-	width: 0;
-	height: 0;
-}
-
-.lb-toggle-slider {
-	position: absolute;
-	cursor: pointer;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: #ccc;
-	transition: .3s;
-	border-radius: 26px;
-}
-
-.lb-toggle-slider:before {
-	position: absolute;
-	content: "";
-	height: 20px;
-	width: 20px;
-	left: 3px;
-	bottom: 3px;
-	background-color: white;
-	transition: .3s;
-	border-radius: 50%;
-}
-
-.lb-toggle input:checked + .lb-toggle-slider {
-	background-color: #2271b1;
-}
-
-.lb-toggle input:checked + .lb-toggle-slider:before {
-	transform: translateX(24px);
-}
-
-.lb-toggle input:focus + .lb-toggle-slider {
-	box-shadow: 0 0 1px #2271b1;
-}
-
-.lb-save-status {
-	margin-left: 10px;
-	color: #00a32a;
-}
-
-@media screen and (max-width: 960px) {
-	.lb-features-grid {
-		grid-template-columns: 1fr;
-	}
-}
-</style>
-
-<script>
+<?php ob_start(); ?>
 jQuery(document).ready(function($) {
-	$('#lb-features-form').on('submit', function(e) {
+	$('#lbite-features-form').on('submit', function(e) {
 		e.preventDefault();
 
 		var $form = $(this);
-		var $status = $form.find('.lb-save-status');
+		var $status = $form.find('.lbite-save-status');
 		var $button = $form.find('button[type="submit"]');
 
 		// Collect all feature states
@@ -404,8 +290,8 @@ jQuery(document).ready(function($) {
 			url: ajaxurl,
 			type: 'POST',
 			data: {
-				action: 'lb_save_features',
-				nonce: $('#lb_nonce').val(),
+				action: 'lbite_save_features',
+				nonce: $('#lbite_nonce').val(),
 				features: JSON.stringify(features)
 			},
 			success: function(response) {
@@ -427,4 +313,4 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
-</script>
+<?php wp_add_inline_script( 'lbite-admin', ob_get_clean() ); ?>

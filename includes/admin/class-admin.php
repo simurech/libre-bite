@@ -12,26 +12,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Admin-Klasse
  */
-class LB_Admin {
+class LBite_Admin {
 
 	/**
 	 * Loader-Instanz
 	 *
-	 * @var LB_Loader
+	 * @var LBite_Loader
 	 */
 	private $loader;
 
 	/**
 	 * Admin-Einstellungen-Instanz
 	 *
-	 * @var LB_Admin_Settings
+	 * @var LBite_Admin_Settings
 	 */
 	private $admin_settings;
 
 	/**
 	 * Konstruktor
 	 *
-	 * @param LB_Loader $loader Loader-Instanz
+	 * @param LBite_Loader $loader Loader-Instanz
 	 */
 	public function __construct( $loader ) {
 		$this->loader = $loader;
@@ -44,15 +44,15 @@ class LB_Admin {
 	 * Rollen-Klasse laden
 	 */
 	private function init_roles() {
-		require_once LB_PLUGIN_DIR . 'includes/admin/class-roles.php';
+		require_once LBITE_PLUGIN_DIR . 'includes/admin/class-roles.php';
 	}
 
 	/**
 	 * Admin-Einstellungen initialisieren
 	 */
 	private function init_admin_settings() {
-		require_once LB_PLUGIN_DIR . 'includes/admin/class-admin-settings.php';
-		$this->admin_settings = new LB_Admin_Settings( $this->loader );
+		require_once LBITE_PLUGIN_DIR . 'includes/admin/class-admin-settings.php';
+		$this->admin_settings = new LBite_Admin_Settings( $this->loader );
 	}
 
 	/**
@@ -64,20 +64,20 @@ class LB_Admin {
 		$this->loader->add_action( 'admin_init', $this, 'maybe_upgrade' );
 
 		// AJAX-Handler.
-		$this->loader->add_action( 'wp_ajax_lb_save_pos_location', $this, 'ajax_save_pos_location' );
-		$this->loader->add_action( 'wp_ajax_lb_pos_get_products', $this, 'ajax_pos_get_products' );
-		$this->loader->add_action( 'wp_ajax_lb_pos_get_product_details', $this, 'ajax_pos_get_product_details' );
-		$this->loader->add_action( 'wp_ajax_lb_pos_create_order', $this, 'ajax_pos_create_order' );
-		$this->loader->add_action( 'wp_ajax_lb_get_theme_colors', $this, 'ajax_get_theme_colors' );
-		$this->loader->add_action( 'wp_ajax_lb_save_features', $this, 'ajax_save_features' );
-		$this->loader->add_action( 'wp_ajax_lb_save_support_settings', $this, 'ajax_save_support_settings' );
+		$this->loader->add_action( 'wp_ajax_lbite_save_pos_location', $this, 'ajax_save_pos_location' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_get_products', $this, 'ajax_pos_get_products' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_get_product_details', $this, 'ajax_pos_get_product_details' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_create_order', $this, 'ajax_pos_create_order' );
+		$this->loader->add_action( 'wp_ajax_lbite_get_theme_colors', $this, 'ajax_get_theme_colors' );
+		$this->loader->add_action( 'wp_ajax_lbite_save_features', $this, 'ajax_save_features' );
+		$this->loader->add_action( 'wp_ajax_lbite_save_support_settings', $this, 'ajax_save_support_settings' );
 	}
 
 	/**
 	 * Plugin-Upgrade bei Bedarf durchführen
 	 */
 	public function maybe_upgrade() {
-		LB_Installer::maybe_upgrade();
+		LBite_Installer::maybe_upgrade();
 	}
 
 	/**
@@ -85,10 +85,10 @@ class LB_Admin {
 	 *
 	 * Menüstruktur nach Benutzerrollen:
 	 *
-	 * PERSONAL (lb_staff):
+	 * PERSONAL (lbite_staff):
 	 * - Dashboard, Bestellübersicht, Kassensystem, Hilfe
 	 *
-	 * ADMIN (lb_admin):
+	 * ADMIN (lbite_admin):
 	 * - Alle Personal-Menüs + Standorte, Produkt-Optionen, Checkout-Felder, Einstellungen
 	 *
 	 * SUPER-ADMIN (administrator):
@@ -96,19 +96,19 @@ class LB_Admin {
 	 */
 	public function add_admin_menu() {
 		// Prüfen ob Benutzer mindestens Staff-Zugriff hat
-		if ( ! LB_Roles::is_staff() ) {
+		if ( ! LBite_Roles::is_staff() ) {
 			return;
 		}
 
 		// Angepasster Plugin-Name
-		$plugin_name = apply_filters( 'lb_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) );
-		$menu_name   = apply_filters( 'lb_plugin_menu_name', __( 'Libre Bite', 'libre-bite' ) );
+		$plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) );
+		$menu_name   = apply_filters( 'lbite_plugin_menu_name', __( 'Libre Bite', 'libre-bite' ) );
 
 		// Hauptmenü - für alle OOS-Benutzer sichtbar
 		add_menu_page(
 			$plugin_name,
 			$menu_name,
-			'lb_view_dashboard',
+			'lbite_view_dashboard',
 			'libre-bite',
 			array( $this, 'render_dashboard_page' ),
 			'dashicons-store',
@@ -116,7 +116,7 @@ class LB_Admin {
 		);
 
 		// ============================================
-		// PERSONAL-BEREICH (lb_staff)
+		// PERSONAL-BEREICH (lbite_staff)
 		// ============================================
 
 		// Dashboard
@@ -124,7 +124,7 @@ class LB_Admin {
 			'libre-bite',
 			__( 'Dashboard', 'libre-bite' ),
 			__( 'Dashboard', 'libre-bite' ),
-			'lb_view_dashboard',
+			'lbite_view_dashboard',
 			'libre-bite',
 			array( $this, 'render_dashboard_page' )
 		);
@@ -134,8 +134,8 @@ class LB_Admin {
 			'libre-bite',
 			__( 'Bestellübersicht', 'libre-bite' ),
 			__( 'Bestellübersicht', 'libre-bite' ),
-			'lb_view_orders',
-			'lb-order-board',
+			'lbite_view_orders',
+			'lbite-order-board',
 			array( $this, 'render_order_board_page' )
 		);
 
@@ -144,13 +144,13 @@ class LB_Admin {
 			'libre-bite',
 			__( 'Kassensystem', 'libre-bite' ),
 			__( 'Kassensystem', 'libre-bite' ),
-			'lb_use_pos',
-			'lb-pos',
+			'lbite_use_pos',
+			'lbite-pos',
 			array( $this, 'render_pos_page' )
 		);
 
 		// ============================================
-		// ADMIN-BEREICH (lb_admin)
+		// ADMIN-BEREICH (lbite_admin)
 		// ============================================
 
 		// Standorte (CPT)
@@ -158,8 +158,8 @@ class LB_Admin {
 			'libre-bite',
 			__( 'Standorte', 'libre-bite' ),
 			__( 'Standorte', 'libre-bite' ),
-			'lb_manage_locations',
-			'edit.php?post_type=lb_location'
+			'lbite_manage_locations',
+			'edit.php?post_type=lbite_location'
 		);
 
 		// Produkt-Optionen (CPT)
@@ -167,8 +167,8 @@ class LB_Admin {
 			'libre-bite',
 			__( 'Produkt-Optionen', 'libre-bite' ),
 			__( 'Produkt-Optionen', 'libre-bite' ),
-			'lb_manage_options',
-			'edit.php?post_type=lb_product_option'
+			'lbite_manage_options',
+			'edit.php?post_type=lbite_product_option'
 		);
 
 		// Checkout-Felder
@@ -176,8 +176,8 @@ class LB_Admin {
 			'libre-bite',
 			__( 'Checkout-Felder', 'libre-bite' ),
 			__( 'Checkout-Felder', 'libre-bite' ),
-			'lb_manage_checkout',
-			'lb-checkout-fields',
+			'lbite_manage_checkout',
+			'lbite-checkout-fields',
 			array( $this, 'render_checkout_fields_page' )
 		);
 
@@ -186,8 +186,8 @@ class LB_Admin {
 			'libre-bite',
 			__( 'Einstellungen', 'libre-bite' ),
 			__( 'Einstellungen', 'libre-bite' ),
-			'lb_manage_settings',
-			'lb-settings',
+			'lbite_manage_settings',
+			'lbite-settings',
 			array( $this, 'render_settings_page' )
 		);
 
@@ -200,8 +200,8 @@ class LB_Admin {
 			'libre-bite',
 			__( 'Feature-Toggles', 'libre-bite' ),
 			__( 'Feature-Toggles', 'libre-bite' ),
-			'lb_manage_features',
-			'lb-features',
+			'lbite_manage_features',
+			'lbite-features',
 			array( $this, 'render_features_page' )
 		);
 
@@ -210,8 +210,8 @@ class LB_Admin {
 			'libre-bite',
 			__( 'Admin-Einstellungen', 'libre-bite' ),
 			__( 'Admin-Einstellungen', 'libre-bite' ),
-			'lb_manage_roles',
-			'lb-admin-settings',
+			'lbite_manage_roles',
+			'lbite-admin-settings',
 			array( $this, 'render_admin_settings_page' )
 		);
 
@@ -220,8 +220,8 @@ class LB_Admin {
 			'libre-bite',
 			__( 'Support-Einstellungen', 'libre-bite' ),
 			__( 'Support-Einstellungen', 'libre-bite' ),
-			'lb_manage_support',
-			'lb-support-settings',
+			'lbite_manage_support',
+			'lbite-support-settings',
 			array( $this, 'render_support_settings_page' )
 		);
 
@@ -234,19 +234,19 @@ class LB_Admin {
 			'libre-bite',
 			__( 'Hilfe & Support', 'libre-bite' ),
 			__( 'Hilfe & Support', 'libre-bite' ),
-			'lb_view_dashboard',
-			'lb-help',
+			'lbite_view_dashboard',
+			'lbite-help',
 			array( $this, 'render_help_page' )
 		);
 
 		// Pricing / Upgrade (Nur wenn nicht Premium)
-		if ( function_exists( 'lb_freemius' ) && ! lb_freemius()->is_premium() ) {
+		if ( function_exists( 'lbite_freemius' ) && ! lbite_freemius()->is_premium() ) {
 			add_submenu_page(
 				'libre-bite',
 				__( 'Upgrade auf Pro', 'libre-bite' ),
 				'<span style="color: #f18500; font-weight: bold;">' . __( 'Pricing', 'libre-bite' ) . '</span>',
 				'manage_options',
-				'lb-pricing',
+				'lbite-pricing',
 				array( $this, 'render_pricing_page' )
 			);
 		}
@@ -257,8 +257,8 @@ class LB_Admin {
 				'libre-bite',
 				__( 'Debug-Info', 'libre-bite' ),
 				__( 'Debug-Info', 'libre-bite' ),
-				'lb_view_debug',
-				'lb-debug-info',
+				'lbite_view_debug',
+				'lbite-debug-info',
 				array( $this, 'render_debug_page' )
 			);
 		}
@@ -268,80 +268,80 @@ class LB_Admin {
 	 * Dashboard-Seite rendern
 	 */
 	public function render_dashboard_page() {
-		include LB_PLUGIN_DIR . 'templates/admin/dashboard.php';
+		include LBITE_PLUGIN_DIR . 'templates/admin/dashboard.php';
 	}
 
 	/**
 	 * Bestellübersicht-Seite rendern
 	 */
 	public function render_order_board_page() {
-		include LB_PLUGIN_DIR . 'templates/admin/order-board.php';
+		include LBITE_PLUGIN_DIR . 'templates/admin/order-board.php';
 	}
 
 	/**
 	 * POS-Seite rendern
 	 */
 	public function render_pos_page() {
-		include LB_PLUGIN_DIR . 'templates/admin/pos.php';
+		include LBITE_PLUGIN_DIR . 'templates/admin/pos.php';
 	}
 
 	/**
 	 * Checkout-Felder-Seite rendern
 	 */
 	public function render_checkout_fields_page() {
-		include LB_PLUGIN_DIR . 'templates/admin/checkout-fields.php';
+		include LBITE_PLUGIN_DIR . 'templates/admin/checkout-fields.php';
 	}
 
 	/**
 	 * Einstellungen-Seite rendern
 	 */
 	public function render_settings_page() {
-		include LB_PLUGIN_DIR . 'templates/admin/settings.php';
+		include LBITE_PLUGIN_DIR . 'templates/admin/settings.php';
 	}
 
 	/**
 	 * Admin-Einstellungen-Seite rendern
 	 */
 	public function render_admin_settings_page() {
-		include LB_PLUGIN_DIR . 'templates/admin/admin-settings.php';
+		include LBITE_PLUGIN_DIR . 'templates/admin/admin-settings.php';
 	}
 
 	/**
 	 * Feature-Toggles-Seite rendern
 	 */
 	public function render_features_page() {
-		if ( ! current_user_can( 'lb_manage_features' ) ) {
+		if ( ! current_user_can( 'lbite_manage_features' ) ) {
 			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
 		}
-		include LB_PLUGIN_DIR . 'templates/admin/super-admin-settings.php';
+		include LBITE_PLUGIN_DIR . 'templates/admin/super-admin-settings.php';
 	}
 
 	/**
 	 * Support-Einstellungen-Seite rendern
 	 */
 	public function render_support_settings_page() {
-		if ( ! current_user_can( 'lb_manage_support' ) ) {
+		if ( ! current_user_can( 'lbite_manage_support' ) ) {
 			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
 		}
-		include LB_PLUGIN_DIR . 'templates/admin/support-settings.php';
+		include LBITE_PLUGIN_DIR . 'templates/admin/support-settings.php';
 	}
 
 	/**
 	 * Hilfe-Seite rendern (rollenbasiert)
 	 */
 	public function render_help_page() {
-		$user_level = LB_Roles::get_user_level();
+		$user_level = LBite_Roles::get_user_level();
 
 		switch ( $user_level ) {
 			case 'super_admin':
-				include LB_PLUGIN_DIR . 'templates/admin/help-superadmin.php';
+				include LBITE_PLUGIN_DIR . 'templates/admin/help-superadmin.php';
 				break;
 			case 'admin':
-				include LB_PLUGIN_DIR . 'templates/admin/help-admin.php';
+				include LBITE_PLUGIN_DIR . 'templates/admin/help-admin.php';
 				break;
 			case 'staff':
 			default:
-				include LB_PLUGIN_DIR . 'templates/admin/help-staff.php';
+				include LBITE_PLUGIN_DIR . 'templates/admin/help-staff.php';
 				break;
 		}
 	}
@@ -350,23 +350,23 @@ class LB_Admin {
 	 * Debug-Seite rendern
 	 */
 	public function render_debug_page() {
-		if ( ! current_user_can( 'lb_view_debug' ) ) {
+		if ( ! current_user_can( 'lbite_view_debug' ) ) {
 			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
 		}
-		include LB_PLUGIN_DIR . 'templates/admin/debug-info.php';
+		include LBITE_PLUGIN_DIR . 'templates/admin/debug-info.php';
 	}
 
 	/**
 	 * Pricing-Seite rendern
 	 */
 	public function render_pricing_page() {
-		if ( function_exists( 'lb_freemius' ) ) {
-			lb_freemius()->get_upgrade_url(); // Dies triggert den Freemius Checkout/Pricing Frame
+		if ( function_exists( 'lbite_freemius' ) ) {
+			lbite_freemius()->get_upgrade_url(); // Dies triggert den Freemius Checkout/Pricing Frame
 			
 			// Fallback falls der Frame nicht sofort lädt
 			echo '<div class="wrap"><h1>' . esc_html__( 'Upgrade auf Libre Bite Pro', 'libre-bite' ) . '</h1>';
 			echo '<p>' . esc_html__( 'Schalten Sie alle Premium-Funktionen frei, um das volle Potenzial von Libre Bite zu nutzen.', 'libre-bite' ) . '</p>';
-			echo '<a href="' . esc_url( lb_freemius()->get_upgrade_url() ) . '" class="button button-primary">' . esc_html__( 'Preise anzeigen', 'libre-bite' ) . '</a>';
+			echo '<a href="' . esc_url( lbite_freemius()->get_upgrade_url() ) . '" class="button button-primary">' . esc_html__( 'Preise anzeigen', 'libre-bite' ) . '</a>';
 			echo '</div>';
 		}
 	}
@@ -378,34 +378,52 @@ class LB_Admin {
 	 */
 	public function enqueue_admin_assets( $hook ) {
 		// Nur auf Plugin-Seiten laden
-		if ( empty( $hook ) || ( strpos( $hook, 'libre-bite' ) === false && strpos( $hook, 'lb-' ) === false ) ) {
+		if ( empty( $hook ) || ( strpos( $hook, 'libre-bite' ) === false && strpos( $hook, 'lbite-' ) === false ) ) {
 			return;
 		}
 
 		// CSS
 		wp_enqueue_style(
-			'lb-admin',
-			LB_PLUGIN_URL . 'assets/css/admin.css',
+			'lbite-admin',
+			LBITE_PLUGIN_URL . 'assets/css/admin.css',
 			array(),
-			LB_VERSION
+			LBITE_VERSION
 		);
+
+		// Seitenspezifisches CSS
+		wp_enqueue_style(
+			'lbite-admin-pages',
+			LBITE_PLUGIN_URL . 'assets/css/admin-pages.css',
+			array( 'lbite-admin' ),
+			LBITE_VERSION
+		);
+
+		// Hilfe-Seiten CSS
+		if ( strpos( $hook, 'lbite-help' ) !== false || strpos( $hook, 'lbite-documentation' ) !== false ) {
+			wp_enqueue_style(
+				'lbite-admin-help',
+				LBITE_PLUGIN_URL . 'assets/css/admin-help.css',
+				array( 'lbite-admin' ),
+				LBITE_VERSION
+			);
+		}
 
 		// JS
 		wp_enqueue_script(
-			'lb-admin',
-			LB_PLUGIN_URL . 'assets/js/admin.js',
+			'lbite-admin',
+			LBITE_PLUGIN_URL . 'assets/js/admin.js',
 			array( 'jquery' ),
-			LB_VERSION,
+			LBITE_VERSION,
 			true
 		);
 
 		// Lokalisierte Daten
 		wp_localize_script(
-			'lb-admin',
-			'lbAdmin',
+			'lbite-admin',
+			'lbiteAdmin',
 			array(
 				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
-				'nonce'        => wp_create_nonce( 'lb_admin_nonce' ),
+				'nonce'        => wp_create_nonce( 'lbite_admin_nonce' ),
 				'strings'      => array(
 					'confirmDelete' => __( 'Wirklich löschen?', 'libre-bite' ),
 					'saveSuccess'   => __( 'Erfolgreich gespeichert', 'libre-bite' ),
@@ -421,7 +439,7 @@ class LB_Admin {
 	 * AJAX: POS-Standort speichern
 	 */
 	public function ajax_save_pos_location() {
-		check_ajax_referer( 'lb_admin_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
@@ -430,7 +448,7 @@ class LB_Admin {
 		$location_id = isset( $_POST['location_id'] ) ? intval( $_POST['location_id'] ) : 0;
 
 		// Standort für aktuellen Benutzer speichern
-		update_user_meta( get_current_user_id(), 'lb_pos_location', $location_id );
+		update_user_meta( get_current_user_id(), 'lbite_pos_location', $location_id );
 
 		wp_send_json_success( array( 'location_id' => $location_id ) );
 	}
@@ -439,7 +457,7 @@ class LB_Admin {
 	 * AJAX: POS-Produkte laden (mit Caching)
 	 */
 	public function ajax_pos_get_products() {
-		check_ajax_referer( 'lb_pos_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
@@ -448,7 +466,7 @@ class LB_Admin {
 		$category_id = isset( $_POST['category_id'] ) ? intval( $_POST['category_id'] ) : 0;
 
 		// Transient-Cache prüfen (5 Minuten).
-		$cache_key    = 'lb_pos_products_' . $category_id;
+		$cache_key    = 'lbite_pos_products_' . $category_id;
 		$product_data = get_transient( $cache_key );
 
 		if ( false === $product_data ) {
@@ -484,7 +502,7 @@ class LB_Admin {
 
 				// Prüfen ob Produkt Varianten oder Optionen hat.
 				$has_variations  = $product->is_type( 'variable' );
-				$product_options = get_post_meta( $product->get_id(), '_lb_product_options', true );
+				$product_options = get_post_meta( $product->get_id(), '_lbite_product_options', true );
 				$has_options     = ! empty( $product_options );
 
 				$product_data[] = array(
@@ -509,7 +527,7 @@ class LB_Admin {
 	 * AJAX: POS-Produkt-Details laden (Varianten & Optionen)
 	 */
 	public function ajax_pos_get_product_details() {
-		check_ajax_referer( 'lb_pos_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
@@ -567,7 +585,7 @@ class LB_Admin {
 		}
 
 		// OOS Produkt-Optionen laden
-		$product_options = get_post_meta( $product->get_id(), '_lb_product_options', true );
+		$product_options = get_post_meta( $product->get_id(), '_lbite_product_options', true );
 		if ( ! empty( $product_options ) && is_array( $product_options ) ) {
 			foreach ( $product_options as $option_id ) {
 				$option_post = get_post( $option_id );
@@ -576,7 +594,7 @@ class LB_Admin {
 				}
 
 				// Einfaches Optionssystem (eine Option = eine Checkbox mit Preis)
-				$option_price = get_post_meta( $option_id, '_lb_price', true );
+				$option_price = get_post_meta( $option_id, '_lbite_price', true );
 
 				$response['options'][] = array(
 					'id'       => $option_id,
@@ -604,9 +622,9 @@ class LB_Admin {
 	 * AJAX: POS-Bestellung erstellen
 	 */
 	public function ajax_pos_create_order() {
-		check_ajax_referer( 'lb_pos_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lb_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lbite_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
@@ -693,24 +711,24 @@ class LB_Admin {
 			}
 
 			// Bestellmeta setzen.
-			$order->update_meta_data( '_lb_location_id', $location_id );
+			$order->update_meta_data( '_lbite_location_id', $location_id );
 
 			// Standort-Name speichern.
 			$location = get_post( $location_id );
 			if ( $location ) {
-				$order->update_meta_data( '_lb_location_name', $location->post_title );
+				$order->update_meta_data( '_lbite_location_name', $location->post_title );
 			}
 
-			$order->update_meta_data( '_lb_order_type', $order_type );
+			$order->update_meta_data( '_lbite_order_type', $order_type );
 			if ( $pickup_time ) {
-				$order->update_meta_data( '_lb_pickup_time', $pickup_time );
+				$order->update_meta_data( '_lbite_pickup_time', $pickup_time );
 			}
-			$order->update_meta_data( '_lb_order_source', 'pos' );
+			$order->update_meta_data( '_lbite_order_source', 'pos' );
 
 			// Kundenname speichern (falls angegeben).
 			if ( ! empty( $customer_name ) ) {
 				$order->set_billing_first_name( $customer_name );
-				$order->update_meta_data( '_lb_customer_name', $customer_name );
+				$order->update_meta_data( '_lbite_customer_name', $customer_name );
 			}
 
 			// Berechnen.
@@ -738,7 +756,7 @@ class LB_Admin {
 	 * AJAX: Theme-Farben abrufen
 	 */
 	public function ajax_get_theme_colors() {
-		check_ajax_referer( 'lb_admin_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
@@ -828,9 +846,9 @@ class LB_Admin {
 	 * AJAX: Feature-Toggles speichern
 	 */
 	public function ajax_save_features() {
-		check_ajax_referer( 'lb_admin_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lb_manage_features' ) ) {
+		if ( ! current_user_can( 'lbite_manage_features' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
@@ -848,7 +866,7 @@ class LB_Admin {
 			$sanitized_features[ sanitize_key( $key ) ] = (bool) $value;
 		}
 
-		update_option( 'lb_features', $sanitized_features );
+		update_option( 'lbite_features', $sanitized_features );
 
 		wp_send_json_success( array( 'message' => __( 'Einstellungen gespeichert', 'libre-bite' ) ) );
 	}
@@ -857,9 +875,9 @@ class LB_Admin {
 	 * AJAX: Support-Einstellungen speichern
 	 */
 	public function ajax_save_support_settings() {
-		check_ajax_referer( 'lb_admin_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lb_manage_support' ) ) {
+		if ( ! current_user_can( 'lbite_manage_support' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
@@ -871,7 +889,7 @@ class LB_Admin {
 			'support_custom_text'  => isset( $_POST['support_custom_text'] ) ? sanitize_textarea_field( wp_unslash( $_POST['support_custom_text'] ) ) : '',
 		);
 
-		update_option( 'lb_support_settings', $settings );
+		update_option( 'lbite_support_settings', $settings );
 
 		wp_send_json_success( array( 'message' => __( 'Support-Einstellungen gespeichert', 'libre-bite' ) ) );
 	}

@@ -12,12 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Product-Options-Modul
  */
-class LB_Product_Options {
+class LBite_Product_Options {
 
 	/**
 	 * Loader-Instanz
 	 *
-	 * @var LB_Loader
+	 * @var LBite_Loader
 	 */
 	private $loader;
 
@@ -26,12 +26,12 @@ class LB_Product_Options {
 	 *
 	 * @var string
 	 */
-	const POST_TYPE = 'lb_product_option';
+	const POST_TYPE = 'lbite_product_option';
 
 	/**
 	 * Konstruktor
 	 *
-	 * @param LB_Loader $loader Loader-Instanz
+	 * @param LBite_Loader $loader Loader-Instanz
 	 */
 	public function __construct( $loader ) {
 		$this->loader = $loader;
@@ -106,7 +106,7 @@ class LB_Product_Options {
 	 */
 	public function add_meta_boxes() {
 		add_meta_box(
-			'lb_option_price',
+			'lbite_option_price',
 			__( 'Preis', 'libre-bite' ),
 			array( $this, 'render_price_meta_box' ),
 			self::POST_TYPE,
@@ -121,13 +121,13 @@ class LB_Product_Options {
 	 * @param WP_Post $post Post-Objekt
 	 */
 	public function render_price_meta_box( $post ) {
-		wp_nonce_field( 'lb_save_option', 'lb_option_nonce' );
+		wp_nonce_field( 'lbite_save_option', 'lbite_option_nonce' );
 
-		$price = get_post_meta( $post->ID, '_lb_price', true );
+		$price = get_post_meta( $post->ID, '_lbite_price', true );
 		?>
 		<p>
-			<label for="lb_option_price"><?php esc_html_e( 'Preis', 'libre-bite' ); ?> (<?php echo esc_html( get_woocommerce_currency_symbol() ); ?>)</label><br>
-			<input type="number" step="0.01" min="0" id="lb_option_price" name="lb_option_price" value="<?php echo esc_attr( $price ); ?>" style="width: 100%;">
+			<label for="lbite_option_price"><?php esc_html_e( 'Preis', 'libre-bite' ); ?> (<?php echo esc_html( get_woocommerce_currency_symbol() ); ?>)</label><br>
+			<input type="number" step="0.01" min="0" id="lbite_option_price" name="lbite_option_price" value="<?php echo esc_attr( $price ); ?>" style="width: 100%;">
 		</p>
 		<p class="description">
 			<?php esc_html_e( 'Dieser Preis wird zum Produktpreis addiert, wenn die Option ausgewählt wird.', 'libre-bite' ); ?>
@@ -143,7 +143,7 @@ class LB_Product_Options {
 	 */
 	public function save_option_meta( $post_id, $post ) {
 		// Nonce prüfen.
-		if ( ! isset( $_POST['lb_option_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lb_option_nonce'] ) ), 'lb_save_option' ) ) {
+		if ( ! isset( $_POST['lbite_option_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lbite_option_nonce'] ) ), 'lbite_save_option' ) ) {
 			return;
 		}
 
@@ -153,14 +153,14 @@ class LB_Product_Options {
 		}
 
 		// Berechtigungen prüfen.
-		if ( ! current_user_can( 'manage_lb_options', $post_id ) ) {
+		if ( ! current_user_can( 'manage_lbite_options', $post_id ) ) {
 			return;
 		}
 
 		// Preis speichern.
-		if ( isset( $_POST['lb_option_price'] ) ) {
-			$price = floatval( wp_unslash( $_POST['lb_option_price'] ) );
-			update_post_meta( $post_id, '_lb_price', $price );
+		if ( isset( $_POST['lbite_option_price'] ) ) {
+			$price = floatval( wp_unslash( $_POST['lbite_option_price'] ) );
+			update_post_meta( $post_id, '_lbite_price', $price );
 		}
 	}
 
@@ -169,7 +169,7 @@ class LB_Product_Options {
 	 */
 	public function add_product_meta_box() {
 		add_meta_box(
-			'lb_product_options',
+			'lbite_product_options',
 			__( 'Produkt-Optionen', 'libre-bite' ),
 			array( $this, 'render_product_options_meta_box' ),
 			'product',
@@ -184,9 +184,9 @@ class LB_Product_Options {
 	 * @param WP_Post $post Post-Objekt
 	 */
 	public function render_product_options_meta_box( $post ) {
-		wp_nonce_field( 'lb_save_product_options', 'lb_product_options_nonce' );
+		wp_nonce_field( 'lbite_save_product_options', 'lbite_product_options_nonce' );
 
-		$selected_options = get_post_meta( $post->ID, '_lb_product_options', true );
+		$selected_options = get_post_meta( $post->ID, '_lbite_product_options', true );
 		if ( ! is_array( $selected_options ) ) {
 			$selected_options = array();
 		}
@@ -209,10 +209,10 @@ class LB_Product_Options {
 		echo '<div style="max-height: 300px; overflow-y: auto;">';
 		foreach ( $options as $option ) {
 			$checked = in_array( $option->ID, $selected_options, true );
-			$price   = get_post_meta( $option->ID, '_lb_price', true );
+			$price   = get_post_meta( $option->ID, '_lbite_price', true );
 			?>
 			<label style="display: block; margin-bottom: 8px; padding: 5px; background: #f9f9f9; border-radius: 3px;">
-				<input type="checkbox" name="lb_product_options[]" value="<?php echo esc_attr( $option->ID ); ?>" <?php checked( $checked ); ?>>
+				<input type="checkbox" name="lbite_product_options[]" value="<?php echo esc_attr( $option->ID ); ?>" <?php checked( $checked ); ?>>
 				<strong><?php echo esc_html( $option->post_title ); ?></strong>
 				<?php if ( $price ) : ?>
 					<span style="color: #666;">(+<?php echo wp_kses_post( wc_price( $price ) ); ?>)</span>
@@ -233,7 +233,7 @@ class LB_Product_Options {
 	 */
 	public function save_product_options( $post_id ) {
 		// Nonce prüfen.
-		if ( ! isset( $_POST['lb_product_options_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lb_product_options_nonce'] ) ), 'lb_save_product_options' ) ) {
+		if ( ! isset( $_POST['lbite_product_options_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lbite_product_options_nonce'] ) ), 'lbite_save_product_options' ) ) {
 			return;
 		}
 
@@ -243,11 +243,11 @@ class LB_Product_Options {
 		}
 
 		// Optionen speichern.
-		$options = isset( $_POST['lb_product_options'] ) && is_array( $_POST['lb_product_options'] )
-			? array_map( 'intval', wp_unslash( $_POST['lb_product_options'] ) )
+		$options = isset( $_POST['lbite_product_options'] ) && is_array( $_POST['lbite_product_options'] )
+			? array_map( 'intval', wp_unslash( $_POST['lbite_product_options'] ) )
 			: array();
 
-		update_post_meta( $post_id, '_lb_product_options', $options );
+		update_post_meta( $post_id, '_lbite_product_options', $options );
 	}
 
 	/**
@@ -260,7 +260,7 @@ class LB_Product_Options {
 			return;
 		}
 
-		$product_options = get_post_meta( $product->get_id(), '_lb_product_options', true );
+		$product_options = get_post_meta( $product->get_id(), '_lbite_product_options', true );
 		if ( empty( $product_options ) || ! is_array( $product_options ) ) {
 			return;
 		}
@@ -280,15 +280,15 @@ class LB_Product_Options {
 		}
 
 		?>
-		<div class="lb-product-options" style="margin: 20px 0;">
+		<div class="lbite-product-options" style="margin: 20px 0;">
 			<h4><?php esc_html_e( 'Optionen', 'libre-bite' ); ?></h4>
 			<?php foreach ( $options as $option ) : ?>
 				<?php
-				$price       = get_post_meta( $option->ID, '_lb_price', true );
+				$price       = get_post_meta( $option->ID, '_lbite_price', true );
 				$description = $option->post_content;
 				?>
 				<label style="display: block; margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
-					<input type="checkbox" name="lb_options[]" value="<?php echo esc_attr( $option->ID ); ?>" style="margin-right: 8px;">
+					<input type="checkbox" name="lbite_options[]" value="<?php echo esc_attr( $option->ID ); ?>" style="margin-right: 8px;">
 					<strong><?php echo esc_html( $option->post_title ); ?></strong>
 					<?php if ( $price ) : ?>
 						<span style="color: #666;">(+<?php echo wp_kses_post( wc_price( $price ) ); ?>)</span>
@@ -310,12 +310,12 @@ class LB_Product_Options {
 	 * @return array
 	 */
 	public function add_cart_item_data( $cart_item_data, $product_id ) {
-		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for add to cart.
-		if ( isset( $_POST['lb_options'] ) && is_array( $_POST['lb_options'] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for add to cart.
-			$options = array_map( 'intval', wp_unslash( $_POST['lb_options'] ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Hook wird von WooCommerce nach eigener Nonce-Pruefung aufgerufen.
+		if ( isset( $_POST['lbite_options'] ) && is_array( $_POST['lbite_options'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Hook wird von WooCommerce nach eigener Nonce-Pruefung aufgerufen.
+			$options = array_map( 'intval', wp_unslash( $_POST['lbite_options'] ) );
 			if ( ! empty( $options ) ) {
-				$cart_item_data['lb_options'] = $options;
+				$cart_item_data['lbite_options'] = $options;
 			}
 		}
 
@@ -330,11 +330,11 @@ class LB_Product_Options {
 	 * @return array
 	 */
 	public function display_cart_item_data( $item_data, $cart_item ) {
-		if ( ! empty( $cart_item['lb_options'] ) ) {
-			foreach ( $cart_item['lb_options'] as $option_id ) {
+		if ( ! empty( $cart_item['lbite_options'] ) ) {
+			foreach ( $cart_item['lbite_options'] as $option_id ) {
 				$option = get_post( $option_id );
 				if ( $option ) {
-					$price = get_post_meta( $option_id, '_lb_price', true );
+					$price = get_post_meta( $option_id, '_lbite_price', true );
 					$value = $option->post_title;
 					if ( $price ) {
 						$value .= ' (+' . wc_price( $price ) . ')';
@@ -358,10 +358,10 @@ class LB_Product_Options {
 	 * @return array
 	 */
 	public function add_cart_item_price( $cart_item ) {
-		if ( ! empty( $cart_item['lb_options'] ) ) {
+		if ( ! empty( $cart_item['lbite_options'] ) ) {
 			$extra_price = 0;
-			foreach ( $cart_item['lb_options'] as $option_id ) {
-				$price = get_post_meta( $option_id, '_lb_price', true );
+			foreach ( $cart_item['lbite_options'] as $option_id ) {
+				$price = get_post_meta( $option_id, '_lbite_price', true );
 				if ( $price ) {
 					$extra_price += floatval( $price );
 				}
@@ -384,9 +384,9 @@ class LB_Product_Options {
 	 * @param WC_Order              $order         Bestellung
 	 */
 	public function add_order_item_meta( $item, $cart_item_key, $values, $order ) {
-		if ( ! empty( $values['lb_options'] ) ) {
+		if ( ! empty( $values['lbite_options'] ) ) {
 			$option_names = array();
-			foreach ( $values['lb_options'] as $option_id ) {
+			foreach ( $values['lbite_options'] as $option_id ) {
 				$option = get_post( $option_id );
 				if ( $option ) {
 					$option_names[] = $option->post_title;
@@ -423,7 +423,7 @@ class LB_Product_Options {
 	 */
 	public function render_admin_columns( $column, $post_id ) {
 		if ( 'price' === $column ) {
-			$price = get_post_meta( $post_id, '_lb_price', true );
+			$price = get_post_meta( $post_id, '_lbite_price', true );
 			echo $price ? wp_kses_post( wc_price( $price ) ) : '—';
 		}
 	}

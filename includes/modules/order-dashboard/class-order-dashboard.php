@@ -12,12 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Order-Dashboard-Modul
  */
-class LB_Order_Dashboard {
+class LBite_Order_Dashboard {
 
 	/**
 	 * Loader-Instanz
 	 *
-	 * @var LB_Loader
+	 * @var LBite_Loader
 	 */
 	private $loader;
 
@@ -36,7 +36,7 @@ class LB_Order_Dashboard {
 	/**
 	 * Konstruktor
 	 *
-	 * @param LB_Loader $loader Loader-Instanz
+	 * @param LBite_Loader $loader Loader-Instanz
 	 */
 	public function __construct( $loader ) {
 		$this->loader = $loader;
@@ -51,14 +51,14 @@ class LB_Order_Dashboard {
 		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_dashboard_assets' );
 
 		// AJAX-Endpoints
-		$this->loader->add_action( 'wp_ajax_lb_get_orders', $this, 'ajax_get_orders' );
-		$this->loader->add_action( 'wp_ajax_lb_update_order_status', $this, 'ajax_update_order_status' );
-		$this->loader->add_action( 'wp_ajax_lb_save_board_location', $this, 'ajax_save_board_location' );
-		$this->loader->add_action( 'wp_ajax_lb_cancel_order', $this, 'ajax_cancel_order' );
-		$this->loader->add_action( 'wp_ajax_lb_load_more_completed', $this, 'ajax_load_more_completed' );
+		$this->loader->add_action( 'wp_ajax_lbite_get_orders', $this, 'ajax_get_orders' );
+		$this->loader->add_action( 'wp_ajax_lbite_update_order_status', $this, 'ajax_update_order_status' );
+		$this->loader->add_action( 'wp_ajax_lbite_save_board_location', $this, 'ajax_save_board_location' );
+		$this->loader->add_action( 'wp_ajax_lbite_cancel_order', $this, 'ajax_cancel_order' );
+		$this->loader->add_action( 'wp_ajax_lbite_load_more_completed', $this, 'ajax_load_more_completed' );
 
 		// Cron für automatische Statusänderungen (Hook wird bei Aktivierung geplant)
-		$this->loader->add_action( 'lb_check_scheduled_orders', $this, 'check_scheduled_orders' );
+		$this->loader->add_action( 'lbite_check_scheduled_orders', $this, 'check_scheduled_orders' );
 
 		// Bestellungs-Meta-Box
 		$this->loader->add_action( 'add_meta_boxes', $this, 'add_order_meta_box' );
@@ -67,8 +67,8 @@ class LB_Order_Dashboard {
 		$this->loader->add_action( 'woocommerce_new_order', $this, 'set_initial_order_status' );
 
 		// Cron-Job aktivieren wenn nicht vorhanden
-		if ( ! wp_next_scheduled( 'lb_check_scheduled_orders' ) ) {
-			wp_schedule_event( time(), 'every_minute', 'lb_check_scheduled_orders' );
+		if ( ! wp_next_scheduled( 'lbite_check_scheduled_orders' ) ) {
+			wp_schedule_event( time(), 'every_minute', 'lbite_check_scheduled_orders' );
 		}
 	}
 
@@ -79,45 +79,53 @@ class LB_Order_Dashboard {
 	 */
 	public function enqueue_dashboard_assets( $hook ) {
 		// Null-Check für $hook.
-		if ( empty( $hook ) || strpos( (string) $hook, 'lb-order-board' ) === false ) {
+		if ( empty( $hook ) || strpos( (string) $hook, 'lbite-order-board' ) === false ) {
 			return;
 		}
+
+		// Order Board CSS
+		wp_enqueue_style(
+			'lbite-order-board',
+			LBITE_PLUGIN_URL . 'assets/css/admin-order-board.css',
+			array(),
+			LBITE_VERSION
+		);
 
 		// SortableJS für Drag & Drop (lokal gebündelt).
 		wp_enqueue_script(
 			'sortablejs',
-			LB_PLUGIN_URL . 'assets/js/vendor/sortable.min.js',
+			LBITE_PLUGIN_URL . 'assets/js/vendor/sortable.min.js',
 			array(),
-			'1.15.0',
+			'1.15.7',
 			true
 		);
 
 		// Dashboard-spezifisches JS
 		wp_enqueue_script(
-			'lb-dashboard',
-			LB_PLUGIN_URL . 'assets/js/dashboard.js',
+			'lbite-dashboard',
+			LBITE_PLUGIN_URL . 'assets/js/dashboard.js',
 			array( 'jquery', 'sortablejs' ),
-			LB_VERSION,
+			LBITE_VERSION,
 			true
 		);
 
 		// Sound-Datei-Pfad (aus Einstellungen oder Default)
-		$sound_url = get_option( 'lb_notification_sound', '' );
+		$sound_url = get_option( 'lbite_notification_sound', '' );
 
 		// Falls kein Sound eingestellt, prüfe auf Default-Sound im Plugin
 		if ( empty( $sound_url ) ) {
-			$sound_file = LB_PLUGIN_DIR . 'assets/sounds/notification.mp3';
-			$sound_url  = file_exists( $sound_file ) ? LB_PLUGIN_URL . 'assets/sounds/notification.mp3' : '';
+			$sound_file = LBITE_PLUGIN_DIR . 'assets/sounds/notification.mp3';
+			$sound_url  = file_exists( $sound_file ) ? LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' : '';
 		}
 
 		// Lokalisierte Daten
 		wp_localize_script(
-			'lb-dashboard',
-			'lbDashboard',
+			'lbite-dashboard',
+			'lbiteDashboard',
 			array(
 				'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
-				'nonce'           => wp_create_nonce( 'lb_dashboard_nonce' ),
-				'refreshInterval' => get_option( 'lb_dashboard_refresh_interval', 30 ) * 1000,
+				'nonce'           => wp_create_nonce( 'lbite_dashboard_nonce' ),
+				'refreshInterval' => get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
 				'soundUrl'        => $sound_url,
 				'statuses'        => self::STATUSES,
 				'strings'         => array(
@@ -133,9 +141,9 @@ class LB_Order_Dashboard {
 	 * Bestellungen abrufen (AJAX)
 	 */
 	public function ajax_get_orders() {
-		check_ajax_referer( 'lb_dashboard_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lb_view_orders' ) ) {
+		if ( ! current_user_can( 'lbite_view_orders' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
@@ -166,7 +174,7 @@ class LB_Order_Dashboard {
 			'order'      => 'ASC',
 			'meta_query' => array(
 				array(
-					'key'   => '_lb_location_id',
+					'key'   => '_lbite_location_id',
 					'value' => $location_id,
 				),
 			),
@@ -181,7 +189,7 @@ class LB_Order_Dashboard {
 			'date_after' => $today_midnight,
 			'meta_query' => array(
 				array(
-					'key'   => '_lb_location_id',
+					'key'   => '_lbite_location_id',
 					'value' => $location_id,
 				),
 			),
@@ -199,19 +207,19 @@ class LB_Order_Dashboard {
 
 		// Process active orders.
 		foreach ( $orders_active as $order ) {
-			$lb_status = get_post_meta( $order->get_id(), '_lb_order_status', true );
-			if ( ! $lb_status || ! isset( $orders_by_status[ $lb_status ] ) ) {
-				$lb_status = 'incoming';
+			$lbite_status = get_post_meta( $order->get_id(), '_lbite_order_status', true );
+			if ( ! $lbite_status || ! isset( $orders_by_status[ $lbite_status ] ) ) {
+				$lbite_status = 'incoming';
 			}
 
-			$orders_by_status[ $lb_status ][] = $this->format_order_for_dashboard( $order );
+			$orders_by_status[ $lbite_status ][] = $this->format_order_for_dashboard( $order );
 		}
 
 		// Process completed orders (already filtered to today only).
 		foreach ( $orders_completed as $order ) {
-			$lb_status = get_post_meta( $order->get_id(), '_lb_order_status', true );
+			$lbite_status = get_post_meta( $order->get_id(), '_lbite_order_status', true );
 			// Only add to completed if status is 'completed'.
-			if ( 'completed' === $lb_status ) {
+			if ( 'completed' === $lbite_status ) {
 				$orders_by_status['completed'][] = $this->format_order_for_dashboard( $order );
 			}
 		}
@@ -240,9 +248,9 @@ class LB_Order_Dashboard {
 	 * @return array
 	 */
 	private function format_order_for_dashboard( $order ) {
-		$order_type  = get_post_meta( $order->get_id(), '_lb_order_type', true );
-		$pickup_time = get_post_meta( $order->get_id(), '_lb_pickup_time', true );
-		$location    = get_post_meta( $order->get_id(), '_lb_location_name', true );
+		$order_type  = get_post_meta( $order->get_id(), '_lbite_order_type', true );
+		$pickup_time = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
+		$location    = get_post_meta( $order->get_id(), '_lbite_location_name', true );
 
 		$items = array();
 		foreach ( $order->get_items() as $item ) {
@@ -303,9 +311,9 @@ class LB_Order_Dashboard {
 	 * Bestellungs-Status aktualisieren (AJAX)
 	 */
 	public function ajax_update_order_status() {
-		check_ajax_referer( 'lb_dashboard_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lb_manage_orders' ) && ! current_user_can( 'edit_shop_orders' ) ) {
+		if ( ! current_user_can( 'lbite_manage_orders' ) && ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
@@ -316,12 +324,12 @@ class LB_Order_Dashboard {
 			wp_send_json_error();
 		}
 
-		update_post_meta( $order_id, '_lb_order_status', $new_status );
-		update_post_meta( $order_id, '_lb_status_changed', current_time( 'mysql' ) );
+		update_post_meta( $order_id, '_lbite_order_status', $new_status );
+		update_post_meta( $order_id, '_lbite_status_changed', current_time( 'mysql' ) );
 
 		// Bei "Abholbereit" - Kunde benachrichtigen (optional)
 		if ( 'ready' === $new_status ) {
-			do_action( 'lb_order_ready', $order_id );
+			do_action( 'lbite_order_ready', $order_id );
 		}
 
 		// Bei "Abgeschlossen" - WooCommerce Status ändern
@@ -343,7 +351,7 @@ class LB_Order_Dashboard {
 	 * AJAX: Board-Standort speichern
 	 */
 	public function ajax_save_board_location() {
-		check_ajax_referer( 'lb_dashboard_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
@@ -352,7 +360,7 @@ class LB_Order_Dashboard {
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
 		// Standort für aktuellen Benutzer speichern
-		update_user_meta( get_current_user_id(), 'lb_board_location', $location_id );
+		update_user_meta( get_current_user_id(), 'lbite_board_location', $location_id );
 
 		wp_send_json_success( array( 'location_id' => $location_id ) );
 	}
@@ -361,7 +369,7 @@ class LB_Order_Dashboard {
 	 * AJAX: Bestellung stornieren
 	 */
 	public function ajax_cancel_order() {
-		check_ajax_referer( 'lb_dashboard_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
@@ -393,7 +401,7 @@ class LB_Order_Dashboard {
 		}
 
 		// Dashboard-Status entfernen
-		update_post_meta( $order_id, '_lb_order_status', 'cancelled' );
+		update_post_meta( $order_id, '_lbite_order_status', 'cancelled' );
 
 		wp_send_json_success(
 			array(
@@ -406,9 +414,9 @@ class LB_Order_Dashboard {
 	 * AJAX: Weitere abgeschlossene Bestellungen laden
 	 */
 	public function ajax_load_more_completed() {
-		check_ajax_referer( 'lb_dashboard_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lb_view_orders' ) ) {
+		if ( ! current_user_can( 'lbite_view_orders' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
@@ -430,12 +438,12 @@ class LB_Order_Dashboard {
 			'date_after' => $today_midnight, // Only orders from today.
 			'meta_query' => array(
 				array(
-					'key'     => '_lb_location_id',
+					'key'     => '_lbite_location_id',
 					'value'   => $location_id,
 					'compare' => '=',
 				),
 				array(
-					'key'     => '_lb_order_status',
+					'key'     => '_lbite_order_status',
 					'value'   => 'completed',
 					'compare' => '=',
 				),
@@ -465,7 +473,7 @@ class LB_Order_Dashboard {
 	 * Geplante Bestellungen prüfen und automatisch verschieben
 	 */
 	public function check_scheduled_orders() {
-		$prep_time = get_option( 'lb_preparation_time', 30 );
+		$prep_time = get_option( 'lbite_preparation_time', 30 );
 
 		// Bestellungen mit Pickup-Zeit in der Zukunft
 		$orders = wc_get_orders(
@@ -474,12 +482,12 @@ class LB_Order_Dashboard {
 				'status'     => array( 'processing', 'pending' ),
 				'meta_query' => array(
 					array(
-						'key'     => '_lb_order_type',
+						'key'     => '_lbite_order_type',
 						'value'   => 'later',
 						'compare' => '=',
 					),
 					array(
-						'key'     => '_lb_order_status',
+						'key'     => '_lbite_order_status',
 						'value'   => 'incoming',
 						'compare' => '=',
 					),
@@ -490,7 +498,7 @@ class LB_Order_Dashboard {
 		$current_time = current_time( 'timestamp' );
 
 		foreach ( $orders as $order ) {
-			$pickup_time = get_post_meta( $order->get_id(), '_lb_pickup_time', true );
+			$pickup_time = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
 			if ( ! $pickup_time ) {
 				continue;
 			}
@@ -500,10 +508,10 @@ class LB_Order_Dashboard {
 
 			// Wenn Vorbereitungszeit erreicht ist
 			if ( $current_time >= $prep_start_time ) {
-				update_post_meta( $order->get_id(), '_lb_order_status', 'preparing' );
-				update_post_meta( $order->get_id(), '_lb_status_changed', current_time( 'mysql' ) );
+				update_post_meta( $order->get_id(), '_lbite_order_status', 'preparing' );
+				update_post_meta( $order->get_id(), '_lbite_status_changed', current_time( 'mysql' ) );
 
-				do_action( 'lb_order_auto_moved_to_preparing', $order->get_id() );
+				do_action( 'lbite_order_auto_moved_to_preparing', $order->get_id() );
 			}
 		}
 	}
@@ -514,34 +522,34 @@ class LB_Order_Dashboard {
 	 * @param int $order_id Bestellungs-ID
 	 */
 	public function set_initial_order_status( $order_id ) {
-		$lb_status = get_post_meta( $order_id, '_lb_order_status', true );
-		if ( ! $lb_status ) {
-			update_post_meta( $order_id, '_lb_order_status', 'incoming' );
+		$lbite_status = get_post_meta( $order_id, '_lbite_order_status', true );
+		if ( ! $lbite_status ) {
+			update_post_meta( $order_id, '_lbite_order_status', 'incoming' );
 		}
 
 		// Fallback: Location-Meta aus Session setzen falls nicht vorhanden.
-		$location_id = get_post_meta( $order_id, '_lb_location_id', true );
+		$location_id = get_post_meta( $order_id, '_lbite_location_id', true );
 		if ( ! $location_id && function_exists( 'WC' ) && WC()->session ) {
-			$session_location_id = WC()->session->get( 'lb_location_id' );
+			$session_location_id = WC()->session->get( 'lbite_location_id' );
 			if ( $session_location_id ) {
-				update_post_meta( $order_id, '_lb_location_id', $session_location_id );
+				update_post_meta( $order_id, '_lbite_location_id', $session_location_id );
 
 				// Standort-Name speichern.
 				$location = get_post( $session_location_id );
 				if ( $location ) {
-					update_post_meta( $order_id, '_lb_location_name', $location->post_title );
+					update_post_meta( $order_id, '_lbite_location_name', $location->post_title );
 				}
 			}
 
 			// Order type und pickup time auch speichern.
-			$order_type = WC()->session->get( 'lb_order_type', 'now' );
+			$order_type = WC()->session->get( 'lbite_order_type', 'now' );
 			if ( $order_type ) {
-				update_post_meta( $order_id, '_lb_order_type', $order_type );
+				update_post_meta( $order_id, '_lbite_order_type', $order_type );
 			}
 
-			$pickup_time = WC()->session->get( 'lb_pickup_time' );
+			$pickup_time = WC()->session->get( 'lbite_pickup_time' );
 			if ( $pickup_time && 'later' === $order_type ) {
-				update_post_meta( $order_id, '_lb_pickup_time', $pickup_time );
+				update_post_meta( $order_id, '_lbite_pickup_time', $pickup_time );
 			}
 		}
 	}
@@ -551,7 +559,7 @@ class LB_Order_Dashboard {
 	 */
 	public function add_order_meta_box() {
 		add_meta_box(
-			'lb_order_dashboard_status',
+			'lbite_order_dashboard_status',
 			__( 'Dashboard-Status', 'libre-bite' ),
 			array( $this, 'render_order_meta_box' ),
 			'shop_order',
@@ -562,7 +570,7 @@ class LB_Order_Dashboard {
 		// HPOS Support
 		$screen = class_exists( '\Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController' ) ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order';
 		add_meta_box(
-			'lb_order_dashboard_status',
+			'lbite_order_dashboard_status',
 			__( 'Dashboard-Status', 'libre-bite' ),
 			array( $this, 'render_order_meta_box' ),
 			$screen,
@@ -583,17 +591,17 @@ class LB_Order_Dashboard {
 			return;
 		}
 
-		$current_status = get_post_meta( $order->get_id(), '_lb_order_status', true );
+		$current_status = get_post_meta( $order->get_id(), '_lbite_order_status', true );
 		if ( ! $current_status ) {
 			$current_status = 'incoming';
 		}
 
-		$status_changed = get_post_meta( $order->get_id(), '_lb_status_changed', true );
+		$status_changed = get_post_meta( $order->get_id(), '_lbite_status_changed', true );
 		?>
-		<div class="lb-order-status-meta">
+		<div class="lbite-order-status-meta">
 			<p>
 				<strong><?php esc_html_e( 'Aktueller Status:', 'libre-bite' ); ?></strong><br>
-				<span class="lb-status-badge lb-status-<?php echo esc_attr( $current_status ); ?>">
+				<span class="lbite-status-badge lbite-status-<?php echo esc_attr( $current_status ); ?>">
 					<?php echo esc_html( self::STATUSES[ $current_status ] ); ?>
 				</span>
 			</p>
@@ -606,25 +614,20 @@ class LB_Order_Dashboard {
 			<?php endif; ?>
 
 			<p>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=lb-order-board' ) ); ?>" class="button">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-order-board' ) ); ?>" class="button">
 					<?php esc_html_e( 'Zum Dashboard', 'libre-bite' ); ?>
 				</a>
 			</p>
 		</div>
 
-		<style>
-		.lb-status-badge {
-			display: inline-block;
-			padding: 5px 10px;
-			border-radius: 3px;
-			font-weight: 600;
-			font-size: 13px;
-		}
-		.lb-status-incoming { background: #f0f0f0; color: #333; }
-		.lb-status-preparing { background: #fff3cd; color: #856404; }
-		.lb-status-ready { background: #d1ecf1; color: #0c5460; }
-		.lb-status-completed { background: #d4edda; color: #155724; }
-		</style>
+		<?php
+		$meta_box_css = '.lbite-status-badge { display: inline-block; padding: 5px 10px; border-radius: 3px; font-weight: 600; font-size: 13px; }
+		.lbite-status-incoming { background: #f0f0f0; color: #333; }
+		.lbite-status-preparing { background: #fff3cd; color: #856404; }
+		.lbite-status-ready { background: #d1ecf1; color: #0c5460; }
+		.lbite-status-completed { background: #d4edda; color: #155724; }';
+		wp_add_inline_style( 'wp-admin', $meta_box_css );
+		?>
 		<?php
 	}
 }

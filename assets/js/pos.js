@@ -39,8 +39,8 @@
 			this.bindFullscreenEvents();
 
 			// Eingebettete Daten verwenden (kein HTTP-Request nötig)
-			if (lbPos.preloadData && lbPos.preloadData.products) {
-				this.usePreloadedData(lbPos.preloadData);
+			if (lbitePos.preloadData && lbitePos.preloadData.products) {
+				this.usePreloadedData(lbitePos.preloadData);
 			} else {
 				// Fallback auf AJAX
 				this.loadProducts();
@@ -94,38 +94,38 @@
 		 */
 		bindEvents: function() {
 			// Kategorie-Wechsel
-			$(document).on('click', '.lb-category-btn', function() {
-				$('.lb-category-btn').removeClass('active');
+			$(document).on('click', '.lbite-category-btn', function() {
+				$('.lbite-category-btn').removeClass('active');
 				$(this).addClass('active');
 				POS.currentCategory = $(this).data('category');
 				POS.loadProducts();
 			});
 
 			// Warenkorb leeren
-			$('#lb-pos-clear').on('click', () => {
+			$('#lbite-pos-clear').on('click', () => {
 				if (confirm('Warenkorb wirklich leeren?')) {
 					this.clearCart();
 				}
 			});
 
 			// Checkout
-			$('#lb-pos-checkout').on('click', () => {
+			$('#lbite-pos-checkout').on('click', () => {
 				this.checkout();
 			});
 
 			// Produkt entfernen
-			$(document).on('click', '.lb-cart-item-remove', function() {
+			$(document).on('click', '.lbite-cart-item-remove', function() {
 				const cartIndex = $(this).data('cart-index');
 				POS.removeFromCart(cartIndex);
 			});
 
 			// Menge ändern
-			$(document).on('click', '.lb-cart-qty-minus', function() {
+			$(document).on('click', '.lbite-cart-qty-minus', function() {
 				const cartIndex = $(this).data('cart-index');
 				POS.updateQuantity(cartIndex, -1);
 			});
 
-			$(document).on('click', '.lb-cart-qty-plus', function() {
+			$(document).on('click', '.lbite-cart-qty-plus', function() {
 				const cartIndex = $(this).data('cart-index');
 				POS.updateQuantity(cartIndex, 1);
 			});
@@ -135,9 +135,9 @@
 		 * Lade-Overlay anzeigen
 		 */
 		showLoading: function(message = 'Laden...') {
-			if ($('#lb-pos-loading').length === 0) {
+			if ($('#lbite-pos-loading').length === 0) {
 				$('body').append(`
-					<div id="lb-pos-loading" style="
+					<div id="lbite-pos-loading" style="
 						position: fixed;
 						top: 0;
 						left: 0;
@@ -156,28 +156,28 @@
 							border: 4px solid #e0e0e0;
 							border-top: 4px solid #0073aa;
 							border-radius: 50%;
-							animation: lb-pos-spin 0.8s linear infinite;
+							animation: lbite-pos-spin 0.8s linear infinite;
 						"></div>
-						<p id="lb-pos-loading-text" style="margin-top: 15px; font-size: 16px; color: #333; font-weight: 500;">${message}</p>
+						<p id="lbite-pos-loading-text" style="margin-top: 15px; font-size: 16px; color: #333; font-weight: 500;">${message}</p>
 					</div>
 					<style>
-						@keyframes lb-pos-spin {
+						@keyframes lbite-pos-spin {
 							0% { transform: rotate(0deg); }
 							100% { transform: rotate(360deg); }
 						}
 					</style>
 				`);
 			} else {
-				$('#lb-pos-loading-text').text(message);
+				$('#lbite-pos-loading-text').text(message);
 			}
-			$('#lb-pos-loading').fadeIn(100);
+			$('#lbite-pos-loading').fadeIn(100);
 		},
 
 		/**
 		 * Lade-Overlay ausblenden
 		 */
 		hideLoading: function() {
-			$('#lb-pos-loading').fadeOut(100);
+			$('#lbite-pos-loading').fadeOut(100);
 		},
 
 		/**
@@ -198,7 +198,7 @@
 			}
 			this.isLoadingProducts = true;
 
-			$('#lb-product-grid').html(`
+			$('#lbite-product-grid').html(`
 				<div style="text-align: center; padding: 40px;">
 					<div style="
 						width: 40px;
@@ -206,7 +206,7 @@
 						border: 3px solid #e0e0e0;
 						border-top: 3px solid #0073aa;
 						border-radius: 50%;
-						animation: lb-pos-spin 0.8s linear infinite;
+						animation: lbite-pos-spin 0.8s linear infinite;
 						margin: 0 auto 15px;
 					"></div>
 					<p style="color: #666;">Produkte werden geladen...</p>
@@ -214,11 +214,11 @@
 			`);
 
 			$.ajax({
-				url: lbPos.ajaxUrl,
+				url: lbitePos.ajaxUrl,
 				type: 'POST',
 				data: {
-					action: 'lb_pos_get_products',
-					nonce: lbPos.nonce,
+					action: 'lbite_pos_get_products',
+					nonce: lbitePos.nonce,
 					category_id: this.currentCategory === 'all' ? 0 : this.currentCategory
 				},
 				success: (response) => {
@@ -229,7 +229,7 @@
 					}
 				},
 				error: () => {
-					$('#lb-product-grid').html('<p style="text-align: center; padding: 20px; color: red;">Fehler beim Laden der Produkte. <button onclick="POS.clearCacheAndReload()" class="button">Erneut versuchen</button></p>');
+					$('#lbite-product-grid').html('<p style="text-align: center; padding: 20px; color: red;">Fehler beim Laden der Produkte. <button onclick="POS.clearCacheAndReload()" class="button">Erneut versuchen</button></p>');
 				},
 				complete: () => {
 					this.isLoadingProducts = false;
@@ -254,7 +254,7 @@
 		 * Produkte rendern
 		 */
 		renderProducts: function(products) {
-			const $grid = $('#lb-product-grid');
+			const $grid = $('#lbite-product-grid');
 			$grid.empty();
 
 			products.forEach(product => {
@@ -264,13 +264,13 @@
 					: '';
 
 				const hasConfig = product.has_variations || product.has_options;
-				const configClass = hasConfig ? 'lb-product-has-config' : '';
+				const configClass = hasConfig ? 'lbite-product-has-config' : '';
 
 				const $item = $(`
-					<div class="lb-pos-product-item ${configClass}" data-product-id="${product.id}" data-has-config="${hasConfig}">
+					<div class="lbite-pos-product-item ${configClass}" data-product-id="${product.id}" data-has-config="${hasConfig}">
 						${imageHtml}
-						<div class="lb-pos-product-name">${safeName}</div>
-						<div class="lb-pos-product-price">${this.formatPrice(product.price)}</div>
+						<div class="lbite-pos-product-name">${safeName}</div>
+						<div class="lbite-pos-product-price">${this.formatPrice(product.price)}</div>
 					</div>
 				`);
 
@@ -291,17 +291,17 @@
 		 */
 		bindModalEvents: function() {
 			// Modal schließen
-			$('#lb-modal-close, #lb-modal-cancel, .lb-modal-close').on('click', () => {
+			$('#lbite-modal-close, #lbite-modal-cancel, .lbite-modal-close').on('click', () => {
 				this.closeProductModal();
 			});
 
 			// Overlay klicken
-			$('.lb-modal-overlay').on('click', () => {
+			$('.lbite-modal-overlay').on('click', () => {
 				this.closeProductModal();
 			});
 
 			// Produkt hinzufügen
-			$('#lb-modal-add').on('click', () => {
+			$('#lbite-modal-add').on('click', () => {
 				this.addConfiguredProductToCart();
 			});
 		},
@@ -310,7 +310,7 @@
 		 * Produkt-Modal öffnen (mit Cache)
 		 */
 		openProductModal: function(productId) {
-			$('#lb-product-modal').fadeIn(200);
+			$('#lbite-product-modal').fadeIn(200);
 
 			// Aus Cache laden wenn vorhanden (JSON oder vorheriger AJAX)
 			const cachedDetails = this.productDetailsCache[productId];
@@ -320,8 +320,8 @@
 				return;
 			}
 
-			$('#lb-modal-product-name').text('Laden...');
-			$('#lb-modal-body').html(`
+			$('#lbite-modal-product-name').text('Laden...');
+			$('#lbite-modal-body').html(`
 				<div style="text-align: center; padding: 30px;">
 					<div style="
 						width: 30px;
@@ -329,7 +329,7 @@
 						border: 3px solid #e0e0e0;
 						border-top: 3px solid #0073aa;
 						border-radius: 50%;
-						animation: lb-pos-spin 0.8s linear infinite;
+						animation: lbite-pos-spin 0.8s linear infinite;
 						margin: 0 auto 10px;
 					"></div>
 					<p style="color: #666; margin: 0;">Produktdetails werden geladen...</p>
@@ -338,11 +338,11 @@
 
 			// Produkt-Details via AJAX laden (Fallback)
 			$.ajax({
-				url: lbPos.ajaxUrl,
+				url: lbitePos.ajaxUrl,
 				type: 'POST',
 				data: {
-					action: 'lb_pos_get_product_details',
-					nonce: lbPos.nonce,
+					action: 'lbite_pos_get_product_details',
+					nonce: lbitePos.nonce,
 					product_id: productId
 				},
 				success: (response) => {
@@ -352,12 +352,12 @@
 						this.currentProduct = response.data;
 						this.renderProductModal(response.data);
 					} else {
-						window.lbNotify && window.lbNotify.error('Fehler beim Laden der Produktdetails');
+						window.lbiteNotify && window.lbiteNotify.error('Fehler beim Laden der Produktdetails');
 						this.closeProductModal();
 					}
 				},
 				error: () => {
-					window.lbNotify && window.lbNotify.error('Fehler beim Laden der Produktdetails');
+					window.lbiteNotify && window.lbiteNotify.error('Fehler beim Laden der Produktdetails');
 					this.closeProductModal();
 				}
 			});
@@ -367,23 +367,23 @@
 		 * Produkt-Modal rendern
 		 */
 	renderProductModal: function(productData) {
-		$('#lb-modal-product-name').text(productData.name);
+		$('#lbite-modal-product-name').text(productData.name);
 
 		let html = '';
 		let choiceCounter = 0;
 
 		// Varianten rendern
 		if (productData.variations && productData.variations.length > 0) {
-			html += '<div class="lb-option-group">';
-			html += '<div class="lb-option-group-label">Variante wählen: <span style="color: red;">*</span></div>';
+			html += '<div class="lbite-option-group">';
+			html += '<div class="lbite-option-group-label">Variante wählen: <span style="color: red;">*</span></div>';
 			productData.variations.forEach((variation, index) => {
 				const variationName = variation.name || 'Variante ' + (index + 1);
 				const inputId = 'modal_choice_' + (choiceCounter++);
 				html += `
-					<label class="lb-option-choice" for="${inputId}">
+					<label class="lbite-option-choice" for="${inputId}">
 						<input type="radio" id="${inputId}" name="variation" value="${variation.id}" ${index === 0 ? 'checked' : ''} data-price="${variation.price}">
-						<span class="lb-option-choice-label">${variationName}</span>
-						<span class="lb-option-choice-price">${this.formatPrice(variation.price)}</span>
+						<span class="lbite-option-choice-label">${variationName}</span>
+						<span class="lbite-option-choice-price">${this.formatPrice(variation.price)}</span>
 					</label>
 				`;
 			});
@@ -393,8 +393,8 @@
 		// Optionen rendern
 		if (productData.options && productData.options.length > 0) {
 			productData.options.forEach(option => {
-				html += '<div class="lb-option-group">';
-				html += `<div class="lb-option-group-label">${escapeHtml(option.name)}${option.required ? ' <span style="color: red;">*</span>' : ''}</div>`;
+				html += '<div class="lbite-option-group">';
+				html += `<div class="lbite-option-group-label">${escapeHtml(option.name)}${option.required ? ' <span style="color: red;">*</span>' : ''}</div>`;
 
 				option.choices.forEach((choice, choiceIndex) => {
 					const inputType = option.type === 'checkbox' ? 'checkbox' : 'radio';
@@ -402,10 +402,10 @@
 					const inputId = 'modal_choice_' + (choiceCounter++);
 
 					html += `
-						<label class="lb-option-choice" for="${inputId}">
+						<label class="lbite-option-choice" for="${inputId}">
 							<input type="${inputType}" id="${inputId}" name="${inputName}" value="${escapeHtml(choice.label)}" data-price="${choice.price}" data-option-id="${option.id}">
-							<span class="lb-option-choice-label">${escapeHtml(choice.label)}</span>
-							${choice.price > 0 ? `<span class="lb-option-choice-price">+${this.formatPrice(choice.price)}</span>` : ''}
+							<span class="lbite-option-choice-label">${escapeHtml(choice.label)}</span>
+							${choice.price > 0 ? `<span class="lbite-option-choice-price">+${this.formatPrice(choice.price)}</span>` : ''}
 						</label>
 					`;
 				});
@@ -417,14 +417,14 @@
 			html = '<p>Keine Konfiguration erforderlich.</p>';
 		}
 
-		$('#lb-modal-body').html(html);
+		$('#lbite-modal-body').html(html);
 	},
 
 		/**
 		 * Modal schließen
 		 */
 		closeProductModal: function() {
-			$('#lb-product-modal').fadeOut(200);
+			$('#lbite-product-modal').fadeOut(200);
 			this.currentProduct = null;
 		},
 
@@ -453,7 +453,7 @@
 			let meta = [];
 
 			// Ausgewählte Optionen
-			$('#lb-modal-body input:checked').each(function() {
+			$('#lbite-modal-body input:checked').each(function() {
 				if ($(this).attr('name') !== 'variation') {
 					const label = $(this).val();
 					const price = parseFloat($(this).data('price') || 0);
@@ -534,12 +534,12 @@
 		 * Warenkorb-Anzeige aktualisieren
 		 */
 		updateCartDisplay: function() {
-			const $cartItems = $('#lb-pos-cart-items');
+			const $cartItems = $('#lbite-pos-cart-items');
 			$cartItems.empty();
 
 			if (this.cart.length === 0) {
 				$cartItems.html('<p style="text-align: center; color: #999;">Warenkorb ist leer</p>');
-				$('#lb-pos-subtotal, #lb-pos-total').text(this.formatPrice(0));
+				$('#lbite-pos-subtotal, #lbite-pos-total').text(this.formatPrice(0));
 				return;
 			}
 
@@ -549,18 +549,18 @@
 				const safeName = escapeHtml(item.name);
 
 				const $item = $(`
-					<div class="lb-pos-cart-item">
-						<div class="lb-pos-cart-item-name">
+					<div class="lbite-pos-cart-item">
+						<div class="lbite-pos-cart-item-name">
 							${safeName}
 							${metaHtml}
 						</div>
-						<div class="lb-pos-cart-item-qty">
-							<button class="lb-cart-qty-minus" data-cart-index="${index}">−</button>
+						<div class="lbite-pos-cart-item-qty">
+							<button class="lbite-cart-qty-minus" data-cart-index="${index}">−</button>
 							<span>${item.quantity}</span>
-							<button class="lb-cart-qty-plus" data-cart-index="${index}">+</button>
+							<button class="lbite-cart-qty-plus" data-cart-index="${index}">+</button>
 						</div>
-						<div class="lb-pos-cart-item-price">${this.formatPrice(itemTotal)}</div>
-						<span class="lb-cart-item-remove dashicons dashicons-trash" data-cart-index="${index}"></span>
+						<div class="lbite-pos-cart-item-price">${this.formatPrice(itemTotal)}</div>
+						<span class="lbite-cart-item-remove dashicons dashicons-trash" data-cart-index="${index}"></span>
 					</div>
 				`);
 
@@ -569,7 +569,7 @@
 
 			// Gesamt berechnen
 			const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-			$('#lb-pos-subtotal, #lb-pos-total').text(this.formatPrice(subtotal));
+			$('#lbite-pos-subtotal, #lbite-pos-total').text(this.formatPrice(subtotal));
 		},
 
 		/**
@@ -580,7 +580,7 @@
 			this.updateCartDisplay();
 			this.saveCart();
 			// Namensfeld auch leeren für nächste Bestellung
-			$('#lb-pos-customer-name').val('');
+			$('#lbite-pos-customer-name').val('');
 		},
 
 		/**
@@ -593,15 +593,15 @@
 			}
 
 			if (this.cart.length === 0) {
-				window.lbNotify.error(lbPos.strings.cartEmpty);
+				window.lbiteNotify.error(lbitePos.strings.cartEmpty);
 				return;
 			}
 
 			// Standort aus Dropdown holen
-			const locationId = $('#lb-pos-location').val();
+			const locationId = $('#lbite-pos-location').val();
 			if (!locationId) {
-				window.lbNotify.error(lbPos.strings.selectLocation);
-				$('#lb-pos-location').focus();
+				window.lbiteNotify.error(lbitePos.strings.selectLocation);
+				$('#lbite-pos-location').focus();
 				return;
 			}
 
@@ -610,7 +610,7 @@
 			const pickupTime = '';
 
 			// Kunden-Name aus dem Eingabefeld in der Warenkorb-Box holen
-			const customerName = $('#lb-pos-customer-name').val().trim();
+			const customerName = $('#lbite-pos-customer-name').val().trim();
 
 			// Direkt Bestellung erstellen (kein Modal mehr)
 			this.createOrder(locationId, orderType, pickupTime, customerName);
@@ -625,14 +625,14 @@
 
 			// Loading-Overlay anzeigen
 			this.showLoading('Bestellung wird erstellt...');
-			$('#lb-pos-checkout').prop('disabled', true);
+			$('#lbite-pos-checkout').prop('disabled', true);
 
 			$.ajax({
-				url: lbPos.ajaxUrl,
+				url: lbitePos.ajaxUrl,
 				type: 'POST',
 				data: {
-					action: 'lb_pos_create_order',
-					nonce: lbPos.nonce,
+					action: 'lbite_pos_create_order',
+					nonce: lbitePos.nonce,
 					cart_items: JSON.stringify(this.cart),
 					location_id: locationId,
 					order_type: orderType,
@@ -641,19 +641,19 @@
 				},
 				success: (response) => {
 					if (response.success) {
-						window.lbNotify && window.lbNotify.success(`Bestellung #${response.data.order_number} erstellt (${response.data.total})`);
+						window.lbiteNotify && window.lbiteNotify.success(`Bestellung #${response.data.order_number} erstellt (${response.data.total})`);
 						this.clearCart();
 					} else {
-						window.lbNotify && window.lbNotify.error(lbPos.strings.orderError + ': ' + (response.data.message || ''));
+						window.lbiteNotify && window.lbiteNotify.error(lbitePos.strings.orderError + ': ' + (response.data.message || ''));
 					}
 				},
 				error: (xhr, status, error) => {
-					window.lbNotify && window.lbNotify.error(lbPos.strings.orderError);
+					window.lbiteNotify && window.lbiteNotify.error(lbitePos.strings.orderError);
 				},
 				complete: () => {
 					this.isProcessingOrder = false;
 					this.hideLoading();
-					$('#lb-pos-checkout').prop('disabled', false);
+					$('#lbite-pos-checkout').prop('disabled', false);
 				}
 			});
 		},
@@ -662,21 +662,21 @@
 		 * Preis formatieren
 		 */
 		formatPrice: function(price) {
-			return lbPos.currency + parseFloat(price).toFixed(2).replace('.', ',');
+			return lbitePos.currency + parseFloat(price).toFixed(2).replace('.', ',');
 		},
 
 		/**
 		 * Warenkorb speichern (LocalStorage)
 		 */
 		saveCart: function() {
-			localStorage.setItem('lb_pos_cart', JSON.stringify(this.cart));
+			localStorage.setItem('lbite_pos_cart', JSON.stringify(this.cart));
 		},
 
 		/**
 		 * Gespeicherten Warenkorb laden
 		 */
 		loadSavedCart: function() {
-			const saved = localStorage.getItem('lb_pos_cart');
+			const saved = localStorage.getItem('lbite_pos_cart');
 			if (saved) {
 				try {
 					this.cart = JSON.parse(saved);
@@ -691,7 +691,7 @@
 		 * Vollbild-Events binden
 		 */
 		bindFullscreenEvents: function() {
-			$('#lb-pos-fullscreen').on('click', () => {
+			$('#lbite-pos-fullscreen').on('click', () => {
 				this.toggleFullscreen();
 			});
 
@@ -720,17 +720,17 @@
 		 * Vollbild-Button aktualisieren
 		 */
 		updateFullscreenButton: function() {
-			const $btn = $('#lb-pos-fullscreen');
+			const $btn = $('#lbite-pos-fullscreen');
 			const $icon = $btn.find('.dashicons');
 
 			if (document.fullscreenElement) {
 				$icon.removeClass('dashicons-editor-expand').addClass('dashicons-editor-contract');
 				$btn.attr('title', 'Vollbild beenden');
-				$('body').addClass('lb-fullscreen-active');
+				$('body').addClass('lbite-fullscreen-active');
 			} else {
 				$icon.removeClass('dashicons-editor-contract').addClass('dashicons-editor-expand');
 				$btn.attr('title', 'Vollbild');
-				$('body').removeClass('lb-fullscreen-active');
+				$('body').removeClass('lbite-fullscreen-active');
 			}
 		}
 	};
@@ -740,7 +740,7 @@
 
 	// Initialisieren
 	$(document).ready(() => {
-		if ($('.lb-pos').length > 0) {
+		if ($('.lbite-pos').length > 0) {
 			POS.init();
 		}
 	});

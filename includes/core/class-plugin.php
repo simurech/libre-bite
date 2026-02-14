@@ -12,19 +12,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Hauptklasse - Singleton Pattern
  */
-class LB_Plugin {
+class LBite_Plugin {
 
 	/**
 	 * Plugin-Instanz
 	 *
-	 * @var LB_Plugin
+	 * @var LBite_Plugin
 	 */
 	private static $instance = null;
 
 	/**
 	 * Loader-Instanz
 	 *
-	 * @var LB_Loader
+	 * @var LBite_Loader
 	 */
 	public $loader;
 
@@ -38,7 +38,7 @@ class LB_Plugin {
 	/**
 	 * Singleton-Instanz abrufen
 	 *
-	 * @return LB_Plugin
+	 * @return LBite_Plugin
 	 */
 	public static function instance() {
 		if ( null === self::$instance ) {
@@ -60,8 +60,8 @@ class LB_Plugin {
 	 * Abhängigkeiten laden
 	 */
 	private function load_dependencies() {
-		require_once LB_PLUGIN_DIR . 'includes/core/class-loader.php';
-		$this->loader = new LB_Loader();
+		require_once LBITE_PLUGIN_DIR . 'includes/core/class-loader.php';
+		$this->loader = new LBite_Loader();
 	}
 
 	/**
@@ -79,29 +79,29 @@ class LB_Plugin {
 		}
 
 		// Basis-Module (immer laden)
-		$this->load_module( 'customizations', 'LB_Customizations' );
-		$this->load_module( 'locations', 'LB_Locations' );
-		$this->load_module( 'checkout', 'LB_Checkout' );
+		$this->load_module( 'customizations', 'LBite_Customizations' );
+		$this->load_module( 'locations', 'LBite_Locations' );
+		$this->load_module( 'checkout', 'LBite_Checkout' );
 
 		// Feature-abhängige Module
-		if ( lb_feature_enabled( 'enable_product_options' ) ) {
-			$this->load_module( 'product-options', 'LB_Product_Options' );
+		if ( lbite_feature_enabled( 'enable_product_options' ) ) {
+			$this->load_module( 'product-options', 'LBite_Product_Options' );
 		}
 
-		if ( lb_feature_enabled( 'enable_nutritional_info' ) ) {
-			$this->load_module( 'nutritional-info', 'LB_Nutritional_Info' );
+		if ( lbite_feature_enabled( 'enable_nutritional_info' ) ) {
+			$this->load_module( 'nutritional-info', 'LBite_Nutritional_Info' );
 		}
 
-		if ( lb_feature_enabled( 'enable_kanban_board' ) ) {
-			$this->load_module( 'order-dashboard', 'LB_Order_Dashboard' );
+		if ( lbite_feature_enabled( 'enable_kanban_board' ) ) {
+			$this->load_module( 'order-dashboard', 'LBite_Order_Dashboard' );
 		}
 
-		if ( lb_feature_enabled( 'enable_pos' ) ) {
-			$this->load_module( 'pos', 'LB_POS' );
+		if ( lbite_feature_enabled( 'enable_pos' ) ) {
+			$this->load_module( 'pos', 'LBite_POS' );
 		}
 
-		if ( lb_feature_enabled( 'enable_pickup_reminders' ) || lb_feature_enabled( 'enable_admin_email' ) ) {
-			$this->load_module( 'notifications', 'LB_Notifications' );
+		if ( lbite_feature_enabled( 'enable_pickup_reminders' ) || lbite_feature_enabled( 'enable_admin_email' ) ) {
+			$this->load_module( 'notifications', 'LBite_Notifications' );
 		}
 	}
 
@@ -109,8 +109,8 @@ class LB_Plugin {
 	 * Admin-Bereich initialisieren
 	 */
 	private function init_admin() {
-		require_once LB_PLUGIN_DIR . 'includes/admin/class-admin.php';
-		$this->modules['admin'] = new LB_Admin( $this->loader );
+		require_once LBITE_PLUGIN_DIR . 'includes/admin/class-admin.php';
+		$this->modules['admin'] = new LBite_Admin( $this->loader );
 	}
 
 	/**
@@ -120,12 +120,12 @@ class LB_Plugin {
 	 * @param string $class_name Klassenname
 	 */
 	private function load_module( $module_dir, $class_name ) {
-		// Erst "LB_" entfernen, DANN Underscores mit Bindestrichen ersetzen
-		$class_file = str_replace( 'LB_', '', $class_name );
+		// Erst "LBite_" entfernen, DANN Underscores mit Bindestrichen ersetzen
+		$class_file = str_replace( 'LBite_', '', $class_name );
 		$class_file = str_replace( '_', '-', $class_file );
 		$class_file = strtolower( $class_file );
 
-		$file_path = LB_PLUGIN_DIR . 'includes/modules/' . $module_dir . '/class-' . $class_file . '.php';
+		$file_path = LBITE_PLUGIN_DIR . 'includes/modules/' . $module_dir . '/class-' . $class_file . '.php';
 
 		if ( file_exists( $file_path ) ) {
 			require_once $file_path;

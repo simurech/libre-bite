@@ -9,10 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="lb-help-section">
+<div class="lbite-help-section">
 	<h2><?php esc_html_e( 'Einstellungen', 'libre-bite' ); ?></h2>
 
-	<div class="lb-help-article">
+	<div class="lbite-help-article">
 		<h3><?php esc_html_e( 'Checkout-Felder', 'libre-bite' ); ?></h3>
 		<p><?php esc_html_e( 'Definieren Sie, welche Felder im Checkout angezeigt werden.', 'libre-bite' ); ?></p>
 
@@ -23,12 +23,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<li><?php esc_html_e( 'Felder als Pflichtfeld markieren', 'libre-bite' ); ?></li>
 		</ul>
 
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lb-checkout-fields' ) ); ?>" class="button">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-checkout-fields' ) ); ?>" class="button">
 			<?php esc_html_e( 'Checkout-Felder bearbeiten', 'libre-bite' ); ?>
 		</a>
 	</div>
 
-	<div class="lb-help-article">
+	<div class="lbite-help-article">
 		<h3><?php esc_html_e( 'Allgemeine Einstellungen', 'libre-bite' ); ?></h3>
 
 		<table class="widefat">
@@ -63,12 +63,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</tbody>
 		</table>
 
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lb-settings' ) ); ?>" class="button">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings' ) ); ?>" class="button">
 			<?php esc_html_e( 'Einstellungen öffnen', 'libre-bite' ); ?>
 		</a>
 	</div>
 
-	<div class="lb-help-article">
+	<div class="lbite-help-article">
 		<h3><?php esc_html_e( 'Trinkgeld-Einstellungen', 'libre-bite' ); ?></h3>
 		<p><?php esc_html_e( 'Definieren Sie drei Trinkgeld-Prozentsätze, die dem Kunden im Checkout angezeigt werden.', 'libre-bite' ); ?></p>
 
@@ -79,57 +79,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<li><?php esc_html_e( 'Option 3: 15%', 'libre-bite' ); ?></li>
 		</ul>
 
-		<div class="lb-help-tip">
+		<div class="lbite-help-tip">
 			<span class="dashicons dashicons-lightbulb"></span>
 			<p><?php esc_html_e( 'Tipp: Das Trinkgeld wird automatisch zum Bestelltotal addiert und in der Bestellung separat ausgewiesen.', 'libre-bite' ); ?></p>
 		</div>
 	</div>
 </div>
 
-<style>
-.lb-help-section {
-	background: #fff;
-	border: 1px solid #c3c4c7;
-	border-radius: 4px;
-	padding: 20px;
-}
-
-.lb-help-article {
-	margin-bottom: 30px;
-	padding-bottom: 30px;
-	border-bottom: 1px solid #eee;
-}
-
-.lb-help-article:last-child {
-	margin-bottom: 0;
-	padding-bottom: 0;
-	border-bottom: none;
-}
-
-.lb-help-article h3 {
-	margin-top: 0;
-}
-
-.lb-help-article table {
-	margin: 15px 0;
-}
-
-.lb-help-tip {
-	display: flex;
-	align-items: flex-start;
-	gap: 10px;
-	background: #fff8e5;
-	padding: 12px;
-	border-radius: 4px;
-	border-left: 3px solid #dba617;
-	margin-top: 15px;
-}
-
-.lb-help-tip .dashicons {
-	color: #dba617;
-}
-
-.lb-help-tip p {
-	margin: 0;
-}
-</style>

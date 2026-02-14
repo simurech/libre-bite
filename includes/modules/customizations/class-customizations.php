@@ -12,19 +12,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Customizations-Modul
  */
-class LB_Customizations {
+class LBite_Customizations {
 
 	/**
 	 * Loader-Instanz
 	 *
-	 * @var LB_Loader
+	 * @var LBite_Loader
 	 */
 	private $loader;
 
 	/**
 	 * Konstruktor
 	 *
-	 * @param LB_Loader $loader Loader-Instanz
+	 * @param LBite_Loader $loader Loader-Instanz
 	 */
 	public function __construct( $loader ) {
 		$this->loader = $loader;
@@ -129,12 +129,8 @@ class LB_Customizations {
 	 * Posts-Menü via CSS verstecken (Fallback)
 	 */
 	public function hide_posts_with_css() {
-		echo '<style>
-			#menu-posts,
-			#wp-admin-bar-new-post {
-				display: none !important;
-			}
-		</style>';
+		$css = '#menu-posts, #wp-admin-bar-new-post { display: none !important; }';
+		wp_add_inline_style( 'wp-admin', $css );
 	}
 
 	/**

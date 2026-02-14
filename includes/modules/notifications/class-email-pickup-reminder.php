@@ -12,25 +12,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * E-Mail-Klasse für Pickup-Reminder
  */
-class LB_Email_Pickup_Reminder extends WC_Email {
+class LBite_Email_Pickup_Reminder extends WC_Email {
 
 	/**
 	 * Konstruktor
 	 */
 	public function __construct() {
-		$this->id             = 'lb_pickup_reminder';
+		$this->id             = 'lbite_pickup_reminder';
 		$this->title          = __( 'Libre Bite - Pickup Reminder', 'libre-bite' );
 		$this->description    = __( 'Erinnerung an bevorstehende Abholzeit', 'libre-bite' );
 		$this->template_html  = 'emails/pickup-reminder.php';
 		$this->template_plain = 'emails/plain/pickup-reminder.php';
-		$this->template_base  = LB_PLUGIN_DIR . 'templates/';
+		$this->template_base  = LBITE_PLUGIN_DIR . 'templates/';
 		$this->placeholders   = array(
 			'{order_date}'   => '',
 			'{order_number}' => '',
 		);
 
 		// Trigger
-		add_action( 'lb_pickup_reminder_notification', array( $this, 'trigger' ), 10, 1 );
+		add_action( 'lbite_pickup_reminder_notification', array( $this, 'trigger' ), 10, 1 );
 
 		// Parent-Konstruktor aufrufen
 		parent::__construct();

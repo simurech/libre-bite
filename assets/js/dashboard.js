@@ -38,7 +38,7 @@
 			this.bindFullscreenEvents();
 
 			// Initial laden wenn Standort bereits gewählt ist
-			const locationId = $('#lb-board-location').val();
+			const locationId = $('#lbite-board-location').val();
 			if (locationId) {
 				this.loadOrders();
 			}
@@ -50,8 +50,8 @@
 		 * Audio initialisieren
 		 */
 		initAudio: function() {
-			if (lbDashboard.soundUrl) {
-				this.audio = new Audio(lbDashboard.soundUrl);
+			if (lbiteDashboard.soundUrl) {
+				this.audio = new Audio(lbiteDashboard.soundUrl);
 			}
 		},
 
@@ -59,17 +59,17 @@
 		 * Drag & Drop initialisieren
 		 */
 		initDragDrop: function() {
-			const columns = document.querySelectorAll('.lb-kanban-cards');
+			const columns = document.querySelectorAll('.lbite-kanban-cards');
 
 			columns.forEach(column => {
 				new Sortable(column, {
 					group: 'kanban',
 					animation: 150,
-					ghostClass: 'lb-ghost',
-					dragClass: 'lb-dragging',
+					ghostClass: 'lbite-ghost',
+					dragClass: 'lbite-dragging',
 					onEnd: (evt) => {
 						const orderId = evt.item.dataset.orderId;
-						const newStatus = evt.to.closest('.lb-kanban-column').dataset.status;
+						const newStatus = evt.to.closest('.lbite-kanban-column').dataset.status;
 
 						if (orderId && newStatus) {
 							this.updateOrderStatus(orderId, newStatus);
@@ -87,22 +87,22 @@
 			this.toggleBoardVisibility();
 
 			// Wake Lock initial aktivieren wenn Checkbox angehakt
-			if ($('#lb-wake-lock').is(':checked')) {
+			if ($('#lbite-wake-lock').is(':checked')) {
 				this.requestWakeLock();
 			}
 
 			// Standort-Filter
-			$('#lb-board-location').on('change', () => {
-				const locationId = $('#lb-board-location').val();
+			$('#lbite-board-location').on('change', () => {
+				const locationId = $('#lbite-board-location').val();
 
 				// Standort speichern
 				if (locationId) {
 					$.ajax({
-						url: lbDashboard.ajaxUrl,
+						url: lbiteDashboard.ajaxUrl,
 						type: 'POST',
 						data: {
-							action: 'lb_save_board_location',
-							nonce: lbDashboard.nonce,
+							action: 'lbite_save_board_location',
+							nonce: lbiteDashboard.nonce,
 							location_id: locationId
 						},
 						error: () => {
@@ -121,7 +121,7 @@
 			});
 
 			// Wake Lock
-			$('#lb-wake-lock').on('change', (e) => {
+			$('#lbite-wake-lock').on('change', (e) => {
 				if (e.target.checked) {
 					this.requestWakeLock();
 				} else {
@@ -130,18 +130,18 @@
 			});
 
 			// Sound Toggle
-			$('#lb-sound-toggle').on('click', () => {
+			$('#lbite-sound-toggle').on('click', () => {
 				this.soundEnabled = !this.soundEnabled;
 
-				const $btn = $('#lb-sound-toggle');
+				const $btn = $('#lbite-sound-toggle');
 				const $icon = $btn.find('.dashicons');
 
 				if (this.soundEnabled) {
 					$icon.removeClass('dashicons-controls-volumeoff').addClass('dashicons-controls-volumeon');
-					$btn.find('span:not(.dashicons)').text(lbDashboard.strings.soundActive || 'Sound aktiv');
+					$btn.find('span:not(.dashicons)').text(lbiteDashboard.strings.soundActive || 'Sound aktiv');
 				} else {
 					$icon.removeClass('dashicons-controls-volumeon').addClass('dashicons-controls-volumeoff');
-					$btn.find('span:not(.dashicons)').text(lbDashboard.strings.soundInactive || 'Sound aus');
+					$btn.find('span:not(.dashicons)').text(lbiteDashboard.strings.soundInactive || 'Sound aus');
 				}
 			});
 		},
@@ -152,7 +152,7 @@
 		async requestWakeLock() {
 			if (!('wakeLock' in navigator)) {
 				alert('Wake Lock wird von diesem Browser nicht unterstützt.');
-				$('#lb-wake-lock').prop('checked', false);
+				$('#lbite-wake-lock').prop('checked', false);
 				return;
 			}
 
@@ -165,7 +165,7 @@
 				});
 			} catch (err) {
 				console.error('Wake Lock Fehler:', err);
-				$('#lb-wake-lock').prop('checked', false);
+				$('#lbite-wake-lock').prop('checked', false);
 			}
 		},
 
@@ -185,21 +185,21 @@
 		startAutoRefresh: function() {
 			this.refreshTimer = setInterval(() => {
 				this.loadOrders(true);
-			}, lbDashboard.refreshInterval);
+			}, lbiteDashboard.refreshInterval);
 		},
 
 		/**
 		 * Board-Sichtbarkeit umschalten
 		 */
 		toggleBoardVisibility: function() {
-			const locationId = $('#lb-board-location').val();
+			const locationId = $('#lbite-board-location').val();
 
 			if (locationId) {
-				$('#lb-no-location-message').css('display', 'none');
-				$('#lb-kanban-board').css('display', 'grid');
+				$('#lbite-no-location-message').css('display', 'none');
+				$('#lbite-kanban-board').css('display', 'grid');
 			} else {
-				$('#lb-no-location-message').css('display', 'block');
-				$('#lb-kanban-board').css('display', 'none');
+				$('#lbite-no-location-message').css('display', 'block');
+				$('#lbite-kanban-board').css('display', 'none');
 			}
 		},
 
@@ -207,9 +207,9 @@
 		 * Lade-Overlay anzeigen
 		 */
 		showLoading: function(message = 'Laden...') {
-			if ($('#lb-loading-overlay').length === 0) {
+			if ($('#lbite-loading-overlay').length === 0) {
 				$('body').append(`
-					<div id="lb-loading-overlay" style="
+					<div id="lbite-loading-overlay" style="
 						position: fixed;
 						top: 0;
 						left: 0;
@@ -222,32 +222,32 @@
 						justify-content: center;
 						z-index: 99999;
 					">
-						<div class="lb-spinner" style="
+						<div class="lbite-spinner" style="
 							width: 40px;
 							height: 40px;
 							border: 4px solid #e0e0e0;
 							border-top: 4px solid #0073aa;
 							border-radius: 50%;
-							animation: lb-spin 0.8s linear infinite;
+							animation: lbite-spin 0.8s linear infinite;
 						"></div>
 						<p style="margin-top: 15px; font-size: 14px; color: #666;">${message}</p>
 					</div>
 					<style>
-						@keyframes lb-spin {
+						@keyframes lbite-spin {
 							0% { transform: rotate(0deg); }
 							100% { transform: rotate(360deg); }
 						}
 					</style>
 				`);
 			}
-			$('#lb-loading-overlay').fadeIn(150);
+			$('#lbite-loading-overlay').fadeIn(150);
 		},
 
 		/**
 		 * Lade-Overlay ausblenden
 		 */
 		hideLoading: function() {
-			$('#lb-loading-overlay').fadeOut(150);
+			$('#lbite-loading-overlay').fadeOut(150);
 		},
 
 		/**
@@ -256,7 +256,7 @@
 		setButtonLoading: function($btn, loading) {
 			if (loading) {
 				$btn.data('original-text', $btn.html());
-				$btn.html('<span class="lb-btn-spinner">⏳</span>').prop('disabled', true);
+				$btn.html('<span class="lbite-btn-spinner">⏳</span>').prop('disabled', true);
 			} else {
 				$btn.html($btn.data('original-text')).prop('disabled', false);
 			}
@@ -266,7 +266,7 @@
 		 * Bestellungen laden
 		 */
 		loadOrders: function(silent = false) {
-			const locationId = $('#lb-board-location').val();
+			const locationId = $('#lbite-board-location').val();
 
 			// Nur laden wenn Standort gewählt
 			if (!locationId) {
@@ -287,11 +287,11 @@
 			}
 
 			$.ajax({
-				url: lbDashboard.ajaxUrl,
+				url: lbiteDashboard.ajaxUrl,
 				type: 'POST',
 				data: {
-					action: 'lb_get_orders',
-					nonce: lbDashboard.nonce,
+					action: 'lbite_get_orders',
+					nonce: lbiteDashboard.nonce,
 					location_id: locationId
 				},
 				success: (response) => {
@@ -303,7 +303,7 @@
 				},
 				error: () => {
 					if (!silent) {
-						window.lbNotify && window.lbNotify.error('Fehler beim Laden der Bestellungen');
+						window.lbiteNotify && window.lbiteNotify.error('Fehler beim Laden der Bestellungen');
 					}
 				},
 				complete: () => {
@@ -322,7 +322,7 @@
 
 		Object.keys(ordersByStatus).forEach(status => {
 			const orders = ordersByStatus[status];
-			const $column = $('#lb-column-' + status);
+			const $column = $('#lbite-column-' + status);
 
 			totalOrders += orders.length;
 
@@ -343,7 +343,7 @@
 			if (status === 'completed' && this.completedCount > this.completedOffset) {
 				const remainingCount = this.completedCount - this.completedOffset;
 				$column.append(`
-					<button class="lb-load-more-completed" onclick="Dashboard.loadMoreCompleted()">
+					<button class="lbite-load-more-completed" onclick="Dashboard.loadMoreCompleted()">
 						📋 ${remainingCount} weitere Bestellung(en) anzeigen
 					</button>
 				`);
@@ -374,7 +374,7 @@
 			order.items.forEach(item => {
 				const safeName = escapeHtml(item.name);
 				const meta = item.meta ? '<div style="margin-left: 20px; font-size: 0.9em; color: #666;">' + item.meta + '</div>' : '';
-				itemsHtml += `<div class="lb-kanban-card-item" style="margin-bottom: 8px;">
+				itemsHtml += `<div class="lbite-kanban-card-item" style="margin-bottom: 8px;">
 					<strong>${item.quantity}x ${safeName}</strong>
 					${meta}
 				</div>`;
@@ -399,7 +399,7 @@
 
 			if (statusButton) {
 				statusButtonHtml = `<button onclick="Dashboard.moveToNextStatus(${order.id}, '${statusButton.next}')"
-					class="lb-status-button"
+					class="lbite-status-button"
 					style="flex: 1; padding: 14px; border: none; background: ${statusButton.color}; color: white; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600;">
 					${statusButton.icon} ${statusButton.label}
 				</button>`;
@@ -408,7 +408,7 @@
 			// Stornieren-Button (außer bei completed)
 			const cancelButton = currentStatus !== 'completed'
 				? `<button onclick="Dashboard.cancelOrder(${order.id})"
-					class="lb-cancel-button"
+					class="lbite-cancel-button"
 					title="Bestellung stornieren"
 					style="padding: 8px 12px; border: 1px solid #e74c3c; background: white; color: #e74c3c; border-radius: 4px; cursor: pointer; font-size: 20px;">
 					🗑️
@@ -416,20 +416,20 @@
 				: '';
 
 			return `
-				<div class="lb-kanban-card" data-order-id="${order.id}">
+				<div class="lbite-kanban-card" data-order-id="${order.id}">
 					<h3 style="margin: 0 0 10px 0; font-size: 16px;">
 						#${order.number}${customerName ? ' - ' + customerName : ''}
 					</h3>
-					<div class="lb-kanban-card-meta" style="margin-bottom: 12px; font-size: 13px; line-height: 1.6;">
+					<div class="lbite-kanban-card-meta" style="margin-bottom: 12px; font-size: 13px; line-height: 1.6;">
 						${typeLabel}
 						<br>🕐 ${escapeHtml(order.date || '')}
 						${order.location ? '<br>📍 ' + escapeHtml(order.location) : ''}
 					</div>
-					<div class="lb-kanban-card-items" style="margin: 12px 0; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
+					<div class="lbite-kanban-card-items" style="margin: 12px 0; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
 						${itemsHtml}
 					</div>
 					${notesHtml}
-					<div class="lb-kanban-card-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center;">
+					<div class="lbite-kanban-card-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center;">
 						${statusButtonHtml}
 						${cancelButton}
 					</div>
@@ -449,29 +449,29 @@
 			this.pendingActions.add(actionKey);
 
 			// Karte visuell als "in Bearbeitung" markieren
-			const $card = $(`.lb-kanban-card[data-order-id="${orderId}"]`);
+			const $card = $(`.lbite-kanban-card[data-order-id="${orderId}"]`);
 			$card.css('opacity', '0.5').find('button').prop('disabled', true);
 
 			$.ajax({
-				url: lbDashboard.ajaxUrl,
+				url: lbiteDashboard.ajaxUrl,
 				type: 'POST',
 				data: {
-					action: 'lb_update_order_status',
-					nonce: lbDashboard.nonce,
+					action: 'lbite_update_order_status',
+					nonce: lbiteDashboard.nonce,
 					order_id: orderId,
 					status: newStatus
 				},
 				success: (response) => {
 					if (response.success) {
-						window.lbNotify && window.lbNotify.success(lbDashboard.strings.orderUpdated || 'Status aktualisiert');
+						window.lbiteNotify && window.lbiteNotify.success(lbiteDashboard.strings.orderUpdated || 'Status aktualisiert');
 						this.loadOrders();
 					} else {
-						window.lbNotify && window.lbNotify.error(lbDashboard.strings.updateError || 'Fehler beim Aktualisieren');
+						window.lbiteNotify && window.lbiteNotify.error(lbiteDashboard.strings.updateError || 'Fehler beim Aktualisieren');
 						$card.css('opacity', '1').find('button').prop('disabled', false);
 					}
 				},
 				error: () => {
-					window.lbNotify && window.lbNotify.error(lbDashboard.strings.updateError || 'Fehler beim Aktualisieren');
+					window.lbiteNotify && window.lbiteNotify.error(lbiteDashboard.strings.updateError || 'Fehler beim Aktualisieren');
 					$card.css('opacity', '1').find('button').prop('disabled', false);
 				},
 				complete: () => {
@@ -504,30 +504,30 @@
 			this.pendingActions.add(actionKey);
 
 			// Karte visuell als "in Bearbeitung" markieren
-			const $card = $(`.lb-kanban-card[data-order-id="${orderId}"]`);
+			const $card = $(`.lbite-kanban-card[data-order-id="${orderId}"]`);
 			$card.css('opacity', '0.5').find('button').prop('disabled', true);
 
 			this.showLoading('Bestellung wird storniert...');
 
 			$.ajax({
-				url: lbDashboard.ajaxUrl,
+				url: lbiteDashboard.ajaxUrl,
 				type: 'POST',
 				data: {
-					action: 'lb_cancel_order',
-					nonce: lbDashboard.nonce,
+					action: 'lbite_cancel_order',
+					nonce: lbiteDashboard.nonce,
 					order_id: orderId
 				},
 				success: (response) => {
 					if (response.success) {
-						window.lbNotify && window.lbNotify.success('Bestellung storniert und Zahlung zurückerstattet');
+						window.lbiteNotify && window.lbiteNotify.success('Bestellung storniert und Zahlung zurückerstattet');
 						this.loadOrders();
 					} else {
-						window.lbNotify && window.lbNotify.error('Fehler beim Stornieren: ' + (response.data && response.data.message ? response.data.message : 'Unbekannter Fehler'));
+						window.lbiteNotify && window.lbiteNotify.error('Fehler beim Stornieren: ' + (response.data && response.data.message ? response.data.message : 'Unbekannter Fehler'));
 						$card.css('opacity', '1').find('button').prop('disabled', false);
 					}
 				},
 				error: () => {
-					window.lbNotify && window.lbNotify.error('Fehler beim Stornieren der Bestellung');
+					window.lbiteNotify && window.lbiteNotify.error('Fehler beim Stornieren der Bestellung');
 					$card.css('opacity', '1').find('button').prop('disabled', false);
 				},
 				complete: () => {
@@ -541,27 +541,27 @@
 		 * Weitere abgeschlossene Bestellungen laden
 	 */
 	loadMoreCompleted: function() {
-		const locationId = $('#lb-board-location').val();
+		const locationId = $('#lbite-board-location').val();
 
 		if (!locationId) {
 			return;
 		}
 
 		$.ajax({
-			url: lbDashboard.ajaxUrl,
+			url: lbiteDashboard.ajaxUrl,
 			type: 'POST',
 			data: {
-				action: 'lb_load_more_completed',
-				nonce: lbDashboard.nonce,
+				action: 'lbite_load_more_completed',
+				nonce: lbiteDashboard.nonce,
 				location_id: locationId,
 				offset: this.completedOffset
 			},
 			success: (response) => {
 				if (response.success && response.data.orders) {
-					const $column = $('#lb-column-completed');
+					const $column = $('#lbite-column-completed');
 
 					// Button entfernen
-					$column.find('.lb-load-more-completed').remove();
+					$column.find('.lbite-load-more-completed').remove();
 
 					// Neue Bestellungen hinzufügen
 					response.data.orders.forEach(order => {
@@ -575,7 +575,7 @@
 					if (this.completedOffset < response.data.total_count) {
 						const remainingCount = response.data.total_count - this.completedOffset;
 						$column.append(`
-							<button class="lb-load-more-completed" onclick="Dashboard.loadMoreCompleted()">
+							<button class="lbite-load-more-completed" onclick="Dashboard.loadMoreCompleted()">
 								📋 ${remainingCount} weitere Bestellung(en) anzeigen
 							</button>
 						`);
@@ -583,7 +583,7 @@
 				}
 			},
 			error: () => {
-				window.lbNotify.error('Fehler beim Laden weiterer Bestellungen');
+				window.lbiteNotify.error('Fehler beim Laden weiterer Bestellungen');
 			}
 		});
 	},
@@ -593,7 +593,7 @@
 		 */
 		viewOrder: function(orderId) {
 			window.open(
-				lbDashboard.ajaxUrl.replace('admin-ajax.php', 'post.php?post=' + orderId + '&action=edit'),
+				lbiteDashboard.ajaxUrl.replace('admin-ajax.php', 'post.php?post=' + orderId + '&action=edit'),
 				'_blank'
 			);
 		},
@@ -602,7 +602,7 @@
 		 * Bestellung drucken
 		 */
 		printOrder: function(orderId) {
-			const $card = $(`.lb-kanban-card[data-order-id="${orderId}"]`);
+			const $card = $(`.lbite-kanban-card[data-order-id="${orderId}"]`);
 			if ($card.length === 0) return;
 
 			const printWindow = window.open('', '', 'width=300,height=600');
@@ -641,7 +641,7 @@
 		 * Vollbild-Events binden
 		 */
 		bindFullscreenEvents: function() {
-			$('#lb-board-fullscreen').on('click', () => {
+			$('#lbite-board-fullscreen').on('click', () => {
 				this.toggleFullscreen();
 			});
 
@@ -670,17 +670,17 @@
 		 * Vollbild-Button aktualisieren
 		 */
 		updateFullscreenButton: function() {
-			const $btn = $('#lb-board-fullscreen');
+			const $btn = $('#lbite-board-fullscreen');
 			const $icon = $btn.find('.dashicons');
 
 			if (document.fullscreenElement) {
 				$icon.removeClass('dashicons-editor-expand').addClass('dashicons-editor-contract');
 				$btn.attr('title', 'Vollbild beenden');
-				$('body').addClass('lb-board-fullscreen-active');
+				$('body').addClass('lbite-board-fullscreen-active');
 			} else {
 				$icon.removeClass('dashicons-editor-contract').addClass('dashicons-editor-expand');
 				$btn.attr('title', 'Vollbild');
-				$('body').removeClass('lb-board-fullscreen-active');
+				$('body').removeClass('lbite-board-fullscreen-active');
 			}
 		}
 	};
@@ -690,7 +690,7 @@
 
 	// Initialisieren wenn Seite geladen ist
 	$(document).ready(() => {
-		if ($('.lb-order-board').length > 0) {
+		if ($('.lbite-order-board').length > 0) {
 			Dashboard.init();
 		}
 	});

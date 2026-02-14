@@ -2,12 +2,12 @@
  * Open Order System - Optimierte Bestätigungsseite
  *
  * CSS-Variablen für Theme-Anpassung:
- * --lb-color-primary: Hauptfarbe (Standard: #0073aa)
- * --lb-color-secondary: Sekundärfarbe (Standard: #23282d)
- * --lb-color-accent: Akzentfarbe für Erfolg (Standard: #00a32a)
- * --lb-color-background: Hintergrund (Standard: #f8f9fa)
- * --lb-color-border: Rahmenfarbe (Standard: #e0e0e0)
- * --lb-border-radius: Eckenradius (Standard: 8px)
+ * --lbite-color-primary: Hauptfarbe (Standard: #0073aa)
+ * --lbite-color-secondary: Sekundärfarbe (Standard: #23282d)
+ * --lbite-color-accent: Akzentfarbe für Erfolg (Standard: #00a32a)
+ * --lbite-color-background: Hintergrund (Standard: #f8f9fa)
+ * --lbite-color-border: Rahmenfarbe (Standard: #e0e0e0)
+ * --lbite-border-radius: Eckenradius (Standard: 8px)
  *
  * @package OpenOrderSystem
  */
@@ -35,55 +35,55 @@ section.woocommerce-customer-details,
 }
 
 /* Main Container */
-.lb-thankyou-optimized {
+.lbite-thankyou-optimized {
 	max-width: 500px;
 	margin: 0 auto;
 	padding: 30px 20px;
 	text-align: center;
 }
 
-.lb-thankyou-optimized * {
+.lbite-thankyou-optimized * {
 	box-sizing: border-box;
 }
 
 /* Logo */
-.lb-thankyou-logo {
+.lbite-thankyou-logo {
 	text-align: center;
 	margin-bottom: 30px;
 }
 
-.lb-thankyou-logo img {
+.lbite-thankyou-logo img {
 	max-width: 150px;
 	height: auto;
 	display: inline-block;
 }
 
 /* Success Section */
-.lb-thankyou-success {
+.lbite-thankyou-success {
 	margin-bottom: 30px;
 	text-align: center;
 }
 
-.lb-thankyou-icon-wrapper {
+.lbite-thankyou-icon-wrapper {
 	text-align: center;
 	margin-bottom: 15px;
 }
 
-.lb-thankyou-icon-svg {
+.lbite-thankyou-icon-svg {
 	width: 60px;
 	height: 60px;
-	color: var(--lb-color-accent, #00a32a);
+	color: var(--lbite-color-accent, #00a32a);
 	display: inline-block;
 }
 
-.lb-thankyou-success h1 {
+.lbite-thankyou-success h1 {
 	margin: 0 0 10px 0;
 	font-size: 28px;
-	color: var(--lb-color-secondary, #23282d);
+	color: var(--lbite-color-secondary, #23282d);
 	text-align: center;
 }
 
-.lb-thankyou-greeting {
+.lbite-thankyou-greeting {
 	font-size: 18px;
 	color: #666;
 	margin: 0;
@@ -91,23 +91,23 @@ section.woocommerce-customer-details,
 }
 
 /* Pickup Number */
-.lb-thankyou-pickup-number {
-	background: var(--lb-color-primary, #0073aa);
+.lbite-thankyou-pickup-number {
+	background: var(--lbite-color-primary, #0073aa);
 	color: #fff;
 	padding: 25px 30px;
-	border-radius: calc(var(--lb-border-radius, 8px) + 4px);
+	border-radius: calc(var(--lbite-border-radius, 8px) + 4px);
 	margin-bottom: 30px;
 	text-align: center;
 }
 
-.lb-pickup-label {
+.lbite-pickup-label {
 	display: block;
 	font-size: 14px;
 	opacity: 0.9;
 	margin-bottom: 8px;
 }
 
-.lb-pickup-number {
+.lbite-pickup-number {
 	display: block;
 	font-size: 52px;
 	font-weight: bold;
@@ -116,36 +116,36 @@ section.woocommerce-customer-details,
 }
 
 /* Details Section */
-.lb-thankyou-details {
+.lbite-thankyou-details {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
 	margin-bottom: 30px;
 }
 
-.lb-thankyou-detail {
+.lbite-thankyou-detail {
 	display: flex;
 	align-items: flex-start;
 	gap: 15px;
 	text-align: left;
 	padding: 15px 20px;
-	background: var(--lb-color-background, #f8f9fa);
-	border-radius: var(--lb-border-radius, 8px);
+	background: var(--lbite-color-background, #f8f9fa);
+	border-radius: var(--lbite-border-radius, 8px);
 }
 
-.lb-detail-icon-svg {
+.lbite-detail-icon-svg {
 	width: 24px;
 	height: 24px;
-	color: var(--lb-color-primary, #0073aa);
+	color: var(--lbite-color-primary, #0073aa);
 	flex-shrink: 0;
 	margin-top: 2px;
 }
 
-.lb-detail-content {
+.lbite-detail-content {
 	flex: 1;
 }
 
-.lb-detail-label {
+.lbite-detail-label {
 	display: block;
 	font-size: 11px;
 	color: #888;
@@ -154,14 +154,14 @@ section.woocommerce-customer-details,
 	margin-bottom: 2px;
 }
 
-.lb-detail-value {
+.lbite-detail-value {
 	display: block;
 	font-size: 16px;
 	font-weight: 600;
-	color: var(--lb-color-secondary, #23282d);
+	color: var(--lbite-color-secondary, #23282d);
 }
 
-.lb-detail-sub {
+.lbite-detail-sub {
 	display: block;
 	font-size: 14px;
 	color: #666;
@@ -169,75 +169,75 @@ section.woocommerce-customer-details,
 }
 
 /* Google Maps Link */
-a.lb-maps-link {
-	color: var(--lb-color-primary, #0073aa);
+a.lbite-maps-link {
+	color: var(--lbite-color-primary, #0073aa);
 	text-decoration: none;
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
 }
 
-a.lb-maps-link:hover {
+a.lbite-maps-link:hover {
 	text-decoration: underline;
 }
 
-.lb-external-link-icon {
+.lbite-external-link-icon {
 	width: 12px;
 	height: 12px;
 	flex-shrink: 0;
 }
 
 /* Order Section */
-.lb-thankyou-order {
+.lbite-thankyou-order {
 	text-align: left;
 	margin-bottom: 30px;
 	padding: 20px;
 	background: #fff;
-	border: 1px solid var(--lb-color-border, #e0e0e0);
-	border-radius: var(--lb-border-radius, 8px);
+	border: 1px solid var(--lbite-color-border, #e0e0e0);
+	border-radius: var(--lbite-border-radius, 8px);
 }
 
-.lb-thankyou-order h3 {
+.lbite-thankyou-order h3 {
 	margin: 0 0 15px 0;
 	font-size: 16px;
 	font-weight: 600;
-	color: var(--lb-color-secondary, #23282d);
+	color: var(--lbite-color-secondary, #23282d);
 	text-align: left;
 }
 
-.lb-order-items {
+.lbite-order-items {
 	width: 100%;
 	border-collapse: collapse;
 	border: none;
 }
 
-.lb-order-items tbody tr {
-	border-bottom: 1px solid var(--lb-color-border, #e0e0e0);
+.lbite-order-items tbody tr {
+	border-bottom: 1px solid var(--lbite-color-border, #e0e0e0);
 }
 
-.lb-order-items tbody tr:last-child {
-	border-bottom: 1px solid var(--lb-color-border, #e0e0e0);
+.lbite-order-items tbody tr:last-child {
+	border-bottom: 1px solid var(--lbite-color-border, #e0e0e0);
 }
 
-.lb-order-items td {
+.lbite-order-items td {
 	padding: 12px 8px;
 	vertical-align: top;
 	border: none;
 }
 
-.lb-item-qty {
+.lbite-item-qty {
 	width: 35px;
 	color: #888;
 	font-weight: 500;
 	text-align: left;
 }
 
-.lb-item-name {
+.lbite-item-name {
 	text-align: left;
-	color: var(--lb-color-secondary, #23282d);
+	color: var(--lbite-color-secondary, #23282d);
 }
 
-.lb-item-meta {
+.lbite-item-meta {
 	display: block;
 	font-size: 12px;
 	color: #888;
@@ -245,90 +245,90 @@ a.lb-maps-link:hover {
 	font-style: italic;
 }
 
-.lb-item-total {
+.lbite-item-total {
 	text-align: right;
 	white-space: nowrap;
 	font-weight: 500;
-	color: var(--lb-color-secondary, #23282d);
+	color: var(--lbite-color-secondary, #23282d);
 }
 
-.lb-order-items tfoot tr {
+.lbite-order-items tfoot tr {
 	border: none;
 }
 
-.lb-order-items tfoot td {
+.lbite-order-items tfoot td {
 	padding: 8px;
 	border: none;
 }
 
-.lb-subtotal-row td {
+.lbite-subtotal-row td {
 	color: #666;
 	font-size: 14px;
 	padding-top: 12px;
 }
 
-.lb-subtotal-row td:last-child {
+.lbite-subtotal-row td:last-child {
 	text-align: right;
 }
 
-.lb-fee-row td,
-.lb-coupon-row td,
-.lb-shipping-row td,
-.lb-tax-row td {
+.lbite-fee-row td,
+.lbite-coupon-row td,
+.lbite-shipping-row td,
+.lbite-tax-row td {
 	color: #666;
 	font-size: 14px;
 }
 
-.lb-fee-row td:last-child,
-.lb-coupon-row td:last-child,
-.lb-shipping-row td:last-child,
-.lb-tax-row td:last-child {
+.lbite-fee-row td:last-child,
+.lbite-coupon-row td:last-child,
+.lbite-shipping-row td:last-child,
+.lbite-tax-row td:last-child {
 	text-align: right;
 }
 
-.lb-coupon-row td:last-child {
-	color: var(--lb-color-accent, #00a32a);
+.lbite-coupon-row td:last-child {
+	color: var(--lbite-color-accent, #00a32a);
 }
 
-.lb-total-row td {
+.lbite-total-row td {
 	font-size: 18px;
 	padding-top: 12px;
-	border-top: 2px solid var(--lb-color-secondary, #23282d);
+	border-top: 2px solid var(--lbite-color-secondary, #23282d);
 }
 
-.lb-total-row td:first-child {
+.lbite-total-row td:first-child {
 	text-align: left;
 }
 
-.lb-total-row td:last-child {
+.lbite-total-row td:last-child {
 	text-align: right;
 }
 
 /* Footer */
-.lb-thankyou-footer {
+.lbite-thankyou-footer {
 	padding-top: 20px;
-	border-top: 1px solid var(--lb-color-border, #e0e0e0);
+	border-top: 1px solid var(--lbite-color-border, #e0e0e0);
 	color: #888;
 	font-size: 14px;
 	text-align: center;
 }
 
-.lb-thankyou-footer p {
+.lbite-thankyou-footer p {
 	margin: 5px 0;
 }
 
 /* Responsive */
 @media (max-width: 480px) {
-	.lb-thankyou-optimized {
+	.lbite-thankyou-optimized {
 		padding: 20px 15px;
 	}
 
-	.lb-pickup-number {
+	.lbite-pickup-number {
 		font-size: 40px;
 		letter-spacing: 5px;
 	}
 
-	.lb-thankyou-success h1 {
+	.lbite-thankyou-success h1 {
 		font-size: 24px;
 	}
 }

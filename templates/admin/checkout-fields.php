@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Speichern.
-if ( isset( $_POST['lb_save_checkout_fields'] ) && check_admin_referer( 'lb_checkout_fields_save' ) ) {
+if ( isset( $_POST['lbite_save_checkout_fields'] ) && check_admin_referer( 'lbite_checkout_fields_save' ) ) {
 	// Standard-Feldliste definieren.
 	$standard_fields = array(
 		'billing'  => array( 'first_name', 'last_name', 'company', 'address_1', 'address_2', 'city', 'postcode', 'country', 'state', 'email', 'phone' ),
@@ -43,20 +43,20 @@ if ( isset( $_POST['lb_save_checkout_fields'] ) && check_admin_referer( 'lb_chec
 	}
 
 	// Allgemeine Optionen speichern.
-	$checkout_fields['_enable_shipping_address']     = isset( $_POST['lb_enable_shipping_address'] );
-	$checkout_fields['_show_shipping_info']          = isset( $_POST['lb_show_shipping_info'] );
-	$checkout_fields['_enable_tip_selection']        = isset( $_POST['lb_enable_tip_selection'] );
-	$checkout_fields['_enable_order_comments']       = isset( $_POST['lb_enable_order_comments'] );
-	$checkout_fields['_order_comments_label']        = isset( $_POST['lb_order_comments_label'] ) ? sanitize_text_field( wp_unslash( $_POST['lb_order_comments_label'] ) ) : '';
-	$checkout_fields['_order_comments_placeholder']  = isset( $_POST['lb_order_comments_placeholder'] ) ? sanitize_text_field( wp_unslash( $_POST['lb_order_comments_placeholder'] ) ) : '';
-	$checkout_fields['_billing_details_title']       = isset( $_POST['lb_billing_details_title'] ) ? sanitize_text_field( wp_unslash( $_POST['lb_billing_details_title'] ) ) : '';
+	$checkout_fields['_enable_shipping_address']     = isset( $_POST['lbite_enable_shipping_address'] );
+	$checkout_fields['_show_shipping_info']          = isset( $_POST['lbite_show_shipping_info'] );
+	$checkout_fields['_enable_tip_selection']        = isset( $_POST['lbite_enable_tip_selection'] );
+	$checkout_fields['_enable_order_comments']       = isset( $_POST['lbite_enable_order_comments'] );
+	$checkout_fields['_order_comments_label']        = isset( $_POST['lbite_order_comments_label'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_comments_label'] ) ) : '';
+	$checkout_fields['_order_comments_placeholder']  = isset( $_POST['lbite_order_comments_placeholder'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_comments_placeholder'] ) ) : '';
+	$checkout_fields['_billing_details_title']       = isset( $_POST['lbite_billing_details_title'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_billing_details_title'] ) ) : '';
 
-	update_option( 'lb_checkout_fields', $checkout_fields );
+	update_option( 'lbite_checkout_fields', $checkout_fields );
 	echo '<div class="notice notice-success"><p>' . esc_html__( 'Einstellungen gespeichert.', 'libre-bite' ) . '</p></div>';
 }
 
 // Aktuelle Einstellungen laden
-$saved_fields = get_option( 'lb_checkout_fields', array() );
+$saved_fields = get_option( 'lbite_checkout_fields', array() );
 
 // Standard WooCommerce Felder
 $default_fields = array(
@@ -95,7 +95,7 @@ $default_fields = array(
 	</p>
 
 	<form method="post" action="">
-		<?php wp_nonce_field( 'lb_checkout_fields_save' ); ?>
+		<?php wp_nonce_field( 'lbite_checkout_fields_save' ); ?>
 
 		<!-- Allgemeine Einstellungen -->
 		<div class="postbox" style="margin-top: 20px;">
@@ -108,7 +108,7 @@ $default_fields = array(
 						<td style="padding: 10px;">
 							<label style="display: flex; align-items: center; gap: 10px;">
 								<input type="checkbox"
-									name="lb_enable_shipping_address"
+									name="lbite_enable_shipping_address"
 									value="1"
 									<?php checked( isset( $saved_fields['_enable_shipping_address'] ) ? $saved_fields['_enable_shipping_address'] : false ); ?>>
 								<strong><?php esc_html_e( 'Option "Lieferung an eine andere Adresse" anzeigen', 'libre-bite' ); ?></strong>
@@ -122,7 +122,7 @@ $default_fields = array(
 						<td style="padding: 10px;">
 							<label style="display: flex; align-items: center; gap: 10px;">
 								<input type="checkbox"
-									name="lb_show_shipping_info"
+									name="lbite_show_shipping_info"
 									value="1"
 									<?php checked( isset( $saved_fields['_show_shipping_info'] ) ? $saved_fields['_show_shipping_info'] : false ); ?>>
 								<strong><?php esc_html_e( 'Versand-Informationen anzeigen', 'libre-bite' ); ?></strong>
@@ -136,7 +136,7 @@ $default_fields = array(
 						<td style="padding: 10px;">
 							<label style="display: flex; align-items: center; gap: 10px;">
 								<input type="checkbox"
-									name="lb_enable_tip_selection"
+									name="lbite_enable_tip_selection"
 									value="1"
 									<?php checked( isset( $saved_fields['_enable_tip_selection'] ) ? $saved_fields['_enable_tip_selection'] : true ); ?>>
 								<strong><?php esc_html_e( 'Trinkgeld-Auswahl im Checkout anzeigen', 'libre-bite' ); ?></strong>
@@ -150,7 +150,7 @@ $default_fields = array(
 						<td style="padding: 10px;">
 							<label style="display: flex; align-items: center; gap: 10px;">
 								<input type="checkbox"
-									name="lb_enable_order_comments"
+									name="lbite_enable_order_comments"
 									value="1"
 									<?php checked( isset( $saved_fields['_enable_order_comments'] ) ? $saved_fields['_enable_order_comments'] : true ); ?>>
 								<strong><?php esc_html_e( 'Feld "Anmerkungen zur Bestellung" anzeigen', 'libre-bite' ); ?></strong>
@@ -163,7 +163,7 @@ $default_fields = array(
 									<strong><?php esc_html_e( 'Label:', 'libre-bite' ); ?></strong>
 								</label>
 								<input type="text"
-									name="lb_order_comments_label"
+									name="lbite_order_comments_label"
 									value="<?php echo esc_attr( isset( $saved_fields['_order_comments_label'] ) ? $saved_fields['_order_comments_label'] : '' ); ?>"
 									placeholder="<?php esc_attr_e( 'Anmerkungen zur Bestellung', 'libre-bite' ); ?>"
 									class="regular-text"
@@ -177,7 +177,7 @@ $default_fields = array(
 									<strong><?php esc_html_e( 'Platzhalter:', 'libre-bite' ); ?></strong>
 								</label>
 								<input type="text"
-									name="lb_order_comments_placeholder"
+									name="lbite_order_comments_placeholder"
 									value="<?php echo esc_attr( isset( $saved_fields['_order_comments_placeholder'] ) ? $saved_fields['_order_comments_placeholder'] : '' ); ?>"
 									placeholder="<?php esc_attr_e( 'Hinweise zu Ihrer Bestellung, z.B. besondere Hinweise für die Lieferung.', 'libre-bite' ); ?>"
 									class="regular-text"
@@ -194,7 +194,7 @@ $default_fields = array(
 								<strong><?php esc_html_e( 'Titel für Rechnungsdetails überschreiben', 'libre-bite' ); ?></strong>
 							</label>
 							<input type="text"
-								name="lb_billing_details_title"
+								name="lbite_billing_details_title"
 								value="<?php echo esc_attr( isset( $saved_fields['_billing_details_title'] ) ? $saved_fields['_billing_details_title'] : '' ); ?>"
 								placeholder="<?php esc_attr_e( 'Rechnungsdetails', 'libre-bite' ); ?>"
 								class="regular-text"
@@ -289,34 +289,10 @@ $default_fields = array(
 		</div>
 
 		<p class="submit">
-			<button type="submit" name="lb_save_checkout_fields" class="button button-primary button-large">
+			<button type="submit" name="lbite_save_checkout_fields" class="button button-primary button-large">
 				<?php esc_html_e( 'Einstellungen speichern', 'libre-bite' ); ?>
 			</button>
 		</p>
 	</form>
 </div>
 
-<style>
-.postbox {
-	background: #fff;
-	border: 1px solid #ccd0d4;
-	border-radius: 4px;
-}
-
-.postbox .hndle {
-	border-bottom: 1px solid #ccd0d4;
-	margin: 0;
-}
-
-.postbox .inside {
-	padding: 0 15px;
-}
-
-.form-table tr {
-	border-bottom: 1px solid #f0f0f1;
-}
-
-.form-table tr:last-child {
-	border-bottom: none;
-}
-</style>

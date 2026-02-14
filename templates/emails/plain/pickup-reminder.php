@@ -9,11 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$pickup_time      = get_post_meta( $order->get_id(), '_lb_pickup_time', true );
-$location_name    = get_post_meta( $order->get_id(), '_lb_location_name', true );
-$location_id      = get_post_meta( $order->get_id(), '_lb_location_id', true );
-$location_address = $location_id ? LB_Locations::get_formatted_address( $location_id ) : '';
-$location_maps    = $location_id ? LB_Locations::get_maps_url( $location_id ) : '';
+$pickup_time      = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
+$location_name    = get_post_meta( $order->get_id(), '_lbite_location_name', true );
+$location_id      = get_post_meta( $order->get_id(), '_lbite_location_id', true );
+$location_address = $location_id ? LBite_Locations::get_formatted_address( $location_id ) : '';
+$location_maps    = $location_id ? LBite_Locations::get_maps_url( $location_id ) : '';
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
 echo esc_html( wp_strip_all_tags( $email_heading ) );

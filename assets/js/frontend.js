@@ -28,7 +28,7 @@
 		},
 
 		bindEvents: function() {
-			$(document).on('change', '.lb-product-options input[type="checkbox"]', function() {
+			$(document).on('change', '.lbite-product-options input[type="checkbox"]', function() {
 				ProductOptions.updatePrice();
 			});
 		},
@@ -58,19 +58,19 @@
 	 */
 	const Loading = {
 		show: function() {
-			if ($('.lb-loading-overlay').length === 0) {
-				$('body').append('<div class="lb-loading-overlay"><div class="lb-spinner"></div></div>');
+			if ($('.lbite-loading-overlay').length === 0) {
+				$('body').append('<div class="lbite-loading-overlay"><div class="lbite-spinner"></div></div>');
 			}
 		},
 
 		hide: function() {
-			$('.lb-loading-overlay').fadeOut(function() {
+			$('.lbite-loading-overlay').fadeOut(function() {
 				$(this).remove();
 			});
 		}
 	};
 
-	window.lbLoading = Loading;
+	window.lbiteLoading = Loading;
 
 	/**
 	 * Initialisierung

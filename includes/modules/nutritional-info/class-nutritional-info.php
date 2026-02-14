@@ -12,19 +12,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Nutritional-Info-Modul
  */
-class LB_Nutritional_Info {
+class LBite_Nutritional_Info {
 
 	/**
 	 * Loader-Instanz
 	 *
-	 * @var LB_Loader
+	 * @var LBite_Loader
 	 */
 	private $loader;
 
 	/**
 	 * Konstruktor
 	 *
-	 * @param LB_Loader $loader Loader-Instanz
+	 * @param LBite_Loader $loader Loader-Instanz
 	 */
 	public function __construct( $loader ) {
 		$this->loader = $loader;
@@ -49,7 +49,7 @@ class LB_Nutritional_Info {
 	 */
 	public function add_meta_boxes() {
 		add_meta_box(
-			'lb_nutritional_info',
+			'lbite_nutritional_info',
 			__( 'Nährwertangaben', 'libre-bite' ),
 			array( $this, 'render_nutritional_meta_box' ),
 			'product',
@@ -58,7 +58,7 @@ class LB_Nutritional_Info {
 		);
 
 		add_meta_box(
-			'lb_allergens',
+			'lbite_allergens',
 			__( 'Allergene & Inhaltsstoffe', 'libre-bite' ),
 			array( $this, 'render_allergens_meta_box' ),
 			'product',
@@ -73,72 +73,72 @@ class LB_Nutritional_Info {
 	 * @param WP_Post $post Post-Objekt
 	 */
 	public function render_nutritional_meta_box( $post ) {
-		wp_nonce_field( 'lb_save_nutritional_info', 'lb_nutritional_nonce' );
+		wp_nonce_field( 'lbite_save_nutritional_info', 'lbite_nutritional_nonce' );
 
-		$serving_size = get_post_meta( $post->ID, '_lb_serving_size', true );
-		$energy_kcal  = get_post_meta( $post->ID, '_lb_energy_kcal', true );
-		$energy_kj    = get_post_meta( $post->ID, '_lb_energy_kj', true );
-		$fat          = get_post_meta( $post->ID, '_lb_fat', true );
-		$saturated    = get_post_meta( $post->ID, '_lb_saturated', true );
-		$carbs        = get_post_meta( $post->ID, '_lb_carbs', true );
-		$sugar        = get_post_meta( $post->ID, '_lb_sugar', true );
-		$protein      = get_post_meta( $post->ID, '_lb_protein', true );
-		$salt         = get_post_meta( $post->ID, '_lb_salt', true );
+		$serving_size = get_post_meta( $post->ID, '_lbite_serving_size', true );
+		$energy_kcal  = get_post_meta( $post->ID, '_lbite_energy_kcal', true );
+		$energy_kj    = get_post_meta( $post->ID, '_lbite_energy_kj', true );
+		$fat          = get_post_meta( $post->ID, '_lbite_fat', true );
+		$saturated    = get_post_meta( $post->ID, '_lbite_saturated', true );
+		$carbs        = get_post_meta( $post->ID, '_lbite_carbs', true );
+		$sugar        = get_post_meta( $post->ID, '_lbite_sugar', true );
+		$protein      = get_post_meta( $post->ID, '_lbite_protein', true );
+		$salt         = get_post_meta( $post->ID, '_lbite_salt', true );
 		?>
 		<table class="form-table">
 			<tr>
-				<th><label for="lb_serving_size"><?php esc_html_e( 'Portionsgröße', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_serving_size"><?php esc_html_e( 'Portionsgröße', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="text" id="lb_serving_size" name="lb_serving_size" value="<?php echo esc_attr( $serving_size ); ?>" class="regular-text">
+					<input type="text" id="lbite_serving_size" name="lbite_serving_size" value="<?php echo esc_attr( $serving_size ); ?>" class="regular-text">
 					<p class="description"><?php esc_html_e( 'z.B. "100g" oder "1 Portion (250g)"', 'libre-bite' ); ?></p>
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_energy_kcal"><?php esc_html_e( 'Energie (kcal)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_energy_kcal"><?php esc_html_e( 'Energie (kcal)', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="number" step="0.1" min="0" id="lb_energy_kcal" name="lb_energy_kcal" value="<?php echo esc_attr( $energy_kcal ); ?>" class="small-text">
+					<input type="number" step="0.1" min="0" id="lbite_energy_kcal" name="lbite_energy_kcal" value="<?php echo esc_attr( $energy_kcal ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_energy_kj"><?php esc_html_e( 'Energie (kJ)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_energy_kj"><?php esc_html_e( 'Energie (kJ)', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="number" step="0.1" min="0" id="lb_energy_kj" name="lb_energy_kj" value="<?php echo esc_attr( $energy_kj ); ?>" class="small-text">
+					<input type="number" step="0.1" min="0" id="lbite_energy_kj" name="lbite_energy_kj" value="<?php echo esc_attr( $energy_kj ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_fat"><?php esc_html_e( 'Fett (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_fat"><?php esc_html_e( 'Fett (g)', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="number" step="0.1" min="0" id="lb_fat" name="lb_fat" value="<?php echo esc_attr( $fat ); ?>" class="small-text">
+					<input type="number" step="0.1" min="0" id="lbite_fat" name="lbite_fat" value="<?php echo esc_attr( $fat ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_saturated"><?php esc_html_e( 'davon gesättigte Fettsäuren (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_saturated"><?php esc_html_e( 'davon gesättigte Fettsäuren (g)', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="number" step="0.1" min="0" id="lb_saturated" name="lb_saturated" value="<?php echo esc_attr( $saturated ); ?>" class="small-text">
+					<input type="number" step="0.1" min="0" id="lbite_saturated" name="lbite_saturated" value="<?php echo esc_attr( $saturated ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_carbs"><?php esc_html_e( 'Kohlenhydrate (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_carbs"><?php esc_html_e( 'Kohlenhydrate (g)', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="number" step="0.1" min="0" id="lb_carbs" name="lb_carbs" value="<?php echo esc_attr( $carbs ); ?>" class="small-text">
+					<input type="number" step="0.1" min="0" id="lbite_carbs" name="lbite_carbs" value="<?php echo esc_attr( $carbs ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_sugar"><?php esc_html_e( 'davon Zucker (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_sugar"><?php esc_html_e( 'davon Zucker (g)', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="number" step="0.1" min="0" id="lb_sugar" name="lb_sugar" value="<?php echo esc_attr( $sugar ); ?>" class="small-text">
+					<input type="number" step="0.1" min="0" id="lbite_sugar" name="lbite_sugar" value="<?php echo esc_attr( $sugar ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_protein"><?php esc_html_e( 'Eiweiß (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_protein"><?php esc_html_e( 'Eiweiß (g)', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="number" step="0.1" min="0" id="lb_protein" name="lb_protein" value="<?php echo esc_attr( $protein ); ?>" class="small-text">
+					<input type="number" step="0.1" min="0" id="lbite_protein" name="lbite_protein" value="<?php echo esc_attr( $protein ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_salt"><?php esc_html_e( 'Salz (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_salt"><?php esc_html_e( 'Salz (g)', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="number" step="0.1" min="0" id="lb_salt" name="lb_salt" value="<?php echo esc_attr( $salt ); ?>" class="small-text">
+					<input type="number" step="0.1" min="0" id="lbite_salt" name="lbite_salt" value="<?php echo esc_attr( $salt ); ?>" class="small-text">
 				</td>
 			</tr>
 		</table>
@@ -151,8 +151,8 @@ class LB_Nutritional_Info {
 	 * @param WP_Post $post Post-Objekt
 	 */
 	public function render_allergens_meta_box( $post ) {
-		$allergens           = get_post_meta( $post->ID, '_lb_allergens', true );
-		$other_ingredients   = get_post_meta( $post->ID, '_lb_other_ingredients', true );
+		$allergens           = get_post_meta( $post->ID, '_lbite_allergens', true );
+		$other_ingredients   = get_post_meta( $post->ID, '_lbite_other_ingredients', true );
 
 		if ( ! is_array( $allergens ) ) {
 			$allergens = array();
@@ -180,7 +180,7 @@ class LB_Nutritional_Info {
 			<div style="column-count: 2; column-gap: 20px;">
 				<?php foreach ( $allergen_list as $key => $label ) : ?>
 					<label style="display: block; margin-bottom: 8px;">
-						<input type="checkbox" name="lb_allergens[]" value="<?php echo esc_attr( $key ); ?>" <?php checked( in_array( $key, $allergens, true ) ); ?>>
+						<input type="checkbox" name="lbite_allergens[]" value="<?php echo esc_attr( $key ); ?>" <?php checked( in_array( $key, $allergens, true ) ); ?>>
 						<?php echo esc_html( $label ); ?>
 					</label>
 				<?php endforeach; ?>
@@ -189,7 +189,7 @@ class LB_Nutritional_Info {
 			<hr style="margin: 20px 0;">
 
 			<p><strong><?php esc_html_e( 'Weitere Inhaltsstoffe:', 'libre-bite' ); ?></strong></p>
-			<textarea name="lb_other_ingredients" rows="4" style="width: 100%;"><?php echo esc_textarea( $other_ingredients ); ?></textarea>
+			<textarea name="lbite_other_ingredients" rows="4" style="width: 100%;"><?php echo esc_textarea( $other_ingredients ); ?></textarea>
 			<p class="description"><?php esc_html_e( 'Weitere Inhaltsstoffe oder Hinweise (optional)', 'libre-bite' ); ?></p>
 		</div>
 		<?php
@@ -202,7 +202,7 @@ class LB_Nutritional_Info {
 	 */
 	public function save_product_meta( $post_id ) {
 		// Nonce prüfen.
-		if ( ! isset( $_POST['lb_nutritional_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lb_nutritional_nonce'] ) ), 'lb_save_nutritional_info' ) ) {
+		if ( ! isset( $_POST['lbite_nutritional_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lbite_nutritional_nonce'] ) ), 'lbite_save_nutritional_info' ) ) {
 			return;
 		}
 
@@ -225,21 +225,21 @@ class LB_Nutritional_Info {
 		);
 
 		foreach ( $nutritional_fields as $field ) {
-			$key = 'lb_' . $field;
+			$key = 'lbite_' . $field;
 			if ( isset( $_POST[ $key ] ) ) {
 				update_post_meta( $post_id, '_' . $key, sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) );
 			}
 		}
 
 		// Allergene speichern.
-		$allergens = isset( $_POST['lb_allergens'] ) && is_array( $_POST['lb_allergens'] )
-			? array_map( 'sanitize_text_field', wp_unslash( $_POST['lb_allergens'] ) )
+		$allergens = isset( $_POST['lbite_allergens'] ) && is_array( $_POST['lbite_allergens'] )
+			? array_map( 'sanitize_text_field', wp_unslash( $_POST['lbite_allergens'] ) )
 			: array();
-		update_post_meta( $post_id, '_lb_allergens', $allergens );
+		update_post_meta( $post_id, '_lbite_allergens', $allergens );
 
 		// Weitere Inhaltsstoffe.
-		if ( isset( $_POST['lb_other_ingredients'] ) ) {
-			update_post_meta( $post_id, '_lb_other_ingredients', sanitize_textarea_field( wp_unslash( $_POST['lb_other_ingredients'] ) ) );
+		if ( isset( $_POST['lbite_other_ingredients'] ) ) {
+			update_post_meta( $post_id, '_lbite_other_ingredients', sanitize_textarea_field( wp_unslash( $_POST['lbite_other_ingredients'] ) ) );
 		}
 	}
 
@@ -253,15 +253,15 @@ class LB_Nutritional_Info {
 			return;
 		}
 
-		$serving_size = get_post_meta( $product->get_id(), '_lb_serving_size', true );
-		$energy_kcal  = get_post_meta( $product->get_id(), '_lb_energy_kcal', true );
-		$energy_kj    = get_post_meta( $product->get_id(), '_lb_energy_kj', true );
-		$fat          = get_post_meta( $product->get_id(), '_lb_fat', true );
-		$saturated    = get_post_meta( $product->get_id(), '_lb_saturated', true );
-		$carbs        = get_post_meta( $product->get_id(), '_lb_carbs', true );
-		$sugar        = get_post_meta( $product->get_id(), '_lb_sugar', true );
-		$protein      = get_post_meta( $product->get_id(), '_lb_protein', true );
-		$salt         = get_post_meta( $product->get_id(), '_lb_salt', true );
+		$serving_size = get_post_meta( $product->get_id(), '_lbite_serving_size', true );
+		$energy_kcal  = get_post_meta( $product->get_id(), '_lbite_energy_kcal', true );
+		$energy_kj    = get_post_meta( $product->get_id(), '_lbite_energy_kj', true );
+		$fat          = get_post_meta( $product->get_id(), '_lbite_fat', true );
+		$saturated    = get_post_meta( $product->get_id(), '_lbite_saturated', true );
+		$carbs        = get_post_meta( $product->get_id(), '_lbite_carbs', true );
+		$sugar        = get_post_meta( $product->get_id(), '_lbite_sugar', true );
+		$protein      = get_post_meta( $product->get_id(), '_lbite_protein', true );
+		$salt         = get_post_meta( $product->get_id(), '_lbite_salt', true );
 
 		// Prüfen ob Daten vorhanden sind
 		if ( ! $energy_kcal && ! $fat && ! $carbs && ! $protein ) {
@@ -269,7 +269,7 @@ class LB_Nutritional_Info {
 		}
 
 		?>
-		<div class="lb-nutritional-info" style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 4px;">
+		<div class="lbite-nutritional-info" style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 4px;">
 			<h3 style="margin-top: 0;"><?php esc_html_e( 'Nährwertangaben', 'libre-bite' ); ?></h3>
 			<?php if ( $serving_size ) : ?>
 				<p style="font-size: 13px; color: #666; margin-bottom: 10px;">
@@ -346,8 +346,8 @@ class LB_Nutritional_Info {
 			return;
 		}
 
-		$allergens         = get_post_meta( $product->get_id(), '_lb_allergens', true );
-		$other_ingredients = get_post_meta( $product->get_id(), '_lb_other_ingredients', true );
+		$allergens         = get_post_meta( $product->get_id(), '_lbite_allergens', true );
+		$other_ingredients = get_post_meta( $product->get_id(), '_lbite_other_ingredients', true );
 
 		if ( empty( $allergens ) && empty( $other_ingredients ) ) {
 			return;
@@ -370,7 +370,7 @@ class LB_Nutritional_Info {
 			'molluscs'    => __( 'Weichtiere', 'libre-bite' ),
 		);
 		?>
-		<div class="lb-allergens" style="margin: 20px 0; padding: 15px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+		<div class="lbite-allergens" style="margin: 20px 0; padding: 15px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
 			<h3 style="margin-top: 0; color: #856404;"><?php esc_html_e( 'Allergene & Inhaltsstoffe', 'libre-bite' ); ?></h3>
 
 			<?php if ( ! empty( $allergens ) && is_array( $allergens ) ) : ?>

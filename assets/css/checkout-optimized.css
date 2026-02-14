@@ -2,149 +2,149 @@
  * Open Order System - Optimierter Checkout
  *
  * CSS-Variablen für Theme-Anpassung:
- * --lb-color-primary: Hauptfarbe (Standard: #0073aa)
- * --lb-color-primary-hover: Hover-Farbe (Standard: #005a87)
- * --lb-color-secondary: Sekundärfarbe (Standard: #23282d)
- * --lb-color-background: Hintergrund (Standard: #f8f9fa)
- * --lb-color-border: Rahmenfarbe (Standard: #e0e0e0)
- * --lb-border-radius: Eckenradius (Standard: 8px)
+ * --lbite-color-primary: Hauptfarbe (Standard: #0073aa)
+ * --lbite-color-primary-hover: Hover-Farbe (Standard: #005a87)
+ * --lbite-color-secondary: Sekundärfarbe (Standard: #23282d)
+ * --lbite-color-background: Hintergrund (Standard: #f8f9fa)
+ * --lbite-color-border: Rahmenfarbe (Standard: #e0e0e0)
+ * --lbite-border-radius: Eckenradius (Standard: 8px)
  *
  * @package OpenOrderSystem
  */
 
 /* CSS-Variablen mit Fallback-Werten */
 :root {
-	--lb-color-primary: #0073aa;
-	--lb-color-primary-hover: #005a87;
-	--lb-color-secondary: #23282d;
-	--lb-color-background: #f8f9fa;
-	--lb-color-border: #e0e0e0;
-	--lb-color-success: #46b450;
-	--lb-color-error: #dc3232;
-	--lb-border-radius: 8px;
-	--lb-font-size-base: 16px;
+	--lbite-color-primary: #0073aa;
+	--lbite-color-primary-hover: #005a87;
+	--lbite-color-secondary: #23282d;
+	--lbite-color-background: #f8f9fa;
+	--lbite-color-border: #e0e0e0;
+	--lbite-color-success: #46b450;
+	--lbite-color-error: #dc3232;
+	--lbite-border-radius: 8px;
+	--lbite-font-size-base: 16px;
 }
 
 /* Container */
-.lb-checkout-optimized {
+.lbite-checkout-optimized {
 	max-width: 600px;
 	margin: 0 auto;
 	padding: 20px;
 }
 
 /* Logo */
-.lb-checkout-logo {
+.lbite-checkout-logo {
 	text-align: center;
 	margin-bottom: 30px;
 }
 
-.lb-checkout-logo img {
+.lbite-checkout-logo img {
 	max-width: 200px;
 	height: auto;
 }
 
 /* Titel */
-.lb-checkout-title {
+.lbite-checkout-title {
 	text-align: center;
 	margin-bottom: 20px;
-	color: var(--lb-color-secondary);
+	color: var(--lbite-color-secondary);
 }
 
 /* Info-Box */
-.lb-checkout-info {
-	background: var(--lb-color-background);
+.lbite-checkout-info {
+	background: var(--lbite-color-background);
 	padding: 15px 20px;
-	border-radius: var(--lb-border-radius);
+	border-radius: var(--lbite-border-radius);
 	margin-bottom: 30px;
 }
 
-.lb-checkout-info p {
+.lbite-checkout-info p {
 	margin: 5px 0;
 }
 
 /* Checkout Steps */
-.lb-checkout-step {
+.lbite-checkout-step {
 	margin-bottom: 30px;
 	padding: 20px;
 	background: #fff;
-	border: 1px solid var(--lb-color-border);
-	border-radius: var(--lb-border-radius);
+	border: 1px solid var(--lbite-color-border);
+	border-radius: var(--lbite-border-radius);
 }
 
-.lb-checkout-step h3 {
+.lbite-checkout-step h3 {
 	margin: 0 0 15px 0;
 	font-size: 18px;
-	color: var(--lb-color-secondary);
+	color: var(--lbite-color-secondary);
 }
 
 /* Input-Felder */
-.lb-checkout-step input[type="text"],
-.lb-checkout-step input[type="email"] {
+.lbite-checkout-step input[type="text"],
+.lbite-checkout-step input[type="email"] {
 	width: 100%;
 	padding: 12px 15px;
-	font-size: var(--lb-font-size-base);
-	border: 2px solid var(--lb-color-border);
-	border-radius: calc(var(--lb-border-radius) - 2px);
+	font-size: var(--lbite-font-size-base);
+	border: 2px solid var(--lbite-color-border);
+	border-radius: calc(var(--lbite-border-radius) - 2px);
 	transition: border-color 0.2s;
 	box-sizing: border-box;
 }
 
-.lb-checkout-step input[type="text"]:focus,
-.lb-checkout-step input[type="email"]:focus {
-	border-color: var(--lb-color-primary);
+.lbite-checkout-step input[type="text"]:focus,
+.lbite-checkout-step input[type="email"]:focus {
+	border-color: var(--lbite-color-primary);
 	outline: none;
 }
 
 /* Beleg-Optionen */
-.lb-receipt-options {
+.lbite-receipt-options {
 	display: flex;
 	gap: 15px;
 	flex-wrap: wrap;
 }
 
-.lb-receipt-option {
+.lbite-receipt-option {
 	flex: 1;
 	min-width: 140px;
 }
 
-.lb-receipt-option input {
+.lbite-receipt-option input {
 	display: none;
 }
 
-.lb-receipt-option-label {
+.lbite-receipt-option-label {
 	display: flex;
 	align-items: center;
 	gap: 10px;
 	padding: 15px;
-	border: 2px solid var(--lb-color-border);
-	border-radius: var(--lb-border-radius);
+	border: 2px solid var(--lbite-color-border);
+	border-radius: var(--lbite-border-radius);
 	cursor: pointer;
 	transition: all 0.2s;
 }
 
-.lb-receipt-option input:checked + .lb-receipt-option-label {
-	border-color: var(--lb-color-primary);
+.lbite-receipt-option input:checked + .lbite-receipt-option-label {
+	border-color: var(--lbite-color-primary);
 	background: rgba(0, 115, 170, 0.05);
 }
 
-.lb-receipt-option-icon {
+.lbite-receipt-option-icon {
 	font-size: 24px;
-	color: var(--lb-color-primary);
+	color: var(--lbite-color-primary);
 }
 
-.lb-email-field {
+.lbite-email-field {
 	margin-top: 15px;
 }
 
 /* WooCommerce Overrides - Order Review */
-.lb-checkout-form #order_review,
-.lb-checkout-form .woocommerce-checkout-review-order {
+.lbite-checkout-form #order_review,
+.lbite-checkout-form .woocommerce-checkout-review-order {
 	width: 100%;
 	float: none;
 	text-align: left;
 }
 
-.lb-checkout-form .woocommerce-checkout-review-order-table {
+.lbite-checkout-form .woocommerce-checkout-review-order-table {
 	width: 100%;
 	margin-bottom: 20px;
 	border-collapse: collapse;
@@ -153,171 +153,171 @@
 }
 
 /* Tabellen-Zellen */
-.lb-checkout-form .woocommerce-checkout-review-order-table th,
-.lb-checkout-form .woocommerce-checkout-review-order-table td {
+.lbite-checkout-form .woocommerce-checkout-review-order-table th,
+.lbite-checkout-form .woocommerce-checkout-review-order-table td {
 	padding: 12px 10px;
 	text-align: left;
 	border: none;
 }
 
 /* Zeilen-Borders */
-.lb-checkout-form .woocommerce-checkout-review-order-table tbody tr {
-	border-bottom: 1px solid var(--lb-color-border);
+.lbite-checkout-form .woocommerce-checkout-review-order-table tbody tr {
+	border-bottom: 1px solid var(--lbite-color-border);
 }
 
-.lb-checkout-form .woocommerce-checkout-review-order-table thead tr {
-	border-bottom: 1px solid var(--lb-color-border);
+.lbite-checkout-form .woocommerce-checkout-review-order-table thead tr {
+	border-bottom: 1px solid var(--lbite-color-border);
 }
 
-.lb-checkout-form .woocommerce-checkout-review-order-table tfoot tr:first-child {
-	border-top: 1px solid var(--lb-color-border);
+.lbite-checkout-form .woocommerce-checkout-review-order-table tfoot tr:first-child {
+	border-top: 1px solid var(--lbite-color-border);
 }
 
-.lb-checkout-form .woocommerce-checkout-review-order-table tfoot tr {
+.lbite-checkout-form .woocommerce-checkout-review-order-table tfoot tr {
 	border-bottom: none;
 }
 
-.lb-checkout-form .woocommerce-checkout-review-order-table th {
+.lbite-checkout-form .woocommerce-checkout-review-order-table th {
 	font-weight: 600;
 }
 
-.lb-checkout-form .woocommerce-checkout-review-order-table .product-name {
+.lbite-checkout-form .woocommerce-checkout-review-order-table .product-name {
 	width: 70%;
 }
 
-.lb-checkout-form .woocommerce-checkout-review-order-table .product-total {
+.lbite-checkout-form .woocommerce-checkout-review-order-table .product-total {
 	width: 30%;
 	text-align: right;
 }
 
-.lb-checkout-form .woocommerce-checkout-review-order-table tfoot th {
+.lbite-checkout-form .woocommerce-checkout-review-order-table tfoot th {
 	text-align: left;
 }
 
-.lb-checkout-form .woocommerce-checkout-review-order-table tfoot td {
+.lbite-checkout-form .woocommerce-checkout-review-order-table tfoot td {
 	text-align: right;
 }
 
-.lb-checkout-form .woocommerce-checkout-review-order-table tfoot .order-total th,
-.lb-checkout-form .woocommerce-checkout-review-order-table tfoot .order-total td {
+.lbite-checkout-form .woocommerce-checkout-review-order-table tfoot .order-total th,
+.lbite-checkout-form .woocommerce-checkout-review-order-table tfoot .order-total td {
 	font-size: 18px;
 	font-weight: bold;
 	padding-top: 12px;
 }
 
 /* Total-Zeile */
-.lb-checkout-form .woocommerce-checkout-review-order-table tfoot .order-total {
-	border-top: 2px solid var(--lb-color-secondary);
+.lbite-checkout-form .woocommerce-checkout-review-order-table tfoot .order-total {
+	border-top: 2px solid var(--lbite-color-secondary);
 }
 
 /* Payment Section */
-.lb-checkout-form #payment {
+.lbite-checkout-form #payment {
 	background: transparent;
 	padding: 0;
 	margin-top: 20px;
 }
 
-.lb-checkout-form .wc_payment_methods {
+.lbite-checkout-form .wc_payment_methods {
 	padding: 0;
 	border: none;
 }
 
-.lb-checkout-form .wc_payment_method {
+.lbite-checkout-form .wc_payment_method {
 	padding: 10px 0;
 }
 
-.lb-checkout-form .place-order {
+.lbite-checkout-form .place-order {
 	padding: 0;
 	margin-top: 20px;
 }
 
 /* Bestellbutton */
-.lb-checkout-form #place_order {
+.lbite-checkout-form #place_order {
 	width: 100%;
 	padding: 15px 30px;
 	font-size: 18px;
-	background: var(--lb-color-primary);
+	background: var(--lbite-color-primary);
 	color: #fff;
 	border: none;
-	border-radius: var(--lb-border-radius);
+	border-radius: var(--lbite-border-radius);
 	cursor: pointer;
 	transition: background 0.2s;
 }
 
-.lb-checkout-form #place_order:hover {
-	background: var(--lb-color-primary-hover);
+.lbite-checkout-form #place_order:hover {
+	background: var(--lbite-color-primary-hover);
 }
 
 /* Unnötige WC-Felder ausblenden */
-.lb-checkout-form .woocommerce-billing-fields__field-wrapper > p:not(.form-row-first-name),
-.lb-checkout-form .woocommerce-additional-fields,
-.lb-checkout-form #billing_last_name_field,
-.lb-checkout-form #billing_company_field,
-.lb-checkout-form #billing_country_field,
-.lb-checkout-form #billing_address_1_field,
-.lb-checkout-form #billing_address_2_field,
-.lb-checkout-form #billing_city_field,
-.lb-checkout-form #billing_state_field,
-.lb-checkout-form #billing_postcode_field,
-.lb-checkout-form #billing_phone_field {
+.lbite-checkout-form .woocommerce-billing-fields__field-wrapper > p:not(.form-row-first-name),
+.lbite-checkout-form .woocommerce-additional-fields,
+.lbite-checkout-form #billing_last_name_field,
+.lbite-checkout-form #billing_company_field,
+.lbite-checkout-form #billing_country_field,
+.lbite-checkout-form #billing_address_1_field,
+.lbite-checkout-form #billing_address_2_field,
+.lbite-checkout-form #billing_city_field,
+.lbite-checkout-form #billing_state_field,
+.lbite-checkout-form #billing_postcode_field,
+.lbite-checkout-form #billing_phone_field {
 	display: none;
 }
 
 /* Box-Sizing Reset */
-.lb-checkout-optimized,
-.lb-checkout-optimized * {
+.lbite-checkout-optimized,
+.lbite-checkout-optimized * {
 	box-sizing: border-box;
 }
 
-.lb-checkout-optimized table {
+.lbite-checkout-optimized table {
 	width: 100%;
 	max-width: 100%;
 	border: none;
 }
 
 /* Tabellen-Rahmen entfernen */
-.lb-checkout-form #order_review,
-.lb-checkout-form .woocommerce-checkout-review-order,
-.lb-checkout-form .shop_table,
-.lb-checkout-form .shop_table tbody,
-.lb-checkout-form .shop_table thead,
-.lb-checkout-form .shop_table tfoot,
-.lb-checkout-form .shop_table tr {
+.lbite-checkout-form #order_review,
+.lbite-checkout-form .woocommerce-checkout-review-order,
+.lbite-checkout-form .shop_table,
+.lbite-checkout-form .shop_table tbody,
+.lbite-checkout-form .shop_table thead,
+.lbite-checkout-form .shop_table tfoot,
+.lbite-checkout-form .shop_table tr {
 	border: none;
 	border-left: none;
 	border-right: none;
 }
 
-.lb-checkout-form .shop_table,
-.lb-checkout-form .woocommerce-checkout-review-order-table {
+.lbite-checkout-form .shop_table,
+.lbite-checkout-form .woocommerce-checkout-review-order-table {
 	border-bottom: none;
 }
 
-.lb-checkout-form .woocommerce-checkout-review-order-table tr {
+.lbite-checkout-form .woocommerce-checkout-review-order-table tr {
 	border-left: none;
 	border-right: none;
 }
 
-.lb-checkout-form #order_review_heading,
-.lb-checkout-form .order-review-wrapper {
+.lbite-checkout-form #order_review_heading,
+.lbite-checkout-form .order-review-wrapper {
 	border: none;
 }
 
 /* Responsive */
 @media (max-width: 480px) {
-	.lb-checkout-optimized {
+	.lbite-checkout-optimized {
 		padding: 15px;
 	}
 
-	.lb-checkout-step {
+	.lbite-checkout-step {
 		padding: 15px;
 	}
 
-	.lb-receipt-options {
+	.lbite-receipt-options {
 		flex-direction: column;
 	}
 
-	.lb-receipt-option {
+	.lbite-receipt-option {
 		min-width: 100%;
 	}
 }

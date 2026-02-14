@@ -12,19 +12,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * POS-Modul
  */
-class LB_POS {
+class LBite_POS {
 
 	/**
 	 * Loader-Instanz
 	 *
-	 * @var LB_Loader
+	 * @var LBite_Loader
 	 */
 	private $loader;
 
 	/**
 	 * Konstruktor
 	 *
-	 * @param LB_Loader $loader Loader-Instanz
+	 * @param LBite_Loader $loader Loader-Instanz
 	 */
 	public function __construct( $loader ) {
 		$this->loader = $loader;
@@ -40,7 +40,7 @@ class LB_POS {
 
 		// AJAX-Endpoints (Haupthandler sind in class-admin.php definiert)
 		// Diese bleiben als Fallback erhalten, werden aber normalerweise nicht verwendet.
-		$this->loader->add_action( 'wp_ajax_lb_pos_get_products', $this, 'ajax_get_products' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_get_products', $this, 'ajax_get_products' );
 	}
 
 	/**
@@ -57,21 +57,29 @@ class LB_POS {
 		// POS-Seite erkennen (verschiedene Hook-Formate möglich).
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checking page parameter for asset loading.
 		$current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
-		$is_pos_page  = ( 'libre-bite_page_lb-pos' === $hook )
+		$is_pos_page  = ( 'libre-bite_page_lbite-pos' === $hook )
 			|| ( strpos( (string) $hook, '_page_oos-pos' ) !== false )
-			|| ( strpos( (string) $hook, '_page_lb-pos' ) !== false )
-			|| ( 'lb-pos' === $current_page );
+			|| ( strpos( (string) $hook, '_page_lbite-pos' ) !== false )
+			|| ( 'lbite-pos' === $current_page );
 
 		if ( ! $is_pos_page ) {
 			return;
 		}
 
+		// POS-spezifisches CSS.
+		wp_enqueue_style(
+			'lbite-pos-page',
+			LBITE_PLUGIN_URL . 'assets/css/admin-pos-page.css',
+			array(),
+			LBITE_VERSION
+		);
+
 		// POS-spezifisches JS.
 		wp_enqueue_script(
-			'lb-pos',
-			LB_PLUGIN_URL . 'assets/js/pos.js',
+			'lbite-pos',
+			LBITE_PLUGIN_URL . 'assets/js/pos.js',
 			array( 'jquery' ),
-			LB_VERSION,
+			LBITE_VERSION,
 			true
 		);
 
@@ -80,11 +88,11 @@ class LB_POS {
 
 		// Lokalisierte Daten.
 		wp_localize_script(
-			'lb-pos',
-			'lbPos',
+			'lbite-pos',
+			'lbitePos',
 			array(
 				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
-				'nonce'        => wp_create_nonce( 'lb_pos_nonce' ),
+				'nonce'        => wp_create_nonce( 'lbite_pos_nonce' ),
 				'currency'     => get_woocommerce_currency_symbol(),
 				'preloadData'  => $product_data,
 				'strings'      => array(
@@ -154,7 +162,7 @@ class LB_POS {
 
 			$product_id      = $product->get_id();
 			$has_variations  = $product->is_type( 'variable' );
-			$product_options = get_post_meta( $product_id, '_lb_product_options', true );
+			$product_options = get_post_meta( $product_id, '_lbite_product_options', true );
 			$has_options     = ! empty( $product_options );
 
 			// Kategorien des Produkts.
@@ -220,7 +228,7 @@ class LB_POS {
 							continue;
 						}
 
-						$option_price        = get_post_meta( $option_id, '_lb_price', true );
+						$option_price        = get_post_meta( $option_id, '_lbite_price', true );
 						$detail['options'][] = array(
 							'id'       => $option_id,
 							'name'     => $option_post->post_title,
@@ -251,9 +259,9 @@ class LB_POS {
 	 * Produkte laden (AJAX) - Fallback falls preloadData nicht verfügbar
 	 */
 	public function ajax_get_products() {
-		check_ajax_referer( 'lb_pos_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lb_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lbite_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
@@ -304,9 +312,9 @@ class LB_POS {
 	 * Bestellung erstellen (AJAX)
 	 */
 	public function ajax_create_order() {
-		check_ajax_referer( 'lb_pos_nonce', 'nonce' );
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lb_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lbite_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
@@ -372,19 +380,19 @@ class LB_POS {
 			}
 
 			// Meta-Daten speichern.
-			$order->update_meta_data( '_lb_location_id', $location_id );
-			$order->update_meta_data( '_lb_order_type', $order_type );
-			$order->update_meta_data( '_lb_order_status', 'incoming' );
-			$order->update_meta_data( '_lb_pos_order', true );
+			$order->update_meta_data( '_lbite_location_id', $location_id );
+			$order->update_meta_data( '_lbite_order_type', $order_type );
+			$order->update_meta_data( '_lbite_order_status', 'incoming' );
+			$order->update_meta_data( '_lbite_pos_order', true );
 
 			if ( 'later' === $order_type && $pickup_time ) {
-				$order->update_meta_data( '_lb_pickup_time', $pickup_time );
+				$order->update_meta_data( '_lbite_pickup_time', $pickup_time );
 			}
 
 			// Standort-Name speichern.
 			$location = get_post( $location_id );
 			if ( $location ) {
-				$order->update_meta_data( '_lb_location_name', $location->post_title );
+				$order->update_meta_data( '_lbite_location_name', $location->post_title );
 			}
 
 			// Gesamt berechnen.

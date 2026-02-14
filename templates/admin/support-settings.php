@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$support_settings = get_option( 'lb_support_settings', array() );
+$support_settings = get_option( 'lbite_support_settings', array() );
 
 $support_email        = isset( $support_settings['support_email'] ) ? $support_settings['support_email'] : get_option( 'admin_email' );
 $support_phone        = isset( $support_settings['support_phone'] ) ? $support_settings['support_phone'] : '';
@@ -17,14 +17,14 @@ $support_hours        = isset( $support_settings['support_hours'] ) ? $support_s
 $support_billing_note = isset( $support_settings['support_billing_note'] ) ? $support_settings['support_billing_note'] : '';
 $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $support_settings['support_custom_text'] : '';
 ?>
-<div class="wrap lb-admin-wrap">
+<div class="wrap lbite-admin-wrap">
 	<h1><?php esc_html_e( 'Support-Einstellungen', 'libre-bite' ); ?></h1>
 	<p class="description"><?php esc_html_e( 'Konfigurieren Sie die Support-Kontaktdaten, die auf den Hilfe-Seiten angezeigt werden.', 'libre-bite' ); ?></p>
 
-	<form id="lb-support-settings-form" method="post">
-		<?php wp_nonce_field( 'lb_admin_nonce', 'lb_nonce' ); ?>
+	<form id="lbite-support-settings-form" method="post">
+		<?php wp_nonce_field( 'lbite_admin_nonce', 'lbite_nonce' ); ?>
 
-		<div class="lb-settings-card">
+		<div class="lbite-settings-card">
 			<h2><?php esc_html_e( 'Kontaktdaten', 'libre-bite' ); ?></h2>
 
 			<table class="form-table">
@@ -76,7 +76,7 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 			</table>
 		</div>
 
-		<div class="lb-settings-card">
+		<div class="lbite-settings-card">
 			<h2><?php esc_html_e( 'Zusätzliche Informationen', 'libre-bite' ); ?></h2>
 
 			<table class="form-table">
@@ -112,12 +112,12 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 			</table>
 		</div>
 
-		<div class="lb-settings-card">
+		<div class="lbite-settings-card">
 			<h2><?php esc_html_e( 'Vorschau', 'libre-bite' ); ?></h2>
 			<p class="description"><?php esc_html_e( 'So werden die Support-Informationen auf den Hilfe-Seiten angezeigt:', 'libre-bite' ); ?></p>
 
-			<div class="lb-support-preview">
-				<div class="lb-support-preview-content">
+			<div class="lbite-support-preview">
+				<div class="lbite-support-preview-content">
 					<h3><?php esc_html_e( 'Support kontaktieren', 'libre-bite' ); ?></h3>
 					<p id="preview-email">
 						<span class="dashicons dashicons-email"></span>
@@ -131,7 +131,7 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 						<span class="dashicons dashicons-clock"></span>
 						<span><?php echo esc_html( $support_hours ); ?></span>
 					</p>
-					<p id="preview-billing" class="lb-billing-note" <?php echo empty( $support_billing_note ) ? 'style="display:none;"' : ''; ?>>
+					<p id="preview-billing" class="lbite-billing-note" <?php echo empty( $support_billing_note ) ? 'style="display:none;"' : ''; ?>>
 						<span class="dashicons dashicons-info"></span>
 						<span><?php echo esc_html( $support_billing_note ); ?></span>
 					</p>
@@ -144,67 +144,13 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 
 		<p class="submit">
 			<button type="submit" class="button button-primary"><?php esc_html_e( 'Einstellungen speichern', 'libre-bite' ); ?></button>
-			<span class="lb-save-status"></span>
+			<span class="lbite-save-status"></span>
 		</p>
 	</form>
 </div>
 
-<style>
-.lb-settings-card {
-	background: #fff;
-	border: 1px solid #c3c4c7;
-	border-radius: 4px;
-	padding: 20px;
-	margin-top: 20px;
-}
 
-.lb-settings-card h2 {
-	margin-top: 0;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #eee;
-}
-
-.lb-support-preview {
-	background: #f6f7f7;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	padding: 20px;
-	margin-top: 15px;
-}
-
-.lb-support-preview-content h3 {
-	margin-top: 0;
-}
-
-.lb-support-preview-content p {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	margin: 10px 0;
-}
-
-.lb-support-preview-content .dashicons {
-	color: #2271b1;
-}
-
-.lb-billing-note {
-	background: #fff8e5;
-	padding: 10px;
-	border-radius: 4px;
-	border-left: 3px solid #dba617;
-}
-
-.lb-billing-note .dashicons {
-	color: #dba617;
-}
-
-.lb-save-status {
-	margin-left: 10px;
-	color: #00a32a;
-}
-</style>
-
-<script>
+<?php ob_start(); ?>
 jQuery(document).ready(function($) {
 	// Live-Vorschau
 	$('#support_email').on('input', function() {
@@ -236,11 +182,11 @@ jQuery(document).ready(function($) {
 	});
 
 	// Formular absenden
-	$('#lb-support-settings-form').on('submit', function(e) {
+	$('#lbite-support-settings-form').on('submit', function(e) {
 		e.preventDefault();
 
 		var $form = $(this);
-		var $status = $form.find('.lb-save-status');
+		var $status = $form.find('.lbite-save-status');
 		var $button = $form.find('button[type="submit"]');
 
 		$button.prop('disabled', true);
@@ -250,8 +196,8 @@ jQuery(document).ready(function($) {
 			url: ajaxurl,
 			type: 'POST',
 			data: {
-				action: 'lb_save_support_settings',
-				nonce: $('#lb_nonce').val(),
+				action: 'lbite_save_support_settings',
+				nonce: $('#lbite_nonce').val(),
 				support_email: $('#support_email').val(),
 				support_phone: $('#support_phone').val(),
 				support_hours: $('#support_hours').val(),
@@ -277,4 +223,4 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
-</script>
+<?php wp_add_inline_script( 'lbite-admin', ob_get_clean() ); ?>

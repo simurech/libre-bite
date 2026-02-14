@@ -14,19 +14,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Admin-Einstellungen-Klasse
  */
-class LB_Admin_Settings {
+class LBite_Admin_Settings {
 
 	/**
 	 * Loader-Instanz
 	 *
-	 * @var LB_Loader
+	 * @var LBite_Loader
 	 */
 	private $loader;
 
 	/**
 	 * Konstruktor
 	 *
-	 * @param LB_Loader $loader Loader-Instanz
+	 * @param LBite_Loader $loader Loader-Instanz
 	 */
 	public function __construct( $loader ) {
 		$this->loader = $loader;
@@ -42,8 +42,8 @@ class LB_Admin_Settings {
 		$this->loader->add_action( 'admin_init', $this, 'save_admin_settings' );
 
 		// Plugin-Name überschreiben
-		$this->loader->add_filter( 'lb_plugin_display_name', $this, 'get_custom_plugin_name' );
-		$this->loader->add_filter( 'lb_plugin_menu_name', $this, 'get_custom_plugin_menu_name' );
+		$this->loader->add_filter( 'lbite_plugin_display_name', $this, 'get_custom_plugin_name' );
+		$this->loader->add_filter( 'lbite_plugin_menu_name', $this, 'get_custom_plugin_menu_name' );
 
 		// Rollennamen überschreiben (mit spezifischem Filter statt gettext)
 		$this->loader->add_filter( 'editable_roles', $this, 'customize_role_names' );
@@ -61,8 +61,8 @@ class LB_Admin_Settings {
 	 */
 	public function register_settings() {
 		register_setting(
-			'lb_admin_settings',
-			'lb_admin_settings',
+			'lbite_admin_settings',
+			'lbite_admin_settings',
 			array(
 				'sanitize_callback' => array( $this, 'sanitize_admin_settings' ),
 			)
@@ -86,11 +86,11 @@ class LB_Admin_Settings {
 	 * Admin-Einstellungen speichern
 	 */
 	public function save_admin_settings() {
-		if ( ! isset( $_POST['lb_admin_settings_nonce'] ) ) {
+		if ( ! isset( $_POST['lbite_admin_settings_nonce'] ) ) {
 			return;
 		}
 
-		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lb_admin_settings_nonce'] ) ), 'lb_save_admin_settings' ) ) {
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lbite_admin_settings_nonce'] ) ), 'lbite_save_admin_settings' ) ) {
 			return;
 		}
 
@@ -99,49 +99,49 @@ class LB_Admin_Settings {
 		}
 
 		// Plugin-Name speichern.
-		if ( isset( $_POST['lb_custom_plugin_name'] ) ) {
-			$custom_name = sanitize_text_field( wp_unslash( $_POST['lb_custom_plugin_name'] ) );
-			update_option( 'lb_custom_plugin_name', $custom_name );
+		if ( isset( $_POST['lbite_custom_plugin_name'] ) ) {
+			$custom_name = sanitize_text_field( wp_unslash( $_POST['lbite_custom_plugin_name'] ) );
+			update_option( 'lbite_custom_plugin_name', $custom_name );
 		}
 
 		// Rollennamen speichern.
-		if ( isset( $_POST['lb_custom_role_names'] ) && is_array( $_POST['lb_custom_role_names'] ) ) {
+		if ( isset( $_POST['lbite_custom_role_names'] ) && is_array( $_POST['lbite_custom_role_names'] ) ) {
 			$custom_role_names = array();
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in loop below.
-			foreach ( wp_unslash( $_POST['lb_custom_role_names'] ) as $role_key => $role_name ) {
+			foreach ( wp_unslash( $_POST['lbite_custom_role_names'] ) as $role_key => $role_name ) {
 				$custom_role_names[ sanitize_key( $role_key ) ] = sanitize_text_field( $role_name );
 			}
-			update_option( 'lb_custom_role_names', $custom_role_names );
+			update_option( 'lbite_custom_role_names', $custom_role_names );
 		} else {
-			update_option( 'lb_custom_role_names', array() );
+			update_option( 'lbite_custom_role_names', array() );
 		}
 
 		// Deaktivierte Rollen speichern.
-		if ( isset( $_POST['lb_disabled_roles'] ) && is_array( $_POST['lb_disabled_roles'] ) ) {
-			$disabled_roles = array_map( 'sanitize_text_field', wp_unslash( $_POST['lb_disabled_roles'] ) );
-			update_option( 'lb_disabled_roles', $disabled_roles );
+		if ( isset( $_POST['lbite_disabled_roles'] ) && is_array( $_POST['lbite_disabled_roles'] ) ) {
+			$disabled_roles = array_map( 'sanitize_text_field', wp_unslash( $_POST['lbite_disabled_roles'] ) );
+			update_option( 'lbite_disabled_roles', $disabled_roles );
 		} else {
-			update_option( 'lb_disabled_roles', array() );
+			update_option( 'lbite_disabled_roles', array() );
 		}
 
 		// Menü-Sichtbarkeit speichern.
-		if ( isset( $_POST['lb_menu_visibility'] ) && is_array( $_POST['lb_menu_visibility'] ) ) {
+		if ( isset( $_POST['lbite_menu_visibility'] ) && is_array( $_POST['lbite_menu_visibility'] ) ) {
 			$menu_visibility = array();
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in loop below.
-			foreach ( wp_unslash( $_POST['lb_menu_visibility'] ) as $role => $menus ) {
+			foreach ( wp_unslash( $_POST['lbite_menu_visibility'] ) as $role => $menus ) {
 				if ( is_array( $menus ) ) {
 					$menu_visibility[ sanitize_key( $role ) ] = array_map( 'sanitize_text_field', $menus );
 				}
 			}
-			update_option( 'lb_menu_visibility', $menu_visibility );
+			update_option( 'lbite_menu_visibility', $menu_visibility );
 		} else {
-			update_option( 'lb_menu_visibility', array() );
+			update_option( 'lbite_menu_visibility', array() );
 		}
 
 		// Erfolgs-Notice.
 		add_settings_error(
-			'lb_admin_settings',
-			'lb_admin_settings_saved',
+			'lbite_admin_settings',
+			'lbite_admin_settings_saved',
 			__( 'Einstellungen erfolgreich gespeichert.', 'libre-bite' ),
 			'success'
 		);
@@ -154,7 +154,7 @@ class LB_Admin_Settings {
 	 * @return string
 	 */
 	public function get_custom_plugin_name( $default = 'Libre Bite' ) {
-		$custom_name = get_option( 'lb_custom_plugin_name', '' );
+		$custom_name = get_option( 'lbite_custom_plugin_name', '' );
 		return ! empty( $custom_name ) ? $custom_name : $default;
 	}
 
@@ -165,7 +165,7 @@ class LB_Admin_Settings {
 	 * @return string
 	 */
 	public function get_custom_plugin_menu_name( $default = 'Libre Bite' ) {
-		$custom_name = get_option( 'lb_custom_plugin_name', '' );
+		$custom_name = get_option( 'lbite_custom_plugin_name', '' );
 		// Kürzen für Menü, falls zu lang
 		if ( ! empty( $custom_name ) ) {
 			return strlen( $custom_name ) > 20 ? substr( $custom_name, 0, 20 ) . '...' : $custom_name;
@@ -180,7 +180,7 @@ class LB_Admin_Settings {
 	 * @return array
 	 */
 	public function customize_role_names( $roles ) {
-		$custom_role_names = get_option( 'lb_custom_role_names', array() );
+		$custom_role_names = get_option( 'lbite_custom_role_names', array() );
 
 		if ( empty( $custom_role_names ) ) {
 			return $roles;
@@ -208,7 +208,7 @@ class LB_Admin_Settings {
 	 * @return array
 	 */
 	public function filter_disabled_roles( $roles ) {
-		$disabled_roles = get_option( 'lb_disabled_roles', array() );
+		$disabled_roles = get_option( 'lbite_disabled_roles', array() );
 
 		if ( empty( $disabled_roles ) ) {
 			return $roles;
@@ -234,7 +234,7 @@ class LB_Admin_Settings {
 			return;
 		}
 
-		$menu_visibility = get_option( 'lb_menu_visibility', array() );
+		$menu_visibility = get_option( 'lbite_menu_visibility', array() );
 
 		if ( empty( $menu_visibility ) ) {
 			return;

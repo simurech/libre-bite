@@ -12,19 +12,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Notifications-Modul
  */
-class LB_Notifications {
+class LBite_Notifications {
 
 	/**
 	 * Loader-Instanz
 	 *
-	 * @var LB_Loader
+	 * @var LBite_Loader
 	 */
 	private $loader;
 
 	/**
 	 * Konstruktor
 	 *
-	 * @param LB_Loader $loader Loader-Instanz
+	 * @param LBite_Loader $loader Loader-Instanz
 	 */
 	public function __construct( $loader ) {
 		$this->loader = $loader;
@@ -39,11 +39,11 @@ class LB_Notifications {
 		$this->loader->add_filter( 'woocommerce_email_classes', $this, 'add_custom_emails' );
 
 		// Pickup-Reminder Cron
-		$this->loader->add_action( 'lb_send_pickup_reminders', $this, 'send_pickup_reminders' );
+		$this->loader->add_action( 'lbite_send_pickup_reminders', $this, 'send_pickup_reminders' );
 
 		// Cron-Job aktivieren
-		if ( ! wp_next_scheduled( 'lb_send_pickup_reminders' ) ) {
-			wp_schedule_event( time(), 'every_minute', 'lb_send_pickup_reminders' );
+		if ( ! wp_next_scheduled( 'lbite_send_pickup_reminders' ) ) {
+			wp_schedule_event( time(), 'every_minute', 'lbite_send_pickup_reminders' );
 		}
 	}
 
@@ -54,8 +54,8 @@ class LB_Notifications {
 	 * @return array
 	 */
 	public function add_custom_emails( $emails ) {
-		require_once LB_PLUGIN_DIR . 'includes/modules/notifications/class-email-pickup-reminder.php';
-		$emails['LB_Email_Pickup_Reminder'] = new LB_Email_Pickup_Reminder();
+		require_once LBITE_PLUGIN_DIR . 'includes/modules/notifications/class-email-pickup-reminder.php';
+		$emails['LBite_Email_Pickup_Reminder'] = new LBite_Email_Pickup_Reminder();
 
 		return $emails;
 	}
@@ -64,11 +64,11 @@ class LB_Notifications {
 	 * Pickup-Reminder versenden
 	 */
 	public function send_pickup_reminders() {
-		if ( ! get_option( 'lb_email_pickup_reminder', true ) ) {
+		if ( ! get_option( 'lbite_email_pickup_reminder', true ) ) {
 			return;
 		}
 
-		$reminder_time = get_option( 'lb_pickup_reminder_time', 15 );
+		$reminder_time = get_option( 'lbite_pickup_reminder_time', 15 );
 
 		// Bestellungen mit Pickup-Zeit in den nächsten X Minuten
 		$orders = wc_get_orders(
@@ -77,12 +77,12 @@ class LB_Notifications {
 				'status'     => array( 'processing', 'on-hold' ),
 				'meta_query' => array(
 					array(
-						'key'     => '_lb_order_type',
+						'key'     => '_lbite_order_type',
 						'value'   => 'later',
 						'compare' => '=',
 					),
 					array(
-						'key'     => '_lb_reminder_sent',
+						'key'     => '_lbite_reminder_sent',
 						'compare' => 'NOT EXISTS',
 					),
 				),
@@ -92,7 +92,7 @@ class LB_Notifications {
 		$current_time = current_time( 'timestamp' );
 
 		foreach ( $orders as $order ) {
-			$pickup_time = get_post_meta( $order->get_id(), '_lb_pickup_time', true );
+			$pickup_time = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
 			if ( ! $pickup_time ) {
 				continue;
 			}
@@ -103,7 +103,7 @@ class LB_Notifications {
 			// Wenn Reminder-Zeit erreicht ist
 			if ( $current_time >= $reminder_timestamp && $current_time < $pickup_timestamp ) {
 				$this->send_pickup_reminder_email( $order );
-				update_post_meta( $order->get_id(), '_lb_reminder_sent', true );
+				update_post_meta( $order->get_id(), '_lbite_reminder_sent', true );
 			}
 		}
 	}
@@ -117,8 +117,8 @@ class LB_Notifications {
 		$mailer = WC()->mailer();
 		$emails = $mailer->get_emails();
 
-		if ( isset( $emails['LB_Email_Pickup_Reminder'] ) ) {
-			$emails['LB_Email_Pickup_Reminder']->trigger( $order->get_id() );
+		if ( isset( $emails['LBite_Email_Pickup_Reminder'] ) ) {
+			$emails['LBite_Email_Pickup_Reminder']->trigger( $order->get_id() );
 		}
 	}
 }

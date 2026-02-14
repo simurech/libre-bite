@@ -10,17 +10,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div class="lb-location-selector-inline">
-	<form method="post" class="lb-location-form">
-		<?php wp_nonce_field( 'lb_location_selector', 'lb_location_nonce' ); ?>
+<div class="lbite-location-selector-inline">
+	<form method="post" class="lbite-location-form">
+		<?php wp_nonce_field( 'lbite_location_selector', 'lbite_location_nonce' ); ?>
 
 		<!-- Standort-Auswahl -->
-		<div class="lb-form-group">
-			<label for="lb-location-select">
+		<div class="lbite-form-group">
+			<label for="lbite-location-select">
 				<?php esc_html_e( 'Standort wählen', 'libre-bite' ); ?>
 				<span class="required">*</span>
 			</label>
-			<select id="lb-location-select" name="lb_location_id" class="lb-select" required>
+			<select id="lbite-location-select" name="lbite_location_id" class="lbite-select" required>
 				<option value=""><?php esc_html_e( 'Bitte wählen...', 'libre-bite' ); ?></option>
 				<?php foreach ( $locations as $location ) : ?>
 					<option value="<?php echo esc_attr( $location->ID ); ?>" <?php selected( $location_id, $location->ID ); ?>>
@@ -32,48 +32,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php if ( 'yes' === $atts['show_time'] ) : ?>
 			<!-- Bestelltyp-Auswahl -->
-			<div class="lb-form-group">
+			<div class="lbite-form-group">
 				<label><?php esc_html_e( 'Wann möchten Sie bestellen?', 'libre-bite' ); ?></label>
-				<div class="lb-radio-group">
-					<label class="lb-radio-label">
-						<input type="radio" name="lb_order_type" value="now" <?php checked( $order_type, 'now' ); ?>>
+				<div class="lbite-radio-group">
+					<label class="lbite-radio-label">
+						<input type="radio" name="lbite_order_type" value="now" <?php checked( $order_type, 'now' ); ?>>
 						<span><?php esc_html_e( 'Sofort', 'libre-bite' ); ?></span>
 					</label>
-					<label class="lb-radio-label">
-						<input type="radio" name="lb_order_type" value="later" <?php checked( $order_type, 'later' ); ?>>
+					<label class="lbite-radio-label">
+						<input type="radio" name="lbite_order_type" value="later" <?php checked( $order_type, 'later' ); ?>>
 						<span><?php esc_html_e( 'Für später vorbestellen', 'libre-bite' ); ?></span>
 					</label>
 				</div>
 			</div>
 
 			<!-- Zeitslot-Auswahl (nur bei "später") -->
-			<div class="lb-form-group lb-timeslot-group" style="display: none;">
-				<label for="lb-pickup-date">
+			<div class="lbite-form-group lbite-timeslot-group" style="display: none;">
+				<label for="lbite-pickup-date">
 					<?php esc_html_e( 'Datum', 'libre-bite' ); ?>
 					<span class="required">*</span>
 				</label>
-				<input type="date" id="lb-pickup-date" class="lb-input" min="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>">
+				<input type="date" id="lbite-pickup-date" class="lbite-input" min="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>">
 
-				<label for="lb-pickup-time" style="margin-top: 10px;">
+				<label for="lbite-pickup-time" style="margin-top: 10px;">
 					<?php esc_html_e( 'Uhrzeit', 'libre-bite' ); ?>
 					<span class="required">*</span>
 				</label>
-				<select id="lb-pickup-time" name="lb_pickup_time" class="lb-select">
+				<select id="lbite-pickup-time" name="lbite_pickup_time" class="lbite-select">
 					<option value=""><?php esc_html_e( 'Bitte Datum wählen', 'libre-bite' ); ?></option>
 				</select>
 			</div>
 		<?php endif; ?>
 
 		<!-- Submit Button -->
-		<div class="lb-form-group">
-			<button type="submit" class="lb-button lb-button-primary">
+		<div class="lbite-form-group">
+			<button type="submit" class="lbite-button lbite-button-primary">
 				<?php esc_html_e( 'Auswahl bestätigen', 'libre-bite' ); ?>
 			</button>
 		</div>
 
 		<!-- Aktuelle Auswahl anzeigen -->
 		<?php if ( $location_id ) : ?>
-			<div class="lb-current-selection">
+			<div class="lbite-current-selection">
 				<strong><?php esc_html_e( 'Aktuelle Auswahl:', 'libre-bite' ); ?></strong><br>
 				<?php
 				$location = get_post( $location_id );
@@ -91,132 +91,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</form>
 </div>
 
-<style>
-.lb-location-selector-inline {
-	max-width: 600px;
-	margin: 20px auto;
-	padding: 30px;
-	background: #fff;
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
 
-.lb-form-group {
-	margin-bottom: 20px;
-}
-
-.lb-form-group label {
-	display: block;
-	margin-bottom: 8px;
-	font-weight: 600;
-	color: #333;
-}
-
-.lb-form-group .required {
-	color: #dc3232;
-}
-
-.lb-select,
-.lb-input {
-	width: 100%;
-	padding: 12px;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	font-size: 16px;
-	transition: border-color 0.3s;
-}
-
-.lb-select:focus,
-.lb-input:focus {
-	outline: none;
-	border-color: #0073aa;
-}
-
-.lb-radio-group {
-	display: flex;
-	gap: 20px;
-	flex-wrap: wrap;
-}
-
-.lb-radio-label {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 12px 20px;
-	border: 2px solid #ddd;
-	border-radius: 4px;
-	cursor: pointer;
-	transition: all 0.3s;
-}
-
-.lb-radio-label:hover {
-	border-color: #0073aa;
-	background: #f0f8ff;
-}
-
-.lb-radio-label input[type="radio"] {
-	margin: 0;
-}
-
-.lb-radio-label input[type="radio"]:checked + span {
-	font-weight: 600;
-	color: #0073aa;
-}
-
-.lb-button {
-	padding: 14px 30px;
-	border: none;
-	border-radius: 4px;
-	font-size: 16px;
-	font-weight: 600;
-	cursor: pointer;
-	transition: all 0.3s;
-}
-
-.lb-button-primary {
-	background: #0073aa;
-	color: #fff;
-	width: 100%;
-}
-
-.lb-button-primary:hover {
-	background: #005a87;
-}
-
-.lb-current-selection {
-	margin-top: 20px;
-	padding: 15px;
-	background: #e7f7ff;
-	border-left: 4px solid #0073aa;
-	border-radius: 4px;
-}
-
-@media (max-width: 600px) {
-	.lb-location-selector-inline {
-		padding: 20px;
-		margin: 10px;
-	}
-
-	.lb-radio-group {
-		flex-direction: column;
-		gap: 10px;
-	}
-}
-</style>
-
-<script>
+<?php ob_start(); ?>
 jQuery(document).ready(function($) {
-	const $form = $('.lb-location-form');
-	const $locationSelect = $('#lb-location-select');
-	const $orderTypeRadios = $('input[name="lb_order_type"]');
-	const $timeslotGroup = $('.lb-timeslot-group');
-	const $pickupDate = $('#lb-pickup-date');
-	const $pickupTime = $('#lb-pickup-time');
+	const $form = $('.lbite-location-form');
+	const $locationSelect = $('#lbite-location-select');
+	const $orderTypeRadios = $('input[name="lbite_order_type"]');
+	const $timeslotGroup = $('.lbite-timeslot-group');
+	const $pickupDate = $('#lbite-pickup-date');
+	const $pickupTime = $('#lbite-pickup-time');
 
 	// Zeitslot-Gruppe anzeigen/verstecken
 	function toggleTimeslotGroup() {
-		const orderType = $('input[name="lb_order_type"]:checked').val();
+		const orderType = $('input[name="lbite_order_type"]:checked').val();
 		if (orderType === 'later') {
 			$timeslotGroup.slideDown();
 			// Zeitslots automatisch laden wenn Datum bereits gesetzt ist
@@ -243,11 +130,11 @@ jQuery(document).ready(function($) {
 		$pickupTime.html('<option value="">Laden...</option>').prop('disabled', true);
 
 		$.ajax({
-			url: lbData.ajaxUrl,
+			url: lbiteData.ajaxUrl,
 			type: 'POST',
 			data: {
-				action: 'lb_get_timeslots',
-				nonce: lbData.nonce,
+				action: 'lbite_get_timeslots',
+				nonce: lbiteData.nonce,
 				location_id: locationId,
 				date: date
 			},
@@ -273,26 +160,26 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 
 		const locationId = $locationSelect.val();
-		const orderType = $('input[name="lb_order_type"]:checked').val() || 'now';
+		const orderType = $('input[name="lbite_order_type"]:checked').val() || 'now';
 		const pickupTime = orderType === 'later' ? $pickupTime.val() : '';
 
 		if (!locationId) {
-			alert(lbData.strings.selectLocation);
+			alert(lbiteData.strings.selectLocation);
 			return;
 		}
 
 		if (orderType === 'later' && !pickupTime) {
-			alert(lbData.strings.selectTime);
+			alert(lbiteData.strings.selectTime);
 			return;
 		}
 
 		// Per AJAX speichern
 		$.ajax({
-			url: lbData.ajaxUrl,
+			url: lbiteData.ajaxUrl,
 			type: 'POST',
 			data: {
-				action: 'lb_set_location',
-				nonce: lbData.nonce,
+				action: 'lbite_set_location',
+				nonce: lbiteData.nonce,
 				location_id: locationId,
 				order_type: orderType,
 				pickup_time: pickupTime
@@ -311,4 +198,4 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
-</script>
+<?php wp_add_inline_script( 'lbite-frontend', ob_get_clean() ); ?>

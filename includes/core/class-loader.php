@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Verwaltet alle Hooks und Actions des Plugins
  */
-class LB_Loader {
+class LBite_Loader {
 
 	/**
 	 * Actions

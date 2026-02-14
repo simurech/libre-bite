@@ -3,44 +3,44 @@
  */
 
 /* Standort-Modal */
-.lb-modal {
+.lbite-modal {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 /* Checkout-Bereiche */
-.lb-checkout-selection,
-.lb-tip-selection {
+.lbite-checkout-selection,
+.lbite-tip-selection {
 	box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 /* Produkt-Optionen */
-.lb-product-options label {
+.lbite-product-options label {
 	transition: all 0.3s;
 }
 
-.lb-product-options label:hover {
+.lbite-product-options label:hover {
 	background: #f9f9f9;
 }
 
-.lb-product-options input[type="checkbox"] {
+.lbite-product-options input[type="checkbox"] {
 	margin-right: 8px;
 }
 
 /* Nährwerttabelle */
-.lb-nutritional-info {
+.lbite-nutritional-info {
 	transition: all 0.3s;
 }
 
-.lb-nutritional-info:hover {
+.lbite-nutritional-info:hover {
 	box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 /* Allergene */
-.lb-allergens {
-	animation: lb-fade-in 0.3s ease-out;
+.lbite-allergens {
+	animation: lbite-fade-in 0.3s ease-out;
 }
 
-@keyframes lb-fade-in {
+@keyframes lbite-fade-in {
 	from {
 		opacity: 0;
 		transform: translateY(-10px);
@@ -53,23 +53,23 @@
 
 /* Responsive */
 @media screen and (max-width: 768px) {
-	.lb-modal-content {
+	.lbite-modal-content {
 		margin: 20px;
 		padding: 20px;
 		max-height: 90vh;
 	}
 
-	.lb-tip-options {
+	.lbite-tip-options {
 		flex-direction: column;
 	}
 
-	.lb-tip-option {
+	.lbite-tip-option {
 		min-width: 100%;
 	}
 }
 
 /* Loading States */
-.lb-loading-overlay {
+.lbite-loading-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -82,15 +82,15 @@
 	z-index: 999999;
 }
 
-.lb-spinner {
+.lbite-spinner {
 	width: 50px;
 	height: 50px;
 	border: 4px solid rgba(0,0,0,0.1);
 	border-top-color: #0073aa;
 	border-radius: 50%;
-	animation: lb-spin 1s linear infinite;
+	animation: lbite-spin 1s linear infinite;
 }
 
-@keyframes lb-spin {
+@keyframes lbite-spin {
 	to { transform: rotate(360deg); }
 }

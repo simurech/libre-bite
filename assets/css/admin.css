@@ -3,52 +3,52 @@
  */
 
 /* Dashboard */
-.lb-admin-dashboard {
+.lbite-admin-dashboard {
 	max-width: 1400px;
 }
 
 /* Allgemeine Widgets */
-.lb-widget {
+.lbite-widget {
 	transition: all 0.3s;
 }
 
-.lb-widget:hover {
+.lbite-widget:hover {
 	box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
 /* Bestellübersicht / Kanban Board */
-.lb-kanban-board {
+.lbite-kanban-board {
 	user-select: none;
 }
 
-.lb-kanban-card {
+.lbite-kanban-card {
 	touch-action: none;
 }
 
-.lb-kanban-card h3 {
+.lbite-kanban-card h3 {
 	margin: 0 0 10px 0;
 	font-size: 14px;
 	font-weight: 600;
 }
 
-.lb-kanban-card-meta {
+.lbite-kanban-card-meta {
 	font-size: 12px;
 	color: #666;
 	margin: 5px 0;
 }
 
-.lb-kanban-card-items {
+.lbite-kanban-card-items {
 	margin: 10px 0;
 	padding: 10px 0;
 	border-top: 1px solid #eee;
 	font-size: 13px;
 }
 
-.lb-kanban-card-item {
+.lbite-kanban-card-item {
 	padding: 3px 0;
 }
 
-.lb-kanban-card-actions {
+.lbite-kanban-card-actions {
 	margin-top: 10px;
 	padding-top: 10px;
 	border-top: 1px solid #eee;
@@ -56,7 +56,7 @@
 	gap: 5px;
 }
 
-.lb-kanban-card-actions button {
+.lbite-kanban-card-actions button {
 	padding: 4px 8px;
 	font-size: 11px;
 	border: none;
@@ -66,21 +66,21 @@
 	cursor: pointer;
 }
 
-.lb-kanban-card-actions button:hover {
+.lbite-kanban-card-actions button:hover {
 	background: #005a87;
 }
 
 /* Drag & Drop Feedback */
-.lb-kanban-card.dragging {
+.lbite-kanban-card.dragging {
 	opacity: 0.4;
 }
 
-.lb-kanban-column.drag-over {
+.lbite-kanban-column.drag-over {
 	background: #e0f0ff;
 }
 
 /* POS / Kassensystem */
-.lb-pos-product-item {
+.lbite-pos-product-item {
 	min-height: 100px;
 	display: flex;
 	flex-direction: column;
@@ -88,17 +88,17 @@
 	align-items: center;
 }
 
-.lb-pos-product-name {
+.lbite-pos-product-name {
 	font-weight: 600;
 	margin-bottom: 5px;
 }
 
-.lb-pos-product-price {
+.lbite-pos-product-price {
 	color: #0073aa;
 	font-weight: 600;
 }
 
-.lb-pos-cart-item {
+.lbite-pos-cart-item {
 	padding: 10px;
 	border-bottom: 1px solid #eee;
 	display: flex;
@@ -106,19 +106,19 @@
 	align-items: center;
 }
 
-.lb-pos-cart-item-name {
+.lbite-pos-cart-item-name {
 	flex: 1;
 	font-weight: 600;
 }
 
-.lb-pos-cart-item-qty {
+.lbite-pos-cart-item-qty {
 	display: flex;
 	align-items: center;
 	gap: 5px;
 	margin: 0 10px;
 }
 
-.lb-pos-cart-item-qty button {
+.lbite-pos-cart-item-qty button {
 	width: 25px;
 	height: 25px;
 	padding: 0;
@@ -128,35 +128,35 @@
 	cursor: pointer;
 }
 
-.lb-pos-cart-item-qty button:hover {
+.lbite-pos-cart-item-qty button:hover {
 	background: #f0f0f0;
 }
 
-.lb-pos-cart-item-price {
+.lbite-pos-cart-item-price {
 	font-weight: 600;
 	color: #0073aa;
 	min-width: 80px;
 	text-align: right;
 }
 
-.lb-pos-cart-item-remove {
+.lbite-pos-cart-item-remove {
 	margin-left: 10px;
 	color: #dc3232;
 	cursor: pointer;
 	font-size: 18px;
 }
 
-.lb-pos-cart-item-remove:hover {
+.lbite-pos-cart-item-remove:hover {
 	color: #a00;
 }
 
 /* Responsive */
 @media screen and (max-width: 782px) {
-	.lb-pos-container {
+	.lbite-pos-container {
 		grid-template-columns: 1fr;
 	}
 
-	.lb-pos-cart {
+	.lbite-pos-cart {
 		position: sticky;
 		bottom: 0;
 		max-height: 50vh;
@@ -164,22 +164,22 @@
 }
 
 /* Loading Spinner */
-.lb-loading {
+.lbite-loading {
 	display: inline-block;
 	width: 20px;
 	height: 20px;
 	border: 3px solid rgba(0,0,0,0.1);
 	border-radius: 50%;
 	border-top-color: #0073aa;
-	animation: lb-spin 1s linear infinite;
+	animation: lbite-spin 1s linear infinite;
 }
 
-@keyframes lb-spin {
+@keyframes lbite-spin {
 	to { transform: rotate(360deg); }
 }
 
 /* Notifications */
-.lb-notification {
+.lbite-notification {
 	position: fixed;
 	top: 32px;
 	right: 20px;
@@ -188,18 +188,18 @@
 	border-left: 4px solid #0073aa;
 	box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 	z-index: 999999;
-	animation: lb-slide-in 0.3s ease-out;
+	animation: lbite-slide-in 0.3s ease-out;
 }
 
-.lb-notification.success {
+.lbite-notification.success {
 	border-left-color: #46b450;
 }
 
-.lb-notification.error {
+.lbite-notification.error {
 	border-left-color: #dc3232;
 }
 
-@keyframes lb-slide-in {
+@keyframes lbite-slide-in {
 	from {
 		transform: translateX(400px);
 		opacity: 0;

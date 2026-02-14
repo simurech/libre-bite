@@ -12,12 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Locations-Modul
  */
-class LB_Locations {
+class LBite_Locations {
 
 	/**
 	 * Loader-Instanz
 	 *
-	 * @var LB_Loader
+	 * @var LBite_Loader
 	 */
 	private $loader;
 
@@ -26,12 +26,12 @@ class LB_Locations {
 	 *
 	 * @var string
 	 */
-	const POST_TYPE = 'lb_location';
+	const POST_TYPE = 'lbite_location';
 
 	/**
 	 * Konstruktor
 	 *
-	 * @param LB_Loader $loader Loader-Instanz
+	 * @param LBite_Loader $loader Loader-Instanz
 	 */
 	public function __construct( $loader ) {
 		$this->loader = $loader;
@@ -88,7 +88,7 @@ class LB_Locations {
 		if ( self::POST_TYPE !== $post->post_type ) {
 			return;
 		}
-		wp_nonce_field( 'lb_save_location', 'lb_location_nonce' );
+		wp_nonce_field( 'lbite_save_location', 'lbite_location_nonce' );
 	}
 
 	/**
@@ -132,7 +132,7 @@ class LB_Locations {
 	 */
 	public function add_meta_boxes() {
 		add_meta_box(
-			'lb_location_image',
+			'lbite_location_image',
 			__( 'Standort-Bild', 'libre-bite' ),
 			array( $this, 'render_image_meta_box' ),
 			self::POST_TYPE,
@@ -141,7 +141,7 @@ class LB_Locations {
 		);
 
 		add_meta_box(
-			'lb_location_address',
+			'lbite_location_address',
 			__( 'Adresse', 'libre-bite' ),
 			array( $this, 'render_address_meta_box' ),
 			self::POST_TYPE,
@@ -150,7 +150,7 @@ class LB_Locations {
 		);
 
 		add_meta_box(
-			'lb_location_hours',
+			'lbite_location_hours',
 			__( 'Öffnungszeiten', 'libre-bite' ),
 			array( $this, 'render_hours_meta_box' ),
 			self::POST_TYPE,
@@ -165,11 +165,11 @@ class LB_Locations {
 	 * @param WP_Post $post Post-Objekt
 	 */
 	public function render_image_meta_box( $post ) {
-		$image_id = get_post_meta( $post->ID, '_lb_location_image', true );
+		$image_id = get_post_meta( $post->ID, '_lbite_location_image', true );
 		$image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'medium' ) : '';
 		?>
-		<div class="lb-location-image-upload">
-			<div class="lb-image-preview" style="margin-bottom: 10px;">
+		<div class="lbite-location-image-upload">
+			<div class="lbite-image-preview" style="margin-bottom: 10px;">
 				<?php if ( $image_url ) : ?>
 					<img src="<?php echo esc_url( $image_url ); ?>" style="max-width: 100%; height: auto; display: block;">
 				<?php else : ?>
@@ -178,70 +178,58 @@ class LB_Locations {
 					</p>
 				<?php endif; ?>
 			</div>
-			<input type="hidden" id="lb_location_image" name="lb_location_image" value="<?php echo esc_attr( $image_id ); ?>">
-			<button type="button" class="button button-secondary lb-upload-image-button" style="width: 100%; margin-bottom: 5px;">
+			<input type="hidden" id="lbite_location_image" name="lbite_location_image" value="<?php echo esc_attr( $image_id ); ?>">
+			<button type="button" class="button button-secondary lbite-upload-image-button" style="width: 100%; margin-bottom: 5px;">
 				<?php esc_html_e( 'Bild auswählen', 'libre-bite' ); ?>
 			</button>
-			<button type="button" class="button button-secondary lb-remove-image-button" style="width: 100%; <?php echo $image_id ? '' : 'display:none;'; ?>">
+			<button type="button" class="button button-secondary lbite-remove-image-button" style="width: 100%; <?php echo $image_id ? '' : 'display:none;'; ?>">
 				<?php esc_html_e( 'Bild entfernen', 'libre-bite' ); ?>
 			</button>
 			<p class="description" style="margin-top: 10px;">
 				<?php esc_html_e( 'Optional: Wird in der Standort-Auswahl als Kachel-Bild angezeigt.', 'libre-bite' ); ?>
 			</p>
 		</div>
-		<script>
+		<?php
+		$image_upload_js = "
 		jQuery(document).ready(function($) {
-			var $container = $('.lb-location-image-upload');
-			var $input = $container.find('input[name="lb_location_image"]');
-			var $preview = $container.find('.lb-image-preview');
-			var $uploadBtn = $container.find('.lb-upload-image-button');
-			var $removeBtn = $container.find('.lb-remove-image-button');
+			var \$container = $('.lbite-location-image-upload');
+			var \$input = \$container.find('input[name=\"lbite_location_image\"]');
+			var \$preview = \$container.find('.lbite-image-preview');
+			var \$uploadBtn = \$container.find('.lbite-upload-image-button');
+			var \$removeBtn = \$container.find('.lbite-remove-image-button');
 			var imageFrame;
 
-			// Prüfen ob wp.media verfügbar ist.
 			if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
-				$uploadBtn.prop('disabled', true).text('<?php echo esc_js( __( 'Fehler: Media-Library nicht geladen', 'libre-bite' ) ); ?>');
+				\$uploadBtn.prop('disabled', true).text('" . esc_js( __( 'Fehler: Media-Library nicht geladen', 'libre-bite' ) ) . "');
 				return;
 			}
 
-			$uploadBtn.on('click', function(e) {
+			\$uploadBtn.on('click', function(e) {
 				e.preventDefault();
-
-				if (imageFrame) {
-					imageFrame.open();
-					return;
-				}
-
+				if (imageFrame) { imageFrame.open(); return; }
 				imageFrame = wp.media({
-					title: '<?php echo esc_js( __( 'Standort-Bild wählen', 'libre-bite' ) ); ?>',
-					button: {
-						text: '<?php echo esc_js( __( 'Bild verwenden', 'libre-bite' ) ); ?>'
-					},
+					title: '" . esc_js( __( 'Standort-Bild wählen', 'libre-bite' ) ) . "',
+					button: { text: '" . esc_js( __( 'Bild verwenden', 'libre-bite' ) ) . "' },
 					multiple: false
 				});
-
 				imageFrame.on('select', function() {
 					var attachment = imageFrame.state().get('selection').first().toJSON();
-
-					// Wert im Hidden-Feld setzen.
-					$input.val(attachment.id);
-
-					// Vorschau aktualisieren.
-					$preview.html('<img src="' + attachment.url + '" style="max-width: 100%; height: auto; display: block;">');
-					$removeBtn.show();
+					\$input.val(attachment.id);
+					\$preview.html('<img src=\"' + attachment.url + '\" style=\"max-width: 100%; height: auto; display: block;\">');
+					\$removeBtn.show();
 				});
-
 				imageFrame.open();
 			});
 
-			$removeBtn.on('click', function(e) {
+			\$removeBtn.on('click', function(e) {
 				e.preventDefault();
-				$input.val('');
-				$preview.html('<p style="text-align: center; padding: 20px; background: #f5f5f5; border: 2px dashed #ddd;"><?php echo esc_js( __( 'Kein Bild ausgewählt', 'libre-bite' ) ); ?></p>');
-				$(this).hide();
+				\$input.val('');
+				\$preview.html('<p style=\"text-align: center; padding: 20px; background: #f5f5f5; border: 2px dashed #ddd;\">" . esc_js( __( 'Kein Bild ausgewählt', 'libre-bite' ) ) . "</p>');
+				\$(this).hide();
 			});
-		});
-		</script>
+		});";
+		wp_add_inline_script( 'jquery', $image_upload_js );
+		?>
 		<?php
 	}
 
@@ -251,41 +239,41 @@ class LB_Locations {
 	 * @param WP_Post $post Post-Objekt
 	 */
 	public function render_address_meta_box( $post ) {
-		$street      = get_post_meta( $post->ID, '_lb_street', true );
-		$zip         = get_post_meta( $post->ID, '_lb_zip', true );
-		$city        = get_post_meta( $post->ID, '_lb_city', true );
-		$country     = get_post_meta( $post->ID, '_lb_country', true );
-		$maps_url    = get_post_meta( $post->ID, '_lb_maps_url', true );
+		$street      = get_post_meta( $post->ID, '_lbite_street', true );
+		$zip         = get_post_meta( $post->ID, '_lbite_zip', true );
+		$city        = get_post_meta( $post->ID, '_lbite_city', true );
+		$country     = get_post_meta( $post->ID, '_lbite_country', true );
+		$maps_url    = get_post_meta( $post->ID, '_lbite_maps_url', true );
 		?>
 		<table class="form-table">
 			<tr>
-				<th><label for="lb_street"><?php esc_html_e( 'Straße & Nr.', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_street"><?php esc_html_e( 'Straße & Nr.', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="text" id="lb_street" name="lb_street" value="<?php echo esc_attr( $street ); ?>" class="regular-text">
+					<input type="text" id="lbite_street" name="lbite_street" value="<?php echo esc_attr( $street ); ?>" class="regular-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_zip"><?php esc_html_e( 'PLZ', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_zip"><?php esc_html_e( 'PLZ', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="text" id="lb_zip" name="lb_zip" value="<?php echo esc_attr( $zip ); ?>" class="regular-text">
+					<input type="text" id="lbite_zip" name="lbite_zip" value="<?php echo esc_attr( $zip ); ?>" class="regular-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_city"><?php esc_html_e( 'Ort', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_city"><?php esc_html_e( 'Ort', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="text" id="lb_city" name="lb_city" value="<?php echo esc_attr( $city ); ?>" class="regular-text">
+					<input type="text" id="lbite_city" name="lbite_city" value="<?php echo esc_attr( $city ); ?>" class="regular-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_country"><?php esc_html_e( 'Land', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_country"><?php esc_html_e( 'Land', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="text" id="lb_country" name="lb_country" value="<?php echo esc_attr( $country ); ?>" class="regular-text">
+					<input type="text" id="lbite_country" name="lbite_country" value="<?php echo esc_attr( $country ); ?>" class="regular-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lb_maps_url"><?php esc_html_e( 'Google Maps Link', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_maps_url"><?php esc_html_e( 'Google Maps Link', 'libre-bite' ); ?></label></th>
 				<td>
-					<input type="url" id="lb_maps_url" name="lb_maps_url" value="<?php echo esc_attr( $maps_url ); ?>" class="large-text" placeholder="https://maps.google.com/...">
+					<input type="url" id="lbite_maps_url" name="lbite_maps_url" value="<?php echo esc_attr( $maps_url ); ?>" class="large-text" placeholder="https://maps.google.com/...">
 					<p class="description"><?php esc_html_e( 'Optional: Link zu Google Maps für diesen Standort. Die Adresse wird auf der Bestellbestätigung und in E-Mails verlinkt.', 'libre-bite' ); ?></p>
 				</td>
 			</tr>
@@ -299,7 +287,7 @@ class LB_Locations {
 	 * @param WP_Post $post Post-Objekt
 	 */
 	public function render_hours_meta_box( $post ) {
-		$opening_hours = get_post_meta( $post->ID, '_lb_opening_hours', true );
+		$opening_hours = get_post_meta( $post->ID, '_lbite_opening_hours', true );
 		if ( ! is_array( $opening_hours ) ) {
 			$opening_hours = array();
 		}
@@ -325,17 +313,17 @@ class LB_Locations {
 					<th><?php echo esc_html( $day_label ); ?></th>
 					<td>
 						<label>
-							<input type="checkbox" name="lb_hours[<?php echo esc_attr( $day_key ); ?>][closed]" value="1" <?php checked( $is_closed, true ); ?>>
+							<input type="checkbox" name="lbite_hours[<?php echo esc_attr( $day_key ); ?>][closed]" value="1" <?php checked( $is_closed, true ); ?>>
 							<?php esc_html_e( 'Geschlossen', 'libre-bite' ); ?>
 						</label>
 						<br>
 						<label>
 							<?php esc_html_e( 'Von', 'libre-bite' ); ?>
-							<input type="time" name="lb_hours[<?php echo esc_attr( $day_key ); ?>][open]" value="<?php echo esc_attr( $open ); ?>">
+							<input type="time" name="lbite_hours[<?php echo esc_attr( $day_key ); ?>][open]" value="<?php echo esc_attr( $open ); ?>">
 						</label>
 						<label>
 							<?php esc_html_e( 'Bis', 'libre-bite' ); ?>
-							<input type="time" name="lb_hours[<?php echo esc_attr( $day_key ); ?>][close]" value="<?php echo esc_attr( $close ); ?>">
+							<input type="time" name="lbite_hours[<?php echo esc_attr( $day_key ); ?>][close]" value="<?php echo esc_attr( $close ); ?>">
 						</label>
 					</td>
 				</tr>
@@ -352,7 +340,7 @@ class LB_Locations {
 	 */
 	public function save_location_meta( $post_id, $post ) {
 		// Nonce prüfen.
-		if ( ! isset( $_POST['lb_location_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lb_location_nonce'] ) ), 'lb_save_location' ) ) {
+		if ( ! isset( $_POST['lbite_location_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lbite_location_nonce'] ) ), 'lbite_save_location' ) ) {
 			return;
 		}
 
@@ -367,44 +355,44 @@ class LB_Locations {
 		}
 
 		// Bild speichern.
-		if ( isset( $_POST['lb_location_image'] ) ) {
-			$image_id = intval( wp_unslash( $_POST['lb_location_image'] ) );
+		if ( isset( $_POST['lbite_location_image'] ) ) {
+			$image_id = intval( wp_unslash( $_POST['lbite_location_image'] ) );
 			if ( $image_id ) {
-				update_post_meta( $post_id, '_lb_location_image', $image_id );
+				update_post_meta( $post_id, '_lbite_location_image', $image_id );
 			} else {
-				delete_post_meta( $post_id, '_lb_location_image' );
+				delete_post_meta( $post_id, '_lbite_location_image' );
 			}
 		}
 
 		// Adresse speichern.
-		if ( isset( $_POST['lb_street'] ) ) {
-			update_post_meta( $post_id, '_lb_street', sanitize_text_field( wp_unslash( $_POST['lb_street'] ) ) );
+		if ( isset( $_POST['lbite_street'] ) ) {
+			update_post_meta( $post_id, '_lbite_street', sanitize_text_field( wp_unslash( $_POST['lbite_street'] ) ) );
 		}
-		if ( isset( $_POST['lb_zip'] ) ) {
-			update_post_meta( $post_id, '_lb_zip', sanitize_text_field( wp_unslash( $_POST['lb_zip'] ) ) );
+		if ( isset( $_POST['lbite_zip'] ) ) {
+			update_post_meta( $post_id, '_lbite_zip', sanitize_text_field( wp_unslash( $_POST['lbite_zip'] ) ) );
 		}
-		if ( isset( $_POST['lb_city'] ) ) {
-			update_post_meta( $post_id, '_lb_city', sanitize_text_field( wp_unslash( $_POST['lb_city'] ) ) );
+		if ( isset( $_POST['lbite_city'] ) ) {
+			update_post_meta( $post_id, '_lbite_city', sanitize_text_field( wp_unslash( $_POST['lbite_city'] ) ) );
 		}
-		if ( isset( $_POST['lb_country'] ) ) {
-			update_post_meta( $post_id, '_lb_country', sanitize_text_field( wp_unslash( $_POST['lb_country'] ) ) );
+		if ( isset( $_POST['lbite_country'] ) ) {
+			update_post_meta( $post_id, '_lbite_country', sanitize_text_field( wp_unslash( $_POST['lbite_country'] ) ) );
 		}
-		if ( isset( $_POST['lb_maps_url'] ) ) {
-			update_post_meta( $post_id, '_lb_maps_url', esc_url_raw( wp_unslash( $_POST['lb_maps_url'] ) ) );
+		if ( isset( $_POST['lbite_maps_url'] ) ) {
+			update_post_meta( $post_id, '_lbite_maps_url', esc_url_raw( wp_unslash( $_POST['lbite_maps_url'] ) ) );
 		}
 
 		// Öffnungszeiten speichern.
-		if ( isset( $_POST['lb_hours'] ) && is_array( $_POST['lb_hours'] ) ) {
+		if ( isset( $_POST['lbite_hours'] ) && is_array( $_POST['lbite_hours'] ) ) {
 			$hours = array();
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in loop below.
-			foreach ( wp_unslash( $_POST['lb_hours'] ) as $day => $times ) {
+			foreach ( wp_unslash( $_POST['lbite_hours'] ) as $day => $times ) {
 				$hours[ sanitize_key( $day ) ] = array(
 					'closed' => isset( $times['closed'] ),
 					'open'   => isset( $times['open'] ) ? sanitize_text_field( $times['open'] ) : '',
 					'close'  => isset( $times['close'] ) ? sanitize_text_field( $times['close'] ) : '',
 				);
 			}
-			update_post_meta( $post_id, '_lb_opening_hours', $hours );
+			update_post_meta( $post_id, '_lbite_opening_hours', $hours );
 		}
 	}
 
@@ -413,7 +401,7 @@ class LB_Locations {
 	 */
 	public function add_product_meta_box() {
 		add_meta_box(
-			'lb_product_locations',
+			'lbite_product_locations',
 			__( 'Standorte', 'libre-bite' ),
 			array( $this, 'render_product_locations_meta_box' ),
 			'product',
@@ -428,9 +416,9 @@ class LB_Locations {
 	 * @param WP_Post $post Post-Objekt
 	 */
 	public function render_product_locations_meta_box( $post ) {
-		wp_nonce_field( 'lb_save_product_locations', 'lb_product_locations_nonce' );
+		wp_nonce_field( 'lbite_save_product_locations', 'lbite_product_locations_nonce' );
 
-		$selected_locations = get_post_meta( $post->ID, '_lb_locations', true );
+		$selected_locations = get_post_meta( $post->ID, '_lbite_locations', true );
 		if ( ! is_array( $selected_locations ) ) {
 			$selected_locations = array();
 		}
@@ -454,7 +442,7 @@ class LB_Locations {
 			$checked = in_array( $location->ID, $selected_locations, true );
 			?>
 			<label style="display: block; margin-bottom: 5px;">
-				<input type="checkbox" name="lb_product_locations[]" value="<?php echo esc_attr( $location->ID ); ?>" <?php checked( $checked ); ?>>
+				<input type="checkbox" name="lbite_product_locations[]" value="<?php echo esc_attr( $location->ID ); ?>" <?php checked( $checked ); ?>>
 				<?php echo esc_html( $location->post_title ); ?>
 			</label>
 			<?php
@@ -469,7 +457,7 @@ class LB_Locations {
 	 */
 	public function save_product_locations( $post_id ) {
 		// Nonce prüfen.
-		if ( ! isset( $_POST['lb_product_locations_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lb_product_locations_nonce'] ) ), 'lb_save_product_locations' ) ) {
+		if ( ! isset( $_POST['lbite_product_locations_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lbite_product_locations_nonce'] ) ), 'lbite_save_product_locations' ) ) {
 			return;
 		}
 
@@ -479,11 +467,11 @@ class LB_Locations {
 		}
 
 		// Standorte speichern.
-		$locations = isset( $_POST['lb_product_locations'] ) && is_array( $_POST['lb_product_locations'] )
-			? array_map( 'intval', wp_unslash( $_POST['lb_product_locations'] ) )
+		$locations = isset( $_POST['lbite_product_locations'] ) && is_array( $_POST['lbite_product_locations'] )
+			? array_map( 'intval', wp_unslash( $_POST['lbite_product_locations'] ) )
 			: array();
 
-		update_post_meta( $post_id, '_lb_locations', $locations );
+		update_post_meta( $post_id, '_lbite_locations', $locations );
 	}
 
 	/**
@@ -510,9 +498,9 @@ class LB_Locations {
 	 */
 	public function render_admin_columns( $column, $post_id ) {
 		if ( 'address' === $column ) {
-			$street = get_post_meta( $post_id, '_lb_street', true );
-			$zip    = get_post_meta( $post_id, '_lb_zip', true );
-			$city   = get_post_meta( $post_id, '_lb_city', true );
+			$street = get_post_meta( $post_id, '_lbite_street', true );
+			$zip    = get_post_meta( $post_id, '_lbite_zip', true );
+			$city   = get_post_meta( $post_id, '_lbite_city', true );
 
 			if ( $street || $zip || $city ) {
 				echo esc_html( $street . ', ' . $zip . ' ' . $city );
@@ -546,7 +534,7 @@ class LB_Locations {
 	 * @return array
 	 */
 	public static function get_opening_hours( $location_id ) {
-		return get_post_meta( $location_id, '_lb_opening_hours', true );
+		return get_post_meta( $location_id, '_lbite_opening_hours', true );
 	}
 
 	/**
@@ -556,10 +544,10 @@ class LB_Locations {
 	 * @return string
 	 */
 	public static function get_formatted_address( $location_id ) {
-		$street  = get_post_meta( $location_id, '_lb_street', true );
-		$zip     = get_post_meta( $location_id, '_lb_zip', true );
-		$city    = get_post_meta( $location_id, '_lb_city', true );
-		$country = get_post_meta( $location_id, '_lb_country', true );
+		$street  = get_post_meta( $location_id, '_lbite_street', true );
+		$zip     = get_post_meta( $location_id, '_lbite_zip', true );
+		$city    = get_post_meta( $location_id, '_lbite_city', true );
+		$country = get_post_meta( $location_id, '_lbite_country', true );
 
 		$parts = array();
 
@@ -592,7 +580,7 @@ class LB_Locations {
 	 * @return string
 	 */
 	public static function get_maps_url( $location_id ) {
-		return get_post_meta( $location_id, '_lb_maps_url', true );
+		return get_post_meta( $location_id, '_lbite_maps_url', true );
 	}
 
 	/**

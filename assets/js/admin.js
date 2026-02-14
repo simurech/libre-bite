@@ -11,7 +11,7 @@
 	const notify = {
 		show: function(message, type = 'success') {
 			const $notification = $('<div>', {
-				class: 'lb-notification ' + type,
+				class: 'lbite-notification ' + type,
 				text: message
 			});
 
@@ -34,18 +34,18 @@
 	};
 
 	// Global verfügbar machen
-	window.lbNotify = notify;
+	window.lbiteNotify = notify;
 
 	/**
 	 * AJAX Helper
 	 */
-	function lbAjax(action, data, callback) {
+	function lbiteAjax(action, data, callback) {
 		$.ajax({
-			url: lbAdmin.ajaxUrl,
+			url: lbiteAdmin.ajaxUrl,
 			type: 'POST',
 			data: {
 				action: action,
-				nonce: lbAdmin.nonce,
+				nonce: lbiteAdmin.nonce,
 				...data
 			},
 			success: function(response) {
@@ -54,18 +54,18 @@
 				}
 			},
 			error: function() {
-				notify.error(lbAdmin.strings.saveError);
+				notify.error(lbiteAdmin.strings.saveError);
 			}
 		});
 	}
 
-	window.lbAjax = lbAjax;
+	window.lbiteAjax = lbiteAjax;
 
 	/**
 	 * Bestätigungs-Dialoge
 	 */
 	$(document).on('click', '[data-confirm]', function(e) {
-		const message = $(this).data('confirm') || lbAdmin.strings.confirmDelete;
+		const message = $(this).data('confirm') || lbiteAdmin.strings.confirmDelete;
 		if (!confirm(message)) {
 			e.preventDefault();
 			return false;
@@ -75,13 +75,13 @@
 	/**
 	 * Auto-Save für Forms
 	 */
-	$('.lb-auto-save').on('change', 'input, select, textarea', function() {
+	$('.lbite-auto-save').on('change', 'input, select, textarea', function() {
 		const $form = $(this).closest('form');
 		const data = $form.serialize();
 
-		lbAjax('lb_save_settings', { settings: data }, function(response) {
+		lbiteAjax('lbite_save_settings', { settings: data }, function(response) {
 			if (response.success) {
-				notify.success(lbAdmin.strings.saveSuccess);
+				notify.success(lbiteAdmin.strings.saveSuccess);
 			}
 		});
 	});

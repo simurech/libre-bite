@@ -15,12 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Feature-Manager Klasse
  */
-class LB_Features {
+class LBite_Features {
 
 	/**
 	 * Singleton-Instanz
 	 *
-	 * @var LB_Features
+	 * @var LBite_Features
 	 */
 	private static $instance = null;
 
@@ -207,7 +207,7 @@ class LB_Features {
 	/**
 	 * Singleton-Instanz abrufen
 	 *
-	 * @return LB_Features
+	 * @return LBite_Features
 	 */
 	public static function instance() {
 		if ( null === self::$instance ) {
@@ -227,7 +227,7 @@ class LB_Features {
 	 * Features aus Datenbank laden
 	 */
 	private function load_features() {
-		$saved_features = get_option( 'lb_features', array() );
+		$saved_features = get_option( 'lbite_features', array() );
 
 		// Defaults mit gespeicherten Werten mergen
 		foreach ( self::$feature_definitions as $key => $definition ) {
@@ -249,7 +249,7 @@ class LB_Features {
 
 		// Wenn das Feature generell deaktiviert ist, direkt false zurückgeben
 		if ( ! $enabled ) {
-			return apply_filters( 'lb_feature_enabled', false, $feature );
+			return apply_filters( 'lbite_feature_enabled', false, $feature );
 		}
 
 		// Premium-Check
@@ -257,22 +257,22 @@ class LB_Features {
 
 		if ( $is_premium_feature ) {
 			// 1. Check auf Entwickler-Override via Konstante (Immer Priorität)
-			if ( defined( 'LB_PREMIUM_OVERRIDE' ) && LB_PREMIUM_OVERRIDE ) {
-				return apply_filters( 'lb_feature_enabled', true, $feature );
+			if ( defined( 'LBITE_PREMIUM_OVERRIDE' ) && LBITE_PREMIUM_OVERRIDE ) {
+				return apply_filters( 'lbite_feature_enabled', true, $feature );
 			}
 
 			// 2. Check via Freemius SDK
-			if ( function_exists( 'lb_freemius' ) ) {
+			if ( function_exists( 'lbite_freemius' ) ) {
 				/**
 				 * Wir nutzen hier can_use_premium_code__premium_only().
 				 * Dieser Block wird vom Freemius-Generator in der Gratis-Version automatisch entfernt.
 				 */
-				if ( ! lb_freemius()->can_use_premium_code__premium_only() ) {
-					return apply_filters( 'lb_feature_enabled', false, $feature );
+				if ( ! lbite_freemius()->can_use_premium_code__premium_only() ) {
+					return apply_filters( 'lbite_feature_enabled', false, $feature );
 				}
 			} else {
 				// Falls Freemius nicht geladen ist (Sicherheits-Fallback)
-				return apply_filters( 'lb_feature_enabled', false, $feature );
+				return apply_filters( 'lbite_feature_enabled', false, $feature );
 			}
 		}
 
@@ -282,7 +282,7 @@ class LB_Features {
 		 * @param bool   $enabled Aktueller Status
 		 * @param string $feature Feature-Key
 		 */
-		return apply_filters( 'lb_feature_enabled', $enabled, $feature );
+		return apply_filters( 'lbite_feature_enabled', $enabled, $feature );
 	}
 
 	/**
@@ -360,7 +360,7 @@ class LB_Features {
 			}
 		}
 
-		$result = update_option( 'lb_features', $sanitized );
+		$result = update_option( 'lbite_features', $sanitized );
 
 		if ( $result ) {
 			$this->features = $sanitized;
@@ -390,6 +390,6 @@ class LB_Features {
  * @param string $feature Feature-Key
  * @return bool
  */
-function lb_feature_enabled( $feature ) {
-	return LB_Features::instance()->is_enabled( $feature );
+function lbite_feature_enabled( $feature ) {
+	return LBite_Features::instance()->is_enabled( $feature );
 }
