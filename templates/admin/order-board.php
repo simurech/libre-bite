@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 <?php
-\$lbite_inline_js = <<<'LBJS'
+$lbite_inline_js = <<<'LBJS'
 // Dashboard-Funktionalität wird via dashboard.js geladen
 LBJS;
 wp_add_inline_script( 'lbite-dashboard', $lbite_inline_js );

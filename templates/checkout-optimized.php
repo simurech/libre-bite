@@ -124,7 +124,7 @@ $pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time', '' ) : '
 </div>
 
 <?php
-\$lbite_inline_js = <<<'LBJS'
+$lbite_inline_js = <<<'LBJS'
 jQuery(document).ready(function($) {
 	// E-Mail-Feld ein/ausblenden
 	$('input[name="lbite_receipt_option"]').on('change', function() {

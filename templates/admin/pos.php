@@ -117,7 +117,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 <?php
-\$lbite_inline_js = <<<'LBJS'
+$lbite_inline_js = <<<'LBJS'
 jQuery(document).ready(function($) {
 	// Standort-Auswahl speichern
 	$('#lbite-pos-location').on('change', function() {

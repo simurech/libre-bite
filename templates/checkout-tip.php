@@ -48,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <?php
-\$lbite_inline_js = <<<'LBJS'
+$lbite_inline_js = <<<'LBJS'
 jQuery(document).ready(function($) {
 	// Trinkgeld-Auswahl
 	$('input[name="lbite_tip_type"]').on('change', function() {

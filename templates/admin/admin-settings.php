@@ -273,7 +273,7 @@ $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'L
 
 
 <?php
-\$lbite_inline_js = <<<'LBJS'
+$lbite_inline_js = <<<'LBJS'
 jQuery(document).ready(function($) {
 	// "Alle auswählen/abwählen" Funktionalität
 	$('.lbite-toggle-all-menus').on('change', function() {
