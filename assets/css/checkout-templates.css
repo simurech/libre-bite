@@ -1,0 +1,433 @@
+/* Checkout Templates CSS */
+
+/* --- checkout-location-time.php --- */
+.lbite-checkout-selection {
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+
+.lbite-checkout-selection h3 {
+	margin-top: 0;
+	margin-bottom: 15px;
+	font-size: 18px;
+	color: #333;
+}
+
+/* Aktuelle Auswahl Anzeige */
+.lbite-selection-display {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	padding: 15px;
+	background: #f8f9fa;
+	border-radius: 8px;
+	border: 2px solid #e8e8e8;
+}
+
+.lbite-location-image {
+	width: 60px;
+	height: 60px;
+	border-radius: 8px;
+	overflow: hidden;
+	flex-shrink: 0;
+}
+
+.lbite-location-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.lbite-location-placeholder {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+}
+
+.lbite-selection-details {
+	flex: 1;
+}
+
+.lbite-location-name {
+	font-size: 16px;
+	margin-bottom: 5px;
+	color: #333;
+}
+
+.lbite-order-info {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.lbite-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 5px 12px;
+	border-radius: 20px;
+	font-size: 13px;
+	font-weight: 500;
+}
+
+.lbite-badge svg {
+	width: 16px;
+	height: 16px;
+}
+
+.lbite-badge-now {
+	background: #d4edda;
+	color: #155724;
+}
+
+.lbite-badge-later {
+	background: #fff3cd;
+	color: #856404;
+}
+
+.lbite-change-btn {
+	padding: 8px 20px;
+	background: #0073aa;
+	color: #fff;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 500;
+	transition: background 0.3s;
+	flex-shrink: 0;
+}
+
+.lbite-change-btn:hover {
+	background: #005a87;
+}
+
+/* Keine Auswahl */
+.lbite-no-selection {
+	text-align: center;
+	padding: 30px;
+	color: #666;
+}
+
+/* Bearbeitungsformular */
+.lbite-edit-form {
+	padding-top: 15px;
+}
+
+.lbite-form-group {
+	margin-bottom: 20px;
+}
+
+.lbite-form-group label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 8px;
+	color: #333;
+}
+
+.lbite-form-group label .required {
+	color: #dc3232;
+}
+
+.lbite-select {
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 14px;
+	background: #fff;
+	cursor: pointer;
+	transition: border-color 0.3s;
+}
+
+.lbite-select:focus {
+	outline: none;
+	border-color: #0073aa;
+	box-shadow: 0 0 0 1px #0073aa;
+}
+
+.lbite-radio-group {
+	display: flex;
+	gap: 15px;
+	flex-wrap: wrap;
+}
+
+.lbite-radio-option {
+	flex: 1;
+	min-width: 150px;
+	padding: 12px 15px;
+	border: 2px solid #ddd;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.lbite-radio-option:hover {
+	border-color: #999;
+	background: #f8f9fa;
+}
+
+.lbite-radio-option input[type="radio"] {
+	margin: 0;
+	cursor: pointer;
+}
+
+.lbite-radio-option:has(input[type="radio"]:checked) {
+	border-color: #0073aa;
+	background: #f0f8ff;
+}
+
+.lbite-radio-option span {
+	font-weight: 500;
+	color: #333;
+}
+
+.lbite-form-actions {
+	display: flex;
+	gap: 10px;
+	margin-top: 20px;
+}
+
+.lbite-save-btn,
+.lbite-cancel-btn {
+	padding: 10px 24px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 500;
+	transition: all 0.3s;
+}
+
+.lbite-save-btn {
+	background: #0073aa;
+	color: #fff;
+}
+
+.lbite-save-btn:hover {
+	background: #005a87;
+}
+
+.lbite-cancel-btn {
+	background: #f3f3f3;
+	color: #333;
+}
+
+.lbite-cancel-btn:hover {
+	background: #e0e0e0;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+	.lbite-selection-display {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.lbite-radio-group {
+		flex-direction: column;
+	}
+
+	.lbite-radio-option {
+		min-width: 100%;
+	}
+
+	.lbite-form-actions {
+		flex-direction: column;
+	}
+
+	.lbite-save-btn,
+	.lbite-cancel-btn {
+		width: 100%;
+	}
+}
+
+/* Inline Hinweis für Datum */
+.lbite-date-error {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	margin-top: 8px;
+	padding: 10px 12px;
+	background: #d4edda;
+	border: 1px solid #28a745;
+	border-radius: 6px;
+	color: #155724;
+	font-size: 14px;
+	animation: slideInError 0.3s ease-out;
+	line-height: 1.5;
+}
+
+@keyframes slideInError {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.lbite-date-error .dashicons {
+	color: #28a745;
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+	margin-top: 2px;
+}
+
+.lbite-error-message {
+	flex: 1;
+}
+
+.lbite-error-message strong {
+	color: #155724;
+	font-weight: 600;
+}
+
+.lbite-error-input {
+	border-color: #28a745 !important;
+	background-color: #f0fff4 !important;
+}
+
+/* Fix für abgeschnittenes Dropdown */
+.lbite-checkout-selection {
+	overflow: visible !important;
+}
+
+.lbite-edit-form {
+	overflow: visible !important;
+}
+
+.lbite-form-group {
+	overflow: visible !important;
+	position: relative;
+}
+
+.lbite-select {
+	position: relative;
+	z-index: 1;
+}
+
+/* Select Dropdown besser sichtbar */
+select.lbite-select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 12px center;
+	padding-right: 36px;
+}
+
+/* Sicherstellen dass Optionen sichtbar sind */
+select.lbite-select option {
+	padding: 8px 12px;
+}
+
+
+/* --- checkout-tip.php --- */
+.lbite-tip-selection {
+	background: #fff;
+	padding: 20px;
+	margin-bottom: 20px;
+	border-radius: 8px;
+	border: 1px solid #e0e0e0;
+}
+
+.lbite-tip-selection h3 {
+	margin: 0 0 5px 0;
+	font-size: 18px;
+	color: var(--lbite-color-secondary, #23282d);
+}
+
+.lbite-tip-selection > p {
+	margin: 0 0 15px 0;
+	color: #666;
+	font-size: 14px;
+}
+
+.lbite-tip-options {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 10px;
+}
+
+.lbite-tip-option {
+	padding: 14px 12px;
+	border: 2px solid #e0e0e0;
+	border-radius: 8px;
+	text-align: center;
+	cursor: pointer;
+	transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	background: #fff;
+}
+
+.lbite-tip-option:hover {
+	border-color: #999;
+	background: #fafafa;
+}
+
+.lbite-tip-option input[type="radio"] {
+	margin: 0;
+	cursor: pointer;
+}
+
+.lbite-tip-option > span {
+	font-weight: 600;
+	font-size: 15px;
+	color: var(--lbite-color-secondary, #23282d);
+}
+
+/* Individuell-Option über volle Breite */
+.lbite-tip-custom {
+	grid-column: 1 / -1;
+	justify-content: flex-start;
+	padding: 12px 15px;
+}
+
+.lbite-tip-custom input[type="number"] {
+	width: 70px;
+	padding: 8px 10px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 14px;
+	text-align: center;
+}
+
+.lbite-tip-custom input[type="number"]:focus {
+	outline: none;
+	border-color: var(--lbite-color-primary, #0073aa);
+}
+
+/* Ausgewählte Option */
+.lbite-tip-option:has(input[type="radio"]:checked) {
+	border-color: var(--lbite-color-primary, #0073aa);
+	background: rgba(0, 115, 170, 0.05);
+}
+
+.lbite-tip-option:has(input[type="radio"]:checked) > span {
+	color: var(--lbite-color-primary, #0073aa);
+}
+
+/* Responsive: Auf kleinen Screens 1 Spalte */
+@media (max-width: 400px) {
+	.lbite-tip-options {
+		grid-template-columns: 1fr;
+	}
+}
+
