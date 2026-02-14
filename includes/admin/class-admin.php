@@ -432,6 +432,17 @@ class LBite_Admin {
 			)
 		);
 
+		// Einstellungen-Seite JS
+		if ( strpos( $hook, 'lbite-settings' ) !== false || strpos( $hook, 'libre-bite' ) !== false ) {
+			wp_enqueue_script(
+				'lbite-admin-settings',
+				LBITE_PLUGIN_URL . 'assets/js/admin-settings-page.js',
+				array( 'jquery' ),
+				LBITE_VERSION,
+				true
+			);
+		}
+
 		// POS-Assets werden komplett in class-pos.php geladen (inkl. preloadData).
 	}
 

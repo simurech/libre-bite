@@ -317,6 +317,27 @@ class LBite_Checkout {
 			);
 		}
 
+		// Checkout JS-Dateien
+		if ( is_checkout() ) {
+			wp_enqueue_script(
+				'lbite-checkout-receipt',
+				LBITE_PLUGIN_URL . 'assets/js/checkout-optimized-receipt.js',
+				array( 'jquery' ),
+				LBITE_VERSION,
+				true
+			);
+
+			if ( lbite_feature_enabled( 'enable_tip' ) ) {
+				wp_enqueue_script(
+					'lbite-checkout-tip',
+					LBITE_PLUGIN_URL . 'assets/js/checkout-tip.js',
+					array( 'jquery' ),
+					LBITE_VERSION,
+					true
+				);
+			}
+		}
+
 		// Optimiertes Checkout CSS laden wenn Feature aktiviert
 		if ( is_checkout() && lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
 			wp_enqueue_style(

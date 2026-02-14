@@ -114,35 +114,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 </div>
-
-
-<?php
-$lbite_inline_js = <<<'LBJS'
-jQuery(document).ready(function($) {
-	// Standort-Auswahl speichern
-	$('#lbite-pos-location').on('change', function() {
-		const locationId = $(this).val();
-
-		// Standort per AJAX speichern
-		$.ajax({
-			url: ajaxurl,
-			type: 'POST',
-			data: {
-				action: 'lbite_save_pos_location',
-				nonce: lbiteAdmin.nonce,
-				location_id: locationId
-			},
-			success: function(response) {
-				if (response.success) {
-					// Seite neu laden um Produkte für diesen Standort anzuzeigen
-					location.reload();
-				}
-			}
-		});
-	});
-});
-
-// POS initialisiert via pos.js
-LBJS;
-wp_add_inline_script( 'lbite-pos', $lbite_inline_js );
-?>

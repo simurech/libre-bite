@@ -83,6 +83,15 @@ class LBite_POS {
 			true
 		);
 
+		// POS-Seite JS (Standort-Auswahl).
+		wp_enqueue_script(
+			'lbite-pos-page',
+			LBITE_PLUGIN_URL . 'assets/js/pos-page.js',
+			array( 'jquery', 'lbite-pos' ),
+			LBITE_VERSION,
+			true
+		);
+
 		// Produktdaten direkt einbetten (kein zusätzlicher HTTP-Request nötig).
 		$product_data = $this->get_pos_product_data();
 

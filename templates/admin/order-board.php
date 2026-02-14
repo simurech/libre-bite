@@ -84,11 +84,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 </div>
-
-
-<?php
-$lbite_inline_js = <<<'LBJS'
-// Dashboard-Funktionalität wird via dashboard.js geladen
-LBJS;
-wp_add_inline_script( 'lbite-dashboard', $lbite_inline_js );
-?>
