@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://github.com/simurech/libre-bite
- * Description:       Komplettes Bestell- und Standortverwaltungssystem für WooCommerce
- * Version:           1.0.5
+ * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
+ * Version:           1.0.6
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Simon Urech
@@ -76,7 +76,7 @@ if ( function_exists( 'lbite_freemius' ) ) {
 		}
 
 	// Plugin-Konstanten definieren
-	define( 'LBITE_VERSION', '1.0.5' );
+	define( 'LBITE_VERSION', '1.0.6' );
 	define( 'LBITE_PLUGIN_FILE', __FILE__ );
 	define( 'LBITE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 	define( 'LBITE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -161,8 +161,8 @@ if ( function_exists( 'lbite_freemius' ) ) {
 		?>
 		<div class="notice notice-error">
 			<p>
-				<strong>Libre Bite</strong> benötigt WooCommerce.
-				Bitte installieren und aktivieren Sie WooCommerce.
+				<strong><?php echo esc_html__( 'Libre Bite', 'libre-bite' ); ?></strong>
+				<?php echo esc_html__( 'requires WooCommerce. Please install and activate WooCommerce.', 'libre-bite' ); ?>
 			</p>
 		</div>
 		<?php
@@ -175,8 +175,8 @@ if ( function_exists( 'lbite_freemius' ) ) {
 		?>
 		<div class="notice notice-error">
 			<p>
-				<strong>Libre Bite</strong> benötigt mindestens WooCommerce Version 8.0.
-				Bitte aktualisieren Sie WooCommerce.
+				<strong><?php echo esc_html__( 'Libre Bite', 'libre-bite' ); ?></strong>
+				<?php echo esc_html__( 'requires at least WooCommerce version 8.0. Please update WooCommerce.', 'libre-bite' ); ?>
 			</p>
 		</div>
 		<?php

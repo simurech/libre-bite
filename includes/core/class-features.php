@@ -145,7 +145,7 @@ class LBite_Features {
 		'enable_sound_notifications' => array(
 			'group'       => 'notifications',
 			'default'     => true,
-			'premium'     => false,
+			'premium'     => true,
 			'label'       => 'Sound-Benachrichtigung',
 			'description' => 'Ton bei neuen Bestellungen abspielen',
 		),
@@ -168,14 +168,14 @@ class LBite_Features {
 		'enable_nutritional_info'   => array(
 			'group'       => 'products',
 			'default'     => false,
-			'premium'     => false,
+			'premium'     => true,
 			'label'       => 'Nährwertangaben',
 			'description' => 'Nährwertinformationen bei Produkten anzeigen',
 		),
 		'enable_allergens'          => array(
 			'group'       => 'products',
 			'default'     => false,
-			'premium'     => false,
+			'premium'     => true,
 			'label'       => 'Allergene',
 			'description' => 'Allergen-Warnungen bei Produkten anzeigen',
 		),
@@ -256,17 +256,17 @@ class LBite_Features {
 		$is_premium_feature = isset( self::$feature_definitions[ $feature ]['premium'] ) && self::$feature_definitions[ $feature ]['premium'];
 
 		if ( $is_premium_feature ) {
-			// 1. Check auf Entwickler-Override via Konstante (Immer Priorität)
-			if ( defined( 'LBITE_PREMIUM_OVERRIDE' ) && LBITE_PREMIUM_OVERRIDE ) {
-				return apply_filters( 'lbite_feature_enabled', true, $feature );
-			}
-
-			// 2. Check via Freemius SDK
 			if ( function_exists( 'lbite_freemius' ) ) {
 				/**
 				 * Wir nutzen hier can_use_premium_code__premium_only().
 				 * Dieser Block wird vom Freemius-Generator in der Gratis-Version automatisch entfernt.
 				 */
+
+				// Entwickler-Override via Konstante (nur in Premium-Version verfügbar)
+				if ( defined( 'LBITE_PREMIUM_OVERRIDE' ) && LBITE_PREMIUM_OVERRIDE ) {
+					return apply_filters( 'lbite_feature_enabled', true, $feature );
+				}
+
 				if ( ! lbite_freemius()->can_use_premium_code__premium_only() ) {
 					return apply_filters( 'lbite_feature_enabled', false, $feature );
 				}
