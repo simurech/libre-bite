@@ -129,6 +129,20 @@
 				const cartIndex = $(this).data('cart-index');
 				POS.updateQuantity(cartIndex, 1);
 			});
+
+			// Zahlungs-Modal schliessen
+			$(document).on('click', '#lbite-payment-modal-cancel, #lbite-payment-modal-overlay', function() {
+				POS.closePaymentModal();
+			});
+
+			// Zahlung bestätigen und Bestellung anlegen
+			$(document).on('click', '#lbite-payment-modal-confirm', function() {
+				const paymentMethod = $('input[name="lbite-payment-method"]:checked').val() || 'cash';
+				const locationId = $('#lbite-pos-location').val();
+				const customerName = $('#lbite-pos-customer-name').val().trim();
+				POS.closePaymentModal();
+				POS.createOrder(locationId, 'now', '', customerName, paymentMethod);
+			});
 		},
 
 		/**
@@ -605,21 +619,49 @@
 				return;
 			}
 
-			// Kassen-Bestellungen sind immer für sofort
-			const orderType = 'now';
-			const pickupTime = '';
+			// Zahlungs-Modal öffnen
+			this.openPaymentModal();
+		},
 
-			// Kunden-Name aus dem Eingabefeld in der Warenkorb-Box holen
-			const customerName = $('#lbite-pos-customer-name').val().trim();
+		/**
+		 * Zahlungs-Modal öffnen und befüllen
+		 */
+		openPaymentModal: function() {
+			// Gesamtbetrag berechnen
+			const total = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-			// Direkt Bestellung erstellen (kein Modal mehr)
-			this.createOrder(locationId, orderType, pickupTime, customerName);
+			// Bestellpositionen rendern
+			let itemsHtml = '';
+			this.cart.forEach(function(item) {
+				const metaStr = item.meta ? ' <small>(' + escapeHtml(item.meta) + ')</small>' : '';
+				itemsHtml += '<div class="lbite-payment-modal-item">' +
+					'<span class="lbite-payment-modal-item-name">' + escapeHtml(item.name) + metaStr + '</span>' +
+					'<span class="lbite-payment-modal-item-qty">&times; ' + item.quantity + '</span>' +
+					'<span class="lbite-payment-modal-item-price">' + POS.formatPrice(item.price * item.quantity) + '</span>' +
+					'</div>';
+			});
+
+			$('#lbite-payment-modal-items').html(itemsHtml);
+			$('#lbite-payment-modal-total').text(this.formatPrice(total));
+
+			// Zahlungsart zurücksetzen
+			$('#lbite-payment-modal input[name="lbite-payment-method"]').prop('checked', false);
+			$('#lbite-payment-method-cash').prop('checked', true);
+
+			$('#lbite-payment-modal').fadeIn(200);
+		},
+
+		/**
+		 * Zahlungs-Modal schliessen
+		 */
+		closePaymentModal: function() {
+			$('#lbite-payment-modal').fadeOut(200);
 		},
 
 		/**
 		 * Bestellung erstellen
 		 */
-		createOrder: function(locationId, orderType, pickupTime, customerName) {
+		createOrder: function(locationId, orderType, pickupTime, customerName, paymentMethod) {
 			// Doppelklick-Schutz.
 			this.isProcessingOrder = true;
 
@@ -637,7 +679,8 @@
 					location_id: locationId,
 					order_type: orderType,
 					pickup_time: pickupTime,
-					customer_name: customerName
+					customer_name: customerName,
+					payment_method: paymentMethod || 'cash'
 				},
 				success: (response) => {
 					if (response.success) {

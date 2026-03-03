@@ -216,7 +216,7 @@ class LBite_Order_Dashboard {
 
 		// Process active orders.
 		foreach ( $orders_active as $order ) {
-			$lbite_status = get_post_meta( $order->get_id(), '_lbite_order_status', true );
+			$lbite_status = $order->get_meta( '_lbite_order_status', true );
 			if ( ! $lbite_status || ! isset( $orders_by_status[ $lbite_status ] ) ) {
 				$lbite_status = 'incoming';
 			}
@@ -226,7 +226,7 @@ class LBite_Order_Dashboard {
 
 		// Process completed orders (already filtered to today only).
 		foreach ( $orders_completed as $order ) {
-			$lbite_status = get_post_meta( $order->get_id(), '_lbite_order_status', true );
+			$lbite_status = $order->get_meta( '_lbite_order_status', true );
 			// Only add to completed if status is 'completed'.
 			if ( 'completed' === $lbite_status ) {
 				$orders_by_status['completed'][] = $this->format_order_for_dashboard( $order );
@@ -257,9 +257,9 @@ class LBite_Order_Dashboard {
 	 * @return array
 	 */
 	private function format_order_for_dashboard( $order ) {
-		$order_type  = get_post_meta( $order->get_id(), '_lbite_order_type', true );
-		$pickup_time = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
-		$location    = get_post_meta( $order->get_id(), '_lbite_location_name', true );
+		$order_type  = $order->get_meta( '_lbite_order_type', true );
+		$pickup_time = $order->get_meta( '_lbite_pickup_time', true );
+		$location    = $order->get_meta( '_lbite_location_name', true );
 
 		$items = array();
 		foreach ( $order->get_items() as $item ) {
@@ -333,8 +333,14 @@ class LBite_Order_Dashboard {
 			wp_send_json_error();
 		}
 
-		update_post_meta( $order_id, '_lbite_order_status', $new_status );
-		update_post_meta( $order_id, '_lbite_status_changed', current_time( 'mysql' ) );
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			wp_send_json_error( array( 'message' => __( 'Bestellung nicht gefunden', 'libre-bite' ) ) );
+		}
+
+		$order->update_meta_data( '_lbite_order_status', $new_status );
+		$order->update_meta_data( '_lbite_status_changed', current_time( 'mysql' ) );
+		$order->save();
 
 		// Bei "Abholbereit" - Kunde benachrichtigen (optional)
 		if ( 'ready' === $new_status ) {
@@ -343,10 +349,7 @@ class LBite_Order_Dashboard {
 
 		// Bei "Abgeschlossen" - WooCommerce Status ändern
 		if ( 'completed' === $new_status ) {
-			$order = wc_get_order( $order_id );
-			if ( $order ) {
-				$order->update_status( 'completed', __( 'Bestellung abgeschlossen via Dashboard', 'libre-bite' ) );
-			}
+			$order->update_status( 'completed', __( 'Bestellung abgeschlossen via Dashboard', 'libre-bite' ) );
 		}
 
 		wp_send_json_success(
@@ -410,7 +413,8 @@ class LBite_Order_Dashboard {
 		}
 
 		// Dashboard-Status entfernen
-		update_post_meta( $order_id, '_lbite_order_status', 'cancelled' );
+		$order->update_meta_data( '_lbite_order_status', 'cancelled' );
+		$order->save();
 
 		wp_send_json_success(
 			array(
@@ -509,7 +513,7 @@ class LBite_Order_Dashboard {
 		$current_time = current_time( 'timestamp' );
 
 		foreach ( $orders as $order ) {
-			$pickup_time = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
+			$pickup_time = $order->get_meta( '_lbite_pickup_time', true );
 			if ( ! $pickup_time ) {
 				continue;
 			}
@@ -519,8 +523,9 @@ class LBite_Order_Dashboard {
 
 			// Wenn Vorbereitungszeit erreicht ist
 			if ( $current_time >= $prep_start_time ) {
-				update_post_meta( $order->get_id(), '_lbite_order_status', 'preparing' );
-				update_post_meta( $order->get_id(), '_lbite_status_changed', current_time( 'mysql' ) );
+				$order->update_meta_data( '_lbite_order_status', 'preparing' );
+				$order->update_meta_data( '_lbite_status_changed', current_time( 'mysql' ) );
+				$order->save();
 
 				do_action( 'lbite_order_auto_moved_to_preparing', $order->get_id() );
 			}
@@ -533,35 +538,43 @@ class LBite_Order_Dashboard {
 	 * @param int $order_id Bestellungs-ID
 	 */
 	public function set_initial_order_status( $order_id ) {
-		$lbite_status = get_post_meta( $order_id, '_lbite_order_status', true );
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			return;
+		}
+
+		$lbite_status = $order->get_meta( '_lbite_order_status', true );
 		if ( ! $lbite_status ) {
-			update_post_meta( $order_id, '_lbite_order_status', 'incoming' );
+			$order->update_meta_data( '_lbite_order_status', 'incoming' );
+			$order->save();
 		}
 
 		// Fallback: Location-Meta aus Session setzen falls nicht vorhanden.
-		$location_id = get_post_meta( $order_id, '_lbite_location_id', true );
+		$location_id = $order->get_meta( '_lbite_location_id', true );
 		if ( ! $location_id && function_exists( 'WC' ) && WC()->session ) {
 			$session_location_id = WC()->session->get( 'lbite_location_id' );
 			if ( $session_location_id ) {
-				update_post_meta( $order_id, '_lbite_location_id', $session_location_id );
+				$order->update_meta_data( '_lbite_location_id', $session_location_id );
 
 				// Standort-Name speichern.
 				$location = get_post( $session_location_id );
 				if ( $location ) {
-					update_post_meta( $order_id, '_lbite_location_name', $location->post_title );
+					$order->update_meta_data( '_lbite_location_name', $location->post_title );
 				}
 			}
 
 			// Order type und pickup time auch speichern.
 			$order_type = WC()->session->get( 'lbite_order_type', 'now' );
 			if ( $order_type ) {
-				update_post_meta( $order_id, '_lbite_order_type', $order_type );
+				$order->update_meta_data( '_lbite_order_type', $order_type );
 			}
 
 			$pickup_time = WC()->session->get( 'lbite_pickup_time' );
 			if ( $pickup_time && 'later' === $order_type ) {
-				update_post_meta( $order_id, '_lbite_pickup_time', $pickup_time );
+				$order->update_meta_data( '_lbite_pickup_time', $pickup_time );
 			}
+
+			$order->save();
 		}
 	}
 
@@ -602,12 +615,12 @@ class LBite_Order_Dashboard {
 			return;
 		}
 
-		$current_status = get_post_meta( $order->get_id(), '_lbite_order_status', true );
+		$current_status = $order->get_meta( '_lbite_order_status', true );
 		if ( ! $current_status ) {
 			$current_status = 'incoming';
 		}
 
-		$status_changed = get_post_meta( $order->get_id(), '_lbite_status_changed', true );
+		$status_changed = $order->get_meta( '_lbite_status_changed', true );
 		?>
 		<div class="lbite-order-status-meta">
 			<p>

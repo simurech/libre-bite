@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -155,6 +155,13 @@ Das Plugin verwendet die Standard-WordPress-i18n-Funktionen und kann über .pot-
 6. **Moduleinstellungen** — Einzelne Funktionen je nach Betriebsbedarf ein- oder ausschalten.
 
 == Changelog ==
+
+= 1.0.9 =
+* Feature: Onboarding-Seite nach Erstinstallation – alle Features wählbar, kein Redirect auf ältere Instanzen.
+* Feature: POS Zahlungsbestätigung – Overlay mit Bestellübersicht und Zahlungsart (Bar/Karte/Twint/Andere) vor Bestellanlage.
+* Fix: HPOS-Inkompatibilität behoben – Order-Meta verwendet jetzt WooCommerce HPOS-API statt get_post_meta/update_post_meta.
+* Fix: XSS in Support-Einstellungen behoben (.html() → .text() für Vorschau-Feld).
+* Fix: XSS in Dashboard-Lade-Overlay behoben (message-Parameter escapet).
 
 = 1.0.8 =
 * Sicherheit: POS-Bestellung verwendet jetzt serverseitigen Produktpreis statt Client-Preis (Manipulation verhindert).

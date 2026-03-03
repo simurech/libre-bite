@@ -96,6 +96,64 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
+	<!-- Modal: Zahlungsbestätigung -->
+	<div id="lbite-payment-modal" class="lbite-modal" style="display: none;">
+		<div id="lbite-payment-modal-overlay" class="lbite-modal-overlay"></div>
+		<div class="lbite-modal-content lbite-payment-modal-content">
+			<div class="lbite-modal-header">
+				<h2><?php esc_html_e( 'Zahlungsbestätigung', 'libre-bite' ); ?></h2>
+			</div>
+			<div class="lbite-modal-body">
+
+				<!-- Bestellübersicht -->
+				<div id="lbite-payment-modal-items" class="lbite-payment-modal-items">
+					<!-- Wird dynamisch befüllt -->
+				</div>
+
+				<div class="lbite-payment-modal-total-row">
+					<span><?php esc_html_e( 'Gesamtbetrag:', 'libre-bite' ); ?></span>
+					<span id="lbite-payment-modal-total" class="lbite-payment-modal-total-amount"></span>
+				</div>
+
+				<!-- Zahlungsart wählen -->
+				<div class="lbite-payment-method-group">
+					<p class="lbite-payment-method-label"><strong><?php esc_html_e( 'Zahlungsart:', 'libre-bite' ); ?></strong></p>
+					<div class="lbite-payment-method-options">
+						<label class="lbite-payment-method-option">
+							<input type="radio" id="lbite-payment-method-cash" name="lbite-payment-method" value="cash" checked>
+							<span class="lbite-payment-method-icon">💵</span>
+							<span><?php esc_html_e( 'Bar', 'libre-bite' ); ?></span>
+						</label>
+						<label class="lbite-payment-method-option">
+							<input type="radio" id="lbite-payment-method-card" name="lbite-payment-method" value="card">
+							<span class="lbite-payment-method-icon">💳</span>
+							<span><?php esc_html_e( 'Karte', 'libre-bite' ); ?></span>
+						</label>
+						<label class="lbite-payment-method-option">
+							<input type="radio" id="lbite-payment-method-twint" name="lbite-payment-method" value="twint">
+							<span class="lbite-payment-method-icon">📱</span>
+							<span>Twint</span>
+						</label>
+						<label class="lbite-payment-method-option">
+							<input type="radio" id="lbite-payment-method-other" name="lbite-payment-method" value="other">
+							<span class="lbite-payment-method-icon">💱</span>
+							<span><?php esc_html_e( 'Andere', 'libre-bite' ); ?></span>
+						</label>
+					</div>
+				</div>
+
+			</div>
+			<div class="lbite-modal-footer">
+				<button type="button" class="button button-large" id="lbite-payment-modal-cancel">
+					<?php esc_html_e( 'Zurück', 'libre-bite' ); ?>
+				</button>
+				<button type="button" class="button button-primary button-hero" id="lbite-payment-modal-confirm">
+					<?php esc_html_e( 'Zahlung bestätigt – Bestellung anlegen', 'libre-bite' ); ?>
+				</button>
+			</div>
+		</div>
+	</div>
+
 	<!-- Modal für Produkt-Konfiguration (Varianten & Optionen) -->
 	<div id="lbite-product-modal" class="lbite-modal" style="display: none;">
 		<div class="lbite-modal-overlay"></div>

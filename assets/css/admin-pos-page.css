@@ -553,6 +553,114 @@ body.lbite-fullscreen-active #lbite-pos-cart-items {
 	}
 }
 
+/* Zahlungs-Modal */
+.lbite-payment-modal-content {
+	max-width: 500px;
+}
+
+.lbite-payment-modal-items {
+	border: 1px solid #e2e4e7;
+	border-radius: 6px;
+	margin-bottom: 16px;
+	overflow: hidden;
+}
+
+.lbite-payment-modal-item {
+	display: grid;
+	grid-template-columns: 1fr auto auto;
+	gap: 12px;
+	align-items: center;
+	padding: 10px 14px;
+	border-bottom: 1px solid #f0f0f0;
+	font-size: 14px;
+}
+
+.lbite-payment-modal-item:last-child {
+	border-bottom: none;
+}
+
+.lbite-payment-modal-item-name {
+	color: #1d2327;
+}
+
+.lbite-payment-modal-item-name small {
+	color: #6c757d;
+	font-size: 12px;
+}
+
+.lbite-payment-modal-item-qty {
+	color: #6c757d;
+	white-space: nowrap;
+}
+
+.lbite-payment-modal-item-price {
+	font-weight: 600;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.lbite-payment-modal-total-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 0;
+	border-top: 2px solid #1d2327;
+	margin-bottom: 20px;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.lbite-payment-modal-total-amount {
+	font-size: 24px;
+	font-weight: 700;
+	color: #0073aa;
+}
+
+/* Zahlungsart-Auswahl */
+.lbite-payment-method-label {
+	margin: 0 0 10px 0;
+}
+
+.lbite-payment-method-options {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+}
+
+.lbite-payment-method-option {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 16px;
+	border: 2px solid #e2e4e7;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 15px;
+	font-weight: 500;
+	transition: border-color 0.2s, background 0.2s;
+}
+
+.lbite-payment-method-option:hover {
+	border-color: #0073aa;
+	background: #f0f8ff;
+}
+
+.lbite-payment-method-option:has(input:checked) {
+	border-color: #0073aa;
+	background: #e3f2fd;
+}
+
+.lbite-payment-method-option input[type="radio"] {
+	accent-color: #0073aa;
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+}
+
+.lbite-payment-method-icon {
+	font-size: 20px;
+}
+
 /* Mobile-Optimierung */
 @media (max-width: 767px) {
 	.lbite-pos-container {

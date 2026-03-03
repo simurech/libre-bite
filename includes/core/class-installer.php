@@ -49,6 +49,11 @@ class LBite_Installer {
 		// Version speichern
 		update_option( 'lbite_version', LBITE_VERSION );
 		update_option( 'lbite_installed_date', current_time( 'mysql' ) );
+
+		// Einmaligen Redirect zur Onboarding-Seite setzen (nur bei Erstinstallation)
+		if ( ! get_option( 'lbite_onboarding_completed' ) ) {
+			add_option( 'lbite_do_activation_redirect', true );
+		}
 	}
 
 	/**
@@ -120,40 +125,41 @@ class LBite_Installer {
 	 * Standard Feature-Toggles setzen
 	 */
 	private static function set_default_features() {
+		// Bei Erstinstallation alle Features deaktiviert – Benutzer wählt im Onboarding.
 		$default_features = array(
 			// Bestellsystem
-			'enable_pos'                => true,
-			'enable_scheduled_orders'   => true,
-			'enable_order_notes'        => true,
-			'enable_order_cancellation' => true,
+			'enable_pos'                => false,
+			'enable_scheduled_orders'   => false,
+			'enable_order_notes'        => false,
+			'enable_order_cancellation' => false,
 
 			// Checkout
-			'enable_optimized_checkout' => true,
-			'enable_tips'               => true,
-			'enable_rounding'           => true,
-			'enable_guest_checkout'     => true,
-			'enable_email_field'        => true,
-			'enable_phone_field'        => true,
+			'enable_optimized_checkout' => false,
+			'enable_tips'               => false,
+			'enable_rounding'           => false,
+			'enable_guest_checkout'     => false,
+			'enable_email_field'        => false,
+			'enable_phone_field'        => false,
 
 			// Standorte
 			'enable_multi_location'     => false,
-			'enable_location_selector'  => true,
-			'enable_opening_hours'      => true,
+			'enable_location_selector'  => false,
+			'enable_opening_hours'      => false,
 
 			// Benachrichtigungen
-			'enable_pickup_reminders'   => true,
-			'enable_sound_notifications' => true,
-			'enable_admin_email'        => true,
+			'enable_pickup_reminders'   => false,
+			'enable_sound_notifications' => false,
+			'enable_admin_email'        => false,
 
 			// Produkte
-			'enable_product_options'    => true,
+			'enable_product_options'    => false,
 			'enable_nutritional_info'   => false,
 			'enable_allergens'          => false,
 
 			// Dashboard
-			'enable_kanban_board'       => true,
-			'enable_auto_status_change' => true,
-			'enable_fullscreen_mode'    => true,
+			'enable_kanban_board'       => false,
+			'enable_auto_status_change' => false,
+			'enable_fullscreen_mode'    => false,
 		);
 
 		if ( false === get_option( 'lbite_features' ) ) {

@@ -87,7 +87,7 @@ class LBite_Notifications {
 		$current_time = current_time( 'timestamp' );
 
 		foreach ( $orders as $order ) {
-			$pickup_time = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
+			$pickup_time = $order->get_meta( '_lbite_pickup_time', true );
 			if ( ! $pickup_time ) {
 				continue;
 			}
@@ -98,7 +98,8 @@ class LBite_Notifications {
 			// Wenn Reminder-Zeit erreicht ist
 			if ( $current_time >= $reminder_timestamp && $current_time < $pickup_timestamp ) {
 				$this->send_pickup_reminder_email( $order );
-				update_post_meta( $order->get_id(), '_lbite_reminder_sent', true );
+				$order->update_meta_data( '_lbite_reminder_sent', true );
+				$order->save();
 			}
 		}
 	}

@@ -178,7 +178,7 @@ jQuery(document).ready(function($) {
 
 	$('#support_custom_text').on('input', function() {
 		var val = $(this).val();
-		$('#preview-custom').html(val.replace(/\n/g, '<br>')).toggle(val.length > 0);
+		$('#preview-custom').text(val).toggle(val.length > 0);
 	});
 
 	// Formular absenden

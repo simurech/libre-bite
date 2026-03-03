@@ -230,7 +230,7 @@
 							border-radius: 50%;
 							animation: lbite-spin 0.8s linear infinite;
 						"></div>
-						<p style="margin-top: 15px; font-size: 14px; color: #666;">${message}</p>
+						<p style="margin-top: 15px; font-size: 14px; color: #666;">${escapeHtml(message)}</p>
 					</div>
 					<style>
 						@keyframes lbite-spin {

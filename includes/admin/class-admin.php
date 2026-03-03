@@ -680,10 +680,17 @@ class LBite_Admin {
 			wp_send_json_error( array( 'message' => __( 'Warenkorb ist leer', 'libre-bite' ) ) );
 		}
 
-		$location_id   = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
-		$order_type    = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
-		$pickup_time   = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
-		$customer_name = isset( $_POST['customer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_name'] ) ) : '';
+		$location_id    = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$order_type     = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
+		$pickup_time    = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
+		$customer_name  = isset( $_POST['customer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_name'] ) ) : '';
+		$payment_method = isset( $_POST['payment_method'] ) ? sanitize_key( wp_unslash( $_POST['payment_method'] ) ) : 'cash';
+
+		// Nur erlaubte Zahlungsarten akzeptieren.
+		$allowed_payment_methods = array( 'cash', 'card', 'twint', 'other' );
+		if ( ! in_array( $payment_method, $allowed_payment_methods, true ) ) {
+			$payment_method = 'other';
+		}
 
 		if ( ! $location_id ) {
 			wp_send_json_error( array( 'message' => __( 'Kein Standort ausgewählt', 'libre-bite' ) ) );
@@ -736,6 +743,7 @@ class LBite_Admin {
 				$order->update_meta_data( '_lbite_pickup_time', $pickup_time );
 			}
 			$order->update_meta_data( '_lbite_order_source', 'pos' );
+			$order->update_meta_data( '_lbite_payment_method', $payment_method );
 
 			// Kundenname speichern (falls angegeben).
 			if ( ! empty( $customer_name ) ) {

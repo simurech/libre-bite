@@ -1,0 +1,279 @@
+/* Onboarding-Seite */
+
+.lbite-onboarding-page {
+	max-width: 960px;
+	margin: 20px auto;
+}
+
+/* Header */
+.lbite-onboarding-header {
+	background: linear-gradient(135deg, #0073aa 0%, #005177 100%);
+	color: #fff;
+	border-radius: 8px;
+	padding: 40px;
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.lbite-onboarding-header h1 {
+	color: #fff;
+	font-size: 28px;
+	margin: 0 0 12px 0;
+}
+
+.lbite-onboarding-header p {
+	color: rgba(255, 255, 255, 0.88);
+	font-size: 16px;
+	margin: 0;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+/* Feature-Gruppen */
+.lbite-onboarding-group {
+	margin-bottom: 32px;
+}
+
+.lbite-onboarding-group-title {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 18px;
+	font-weight: 600;
+	margin: 0 0 16px 0;
+	color: #1d2327;
+}
+
+.lbite-onboarding-group-icon {
+	font-size: 20px;
+}
+
+/* Karten-Raster */
+.lbite-onboarding-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 16px;
+}
+
+/* Einzelne Karte */
+.lbite-onboarding-card {
+	background: #fff;
+	border: 2px solid #e2e4e7;
+	border-radius: 8px;
+	padding: 18px;
+	position: relative;
+	transition: border-color 0.2s;
+}
+
+.lbite-onboarding-card:hover {
+	border-color: #0073aa;
+}
+
+.lbite-onboarding-card--pro {
+	background: #fafafa;
+}
+
+/* Pro-Badge */
+.lbite-onboarding-pro-badge {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	background: linear-gradient(135deg, #f18500, #e67000);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+	padding: 2px 8px;
+	border-radius: 10px;
+	text-transform: uppercase;
+}
+
+/* Karten-Header mit Toggle */
+.lbite-onboarding-card-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 10px;
+}
+
+.lbite-onboarding-card-label {
+	font-weight: 600;
+	font-size: 14px;
+	color: #1d2327;
+	flex: 1;
+	padding-right: 40px; /* Platz für Pro-Badge */
+}
+
+/* Beschreibungstext */
+.lbite-onboarding-card-description {
+	font-size: 13px;
+	color: #6c757d;
+	margin: 0;
+	line-height: 1.5;
+}
+
+/* Pro-Hinweis */
+.lbite-onboarding-pro-notice {
+	margin-top: 10px;
+	font-size: 12px;
+}
+
+.lbite-onboarding-pro-notice a {
+	color: #f18500;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.lbite-onboarding-pro-notice a:hover {
+	text-decoration: underline;
+}
+
+/* Toggle-Button */
+.lbite-onboarding-toggle {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	flex-shrink: 0;
+}
+
+.lbite-onboarding-toggle:disabled {
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
+.lbite-onboarding-toggle-track {
+	display: inline-block;
+	width: 42px;
+	height: 24px;
+	background: #ccd0d4;
+	border-radius: 12px;
+	position: relative;
+	transition: background 0.2s;
+}
+
+.lbite-onboarding-toggle.is-active .lbite-onboarding-toggle-track {
+	background: #0073aa;
+}
+
+.lbite-onboarding-toggle-thumb {
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: 18px;
+	height: 18px;
+	background: #fff;
+	border-radius: 50%;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+	transition: transform 0.2s;
+}
+
+.lbite-onboarding-toggle.is-active .lbite-onboarding-toggle-thumb {
+	transform: translateX(18px);
+}
+
+.lbite-onboarding-toggle-label {
+	font-size: 12px;
+	font-weight: 700;
+	color: #6c757d;
+	min-width: 26px;
+	text-align: left;
+}
+
+.lbite-onboarding-toggle.is-active .lbite-onboarding-toggle-label {
+	color: #0073aa;
+}
+
+/* Karte hervorgehoben wenn aktiv */
+.lbite-onboarding-card:has(.lbite-onboarding-toggle.is-active) {
+	border-color: #0073aa;
+	background: #f0f8ff;
+}
+
+/* Nächste Schritte */
+.lbite-onboarding-next-steps {
+	background: #f8f9fa;
+	border: 1px solid #e2e4e7;
+	border-radius: 8px;
+	padding: 24px;
+	margin-top: 32px;
+	margin-bottom: 32px;
+}
+
+.lbite-onboarding-next-steps h2 {
+	margin: 0 0 16px 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.lbite-onboarding-checklist {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lbite-onboarding-checklist li {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	padding: 8px 0;
+	border-bottom: 1px solid #e2e4e7;
+}
+
+.lbite-onboarding-checklist li:last-child {
+	border-bottom: none;
+}
+
+.lbite-onboarding-check-icon {
+	font-size: 16px;
+	flex-shrink: 0;
+	color: #6c757d;
+}
+
+.lbite-onboarding-checklist a {
+	font-weight: 500;
+	color: #0073aa;
+	text-decoration: none;
+}
+
+.lbite-onboarding-checklist a:hover {
+	text-decoration: underline;
+}
+
+.lbite-onboarding-check-hint {
+	font-size: 12px;
+	color: #6c757d;
+	display: block;
+	margin-left: auto;
+}
+
+/* Footer / Abschluss-Button */
+.lbite-onboarding-footer {
+	text-align: center;
+	padding: 30px 0 40px;
+}
+
+.lbite-onboarding-footer .button-hero {
+	display: inline-flex;
+	align-items: center;
+	font-size: 16px;
+	padding: 12px 28px;
+	height: auto;
+}
+
+.lbite-onboarding-footer-hint {
+	margin-top: 12px;
+	color: #6c757d;
+	font-size: 13px;
+}
+
+/* Ladeanimation im Button */
+.lbite-onboarding-footer .button.is-loading {
+	opacity: 0.7;
+	pointer-events: none;
+}
