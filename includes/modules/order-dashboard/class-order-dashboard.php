@@ -22,16 +22,30 @@ class LBite_Order_Dashboard {
 	private $loader;
 
 	/**
-	 * Status-Definitionen
+	 * Status-Keys (für interne Validierung)
 	 *
 	 * @var array
 	 */
 	const STATUSES = array(
-		'incoming'  => 'Eingang',
-		'preparing' => 'Zubereiten',
-		'ready'     => 'Abholbereit',
-		'completed' => 'Abgeschlossen',
+		'incoming'  => 'incoming',
+		'preparing' => 'preparing',
+		'ready'     => 'ready',
+		'completed' => 'completed',
 	);
+
+	/**
+	 * Übersetzte Status-Labels zurückgeben
+	 *
+	 * @return array
+	 */
+	public static function get_status_labels() {
+		return array(
+			'incoming'  => __( 'Eingang', 'libre-bite' ),
+			'preparing' => __( 'Zubereiten', 'libre-bite' ),
+			'ready'     => __( 'Abholbereit', 'libre-bite' ),
+			'completed' => __( 'Abgeschlossen', 'libre-bite' ),
+		);
+	}
 
 	/**
 	 * Konstruktor
@@ -127,7 +141,7 @@ class LBite_Order_Dashboard {
 				'nonce'           => wp_create_nonce( 'lbite_dashboard_nonce' ),
 				'refreshInterval' => get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
 				'soundUrl'        => $sound_url,
-				'statuses'        => self::STATUSES,
+				'statuses'        => self::get_status_labels(),
 				'strings'         => array(
 					'orderUpdated' => __( 'Bestellung aktualisiert', 'libre-bite' ),
 					'updateError'  => __( 'Fehler beim Aktualisieren', 'libre-bite' ),
@@ -602,7 +616,7 @@ class LBite_Order_Dashboard {
 			<p>
 				<strong><?php esc_html_e( 'Aktueller Status:', 'libre-bite' ); ?></strong><br>
 				<span class="lbite-status-badge lbite-status-<?php echo esc_attr( $current_status ); ?>">
-					<?php echo esc_html( self::STATUSES[ $current_status ] ); ?>
+					<?php echo esc_html( self::get_status_labels()[ $current_status ] ); ?>
 				</span>
 			</p>
 

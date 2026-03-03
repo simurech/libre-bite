@@ -153,7 +153,7 @@ class LBite_Product_Options {
 		}
 
 		// Berechtigungen prüfen.
-		if ( ! current_user_can( 'manage_lbite_options', $post_id ) ) {
+		if ( ! current_user_can( 'lbite_manage_options', $post_id ) ) {
 			return;
 		}
 

@@ -373,7 +373,7 @@
 			let itemsHtml = '';
 			order.items.forEach(item => {
 				const safeName = escapeHtml(item.name);
-				const meta = item.meta ? '<div style="margin-left: 20px; font-size: 0.9em; color: #666;">' + item.meta + '</div>' : '';
+				const meta = item.meta ? '<div style="margin-left: 20px; font-size: 0.9em; color: #666;">' + escapeHtml(item.meta) + '</div>' : '';
 				itemsHtml += `<div class="lbite-kanban-card-item" style="margin-bottom: 8px;">
 					<strong>${item.quantity}x ${safeName}</strong>
 					${meta}
@@ -522,7 +522,7 @@
 						window.lbiteNotify && window.lbiteNotify.success('Bestellung storniert und Zahlung zurückerstattet');
 						this.loadOrders();
 					} else {
-						window.lbiteNotify && window.lbiteNotify.error('Fehler beim Stornieren: ' + (response.data && response.data.message ? response.data.message : 'Unbekannter Fehler'));
+						window.lbiteNotify && window.lbiteNotify.error('Fehler beim Stornieren: ' + escapeHtml(response.data && response.data.message ? response.data.message : 'Unbekannter Fehler'));
 						$card.css('opacity', '1').find('button').prop('disabled', false);
 					}
 				},

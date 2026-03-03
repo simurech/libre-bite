@@ -377,7 +377,7 @@
 			html += '<div class="lbite-option-group">';
 			html += '<div class="lbite-option-group-label">Variante wählen: <span style="color: red;">*</span></div>';
 			productData.variations.forEach((variation, index) => {
-				const variationName = variation.name || 'Variante ' + (index + 1);
+				const variationName = escapeHtml(variation.name || 'Variante ' + (index + 1));
 				const inputId = 'modal_choice_' + (choiceCounter++);
 				html += `
 					<label class="lbite-option-choice" for="${inputId}">

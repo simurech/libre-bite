@@ -327,7 +327,7 @@ class LBite_Checkout {
 				true
 			);
 
-			if ( lbite_feature_enabled( 'enable_tip' ) ) {
+			if ( lbite_feature_enabled( 'enable_tips' ) ) {
 				wp_enqueue_script(
 					'lbite-checkout-tip',
 					LBITE_PLUGIN_URL . 'assets/js/checkout-tip.js',

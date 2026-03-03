@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -156,6 +156,13 @@ Das Plugin verwendet die Standard-WordPress-i18n-Funktionen und kann über .pot-
 
 == Changelog ==
 
+= 1.0.7 =
+* Sicherheit: XSS-Escaping in dashboard.js ergänzt (item.meta, Fehlermeldung beim Stornieren).
+* Sicherheit: XSS-Escaping in pos.js ergänzt (variationName in Produkt-Modal).
+* Fix: Falscher Capability-Name in class-product-options.php korrigiert (manage_lbite_options → lbite_manage_options). Produkt-Optionen werden jetzt korrekt gespeichert.
+* Fix: Tippfehler beim Feature-Key in class-checkout.php behoben (enable_tip → enable_tips). Trinkgeld-JS wird jetzt für Pro-Nutzer korrekt geladen.
+* Fix: Status-Labels in class-order-dashboard.php durch WordPress-i18n übersetzbar gemacht (WordPress.org-Compliance).
+
 = 1.0.6 =
 * Fix: Premium-Override nur noch in der Pro-Version verfügbar (WordPress.org Compliance).
 * Fix: Nährwertangaben, Allergene und Sound-Benachrichtigungen korrekt als Pro-Funktionen markiert.
@@ -201,6 +208,9 @@ Das Plugin verwendet die Standard-WordPress-i18n-Funktionen und kann über .pot-
 * Hinzugefügt: Freemius-Integration für Pro-Funktionen.
 
 == Upgrade Notice ==
+
+= 1.0.7 =
+Sicherheits- und Bugfix-Release: XSS-Fixes in JS, korrektes Capability-Checking für Produkt-Optionen, Fix für Trinkgeld-Feature-Key. Update empfohlen.
 
 = 1.0.6 =
 Wartungsversion mit WordPress.org-Compliance-Fixes. Keine Breaking Changes.
