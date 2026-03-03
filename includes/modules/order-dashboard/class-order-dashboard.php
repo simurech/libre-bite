@@ -79,11 +79,6 @@ class LBite_Order_Dashboard {
 
 		// Neue Bestellung: Initial Status setzen
 		$this->loader->add_action( 'woocommerce_new_order', $this, 'set_initial_order_status' );
-
-		// Cron-Job aktivieren wenn nicht vorhanden
-		if ( ! wp_next_scheduled( 'lbite_check_scheduled_orders' ) ) {
-			wp_schedule_event( time(), 'every_minute', 'lbite_check_scheduled_orders' );
-		}
 	}
 
 	/**
@@ -182,7 +177,7 @@ class LBite_Order_Dashboard {
 
 		// Query for non-completed orders (no date restriction).
 		$args_active = array(
-			'limit'      => -1,
+			'limit'      => 200,
 			'status'     => array( 'processing', 'pending', 'on-hold' ),
 			'orderby'    => 'ID',
 			'order'      => 'ASC',
@@ -196,7 +191,7 @@ class LBite_Order_Dashboard {
 
 		// Query for completed orders (only from today).
 		$args_completed = array(
-			'limit'      => -1,
+			'limit'      => 200,
 			'status'     => array( 'completed' ),
 			'orderby'    => 'ID',
 			'order'      => 'ASC',
@@ -445,7 +440,6 @@ class LBite_Order_Dashboard {
 		$today_midnight = wp_date( 'Y-m-d 00:00:00' );
 
 		$args = array(
-			'limit'      => -1,
 			'status'     => array( 'completed' ),
 			'orderby'    => 'ID',
 			'order'      => 'DESC',
@@ -464,14 +458,17 @@ class LBite_Order_Dashboard {
 			),
 		);
 
-		$orders          = wc_get_orders( $args );
-		$formatted       = array();
-		$total_completed = count( $orders );
+		// Gesamtanzahl mit leichtgewichtiger IDs-Abfrage bestimmen.
+		$args_count      = array_merge( $args, array( 'return' => 'ids', 'limit' => -1 ) );
+		$total_completed = count( wc_get_orders( $args_count ) );
 
-		// Nur die angeforderten Bestellungen zurückgeben (ab offset, 10 Stück).
-		$orders_to_show = array_slice( $orders, $offset, 10 );
+		// Nur die angeforderten Bestellungen laden (paginiert).
+		$args['limit']  = 10;
+		$args['offset'] = $offset;
+		$orders         = wc_get_orders( $args );
+		$formatted      = array();
 
-		foreach ( $orders_to_show as $order ) {
+		foreach ( $orders as $order ) {
 			$formatted[] = $this->format_order_for_dashboard( $order );
 		}
 
@@ -492,7 +489,7 @@ class LBite_Order_Dashboard {
 		// Bestellungen mit Pickup-Zeit in der Zukunft
 		$orders = wc_get_orders(
 			array(
-				'limit'      => -1,
+				'limit'      => 100,
 				'status'     => array( 'processing', 'pending' ),
 				'meta_query' => array(
 					array(

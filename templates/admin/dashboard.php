@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 				$today_orders = wc_get_orders(
 					array(
-						'limit'        => -1,
+						'limit'        => 50,
 						'date_created' => '>' . strtotime( 'today' ),
 						'return'       => 'ids',
 					)

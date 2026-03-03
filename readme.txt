@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -155,6 +155,12 @@ Das Plugin verwendet die Standard-WordPress-i18n-Funktionen und kann über .pot-
 6. **Moduleinstellungen** — Einzelne Funktionen je nach Betriebsbedarf ein- oder ausschalten.
 
 == Changelog ==
+
+= 1.0.8 =
+* Sicherheit: POS-Bestellung verwendet jetzt serverseitigen Produktpreis statt Client-Preis (Manipulation verhindert).
+* Performance: wc_get_orders() mit unbegrenztem Limit (limit => -1) durch sinnvolle Obergrenzen ersetzt (Dashboard 50, Kanban 200, Cron 100).
+* Performance: Pagination in ajax_load_more_completed() auf echte DB-Pagination umgestellt (statt alle Bestellungen laden und slicen).
+* Code: Redundante Cron-Job-Registrierung aus Modul-Konstruktoren entfernt (Cron-Setup nur noch in Aktivierungs-Hook).
 
 = 1.0.7 =
 * Sicherheit: XSS-Escaping in dashboard.js ergänzt (item.meta, Fehlermeldung beim Stornieren).

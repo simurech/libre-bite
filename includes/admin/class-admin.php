@@ -663,7 +663,6 @@ class LBite_Admin {
 
 			$product_id = isset( $raw_item['id'] ) ? absint( $raw_item['id'] ) : 0;
 			$quantity   = isset( $raw_item['quantity'] ) ? (int) $raw_item['quantity'] : 0;
-			$price      = isset( $raw_item['price'] ) ? floatval( $raw_item['price'] ) : 0.0;
 			$meta       = isset( $raw_item['meta'] ) ? sanitize_text_field( $raw_item['meta'] ) : '';
 
 			if ( ! $product_id || $quantity <= 0 ) {
@@ -673,7 +672,6 @@ class LBite_Admin {
 			$cart_items[] = array(
 				'id'       => $product_id,
 				'quantity' => $quantity,
-				'price'    => $price,
 				'meta'     => $meta,
 			);
 		}
@@ -698,16 +696,19 @@ class LBite_Admin {
 			// Produkte hinzufügen.
 			foreach ( $cart_items as $item ) {
 				$product = wc_get_product( $item['id'] );
-				if ( ! $product ) {
+				if ( ! $product || ! $product->is_purchasable() ) {
 					continue;
 				}
+
+				// Client-Preis ignorieren – echten Produktpreis aus WooCommerce verwenden.
+				$price = (float) $product->get_price();
 
 				$order_item_id = $order->add_product(
 					$product,
 					$item['quantity'],
 					array(
-						'subtotal' => $item['price'] * $item['quantity'],
-						'total'    => $item['price'] * $item['quantity'],
+						'subtotal' => $price * $item['quantity'],
+						'total'    => $price * $item['quantity'],
 					)
 				);
 

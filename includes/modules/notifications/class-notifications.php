@@ -40,11 +40,6 @@ class LBite_Notifications {
 
 		// Pickup-Reminder Cron
 		$this->loader->add_action( 'lbite_send_pickup_reminders', $this, 'send_pickup_reminders' );
-
-		// Cron-Job aktivieren
-		if ( ! wp_next_scheduled( 'lbite_send_pickup_reminders' ) ) {
-			wp_schedule_event( time(), 'every_minute', 'lbite_send_pickup_reminders' );
-		}
 	}
 
 	/**
@@ -73,7 +68,7 @@ class LBite_Notifications {
 		// Bestellungen mit Pickup-Zeit in den nächsten X Minuten
 		$orders = wc_get_orders(
 			array(
-				'limit'      => -1,
+				'limit'      => 100,
 				'status'     => array( 'processing', 'on-hold' ),
 				'meta_query' => array(
 					array(
