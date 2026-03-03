@@ -52,9 +52,11 @@ yarn-error.log*
 # Plugin specific
 migrate.php
 
-# Internal Docs
+# Internal Docs (nicht für GitHub)
 MASSNAHMENPLAN.md
 WPORG-REVIEW-PLAN.md
+GEMINI.md
+CLAUDE.md
 
 # Lokale Hilfs- und Konfigdateien
 .claude/
@@ -69,4 +71,3 @@ WPORG-REVIEW-PLAN.md
 .windsurf/
 .cursor-tasks/
 .llm-cache/
-GEMINI.md
