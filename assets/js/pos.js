@@ -644,9 +644,9 @@
 			$('#lbite-payment-modal-items').html(itemsHtml);
 			$('#lbite-payment-modal-total').text(this.formatPrice(total));
 
-			// Zahlungsart zurücksetzen
+			// Zahlungsart zurücksetzen (ersten verfügbaren aktivieren)
 			$('#lbite-payment-modal input[name="lbite-payment-method"]').prop('checked', false);
-			$('#lbite-payment-method-cash').prop('checked', true);
+			$('#lbite-payment-modal input[name="lbite-payment-method"]:first').prop('checked', true);
 
 			$('#lbite-payment-modal').fadeIn(200);
 		},

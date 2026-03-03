@@ -686,10 +686,13 @@ class LBite_Admin {
 		$customer_name  = isset( $_POST['customer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_name'] ) ) : '';
 		$payment_method = isset( $_POST['payment_method'] ) ? sanitize_key( wp_unslash( $_POST['payment_method'] ) ) : 'cash';
 
-		// Nur erlaubte Zahlungsarten akzeptieren.
-		$allowed_payment_methods = array( 'cash', 'card', 'twint', 'other' );
+		// Erlaubte Zahlungsarten aus Einstellungen lesen (Fallback: alle vier Standardarten).
+		$configured_methods      = get_option( 'lbite_pos_payment_methods', array() );
+		$allowed_payment_methods = ! empty( $configured_methods )
+			? array_column( $configured_methods, 'key' )
+			: array( 'cash', 'card', 'twint', 'other' );
 		if ( ! in_array( $payment_method, $allowed_payment_methods, true ) ) {
-			$payment_method = 'other';
+			$payment_method = $allowed_payment_methods[0] ?? 'other';
 		}
 
 		if ( ! $location_id ) {

@@ -116,29 +116,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 
 				<!-- Zahlungsart wählen -->
+				<?php
+				$icons = array( 'cash' => '💵', 'card' => '💳', 'twint' => '📱', 'other' => '💱' );
+				$saved_pm = get_option( 'lbite_pos_payment_methods', array() );
+				// Fallback: alle vier aktiv wenn Option leer
+				if ( empty( $saved_pm ) ) {
+					$saved_pm = array(
+						array( 'key' => 'cash',  'label' => 'Bar',    'enabled' => true ),
+						array( 'key' => 'card',  'label' => 'Karte',  'enabled' => true ),
+						array( 'key' => 'twint', 'label' => 'Twint',  'enabled' => true ),
+						array( 'key' => 'other', 'label' => 'Andere', 'enabled' => true ),
+					);
+				}
+				$active_pm = array_filter( $saved_pm, fn( $m ) => ! empty( $m['enabled'] ) );
+				$active_pm = array_values( $active_pm );
+				$first     = true;
+				?>
 				<div class="lbite-payment-method-group">
 					<p class="lbite-payment-method-label"><strong><?php esc_html_e( 'Zahlungsart:', 'libre-bite' ); ?></strong></p>
 					<div class="lbite-payment-method-options">
+						<?php foreach ( $active_pm as $pm ) : ?>
 						<label class="lbite-payment-method-option">
-							<input type="radio" id="lbite-payment-method-cash" name="lbite-payment-method" value="cash" checked>
-							<span class="lbite-payment-method-icon">💵</span>
-							<span><?php esc_html_e( 'Bar', 'libre-bite' ); ?></span>
+							<input
+								type="radio"
+								id="lbite-payment-method-<?php echo esc_attr( $pm['key'] ); ?>"
+								name="lbite-payment-method"
+								value="<?php echo esc_attr( $pm['key'] ); ?>"
+								<?php echo $first ? 'checked' : ''; ?>
+							>
+							<span class="lbite-payment-method-icon"><?php echo esc_html( $icons[ $pm['key'] ] ?? '💱' ); ?></span>
+							<span><?php echo esc_html( $pm['label'] ); ?></span>
 						</label>
-						<label class="lbite-payment-method-option">
-							<input type="radio" id="lbite-payment-method-card" name="lbite-payment-method" value="card">
-							<span class="lbite-payment-method-icon">💳</span>
-							<span><?php esc_html_e( 'Karte', 'libre-bite' ); ?></span>
-						</label>
-						<label class="lbite-payment-method-option">
-							<input type="radio" id="lbite-payment-method-twint" name="lbite-payment-method" value="twint">
-							<span class="lbite-payment-method-icon">📱</span>
-							<span>Twint</span>
-						</label>
-						<label class="lbite-payment-method-option">
-							<input type="radio" id="lbite-payment-method-other" name="lbite-payment-method" value="other">
-							<span class="lbite-payment-method-icon">💱</span>
-							<span><?php esc_html_e( 'Andere', 'libre-bite' ); ?></span>
-						</label>
+						<?php $first = false; ?>
+						<?php endforeach; ?>
 					</div>
 				</div>
 

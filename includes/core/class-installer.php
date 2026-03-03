@@ -91,6 +91,14 @@ class LBite_Installer {
 	 */
 	private static function set_default_options() {
 		$defaults = array(
+			// POS-Zahlungsarten
+			'lbite_pos_payment_methods'       => array(
+				array( 'key' => 'cash',  'label' => 'Bar',    'enabled' => true ),
+				array( 'key' => 'card',  'label' => 'Karte',  'enabled' => true ),
+				array( 'key' => 'twint', 'label' => 'Twint',  'enabled' => true ),
+				array( 'key' => 'other', 'label' => 'Andere', 'enabled' => true ),
+			),
+
 			// Checkout-Einstellungen
 			'lbite_checkout_fields'           => array(),
 

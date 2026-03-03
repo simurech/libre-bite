@@ -51,6 +51,31 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 	update_option( 'lbite_timeslot_interval', isset( $_POST['lbite_timeslot_interval'] ) ? intval( wp_unslash( $_POST['lbite_timeslot_interval'] ) ) : 15 );
 	update_option( 'lbite_dashboard_refresh_interval', isset( $_POST['lbite_dashboard_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_dashboard_refresh_interval'] ) ) : 30 );
 	update_option( 'lbite_notification_sound', isset( $_POST['lbite_notification_sound'] ) ? esc_url_raw( wp_unslash( $_POST['lbite_notification_sound'] ) ) : '' );
+
+	// POS-Zahlungsarten speichern
+	$default_methods = array(
+		array( 'key' => 'cash',  'label' => 'Bar',    'icon' => '💵' ),
+		array( 'key' => 'card',  'label' => 'Karte',  'icon' => '💳' ),
+		array( 'key' => 'twint', 'label' => 'Twint',  'icon' => '📱' ),
+		array( 'key' => 'other', 'label' => 'Andere', 'icon' => '💱' ),
+	);
+	$payment_methods = array();
+	foreach ( $default_methods as $method ) {
+		$key     = $method['key'];
+		$enabled = isset( $_POST['lbite_pm_enabled'][ $key ] );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$label   = isset( $_POST['lbite_pm_label'][ $key ] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pm_label'][ $key ] ) ) : $method['label'];
+		if ( empty( $label ) ) {
+			$label = $method['label'];
+		}
+		$payment_methods[] = array(
+			'key'     => $key,
+			'label'   => $label,
+			'enabled' => $enabled,
+		);
+	}
+	update_option( 'lbite_pos_payment_methods', $payment_methods );
+
 	update_option( 'lbite_delete_data_on_uninstall', isset( $_POST['lbite_delete_data_on_uninstall'] ) );
 
 	echo '<div class="notice notice-success"><p>' . esc_html__( 'Einstellungen gespeichert', 'libre-bite' ) . '</p></div>';
@@ -68,6 +93,27 @@ $pickup_reminder_time         = get_option( 'lbite_pickup_reminder_time', 15 );
 $timeslot_interval            = get_option( 'lbite_timeslot_interval', 15 );
 $dashboard_refresh_interval   = get_option( 'lbite_dashboard_refresh_interval', 30 );
 $delete_data_on_uninstall     = get_option( 'lbite_delete_data_on_uninstall', false );
+
+// POS-Zahlungsarten
+$pos_payment_methods_default = array(
+	array( 'key' => 'cash',  'label' => 'Bar',    'icon' => '💵', 'enabled' => true ),
+	array( 'key' => 'card',  'label' => 'Karte',  'icon' => '💳', 'enabled' => true ),
+	array( 'key' => 'twint', 'label' => 'Twint',  'icon' => '📱', 'enabled' => true ),
+	array( 'key' => 'other', 'label' => 'Andere', 'icon' => '💱', 'enabled' => true ),
+);
+$saved_methods = get_option( 'lbite_pos_payment_methods', array() );
+// Gespeicherte Werte mit Defaults zusammenführen (Reihenfolge und Icons aus Default beibehalten)
+$pos_payment_methods = array();
+foreach ( $pos_payment_methods_default as $default ) {
+	$saved = array_filter( $saved_methods, fn( $m ) => $m['key'] === $default['key'] );
+	$saved = $saved ? array_values( $saved )[0] : array();
+	$pos_payment_methods[] = array(
+		'key'     => $default['key'],
+		'label'   => ! empty( $saved['label'] ) ? $saved['label'] : $default['label'],
+		'icon'    => $default['icon'],
+		'enabled' => isset( $saved['enabled'] ) ? (bool) $saved['enabled'] : $default['enabled'],
+	);
+}
 
 // Branding settings.
 $brand_name      = get_option( 'lbite_brand_name', '' );
@@ -302,6 +348,54 @@ $all_pages = get_pages( array( 'post_status' => 'publish' ) );
 					</button>
 					<span class="spinner" id="lbite_theme_colors_spinner" style="float: none; margin-top: 0;"></span>
 					<p class="description"><?php esc_html_e( 'Versucht, die Farben aus Ihrem aktiven Theme zu übernehmen.', 'libre-bite' ); ?></p>
+				</td>
+			</tr>
+		</table>
+
+		<h2><?php esc_html_e( 'Kassensystem (POS)', 'libre-bite' ); ?></h2>
+		<table class="form-table">
+			<tr>
+				<th><?php esc_html_e( 'Zahlungsarten', 'libre-bite' ); ?></th>
+				<td>
+					<p class="description" style="margin-bottom: 12px;">
+						<?php esc_html_e( 'Wähle, welche Zahlungsarten im POS-Zahlungs-Modal angezeigt werden, und passe die Bezeichnungen an.', 'libre-bite' ); ?>
+					</p>
+					<table class="widefat" style="max-width: 480px;">
+						<thead>
+							<tr>
+								<th style="width: 40px;"><?php esc_html_e( 'Aktiv', 'libre-bite' ); ?></th>
+								<th style="width: 32px;"></th>
+								<th><?php esc_html_e( 'Bezeichnung', 'libre-bite' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ( $pos_payment_methods as $method ) : ?>
+							<tr>
+								<td>
+									<input
+										type="checkbox"
+										name="lbite_pm_enabled[<?php echo esc_attr( $method['key'] ); ?>]"
+										value="1"
+										<?php checked( $method['enabled'] ); ?>
+									>
+								</td>
+								<td style="font-size: 20px; text-align: center; line-height: 1;"><?php echo esc_html( $method['icon'] ); ?></td>
+								<td>
+									<input
+										type="text"
+										name="lbite_pm_label[<?php echo esc_attr( $method['key'] ); ?>]"
+										value="<?php echo esc_attr( $method['label'] ); ?>"
+										class="regular-text"
+										style="max-width: 200px;"
+									>
+								</td>
+							</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+					<p class="description" style="margin-top: 8px;">
+						<?php esc_html_e( 'Es muss mindestens eine Zahlungsart aktiv sein.', 'libre-bite' ); ?>
+					</p>
 				</td>
 			</tr>
 		</table>
