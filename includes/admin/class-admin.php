@@ -453,6 +453,15 @@ class LBite_Admin {
 				LBITE_VERSION
 			);
 
+			// SortableJS registrieren (wird vom Dashboard als Abhängigkeit benötigt)
+			wp_register_script(
+				'sortablejs',
+				LBITE_PLUGIN_URL . 'assets/js/vendor/sortable.min.js',
+				array(),
+				LBITE_VERSION,
+				true
+			);
+
 			wp_enqueue_script(
 				'lbite-dashboard',
 				LBITE_PLUGIN_URL . 'assets/js/dashboard.js',

@@ -253,17 +253,6 @@ $feature_groups = array(
 		</p>
 	</form>
 
-	<div class="lbite-developer-info" style="margin-top: 40px; padding: 20px; background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #72aee6; border-radius: 4px;">
-		<h3><?php esc_html_e( 'Entwickler-Informationen', 'libre-bite' ); ?></h3>
-		<p>
-			<?php esc_html_e( 'Einige Funktionen sind als Premium markiert. Diese erfordern normalerweise ein aktives Freemius-Abonnement.', 'libre-bite' ); ?>
-		</p>
-		<p>
-			<strong><?php esc_html_e( 'Pro-Modus erzwingen:', 'libre-bite' ); ?></strong><br>
-			<?php esc_html_e( 'Um alle Premium-Funktionen zu Testzwecken freizuschalten, fügen Sie folgende Zeile in Ihre', 'libre-bite' ); ?> <code>wp-config.php</code> <?php esc_html_e( 'ein:', 'libre-bite' ); ?><br>
-			<code>define( 'LBITE_PREMIUM_OVERRIDE', true );</code>
-		</p>
-	</div>
 </div>
 
 
