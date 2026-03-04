@@ -168,6 +168,11 @@ body .lbite-checkout-optimized #order_review_heading {
 	text-align: left;
 }
 
+/* Rahmen auf #order_review entfernen (Theme setzt form #order_review auf 2px border) */
+body .lbite-checkout-optimized #order_review {
+	border: none !important;
+}
+
 /* blockUI-Ladeoverlay auf Produkttabelle und Zahlungsbereich ausblenden.
  * WooCommerce blockiert diese Elemente während update_order_review AJAX-Aufrufen.
  * Im optimierten Checkout ist dieses Blocking nicht erwünscht, da es die Interaktion
