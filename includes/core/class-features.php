@@ -66,6 +66,13 @@ class LBite_Features {
 			'label'       => 'Stornierung',
 			'description' => 'Kunden können Bestellungen selbst stornieren',
 		),
+		'enable_table_ordering'     => array(
+			'group'       => 'order_system',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Tischbestellung',
+			'description' => 'Bestellung am Tisch via QR-Code ermöglichen',
+		),
 
 		// Checkout
 		'enable_optimized_checkout' => array(

@@ -133,7 +133,7 @@ class LBite_POS {
 		$products = get_posts(
 			array(
 				'post_type'      => 'product',
-				'posts_per_page' => -1,
+				'posts_per_page' => 500, // Begrenzt auf 500 für Performance.
 				'post_status'    => 'publish',
 				'orderby'        => 'title',
 				'order'          => 'ASC',
@@ -278,7 +278,7 @@ class LBite_POS {
 
 		$args = array(
 			'post_type'      => 'product',
-			'posts_per_page' => -1,
+			'posts_per_page' => 500, // Begrenzt für Performance.
 			'post_status'    => 'publish',
 			'orderby'        => 'title',
 			'order'          => 'ASC',

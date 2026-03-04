@@ -139,9 +139,10 @@
 			$(document).on('click', '#lbite-payment-modal-confirm', function() {
 				const paymentMethod = $('input[name="lbite-payment-method"]:checked').val() || 'cash';
 				const locationId = $('#lbite-pos-location').val();
+				const tableId = $('#lbite-pos-table').val() || 0;
 				const customerName = $('#lbite-pos-customer-name').val().trim();
 				POS.closePaymentModal();
-				POS.createOrder(locationId, 'now', '', customerName, paymentMethod);
+				POS.createOrder(locationId, 'now', '', customerName, paymentMethod, tableId);
 			});
 		},
 
@@ -149,42 +150,16 @@
 		 * Lade-Overlay anzeigen
 		 */
 		showLoading: function(message = 'Laden...') {
-			if ($('#lbite-pos-loading').length === 0) {
-				$('body').append(`
-					<div id="lbite-pos-loading" style="
-						position: fixed;
-						top: 0;
-						left: 0;
-						right: 0;
-						bottom: 0;
-						background: rgba(255,255,255,0.9);
-						display: flex;
-						flex-direction: column;
-						align-items: center;
-						justify-content: center;
-						z-index: 99999;
-					">
-						<div style="
-							width: 50px;
-							height: 50px;
-							border: 4px solid #e0e0e0;
-							border-top: 4px solid #0073aa;
-							border-radius: 50%;
-							animation: lbite-pos-spin 0.8s linear infinite;
-						"></div>
-						<p id="lbite-pos-loading-text" style="margin-top: 15px; font-size: 16px; color: #333; font-weight: 500;">${message}</p>
-					</div>
-					<style>
-						@keyframes lbite-pos-spin {
-							0% { transform: rotate(0deg); }
-							100% { transform: rotate(360deg); }
-						}
-					</style>
-				`);
+			let $overlay = $('#lbite-pos-loading');
+			if ($overlay.length === 0) {
+				$overlay = $('<div id="lbite-pos-loading"></div>');
+				$overlay.append('<div class="lbite-pos-spinner"></div>');
+				$overlay.append($('<p id="lbite-pos-loading-text"></p>').text(message));
+				$('body').append($overlay);
 			} else {
 				$('#lbite-pos-loading-text').text(message);
 			}
-			$('#lbite-pos-loading').fadeIn(100);
+			$overlay.fadeIn(100);
 		},
 
 		/**
@@ -212,20 +187,10 @@
 			}
 			this.isLoadingProducts = true;
 
-			$('#lbite-product-grid').html(`
-				<div style="text-align: center; padding: 40px;">
-					<div style="
-						width: 40px;
-						height: 40px;
-						border: 3px solid #e0e0e0;
-						border-top: 3px solid #0073aa;
-						border-radius: 50%;
-						animation: lbite-pos-spin 0.8s linear infinite;
-						margin: 0 auto 15px;
-					"></div>
-					<p style="color: #666;">Produkte werden geladen...</p>
-				</div>
-			`);
+			const $loading = $('<div class="lbite-pos-loading-container"></div>');
+			$loading.append('<div class="lbite-pos-inline-spinner"></div>');
+			$loading.append($('<p></p>').text('Produkte werden geladen...'));
+			$('#lbite-product-grid').html($loading);
 
 			$.ajax({
 				url: lbitePos.ajaxUrl,
@@ -243,7 +208,10 @@
 					}
 				},
 				error: () => {
-					$('#lbite-product-grid').html('<p style="text-align: center; padding: 20px; color: red;">Fehler beim Laden der Produkte. <button onclick="POS.clearCacheAndReload()" class="button">Erneut versuchen</button></p>');
+					const $error = $('<p class="lbite-pos-error-message"></p>');
+					$error.text('Fehler beim Laden der Produkte. ');
+					$error.append($('<button class="button">Erneut versuchen</button>').on('click', () => this.clearCacheAndReload()));
+					$('#lbite-product-grid').html($error);
 				},
 				complete: () => {
 					this.isLoadingProducts = false;
@@ -272,21 +240,23 @@
 			$grid.empty();
 
 			products.forEach(product => {
-				const safeName = escapeHtml(product.name);
-				const imageHtml = product.image
-					? `<img src="${product.image}" alt="${safeName}" style="max-width: 100%; height: auto; margin-bottom: 5px;">`
-					: '';
-
 				const hasConfig = product.has_variations || product.has_options;
-				const configClass = hasConfig ? 'lbite-product-has-config' : '';
+				const $item = $('<div class="lbite-pos-product-item"></div>')
+					.attr('data-product-id', product.id)
+					.attr('data-has-config', hasConfig);
 
-				const $item = $(`
-					<div class="lbite-pos-product-item ${configClass}" data-product-id="${product.id}" data-has-config="${hasConfig}">
-						${imageHtml}
-						<div class="lbite-pos-product-name">${safeName}</div>
-						<div class="lbite-pos-product-price">${this.formatPrice(product.price)}</div>
-					</div>
-				`);
+				if (hasConfig) {
+					$item.addClass('lbite-product-has-config');
+				}
+
+				if (product.image) {
+					$item.append($('<img>')
+						.attr('src', product.image)
+						.attr('alt', product.name));
+				}
+
+				$item.append($('<div class="lbite-pos-product-name"></div>').text(product.name));
+				$item.append($('<div class="lbite-pos-product-price"></div>').text(this.formatPrice(product.price)));
 
 				$item.on('click', () => {
 					if (hasConfig) {
@@ -335,20 +305,10 @@
 			}
 
 			$('#lbite-modal-product-name').text('Laden...');
-			$('#lbite-modal-body').html(`
-				<div style="text-align: center; padding: 30px;">
-					<div style="
-						width: 30px;
-						height: 30px;
-						border: 3px solid #e0e0e0;
-						border-top: 3px solid #0073aa;
-						border-radius: 50%;
-						animation: lbite-pos-spin 0.8s linear infinite;
-						margin: 0 auto 10px;
-					"></div>
-					<p style="color: #666; margin: 0;">Produktdetails werden geladen...</p>
-				</div>
-			`);
+			const $loading = $('<div class="lbite-pos-modal-loading"></div>');
+			$loading.append('<div class="lbite-pos-modal-spinner"></div>');
+			$loading.append($('<p></p>').text('Produktdetails werden geladen...'));
+			$('#lbite-modal-body').html($loading);
 
 			// Produkt-Details via AJAX laden (Fallback)
 			$.ajax({
@@ -383,55 +343,77 @@
 	renderProductModal: function(productData) {
 		$('#lbite-modal-product-name').text(productData.name);
 
-		let html = '';
+		const $body = $('#lbite-modal-body');
+		$body.empty();
+		
 		let choiceCounter = 0;
 
 		// Varianten rendern
 		if (productData.variations && productData.variations.length > 0) {
-			html += '<div class="lbite-option-group">';
-			html += '<div class="lbite-option-group-label">Variante wählen: <span style="color: red;">*</span></div>';
+			const $group = $('<div class="lbite-option-group"></div>');
+			$group.append($('<div class="lbite-option-group-label"></div>').html('Variante wählen: <span style="color: red;">*</span>'));
+			
 			productData.variations.forEach((variation, index) => {
-				const variationName = escapeHtml(variation.name || 'Variante ' + (index + 1));
 				const inputId = 'modal_choice_' + (choiceCounter++);
-				html += `
-					<label class="lbite-option-choice" for="${inputId}">
-						<input type="radio" id="${inputId}" name="variation" value="${variation.id}" ${index === 0 ? 'checked' : ''} data-price="${variation.price}">
-						<span class="lbite-option-choice-label">${variationName}</span>
-						<span class="lbite-option-choice-price">${this.formatPrice(variation.price)}</span>
-					</label>
-				`;
+				const $label = $('<label class="lbite-option-choice"></label>').attr('for', inputId);
+				
+				const $radio = $('<input type="radio" name="variation">')
+					.attr('id', inputId)
+					.val(variation.id)
+					.attr('data-price', variation.price);
+				
+				if (index === 0) {
+					$radio.prop('checked', true);
+				}
+				
+				$label.append($radio);
+				$label.append($('<span class="lbite-option-choice-label"></span>').text(variation.name || 'Variante ' + (index + 1)));
+				$label.append($('<span class="lbite-option-choice-price"></span>').text(this.formatPrice(variation.price)));
+				
+				$group.append($label);
 			});
-			html += '</div>';
+			$body.append($group);
 		}
 
 		// Optionen rendern
 		if (productData.options && productData.options.length > 0) {
 			productData.options.forEach(option => {
-				html += '<div class="lbite-option-group">';
-				html += `<div class="lbite-option-group-label">${escapeHtml(option.name)}${option.required ? ' <span style="color: red;">*</span>' : ''}</div>`;
+				const $group = $('<div class="lbite-option-group"></div>');
+				const $labelDiv = $('<div class="lbite-option-group-label"></div>').text(option.name);
+				if (option.required) {
+					$labelDiv.append(' <span style="color: red;">*</span>');
+				}
+				$group.append($labelDiv);
 
 				option.choices.forEach((choice, choiceIndex) => {
 					const inputType = option.type === 'checkbox' ? 'checkbox' : 'radio';
 					const inputName = option.type === 'checkbox' ? `option_${option.id}[]` : `option_${option.id}`;
 					const inputId = 'modal_choice_' + (choiceCounter++);
 
-					html += `
-						<label class="lbite-option-choice" for="${inputId}">
-							<input type="${inputType}" id="${inputId}" name="${inputName}" value="${escapeHtml(choice.label)}" data-price="${choice.price}" data-option-id="${option.id}">
-							<span class="lbite-option-choice-label">${escapeHtml(choice.label)}</span>
-							${choice.price > 0 ? `<span class="lbite-option-choice-price">+${this.formatPrice(choice.price)}</span>` : ''}
-						</label>
-					`;
+					const $label = $('<label class="lbite-option-choice"></label>').attr('for', inputId);
+					const $input = $(`<input type="${inputType}">`)
+						.attr('id', inputId)
+						.attr('name', inputName)
+						.val(choice.label)
+						.attr('data-price', choice.price)
+						.attr('data-option-id', option.id);
+						
+					$label.append($input);
+					$label.append($('<span class="lbite-option-choice-label"></span>').text(choice.label));
+					
+					if (choice.price > 0) {
+						$label.append($('<span class="lbite-option-choice-price"></span>').text(`+${this.formatPrice(choice.price)}`));
+					}
+					
+					$group.append($label);
 				});
-				html += '</div>';
+				$body.append($group);
 			});
 		}
 
-		if (!html) {
-			html = '<p>Keine Konfiguration erforderlich.</p>';
+		if ($body.is(':empty')) {
+			$body.append($('<p></p>').text('Keine Konfiguration erforderlich.'));
 		}
-
-		$('#lbite-modal-body').html(html);
 	},
 
 		/**
@@ -552,31 +534,29 @@
 			$cartItems.empty();
 
 			if (this.cart.length === 0) {
-				$cartItems.html('<p style="text-align: center; color: #999;">Warenkorb ist leer</p>');
+				$cartItems.append($('<p style="text-align: center; color: #999;"></p>').text('Warenkorb ist leer'));
 				$('#lbite-pos-subtotal, #lbite-pos-total').text(this.formatPrice(0));
 				return;
 			}
 
 			this.cart.forEach((item, index) => {
 				const itemTotal = item.price * item.quantity;
-				const metaHtml = item.meta ? `<div style="font-size: 0.9em; color: #666; margin-top: 3px;">${escapeHtml(item.meta)}</div>` : '';
-				const safeName = escapeHtml(item.name);
-
-				const $item = $(`
-					<div class="lbite-pos-cart-item">
-						<div class="lbite-pos-cart-item-name">
-							${safeName}
-							${metaHtml}
-						</div>
-						<div class="lbite-pos-cart-item-qty">
-							<button class="lbite-cart-qty-minus" data-cart-index="${index}">−</button>
-							<span>${item.quantity}</span>
-							<button class="lbite-cart-qty-plus" data-cart-index="${index}">+</button>
-						</div>
-						<div class="lbite-pos-cart-item-price">${this.formatPrice(itemTotal)}</div>
-						<span class="lbite-cart-item-remove dashicons dashicons-trash" data-cart-index="${index}"></span>
-					</div>
-				`);
+				const $item = $('<div class="lbite-pos-cart-item"></div>');
+				
+				const $nameDiv = $('<div class="lbite-pos-cart-item-name"></div>').text(item.name);
+				if (item.meta) {
+					$nameDiv.append($('<div class="lbite-pos-cart-meta"></div>').text(item.meta));
+				}
+				$item.append($nameDiv);
+				
+				const $qtyDiv = $('<div class="lbite-pos-cart-item-qty"></div>');
+				$qtyDiv.append($('<button class="lbite-cart-qty-minus">−</button>').attr('data-cart-index', index));
+				$qtyDiv.append($('<span></span>').text(item.quantity));
+				$qtyDiv.append($('<button class="lbite-cart-qty-plus">+</button>').attr('data-cart-index', index));
+				$item.append($qtyDiv);
+				
+				$item.append($('<div class="lbite-pos-cart-item-price"></div>').text(this.formatPrice(itemTotal)));
+				$item.append($('<span class="lbite-cart-item-remove dashicons dashicons-trash"></span>').attr('data-cart-index', index));
 
 				$cartItems.append($item);
 			});
@@ -631,17 +611,21 @@
 			const total = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
 			// Bestellpositionen rendern
-			let itemsHtml = '';
-			this.cart.forEach(function(item) {
-				const metaStr = item.meta ? ' <small>(' + escapeHtml(item.meta) + ')</small>' : '';
-				itemsHtml += '<div class="lbite-payment-modal-item">' +
-					'<span class="lbite-payment-modal-item-name">' + escapeHtml(item.name) + metaStr + '</span>' +
-					'<span class="lbite-payment-modal-item-qty">&times; ' + item.quantity + '</span>' +
-					'<span class="lbite-payment-modal-item-price">' + POS.formatPrice(item.price * item.quantity) + '</span>' +
-					'</div>';
+			const $items = $('#lbite-payment-modal-items');
+			$items.empty();
+
+			this.cart.forEach((item) => {
+				const $row = $('<div class="lbite-payment-modal-item"></div>');
+				const $name = $('<span class="lbite-payment-modal-item-name"></span>').text(item.name);
+				if (item.meta) {
+					$name.append($('<small></small>').text(` (${item.meta})`));
+				}
+				$row.append($name);
+				$row.append($('<span class="lbite-payment-modal-item-qty"></span>').text(`× ${item.quantity}`));
+				$row.append($('<span class="lbite-payment-modal-item-price"></span>').text(this.formatPrice(item.price * item.quantity)));
+				$items.append($row);
 			});
 
-			$('#lbite-payment-modal-items').html(itemsHtml);
 			$('#lbite-payment-modal-total').text(this.formatPrice(total));
 
 			// Zahlungsart zurücksetzen (ersten verfügbaren aktivieren)
@@ -661,7 +645,7 @@
 		/**
 		 * Bestellung erstellen
 		 */
-		createOrder: function(locationId, orderType, pickupTime, customerName, paymentMethod) {
+		createOrder: function(locationId, orderType, pickupTime, customerName, paymentMethod, tableId = 0) {
 			// Doppelklick-Schutz.
 			this.isProcessingOrder = true;
 
@@ -677,6 +661,7 @@
 					nonce: lbitePos.nonce,
 					cart_items: JSON.stringify(this.cart),
 					location_id: locationId,
+					table_id: tableId,
 					order_type: orderType,
 					pickup_time: pickupTime,
 					customer_name: customerName,

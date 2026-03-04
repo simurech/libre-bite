@@ -19,22 +19,56 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<!-- Standort-Auswahl -->
-	<div class="lbite-pos-location-selector">
-		<label for="lbite-pos-location">
-			<strong><?php esc_html_e( 'Standort:', 'libre-bite' ); ?></strong>
-		</label>
-		<select id="lbite-pos-location" class="lbite-pos-location-select">
-			<option value=""><?php esc_html_e( 'Bitte Standort wählen', 'libre-bite' ); ?></option>
-			<?php
-			$locations = LBite_Locations::get_all_locations();
-			$selected_location = get_user_meta( get_current_user_id(), 'lbite_pos_location', true );
-			foreach ( $locations as $location ) :
+	<div class="lbite-pos-location-selector" style="display: flex; gap: 20px; align-items: flex-end; margin-bottom: 20px;">
+		<div>
+			<label for="lbite-pos-location">
+				<strong><?php esc_html_e( 'Standort:', 'libre-bite' ); ?></strong>
+			</label>
+			<select id="lbite-pos-location" class="lbite-pos-location-select">
+				<option value=""><?php esc_html_e( 'Bitte Standort wählen', 'libre-bite' ); ?></option>
+				<?php
+				$locations = LBite_Locations::get_all_locations();
+				$selected_location = get_user_meta( get_current_user_id(), 'lbite_pos_location', true );
+				foreach ( $locations as $location ) :
+					?>
+					<option value="<?php echo esc_attr( $location->ID ); ?>" <?php selected( $selected_location, $location->ID ); ?>>
+						<?php echo esc_html( $location->post_title ); ?>
+					</option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+
+		<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
+		<div id="lbite-pos-table-selector-container" style="<?php echo ! $selected_location ? 'display: none;' : ''; ?>">
+			<label for="lbite-pos-table">
+				<strong><?php esc_html_e( 'Tisch (optional):', 'libre-bite' ); ?></strong>
+			</label>
+			<select id="lbite-pos-table" class="lbite-pos-table-select">
+				<option value=""><?php esc_html_e( 'Kein Tisch', 'libre-bite' ); ?></option>
+				<?php
+				if ( $selected_location ) {
+					$tables = get_posts( array(
+						'post_type'      => 'lbite_table',
+						'posts_per_page' => 100,
+						'meta_query'     => array(
+							array(
+								'key'   => '_lbite_location_id',
+								'value' => $selected_location,
+							),
+						),
+					) );
+					foreach ( $tables as $table ) :
+						?>
+						<option value="<?php echo esc_attr( $table->ID ); ?>">
+							<?php echo esc_html( $table->post_title ); ?>
+						</option>
+						<?php
+					endforeach;
+				}
 				?>
-				<option value="<?php echo esc_attr( $location->ID ); ?>" <?php selected( $selected_location, $location->ID ); ?>>
-					<?php echo esc_html( $location->post_title ); ?>
-				</option>
-			<?php endforeach; ?>
-		</select>
+			</select>
+		</div>
+		<?php endif; ?>
 	</div>
 
 	<div class="lbite-pos-container">

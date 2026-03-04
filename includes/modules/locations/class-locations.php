@@ -426,7 +426,7 @@ class LBite_Locations {
 		$locations = get_posts(
 			array(
 				'post_type'      => self::POST_TYPE,
-				'posts_per_page' => -1,
+				'posts_per_page' => 100, // Begrenzt für Performance.
 				'orderby'        => 'title',
 				'order'          => 'ASC',
 			)
@@ -519,7 +519,7 @@ class LBite_Locations {
 		return get_posts(
 			array(
 				'post_type'      => self::POST_TYPE,
-				'posts_per_page' => -1,
+				'posts_per_page' => 100, // Begrenzt für Performance.
 				'orderby'        => 'title',
 				'order'          => 'ASC',
 				'post_status'    => 'publish',

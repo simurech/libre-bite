@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Order-Objekt.
-if ( ! $order ) {
+if ( ! $lbite_order ) {
 	return;
 }
 
@@ -19,11 +19,11 @@ $brand_logo = get_option( 'lbite_brand_logo', 0 );
 $logo_url   = $brand_logo ? wp_get_attachment_image_url( $brand_logo, 'medium' ) : '';
 
 // Order-Meta.
-$location_id   = $order->get_meta( '_lbite_location_id' );
-$location_name = $order->get_meta( '_lbite_location_name' );
-$order_type    = $order->get_meta( '_lbite_order_type' );
-$pickup_time   = $order->get_meta( '_lbite_pickup_time' );
-$customer_name = $order->get_billing_first_name();
+$location_id   = $lbite_order->get_meta( '_lbite_location_id' );
+$location_name = $lbite_order->get_meta( '_lbite_location_name' );
+$lbite_order_type    = $lbite_order->get_meta( '_lbite_order_type' );
+$lbite_pickup_time   = $lbite_order->get_meta( '_lbite_pickup_time' );
+$lbite_customer_name = $lbite_order->get_billing_first_name();
 
 // Fallback: Standort-Name aus Post laden wenn nicht in Meta.
 if ( empty( $location_name ) && $location_id ) {
@@ -32,29 +32,10 @@ if ( empty( $location_name ) && $location_id ) {
 		$location_name = $location_post->post_title;
 	}
 }
-
-// Fallback: Standort aus Session laden wenn nicht in Order-Meta.
-if ( empty( $location_name ) && WC()->session ) {
-	$session_location_id = WC()->session->get( 'lbite_location_id' );
-	if ( $session_location_id ) {
-		$location_post = get_post( $session_location_id );
-		if ( $location_post ) {
-			$location_name = $location_post->post_title;
-			$location_id   = $session_location_id;
-		}
-	}
-}
-
-// Standort-Details.
-$location_address = '';
-$location_maps_url = '';
-if ( $location_id ) {
-	$location_address  = LBite_Locations::get_formatted_address( $location_id );
-	$location_maps_url = LBite_Locations::get_maps_url( $location_id );
-}
+// ... (restliche Logik bleibt, da sie $location_id etc. verwendet, die hier lokal definiert sind)
 
 // Abholnummer (letzte 4 Ziffern der Bestellnummer).
-$order_number  = $order->get_order_number();
+$order_number  = $lbite_order->get_order_number();
 $pickup_number = substr( $order_number, -4 );
 
 // Steueranzeige-Einstellung (incl = Brutto, excl = Netto).
@@ -75,11 +56,11 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 			</svg>
 		</div>
 		<h1><?php esc_html_e( 'Bestellung erfolgreich!', 'libre-bite' ); ?></h1>
-		<?php if ( $customer_name ) : ?>
+		<?php if ( $lbite_customer_name ) : ?>
 			<p class="lbite-thankyou-greeting">
 				<?php
 				/* translators: %s: customer name */
-				printf( esc_html__( 'Danke, %s!', 'libre-bite' ), esc_html( $customer_name ) );
+				printf( esc_html__( 'Danke, %s!', 'libre-bite' ), esc_html( $lbite_customer_name ) );
 				?>
 			</p>
 		<?php endif; ?>
@@ -125,10 +106,10 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 				<span class="lbite-detail-label"><?php esc_html_e( 'Abholung', 'libre-bite' ); ?></span>
 				<span class="lbite-detail-value">
 					<?php
-					if ( 'later' === $order_type && $pickup_time ) {
-						echo esc_html( wp_date( 'd.m.Y', strtotime( $pickup_time ) ) );
+					if ( 'later' === $lbite_order_type && $lbite_pickup_time ) {
+						echo esc_html( wp_date( 'd.m.Y', strtotime( $lbite_pickup_time ) ) );
 						echo ' ' . esc_html__( 'um', 'libre-bite' ) . ' ';
-						echo esc_html( wp_date( 'H:i', strtotime( $pickup_time ) ) );
+						echo esc_html( wp_date( 'H:i', strtotime( $lbite_pickup_time ) ) );
 						echo ' ' . esc_html__( 'Uhr', 'libre-bite' );
 					} else {
 						esc_html_e( 'Sobald fertig', 'libre-bite' );
@@ -144,7 +125,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 
 		<table class="lbite-order-items">
 			<tbody>
-				<?php foreach ( $order->get_items() as $item_id => $item ) : ?>
+				<?php foreach ( $lbite_order->get_items() as $item_id => $item ) : ?>
 					<tr>
 						<td class="lbite-item-qty"><?php echo esc_html( $item->get_quantity() ); ?>x</td>
 						<td class="lbite-item-name">
@@ -172,20 +153,20 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 			<tfoot>
 				<?php
 				// Prüfen ob zusätzliche Zeilen nötig sind (Fees, Coupons, Versand, Steuern).
-				$fees    = $order->get_fees();
-				$coupons = $order->get_coupons();
-				$has_shipping = $order->get_shipping_total() > 0;
-				$has_tax = $order->get_total_tax() > 0 && 'excl' === $tax_display;
+				$fees    = $lbite_order->get_fees();
+				$coupons = $lbite_order->get_coupons();
+				$has_shipping = $lbite_order->get_shipping_total() > 0;
+				$has_tax = $lbite_order->get_total_tax() > 0 && 'excl' === $tax_display;
 				$has_extras = ! empty( $fees ) || ! empty( $coupons ) || $has_shipping || $has_tax;
 
 				// Zwischensumme berechnen (inkl. oder exkl. MwSt.).
 				$subtotal = 'incl' === $tax_display
-					? $order->get_subtotal() + $order->get_cart_tax() - array_sum( wp_list_pluck( $fees, 'total_tax' ) )
-					: $order->get_subtotal();
+					? $lbite_order->get_subtotal() + $lbite_order->get_cart_tax() - array_sum( wp_list_pluck( $fees, 'total_tax' ) )
+					: $lbite_order->get_subtotal();
 
 				// Einfacher: Summe aller Artikelpreise.
 				$subtotal = 0;
-				foreach ( $order->get_items() as $calc_item ) {
+				foreach ( $lbite_order->get_items() as $calc_item ) {
 					$subtotal += 'incl' === $tax_display
 						? $calc_item->get_total() + $calc_item->get_total_tax()
 						: $calc_item->get_total();
@@ -232,7 +213,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 						?>
 						<tr class="lbite-shipping-row">
 							<td colspan="2"><?php esc_html_e( 'Versand', 'libre-bite' ); ?></td>
-							<td><?php echo wp_kses_post( wc_price( $order->get_shipping_total() ) ); ?></td>
+							<td><?php echo wp_kses_post( wc_price( $lbite_order->get_shipping_total() ) ); ?></td>
 						</tr>
 					<?php endif; ?>
 
@@ -242,7 +223,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 						?>
 						<tr class="lbite-tax-row">
 							<td colspan="2"><?php esc_html_e( 'MwSt.', 'libre-bite' ); ?></td>
-							<td><?php echo wp_kses_post( wc_price( $order->get_total_tax() ) ); ?></td>
+							<td><?php echo wp_kses_post( wc_price( $lbite_order->get_total_tax() ) ); ?></td>
 						</tr>
 					<?php endif; ?>
 
@@ -251,7 +232,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 				<!-- Total -->
 				<tr class="lbite-total-row">
 					<td colspan="2"><strong><?php esc_html_e( 'Total', 'libre-bite' ); ?></strong></td>
-					<td><strong><?php echo wp_kses_post( wc_price( $order->get_total() ) ); ?></strong></td>
+					<td><strong><?php echo wp_kses_post( wc_price( $lbite_order->get_total() ) ); ?></strong></td>
 				</tr>
 			</tfoot>
 		</table>

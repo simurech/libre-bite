@@ -105,6 +105,26 @@ class LBite_Checkout {
 	public function customize_checkout_fields( $fields ) {
 		$custom_fields = get_option( 'lbite_checkout_fields', array() );
 
+		// Tischbestellung Prüfung.
+		$table_id = WC()->session ? WC()->session->get( 'lbite_table_id' ) : 0;
+
+		if ( $table_id ) {
+			// Bei Tischbestellung brauchen wir keine Adressdaten.
+			// Wir behalten nur Name und E-Mail (für den Beleg).
+			$keep_fields = array( 'billing_first_name', 'billing_last_name', 'billing_email' );
+
+			foreach ( $fields['billing'] as $key => $field ) {
+				if ( ! in_array( $key, $keep_fields, true ) ) {
+					unset( $fields['billing'][ $key ] );
+				}
+			}
+
+			// Shipping Felder komplett entfernen.
+			unset( $fields['shipping'] );
+
+			return $fields;
+		}
+
 		if ( empty( $custom_fields ) ) {
 			return $fields;
 		}
@@ -260,6 +280,11 @@ class LBite_Checkout {
 	 * CSS hinzufügen um Versand-Elemente auszublenden
 	 */
 	public function maybe_add_hide_shipping_css() {
+		// Nur auf Warenkorb und Checkout Seiten.
+		if ( ! is_cart() && ! is_checkout() ) {
+			return;
+		}
+
 		$custom_fields = get_option( 'lbite_checkout_fields', array() );
 
 		// Wenn Versand-Anzeigen NICHT aktiviert ist, CSS zum Ausblenden hinzufügen
@@ -288,7 +313,13 @@ class LBite_Checkout {
 	 * Frontend-Assets laden
 	 */
 	public function enqueue_frontend_assets() {
-		if ( ! is_shop() && ! is_product() && ! is_cart() && ! is_checkout() ) {
+		global $post;
+		
+		// Prüfen ob Shortcode auf der Seite vorhanden ist.
+		$has_shortcode = is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'lbite_location_selector' );
+
+		// Nur auf relevanten WooCommerce-Seiten oder wenn Shortcode vorhanden ist.
+		if ( ! is_shop() && ! is_product() && ! is_cart() && ! is_checkout() && ! $has_shortcode ) {
 			return;
 		}
 
@@ -490,15 +521,15 @@ class LBite_Checkout {
 			'lbite_location_selector'
 		);
 
-		$locations = LBite_Locations::get_all_locations();
+		$lbite_locations = LBite_Locations::get_all_locations();
 
-		if ( empty( $locations ) ) {
+		if ( empty( $lbite_locations ) ) {
 			return '<p>' . esc_html__( 'Keine Standorte verfügbar.', 'libre-bite' ) . '</p>';
 		}
 
-		$location_id = WC()->session ? WC()->session->get( 'lbite_location_id' ) : null;
-		$order_type = WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now';
-		$pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time' ) : null;
+		$lbite_location_id = WC()->session ? WC()->session->get( 'lbite_location_id' ) : null;
+		$lbite_order_type = WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now';
+		$lbite_pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time' ) : null;
 
 		ob_start();
 
@@ -529,9 +560,9 @@ class LBite_Checkout {
 			return;
 		}
 
-		$locations = LBite_Locations::get_all_locations();
+		$lbite_locations = LBite_Locations::get_all_locations();
 
-		if ( empty( $locations ) ) {
+		if ( empty( $lbite_locations ) ) {
 			return;
 		}
 
@@ -542,11 +573,11 @@ class LBite_Checkout {
 	 * Standort- & Zeitwahl im Checkout anzeigen
 	 */
 	public function render_location_time_selection() {
-		$location_id = WC()->session ? WC()->session->get( 'lbite_location_id' ) : null;
-		$order_type  = WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now';
-		$pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time' ) : null;
+		$lbite_location_id = WC()->session ? WC()->session->get( 'lbite_location_id' ) : null;
+		$lbite_order_type  = WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now';
+		$lbite_pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time' ) : null;
 
-		$locations = LBite_Locations::get_all_locations();
+		$lbite_locations = LBite_Locations::get_all_locations();
 
 		include LBITE_PLUGIN_DIR . 'templates/checkout-location-time.php';
 	}
@@ -641,10 +672,10 @@ class LBite_Checkout {
 			return;
 		}
 
-		$percentage_1 = get_option( 'lbite_tip_percentage_1', 5 );
-		$percentage_2 = get_option( 'lbite_tip_percentage_2', 10 );
-		$percentage_3 = get_option( 'lbite_tip_percentage_3', 15 );
-		$default_selection = get_option( 'lbite_tip_default_selection', 'none' );
+		$lbite_percentage_1 = get_option( 'lbite_tip_percentage_1', 5 );
+		$lbite_percentage_2 = get_option( 'lbite_tip_percentage_2', 10 );
+		$lbite_percentage_3 = get_option( 'lbite_tip_percentage_3', 15 );
+		$lbite_default_selection = get_option( 'lbite_tip_default_selection', 'none' );
 
 		include LBITE_PLUGIN_DIR . 'templates/checkout-tip.php';
 	}
@@ -1035,9 +1066,9 @@ class LBite_Checkout {
 			return;
 		}
 
-		$order = wc_get_order( $order_id );
+		$lbite_order = wc_get_order( $order_id );
 
-		if ( ! $order ) {
+		if ( ! $lbite_order ) {
 			return;
 		}
 

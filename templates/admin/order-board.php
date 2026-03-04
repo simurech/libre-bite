@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$locations = get_posts(
 					array(
 						'post_type'      => 'lbite_location',
-						'posts_per_page' => -1,
+						'posts_per_page' => 100, // Begrenzt für Performance.
 						'post_status'    => 'publish',
 					)
 				);
@@ -42,6 +42,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</select>
 		</label>
 
+		<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
+		<label style="margin-left: 10px;">
+			<?php esc_html_e( 'Filter:', 'libre-bite' ); ?>
+			<select id="lbite-board-filter">
+				<option value="all"><?php esc_html_e( 'Alle Bestellungen', 'libre-bite' ); ?></option>
+				<option value="table"><?php esc_html_e( 'Nur Tischbestellungen', 'libre-bite' ); ?></option>
+				<option value="takeaway"><?php esc_html_e( 'Nur Take-Away', 'libre-bite' ); ?></option>
+			</select>
+		</label>
+		<?php endif; ?>
+
 		<label class="lbite-wake-lock-toggle">
 			<input type="checkbox" id="lbite-wake-lock" checked>
 			<?php esc_html_e( 'Standby verhindern', 'libre-bite' ); ?>
@@ -50,6 +61,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<button type="button" id="lbite-sound-toggle" class="button">
 			<span class="dashicons dashicons-controls-volumeon"></span>
 			<?php esc_html_e( 'Sound aktiv', 'libre-bite' ); ?>
+		</button>
+
+		<button type="button" id="lbite-activate-audio" class="button button-primary" style="display: none;">
+			<span class="dashicons dashicons-megaphone"></span>
+			<?php esc_html_e( 'Sound-Benachrichtigungen aktivieren', 'libre-bite' ); ?>
 		</button>
 	</div>
 

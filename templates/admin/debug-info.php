@@ -71,7 +71,7 @@ $plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'li
 						$locations = get_posts(
 							array(
 								'post_type'      => 'lbite_location',
-								'posts_per_page' => -1,
+								'posts_per_page' => 100, // Begrenzt für Performance.
 								'post_status'    => 'publish',
 							)
 						);
@@ -86,7 +86,7 @@ $plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'li
 						$options = get_posts(
 							array(
 								'post_type'      => 'lbite_product_option',
-								'posts_per_page' => -1,
+								'posts_per_page' => 100, // Begrenzt für Performance.
 								'post_status'    => 'publish',
 							)
 						);

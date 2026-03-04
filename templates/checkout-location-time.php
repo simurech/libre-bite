@@ -9,26 +9,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$location = $location_id ? get_post( $location_id ) : null;
-$location_image_id = $location_id ? get_post_meta( $location_id, '_lbite_location_image', true ) : '';
-$location_image_url = $location_image_id ? wp_get_attachment_image_url( $location_image_id, 'thumbnail' ) : '';
+$lbite_location = $lbite_location_id ? get_post( $lbite_location_id ) : null;
+$lbite_location_image_id = $lbite_location_id ? get_post_meta( $lbite_location_id, '_lbite_location_image', true ) : '';
+$lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_url( $lbite_location_image_id, 'thumbnail' ) : '';
 ?>
 
 <div class="lbite-checkout-selection">
 	<h3><?php esc_html_e( 'Standort & Abholzeit', 'libre-bite' ); ?></h3>
 
 	<!-- Versteckte Felder für das Formular -->
-	<input type="hidden" name="lbite_location_id" id="lbite_location_id" value="<?php echo esc_attr( $location_id ); ?>" required>
-	<input type="hidden" name="lbite_order_type" id="lbite_order_type" value="<?php echo esc_attr( $order_type ); ?>" required>
-	<input type="hidden" name="lbite_pickup_time" id="lbite_pickup_time" value="<?php echo esc_attr( $pickup_time ); ?>">
+	<input type="hidden" name="lbite_location_id" id="lbite_location_id" value="<?php echo esc_attr( $lbite_location_id ); ?>" required>
+	<input type="hidden" name="lbite_order_type" id="lbite_order_type" value="<?php echo esc_attr( $lbite_order_type ); ?>" required>
+	<input type="hidden" name="lbite_pickup_time" id="lbite_pickup_time" value="<?php echo esc_attr( $lbite_pickup_time ); ?>">
 
-	<?php if ( $location ) : ?>
+	<?php if ( $lbite_location ) : ?>
 		<!-- Anzeige der aktuellen Auswahl -->
 		<div class="lbite-current-selection">
 			<div class="lbite-selection-display">
-				<?php if ( $location_image_url ) : ?>
+				<?php if ( $lbite_location_image_url ) : ?>
 					<div class="lbite-location-image">
-						<img src="<?php echo esc_url( $location_image_url ); ?>" alt="<?php echo esc_attr( $location->post_title ); ?>">
+						<img src="<?php echo esc_url( $lbite_location_image_url ); ?>" alt="<?php echo esc_attr( $lbite_location->post_title ); ?>">
 					</div>
 				<?php else : ?>
 					<div class="lbite-location-image lbite-location-placeholder">
@@ -41,16 +41,22 @@ $location_image_url = $location_image_id ? wp_get_attachment_image_url( $locatio
 
 				<div class="lbite-selection-details">
 					<div class="lbite-location-name">
-						<strong><?php echo esc_html( $location->post_title ); ?></strong>
+						<strong><?php echo esc_html( $lbite_location->post_title ); ?></strong>
 					</div>
 					<div class="lbite-order-info">
-						<?php if ( 'now' === $order_type ) : ?>
+						<?php if ( 'now' === $lbite_order_type ) : ?>
 							<span class="lbite-badge lbite-badge-now">
 								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 									<circle cx="12" cy="12" r="10"></circle>
 									<polyline points="12 6 12 12 16 14"></polyline>
 								</svg>
-								<?php esc_html_e( 'Sofort bestellen', 'libre-bite' ); ?>
+								<?php 
+								if ( WC()->session && WC()->session->get( 'lbite_table_id' ) ) {
+									esc_html_e( 'Service am Tisch', 'libre-bite' );
+								} else {
+									esc_html_e( 'Sofort bestellen', 'libre-bite' );
+								}
+								?>
 							</span>
 						<?php else : ?>
 							<span class="lbite-badge lbite-badge-later">
@@ -62,9 +68,9 @@ $location_image_url = $location_image_id ? wp_get_attachment_image_url( $locatio
 								</svg>
 								<?php
 								// Datum und Zeit formatieren
-								$datetime = DateTime::createFromFormat( 'Y-m-d H:i', $pickup_time );
+								$datetime = DateTime::createFromFormat( 'Y-m-d H:i', $lbite_pickup_time );
 								$formatted_date = $datetime ? $datetime->format( 'd.m.Y' ) : '';
-								$formatted_time = $datetime ? $datetime->format( 'H:i' ) : $pickup_time;
+								$formatted_time = $datetime ? $datetime->format( 'H:i' ) : $lbite_pickup_time;
 								?>
 								<?php esc_html_e( 'Vorbestellen:', 'libre-bite' ); ?> <?php echo esc_html( $formatted_date . ' ' . $formatted_time ); ?> <?php esc_html_e( 'Uhr', 'libre-bite' ); ?>
 							</span>
@@ -72,9 +78,11 @@ $location_image_url = $location_image_id ? wp_get_attachment_image_url( $locatio
 					</div>
 				</div>
 
-				<button type="button" class="lbite-change-btn" id="lbite-change-selection">
-					<?php esc_html_e( 'Ändern', 'libre-bite' ); ?>
-				</button>
+				<?php if ( ! ( WC()->session && WC()->session->get( 'lbite_table_id' ) ) ) : ?>
+					<button type="button" class="lbite-change-btn" id="lbite-change-selection">
+						<?php esc_html_e( 'Ändern', 'libre-bite' ); ?>
+					</button>
+				<?php endif; ?>
 			</div>
 		</div>
 	<?php else : ?>
@@ -84,15 +92,15 @@ $location_image_url = $location_image_id ? wp_get_attachment_image_url( $locatio
 	<?php endif; ?>
 
 	<!-- Bearbeitungsformular (zunächst versteckt) -->
-	<div class="lbite-edit-form" style="<?php echo $location ? 'display: none;' : ''; ?>">
+	<div class="lbite-edit-form" style="<?php echo $lbite_location ? 'display: none;' : ''; ?>">
 		<div class="lbite-form-group">
 			<label>
 				<?php esc_html_e( 'Standort', 'libre-bite' ); ?> <span class="required">*</span>
 			</label>
 			<select id="lbite_location_select" class="lbite-select">
 				<option value=""><?php esc_html_e( 'Standort wählen...', 'libre-bite' ); ?></option>
-				<?php foreach ( $locations as $loc ) : ?>
-					<option value="<?php echo esc_attr( $loc->ID ); ?>" <?php selected( $location_id, $loc->ID ); ?>>
+				<?php foreach ( $lbite_locations as $loc ) : ?>
+					<option value="<?php echo esc_attr( $loc->ID ); ?>" <?php selected( $lbite_location_id, $loc->ID ); ?>>
 						<?php echo esc_html( $loc->post_title ); ?>
 					</option>
 				<?php endforeach; ?>
@@ -105,11 +113,17 @@ $location_image_url = $location_image_id ? wp_get_attachment_image_url( $locatio
 			</label>
 			<div class="lbite-radio-group">
 				<label class="lbite-radio-option">
-					<input type="radio" name="lbite_order_type_select" value="now" <?php checked( $order_type, 'now' ); ?>>
-					<span><?php esc_html_e( 'Sofort bestellen', 'libre-bite' ); ?></span>
+					<input type="radio" name="lbite_order_type_select" value="now" <?php checked( $lbite_order_type, 'now' ); ?>>
+					<span><?php 
+					if ( WC()->session && WC()->session->get( 'lbite_table_id' ) ) {
+						esc_html_e( 'Service am Tisch', 'libre-bite' );
+					} else {
+						esc_html_e( 'Sofort bestellen', 'libre-bite' );
+					}
+					?></span>
 				</label>
 				<label class="lbite-radio-option">
-					<input type="radio" name="lbite_order_type_select" value="later" <?php checked( $order_type, 'later' ); ?>>
+					<input type="radio" name="lbite_order_type_select" value="later" <?php checked( $lbite_order_type, 'later' ); ?>>
 					<span><?php esc_html_e( 'Für später vorbestellen', 'libre-bite' ); ?></span>
 				</label>
 			</div>
@@ -141,7 +155,7 @@ $location_image_url = $location_image_id ? wp_get_attachment_image_url( $locatio
 			<button type="button" class="lbite-save-btn" id="lbite-save-selection">
 				<?php esc_html_e( 'Übernehmen', 'libre-bite' ); ?>
 			</button>
-			<?php if ( $location ) : ?>
+			<?php if ( $lbite_location ) : ?>
 				<button type="button" class="lbite-cancel-btn" id="lbite-cancel-selection">
 					<?php esc_html_e( 'Abbrechen', 'libre-bite' ); ?>
 				</button>
@@ -427,4 +441,3 @@ jQuery(document).ready(function($) {
 	}
 });
 <?php wp_add_inline_script( 'lbite-frontend', ob_get_clean() ); ?>
-

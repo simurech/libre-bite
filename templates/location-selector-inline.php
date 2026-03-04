@@ -22,8 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</label>
 			<select id="lbite-location-select" name="lbite_location_id" class="lbite-select" required>
 				<option value=""><?php esc_html_e( 'Bitte wählen...', 'libre-bite' ); ?></option>
-				<?php foreach ( $locations as $location ) : ?>
-					<option value="<?php echo esc_attr( $location->ID ); ?>" <?php selected( $location_id, $location->ID ); ?>>
+				<?php foreach ( $lbite_locations as $location ) : ?>
+					<option value="<?php echo esc_attr( $location->ID ); ?>" <?php selected( $lbite_location_id, $location->ID ); ?>>
 						<?php echo esc_html( $location->post_title ); ?>
 					</option>
 				<?php endforeach; ?>
@@ -36,11 +36,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<label><?php esc_html_e( 'Wann möchten Sie bestellen?', 'libre-bite' ); ?></label>
 				<div class="lbite-radio-group">
 					<label class="lbite-radio-label">
-						<input type="radio" name="lbite_order_type" value="now" <?php checked( $order_type, 'now' ); ?>>
+						<input type="radio" name="lbite_order_type" value="now" <?php checked( $lbite_order_type, 'now' ); ?>>
 						<span><?php esc_html_e( 'Sofort', 'libre-bite' ); ?></span>
 					</label>
 					<label class="lbite-radio-label">
-						<input type="radio" name="lbite_order_type" value="later" <?php checked( $order_type, 'later' ); ?>>
+						<input type="radio" name="lbite_order_type" value="later" <?php checked( $lbite_order_type, 'later' ); ?>>
 						<span><?php esc_html_e( 'Für später vorbestellen', 'libre-bite' ); ?></span>
 					</label>
 				</div>
@@ -72,16 +72,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<!-- Aktuelle Auswahl anzeigen -->
-		<?php if ( $location_id ) : ?>
+		<?php if ( $lbite_location_id ) : ?>
 			<div class="lbite-current-selection">
 				<strong><?php esc_html_e( 'Aktuelle Auswahl:', 'libre-bite' ); ?></strong><br>
 				<?php
-				$location = get_post( $location_id );
+				$location = get_post( $lbite_location_id );
 				if ( $location ) {
 					echo esc_html( $location->post_title );
-					if ( 'later' === $order_type && $pickup_time ) {
-						echo ' - ' . esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $pickup_time ) ) );
-					} elseif ( 'now' === $order_type ) {
+					if ( 'later' === $lbite_order_type && $lbite_pickup_time ) {
+						echo ' - ' . esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $lbite_pickup_time ) ) );
+					} elseif ( 'now' === $lbite_order_type ) {
 						echo ' - ' . esc_html__( 'Sofort', 'libre-bite' );
 					}
 				}

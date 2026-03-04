@@ -103,6 +103,10 @@ class LBite_Plugin {
 		if ( lbite_feature_enabled( 'enable_pickup_reminders' ) || lbite_feature_enabled( 'enable_admin_email' ) ) {
 			$this->load_module( 'notifications', 'LBite_Notifications' );
 		}
+
+		if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
+			$this->load_module( 'tables', 'LBite_Tables' );
+		}
 	}
 
 	/**

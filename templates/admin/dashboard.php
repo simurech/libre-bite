@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$locations = get_posts(
 					array(
 						'post_type'      => 'lbite_location',
-						'posts_per_page' => -1,
+						'posts_per_page' => 100, // Begrenzt für Performance.
 						'post_status'    => 'publish',
 					)
 				);

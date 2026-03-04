@@ -1,0 +1,22 @@
+/**
+ * Admin-Styles für Tischverwaltung
+ *
+ * @package LibreBite
+ */
+
+/* QR-Code Meta-Box: URL-Zeile */
+.lbite-qr-meta-url {
+	margin-bottom: 15px;
+}
+
+/* QR-Code Anzeige-Box */
+.lbite-qr-display {
+	background: #fff;
+	padding: 10px;
+	border: 1px solid #ddd;
+	display: inline-block;
+}
+
+.lbite-qr-display img {
+	display: block;
+}

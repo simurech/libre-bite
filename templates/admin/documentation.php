@@ -173,6 +173,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div>
 
+		<!-- Tischverwaltung -->
+		<div class="lbite-doc-section">
+			<h2><?php esc_html_e( 'Tischverwaltung & QR-Bestellung', 'libre-bite' ); ?></h2>
+
+			<div class="lbite-doc-card">
+				<p><?php esc_html_e( 'Mit der Tischverwaltung können Sie Tische für Ihre Standorte anlegen und QR-Codes für die kontaktlose Bestellung generieren.', 'libre-bite' ); ?></p>
+
+				<h4><?php esc_html_e( 'Vorgehensweise:', 'libre-bite' ); ?></h4>
+				<ol>
+					<li><?php esc_html_e( 'Erstellen Sie Tische unter "Libre Bite → Tische".', 'libre-bite' ); ?></li>
+					<li><?php esc_html_e( 'Weisen Sie jedem Tisch einen Standort zu.', 'libre-bite' ); ?></li>
+					<li><?php esc_html_e( 'Drucken Sie den QR-Code aus oder kopieren Sie den Link für Ihre Tischaufsteller.', 'libre-bite' ); ?></li>
+				</ol>
+
+				<h4><?php esc_html_e( 'Funktionsweise:', 'libre-bite' ); ?></h4>
+				<ul>
+					<li><strong><?php esc_html_e( 'Automatischer Standort:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Beim Scannen des QR-Codes wird der Standort automatisch im Browser des Kunden voreingestellt.', 'libre-bite' ); ?></li>
+					<li><strong><?php esc_html_e( 'Vereinfachter Checkout:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Kunden an einem Tisch müssen keine Adressdaten eingeben. Das System fragt nur nach Name und (optional) E-Mail.', 'libre-bite' ); ?></li>
+					<li><strong><?php esc_html_e( 'Tisch-Info auf dem Board:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'In der Bestellübersicht und im POS wird die Tischnummer direkt bei der Bestellung angezeigt.', 'libre-bite' ); ?></li>
+				</ul>
+
+				<div class="notice notice-info inline">
+					<p><strong><?php esc_html_e( 'Tipp:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'In der Bestellübersicht (Kanban) können Sie oben rechts einen Filter setzen, um nur Tischbestellungen oder nur Take-Away anzuzeigen.', 'libre-bite' ); ?></p>
+				</div>
+			</div>
+		</div>
+
 		<!-- Weitere Informationen -->
 		<div class="lbite-doc-section">
 			<h2><?php esc_html_e( 'Weitere Informationen', 'libre-bite' ); ?></h2>

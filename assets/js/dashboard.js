@@ -27,6 +27,8 @@
 		completedOffset: 3,
 		isLoading: false,
 		pendingActions: new Set(),
+		currentFilter: 'all',
+		allOrders: {},
 
 		/**
 		 * Initialisierung
@@ -52,6 +54,17 @@
 		initAudio: function() {
 			if (lbiteDashboard.soundUrl) {
 				this.audio = new Audio(lbiteDashboard.soundUrl);
+				
+				// Browser-Restriktionen prüfen: Versuche Audio "stumm" anzuspielen
+				this.audio.play().then(() => {
+					// Autoplay funktioniert oder ist bereits erlaubt
+					this.audio.pause();
+					this.audio.currentTime = 0;
+				}).catch(() => {
+					// Autoplay blockiert -> Button anzeigen
+					$('#lbite-activate-audio').show();
+					$('#lbite-sound-toggle').hide();
+				});
 			}
 		},
 
@@ -86,6 +99,19 @@
 			// Initial-Check: Board nur anzeigen wenn Standort gewählt
 			this.toggleBoardVisibility();
 
+			// Audio Aktivierung (Browser Workaround)
+			$('#lbite-activate-audio').on('click', () => {
+				if (this.audio) {
+					this.audio.play().then(() => {
+						this.audio.pause();
+						this.audio.currentTime = 0;
+						$('#lbite-activate-audio').hide();
+						$('#lbite-sound-toggle').show();
+						window.lbiteNotify && window.lbiteNotify.success('Sound-Benachrichtigungen aktiviert');
+					});
+				}
+			});
+
 			// Wake Lock initial aktivieren wenn Checkbox angehakt
 			if ($('#lbite-wake-lock').is(':checked')) {
 				this.requestWakeLock();
@@ -117,6 +143,14 @@
 				// Bestellungen laden
 				if (locationId) {
 					this.loadOrders();
+				}
+			});
+
+			// Bestell-Filter
+			$('#lbite-board-filter').on('change', (e) => {
+				this.currentFilter = $(e.target).val();
+				if (this.allOrders) {
+					this.renderOrders(this.allOrders, true);
 				}
 			});
 
@@ -207,40 +241,18 @@
 		 * Lade-Overlay anzeigen
 		 */
 		showLoading: function(message = 'Laden...') {
-			if ($('#lbite-loading-overlay').length === 0) {
-				$('body').append(`
-					<div id="lbite-loading-overlay" style="
-						position: fixed;
-						top: 0;
-						left: 0;
-						right: 0;
-						bottom: 0;
-						background: rgba(255,255,255,0.8);
-						display: flex;
-						flex-direction: column;
-						align-items: center;
-						justify-content: center;
-						z-index: 99999;
-					">
-						<div class="lbite-spinner" style="
-							width: 40px;
-							height: 40px;
-							border: 4px solid #e0e0e0;
-							border-top: 4px solid #0073aa;
-							border-radius: 50%;
-							animation: lbite-spin 0.8s linear infinite;
-						"></div>
-						<p style="margin-top: 15px; font-size: 14px; color: #666;">${escapeHtml(message)}</p>
-					</div>
-					<style>
-						@keyframes lbite-spin {
-							0% { transform: rotate(0deg); }
-							100% { transform: rotate(360deg); }
-						}
-					</style>
-				`);
+			let $overlay = $('#lbite-loading-overlay');
+			
+			if ($overlay.length === 0) {
+				$overlay = $('<div id="lbite-loading-overlay"></div>');
+				$overlay.append('<div class="lbite-spinner"></div>');
+				$overlay.append($('<p></p>').text(message));
+				$('body').append($overlay);
+			} else {
+				$overlay.find('p').text(message);
 			}
-			$('#lbite-loading-overlay').fadeIn(150);
+			
+			$overlay.fadeIn(150);
 		},
 
 		/**
@@ -296,6 +308,7 @@
 				},
 				success: (response) => {
 					if (response.success && response.data.orders) {
+						this.allOrders = response.data.orders;
 						this.completedCount = response.data.completed_count || 0;
 						this.completedOffset = 3; // Zurücksetzen beim Neuladen
 						this.renderOrders(response.data.orders, silent);
@@ -317,12 +330,21 @@
 	 * Bestellungen rendern
 	 */
 	renderOrders: function(ordersByStatus, silent) {
+		this.allOrders = ordersByStatus;
+		
 		let totalOrders = 0;
 		let activeOrders = 0; // Nur nicht-abgeschlossene Bestellungen
 
 		Object.keys(ordersByStatus).forEach(status => {
-			const orders = ordersByStatus[status];
+			let orders = ordersByStatus[status];
 			const $column = $('#lbite-column-' + status);
+
+			// Filter anwenden
+			if (this.currentFilter === 'table') {
+				orders = orders.filter(o => !!o.table_id);
+			} else if (this.currentFilter === 'takeaway') {
+				orders = orders.filter(o => !o.table_id);
+			}
 
 			totalOrders += orders.length;
 
@@ -342,11 +364,10 @@
 			// "Mehr laden" Button bei abgeschlossenen Bestellungen
 			if (status === 'completed' && this.completedCount > this.completedOffset) {
 				const remainingCount = this.completedCount - this.completedOffset;
-				$column.append(`
-					<button class="lbite-load-more-completed" onclick="Dashboard.loadMoreCompleted()">
-						📋 ${remainingCount} weitere Bestellung(en) anzeigen
-					</button>
-				`);
+				const $loadMoreBtn = $('<button class="lbite-load-more-completed"></button>')
+					.text(`📋 ${remainingCount} weitere Bestellung(en) anzeigen`)
+					.on('click', () => this.loadMoreCompleted());
+				$column.append($loadMoreBtn);
 			}
 		});
 
@@ -362,79 +383,72 @@
 		 * Bestellungs-Karte erstellen
 		 */
 		createOrderCard: function(order, currentStatus) {
-			const typeLabel = order.type === 'later'
-				? '<span style="color: #f39c12;">⏰ ' + escapeHtml(order.pickup_time || '') + '</span>'
-				: '<span style="color: #27ae60;">🔥 Sofort</span>';
-
-			// Kundenname anzeigen
+			const $card = $('<div class="lbite-kanban-card"></div>').attr('data-order-id', order.id);
+			
+			// Header (Nummer & Name)
 			const customerNameRaw = order.customer && order.customer.trim() ? order.customer.trim() : '';
-			const customerName = escapeHtml(customerNameRaw);
-
-			let itemsHtml = '';
+			const $h3 = $('<h3></h3>').text(`#${order.number}${customerNameRaw ? ' - ' + customerNameRaw : ''}`);
+			$card.append($h3);
+			
+			// Meta-Info
+			const $meta = $('<div class="lbite-kanban-card-meta"></div>');
+			if (order.type === 'later') {
+				$meta.append($('<span class="lbite-order-type-later"></span>').text(`⏰ ${order.pickup_time || ''}`));
+			} else {
+				$meta.append($('<span class="lbite-order-type-now"></span>').text('🔥 Sofort'));
+			}
+			$meta.append('<br>🕐 ').append(document.createTextNode(order.date || ''));
+			if (order.location) {
+				$meta.append('<br>📍 ').append(document.createTextNode(order.location));
+			}
+			$card.append($meta);
+			
+			// Items
+			const $items = $('<div class="lbite-kanban-card-items"></div>');
 			order.items.forEach(item => {
-				const safeName = escapeHtml(item.name);
-				const meta = item.meta ? '<div style="margin-left: 20px; font-size: 0.9em; color: #666;">' + escapeHtml(item.meta) + '</div>' : '';
-				itemsHtml += `<div class="lbite-kanban-card-item" style="margin-bottom: 8px;">
-					<strong>${item.quantity}x ${safeName}</strong>
-					${meta}
-				</div>`;
+				const $itemDiv = $('<div class="lbite-kanban-card-item"></div>');
+				$itemDiv.append($('<strong></strong>').text(`${item.quantity}x ${item.name}`));
+				if (item.meta) {
+					$itemDiv.append($('<div class="lbite-item-meta"></div>').text(item.meta));
+				}
+				$items.append($itemDiv);
 			});
-
-			const notesHtml = order.notes
-				? `<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee; font-style: italic; color: #666;">
-					📝 ${escapeHtml(order.notes)}
-				</div>`
-				: '';
-
-			// Status-Button bestimmen
+			$card.append($items);
+			
+			// Notizen
+			if (order.notes) {
+				$card.append($('<div class="lbite-kanban-card-notes"></div>').text(`📝 ${order.notes}`));
+			}
+			
+			// Actions
+			const $actions = $('<div class="lbite-kanban-card-actions"></div>');
+			
+			// Status-Button
 			const statusButtons = {
 				'incoming': { next: 'preparing', label: 'Zubereitung starten', icon: '🔪', color: '#f39c12' },
 				'preparing': { next: 'ready', label: 'Abholbereit', icon: '✅', color: '#27ae60' },
 				'ready': { next: 'completed', label: 'Abgeschlossen', icon: '🎉', color: '#3498db' },
 				'completed': null
 			};
-
+			
 			const statusButton = statusButtons[currentStatus];
-			let statusButtonHtml = '';
-
 			if (statusButton) {
-				statusButtonHtml = `<button onclick="Dashboard.moveToNextStatus(${order.id}, '${statusButton.next}')"
-					class="lbite-status-button"
-					style="flex: 1; padding: 14px; border: none; background: ${statusButton.color}; color: white; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600;">
-					${statusButton.icon} ${statusButton.label}
-				</button>`;
+				const $sBtn = $('<button class="lbite-status-button"></button>')
+					.addClass(`lbite-status-button-${currentStatus}`)
+					.text(`${statusButton.icon} ${statusButton.label}`)
+					.on('click', () => this.moveToNextStatus(order.id, statusButton.next));
+				$actions.append($sBtn);
 			}
-
-			// Stornieren-Button (außer bei completed)
-			const cancelButton = currentStatus !== 'completed'
-				? `<button onclick="Dashboard.cancelOrder(${order.id})"
-					class="lbite-cancel-button"
-					title="Bestellung stornieren"
-					style="padding: 8px 12px; border: 1px solid #e74c3c; background: white; color: #e74c3c; border-radius: 4px; cursor: pointer; font-size: 20px;">
-					🗑️
-				</button>`
-				: '';
-
-			return `
-				<div class="lbite-kanban-card" data-order-id="${order.id}">
-					<h3 style="margin: 0 0 10px 0; font-size: 16px;">
-						#${order.number}${customerName ? ' - ' + customerName : ''}
-					</h3>
-					<div class="lbite-kanban-card-meta" style="margin-bottom: 12px; font-size: 13px; line-height: 1.6;">
-						${typeLabel}
-						<br>🕐 ${escapeHtml(order.date || '')}
-						${order.location ? '<br>📍 ' + escapeHtml(order.location) : ''}
-					</div>
-					<div class="lbite-kanban-card-items" style="margin: 12px 0; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
-						${itemsHtml}
-					</div>
-					${notesHtml}
-					<div class="lbite-kanban-card-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center;">
-						${statusButtonHtml}
-						${cancelButton}
-					</div>
-				</div>
-			`;
+			
+			// Stornieren-Button
+			if (currentStatus !== 'completed') {
+				const $cBtn = $('<button class="lbite-cancel-button" title="Bestellung stornieren">🗑️</button>')
+					.on('click', () => this.cancelOrder(order.id));
+				$actions.append($cBtn);
+			}
+			
+			$card.append($actions);
+			return $card;
 		},
 
 		/**
@@ -574,11 +588,10 @@
 					// Button wieder hinzufügen wenn noch mehr vorhanden
 					if (this.completedOffset < response.data.total_count) {
 						const remainingCount = response.data.total_count - this.completedOffset;
-						$column.append(`
-							<button class="lbite-load-more-completed" onclick="Dashboard.loadMoreCompleted()">
-								📋 ${remainingCount} weitere Bestellung(en) anzeigen
-							</button>
-						`);
+						const $loadMoreBtn = $('<button class="lbite-load-more-completed"></button>')
+							.text(`📋 ${remainingCount} weitere Bestellung(en) anzeigen`)
+							.on('click', () => this.loadMoreCompleted());
+						$column.append($loadMoreBtn);
 					}
 				}
 			},
@@ -606,24 +619,27 @@
 			if ($card.length === 0) return;
 
 			const printWindow = window.open('', '', 'width=300,height=600');
+			
+			// CSS Handles holen (einfachere Lösung für ein Popup ohne komplettes Head-Management)
+			const cssUrl = $('link[id="lbite-order-board-css"]').attr('href') || '';
+			
 			printWindow.document.write(`
 				<html>
 				<head>
 					<title>Bestellung #${orderId}</title>
-					<style>
-						body { font-family: monospace; font-size: 12px; margin: 10px; }
-						h2 { text-align: center; margin: 10px 0; }
-						.divider { border-top: 1px dashed #000; margin: 10px 0; }
-						.item { margin: 5px 0; }
-					</style>
+					${cssUrl ? `<link rel="stylesheet" href="${cssUrl}">` : ''}
 				</head>
-				<body>
+				<body class="lbite-print-body">
 					${$card.html()}
 				</body>
 				</html>
 			`);
 			printWindow.document.close();
-			printWindow.print();
+			
+			// Warten bis Styles geladen sind
+			printWindow.onload = function() {
+				printWindow.print();
+			};
 		},
 
 		/**

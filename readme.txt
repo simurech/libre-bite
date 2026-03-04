@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.9
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,217 +13,237 @@ Transforms WooCommerce into a restaurant management powerhouse — with POS, liv
 
 == Description ==
 
-**Libre Bite verwandelt WooCommerce in ein vollständiges Restaurantverwaltungssystem.** Ob Restaurant, Take-Away, Café oder Bar — Libre Bite bringt alles, was dein Gastronomiebetrieb braucht, direkt in WordPress.
+**Libre Bite transforms WooCommerce into a complete restaurant management system.** Whether for a restaurant, take-away, café, or bar — Libre Bite brings everything your gastronomy business needs directly into WordPress.
 
-Kein externes SaaS. Keine monatlichen Plattformgebühren. Deine Daten bleiben in deiner eigenen WordPress-Installation.
-
----
-
-= Für wen ist Libre Bite? =
-
-* **Restaurants** — Dine-in und Take-Away-Bestellungen über ein einziges Dashboard verwalten
-* **Take-Away & Schnellgastronomie** — Betrieb am Schalter mit integriertem Kassensystem vereinfachen
-* **Cafés & Bars** — Produkte, Trinkgeld und Tagesbestellungen übersichtlich verwalten
-* **Gastronomiebetriebe mit mehreren Standorten** — Filialen zentral in einer Installation verwalten
+No monthly platform fees. Your data stays within your own WordPress installation.
 
 ---
 
-= Kernfunktionen (Kostenlos) =
+= For whom is Libre Bite? =
 
-**Live Kanban-Bestellboard**
-Eine Echtzeit-Küchenanzeige, die jede eingehende WooCommerce-Bestellung als Karte darstellt. Karten lassen sich per Drag & Drop zwischen Spalten verschieben (Neu → In Bearbeitung → Bereit → Abgeschlossen), um den Bestellstatus sofort zu aktualisieren — ohne Seitenneuladen.
-
-**Integriertes Kassensystem (POS)**
-Eine übersichtliche Kassenoberfläche für Laufkundschaft. Produkte zur Bestellung hinzufügen, Rabatte anwenden, Zahlung entgegennehmen — alles ohne WordPress zu verlassen.
-
-**Standortverwaltung**
-Filialen anlegen und verwalten, jeweils mit eigener Adresse, Öffnungszeiten und Bestellweiterleitung. Funktioniert sofort für Einzelstandort-Betriebe.
-
-**Schweizer 5-Rappen-Rundung**
-Eingebaute Unterstützung für die Schweizer Rundungsregel (5-Rappen-Rundung). Unverzichtbar für Restaurants und den Detailhandel in der Schweiz.
-
-**Zeitfenster für Abholung/Lieferung**
-Kunden wählen direkt im Bestellvorgang ein Zeitfenster für Abholung oder Lieferung. Spitzenstunden entlasten, Küchenkapazität besser steuern.
-
-**Produkt-Add-ons & Extras**
-Konfigurierbare Optionen zu jedem WooCommerce-Produkt hinzufügen — Grössen, Saucen, Toppings, Zubereitungshinweise — mit optionalen Preisaufschlägen.
-
-**Modulare Funktionssteuerung**
-Nur aktivieren, was der Betrieb wirklich braucht. Jedes Modul lässt sich im Admin-Bereich unabhängig ein- und ausschalten.
-
-**WooCommerce HPOS-kompatibel**
-Vollständig getestet mit WooCommerce High-Performance Order Storage (HPOS). Sicher für moderne, stark frequentierte Setups.
+* **Restaurants** — Manage dine-in and take-away orders via a single dashboard.
+* **Take-Away & Fast Food** — Simplify counter operations with an integrated POS system.
+* **Cafés & Bars** — Manage products, tips, and daily orders clearly.
+* **Multi-location businesses** — Manage branches centrally in one installation.
 
 ---
 
-= Pro-Funktionen (Abonnement erforderlich) =
+= Core Features (Free) =
 
-**Mehrstöndiges Standortmanagement**
-Beliebig viele Filialen verwalten. Jeder Standort erhält ein eigenes Kanban-Board, eigene POS-Konfiguration und einen separaten Bestellstrom — zentral über eine WordPress-Installation verwaltet.
+**Live Kanban Order Board (KDS)**
+A real-time kitchen display that visualizes every incoming WooCommerce order as a card. Drag & drop cards between columns (New → Preparing → Ready → Completed) to update order statuses instantly — without reloading the page.
 
-**Optimierter Bestellvorgang**
-Ein auf Konversion ausgerichteter Bestellprozess für Gastronomiebetriebe — weniger Schritte, klareres Layout, Mobile-first.
+**Integrated Point of Sale (POS)**
+A clear POS interface for walk-in customers. Add products to the order, apply discounts, accept payments — all without leaving WordPress.
 
-**Erweitertes Trinkgeldsystem**
-Kunden können prozentuale Trinkgeldvorschläge (z. B. 5 %, 10 %, 15 %) oder einen eigenen Betrag eingeben. Trinkgeldbeträge werden pro Bestellung gespeichert und im Dashboard angezeigt.
+**Location Management**
+Create and manage branches, each with its own address, opening hours, and order routing. Works immediately for single-location businesses.
 
-**Automatische Abholungserinnerungen**
-Automatische E-Mail-Erinnerungen an Kunden X Minuten vor dem geplanten Abholzeitpunkt. Weniger No-Shows, bessere Abholerfahrung.
+**Swiss 5-Cent Rounding**
+Built-in support for the Swiss rounding rule (5-cent rounding). Indispensable for restaurants and retail in Switzerland.
 
-**Nährwertangaben & Allergenkennzeichnung**
-EU-konforme Nährwerte und Allergendeklarationen für jedes Produkt. Werden übersichtlich auf der Produktseite und im Bestellvorgang angezeigt.
+**Pickup/Delivery Time Slots**
+Customers choose a time slot for pickup or delivery directly during checkout. Relieve peak hours and better manage kitchen capacity.
 
-**Erweiterte Sound-Benachrichtigungen**
-Ein Signalton im Browser, wenn eine neue Bestellung auf dem Kanban-Board eintrifft. Pro Standort individuell konfigurierbar.
+**Product Add-ons & Extras**
+Add configurable options to any WooCommerce product — sizes, sauces, toppings, preparation notes — with optional price markups.
 
----
+**Modular Feature Control**
+Only enable what your business really needs. Each module can be independently toggled on or off in the admin area.
 
-= Warum Libre Bite? =
-
-Die meisten Restaurant-Plugins für WordPress sind entweder zu einfach (nur eine Speisekartendarstellung) oder zu komplex (mit teuren SaaS-Abonnements). Libre Bite findet die richtige Balance: ein ernstzunehmendes Betriebswerkzeug auf der bewährten WooCommerce-Grundlage — mit vollem Dateneigentum, ohne Transaktionsgebühren und mit einer vertrauten WordPress-Benutzeroberfläche.
-
-* Vollständige Kontrolle über deine Bestelldaten
-* Keine Transaktionsgebühren
-* Bekannte WordPress-Benutzeroberfläche
-* Kernfunktionen kostenlos — nur für erweiterte Funktionen zahlen
-* 7 Tage kostenlose Testphase für Pro-Funktionen
+**WooCommerce HPOS Compatible**
+Fully tested with WooCommerce High-Performance Order Storage (HPOS). Safe for modern, high-traffic setups.
 
 ---
 
-= Externe Dienste =
+= Pro Features (Subscription required) =
 
-Dieses Plugin nutzt **Freemius**, eine Drittanbieterplattform zur Verwaltung von Lizenzen, Abonnements und Plugin-Updates für die Pro-Version.
+**Multi-Location Management**
+Manage an unlimited number of branches. Each location gets its own Kanban board, POS configuration, and separate order flow — managed centrally via one WordPress installation.
 
-Bei der Plugin-Aktivierung kannst du der Datenübermittlung an Freemius zustimmen. Dabei werden grundlegende Informationen über deine Website (WordPress-Version, PHP-Version, aktive Plugins) an Freemius übermittelt, um die Lizenzvalidierung und Nutzungsanalyse zu ermöglichen. **Die Zustimmung ist vollständig optional.** Alle kostenlosen Kernfunktionen funktionieren auch ohne Zustimmung.
+**Optimized Checkout Flow**
+A conversion-focused checkout process for gastronomy businesses — fewer steps, cleaner layout, mobile-first.
 
-* Datenschutzerklärung von Freemius: https://freemius.com/privacy/
-* Nutzungsbedingungen von Freemius: https://freemius.com/terms/
+**Advanced Tipping System**
+Customers can enter percentage tip suggestions (e.g., 5%, 10%, 15%) or a custom amount. Tip amounts are saved per order and displayed in the dashboard.
 
-Es werden keine Daten an Freemius übermittelt, wenn du die Zustimmung bei der Aktivierung überspringst oder ablehnst.
+**Automatic Pickup Reminders**
+Automatic email reminders to customers X minutes before the scheduled pickup time. Fewer no-shows, better pickup experience.
+
+**Nutritional Info & Allergen Labeling**
+EU-compliant nutritional values and allergen declarations for every product. Displayed clearly on the product page and during checkout.
+
+**Advanced Sound Notifications**
+A browser signal tone when a new order arrives on the Kanban board. Configurable individually per location.
+
+---
+
+= Why Libre Bite? =
+
+Most restaurant plugins for WordPress are either too simple (just a menu display) or too complex (with expensive SaaS subscriptions). Libre Bite finds the right balance: a serious operational tool built on the proven WooCommerce foundation — with full data ownership, no transaction fees, and a familiar WordPress interface.
+
+* Full control over your order data
+* No transaction fees
+* Familiar WordPress interface
+* Core features free — pay only for advanced features
+* 7-day free trial for Pro features
+
+---
+
+= External Services =
+
+This plugin uses **Freemius**, a third-party platform for managing licenses, subscriptions, and plugin updates for the Pro version.
+
+During plugin activation, you can opt-in to data sharing with Freemius. Basic information about your website (WordPress version, PHP version, active plugins) is transmitted to Freemius to enable license validation and usage analysis. **Opt-in is completely optional.** All free core features work without opt-in.
+
+* Freemius Privacy Policy: https://freemius.com/privacy/
+* Freemius Terms of Service: https://freemius.com/terms/
+
+No data is sent to Freemius if you skip or decline the opt-in during activation.
+
+The Table Management feature (Pro) uses the **goQR.me API** (https://goqr.me/api/) to generate QR codes for table ordering links. The QR code URL is transmitted to generate the corresponding image. No personal or order data is sent.
+
+* goQR.me API: https://goqr.me/api/
+* goQR.me Privacy Policy: https://goqr.me/privacy-policy/
 
 == Installation ==
 
-1. Lade den Plugin-Ordner nach `/wp-content/plugins/libre-bite` hoch oder installiere das Plugin über **Plugins → Installieren** im WordPress-Dashboard.
-2. Aktiviere das Plugin unter **Plugins → Installierte Plugins**.
-3. Stelle sicher, dass **WooCommerce** installiert und aktiv ist — Libre Bite setzt WooCommerce voraus.
-4. Navigiere im Admin-Menü zu **Libre Bite**, um Standorte zu konfigurieren, Module zu aktivieren und Kassensystem sowie Kanban-Board einzurichten.
+1. Upload the plugin folder to the `/wp-content/plugins/libre-bite` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the **Plugins** screen in WordPress.
+3. Make sure **WooCommerce** is installed and active — Libre Bite requires WooCommerce.
+4. Navigate to **Libre Bite** in the admin menu to configure locations, enable modules, and set up the POS and Kanban board.
 
 == Frequently Asked Questions ==
 
-= Ist WooCommerce zwingend erforderlich? =
+= Is WooCommerce mandatory? =
 
-Ja. Libre Bite ist eine WooCommerce-Erweiterung. WooCommerce muss installiert und aktiv sein, damit Libre Bite funktioniert. Empfohlen wird mindestens WooCommerce 8.0.
+Yes. Libre Bite is a WooCommerce extension. WooCommerce must be installed and active for Libre Bite to work. WooCommerce 8.0 or later is recommended.
 
-= Ist das Plugin mit WooCommerce HPOS kompatibel? =
+= Is the plugin compatible with WooCommerce HPOS? =
 
-Ja. Libre Bite ist vollständig kompatibel mit WooCommerce High-Performance Order Storage (HPOS). Es wurde sowohl mit der bisherigen Post-basierten Speicherung als auch mit den neuen Custom Order Tables getestet.
+Yes. Libre Bite is fully compatible with WooCommerce High-Performance Order Storage (HPOS). It has been tested with both legacy post-based storage and the new Custom Order Tables.
 
-= Kann ich mehrere Restaurantstandorte verwalten? =
+= Can I manage multiple restaurant locations? =
 
-Die Mehrstöndige Standortverwaltung ist in der Pro-Version enthalten. Die kostenlose Version unterstützt einen Einzelstandort mit vollständiger Adress-, Öffnungszeiten- und Bestellweiterleitungskonfiguration.
+Multi-location management is included in the Pro version. The free version supports a single location with full configuration of address, opening hours, and order routing.
 
-= Was ist die Schweizer 5-Rappen-Rundung? =
+= What is Swiss 5-Cent Rounding? =
 
-In der Schweiz werden Barzahlungen auf den nächsten 5 Rappen gerundet, da 1- und 2-Rappen-Münzen nicht mehr im Umlauf sind. Libre Bite wendet diese Rundungsregel beim Checkout automatisch an — nützlich für Schweizer Restaurants, Cafés und Take-Away-Betriebe.
+In Switzerland, cash payments are rounded to the nearest 5 cents as 1- and 2-cent coins are no longer in circulation. Libre Bite automatically applies this rounding rule at checkout — useful for Swiss restaurants, cafés, and take-away businesses.
 
-= Funktioniert das Kassensystem offline? =
+= Does the POS system work offline? =
 
-Das integrierte Kassensystem benötigt eine aktive WordPress/WooCommerce-Sitzung und eine Internetverbindung. Es handelt sich um eine browserbasierte Oberfläche, die derzeit keinen Offline-Modus unterstützt.
+The integrated POS system requires an active WordPress/WooCommerce session and an internet connection. It is a browser-based interface that currently does not support offline mode.
 
-= Teilt Libre Bite meine Daten mit Dritten? =
+= Does Libre Bite share my data with third parties? =
 
-Libre Bite nutzt Freemius für die Lizenzverwaltung und die Bereitstellung von Pro-Funktionen. Daten werden nur dann an Freemius übermittelt, wenn du bei der Aktivierung ausdrücklich zustimmst. Es werden keine Bestell-, Kunden- oder Produktdaten übertragen — nur grundlegende Informationen zur Website-Umgebung (PHP-Version, WP-Version, Plugin-Liste). Weitere Details findest du in der Datenschutzerklärung von Freemius: https://freemius.com/privacy/
+Libre Bite uses Freemius for license management and delivery of Pro features. Data is only transmitted to Freemius if you explicitly opt-in during activation. No order, customer, or product data is transmitted — only basic website environment information (PHP version, WP version, plugin list). For more details, see the Freemius Privacy Policy: https://freemius.com/privacy/
 
-= Was sind die Mindestanforderungen? =
+= What are the minimum requirements? =
 
-* WordPress 6.0 oder höher
-* WooCommerce 8.0 oder höher
-* PHP 7.4 oder höher (PHP 8.1+ empfohlen)
-* Ein moderner Browser für Kanban-Board und Kassenoberfläche
+* WordPress 6.0 or higher
+* WooCommerce 8.0 or higher
+* PHP 7.4 or higher (PHP 8.1+ recommended)
+* A modern browser for Kanban board and POS interface
 
-= Ist Libre Bite mehrsprachig verfügbar? =
+= Is Libre Bite available in multiple languages? =
 
-Das Plugin verwendet die Standard-WordPress-i18n-Funktionen und kann über .pot-Dateien oder Community-Übersetzungen auf translate.wordpress.org übersetzt werden. Die Standardsprache ist Englisch.
+The plugin uses standard WordPress i18n functions and can be translated via .pot files or community translations on translate.wordpress.org. The default language is English.
 
 == Screenshots ==
 
-1. **Kanban-Bestellboard** — Echtzeit-Bestellverwaltung für das Küchenpersonal. Karten per Drag & Drop verschieben, um den Status zu aktualisieren.
-2. **Kassenoberfläche (POS)** — Integriertes Kassensystem für Laufkundschaft und Thekenbestellungen.
-3. **Standorteinstellungen** — Filialadresse, Öffnungszeiten und Bestellweiterleitung konfigurieren.
-4. **Zeitfenster im Checkout** — Kunden wählen ihr Abholzeitfenster direkt im Bestellvorgang.
-5. **Produkt-Add-ons** — Konfigurierbare Extras und Optionen für jeden Menüpunkt.
-6. **Moduleinstellungen** — Einzelne Funktionen je nach Betriebsbedarf ein- oder ausschalten.
+1. **Kanban Order Board** — Real-time order management for kitchen staff. Drag & drop cards to update status.
+2. **POS Interface** — Integrated Point of Sale for walk-in customers and counter orders.
+3. **Location Settings** — Configure branch address, opening hours, and order routing.
+4. **Checkout Time Slots** — Customers choose their pickup time slot directly during checkout.
+5. **Product Add-ons** — Configurable extras and options for each menu item.
+6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
 
+= 1.1.0 =
+* Feature: Table Management module – create tables, assign to locations, generate QR codes for ordering.
+* Feature: Order at Table – QR code URL stores table + location in session, checkout adapts automatically.
+* Feature: Table filter in Kanban board and table name display in order cards.
+* Feature: Clean uninstall – new uninstall.php removes all plugin data when enabled in settings.
+* Security: XSS hardening in dashboard.js and pos.js (template strings replaced with jQuery DOM APIs).
+* Security: wp_unslash() added to all superglobal access in tables module and admin AJAX.
+* Security: current_user_can() check added to table meta save callback.
+* Security: Capability for table AJAX endpoint changed from edit_posts to lbite_use_pos.
+* Improvement: Template variables prefixed with lbite_ in all frontend templates (XSS namespace protection).
+* Improvement: Performance limits added to all unlimited post queries.
+* Improvement: Inline styles and scripts in tables module extracted to external CSS/JS files.
+* Improvement: readme.txt fully translated to English, external services disclosed.
+* Improvement: Order board and POS styles extracted to dedicated CSS files.
+
 = 1.0.9 =
-* Feature: Onboarding-Seite nach Erstinstallation – alle Features wählbar, kein Redirect auf ältere Instanzen.
-* Feature: POS Zahlungsbestätigung – Overlay mit Bestellübersicht und Zahlungsart (Bar/Karte/Twint/Andere) vor Bestellanlage.
-* Fix: HPOS-Inkompatibilität behoben – Order-Meta verwendet jetzt WooCommerce HPOS-API statt get_post_meta/update_post_meta.
-* Fix: XSS in Support-Einstellungen behoben (.html() → .text() für Vorschau-Feld).
-* Fix: XSS in Dashboard-Lade-Overlay behoben (message-Parameter escapet).
+* Feature: Onboarding page after initial installation – select features, no redirect to older instances.
+* Feature: POS Payment Confirmation – Overlay with order summary and payment method (Cash/Card/Twint/Other) before order creation.
+* Fix: HPOS incompatibility resolved – Order meta now uses WooCommerce HPOS API instead of get_post_meta/update_post_meta.
+* Fix: XSS in support settings resolved (.html() → .text() for preview field).
+* Fix: XSS in dashboard loading overlay resolved (message parameter escaped).
 
 = 1.0.8 =
-* Sicherheit: POS-Bestellung verwendet jetzt serverseitigen Produktpreis statt Client-Preis (Manipulation verhindert).
-* Performance: wc_get_orders() mit unbegrenztem Limit (limit => -1) durch sinnvolle Obergrenzen ersetzt (Dashboard 50, Kanban 200, Cron 100).
-* Performance: Pagination in ajax_load_more_completed() auf echte DB-Pagination umgestellt (statt alle Bestellungen laden und slicen).
-* Code: Redundante Cron-Job-Registrierung aus Modul-Konstruktoren entfernt (Cron-Setup nur noch in Aktivierungs-Hook).
+* Security: POS order now uses server-side product price instead of client price (prevents manipulation).
+* Performance: Replaced wc_get_orders() unlimited limit (limit => -1) with sensible caps (Dashboard 50, Kanban 200, Cron 100).
+* Performance: Pagination in ajax_load_more_completed() switched to true DB pagination (instead of loading all orders and slicing).
+* Code: Removed redundant cron job registration from module constructors (cron setup only in activation hook).
 
 = 1.0.7 =
-* Sicherheit: XSS-Escaping in dashboard.js ergänzt (item.meta, Fehlermeldung beim Stornieren).
-* Sicherheit: XSS-Escaping in pos.js ergänzt (variationName in Produkt-Modal).
-* Fix: Falscher Capability-Name in class-product-options.php korrigiert (manage_lbite_options → lbite_manage_options). Produkt-Optionen werden jetzt korrekt gespeichert.
-* Fix: Tippfehler beim Feature-Key in class-checkout.php behoben (enable_tip → enable_tips). Trinkgeld-JS wird jetzt für Pro-Nutzer korrekt geladen.
-* Fix: Status-Labels in class-order-dashboard.php durch WordPress-i18n übersetzbar gemacht (WordPress.org-Compliance).
+* Security: Added XSS escaping in dashboard.js (item.meta, error message when cancelling).
+* Security: Added XSS escaping in pos.js (variationName in product modal).
+* Fix: Corrected wrong capability name in class-product-options.php (manage_lbite_options → lbite_manage_options). Product options are now saved correctly.
+* Fix: Fixed typo in feature key in class-checkout.php (enable_tip → enable_tips). Tip JS is now loaded correctly for Pro users.
+* Fix: Status labels in class-order-dashboard.php made translatable via WordPress i18n (WordPress.org compliance).
 
 = 1.0.6 =
-* Fix: Premium-Override nur noch in der Pro-Version verfügbar (WordPress.org Compliance).
-* Fix: Nährwertangaben, Allergene und Sound-Benachrichtigungen korrekt als Pro-Funktionen markiert.
-* Fix: Feature-Liste in readme.txt an die Free/Pro-Zuordnung angepasst.
-* Fix: Plugin-Beschreibung auf Englisch übersetzt (WordPress.org-Richtlinie).
-* Fix: Output-Escaping in Admin-Notices ergänzt.
-* Bump: Version auf 1.0.6.
+* Fix: Premium override only available in Pro version (WordPress.org compliance).
+* Fix: Nutritional info, allergens, and sound notifications correctly marked as Pro features.
+* Fix: Feature list in readme.txt adapted to Free/Pro assignment.
+* Fix: Plugin description translated to English (WordPress.org guideline).
+* Fix: Output escaping added to admin notices.
+* Bump: Version to 1.0.6.
 
 = 1.0.5 =
-* Fix: Heredoc/Nowdoc-Syntax durch externe JS-Dateien ersetzt (WPCS-Konformität).
+* Fix: Replaced Heredoc/Nowdoc syntax with external JS files (WPCS compliance).
 
 = 1.0.4 =
-* Fix: Funktionspräfix von lb_ auf lbite_ geändert (WordPress.org-Namenskonvention).
-* Fix: Inline-CSS/JS aus Templates in separate Enqueue-Dateien verschoben.
-* Fix: Nonce-Prüfungen in Checkout und Produktoptionen ergänzt.
-* Fix: Freemius-Parameter is_org_compliant hinzugefügt.
-* Fix: SortableJS auf Version 1.15.7 aktualisiert.
-* Fix: Contributors-Feld in readme.txt korrigiert.
+* Fix: Changed function prefix from lb_ to lbite_ (WordPress.org naming convention).
+* Fix: Moved inline CSS/JS from templates to separate enqueue files.
+* Fix: Added nonce checks in checkout and product options.
+* Fix: Added Freemius parameter is_org_compliant.
+* Fix: Updated SortableJS to version 1.15.7.
+* Fix: Corrected contributors field in readme.txt.
 
 = 1.0.3 =
-* Fix: Alle WordPress.org Plugin Check-Fehler und -Warnungen behoben.
-* Fix: Direkter Dateizugriffsschutz in der Hauptplugin-Datei korrigiert.
-* Fix: Output-Escaping bei wp_die()-Aufrufen behoben.
-* Fix: strip_tags() durch wp_strip_all_tags() ersetzt.
-* Fix: PHPCS-Ignore-Kommentare für legitime Verwendungen hinzugefügt.
-* Fix: Tags in readme.txt auf maximal 5 reduziert.
+* Fix: Resolved all WordPress.org Plugin Check errors and warnings.
+* Fix: Corrected direct file access protection in main plugin file.
+* Fix: Fixed output escaping in wp_die() calls.
+* Fix: Replaced strip_tags() with wp_strip_all_tags().
+* Fix: Added PHPCS ignore comments for legitimate uses.
+* Fix: Reduced tags in readme.txt to maximum 5.
 
 = 1.0.2 =
-* Fix: WordPress.org Plugin Check-Fehler behoben (Tested-up-to-Tag, Textdomain-Laden).
-* Fix: Domain-Path-Header entfernt.
+* Fix: Resolved WordPress.org Plugin Check errors (Tested up to tag, text domain loading).
+* Fix: Removed Domain Path header.
 
 = 1.0.1 =
-* Verbessert: Freemius-Integration für bessere WordPress.org-Konformität.
-* Behoben: Deinstallationsprozess für Feedback-Tracking angepasst.
-* Sicherheit: Sicherheitsprüfungen und Escaping verbessert.
+* Improved: Freemius integration for better WordPress.org compliance.
+* Fixed: Uninstallation process adapted for feedback tracking.
+* Security: Improved security checks and escaping.
 
 = 1.0.0-beta =
-* Erste Beta-Version.
-* Hinzugefügt: Standortverwaltungsmodul.
-* Hinzugefügt: Kassensystem (POS).
-* Hinzugefügt: Kanban-Bestellboard.
-* Hinzugefügt: Trinkgeldsystem und geplante Bestellzeitfenster.
-* Hinzugefügt: Freemius-Integration für Pro-Funktionen.
+* First beta version.
+* Added: Location management module.
+* Added: Point of Sale (POS).
+* Added: Kanban order board.
+* Added: Tipping system and scheduled order time slots.
+* Added: Freemius integration for Pro features.
 
 == Upgrade Notice ==
 
 = 1.0.7 =
-Sicherheits- und Bugfix-Release: XSS-Fixes in JS, korrektes Capability-Checking für Produkt-Optionen, Fix für Trinkgeld-Feature-Key. Update empfohlen.
+Security and bugfix release: XSS fixes in JS, correct capability checking for product options, fix for tip feature key. Update recommended.
 
 = 1.0.6 =
-Wartungsversion mit WordPress.org-Compliance-Fixes. Keine Breaking Changes.
+Maintenance release with WordPress.org compliance fixes. No breaking changes.

@@ -94,3 +94,23 @@
 @keyframes lbite-spin {
 	to { transform: rotate(360deg); }
 }
+
+/* Tisch-Info-Box im Checkout */
+.lbite-table-info-box {
+	background: #e7f5ff;
+	border: 1px solid #b3d7ff;
+	padding: 15px;
+	margin-bottom: 20px;
+	border-radius: 4px;
+	color: #004085;
+}
+
+.lbite-table-info-flex {
+	display: flex;
+	align-items: center;
+}
+
+.lbite-table-icon {
+	margin-right: 10px;
+	color: #0073aa;
+}

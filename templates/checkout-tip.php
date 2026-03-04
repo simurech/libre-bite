@@ -16,26 +16,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="lbite-tip-options">
 		<label class="lbite-tip-option">
-			<input type="radio" name="lbite_tip_type" value="none" <?php checked( $default_selection, 'none' ); ?>>
+			<input type="radio" name="lbite_tip_type" value="none" <?php checked( $lbite_default_selection, 'none' ); ?>>
 			<span><?php esc_html_e( 'Kein Trinkgeld', 'libre-bite' ); ?></span>
 		</label>
 
 		<label class="lbite-tip-option">
-			<input type="radio" name="lbite_tip_type" value="percentage" data-percentage="<?php echo esc_attr( $percentage_1 ); ?>" <?php checked( $default_selection, 'percentage_1' ); ?>>
-			<input type="hidden" name="lbite_tip_percentage" class="lbite-tip-percentage-value" value="<?php echo $default_selection === 'percentage_1' ? esc_attr( $percentage_1 ) : ''; ?>" <?php echo $default_selection === 'percentage_1' ? '' : 'disabled'; ?>>
-			<span><?php echo esc_html( $percentage_1 ); ?>%</span>
+			<input type="radio" name="lbite_tip_type" value="percentage" data-percentage="<?php echo esc_attr( $lbite_percentage_1 ); ?>" <?php checked( $lbite_default_selection, 'percentage_1' ); ?>>
+			<input type="hidden" name="lbite_tip_percentage" class="lbite-tip-percentage-value" value="<?php echo $lbite_default_selection === 'percentage_1' ? esc_attr( $lbite_percentage_1 ) : ''; ?>" <?php echo $lbite_default_selection === 'percentage_1' ? '' : 'disabled'; ?>>
+			<span><?php echo esc_html( $lbite_percentage_1 ); ?>%</span>
 		</label>
 
 		<label class="lbite-tip-option">
-			<input type="radio" name="lbite_tip_type" value="percentage" data-percentage="<?php echo esc_attr( $percentage_2 ); ?>" <?php checked( $default_selection, 'percentage_2' ); ?>>
-			<input type="hidden" name="lbite_tip_percentage" class="lbite-tip-percentage-value" value="<?php echo $default_selection === 'percentage_2' ? esc_attr( $percentage_2 ) : ''; ?>" <?php echo $default_selection === 'percentage_2' ? '' : 'disabled'; ?>>
-			<span><?php echo esc_html( $percentage_2 ); ?>%</span>
+			<input type="radio" name="lbite_tip_type" value="percentage" data-percentage="<?php echo esc_attr( $lbite_percentage_2 ); ?>" <?php checked( $lbite_default_selection, 'percentage_2' ); ?>>
+			<input type="hidden" name="lbite_tip_percentage" class="lbite-tip-percentage-value" value="<?php echo $lbite_default_selection === 'percentage_2' ? esc_attr( $lbite_percentage_2 ) : ''; ?>" <?php echo $lbite_default_selection === 'percentage_2' ? '' : 'disabled'; ?>>
+			<span><?php echo esc_html( $lbite_percentage_2 ); ?>%</span>
 		</label>
 
 		<label class="lbite-tip-option">
-			<input type="radio" name="lbite_tip_type" value="percentage" data-percentage="<?php echo esc_attr( $percentage_3 ); ?>" <?php checked( $default_selection, 'percentage_3' ); ?>>
-			<input type="hidden" name="lbite_tip_percentage" class="lbite-tip-percentage-value" value="<?php echo $default_selection === 'percentage_3' ? esc_attr( $percentage_3 ) : ''; ?>" <?php echo $default_selection === 'percentage_3' ? '' : 'disabled'; ?>>
-			<span><?php echo esc_html( $percentage_3 ); ?>%</span>
+			<input type="radio" name="lbite_tip_type" value="percentage" data-percentage="<?php echo esc_attr( $lbite_percentage_3 ); ?>" <?php checked( $lbite_default_selection, 'percentage_3' ); ?>>
+			<input type="hidden" name="lbite_tip_percentage" class="lbite-tip-percentage-value" value="<?php echo $lbite_default_selection === 'percentage_3' ? esc_attr( $lbite_percentage_3 ) : ''; ?>" <?php echo $lbite_default_selection === 'percentage_3' ? '' : 'disabled'; ?>>
+			<span><?php echo esc_html( $lbite_percentage_3 ); ?>%</span>
 		</label>
 
 		<label class="lbite-tip-option lbite-tip-custom">
@@ -46,4 +46,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</label>
 	</div>
 </div>
-

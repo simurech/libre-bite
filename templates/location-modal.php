@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<p><?php esc_html_e( 'Bitte wählen Sie Ihren gewünschten Standort:', 'libre-bite' ); ?></p>
 
 		<div class="lbite-location-list">
-			<?php foreach ( $locations as $location ) : ?>
+			<?php foreach ( $lbite_locations as $location ) : ?>
 				<?php
 				$street = get_post_meta( $location->ID, '_lbite_street', true );
 				$zip    = get_post_meta( $location->ID, '_lbite_zip', true );

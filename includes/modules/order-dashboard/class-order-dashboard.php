@@ -61,9 +61,6 @@ class LBite_Order_Dashboard {
 	 * Hooks initialisieren
 	 */
 	private function init_hooks() {
-		// Admin-Assets
-		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_dashboard_assets' );
-
 		// AJAX-Endpoints
 		$this->loader->add_action( 'wp_ajax_lbite_get_orders', $this, 'ajax_get_orders' );
 		$this->loader->add_action( 'wp_ajax_lbite_update_order_status', $this, 'ajax_update_order_status' );
@@ -79,71 +76,6 @@ class LBite_Order_Dashboard {
 
 		// Neue Bestellung: Initial Status setzen
 		$this->loader->add_action( 'woocommerce_new_order', $this, 'set_initial_order_status' );
-	}
-
-	/**
-	 * Dashboard-Assets laden
-	 *
-	 * @param string $hook Aktuelle Admin-Seite
-	 */
-	public function enqueue_dashboard_assets( $hook ) {
-		// Null-Check für $hook.
-		if ( empty( $hook ) || strpos( (string) $hook, 'lbite-order-board' ) === false ) {
-			return;
-		}
-
-		// Order Board CSS
-		wp_enqueue_style(
-			'lbite-order-board',
-			LBITE_PLUGIN_URL . 'assets/css/admin-order-board.css',
-			array(),
-			LBITE_VERSION
-		);
-
-		// SortableJS für Drag & Drop (lokal gebündelt).
-		wp_enqueue_script(
-			'sortablejs',
-			LBITE_PLUGIN_URL . 'assets/js/vendor/sortable.min.js',
-			array(),
-			'1.15.7',
-			true
-		);
-
-		// Dashboard-spezifisches JS
-		wp_enqueue_script(
-			'lbite-dashboard',
-			LBITE_PLUGIN_URL . 'assets/js/dashboard.js',
-			array( 'jquery', 'sortablejs' ),
-			LBITE_VERSION,
-			true
-		);
-
-		// Sound-Datei-Pfad (aus Einstellungen oder Default)
-		$sound_url = get_option( 'lbite_notification_sound', '' );
-
-		// Falls kein Sound eingestellt, prüfe auf Default-Sound im Plugin
-		if ( empty( $sound_url ) ) {
-			$sound_file = LBITE_PLUGIN_DIR . 'assets/sounds/notification.mp3';
-			$sound_url  = file_exists( $sound_file ) ? LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' : '';
-		}
-
-		// Lokalisierte Daten
-		wp_localize_script(
-			'lbite-dashboard',
-			'lbiteDashboard',
-			array(
-				'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
-				'nonce'           => wp_create_nonce( 'lbite_dashboard_nonce' ),
-				'refreshInterval' => get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
-				'soundUrl'        => $sound_url,
-				'statuses'        => self::get_status_labels(),
-				'strings'         => array(
-					'orderUpdated' => __( 'Bestellung aktualisiert', 'libre-bite' ),
-					'updateError'  => __( 'Fehler beim Aktualisieren', 'libre-bite' ),
-					'newOrder'     => __( 'Neue Bestellung', 'libre-bite' ),
-				),
-			)
-		);
 	}
 
 	/**
@@ -260,6 +192,7 @@ class LBite_Order_Dashboard {
 		$order_type  = $order->get_meta( '_lbite_order_type', true );
 		$pickup_time = $order->get_meta( '_lbite_pickup_time', true );
 		$location    = $order->get_meta( '_lbite_location_name', true );
+		$table_id    = $order->get_meta( '_lbite_table_id', true );
 
 		$items = array();
 		foreach ( $order->get_items() as $item ) {
@@ -271,18 +204,21 @@ class LBite_Order_Dashboard {
 			);
 		}
 
-		return array(
+		$data = array(
 			'id'          => $order->get_id(),
 			'number'      => $order->get_order_number(),
 			'date'        => $order->get_date_created()->format( 'H:i' ),
 			'type'        => $order_type,
 			'pickup_time' => $pickup_time ? wp_date( 'H:i', strtotime( $pickup_time ) ) : '',
 			'location'    => $location,
+			'table_id'    => $table_id,
 			'customer'    => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
 			'total'       => $order->get_formatted_order_total(),
 			'items'       => $items,
 			'notes'       => $order->get_customer_note(),
 		);
+
+		return apply_filters( 'lbite_dashboard_order_data', $data, $order );
 	}
 
 	/**
@@ -462,15 +398,16 @@ class LBite_Order_Dashboard {
 			),
 		);
 
-		// Gesamtanzahl mit leichtgewichtiger IDs-Abfrage bestimmen.
-		$args_count      = array_merge( $args, array( 'return' => 'ids', 'limit' => -1 ) );
-		$total_completed = count( wc_get_orders( $args_count ) );
-
 		// Nur die angeforderten Bestellungen laden (paginiert).
-		$args['limit']  = 10;
-		$args['offset'] = $offset;
-		$orders         = wc_get_orders( $args );
-		$formatted      = array();
+		$args['limit']    = 10;
+		$args['offset']   = $offset;
+		$args['paginate'] = true;
+		
+		$results         = wc_get_orders( $args );
+		$orders          = $results->orders;
+		$total_completed = $results->total;
+		
+		$formatted = array();
 
 		foreach ( $orders as $order ) {
 			$formatted[] = $this->format_order_for_dashboard( $order );

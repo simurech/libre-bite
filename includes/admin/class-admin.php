@@ -71,6 +71,7 @@ class LBite_Admin {
 		$this->loader->add_action( 'wp_ajax_lbite_get_theme_colors', $this, 'ajax_get_theme_colors' );
 		$this->loader->add_action( 'wp_ajax_lbite_save_features', $this, 'ajax_save_features' );
 		$this->loader->add_action( 'wp_ajax_lbite_save_support_settings', $this, 'ajax_save_support_settings' );
+		$this->loader->add_action( 'wp_ajax_lbite_get_location_tables', $this, 'ajax_get_location_tables' );
 	}
 
 	/**
@@ -443,6 +444,41 @@ class LBite_Admin {
 			);
 		}
 
+		// Dashboard / Order Board Assets
+		if ( strpos( $hook, 'lbite-order-board' ) !== false ) {
+			wp_enqueue_style(
+				'lbite-order-board',
+				LBITE_PLUGIN_URL . 'assets/css/admin-order-board.css',
+				array( 'lbite-admin' ),
+				LBITE_VERSION
+			);
+
+			wp_enqueue_script(
+				'lbite-dashboard',
+				LBITE_PLUGIN_URL . 'assets/js/dashboard.js',
+				array( 'jquery', 'sortablejs' ),
+				LBITE_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'lbite-dashboard',
+				'lbiteDashboard',
+				array(
+					'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+					'nonce'    => wp_create_nonce( 'lbite_dashboard_nonce' ),
+					'soundUrl' => get_option( 'lbite_notification_sound', LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' ),
+					'refresh'  => get_option( 'lbite_dashboard_refresh_interval', 30 ),
+					'strings'  => array(
+						'orderUpdated'  => __( 'Status aktualisiert', 'libre-bite' ),
+						'updateError'   => __( 'Fehler beim Aktualisieren', 'libre-bite' ),
+						'soundActive'   => __( 'Sound aktiv', 'libre-bite' ),
+						'soundInactive' => __( 'Sound aus', 'libre-bite' ),
+					),
+				)
+			);
+		}
+
 		// POS-Assets werden komplett in class-pos.php geladen (inkl. preloadData).
 	}
 
@@ -484,7 +520,7 @@ class LBite_Admin {
 			// Nicht im Cache - Daten laden.
 			$args = array(
 				'post_type'      => 'product',
-				'posts_per_page' => -1,
+				'posts_per_page' => 500, // Begrenzt für Performance.
 				'post_status'    => 'publish',
 				'orderby'        => 'title',
 				'order'          => 'ASC',
@@ -681,6 +717,7 @@ class LBite_Admin {
 		}
 
 		$location_id    = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$table_id       = isset( $_POST['table_id'] ) ? intval( wp_unslash( $_POST['table_id'] ) ) : 0;
 		$order_type     = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
 		$pickup_time    = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
 		$customer_name  = isset( $_POST['customer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_name'] ) ) : '';
@@ -734,6 +771,15 @@ class LBite_Admin {
 
 			// Bestellmeta setzen.
 			$order->update_meta_data( '_lbite_location_id', $location_id );
+
+			// Tisch-ID speichern.
+			if ( $table_id ) {
+				$order->update_meta_data( '_lbite_table_id', $table_id );
+				$table = get_post( $table_id );
+				if ( $table ) {
+					$order->update_meta_data( '_lbite_table_name', $table->post_title );
+				}
+			}
 
 			// Standort-Name speichern.
 			$location = get_post( $location_id );
@@ -915,5 +961,43 @@ class LBite_Admin {
 		update_option( 'lbite_support_settings', $settings );
 
 		wp_send_json_success( array( 'message' => __( 'Support-Einstellungen gespeichert', 'libre-bite' ) ) );
+	}
+
+	/**
+	 * AJAX: Tische für einen Standort abrufen
+	 */
+	public function ajax_get_location_tables() {
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+		}
+
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+
+		if ( ! $location_id ) {
+			wp_send_json_success( array( 'tables' => array() ) );
+		}
+
+		$tables = get_posts( array(
+			'post_type'      => 'lbite_table',
+			'posts_per_page' => 100,
+			'meta_query'     => array(
+				array(
+					'key'   => '_lbite_location_id',
+					'value' => $location_id,
+				),
+			),
+		) );
+
+		$formatted_tables = array();
+		foreach ( $tables as $table ) {
+			$formatted_tables[] = array(
+				'id'    => $table->ID,
+				'title' => $table->post_title,
+			);
+		}
+
+		wp_send_json_success( array( 'tables' => $formatted_tables ) );
 	}
 }

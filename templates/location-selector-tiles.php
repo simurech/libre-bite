@@ -10,19 +10,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Check if single location mode.
-$is_single_location = ( count( $locations ) === 1 );
-$location_class     = $is_single_location ? 'lbite-location-selector-tiles lbite-single-location' : 'lbite-location-selector-tiles';
+$lbite_is_single_location = ( count( $lbite_locations ) === 1 );
+$lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector-tiles lbite-single-location' : 'lbite-location-selector-tiles';
 ?>
 
-<div class="<?php echo esc_attr( $location_class ); ?>">
+<div class="<?php echo esc_attr( $lbite_location_class ); ?>">
 	<!-- Schritt 1: Standort-Auswahl -->
 	<div class="lbite-step lbite-step-location active" id="lbite-step-location">
-		<?php if ( ! $is_single_location ) : ?>
+		<?php if ( ! $lbite_is_single_location ) : ?>
 			<h2 class="lbite-step-title"><?php esc_html_e( 'Wählen Sie Ihren Standort', 'libre-bite' ); ?></h2>
 		<?php endif; ?>
 
-		<div class="lbite-location-grid<?php echo $is_single_location ? ' lbite-single' : ''; ?>">
-			<?php foreach ( $locations as $location ) : ?>
+		<div class="lbite-location-grid<?php echo $lbite_is_single_location ? ' lbite-single' : ''; ?>">
+			<?php foreach ( $lbite_locations as $location ) : ?>
 				<?php
 				$image_id = get_post_meta( $location->ID, '_lbite_location_image', true );
 				$image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'medium' ) : '';

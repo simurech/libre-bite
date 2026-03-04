@@ -194,7 +194,7 @@ class LBite_Product_Options {
 		$options = get_posts(
 			array(
 				'post_type'      => self::POST_TYPE,
-				'posts_per_page' => -1,
+				'posts_per_page' => 200, // Begrenzt für Performance.
 				'orderby'        => 'title',
 				'order'          => 'ASC',
 			)
@@ -268,7 +268,7 @@ class LBite_Product_Options {
 		$options = get_posts(
 			array(
 				'post_type'      => self::POST_TYPE,
-				'posts_per_page' => -1,
+				'posts_per_page' => 200, // Begrenzt für Performance.
 				'post__in'       => $product_options,
 				'orderby'        => 'title',
 				'order'          => 'ASC',
