@@ -168,15 +168,13 @@ body .lbite-checkout-optimized #order_review_heading {
 	text-align: left;
 }
 
-/* blockUI Ladeindikator: verhindert permanentes Grau-Overlay */
-body .lbite-checkout-optimized .blockOverlay {
-	opacity: 0.3 !important;
-}
-
-body .lbite-checkout-optimized .woocommerce-checkout-review-order .blockOverlay,
-body .lbite-checkout-optimized #payment .blockOverlay {
-	background: rgba(255, 255, 255, 0.6) !important;
-	opacity: 1 !important;
+/* blockUI-Ladeoverlay auf Produkttabelle und Zahlungsbereich ausblenden.
+ * WooCommerce blockiert diese Elemente während update_order_review AJAX-Aufrufen.
+ * Im optimierten Checkout ist dieses Blocking nicht erwünscht, da es die Interaktion
+ * dauerhaft verhindert. CSS !important überschreibt auch blockUI-Inline-Styles. */
+.lbite-checkout-optimized .woocommerce-checkout-review-order-table .blockUI,
+.lbite-checkout-optimized #payment .blockUI {
+	display: none !important;
 }
 
 .lbite-checkout-form .woocommerce-checkout-review-order-table {
