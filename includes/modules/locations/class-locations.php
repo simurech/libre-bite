@@ -76,6 +76,25 @@ class LBite_Locations {
 		$screen = get_current_screen();
 		if ( $screen && self::POST_TYPE === $screen->post_type ) {
 			wp_enqueue_media();
+
+			// Bild-Upload-Script laden (nach media-views, damit wp.media verfügbar ist).
+			wp_enqueue_script(
+				'lbite-admin-location-image',
+				LBITE_PLUGIN_URL . 'assets/js/admin-location-image.js',
+				array( 'jquery', 'media-views' ),
+				LBITE_VERSION,
+				true
+			);
+			wp_localize_script(
+				'lbite-admin-location-image',
+				'lbiteLocationImage',
+				array(
+					'title'      => __( 'Standort-Bild wählen', 'libre-bite' ),
+					'buttonText' => __( 'Bild verwenden', 'libre-bite' ),
+					'noImageText' => __( 'Kein Bild ausgewählt', 'libre-bite' ),
+					'errorText'  => __( 'Fehler: Media-Library nicht geladen', 'libre-bite' ),
+				)
+			);
 		}
 	}
 
@@ -189,47 +208,6 @@ class LBite_Locations {
 				<?php esc_html_e( 'Optional: Wird in der Standort-Auswahl als Kachel-Bild angezeigt.', 'libre-bite' ); ?>
 			</p>
 		</div>
-		<?php
-		$image_upload_js = "
-		jQuery(document).ready(function($) {
-			var \$container = $('.lbite-location-image-upload');
-			var \$input = \$container.find('input[name=\"lbite_location_image\"]');
-			var \$preview = \$container.find('.lbite-image-preview');
-			var \$uploadBtn = \$container.find('.lbite-upload-image-button');
-			var \$removeBtn = \$container.find('.lbite-remove-image-button');
-			var imageFrame;
-
-			if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
-				\$uploadBtn.prop('disabled', true).text('" . esc_js( __( 'Fehler: Media-Library nicht geladen', 'libre-bite' ) ) . "');
-				return;
-			}
-
-			\$uploadBtn.on('click', function(e) {
-				e.preventDefault();
-				if (imageFrame) { imageFrame.open(); return; }
-				imageFrame = wp.media({
-					title: '" . esc_js( __( 'Standort-Bild wählen', 'libre-bite' ) ) . "',
-					button: { text: '" . esc_js( __( 'Bild verwenden', 'libre-bite' ) ) . "' },
-					multiple: false
-				});
-				imageFrame.on('select', function() {
-					var attachment = imageFrame.state().get('selection').first().toJSON();
-					\$input.val(attachment.id);
-					\$preview.html('<img src=\"' + attachment.url + '\" style=\"max-width: 100%; height: auto; display: block;\">');
-					\$removeBtn.show();
-				});
-				imageFrame.open();
-			});
-
-			\$removeBtn.on('click', function(e) {
-				e.preventDefault();
-				\$input.val('');
-				\$preview.html('<p style=\"text-align: center; padding: 20px; background: #f5f5f5; border: 2px dashed #ddd;\">" . esc_js( __( 'Kein Bild ausgewählt', 'libre-bite' ) ) . "</p>');
-				\$(this).hide();
-			});
-		});";
-		wp_add_inline_script( 'jquery', $image_upload_js );
-		?>
 		<?php
 	}
 
