@@ -1,6 +1,9 @@
 jQuery(document).ready(function($) {
+	// Event-Delegation: Listener auf document binden damit WooCommerce Fragment-Updates
+	// (DOM-Replacement von .woocommerce-checkout-review-order) die Handler nicht entfernen.
+
 	// Trinkgeld-Auswahl
-	$('input[name="lbite_tip_type"]').on('change', function() {
+	$(document).on('change', 'input[name="lbite_tip_type"]', function() {
 		// Alle versteckten Felder zurücksetzen
 		$('.lbite-tip-percentage-value').prop('disabled', true).val('');
 
@@ -14,7 +17,7 @@ jQuery(document).ready(function($) {
 		$('body').trigger('update_checkout');
 	});
 
-	$('input[name="lbite_tip_custom"]').on('input', function() {
+	$(document).on('input', 'input[name="lbite_tip_custom"]', function() {
 		$(this).closest('.lbite-tip-option').find('input[name="lbite_tip_type"]').prop('checked', true);
 
 		// Debounce
