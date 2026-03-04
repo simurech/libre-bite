@@ -136,12 +136,47 @@
 	margin-top: 15px;
 }
 
+/* WooCommerce Overrides - Layout (theme-unabhängig, hohe Spezifität) */
+
+/* WooCommerce zweispaltig-Layout aufheben (col2-set, col-1, col-2) */
+body .lbite-checkout-optimized .woocommerce-checkout.lbite-checkout-form .col2-set,
+body .lbite-checkout-optimized .woocommerce-checkout.lbite-checkout-form .col-1,
+body .lbite-checkout-optimized .woocommerce-checkout.lbite-checkout-form .col-2 {
+	float: none !important;
+	width: 100% !important;
+	margin-right: 0 !important;
+	padding: 0 !important;
+}
+
+/* Order Review Bereich vollbreit erzwingen */
+body .lbite-checkout-optimized #order_review,
+body .lbite-checkout-optimized .woocommerce-checkout-review-order,
+body .lbite-checkout-optimized #order_review_heading {
+	float: none !important;
+	width: 100% !important;
+	clear: both !important;
+	padding: 0 !important;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+
 /* WooCommerce Overrides - Order Review */
 .lbite-checkout-form #order_review,
 .lbite-checkout-form .woocommerce-checkout-review-order {
 	width: 100%;
 	float: none;
 	text-align: left;
+}
+
+/* blockUI Ladeindikator: verhindert permanentes Grau-Overlay */
+body .lbite-checkout-optimized .blockOverlay {
+	opacity: 0.3 !important;
+}
+
+body .lbite-checkout-optimized .woocommerce-checkout-review-order .blockOverlay,
+body .lbite-checkout-optimized #payment .blockOverlay {
+	background: rgba(255, 255, 255, 0.6) !important;
+	opacity: 1 !important;
 }
 
 .lbite-checkout-form .woocommerce-checkout-review-order-table {
