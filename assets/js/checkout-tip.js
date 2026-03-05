@@ -14,6 +14,7 @@ jQuery(document).ready(function($) {
 			$hiddenField.val(percentage).prop('disabled', false);
 		}
 
+		$('.lbite-tip-selection').addClass('lbite-tip--updating');
 		$('body').trigger('update_checkout');
 	});
 
@@ -23,7 +24,13 @@ jQuery(document).ready(function($) {
 		// Debounce
 		clearTimeout(window.tipTimeout);
 		window.tipTimeout = setTimeout(function() {
+			$('.lbite-tip-selection').addClass('lbite-tip--updating');
 			$('body').trigger('update_checkout');
 		}, 500);
+	});
+
+	// Lade-Status entfernen sobald WooCommerce den Checkout aktualisiert hat
+	$(document.body).on('updated_checkout', function() {
+		$('.lbite-tip-selection').removeClass('lbite-tip--updating');
 	});
 });

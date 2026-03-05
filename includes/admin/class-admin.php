@@ -477,7 +477,7 @@ class LBite_Admin {
 					'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
 					'nonce'    => wp_create_nonce( 'lbite_dashboard_nonce' ),
 					'soundUrl' => get_option( 'lbite_notification_sound', LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' ),
-					'refresh'  => get_option( 'lbite_dashboard_refresh_interval', 30 ),
+					'refreshInterval' => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000, // in Millisekunden
 					'strings'  => array(
 						'orderUpdated'  => __( 'Status aktualisiert', 'libre-bite' ),
 						'updateError'   => __( 'Fehler beim Aktualisieren', 'libre-bite' ),

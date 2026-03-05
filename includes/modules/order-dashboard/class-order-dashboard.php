@@ -84,7 +84,7 @@ class LBite_Order_Dashboard {
 	public function ajax_get_orders() {
 		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lbite_view_orders' ) ) {
+		if ( ! current_user_can( 'lbite_view_orders' ) && ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
@@ -258,7 +258,7 @@ class LBite_Order_Dashboard {
 	public function ajax_update_order_status() {
 		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lbite_manage_orders' ) && ! current_user_can( 'edit_shop_orders' ) ) {
+		if ( ! current_user_can( 'lbite_manage_orders' ) && ! current_user_can( 'edit_shop_orders' ) && ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 
@@ -365,7 +365,7 @@ class LBite_Order_Dashboard {
 	public function ajax_load_more_completed() {
 		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lbite_view_orders' ) ) {
+		if ( ! current_user_can( 'lbite_view_orders' ) && ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
 		}
 

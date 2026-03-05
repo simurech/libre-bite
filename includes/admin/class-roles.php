@@ -248,7 +248,7 @@ class LBite_Roles {
 		}
 
 		// Version für Migration speichern
-		update_option( 'lbite_roles_version', '1.0.0' );
+		update_option( 'lbite_roles_version', '1.1.0' );
 	}
 
 	/**
@@ -258,6 +258,6 @@ class LBite_Roles {
 	 */
 	public static function needs_migration() {
 		$current_version = get_option( 'lbite_roles_version', '0' );
-		return version_compare( $current_version, '1.0.0', '<' );
+		return version_compare( $current_version, '1.1.0', '<' );
 	}
 }

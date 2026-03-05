@@ -32,7 +32,9 @@ if ( empty( $location_name ) && $location_id ) {
 		$location_name = $location_post->post_title;
 	}
 }
-// ... (restliche Logik bleibt, da sie $location_id etc. verwendet, die hier lokal definiert sind)
+// Standort-Adresse und Maps-URL.
+$location_address  = $location_id ? LBite_Locations::get_formatted_address( $location_id ) : '';
+$location_maps_url = $location_id ? LBite_Locations::get_maps_url( $location_id ) : '';
 
 // Abholnummer (letzte 4 Ziffern der Bestellnummer).
 $order_number  = $lbite_order->get_order_number();

@@ -75,7 +75,9 @@ class LBite_Checkout {
 
 		// Trinkgeld (Feature-abhängig)
 		if ( lbite_feature_enabled( 'enable_tips' ) ) {
-			$this->loader->add_action( 'woocommerce_review_order_before_payment', $this, 'render_tip_selection' );
+			// Priorität 15: zwischen Bestelltabelle (Prio 10) und Zahlungsbereich (Prio 20).
+			// So landet das Trinkgeld ausserhalb von #payment und wird nicht vom Theme transformiert.
+			$this->loader->add_action( 'woocommerce_checkout_order_review', $this, 'render_tip_selection', 15 );
 			$this->loader->add_action( 'woocommerce_cart_calculate_fees', $this, 'add_tip_fee' );
 			$this->loader->add_action( 'woocommerce_checkout_update_order_meta', $this, 'save_tip_meta' );
 		}
@@ -122,6 +124,23 @@ class LBite_Checkout {
 			// Shipping Felder komplett entfernen.
 			unset( $fields['shipping'] );
 
+			return $fields;
+		}
+
+		// Optimierter Checkout: Nur Name und E-Mail behalten.
+		// Die restlichen Felder werden im Template per CSS ausgeblendet, müssen aber auch
+		// server-seitig entfernt werden, damit WooCommerce keine Pflichtfeld-Validierung auslöst.
+		$checkout_mode = get_option( 'lbite_checkout_mode', 'standard' );
+		if ( 'optimized' === $checkout_mode ) {
+			$keep_fields = array( 'billing_first_name', 'billing_email' );
+			foreach ( $fields['billing'] as $key => $field ) {
+				if ( ! in_array( $key, $keep_fields, true ) ) {
+					unset( $fields['billing'][ $key ] );
+				}
+			}
+			if ( isset( $fields['shipping'] ) ) {
+				unset( $fields['shipping'] );
+			}
 			return $fields;
 		}
 
@@ -688,42 +707,33 @@ class LBite_Checkout {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Daten kommen aus update_order_review AJAX (Nonce dort geprueft).
-		if ( ! isset( $_POST['post_data'] ) ) {
+		// Formulardaten ermitteln: Bei update_order_review als serialisierter String in post_data,
+		// bei process_checkout direkt in $_POST.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce wird im jeweiligen AJAX-Handler geprüft.
+		if ( isset( $_POST['post_data'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			parse_str( wp_unslash( $_POST['post_data'] ), $form_data );
+		} else {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$form_data = wp_unslash( $_POST );
+		}
+
+		if ( ! isset( $form_data['lbite_tip_type'] ) || 'none' === $form_data['lbite_tip_type'] ) {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Daten kommen aus update_order_review AJAX (Nonce dort geprueft).
-		$post_data_string = sanitize_text_field( wp_unslash( $_POST['post_data'] ) );
-
-		// Sicherere Alternative zu parse_str(): wp_parse_args() verwenden
-		$post_data = array();
-		$pairs     = explode( '&', $post_data_string );
-		foreach ( $pairs as $pair ) {
-			$parts = explode( '=', $pair, 2 );
-			if ( count( $parts ) === 2 ) {
-				$key   = sanitize_key( urldecode( $parts[0] ) );
-				$value = sanitize_text_field( urldecode( $parts[1] ) );
-				$post_data[ $key ] = $value;
-			}
-		}
-
-		if ( ! isset( $post_data['lbite_tip_type'] ) || 'none' === $post_data['lbite_tip_type'] ) {
-			return;
-		}
-
-		$tip_type   = sanitize_text_field( $post_data['lbite_tip_type'] );
+		$tip_type   = sanitize_text_field( $form_data['lbite_tip_type'] );
 		$tip_amount = 0;
 
-		// Use gross subtotal (including tax) for tip calculation.
+		// Brutto-Zwischensumme (inkl. MwSt.) für Trinkgeldberechnung.
 		$cart       = WC()->cart;
 		$cart_total = $cart->get_subtotal() + $cart->get_subtotal_tax();
 
-		if ( 'percentage' === $tip_type && isset( $post_data['lbite_tip_percentage'] ) ) {
-			$percentage = floatval( $post_data['lbite_tip_percentage'] );
+		if ( 'percentage' === $tip_type && isset( $form_data['lbite_tip_percentage'] ) ) {
+			$percentage = floatval( $form_data['lbite_tip_percentage'] );
 			$tip_amount = ( $cart_total * $percentage ) / 100;
-		} elseif ( 'custom' === $tip_type && isset( $post_data['lbite_tip_custom'] ) ) {
-			$percentage = floatval( $post_data['lbite_tip_custom'] );
+		} elseif ( 'custom' === $tip_type && isset( $form_data['lbite_tip_custom'] ) ) {
+			$percentage = floatval( $form_data['lbite_tip_custom'] );
 			$tip_amount = ( $cart_total * $percentage ) / 100;
 		}
 

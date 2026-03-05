@@ -424,6 +424,31 @@ select.lbite-select option {
 	color: var(--lbite-color-primary, #0073aa);
 }
 
+/* Lade-Status während Checkout-Aktualisierung */
+.lbite-tip-selection.lbite-tip--updating {
+	position: relative;
+	pointer-events: none;
+	opacity: 0.6;
+}
+
+.lbite-tip-selection.lbite-tip--updating::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 20px;
+	height: 20px;
+	margin: -10px 0 0 -10px;
+	border: 2px solid #ddd;
+	border-top-color: var(--lbite-color-primary, #0073aa);
+	border-radius: 50%;
+	animation: lbite-tip-spin 0.6s linear infinite;
+}
+
+@keyframes lbite-tip-spin {
+	to { transform: rotate(360deg); }
+}
+
 /* Responsive: Auf kleinen Screens 1 Spalte */
 @media (max-width: 400px) {
 	.lbite-tip-options {
