@@ -183,8 +183,10 @@ $feature_groups = array(
 	),
 );
 ?>
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap lbite-admin-wrap">
 	<h1><?php esc_html_e( 'Feature-Toggles', 'libre-bite' ); ?></h1>
+<?php endif; ?>
 	<p class="description"><?php esc_html_e( 'Aktivieren oder deaktivieren Sie einzelne Funktionen des Libre Bites.', 'libre-bite' ); ?></p>
 
 	<?php if ( function_exists( 'lbite_freemius' ) && ! lbite_freemius()->is_premium() ) : ?>
@@ -252,8 +254,9 @@ $feature_groups = array(
 			<span class="lbite-save-status"></span>
 		</p>
 	</form>
-
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 </div>
+<?php endif; ?>
 
 
 <?php ob_start(); ?>

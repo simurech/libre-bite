@@ -39,8 +39,10 @@ if ( isset( $_GET['debug_menus'] ) && current_user_can( 'manage_options' ) ) {
 $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'Libre Bite';
 ?>
 
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap">
 	<h1><?php echo esc_html( $plugin_display_name ); ?> - <?php esc_html_e( 'Admin-Einstellungen', 'libre-bite' ); ?></h1>
+<?php endif; ?>
 
 	<p class="description">
 		<?php esc_html_e( 'Diese Einstellungen sind nur für Administratoren sichtbar und ermöglichen erweiterte Anpassungen.', 'libre-bite' ); ?>
@@ -269,4 +271,6 @@ $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'L
 
 		<?php submit_button( __( 'Einstellungen speichern', 'libre-bite' ), 'primary' ); ?>
 	</form>
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 </div>
+<?php endif; ?>

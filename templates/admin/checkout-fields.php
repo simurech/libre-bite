@@ -87,8 +87,10 @@ $default_fields = array(
 );
 ?>
 
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap">
 	<h1><?php esc_html_e( 'Checkout-Felder verwalten', 'libre-bite' ); ?></h1>
+<?php endif; ?>
 
 	<p class="description">
 		<?php esc_html_e( 'Hier können Sie festlegen, welche Felder im Checkout angezeigt werden sollen und die Feldbezeichnungen anpassen.', 'libre-bite' ); ?>
@@ -294,5 +296,7 @@ $default_fields = array(
 			</button>
 		</p>
 	</form>
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 </div>
+<?php endif; ?>
 

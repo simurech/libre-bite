@@ -130,59 +130,57 @@ class LBite_Admin {
 			array( $this, 'render_dashboard_page' )
 		);
 
-		// Bestellübersicht (Kanban)
-		add_submenu_page(
-			'libre-bite',
-			__( 'Bestellübersicht', 'libre-bite' ),
-			__( 'Bestellübersicht', 'libre-bite' ),
-			'lbite_view_orders',
-			'lbite-order-board',
-			array( $this, 'render_order_board_page' )
-		);
+		// Bestellübersicht (Kanban) – nur wenn Feature aktiv
+		if ( lbite_feature_enabled( 'enable_kanban_board' ) ) {
+			add_submenu_page(
+				'libre-bite',
+				__( 'Bestellübersicht', 'libre-bite' ),
+				__( 'Bestellübersicht', 'libre-bite' ),
+				'lbite_view_orders',
+				'lbite-order-board',
+				array( $this, 'render_order_board_page' )
+			);
+		}
 
-		// POS/Kassensystem
-		add_submenu_page(
-			'libre-bite',
-			__( 'Kassensystem', 'libre-bite' ),
-			__( 'Kassensystem', 'libre-bite' ),
-			'lbite_use_pos',
-			'lbite-pos',
-			array( $this, 'render_pos_page' )
-		);
+		// POS/Kassensystem – nur wenn Feature aktiv
+		if ( lbite_feature_enabled( 'enable_pos' ) ) {
+			add_submenu_page(
+				'libre-bite',
+				__( 'Kassensystem', 'libre-bite' ),
+				__( 'Kassensystem', 'libre-bite' ),
+				'lbite_use_pos',
+				'lbite-pos',
+				array( $this, 'render_pos_page' )
+			);
+		}
 
 		// ============================================
-		// ADMIN-BEREICH (lbite_admin)
+		// ADMIN-BEREICH (administrator)
 		// ============================================
 
-		// Standorte (CPT)
-		add_submenu_page(
-			'libre-bite',
-			__( 'Standorte', 'libre-bite' ),
-			__( 'Standorte', 'libre-bite' ),
-			'lbite_manage_locations',
-			'edit.php?post_type=lbite_location'
-		);
+		// Standorte (CPT) – nur wenn Standort-Feature aktiv
+		if ( lbite_feature_enabled( 'enable_location_selector' ) || lbite_feature_enabled( 'enable_multi_location' ) ) {
+			add_submenu_page(
+				'libre-bite',
+				__( 'Standorte', 'libre-bite' ),
+				__( 'Standorte', 'libre-bite' ),
+				'lbite_manage_locations',
+				'edit.php?post_type=lbite_location'
+			);
+		}
 
-		// Produkt-Optionen (CPT)
-		add_submenu_page(
-			'libre-bite',
-			__( 'Produkt-Optionen', 'libre-bite' ),
-			__( 'Produkt-Optionen', 'libre-bite' ),
-			'lbite_manage_options',
-			'edit.php?post_type=lbite_product_option'
-		);
+		// Produkt-Optionen (CPT) – nur wenn Feature aktiv
+		if ( lbite_feature_enabled( 'enable_product_options' ) ) {
+			add_submenu_page(
+				'libre-bite',
+				__( 'Produkt-Optionen', 'libre-bite' ),
+				__( 'Produkt-Optionen', 'libre-bite' ),
+				'lbite_manage_options',
+				'edit.php?post_type=lbite_product_option'
+			);
+		}
 
-		// Checkout-Felder
-		add_submenu_page(
-			'libre-bite',
-			__( 'Checkout-Felder', 'libre-bite' ),
-			__( 'Checkout-Felder', 'libre-bite' ),
-			'lbite_manage_checkout',
-			'lbite-checkout-fields',
-			array( $this, 'render_checkout_fields_page' )
-		);
-
-		// Einstellungen
+		// Einstellungen (konsolidiert mit Tabs)
 		add_submenu_page(
 			'libre-bite',
 			__( 'Einstellungen', 'libre-bite' ),
@@ -190,40 +188,6 @@ class LBite_Admin {
 			'lbite_manage_settings',
 			'lbite-settings',
 			array( $this, 'render_settings_page' )
-		);
-
-		// ============================================
-		// SUPER-ADMIN-BEREICH (administrator)
-		// ============================================
-
-		// Feature-Toggles (Grundkonfiguration)
-		add_submenu_page(
-			'libre-bite',
-			__( 'Feature-Toggles', 'libre-bite' ),
-			__( 'Feature-Toggles', 'libre-bite' ),
-			'lbite_manage_features',
-			'lbite-features',
-			array( $this, 'render_features_page' )
-		);
-
-		// Admin-Einstellungen (Rollen, Menüs)
-		add_submenu_page(
-			'libre-bite',
-			__( 'Admin-Einstellungen', 'libre-bite' ),
-			__( 'Admin-Einstellungen', 'libre-bite' ),
-			'lbite_manage_roles',
-			'lbite-admin-settings',
-			array( $this, 'render_admin_settings_page' )
-		);
-
-		// Support-Einstellungen
-		add_submenu_page(
-			'libre-bite',
-			__( 'Support-Einstellungen', 'libre-bite' ),
-			__( 'Support-Einstellungen', 'libre-bite' ),
-			'lbite_manage_support',
-			'lbite-support-settings',
-			array( $this, 'render_support_settings_page' )
 		);
 
 		// ============================================
@@ -287,63 +251,20 @@ class LBite_Admin {
 	}
 
 	/**
-	 * Checkout-Felder-Seite rendern
-	 */
-	public function render_checkout_fields_page() {
-		include LBITE_PLUGIN_DIR . 'templates/admin/checkout-fields.php';
-	}
-
-	/**
-	 * Einstellungen-Seite rendern
+	 * Einstellungen-Seite rendern (konsolidiert mit Tabs)
 	 */
 	public function render_settings_page() {
-		include LBITE_PLUGIN_DIR . 'templates/admin/settings.php';
-	}
-
-	/**
-	 * Admin-Einstellungen-Seite rendern
-	 */
-	public function render_admin_settings_page() {
-		include LBITE_PLUGIN_DIR . 'templates/admin/admin-settings.php';
-	}
-
-	/**
-	 * Feature-Toggles-Seite rendern
-	 */
-	public function render_features_page() {
-		if ( ! current_user_can( 'lbite_manage_features' ) ) {
-			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
-		}
-		include LBITE_PLUGIN_DIR . 'templates/admin/super-admin-settings.php';
-	}
-
-	/**
-	 * Support-Einstellungen-Seite rendern
-	 */
-	public function render_support_settings_page() {
-		if ( ! current_user_can( 'lbite_manage_support' ) ) {
-			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
-		}
-		include LBITE_PLUGIN_DIR . 'templates/admin/support-settings.php';
+		include LBITE_PLUGIN_DIR . 'templates/admin/settings-tabbed.php';
 	}
 
 	/**
 	 * Hilfe-Seite rendern (rollenbasiert)
 	 */
 	public function render_help_page() {
-		$user_level = LBite_Roles::get_user_level();
-
-		switch ( $user_level ) {
-			case 'super_admin':
-				include LBITE_PLUGIN_DIR . 'templates/admin/help-superadmin.php';
-				break;
-			case 'admin':
-				include LBITE_PLUGIN_DIR . 'templates/admin/help-admin.php';
-				break;
-			case 'staff':
-			default:
-				include LBITE_PLUGIN_DIR . 'templates/admin/help-staff.php';
-				break;
+		if ( current_user_can( 'manage_options' ) ) {
+			include LBITE_PLUGIN_DIR . 'templates/admin/help-admin.php';
+		} else {
+			include LBITE_PLUGIN_DIR . 'templates/admin/help-staff.php';
 		}
 	}
 

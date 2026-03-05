@@ -131,6 +131,7 @@ $notification_sound     = get_option( 'lbite_notification_sound', $default_sound
 $all_pages = get_pages( array( 'post_status' => 'publish' ) );
 ?>
 
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap">
 	<h1>
 		<?php
@@ -138,6 +139,7 @@ $all_pages = get_pages( array( 'post_status' => 'publish' ) );
 		echo esc_html( $plugin_name . ' - ' . __( 'Einstellungen', 'libre-bite' ) );
 		?>
 	</h1>
+<?php endif; ?>
 
 	<form method="post">
 		<?php wp_nonce_field( 'lbite_settings' ); ?>
@@ -419,7 +421,9 @@ $all_pages = get_pages( array( 'post_status' => 'publish' ) );
 
 		<?php submit_button( __( 'Einstellungen speichern', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 	</form>
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 </div>
+<?php endif; ?>
 
 <?php ob_start(); ?>
 jQuery(document).ready(function($) {

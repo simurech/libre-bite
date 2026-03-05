@@ -17,8 +17,10 @@ $support_hours        = isset( $support_settings['support_hours'] ) ? $support_s
 $support_billing_note = isset( $support_settings['support_billing_note'] ) ? $support_settings['support_billing_note'] : '';
 $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $support_settings['support_custom_text'] : '';
 ?>
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap lbite-admin-wrap">
 	<h1><?php esc_html_e( 'Support-Einstellungen', 'libre-bite' ); ?></h1>
+<?php endif; ?>
 	<p class="description"><?php esc_html_e( 'Konfigurieren Sie die Support-Kontaktdaten, die auf den Hilfe-Seiten angezeigt werden.', 'libre-bite' ); ?></p>
 
 	<form id="lbite-support-settings-form" method="post">
@@ -147,7 +149,9 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 			<span class="lbite-save-status"></span>
 		</p>
 	</form>
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 </div>
+<?php endif; ?>
 
 
 <?php ob_start(); ?>
