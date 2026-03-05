@@ -82,31 +82,63 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h3><?php esc_html_e( 'Standort-Auswahl einbinden', 'libre-bite' ); ?></h3>
 		<p><?php esc_html_e( 'Mit dem folgenden Shortcode können Kunden einen Standort direkt auf einer Seite oder im Checkout wählen:', 'libre-bite' ); ?></p>
 
-		<div style="background: #f6f7f7; border: 1px solid #ccd0d4; border-radius: 3px; padding: 12px 16px; margin: 12px 0; font-family: monospace; font-size: 14px;">
+		<p><?php esc_html_e( 'Den Shortcode können Sie auf jeder beliebigen Seite (z.B. der Bestellseite oder Homepage) einfügen. Die gewählte Standort-Auswahl wird in der Session gespeichert und beim Checkout übernommen.', 'libre-bite' ); ?></p>
+
+		<h4><?php esc_html_e( 'Einfache Verwendung', 'libre-bite' ); ?></h4>
+		<div style="background: #f6f7f7; border: 1px solid #ccd0d4; border-radius: 3px; padding: 12px 16px; margin: 8px 0; font-family: monospace; font-size: 14px;">
 			[lbite_location_selector]
 		</div>
 
-		<p><?php esc_html_e( 'Den Shortcode können Sie auf jeder beliebigen Seite (z.B. der Bestellseite oder Homepage) einfügen. Die gewählte Standort-Auswahl wird in der Session gespeichert und beim Checkout übernommen.', 'libre-bite' ); ?></p>
-
+		<h4><?php esc_html_e( 'Parameter', 'libre-bite' ); ?></h4>
 		<table class="widefat">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Funktion', 'libre-bite' ); ?></th>
+					<th><?php esc_html_e( 'Parameter', 'libre-bite' ); ?></th>
+					<th><?php esc_html_e( 'Mögliche Werte', 'libre-bite' ); ?></th>
+					<th><?php esc_html_e( 'Standard', 'libre-bite' ); ?></th>
 					<th><?php esc_html_e( 'Beschreibung', 'libre-bite' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td><strong><?php esc_html_e( 'Standort wählen', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Zeigt alle aktiven Standorte als auswählbare Liste an', 'libre-bite' ); ?></td>
+					<td><code>style</code></td>
+					<td><code>tiles</code>, <code>inline</code></td>
+					<td><code>tiles</code></td>
+					<td><?php esc_html_e( 'Darstellung: Kacheln (nebeneinander) oder Inline (kompakt)', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
-					<td><strong><?php esc_html_e( 'Session-Speicherung', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Die Wahl bleibt für den gesamten Besuch gespeichert', 'libre-bite' ); ?></td>
+					<td><code>show_time</code></td>
+					<td><code>yes</code>, <code>no</code></td>
+					<td><code>yes</code></td>
+					<td><?php esc_html_e( 'Zeitauswahl anzeigen oder ausblenden', 'libre-bite' ); ?></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h4><?php esc_html_e( 'Beispiele', 'libre-bite' ); ?></h4>
+		<table class="widefat">
+			<thead>
+				<tr>
+					<th><?php esc_html_e( 'Shortcode', 'libre-bite' ); ?></th>
+					<th><?php esc_html_e( 'Ergebnis', 'libre-bite' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>[lbite_location_selector]</code></td>
+					<td><?php esc_html_e( 'Kachel-Ansicht mit Standort- und Zeitauswahl', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
-					<td><strong><?php esc_html_e( 'Checkout-Integration', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Der gewählte Standort wird automatisch im Checkout verwendet', 'libre-bite' ); ?></td>
+					<td><code>[lbite_location_selector style="inline"]</code></td>
+					<td><?php esc_html_e( 'Kompakte Inline-Ansicht mit Zeitauswahl', 'libre-bite' ); ?></td>
+				</tr>
+				<tr>
+					<td><code>[lbite_location_selector show_time="no"]</code></td>
+					<td><?php esc_html_e( 'Nur Standortauswahl, ohne Zeitauswahl', 'libre-bite' ); ?></td>
+				</tr>
+				<tr>
+					<td><code>[lbite_location_selector style="inline" show_time="no"]</code></td>
+					<td><?php esc_html_e( 'Kompakt, nur Standortauswahl', 'libre-bite' ); ?></td>
 				</tr>
 			</tbody>
 		</table>

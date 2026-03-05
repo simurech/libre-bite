@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h4><?php esc_html_e( 'Option einem Produkt zuweisen', 'libre-bite' ); ?></h4>
 		<ol>
 			<li><?php esc_html_e( 'Öffnen Sie das gewünschte Produkt in WooCommerce', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Scrollen Sie zum Abschnitt "OOS Produkt-Optionen"', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Scrollen Sie zum Abschnitt "Libre Bite Produkt-Optionen"', 'libre-bite' ); ?></li>
 			<li><?php esc_html_e( 'Wählen Sie die gewünschten Optionen aus', 'libre-bite' ); ?></li>
 			<li><?php esc_html_e( 'Aktualisieren Sie das Produkt', 'libre-bite' ); ?></li>
 		</ol>
