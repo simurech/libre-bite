@@ -210,6 +210,11 @@ $default_fields = array(
 			</div>
 		</div>
 
+		<p class="description" style="margin-top: 16px;">
+			<span class="dashicons dashicons-info" style="vertical-align: middle;"></span>
+			<?php esc_html_e( 'Haken gesetzt = Feld wird im Checkout angezeigt. Haken entfernt = Feld wird ausgeblendet. Die Bezeichnung kann optional überschrieben werden.', 'libre-bite' ); ?>
+		</p>
+
 		<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
 			<!-- Rechnungsadresse -->
 			<div class="postbox">

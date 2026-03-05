@@ -72,6 +72,10 @@ class LBite_Admin {
 		$this->loader->add_action( 'wp_ajax_lbite_save_features', $this, 'ajax_save_features' );
 		$this->loader->add_action( 'wp_ajax_lbite_save_support_settings', $this, 'ajax_save_support_settings' );
 		$this->loader->add_action( 'wp_ajax_lbite_get_location_tables', $this, 'ajax_get_location_tables' );
+		$this->loader->add_action( 'wp_ajax_lbite_restart_onboarding', $this, 'ajax_restart_onboarding' );
+
+		// Support-Box im Admin-Footer
+		$this->loader->add_action( 'admin_footer', $this, 'render_support_footer' );
 	}
 
 	/**
@@ -216,17 +220,6 @@ class LBite_Admin {
 			);
 		}
 
-		// Debug (nur wenn WP_DEBUG aktiv und Super-Admin)
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			add_submenu_page(
-				'libre-bite',
-				__( 'Debug-Info', 'libre-bite' ),
-				__( 'Debug-Info', 'libre-bite' ),
-				'lbite_view_debug',
-				'lbite-debug-info',
-				array( $this, 'render_debug_page' )
-			);
-		}
 	}
 
 	/**
@@ -891,6 +884,174 @@ class LBite_Admin {
 		update_option( 'lbite_support_settings', $settings );
 
 		wp_send_json_success( array( 'message' => __( 'Support-Einstellungen gespeichert', 'libre-bite' ) ) );
+	}
+
+	/**
+	 * AJAX: Onboarding neu starten
+	 */
+	public function ajax_restart_onboarding() {
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+		}
+
+		delete_option( 'lbite_onboarding_completed' );
+		update_option( 'lbite_do_activation_redirect', true );
+
+		wp_send_json_success( array( 'redirect' => admin_url( 'admin.php?page=lbite-onboarding' ) ) );
+	}
+
+	/**
+	 * Support-Box im Admin-Footer (nur auf Plugin-Seiten)
+	 */
+	public function render_support_footer() {
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return;
+		}
+
+		// Nur auf Plugin-Seiten anzeigen
+		if ( strpos( $screen->id, 'libre-bite' ) === false && strpos( $screen->id, 'lbite-' ) === false ) {
+			return;
+		}
+
+		// Auf der Hilfe-Seite nicht anzeigen (Support ist dort bereits integriert)
+		if ( strpos( $screen->id, 'lbite-help' ) !== false ) {
+			return;
+		}
+
+		$support_settings = get_option( 'lbite_support_settings', array() );
+		$support_email    = isset( $support_settings['support_email'] ) ? $support_settings['support_email'] : get_option( 'admin_email' );
+		$support_phone    = isset( $support_settings['support_phone'] ) ? $support_settings['support_phone'] : '';
+		$support_hours    = isset( $support_settings['support_hours'] ) ? $support_settings['support_hours'] : '';
+		$billing_note     = isset( $support_settings['support_billing_note'] ) ? $support_settings['support_billing_note'] : '';
+		?>
+		<div id="lbite-support-footer" class="lbite-support-footer" style="display:none;">
+			<button class="lbite-support-footer-toggle" type="button" aria-expanded="false">
+				<span class="dashicons dashicons-sos"></span>
+				<?php esc_html_e( 'Support', 'libre-bite' ); ?>
+			</button>
+			<div class="lbite-support-footer-panel">
+				<h3><?php esc_html_e( 'Hilfe & Support', 'libre-bite' ); ?></h3>
+				<?php if ( $support_email ) : ?>
+					<p>
+						<span class="dashicons dashicons-email"></span>
+						<a href="mailto:<?php echo esc_attr( $support_email ); ?>"><?php echo esc_html( $support_email ); ?></a>
+					</p>
+				<?php endif; ?>
+				<?php if ( $support_phone ) : ?>
+					<p>
+						<span class="dashicons dashicons-phone"></span>
+						<a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $support_phone ) ); ?>"><?php echo esc_html( $support_phone ); ?></a>
+					</p>
+				<?php endif; ?>
+				<?php if ( $support_hours ) : ?>
+					<p>
+						<span class="dashicons dashicons-clock"></span>
+						<?php echo esc_html( $support_hours ); ?>
+					</p>
+				<?php endif; ?>
+				<?php if ( $billing_note ) : ?>
+					<p class="lbite-support-footer-note">
+						<span class="dashicons dashicons-info"></span>
+						<?php echo esc_html( $billing_note ); ?>
+					</p>
+				<?php endif; ?>
+				<p>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=support' ) ); ?>" class="button button-small">
+						<?php esc_html_e( 'Alle Support-Infos', 'libre-bite' ); ?>
+					</a>
+				</p>
+			</div>
+		</div>
+		<style>
+		#lbite-support-footer {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			z-index: 9999;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.lbite-support-footer-toggle {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			background: #1d2327;
+			color: #fff;
+			border: none;
+			border-radius: 20px;
+			padding: 8px 14px;
+			cursor: pointer;
+			font-size: 13px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+			transition: background 0.2s;
+		}
+		.lbite-support-footer-toggle:hover {
+			background: #2c3338;
+		}
+		.lbite-support-footer-panel {
+			display: none;
+			position: absolute;
+			bottom: 50px;
+			right: 0;
+			background: #fff;
+			border: 1px solid #ccd0d4;
+			border-radius: 4px;
+			padding: 16px;
+			min-width: 240px;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+		}
+		.lbite-support-footer-panel h3 {
+			margin: 0 0 12px;
+			font-size: 14px;
+			border-bottom: 1px solid #eee;
+			padding-bottom: 8px;
+		}
+		.lbite-support-footer-panel p {
+			margin: 6px 0;
+			font-size: 13px;
+			display: flex;
+			align-items: flex-start;
+			gap: 6px;
+		}
+		.lbite-support-footer-panel .dashicons {
+			font-size: 16px;
+			width: 16px;
+			height: 16px;
+			flex-shrink: 0;
+			margin-top: 1px;
+		}
+		.lbite-support-footer-note {
+			color: #646970;
+			font-size: 12px !important;
+		}
+		.lbite-support-footer-panel[aria-expanded="true"],
+		.lbite-support-footer-panel.is-open {
+			display: block;
+		}
+		</style>
+		<script>
+		(function() {
+			var el = document.getElementById('lbite-support-footer');
+			if (el) {
+				el.style.display = 'block';
+				var btn = el.querySelector('.lbite-support-footer-toggle');
+				var panel = el.querySelector('.lbite-support-footer-panel');
+				btn.addEventListener('click', function() {
+					var open = panel.classList.toggle('is-open');
+					btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+				});
+				document.addEventListener('click', function(e) {
+					if (!el.contains(e.target)) {
+						panel.classList.remove('is-open');
+						btn.setAttribute('aria-expanded', 'false');
+					}
+				});
+			}
+		})();
+		</script>
+		<?php
 	}
 
 	/**

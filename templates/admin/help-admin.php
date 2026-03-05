@@ -54,6 +54,12 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 		   class="nav-tab <?php echo 'support' === $active_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Support', 'libre-bite' ); ?>
 		</a>
+		<?php if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) : ?>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=debug' ) ); ?>"
+		   class="nav-tab <?php echo 'debug' === $active_tab ? 'nav-tab-active' : ''; ?>">
+			<?php esc_html_e( 'Debug-Info', 'libre-bite' ); ?>
+		</a>
+		<?php endif; ?>
 	</nav>
 
 	<div class="lbite-help-content">
@@ -73,6 +79,12 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 				break;
 			case 'support':
 				include __DIR__ . '/help-partials/support.php';
+				break;
+			case 'debug':
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG && current_user_can( 'manage_options' ) ) {
+					$lbite_is_tab = true;
+					include LBITE_PLUGIN_DIR . 'templates/admin/debug-info.php';
+				}
 				break;
 			default:
 				// Übersicht
@@ -97,6 +109,15 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 								<?php esc_html_e( 'Einstellungen', 'libre-bite' ); ?>
 							</a>
 						</div>
+
+						<hr style="margin: 16px 0;">
+						<p style="margin: 0;">
+							<span class="dashicons dashicons-welcome-learn-more" style="vertical-align: middle;"></span>
+							<button type="button" id="lbite-restart-onboarding" class="button button-secondary" style="margin-left: 4px;">
+								<?php esc_html_e( 'Ersteinrichtung erneut öffnen', 'libre-bite' ); ?>
+							</button>
+							<span id="lbite-onboarding-status" style="margin-left: 8px; color: #646970;"></span>
+						</p>
 					</div>
 
 					<!-- Bestellungen -->
@@ -197,3 +218,27 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 	</div>
 </div>
 
+<?php ob_start(); ?>
+jQuery(function($) {
+	$('#lbite-restart-onboarding').on('click', function() {
+		var $btn = $(this);
+		var $status = $('#lbite-onboarding-status');
+		$btn.prop('disabled', true);
+		$status.text('<?php echo esc_js( __( 'Wird geöffnet…', 'libre-bite' ) ); ?>');
+		$.post(ajaxurl, {
+			action: 'lbite_restart_onboarding',
+			nonce: lbiteAdmin.nonce
+		}, function(response) {
+			if (response.success && response.data.redirect) {
+				window.location.href = response.data.redirect;
+			} else {
+				$btn.prop('disabled', false);
+				$status.text('<?php echo esc_js( __( 'Fehler – bitte Seite neu laden.', 'libre-bite' ) ); ?>');
+			}
+		}).fail(function() {
+			$btn.prop('disabled', false);
+			$status.text('<?php echo esc_js( __( 'Fehler – bitte Seite neu laden.', 'libre-bite' ) ); ?>');
+		});
+	});
+});
+<?php wp_add_inline_script( 'lbite-admin', ob_get_clean() ); ?>

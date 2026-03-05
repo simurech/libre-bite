@@ -287,97 +287,43 @@ class LBite_Admin_Settings {
 	 * @return array
 	 */
 	public static function get_all_menu_items() {
-		global $menu, $submenu;
+		global $submenu;
 
-		// Sicherstellen, dass $menu und $submenu initialisiert sind
-		if ( ! is_array( $menu ) ) {
-			$menu = array();
-		}
-		if ( ! is_array( $submenu ) ) {
-			$submenu = array();
+		if ( ! is_array( $submenu ) || ! isset( $submenu['libre-bite'] ) ) {
+			return array();
 		}
 
 		$menu_items = array();
-		$main_menu_slugs = array();
 
-		// ERST Hauptmenüs erfassen
-		foreach ( $menu as $menu_item ) {
-			if ( ! is_array( $menu_item ) ) {
+		// Nur Einträge unter dem Plugin-Hauptmenü einschließen
+		foreach ( $submenu['libre-bite'] as $submenu_item ) {
+			if ( ! is_array( $submenu_item ) || ! isset( $submenu_item[0], $submenu_item[2] ) ) {
 				continue;
 			}
 
-			// Index 0 = Titel, Index 2 = Slug
-			if ( isset( $menu_item[0], $menu_item[2] ) && ! empty( $menu_item[2] ) ) {
-				$menu_title = (string) $menu_item[0];
-				$slug       = (string) $menu_item[2];
+			$slug  = (string) $submenu_item[2];
+			$title = wp_strip_all_tags( (string) $submenu_item[0] );
+			$title = (string) preg_replace( '/\s+\d+$/', '', $title );
 
-				// Separator überspringen
-				if ( strpos( $slug, 'separator' ) !== false ) {
-					continue;
-				}
-
-				// Leere Einträge überspringen
-				if ( '' === $menu_title || '' === trim( $menu_title ) ) {
-					continue;
-				}
-
-				// Menü-Item-Titel bereinigen (HTML-Tags und Zähler entfernen).
-				$title = wp_strip_all_tags( $menu_title );
-				// Zähler wie "0" oder "3" am Ende entfernen.
-				$title = (string) preg_replace( '/\s+\d+$/', '', $title );
-
-				$main_menu_slugs[] = $slug;
-
-				$menu_items[ $slug ] = array(
-					'title'  => trim( $title ),
-					'slug'   => $slug,
-					'parent' => '',
-				);
-			}
-		}
-
-		// DANN Submenüs (aber nur wenn sie NICHT das Hauptmenü selbst sind)
-		foreach ( $submenu as $parent_slug => $submenu_items ) {
-			if ( ! is_array( $submenu_items ) ) {
+			if ( '' === $slug || '' === trim( $title ) ) {
 				continue;
 			}
 
-			foreach ( $submenu_items as $submenu_item ) {
-				if ( ! is_array( $submenu_item ) ) {
-					continue;
-				}
-
-				// Index 0 = Titel, Index 2 = Slug
-				if ( isset( $submenu_item[0], $submenu_item[2] ) ) {
-					$submenu_title = (string) $submenu_item[0];
-					$slug          = (string) $submenu_item[2];
-
-					// Leere Titel überspringen
-					if ( '' === $submenu_title ) {
-						continue;
-					}
-
-					// Überspringen, wenn dieser Slug bereits als Hauptmenü existiert
-					// ABER: nur wenn der Slug identisch mit dem Parent ist (das erste Submenü)
-					if ( $slug === $parent_slug && in_array( $slug, $main_menu_slugs, true ) ) {
-						continue;
-					}
-
-					// Titel bereinigen.
-					$title = wp_strip_all_tags( $submenu_title );
-					// Zähler entfernen.
-					$title = (string) preg_replace( '/\s+\d+$/', '', $title );
-
-					// Nur hinzufügen, wenn es noch nicht existiert oder als Submenü überschrieben werden soll
-					if ( ! isset( $menu_items[ $slug ] ) || ! in_array( $slug, $main_menu_slugs, true ) ) {
-						$menu_items[ $slug ] = array(
-							'title'  => trim( $title ),
-							'slug'   => $slug,
-							'parent' => (string) $parent_slug,
-						);
-					}
-				}
+			// Dashboard-Dopplung überspringen
+			if ( 'libre-bite' === $slug ) {
+				continue;
 			}
+
+			// Bereits hinzugefügte Einträge nicht doppeln
+			if ( isset( $menu_items[ $slug ] ) ) {
+				continue;
+			}
+
+			$menu_items[ $slug ] = array(
+				'title'  => trim( $title ),
+				'slug'   => $slug,
+				'parent' => '', // Flat-Liste ohne Hierarchie
+			);
 		}
 
 		return $menu_items;
@@ -399,12 +345,28 @@ class LBite_Admin_Settings {
 		$roles = array();
 
 		foreach ( $wp_roles->roles as $role_key => $role_data ) {
-			// Administrator überspringen (hat immer vollen Zugriff)
-			if ( $role_key === 'administrator' && ! $include_admin ) {
+			// Administrator separat behandeln
+			if ( 'administrator' === $role_key ) {
+				if ( $include_admin ) {
+					$roles[ $role_key ] = $role_data['name'];
+				}
 				continue;
 			}
 
-			$roles[ $role_key ] = $role_data['name'];
+			// Nur Rollen einschließen, die mindestens eine lbite_-Capability haben
+			$has_lbite_cap = false;
+			if ( isset( $role_data['capabilities'] ) && is_array( $role_data['capabilities'] ) ) {
+				foreach ( array_keys( $role_data['capabilities'] ) as $cap ) {
+					if ( strpos( $cap, 'lbite_' ) === 0 ) {
+						$has_lbite_cap = true;
+						break;
+					}
+				}
+			}
+
+			if ( $has_lbite_cap ) {
+				$roles[ $role_key ] = $role_data['name'];
+			}
 		}
 
 		return $roles;

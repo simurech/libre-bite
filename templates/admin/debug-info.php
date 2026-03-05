@@ -17,8 +17,10 @@ if ( ! current_user_can( 'manage_options' ) ) {
 $plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) );
 ?>
 
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap">
 	<h1><?php echo esc_html( $plugin_name . ' - ' . __( 'Debug-Informationen', 'libre-bite' ) ); ?></h1>
+<?php endif; ?>
 
 	<div class="lbite-debug-section">
 		<h2><?php esc_html_e( 'System-Informationen', 'libre-bite' ); ?></h2>
@@ -192,5 +194,7 @@ $plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'li
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
+<?php if ( empty( $lbite_is_tab ) ) : ?>
 </div>
+<?php endif; ?>
 

@@ -90,9 +90,11 @@ class LBite_Roles {
 	 * Rollen bei Plugin-Deaktivierung entfernen
 	 */
 	public static function remove_roles() {
-		// Custom Roles entfernen
+		// Custom Roles entfernen (inkl. aller bekannten alten Benennungen)
 		remove_role( 'lbite_staff' );
-		remove_role( 'lbite_admin' ); // Rückwärtskompatibilität: entfernen falls noch vorhanden
+		remove_role( 'lbite_admin' );
+		remove_role( 'lb_admin' );
+		remove_role( 'lb_staff' );
 
 		// Capabilities von bestehenden Rollen entfernen
 		$roles_to_clean = array( 'administrator', 'shop_manager' );
@@ -181,8 +183,10 @@ class LBite_Roles {
 	 * und entfernt die obsolete lbite_admin-Rolle.
 	 */
 	public static function migrate_existing_users() {
-		// Obsolete lbite_admin-Rolle entfernen
+		// Obsolete Rollen entfernen (alte Benennungen aus früheren Versionen)
 		remove_role( 'lbite_admin' );
+		remove_role( 'lb_admin' );
+		remove_role( 'lb_staff' );
 
 		// Administrator: alle Capabilities sicherstellen
 		$admin_role = get_role( 'administrator' );
