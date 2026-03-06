@@ -57,7 +57,7 @@ $feature_groups = array(
 			array(
 				'key'         => 'enable_fullscreen_mode',
 				'label'       => __( 'Vollbild-Modus', 'libre-bite' ),
-				'description' => __( 'POS und Dashboard im Vollbild betreiben.', 'libre-bite' ),
+				'description' => __( 'POS und Bestellübersicht im Vollbild betreiben.', 'libre-bite' ),
 				'pro'         => false,
 			),
 		),
@@ -126,6 +126,12 @@ $feature_groups = array(
 				'description' => __( 'Mehrere Standorte mit eigenen Einstellungen verwalten.', 'libre-bite' ),
 				'pro'         => true,
 			),
+			array(
+				'key'         => 'enable_table_ordering',
+				'label'       => __( 'Tischbestellung', 'libre-bite' ),
+				'description' => __( 'QR-Codes pro Tisch – Kunden scannen und bestellen direkt am Tisch.', 'libre-bite' ),
+				'pro'         => true,
+			),
 		),
 	),
 	array(
@@ -186,7 +192,7 @@ $is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->is_premiu
 	<div class="lbite-onboarding-header">
 		<div class="lbite-onboarding-header-inner">
 			<h1><?php esc_html_e( 'Willkommen bei Libre Bite!', 'libre-bite' ); ?></h1>
-			<p><?php esc_html_e( 'Aktiviere die Funktionen, die du für dein Restaurant oder Café brauchst. Du kannst diese Auswahl jederzeit unter Feature-Toggles anpassen.', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'Aktiviere die Funktionen, die du für dein Restaurant oder Café brauchst. Du kannst diese Auswahl jederzeit unter Einstellungen → Features anpassen.', 'libre-bite' ); ?></p>
 		</div>
 	</div>
 
@@ -278,7 +284,7 @@ $is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->is_premiu
 				<span class="dashicons dashicons-arrow-right-alt" style="margin-left: 5px; margin-top: 2px;"></span>
 			</button>
 			<p class="lbite-onboarding-footer-hint">
-				<?php esc_html_e( 'Du kannst alle Einstellungen jederzeit unter Feature-Toggles ändern.', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Du kannst alle Features jederzeit unter Einstellungen → Features anpassen.', 'libre-bite' ); ?>
 			</p>
 		</div>
 

@@ -224,7 +224,7 @@ class LBite_Tables {
 			'public'              => false,
 			'publicly_queryable'  => false,
 			'show_ui'             => true,
-			'show_in_menu'        => 'libre-bite',
+			'show_in_menu'        => false,
 			'query_var'           => true,
 			'rewrite'             => false,
 			'capability_type'     => 'post',

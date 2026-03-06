@@ -173,6 +173,17 @@ class LBite_Admin {
 			);
 		}
 
+		// Tische (CPT) – nur wenn Tischbestellung aktiv
+		if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
+			add_submenu_page(
+				'libre-bite',
+				__( 'Tische', 'libre-bite' ),
+				__( 'Tische', 'libre-bite' ),
+				'lbite_manage_locations',
+				'edit.php?post_type=lbite_table'
+			);
+		}
+
 		// Produkt-Optionen (CPT) – nur wenn Feature aktiv
 		if ( lbite_feature_enabled( 'enable_product_options' ) ) {
 			add_submenu_page(

@@ -107,6 +107,12 @@ $feature_groups = array(
 				'default'     => true,
 				'premium'     => false,
 			),
+			'enable_table_ordering'    => array(
+				'label'       => __( 'Tischbestellung', 'libre-bite' ),
+				'description' => __( 'QR-Codes pro Tisch – Kunden scannen und bestellen direkt am Tisch', 'libre-bite' ),
+				'default'     => false,
+				'premium'     => true,
+			),
 		),
 	),
 	'notifications' => array(
@@ -123,7 +129,7 @@ $feature_groups = array(
 				'label'       => __( 'Sound-Benachrichtigung', 'libre-bite' ),
 				'description' => __( 'Ton bei neuen Bestellungen abspielen', 'libre-bite' ),
 				'default'     => true,
-				'premium'     => false,
+				'premium'     => true,
 			),
 			'enable_admin_email'         => array(
 				'label'       => __( 'Admin-Benachrichtigung', 'libre-bite' ),
@@ -147,19 +153,19 @@ $feature_groups = array(
 				'label'       => __( 'Nährwertangaben', 'libre-bite' ),
 				'description' => __( 'Nährwertinformationen bei Produkten anzeigen', 'libre-bite' ),
 				'default'     => false,
-				'premium'     => false,
+				'premium'     => true,
 			),
 			'enable_allergens'        => array(
 				'label'       => __( 'Allergene', 'libre-bite' ),
 				'description' => __( 'Allergen-Warnungen bei Produkten anzeigen', 'libre-bite' ),
 				'default'     => false,
-				'premium'     => false,
+				'premium'     => true,
 			),
 		),
 	),
 	'dashboard'    => array(
-		'title'       => __( 'Dashboard', 'libre-bite' ),
-		'description' => __( 'Dashboard-Funktionen', 'libre-bite' ),
+		'title'       => __( 'Bestellübersicht', 'libre-bite' ),
+		'description' => __( 'Bestellübersicht-Funktionen', 'libre-bite' ),
 		'features'    => array(
 			'enable_kanban_board'       => array(
 				'label'       => __( 'Kanban-Board', 'libre-bite' ),
