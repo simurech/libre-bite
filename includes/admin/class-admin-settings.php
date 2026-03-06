@@ -124,6 +124,33 @@ class LBite_Admin_Settings {
 			update_option( 'lbite_disabled_roles', array() );
 		}
 
+		// Zugriff für Standard-Rollen speichern (Capabilities zuweisen/entziehen).
+		$standard_roles        = self::get_standard_roles();
+		$allowed_standard_roles = isset( $_POST['lbite_allowed_standard_roles'] ) && is_array( $_POST['lbite_allowed_standard_roles'] )
+			? array_map( 'sanitize_key', wp_unslash( $_POST['lbite_allowed_standard_roles'] ) )
+			: array();
+
+		// Staff-Capabilities, die Standard-Rollen erhalten können
+		$staff_caps = array( 'lbite_view_dashboard', 'lbite_view_orders', 'lbite_manage_orders', 'lbite_use_pos' );
+
+		foreach ( array_keys( $standard_roles ) as $role_key ) {
+			$role = get_role( $role_key );
+			if ( ! $role ) {
+				continue;
+			}
+			if ( in_array( $role_key, $allowed_standard_roles, true ) ) {
+				foreach ( $staff_caps as $cap ) {
+					$role->add_cap( $cap );
+				}
+			} else {
+				foreach ( $staff_caps as $cap ) {
+					$role->remove_cap( $cap );
+				}
+			}
+		}
+
+		update_option( 'lbite_allowed_standard_roles', $allowed_standard_roles );
+
 		// Menü-Sichtbarkeit speichern.
 		if ( isset( $_POST['lbite_menu_visibility'] ) && is_array( $_POST['lbite_menu_visibility'] ) ) {
 			$menu_visibility = array();
@@ -327,6 +354,47 @@ class LBite_Admin_Settings {
 		}
 
 		return $menu_items;
+	}
+
+	/**
+	 * Standard-WordPress-Rollen ohne Plugin-Capabilities abrufen
+	 *
+	 * Gibt alle Rollen zurück, die KEINE lbite_-Capability haben (außer Administrator).
+	 * Wird für den vereinfachten Rollenzugriff-Bereich verwendet.
+	 *
+	 * @return array Role-Key => Rollenname
+	 */
+	public static function get_standard_roles() {
+		global $wp_roles;
+
+		if ( ! isset( $wp_roles ) ) {
+			$wp_roles = new WP_Roles();
+		}
+
+		$roles = array();
+
+		foreach ( $wp_roles->roles as $role_key => $role_data ) {
+			if ( 'administrator' === $role_key ) {
+				continue;
+			}
+
+			// Nur Rollen einschließen, die KEINE lbite_-Capability haben
+			$has_lbite_cap = false;
+			if ( isset( $role_data['capabilities'] ) && is_array( $role_data['capabilities'] ) ) {
+				foreach ( array_keys( $role_data['capabilities'] ) as $cap ) {
+					if ( strpos( $cap, 'lbite_' ) === 0 ) {
+						$has_lbite_cap = true;
+						break;
+					}
+				}
+			}
+
+			if ( ! $has_lbite_cap ) {
+				$roles[ $role_key ] = $role_data['name'];
+			}
+		}
+
+		return $roles;
 	}
 
 	/**

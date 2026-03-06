@@ -183,10 +183,47 @@ class LBite_Roles {
 	 * und entfernt die obsolete lbite_admin-Rolle.
 	 */
 	public static function migrate_existing_users() {
-		// Obsolete Rollen entfernen (alte Benennungen aus früheren Versionen)
-		remove_role( 'lbite_admin' );
-		remove_role( 'lb_admin' );
-		remove_role( 'lb_staff' );
+		// Explizit bekannte veraltete Rollen entfernen
+		$lbite_legacy_slugs = array( 'lbite_admin', 'lb_admin', 'lb_staff' );
+		foreach ( $lbite_legacy_slugs as $lbite_legacy_slug ) {
+			remove_role( $lbite_legacy_slug );
+		}
+
+		// Alle Rollen prüfen: nicht-erlaubte Rollen mit lbite_-Caps entfernen (z.B. OOS-Altlasten)
+		global $wp_roles;
+		$lbite_allowed_roles = array( 'lbite_staff', 'administrator', 'editor', 'author', 'contributor', 'subscriber', 'shop_manager', 'customer' );
+		foreach ( array_keys( $wp_roles->roles ) as $lbite_role_slug ) {
+			if ( in_array( $lbite_role_slug, $lbite_allowed_roles, true ) ) {
+				continue;
+			}
+			$lbite_role_obj = get_role( $lbite_role_slug );
+			if ( $lbite_role_obj ) {
+				foreach ( array_keys( $lbite_role_obj->capabilities ) as $lbite_cap ) {
+					if ( strpos( $lbite_cap, 'lbite_' ) === 0 ) {
+						remove_role( $lbite_role_slug );
+						break;
+					}
+				}
+			}
+		}
+
+		// Veraltete Einträge aus lbite_custom_role_names bereinigen
+		$lbite_custom_names = get_option( 'lbite_custom_role_names', array() );
+		if ( is_array( $lbite_custom_names ) ) {
+			foreach ( array_keys( $lbite_custom_names ) as $lbite_name_key ) {
+				if ( ! get_role( $lbite_name_key ) ) {
+					unset( $lbite_custom_names[ $lbite_name_key ] );
+				}
+			}
+			update_option( 'lbite_custom_role_names', $lbite_custom_names );
+		}
+
+		// Veraltete Einträge aus lbite_disabled_roles bereinigen
+		$lbite_disabled = get_option( 'lbite_disabled_roles', array() );
+		if ( is_array( $lbite_disabled ) ) {
+			$lbite_disabled = array_values( array_filter( $lbite_disabled, fn( $lbite_slug ) => null !== get_role( $lbite_slug ) ) );
+			update_option( 'lbite_disabled_roles', $lbite_disabled );
+		}
 
 		// Administrator: alle Capabilities sicherstellen
 		$admin_role = get_role( 'administrator' );
@@ -219,7 +256,7 @@ class LBite_Roles {
 			}
 		}
 
-		update_option( 'lbite_roles_version', '1.1.1' );
+		update_option( 'lbite_roles_version', '1.1.2' );
 	}
 
 	/**
@@ -229,6 +266,6 @@ class LBite_Roles {
 	 */
 	public static function needs_migration() {
 		$current_version = get_option( 'lbite_roles_version', '0' );
-		return version_compare( $current_version, '1.1.1', '<' );
+		return version_compare( $current_version, '1.1.2', '<' );
 	}
 }

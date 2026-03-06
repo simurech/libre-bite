@@ -21,8 +21,9 @@ $custom_plugin_name = get_option( 'lbite_custom_plugin_name', '' );
 $menu_visibility    = get_option( 'lbite_menu_visibility', array() );
 
 // Alle Menüeinträge und Rollen abrufen
-$all_menu_items = LBite_Admin_Settings::get_all_menu_items();
-$all_roles      = LBite_Admin_Settings::get_all_roles();
+$all_menu_items       = LBite_Admin_Settings::get_all_menu_items();
+$all_roles            = LBite_Admin_Settings::get_all_roles();
+$lbite_standard_roles = LBite_Admin_Settings::get_standard_roles();
 
 // Debug: Menüs anzeigen (nur für Admins)
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Debug-Ausgabe.
@@ -77,6 +78,37 @@ $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'L
 				</td>
 			</tr>
 		</table>
+
+		<!-- Zugriff für andere Rollen -->
+		<?php if ( ! empty( $lbite_standard_roles ) ) : ?>
+		<h2><?php esc_html_e( 'Zugriff für andere Benutzerrollen', 'libre-bite' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'Wählen Sie, welche Standard-Rollen auf das Plugin zugreifen dürfen. Aktivierte Rollen erhalten denselben Zugriff wie Libre Bite Personal (Bestellübersicht, POS).', 'libre-bite' ); ?>
+		</p>
+		<?php
+		$lbite_allowed_standard_roles = get_option( 'lbite_allowed_standard_roles', array() );
+		?>
+		<table class="form-table">
+			<tbody>
+			<?php foreach ( $lbite_standard_roles as $lbite_std_role_key => $lbite_std_role_name ) : ?>
+				<tr>
+					<th scope="row"><?php echo esc_html( $lbite_std_role_name ); ?> <span style="color: #646970; font-weight: normal; font-size: 12px;">(<?php echo esc_html( $lbite_std_role_key ); ?>)</span></th>
+					<td>
+						<label>
+							<input
+								type="checkbox"
+								name="lbite_allowed_standard_roles[]"
+								value="<?php echo esc_attr( $lbite_std_role_key ); ?>"
+								<?php checked( in_array( $lbite_std_role_key, $lbite_allowed_standard_roles, true ) ); ?>
+							>
+							<?php esc_html_e( 'Kann Plugin nutzen', 'libre-bite' ); ?>
+						</label>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php endif; ?>
 
 		<!-- Rollennamen anpassen -->
 		<h2><?php esc_html_e( 'Nutzerrollen verwalten', 'libre-bite' ); ?></h2>

@@ -143,6 +143,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</tbody>
 		</table>
 
+		<h4><?php esc_html_e( 'URL-Parameter (Deep-Links)', 'libre-bite' ); ?></h4>
+		<p><?php esc_html_e( 'Sie können Standort und Bestelltyp auch direkt per URL vorauswählen – nützlich für QR-Codes, Flyer oder Links.', 'libre-bite' ); ?></p>
+
+		<table class="widefat">
+			<thead>
+				<tr>
+					<th><?php esc_html_e( 'URL-Parameter', 'libre-bite' ); ?></th>
+					<th><?php esc_html_e( 'Mögliche Werte', 'libre-bite' ); ?></th>
+					<th><?php esc_html_e( 'Beschreibung', 'libre-bite' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>?location=ID</code></td>
+					<td><?php esc_html_e( 'Standort-ID (Zahl)', 'libre-bite' ); ?></td>
+					<td><?php esc_html_e( 'Wählt den Standort automatisch vor. Die ID finden Sie in der URL beim Bearbeiten des Standorts.', 'libre-bite' ); ?></td>
+				</tr>
+				<tr>
+					<td><code>?order_type=now</code></td>
+					<td><code>now</code></td>
+					<td><?php esc_html_e( 'Setzt den Bestelltyp auf "Sofort" (schnellstmögliche Abholzeit).', 'libre-bite' ); ?></td>
+				</tr>
+				<tr>
+					<td><code>?order_type=later</code></td>
+					<td><code>later</code></td>
+					<td><?php esc_html_e( 'Setzt den Bestelltyp auf "Vorbestellung" (Kunde wählt Abholzeit selbst).', 'libre-bite' ); ?></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<p style="margin-top: 8px;"><?php esc_html_e( 'Beispiel-URL:', 'libre-bite' ); ?></p>
+		<div style="background: #f6f7f7; border: 1px solid #ccd0d4; border-radius: 3px; padding: 10px 14px; font-family: monospace; font-size: 13px; word-break: break-all;">
+			<?php echo esc_html( home_url( '/bestellen/?location=5&order_type=now' ) ); ?>
+		</div>
+
 		<div class="lbite-help-tip">
 			<span class="dashicons dashicons-lightbulb"></span>
 			<p><?php esc_html_e( 'Tipp: Aktivieren Sie das Feature "Standort-Auswahl" unter Einstellungen → Features, damit der Shortcode sichtbar ist.', 'libre-bite' ); ?></p>

@@ -179,8 +179,23 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 					<!-- Support -->
 					<div class="lbite-help-card lbite-help-support">
 						<h2><span class="dashicons dashicons-sos"></span> <?php esc_html_e( 'Support', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'Nicht fündig geworden? Ich helfe dir gerne weiter.', 'libre-bite' ); ?></p>
 
 						<div class="lbite-support-info">
+							<?php if ( $support_hours ) : ?>
+								<p>
+									<span class="dashicons dashicons-clock"></span>
+									<?php echo esc_html( $support_hours ); ?>
+								</p>
+							<?php endif; ?>
+
+							<?php if ( $billing_note ) : ?>
+								<p class="lbite-billing-note">
+									<span class="dashicons dashicons-info"></span>
+									<?php echo esc_html( $billing_note ); ?>
+								</p>
+							<?php endif; ?>
+
 							<?php if ( $support_email ) : ?>
 								<p>
 									<span class="dashicons dashicons-email"></span>
@@ -194,21 +209,7 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 									<a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $support_phone ) ); ?>"><?php echo esc_html( $support_phone ); ?></a>
 								</p>
 							<?php endif; ?>
-
-							<?php if ( $support_hours ) : ?>
-								<p>
-									<span class="dashicons dashicons-clock"></span>
-									<?php echo esc_html( $support_hours ); ?>
-								</p>
-							<?php endif; ?>
 						</div>
-
-						<?php if ( $billing_note ) : ?>
-							<div class="lbite-billing-notice">
-								<span class="dashicons dashicons-info"></span>
-								<?php echo esc_html( $billing_note ); ?>
-							</div>
-						<?php endif; ?>
 					</div>
 				</div>
 				<?php

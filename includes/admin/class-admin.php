@@ -903,7 +903,7 @@ class LBite_Admin {
 	}
 
 	/**
-	 * Support-Box im Admin-Footer (nur auf Plugin-Seiten)
+	 * Support-Floating-Button (nur auf Plugin-Seiten)
 	 */
 	public function render_support_footer() {
 		$screen = get_current_screen();
@@ -927,128 +927,208 @@ class LBite_Admin {
 		$support_hours    = isset( $support_settings['support_hours'] ) ? $support_settings['support_hours'] : '';
 		$billing_note     = isset( $support_settings['support_billing_note'] ) ? $support_settings['support_billing_note'] : '';
 		?>
-		<div id="lbite-support-footer" class="lbite-support-footer" style="display:none;">
-			<button class="lbite-support-footer-toggle" type="button" aria-expanded="false">
-				<span class="dashicons dashicons-sos"></span>
-				<?php esc_html_e( 'Support', 'libre-bite' ); ?>
-			</button>
-			<div class="lbite-support-footer-panel">
-				<h3><?php esc_html_e( 'Hilfe & Support', 'libre-bite' ); ?></h3>
-				<?php if ( $support_email ) : ?>
-					<p>
-						<span class="dashicons dashicons-email"></span>
-						<a href="mailto:<?php echo esc_attr( $support_email ); ?>"><?php echo esc_html( $support_email ); ?></a>
+		<div id="lbite-help-btn" aria-expanded="false">
+			<span class="dashicons dashicons-editor-help"></span>
+			<span><?php esc_html_e( 'Hilfe', 'libre-bite' ); ?></span>
+
+			<div id="lbite-help-panel" role="dialog" aria-label="<?php esc_attr_e( 'Hilfe & Support', 'libre-bite' ); ?>">
+				<div class="lbite-help-panel-head">
+					<strong><?php esc_html_e( 'Hilfe & Support', 'libre-bite' ); ?></strong>
+					<button type="button" class="lbite-help-panel-close" aria-label="<?php esc_attr_e( 'Schliessen', 'libre-bite' ); ?>">&#x2715;</button>
+				</div>
+
+				<!-- Hilfe-Bereich: primäre Aktion -->
+				<div class="lbite-help-panel-primary">
+					<p class="lbite-help-panel-primary-text">
+						<?php esc_html_e( 'Zuerst im Hilfe-Bereich nachschauen – dort findest du Anleitungen zu allen Funktionen.', 'libre-bite' ); ?>
 					</p>
-				<?php endif; ?>
-				<?php if ( $support_phone ) : ?>
-					<p>
-						<span class="dashicons dashicons-phone"></span>
-						<a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $support_phone ) ); ?>"><?php echo esc_html( $support_phone ); ?></a>
-					</p>
-				<?php endif; ?>
-				<?php if ( $support_hours ) : ?>
-					<p>
-						<span class="dashicons dashicons-clock"></span>
-						<?php echo esc_html( $support_hours ); ?>
-					</p>
-				<?php endif; ?>
-				<?php if ( $billing_note ) : ?>
-					<p class="lbite-support-footer-note">
-						<span class="dashicons dashicons-info"></span>
-						<?php echo esc_html( $billing_note ); ?>
-					</p>
-				<?php endif; ?>
-				<p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=support' ) ); ?>" class="button button-small">
-						<?php esc_html_e( 'Alle Support-Infos', 'libre-bite' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help' ) ); ?>" class="button button-primary button-large lbite-help-panel-cta">
+						<span class="dashicons dashicons-book-alt"></span>
+						<?php esc_html_e( 'Hilfe-Bereich öffnen', 'libre-bite' ); ?>
 					</a>
-				</p>
+				</div>
+
+				<!-- Support-Kontakt: sekundäre Aktion -->
+				<div class="lbite-help-panel-support">
+					<p class="lbite-help-panel-divider"><?php esc_html_e( 'Nicht fündig geworden?', 'libre-bite' ); ?></p>
+
+					<?php if ( $support_hours ) : ?>
+						<p>
+							<span class="dashicons dashicons-clock"></span>
+							<?php echo esc_html( $support_hours ); ?>
+						</p>
+					<?php endif; ?>
+					<?php if ( $billing_note ) : ?>
+						<p class="lbite-help-panel-note">
+							<span class="dashicons dashicons-info"></span>
+							<?php echo esc_html( $billing_note ); ?>
+						</p>
+					<?php endif; ?>
+					<?php if ( $support_email ) : ?>
+						<p>
+							<span class="dashicons dashicons-email"></span>
+							<a href="mailto:<?php echo esc_attr( $support_email ); ?>"><?php echo esc_html( $support_email ); ?></a>
+						</p>
+					<?php endif; ?>
+					<?php if ( $support_phone ) : ?>
+						<p>
+							<span class="dashicons dashicons-phone"></span>
+							<a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $support_phone ) ); ?>"><?php echo esc_html( $support_phone ); ?></a>
+						</p>
+					<?php endif; ?>
+				</div>
 			</div>
 		</div>
 		<style>
-		#lbite-support-footer {
+		#lbite-help-btn {
 			position: fixed;
-			bottom: 20px;
+			bottom: 40px;
 			right: 20px;
-			z-index: 9999;
-			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-		}
-		.lbite-support-footer-toggle {
+			z-index: 99990;
 			display: flex;
 			align-items: center;
 			gap: 6px;
-			background: #1d2327;
+			background: #646970;
 			color: #fff;
-			border: none;
-			border-radius: 20px;
-			padding: 8px 14px;
-			cursor: pointer;
-			font-size: 13px;
-			box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-			transition: background 0.2s;
-		}
-		.lbite-support-footer-toggle:hover {
-			background: #2c3338;
-		}
-		.lbite-support-footer-panel {
-			display: none;
-			position: absolute;
-			bottom: 50px;
-			right: 0;
-			background: #fff;
-			border: 1px solid #ccd0d4;
 			border-radius: 4px;
-			padding: 16px;
-			min-width: 240px;
-			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-		}
-		.lbite-support-footer-panel h3 {
-			margin: 0 0 12px;
-			font-size: 14px;
-			border-bottom: 1px solid #eee;
-			padding-bottom: 8px;
-		}
-		.lbite-support-footer-panel p {
-			margin: 6px 0;
+			padding: 8px 14px;
 			font-size: 13px;
-			display: flex;
-			align-items: flex-start;
-			gap: 6px;
+			font-weight: 600;
+			cursor: pointer;
+			box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+			user-select: none;
+			transition: background 0.15s;
 		}
-		.lbite-support-footer-panel .dashicons {
+		#lbite-help-btn:hover {
+			background: #50575e;
+		}
+		#lbite-help-btn > .dashicons {
 			font-size: 16px;
 			width: 16px;
 			height: 16px;
+		}
+		#lbite-help-panel {
+			display: none;
+			position: absolute;
+			bottom: calc(100% + 8px);
+			right: 0;
+			width: 260px;
+			background: #fff;
+			border: 1px solid #ccd0d4;
+			border-radius: 4px;
+			box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+			font-size: 13px;
+			color: #3c434a;
+			overflow: hidden;
+		}
+		#lbite-help-panel.is-open {
+			display: block;
+		}
+		.lbite-help-panel-head {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 10px 14px 9px;
+			border-bottom: 1px solid #f0f0f1;
+		}
+		.lbite-help-panel-close {
+			background: none;
+			border: none;
+			cursor: pointer;
+			color: #787c82;
+			font-size: 14px;
+			line-height: 1;
+			padding: 0;
+		}
+		.lbite-help-panel-close:hover { color: #1d2327; }
+		.lbite-help-panel-primary {
+			padding: 14px;
+			background: #f6f7f7;
+			border-bottom: 1px solid #e8e8e8;
+		}
+		.lbite-help-panel-primary-text {
+			margin: 0 0 10px;
+			font-size: 12px;
+			color: #646970;
+			line-height: 1.5;
+		}
+		.lbite-help-panel-cta {
+			display: flex !important;
+			align-items: center;
+			gap: 5px;
+			width: 100%;
+			justify-content: center;
+			box-sizing: border-box;
+		}
+		.lbite-help-panel-cta .dashicons {
+			font-size: 16px;
+			width: 16px;
+			height: 16px;
+		}
+		.lbite-help-panel-support {
+			padding: 4px 0 6px;
+		}
+		.lbite-help-panel-divider {
+			margin: 0;
+			padding: 8px 14px 6px;
+			font-size: 11px;
+			font-weight: 600;
+			color: #787c82;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+		.lbite-help-panel-support p {
+			margin: 0;
+			padding: 5px 14px;
+			display: flex;
+			align-items: flex-start;
+			gap: 7px;
+		}
+		.lbite-help-panel-support p a {
+			color: #3c434a;
+			text-decoration: none;
+			word-break: break-all;
+		}
+		.lbite-help-panel-support p a:hover { color: #0073aa; }
+		.lbite-help-panel-support .dashicons {
+			font-size: 15px;
+			width: 15px;
+			height: 15px;
 			flex-shrink: 0;
 			margin-top: 1px;
+			color: #787c82;
 		}
-		.lbite-support-footer-note {
-			color: #646970;
+		.lbite-help-panel-note {
+			color: #646970 !important;
 			font-size: 12px !important;
-		}
-		.lbite-support-footer-panel[aria-expanded="true"],
-		.lbite-support-footer-panel.is-open {
-			display: block;
 		}
 		</style>
 		<script>
 		(function() {
-			var el = document.getElementById('lbite-support-footer');
-			if (el) {
-				el.style.display = 'block';
-				var btn = el.querySelector('.lbite-support-footer-toggle');
-				var panel = el.querySelector('.lbite-support-footer-panel');
-				btn.addEventListener('click', function() {
-					var open = panel.classList.toggle('is-open');
-					btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-				});
-				document.addEventListener('click', function(e) {
-					if (!el.contains(e.target)) {
-						panel.classList.remove('is-open');
-						btn.setAttribute('aria-expanded', 'false');
-					}
-				});
+			var btn   = document.getElementById('lbite-help-btn');
+			var panel = document.getElementById('lbite-help-panel');
+			if (!btn || !panel) return;
+
+			function open() {
+				panel.classList.add('is-open');
+				btn.setAttribute('aria-expanded', 'true');
 			}
+			function close() {
+				panel.classList.remove('is-open');
+				btn.setAttribute('aria-expanded', 'false');
+			}
+
+			btn.addEventListener('click', function(e) {
+				if (e.target.classList.contains('lbite-help-panel-close')) {
+					close();
+				} else {
+					panel.classList.contains('is-open') ? close() : open();
+				}
+			});
+
+			document.addEventListener('click', function(e) {
+				if (!btn.contains(e.target)) close();
+			});
 		})();
 		</script>
 		<?php
