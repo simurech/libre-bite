@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $lbite_is_admin = current_user_can( 'manage_options' );
 
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Anzeigesteuerung.
-$lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'general';
+$lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : ( $lbite_is_admin ? 'features' : 'general' );
 
 // Tabs definieren – Reihenfolge: Features zuerst, dann Allgemein, dann Feature-Tabs, dann Admin-Tabs
 $lbite_tabs = array();
@@ -204,38 +204,19 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				break;
 
 			case 'checkout':
-				// Box 1: Standard-Checkout (Felder konfigurieren)
-				?>
-				<h2><?php esc_html_e( 'Standard-Checkout', 'libre-bite' ); ?></h2>
-				<p class="description"><?php esc_html_e( 'Konfiguriere, welche Felder und Optionen im normalen WooCommerce-Checkout angezeigt werden.', 'libre-bite' ); ?></p>
+				// Checkout-Optionen (Rundung + ggf. Checkout-Modus ganz oben)
 				<?php
-				include LBITE_PLUGIN_DIR . 'templates/admin/checkout-fields.php';
-
-				// Box 2: Optimierter Checkout (nur wenn Features aktiv)
-				if ( lbite_feature_enabled( 'enable_optimized_checkout' ) || lbite_feature_enabled( 'enable_rounding' ) ) :
+				if ( lbite_feature_enabled( 'enable_rounding' ) || lbite_feature_enabled( 'enable_optimized_checkout' ) ) :
 					$lbite_checkout_mode   = get_option( 'lbite_checkout_mode', 'standard' );
 					$lbite_enable_rounding = get_option( 'lbite_enable_rounding', false );
 					?>
-					<div class="postbox" style="margin-top: 30px;">
-						<h2 class="hndle" style="padding: 12px 15px;"><?php esc_html_e( 'Optimierter Checkout', 'libre-bite' ); ?></h2>
+					<div class="postbox" style="margin-bottom: 20px;">
+						<h2 class="hndle" style="padding: 12px 15px;"><?php esc_html_e( 'Checkout-Optionen', 'libre-bite' ); ?></h2>
 						<div class="inside">
-							<p class="description"><?php esc_html_e( 'Der optimierte Checkout reduziert das Formular auf das Wesentliche \u2013 ideal f\u00fcr Take-Away ohne Lieferung.', 'libre-bite' ); ?></p>
-							<form method="post" style="margin-top: 12px;">
+							<form method="post">
 								<?php wp_nonce_field( 'lbite_settings' ); ?>
 								<input type="hidden" name="lbite_save_tab" value="checkout">
 								<table class="form-table">
-									<?php if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) : ?>
-									<tr>
-										<th><?php esc_html_e( 'Checkout-Modus', 'libre-bite' ); ?></th>
-										<td>
-											<select name="lbite_checkout_mode">
-												<option value="standard" <?php selected( $lbite_checkout_mode, 'standard' ); ?>><?php esc_html_e( 'Standard (alle WooCommerce-Felder)', 'libre-bite' ); ?></option>
-												<option value="optimized" <?php selected( $lbite_checkout_mode, 'optimized' ); ?>><?php esc_html_e( 'Optimiert (nur Name + Beleg-Option)', 'libre-bite' ); ?></option>
-											</select>
-											<p class="description"><?php esc_html_e( 'Im optimierten Modus wird nur nach dem Namen gefragt und ob ein Beleg per E-Mail gew\u00fcnscht ist.', 'libre-bite' ); ?></p>
-										</td>
-									</tr>
-									<?php endif; ?>
 									<?php if ( lbite_feature_enabled( 'enable_rounding' ) ) : ?>
 									<tr>
 										<th><?php esc_html_e( 'Gesamtbetrag runden', 'libre-bite' ); ?></th>
@@ -244,7 +225,19 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 												<input type="checkbox" name="lbite_enable_rounding" value="1" <?php checked( $lbite_enable_rounding ); ?>>
 												<?php esc_html_e( 'Gesamtbetrag auf 5 Rappen (0.05 CHF) runden', 'libre-bite' ); ?>
 											</label>
-											<p class="description"><?php esc_html_e( 'Verhindert Rundungsfehler bei Kombination von Gutscheinen und Trinkgeld.', 'libre-bite' ); ?></p>
+											<p class="description"><?php esc_html_e( 'Verhindert Rundungsfehler bei Kombination von Gutscheinen und Trinkgeld. Empfohlen für Schweizer Betriebe.', 'libre-bite' ); ?></p>
+										</td>
+									</tr>
+									<?php endif; ?>
+									<?php if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) : ?>
+									<tr>
+										<th><?php esc_html_e( 'Checkout-Modus', 'libre-bite' ); ?></th>
+										<td>
+											<select name="lbite_checkout_mode">
+												<option value="standard" <?php selected( $lbite_checkout_mode, 'standard' ); ?>><?php esc_html_e( 'Standard (alle WooCommerce-Felder)', 'libre-bite' ); ?></option>
+												<option value="optimized" <?php selected( $lbite_checkout_mode, 'optimized' ); ?>><?php esc_html_e( 'Optimiert (nur Name + Beleg-Option)', 'libre-bite' ); ?></option>
+											</select>
+											<p class="description"><?php esc_html_e( 'Im optimierten Modus wird nur nach dem Namen gefragt und ob ein Beleg per E-Mail gewünscht ist.', 'libre-bite' ); ?></p>
 										</td>
 									</tr>
 									<?php endif; ?>
@@ -255,6 +248,13 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					</div>
 					<?php
 				endif;
+
+				// Checkout-Felder (Standard-Checkout konfigurieren)
+				?>
+				<h2><?php esc_html_e( 'Felder im Standard-Checkout', 'libre-bite' ); ?></h2>
+				<p class="description"><?php esc_html_e( 'Wähle, welche Felder und Optionen im Checkout angezeigt werden.', 'libre-bite' ); ?></p>
+				<?php
+				include LBITE_PLUGIN_DIR . 'templates/admin/checkout-fields.php';
 				break;
 
 			case 'orders_settings':
