@@ -205,7 +205,6 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 
 			case 'checkout':
 				// Checkout-Optionen (Rundung + ggf. Checkout-Modus ganz oben)
-				<?php
 				if ( lbite_feature_enabled( 'enable_rounding' ) || lbite_feature_enabled( 'enable_optimized_checkout' ) ) :
 					$lbite_checkout_mode   = get_option( 'lbite_checkout_mode', 'standard' );
 					$lbite_enable_rounding = get_option( 'lbite_enable_rounding', false );
