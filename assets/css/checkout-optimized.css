@@ -1,5 +1,5 @@
 /**
- * Open Order System - Optimierter Checkout
+ * Libre Bite - Optimierter Checkout
  *
  * CSS-Variablen für Theme-Anpassung:
  * --lbite-color-primary: Hauptfarbe (Standard: #0073aa)
@@ -137,6 +137,17 @@
 }
 
 /* WooCommerce Overrides - Layout (theme-unabhängig, hohe Spezifität) */
+
+/* Checkout-Formular: kein Flex/Grid durch Theme */
+body .lbite-checkout-optimized .woocommerce-checkout {
+	display: block !important;
+}
+
+/* Rechnungsdetails-Bereich vollbreit */
+body .lbite-checkout-optimized #customer_details {
+	float: none !important;
+	width: 100% !important;
+}
 
 /* WooCommerce zweispaltig-Layout aufheben (col2-set, col-1, col-2) */
 body .lbite-checkout-optimized .woocommerce-checkout.lbite-checkout-form .col2-set,

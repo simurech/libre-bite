@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -160,6 +160,13 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.1.2 =
+* Improvement: Consolidated settings tabs – Checkout and Checkout Fields merged, Dashboard renamed to Order Board, Features tab shown first.
+* Improvement: Simplified user roles to two-tier system (administrator + staff), removed legacy role cleanup on migration.
+* Improvement: Rewrote help documentation to be feature-focused for new users.
+* Fix: Optimized checkout CSS layout overrides for theme compatibility (Astra and others).
+* Fix: Outdated legacy roles (OOS) removed from Roles & Menus screen.
 
 = 1.1.1 =
 * Improvement: Prefix all variables in template files with lbite_ for WordPress.org compliance.
