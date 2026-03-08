@@ -38,12 +38,51 @@
 			this.loadSavedCart();
 			this.bindFullscreenEvents();
 
+			// Initiale Standort-Farbe und Overlay-Status setzen
+			const initialLocation = $('#lbite-pos-location').val();
+			this.applyLocationColor(initialLocation);
+			this.updateNoLocationState(!initialLocation);
+
 			// Eingebettete Daten verwenden (kein HTTP-Request nötig)
 			if (lbitePos.preloadData && lbitePos.preloadData.products) {
 				this.usePreloadedData(lbitePos.preloadData);
 			} else {
 				// Fallback auf AJAX
 				this.loadProducts();
+			}
+		},
+
+		/**
+		 * Standort-Farbe auf POS-Dropdown anwenden
+		 */
+		applyLocationColor: function(locationId) {
+			const $select = $('#lbite-pos-location');
+			const colors = (lbitePos.locationColors) || {};
+			const color = locationId ? colors[locationId] : null;
+			if (color) {
+				$select.css({
+					'border-color': color,
+					'border-width': '2px',
+					'box-shadow': '0 0 0 1px ' + color
+				});
+			} else {
+				$select.css({
+					'border-color': '',
+					'border-width': '',
+					'box-shadow': ''
+				});
+			}
+		},
+
+		/**
+		 * Produkt-Bereich bei fehlendem Standort blockieren/freigeben
+		 */
+		updateNoLocationState: function(noLocation) {
+			const $products = $('.lbite-pos-products');
+			if (noLocation) {
+				$products.addClass('lbite-pos-no-location');
+			} else {
+				$products.removeClass('lbite-pos-no-location');
 			}
 		},
 

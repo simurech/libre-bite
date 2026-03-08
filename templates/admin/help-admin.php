@@ -46,6 +46,12 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 		   class="nav-tab <?php echo 'locations' === $active_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Standorte', 'libre-bite' ); ?>
 		</a>
+		<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=tables' ) ); ?>"
+		   class="nav-tab <?php echo 'tables' === $active_tab ? 'nav-tab-active' : ''; ?>">
+			<?php esc_html_e( 'Tische', 'libre-bite' ); ?>
+		</a>
+		<?php endif; ?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=settings' ) ); ?>"
 		   class="nav-tab <?php echo 'settings' === $active_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Einstellungen', 'libre-bite' ); ?>
@@ -73,6 +79,11 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 				break;
 			case 'locations':
 				include __DIR__ . '/help-partials/locations.php';
+				break;
+			case 'tables':
+				if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
+					include __DIR__ . '/help-partials/tables.php';
+				}
 				break;
 			case 'settings':
 				include __DIR__ . '/help-partials/settings.php';
@@ -162,7 +173,23 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 						</a>
 					</div>
 
-					<!-- Einstellungen -->
+					<!-- Tische -->
+					<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
+					<div class="lbite-help-card">
+						<h2><span class="dashicons dashicons-grid-view"></span> <?php esc_html_e( 'Tische', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'QR-Code-basierte Tischbestellung – Gäste scannen und bestellen direkt am Tisch.', 'libre-bite' ); ?></p>
+						<ul>
+							<li><?php esc_html_e( 'Tische anlegen und QR-Codes generieren', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Sitzplätze pro Tisch konfigurieren', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Mehrere Tische auf einmal erstellen', 'libre-bite' ); ?></li>
+						</ul>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=tables' ) ); ?>" class="button">
+							<?php esc_html_e( 'Mehr erfahren', 'libre-bite' ); ?>
+						</a>
+					</div>
+					<?php endif; ?>
+
+				<!-- Einstellungen -->
 					<div class="lbite-help-card">
 						<h2><span class="dashicons dashicons-admin-settings"></span> <?php esc_html_e( 'Einstellungen', 'libre-bite' ); ?></h2>
 						<p><?php esc_html_e( 'Passen Sie das Libre Bite an Ihre Bedürfnisse an.', 'libre-bite' ); ?></p>

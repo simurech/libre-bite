@@ -184,6 +184,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
+	<div class="lbite-help-article">
+		<h3><?php esc_html_e( 'Standort-Farbe', 'libre-bite' ); ?></h3>
+		<p><?php esc_html_e( 'Jedem Standort kann eine Akzentfarbe zugewiesen werden. Diese wird in folgenden Bereichen als visuelle Hervorhebung angezeigt:', 'libre-bite' ); ?></p>
+		<ul>
+			<li><strong><?php esc_html_e( 'Kassensystem (POS):', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Das Standort-Dropdown erhält einen farbigen Rahmen passend zur gewählten Farbe.', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Bestellübersicht:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Das Standort-Dropdown in der Bestellübersicht wird ebenfalls farbig hervorgehoben.', 'libre-bite' ); ?></li>
+		</ul>
+		<p><?php esc_html_e( 'Die Farbe wird im Standort-Bearbeitungsbereich unter "Farbe" mit dem WordPress-Farbwähler festgelegt.', 'libre-bite' ); ?></p>
+	</div>
+
 	<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_location' ) ); ?>" class="button button-primary">
 		<?php esc_html_e( 'Standorte verwalten', 'libre-bite' ); ?>
 	</a>

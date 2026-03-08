@@ -66,14 +66,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
 	<div class="lbite-help-article">
 		<h3><?php esc_html_e( 'Tischbestellungen', 'libre-bite' ); ?></h3>
-		<p><?php esc_html_e( 'Mit der Tischverwaltung kannst du QR-Codes für jeden Tisch generieren. Kunden scannen den QR-Code und bestellen direkt am Tisch – ohne Laufweg zur Kasse.', 'libre-bite' ); ?></p>
-		<ul>
-			<li><?php esc_html_e( 'QR-Code wird automatisch pro Tisch generiert', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Bestellungen erscheinen im Dashboard mit Tischnummer', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Adress- und Pickup-Felder werden im Checkout automatisch ausgeblendet', 'libre-bite' ); ?></li>
-		</ul>
-		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_table' ) ); ?>" class="button">
-			<?php esc_html_e( 'Zu den Tischen', 'libre-bite' ); ?>
+		<p><?php esc_html_e( 'QR-Code-basierte Tischbestellung: Gäste scannen und bestellen direkt – ohne Adress- oder Abholzeitfelder.', 'libre-bite' ); ?></p>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=tables' ) ); ?>" class="button">
+			<?php esc_html_e( 'Tisch-Hilfe anzeigen', 'libre-bite' ); ?>
 		</a>
 	</div>
 	<?php endif; ?>

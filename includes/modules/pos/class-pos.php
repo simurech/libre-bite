@@ -95,22 +95,34 @@ class LBite_POS {
 		// Produktdaten direkt einbetten (kein zusätzlicher HTTP-Request nötig).
 		$product_data = $this->get_pos_product_data();
 
+		// Standort-Farben für POS-Hervorhebung.
+		$pos_location_colors = array();
+		$pos_all_locations   = LBite_Locations::get_all_locations();
+		foreach ( $pos_all_locations as $pos_loc ) {
+			$pos_color = get_post_meta( $pos_loc->ID, '_lbite_location_color', true );
+			if ( $pos_color ) {
+				$pos_location_colors[ $pos_loc->ID ] = $pos_color;
+			}
+		}
+
 		// Lokalisierte Daten.
 		wp_localize_script(
 			'lbite-pos',
 			'lbitePos',
 			array(
-				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
-				'nonce'        => wp_create_nonce( 'lbite_pos_nonce' ),
-				'currency'     => get_woocommerce_currency_symbol(),
-				'preloadData'  => $product_data,
-				'strings'      => array(
+				'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
+				'nonce'          => wp_create_nonce( 'lbite_pos_nonce' ),
+				'currency'       => get_woocommerce_currency_symbol(),
+				'preloadData'    => $product_data,
+				'locationColors' => $pos_location_colors,
+				'strings'        => array(
 					'addToCart'      => __( 'Zum Warenkorb', 'libre-bite' ),
 					'removeFromCart' => __( 'Entfernen', 'libre-bite' ),
 					'orderCreated'   => __( 'Bestellung erstellt', 'libre-bite' ),
 					'orderError'     => __( 'Fehler beim Erstellen der Bestellung', 'libre-bite' ),
 					'cartEmpty'      => __( 'Warenkorb ist leer', 'libre-bite' ),
 					'selectLocation' => __( 'Bitte Standort wählen', 'libre-bite' ),
+					'selectLocationFirst' => __( 'Bitte zuerst einen Standort wählen', 'libre-bite' ),
 				),
 			)
 		);

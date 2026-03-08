@@ -77,6 +77,11 @@ class LBite_Locations {
 		if ( $screen && self::POST_TYPE === $screen->post_type ) {
 			wp_enqueue_media();
 
+			// WP Color Picker für Standort-Farbe.
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'wp-color-picker' );
+			wp_add_inline_script( 'wp-color-picker', 'jQuery(function($){ $(".lbite-color-picker").wpColorPicker(); });' );
+
 			// Bild-Upload-Script laden (nach media-views, damit wp.media verfügbar ist).
 			wp_enqueue_script(
 				'lbite-admin-location-image',
@@ -160,6 +165,15 @@ class LBite_Locations {
 		);
 
 		add_meta_box(
+			'lbite_location_color',
+			__( 'Farbe', 'libre-bite' ),
+			array( $this, 'render_color_meta_box' ),
+			self::POST_TYPE,
+			'side',
+			'default'
+		);
+
+		add_meta_box(
 			'lbite_location_address',
 			__( 'Adresse', 'libre-bite' ),
 			array( $this, 'render_address_meta_box' ),
@@ -208,6 +222,26 @@ class LBite_Locations {
 				<?php esc_html_e( 'Optional: Wird in der Standort-Auswahl als Kachel-Bild angezeigt.', 'libre-bite' ); ?>
 			</p>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Farb-Meta-Box rendern
+	 *
+	 * @param WP_Post $post Post-Objekt
+	 */
+	public function render_color_meta_box( $post ) {
+		$color = get_post_meta( $post->ID, '_lbite_location_color', true );
+		?>
+		<p>
+			<label for="lbite_location_color"><?php esc_html_e( 'Wird in POS und Bestellübersicht als Akzentfarbe angezeigt.', 'libre-bite' ); ?></label>
+		</p>
+		<input type="text"
+			id="lbite_location_color"
+			name="lbite_location_color"
+			class="lbite-color-picker"
+			value="<?php echo esc_attr( $color ); ?>"
+			data-default-color="">
 		<?php
 	}
 
@@ -339,6 +373,16 @@ class LBite_Locations {
 				update_post_meta( $post_id, '_lbite_location_image', $image_id );
 			} else {
 				delete_post_meta( $post_id, '_lbite_location_image' );
+			}
+		}
+
+		// Farbe speichern.
+		if ( isset( $_POST['lbite_location_color'] ) ) {
+			$color = sanitize_hex_color( wp_unslash( $_POST['lbite_location_color'] ) );
+			if ( $color ) {
+				update_post_meta( $post_id, '_lbite_location_color', $color );
+			} else {
+				delete_post_meta( $post_id, '_lbite_location_color' );
 			}
 		}
 
@@ -503,6 +547,16 @@ class LBite_Locations {
 				'post_status'    => 'publish',
 			)
 		);
+	}
+
+	/**
+	 * Farbe eines Standorts abrufen
+	 *
+	 * @param int $location_id Standort-ID
+	 * @return string Hex-Farbe oder leerer String
+	 */
+	public static function get_location_color( $location_id ) {
+		return (string) get_post_meta( $location_id, '_lbite_location_color', true );
 	}
 
 	/**
