@@ -70,8 +70,8 @@ class LBite_Features {
 			'group'       => 'order_system',
 			'default'     => false,
 			'premium'     => true,
-			'label'       => 'Tischbestellung',
-			'description' => 'Bestellung am Tisch via QR-Code ermöglichen',
+			'label'       => 'Tischverwaltung & Tischbestellung',
+			'description' => 'Tische anlegen, Sitzplätze definieren, QR-Codes generieren und Bestellungen direkt am Tisch ermöglichen',
 		),
 
 		// Checkout

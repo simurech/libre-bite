@@ -17,27 +17,15 @@ $feature_groups = array(
 		'title'       => __( 'Bestellsystem', 'libre-bite' ),
 		'description' => __( 'Grundlegende Bestellfunktionen', 'libre-bite' ),
 		'features'    => array(
-			'enable_pos'                => array(
+			'enable_pos'              => array(
 				'label'       => __( 'Kassensystem (POS)', 'libre-bite' ),
 				'description' => __( 'Kassensystem für Vor-Ort-Bestellungen aktivieren', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),
-			'enable_scheduled_orders'   => array(
+			'enable_scheduled_orders' => array(
 				'label'       => __( 'Vorbestellungen', 'libre-bite' ),
 				'description' => __( 'Kunden können Bestellungen für später aufgeben', 'libre-bite' ),
-				'default'     => true,
-				'premium'     => false,
-			),
-			'enable_order_notes'        => array(
-				'label'       => __( 'Kundennotizen', 'libre-bite' ),
-				'description' => __( 'Kunden können Notizen zur Bestellung hinzufügen', 'libre-bite' ),
-				'default'     => true,
-				'premium'     => false,
-			),
-			'enable_order_cancellation' => array(
-				'label'       => __( 'Stornierung', 'libre-bite' ),
-				'description' => __( 'Kunden können Bestellungen selbst stornieren', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),
@@ -71,19 +59,7 @@ $feature_groups = array(
 				'default'     => true,
 				'premium'     => false,
 			),
-			'enable_email_field'        => array(
-				'label'       => __( 'E-Mail-Feld', 'libre-bite' ),
-				'description' => __( 'E-Mail-Adresse im Checkout anzeigen', 'libre-bite' ),
-				'default'     => true,
-				'premium'     => false,
 			),
-			'enable_phone_field'        => array(
-				'label'       => __( 'Telefon-Feld', 'libre-bite' ),
-				'description' => __( 'Telefonnummer im Checkout anzeigen', 'libre-bite' ),
-				'default'     => true,
-				'premium'     => false,
-			),
-		),
 	),
 	'locations'    => array(
 		'title'       => __( 'Standorte', 'libre-bite' ),
@@ -108,8 +84,8 @@ $feature_groups = array(
 				'premium'     => false,
 			),
 			'enable_table_ordering'    => array(
-				'label'       => __( 'Tischbestellung', 'libre-bite' ),
-				'description' => __( 'QR-Codes pro Tisch – Kunden scannen und bestellen direkt am Tisch', 'libre-bite' ),
+				'label'       => __( 'Tischverwaltung & Tischbestellung', 'libre-bite' ),
+				'description' => __( 'Tische anlegen, Sitzplätze definieren, QR-Codes generieren und Bestellungen direkt am Tisch ermöglichen', 'libre-bite' ),
 				'default'     => false,
 				'premium'     => true,
 			),
@@ -167,21 +143,9 @@ $feature_groups = array(
 		'title'       => __( 'Bestellübersicht', 'libre-bite' ),
 		'description' => __( 'Bestellübersicht-Funktionen', 'libre-bite' ),
 		'features'    => array(
-			'enable_kanban_board'       => array(
-				'label'       => __( 'Kanban-Board', 'libre-bite' ),
-				'description' => __( 'Bestellungen als Kanban-Board anzeigen', 'libre-bite' ),
-				'default'     => true,
-				'premium'     => false,
-			),
-			'enable_auto_status_change' => array(
-				'label'       => __( 'Auto-Status', 'libre-bite' ),
-				'description' => __( 'Automatischer Status-Wechsel bei Zeitüberschreitung', 'libre-bite' ),
-				'default'     => true,
-				'premium'     => false,
-			),
-			'enable_fullscreen_mode'    => array(
-				'label'       => __( 'Fullscreen-Modus', 'libre-bite' ),
-				'description' => __( 'Vollbild-Ansicht für Tablets aktivieren', 'libre-bite' ),
+			'enable_kanban_board' => array(
+				'label'       => __( 'Bestellübersicht aktivieren', 'libre-bite' ),
+				'description' => __( 'Kanban-Board für eingehende Bestellungen mit Statusverfolgung und Vollbild-Modus', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),

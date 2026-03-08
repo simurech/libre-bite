@@ -63,6 +63,10 @@ class LBite_Admin {
 		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_admin_assets' );
 		$this->loader->add_action( 'admin_init', $this, 'maybe_upgrade' );
 
+		// Menü-Highlighting für CPT-Seiten
+		$this->loader->add_filter( 'parent_file', $this, 'fix_menu_parent_file' );
+		$this->loader->add_filter( 'submenu_file', $this, 'fix_menu_submenu_file' );
+
 		// AJAX-Handler.
 		$this->loader->add_action( 'wp_ajax_lbite_save_pos_location', $this, 'ajax_save_pos_location' );
 		$this->loader->add_action( 'wp_ajax_lbite_pos_get_products', $this, 'ajax_pos_get_products' );
@@ -273,6 +277,36 @@ class LBite_Admin {
 	}
 
 	/**
+	 * Menü-Highlighting: Hauptmenü für LibreBite-CPTs aktiv halten.
+	 *
+	 * @param string $parent_file Aktueller Parent-File.
+	 * @return string
+	 */
+	public function fix_menu_parent_file( $parent_file ) {
+		global $post_type;
+		$lbite_post_types = array( 'lbite_location', 'lbite_table', 'lbite_product_option' );
+		if ( in_array( $post_type, $lbite_post_types, true ) ) {
+			return 'libre-bite';
+		}
+		return $parent_file;
+	}
+
+	/**
+	 * Menü-Highlighting: Korrekten Untermenü-Eintrag hervorheben.
+	 *
+	 * @param string $submenu_file Aktueller Submenu-File.
+	 * @return string
+	 */
+	public function fix_menu_submenu_file( $submenu_file ) {
+		global $post_type;
+		$lbite_post_types = array( 'lbite_location', 'lbite_table', 'lbite_product_option' );
+		if ( in_array( $post_type, $lbite_post_types, true ) ) {
+			return 'edit.php?post_type=' . $post_type;
+		}
+		return $submenu_file;
+	}
+
+	/**
 	 * Debug-Seite rendern
 	 */
 	public function render_debug_page() {
@@ -354,6 +388,7 @@ class LBite_Admin {
 					'confirmDelete' => __( 'Wirklich löschen?', 'libre-bite' ),
 					'saveSuccess'   => __( 'Erfolgreich gespeichert', 'libre-bite' ),
 					'saveError'     => __( 'Fehler beim Speichern', 'libre-bite' ),
+					'noTable'       => __( 'Kein Tisch', 'libre-bite' ),
 				),
 			)
 		);
@@ -395,15 +430,31 @@ class LBite_Admin {
 				true
 			);
 
+			// Standort-Farben für Dashboard-Hervorhebung.
+			$lbite_dashboard_colors = array();
+			$lbite_locations_for_colors = get_posts( array(
+				'post_type'      => 'lbite_location',
+				'posts_per_page' => 100,
+				'post_status'    => 'publish',
+				'fields'         => 'ids',
+			) );
+			foreach ( $lbite_locations_for_colors as $lbite_loc_id ) {
+				$lbite_color = get_post_meta( $lbite_loc_id, '_lbite_location_color', true );
+				if ( $lbite_color ) {
+					$lbite_dashboard_colors[ $lbite_loc_id ] = $lbite_color;
+				}
+			}
+
 			wp_localize_script(
 				'lbite-dashboard',
 				'lbiteDashboard',
 				array(
-					'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
-					'nonce'    => wp_create_nonce( 'lbite_dashboard_nonce' ),
-					'soundUrl' => get_option( 'lbite_notification_sound', LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' ),
-					'refreshInterval' => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000, // in Millisekunden
-					'strings'  => array(
+					'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
+					'nonce'           => wp_create_nonce( 'lbite_dashboard_nonce' ),
+					'soundUrl'        => get_option( 'lbite_notification_sound', LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' ),
+					'refreshInterval' => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
+					'locationColors'  => $lbite_dashboard_colors,
+					'strings'         => array(
 						'orderUpdated'  => __( 'Status aktualisiert', 'libre-bite' ),
 						'updateError'   => __( 'Fehler beim Aktualisieren', 'libre-bite' ),
 						'soundActive'   => __( 'Sound aktiv', 'libre-bite' ),

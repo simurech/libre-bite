@@ -10,18 +10,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Aktuelle Feature-Einstellungen laden (Standard: alle false bei Erstinstallation)
-$current_features = get_option( 'lbite_features', array() );
+$lbite_current_features = get_option( 'lbite_features', array() );
 
 // Feature-Gruppen mit Metadaten für die Darstellung
-$feature_groups = array(
+$lbite_feature_groups = array(
 	array(
 		'label'    => __( 'Bestellsystem', 'libre-bite' ),
 		'icon'     => '🍽️',
 		'features' => array(
 			array(
 				'key'         => 'enable_kanban_board',
-				'label'       => __( 'Bestellübersicht (Kanban)', 'libre-bite' ),
-				'description' => __( 'Visuelles Kanban-Board für eingehende Bestellungen mit Status-Tracking.', 'libre-bite' ),
+				'label'       => __( 'Bestellübersicht', 'libre-bite' ),
+				'description' => __( 'Kanban-Board für eingehende Bestellungen mit Statusverfolgung und Vollbild-Modus.', 'libre-bite' ),
 				'pro'         => false,
 			),
 			array(
@@ -31,33 +31,9 @@ $feature_groups = array(
 				'pro'         => false,
 			),
 			array(
-				'key'         => 'enable_auto_status_change',
-				'label'       => __( 'Automatische Statusänderung', 'libre-bite' ),
-				'description' => __( 'Vorbestellungen werden automatisch zur Vorbereitung verschoben.', 'libre-bite' ),
-				'pro'         => false,
-			),
-			array(
 				'key'         => 'enable_scheduled_orders',
 				'label'       => __( 'Vorbestellungen', 'libre-bite' ),
 				'description' => __( 'Kunden können Abholzeiten im Voraus wählen.', 'libre-bite' ),
-				'pro'         => false,
-			),
-			array(
-				'key'         => 'enable_order_notes',
-				'label'       => __( 'Bestellnotizen', 'libre-bite' ),
-				'description' => __( 'Kunden können Sonderwünsche als Notiz angeben.', 'libre-bite' ),
-				'pro'         => false,
-			),
-			array(
-				'key'         => 'enable_order_cancellation',
-				'label'       => __( 'Bestellstornierung', 'libre-bite' ),
-				'description' => __( 'Bestellungen können über das Dashboard storniert werden.', 'libre-bite' ),
-				'pro'         => false,
-			),
-			array(
-				'key'         => 'enable_fullscreen_mode',
-				'label'       => __( 'Vollbild-Modus', 'libre-bite' ),
-				'description' => __( 'POS und Bestellübersicht im Vollbild betreiben.', 'libre-bite' ),
 				'pro'         => false,
 			),
 		),
@@ -90,18 +66,6 @@ $feature_groups = array(
 				'description' => __( 'Bestellungen ohne Kundenkonto ermöglichen.', 'libre-bite' ),
 				'pro'         => false,
 			),
-			array(
-				'key'         => 'enable_email_field',
-				'label'       => __( 'E-Mail-Feld', 'libre-bite' ),
-				'description' => __( 'E-Mail-Adresse beim Checkout abfragen.', 'libre-bite' ),
-				'pro'         => false,
-			),
-			array(
-				'key'         => 'enable_phone_field',
-				'label'       => __( 'Telefon-Feld', 'libre-bite' ),
-				'description' => __( 'Telefonnummer beim Checkout abfragen.', 'libre-bite' ),
-				'pro'         => false,
-			),
 		),
 	),
 	array(
@@ -128,8 +92,8 @@ $feature_groups = array(
 			),
 			array(
 				'key'         => 'enable_table_ordering',
-				'label'       => __( 'Tischbestellung', 'libre-bite' ),
-				'description' => __( 'QR-Codes pro Tisch – Kunden scannen und bestellen direkt am Tisch.', 'libre-bite' ),
+				'label'       => __( 'Tischverwaltung & Tischbestellung', 'libre-bite' ),
+				'description' => __( 'Tische anlegen, Sitzplätze definieren, QR-Codes generieren und Bestellungen direkt am Tisch ermöglichen.', 'libre-bite' ),
 				'pro'         => true,
 			),
 		),
@@ -185,7 +149,7 @@ $feature_groups = array(
 );
 
 // Prüfen ob Premium aktiv
-$is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->is_premium();
+$lbite_is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->is_premium();
 ?>
 <div class="lbite-onboarding-page">
 
@@ -198,40 +162,40 @@ $is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->is_premiu
 
 	<div class="lbite-onboarding-body">
 
-		<?php foreach ( $feature_groups as $group ) : ?>
+		<?php foreach ( $lbite_feature_groups as $lbite_group ) : ?>
 		<div class="lbite-onboarding-group">
 			<h2 class="lbite-onboarding-group-title">
-				<span class="lbite-onboarding-group-icon"><?php echo esc_html( $group['icon'] ); ?></span>
-				<?php echo esc_html( $group['label'] ); ?>
+				<span class="lbite-onboarding-group-icon"><?php echo esc_html( $lbite_group['icon'] ); ?></span>
+				<?php echo esc_html( $lbite_group['label'] ); ?>
 			</h2>
 			<div class="lbite-onboarding-cards">
-				<?php foreach ( $group['features'] as $feature ) :
-					$is_enabled = isset( $current_features[ $feature['key'] ] ) ? (bool) $current_features[ $feature['key'] ] : false;
-					$is_pro_locked = $feature['pro'] && ! $is_premium;
+				<?php foreach ( $lbite_group['features'] as $lbite_feature ) :
+					$lbite_is_enabled = isset( $lbite_current_features[ $lbite_feature['key'] ] ) ? (bool) $lbite_current_features[ $lbite_feature['key'] ] : false;
+					$lbite_is_pro_locked = $lbite_feature['pro'] && ! $lbite_is_premium;
 				?>
-				<div class="lbite-onboarding-card <?php echo $is_pro_locked ? 'lbite-onboarding-card--pro' : ''; ?>" data-feature="<?php echo esc_attr( $feature['key'] ); ?>">
-					<?php if ( $feature['pro'] ) : ?>
+				<div class="lbite-onboarding-card <?php echo $lbite_is_pro_locked ? 'lbite-onboarding-card--pro' : ''; ?>" data-feature="<?php echo esc_attr( $lbite_feature['key'] ); ?>">
+					<?php if ( $lbite_feature['pro'] ) : ?>
 					<span class="lbite-onboarding-pro-badge"><?php esc_html_e( 'Pro', 'libre-bite' ); ?></span>
 					<?php endif; ?>
 
 					<div class="lbite-onboarding-card-header">
-						<span class="lbite-onboarding-card-label"><?php echo esc_html( $feature['label'] ); ?></span>
+						<span class="lbite-onboarding-card-label"><?php echo esc_html( $lbite_feature['label'] ); ?></span>
 						<button
 							type="button"
-							class="lbite-onboarding-toggle <?php echo $is_enabled ? 'is-active' : ''; ?> <?php echo $is_pro_locked ? 'is-locked' : ''; ?>"
-							data-feature="<?php echo esc_attr( $feature['key'] ); ?>"
-							aria-pressed="<?php echo $is_enabled ? 'true' : 'false'; ?>"
-							<?php echo $is_pro_locked ? 'disabled' : ''; ?>
+							class="lbite-onboarding-toggle <?php echo $lbite_is_enabled ? 'is-active' : ''; ?> <?php echo $lbite_is_pro_locked ? 'is-locked' : ''; ?>"
+							data-feature="<?php echo esc_attr( $lbite_feature['key'] ); ?>"
+							aria-pressed="<?php echo $lbite_is_enabled ? 'true' : 'false'; ?>"
+							<?php echo $lbite_is_pro_locked ? 'disabled' : ''; ?>
 						>
 							<span class="lbite-onboarding-toggle-track">
 								<span class="lbite-onboarding-toggle-thumb"></span>
 							</span>
 							<span class="lbite-onboarding-toggle-label">
-								<?php echo $is_enabled ? esc_html__( 'AN', 'libre-bite' ) : esc_html__( 'AUS', 'libre-bite' ); ?>
+								<?php echo $lbite_is_enabled ? esc_html__( 'AN', 'libre-bite' ) : esc_html__( 'AUS', 'libre-bite' ); ?>
 							</span>
 						</button>
 					</div>
-					<p class="lbite-onboarding-card-description"><?php echo esc_html( $feature['description'] ); ?></p>
+					<p class="lbite-onboarding-card-description"><?php echo esc_html( $lbite_feature['description'] ); ?></p>
 
 					<?php if ( $is_pro_locked ) : ?>
 					<div class="lbite-onboarding-pro-notice">

@@ -45,7 +45,32 @@
 				this.loadOrders();
 			}
 
+			// Initiale Farbe anwenden
+			this.applyLocationColor(locationId);
+
 			this.startAutoRefresh();
+		},
+
+		/**
+		 * Standort-Farbe auf Dropdown anwenden
+		 */
+		applyLocationColor: function(locationId) {
+			const $select = $('#lbite-board-location');
+			const colors = (lbiteDashboard.locationColors) || {};
+			const color = locationId ? colors[locationId] : null;
+			if (color) {
+				$select.css({
+					'border-color': color,
+					'border-width': '2px',
+					'box-shadow': '0 0 0 1px ' + color
+				});
+			} else {
+				$select.css({
+					'border-color': '',
+					'border-width': '',
+					'box-shadow': ''
+				});
+			}
 		},
 
 		/**
@@ -120,6 +145,9 @@
 			// Standort-Filter
 			$('#lbite-board-location').on('change', () => {
 				const locationId = $('#lbite-board-location').val();
+
+				// Farbe anwenden
+				this.applyLocationColor(locationId);
 
 				// Standort speichern
 				if (locationId) {
@@ -371,8 +399,8 @@
 			}
 		});
 
-		// Neue Bestellung erkannt (nur aktive Bestellungen zählen)
-		if (!silent && activeOrders > this.lastOrderCount) {
+		// Neue Bestellung erkannt (auch bei Auto-Refresh prüfen)
+		if (activeOrders > this.lastOrderCount) {
 			this.playNotificationSound();
 		}
 
@@ -647,8 +675,11 @@
 		 */
 		playNotificationSound: function() {
 			if (this.soundEnabled && this.audio) {
-				this.audio.play().catch(err => {
-					console.log('Sound konnte nicht abgespielt werden:', err);
+				this.audio.currentTime = 0;
+				this.audio.play().catch(() => {
+					// Autoplay vom Browser blockiert -> Aktivierungs-Button erneut anzeigen
+					$('#lbite-activate-audio').show();
+					$('#lbite-sound-toggle').hide();
 				});
 			}
 		},
