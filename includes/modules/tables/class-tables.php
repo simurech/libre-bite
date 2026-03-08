@@ -46,6 +46,7 @@ class LBite_Tables {
 		$this->loader->add_action( 'add_meta_boxes', $this, 'add_meta_boxes' );
 		$this->loader->add_action( 'save_post_' . self::POST_TYPE, $this, 'save_table_meta' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_table_assets' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_floor_plan_assets' );
 
 		// Admin-Spalten
 		$this->loader->add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', $this, 'add_admin_columns' );
@@ -63,6 +64,10 @@ class LBite_Tables {
 
 		// Formular-Handler: Schnell-Erstellung
 		$this->loader->add_action( 'admin_post_lbite_bulk_create_tables', $this, 'handle_bulk_create' );
+
+		// AJAX: Tischplan
+		$this->loader->add_action( 'wp_ajax_lbite_get_floor_plan_tables', $this, 'ajax_get_floor_plan_tables' );
+		$this->loader->add_action( 'wp_ajax_lbite_save_floor_plan_order', $this, 'ajax_save_floor_plan_order' );
 
 		// Frontend: URL Parameter verarbeiten
 		$this->loader->add_action( 'template_redirect', $this, 'process_table_url_parameters' );
@@ -114,6 +119,153 @@ class LBite_Tables {
 				'scanText' => __( 'Hier scannen zum Bestellen', 'libre-bite' ),
 			)
 		);
+	}
+
+	/**
+	 * Assets für Tischplan-Seite laden
+	 *
+	 * @param string $hook Aktuelle Admin-Seite
+	 */
+	public function enqueue_floor_plan_assets( $hook ) {
+		if ( false === strpos( $hook, 'lbite-floor-plan' ) ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'lbite-admin-table-plan',
+			LBITE_PLUGIN_URL . 'assets/css/admin-table-plan.css',
+			array(),
+			LBITE_VERSION
+		);
+
+		// SortableJS registrieren falls noch nicht geschehen
+		if ( ! wp_script_is( 'sortablejs', 'registered' ) ) {
+			wp_register_script(
+				'sortablejs',
+				LBITE_PLUGIN_URL . 'assets/js/vendor/sortable.min.js',
+				array(),
+				LBITE_VERSION,
+				true
+			);
+		}
+		wp_enqueue_script( 'sortablejs' );
+
+		wp_enqueue_script(
+			'lbite-admin-table-plan',
+			LBITE_PLUGIN_URL . 'assets/js/admin-table-plan.js',
+			array( 'jquery', 'sortablejs' ),
+			LBITE_VERSION,
+			true
+		);
+
+		wp_localize_script(
+			'lbite-admin-table-plan',
+			'lbiteFloorPlan',
+			array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'nonce'   => wp_create_nonce( 'lbite_admin_nonce' ),
+				'editUrl' => admin_url( 'post.php?post=%d&action=edit' ),
+				'strings' => array(
+					'saving'    => __( 'Wird gespeichert …', 'libre-bite' ),
+					'saved'     => __( 'Gespeichert ✓', 'libre-bite' ),
+					'saveError' => __( 'Fehler beim Speichern', 'libre-bite' ),
+					'loadError' => __( 'Fehler beim Laden der Tische', 'libre-bite' ),
+					'editTable' => __( 'Tisch bearbeiten', 'libre-bite' ),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Tischplan-Seite rendern
+	 */
+	public function render_floor_plan_page() {
+		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
+			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
+		}
+
+		include LBITE_PLUGIN_DIR . 'templates/admin/table-plan.php';
+	}
+
+	/**
+	 * AJAX: Tische für Tischplan laden
+	 */
+	public function ajax_get_floor_plan_tables() {
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+		}
+
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+
+		if ( ! $location_id ) {
+			wp_send_json_error( array( 'message' => __( 'Kein Standort angegeben', 'libre-bite' ) ) );
+		}
+
+		// Letzten Standort merken
+		update_user_meta( get_current_user_id(), '_lbite_floor_plan_location', $location_id );
+
+		// Tische für diesen Standort laden, sortiert nach _lbite_table_order
+		$posts = get_posts(
+			array(
+				'post_type'      => self::POST_TYPE,
+				'posts_per_page' => 200,
+				'post_status'    => 'publish',
+				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					array(
+						'key'   => '_lbite_location_id',
+						'value' => $location_id,
+					),
+				),
+				'meta_key'       => '_lbite_table_order', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+				'orderby'        => array(
+					'meta_value_num' => 'ASC',
+					'title'          => 'ASC',
+				),
+			)
+		);
+
+		$tables = array();
+		foreach ( $posts as $lbite_post ) {
+			$tables[] = array(
+				'id'    => $lbite_post->ID,
+				'title' => $lbite_post->post_title,
+				'seats' => intval( get_post_meta( $lbite_post->ID, '_lbite_table_seats', true ) ),
+			);
+		}
+
+		wp_send_json_success( array( 'tables' => $tables ) );
+	}
+
+	/**
+	 * AJAX: Tisch-Reihenfolge speichern
+	 */
+	public function ajax_save_floor_plan_order() {
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+		}
+
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$order       = isset( $_POST['order'] ) ? array_map( 'intval', wp_unslash( (array) $_POST['order'] ) ) : array();
+
+		if ( ! $location_id || empty( $order ) ) {
+			wp_send_json_error( array( 'message' => __( 'Ungültige Daten', 'libre-bite' ) ) );
+		}
+
+		// Reihenfolge als _lbite_table_order (1-basiert) in Postmeta speichern
+		foreach ( $order as $position => $table_id ) {
+			// Sicherheitsprüfung: Tisch muss zum Standort gehören
+			$stored_location = intval( get_post_meta( $table_id, '_lbite_location_id', true ) );
+			if ( $stored_location !== $location_id ) {
+				continue;
+			}
+			update_post_meta( $table_id, '_lbite_table_order', $position + 1 );
+		}
+
+		wp_send_json_success();
 	}
 
 	/**
@@ -492,6 +644,16 @@ class LBite_Tables {
 		if ( ! lbite_feature_enabled( 'enable_table_ordering' ) ) {
 			return;
 		}
+
+		// Tischplan – sichtbarer Menüpunkt
+		add_submenu_page(
+			'libre-bite',
+			__( 'Tischplan', 'libre-bite' ),
+			__( 'Tischplan', 'libre-bite' ),
+			'lbite_manage_locations',
+			'lbite-floor-plan',
+			array( $this, 'render_floor_plan_page' )
+		);
 
 		// Seite registrieren, aber aus dem sichtbaren Menü entfernen.
 		// Zugänglich via Tischliste-Ansicht (add_bulk_create_link).

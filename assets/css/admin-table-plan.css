@@ -1,0 +1,113 @@
+/**
+ * Tischplan – Admin-Seite
+ */
+
+/* Toolbar */
+.lbite-floor-plan-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 16px 0 20px;
+	flex-wrap: wrap;
+}
+
+.lbite-floor-plan-toolbar label {
+	font-weight: 600;
+}
+
+.lbite-floor-plan-toolbar select {
+	min-width: 220px;
+}
+
+#lbite-floor-plan-status {
+	font-style: italic;
+	color: #646970;
+}
+
+/* Grid */
+.lbite-floor-plan-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+	gap: 16px;
+	max-width: 960px;
+	margin-bottom: 16px;
+}
+
+/* Tisch-Kachel */
+.lbite-floor-plan-table {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	padding: 14px 12px;
+	cursor: default;
+	position: relative;
+	text-align: center;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+	transition: box-shadow .15s;
+}
+
+.lbite-floor-plan-table:hover {
+	box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+}
+
+.lbite-floor-plan-table-handle {
+	font-size: 18px;
+	color: #bbb;
+	cursor: grab;
+	margin-bottom: 8px;
+	line-height: 1;
+	user-select: none;
+}
+
+.lbite-floor-plan-table-handle:active {
+	cursor: grabbing;
+}
+
+.lbite-floor-plan-table-name {
+	font-weight: 600;
+	font-size: 15px;
+	margin-bottom: 6px;
+	word-break: break-word;
+}
+
+.lbite-floor-plan-table-seats {
+	font-size: 12px;
+	color: #646970;
+	margin-bottom: 8px;
+}
+
+.lbite-floor-plan-table-edit {
+	font-size: 14px;
+	text-decoration: none;
+	opacity: .45;
+	transition: opacity .15s;
+	display: inline-block;
+}
+
+.lbite-floor-plan-table-edit:hover {
+	opacity: 1;
+}
+
+/* Sortable-Zustände */
+.lbite-floor-plan-ghost {
+	opacity: .35;
+	border: 2px dashed #0073aa;
+}
+
+.lbite-floor-plan-dragging {
+	box-shadow: 0 8px 20px rgba(0, 0, 0, .18) !important;
+}
+
+/* Leer-/Lade-Zustand */
+.lbite-floor-plan-loading {
+	font-size: 22px;
+	padding: 16px;
+}
+
+.lbite-floor-plan-error {
+	color: #d63638;
+}
+
+.lbite-floor-plan-empty {
+	margin: 16px 0;
+}

@@ -298,10 +298,15 @@ class LBite_Admin {
 	 * @return string
 	 */
 	public function fix_menu_submenu_file( $submenu_file ) {
-		global $post_type;
+		global $post_type, $pagenow;
 		$lbite_post_types = array( 'lbite_location', 'lbite_table', 'lbite_product_option' );
 		if ( in_array( $post_type, $lbite_post_types, true ) ) {
 			return 'edit.php?post_type=' . $post_type;
+		}
+		// Auf der Tischplan-Seite "Tische" im Submenü aktiv lassen
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( 'admin.php' === $pagenow && isset( $_GET['page'] ) && 'lbite-floor-plan' === $_GET['page'] ) {
+			return 'edit.php?post_type=lbite_table';
 		}
 		return $submenu_file;
 	}
