@@ -24,19 +24,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<select id="lbite-board-location">
 				<option value=""><?php esc_html_e( 'Bitte Standort wählen', 'libre-bite' ); ?></option>
 				<?php
-				$locations = get_posts(
+				$lbite_locations = get_posts(
 					array(
 						'post_type'      => 'lbite_location',
 						'posts_per_page' => 100, // Begrenzt für Performance.
 						'post_status'    => 'publish',
 					)
 				);
-				$saved_location = get_user_meta( get_current_user_id(), 'lbite_board_location', true );
+				$lbite_saved_location = get_user_meta( get_current_user_id(), 'lbite_board_location', true );
 
-				foreach ( $locations as $location ) :
+				foreach ( $lbite_locations as $lbite_location ) :
 					?>
-					<option value="<?php echo esc_attr( $location->ID ); ?>" <?php selected( $saved_location, $location->ID ); ?>>
-						<?php echo esc_html( $location->post_title ); ?>
+					<option value="<?php echo esc_attr( $lbite_location->ID ); ?>" <?php selected( $lbite_saved_location, $lbite_location->ID ); ?>>
+						<?php echo esc_html( $lbite_location->post_title ); ?>
 					</option>
 				<?php endforeach; ?>
 			</select>
@@ -70,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<!-- Platzhalter wenn kein Standort gewählt -->
-	<div class="lbite-no-location-selected" id="lbite-no-location-message" style="<?php echo $saved_location ? 'display: none;' : ''; ?>">
+	<div class="lbite-no-location-selected" id="lbite-no-location-message" style="<?php echo $lbite_saved_location ? 'display: none;' : ''; ?>">
 		<div style="background: #fff; padding: 40px; margin: 40px 0; border: 2px dashed #ccc; border-radius: 8px; text-align: center;">
 			<span class="dashicons dashicons-location" style="font-size: 48px; color: #999; margin-bottom: 20px;"></span>
 			<h2 style="color: #666; margin: 10px 0;"><?php esc_html_e( 'Bitte wählen Sie einen Standort aus', 'libre-bite' ); ?></h2>
@@ -78,7 +78,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div class="lbite-kanban-board" id="lbite-kanban-board" style="<?php echo $saved_location ? '' : 'display: none;'; ?>">
+	<div class="lbite-kanban-board" id="lbite-kanban-board" style="<?php echo $lbite_saved_location ? '' : 'display: none;'; ?>">
 		<div class="lbite-kanban-column" data-status="incoming">
 			<h2><?php esc_html_e( 'Eingang', 'libre-bite' ); ?></h2>
 			<div class="lbite-kanban-cards" id="lbite-column-incoming"></div>

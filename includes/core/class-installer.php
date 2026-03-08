@@ -99,10 +99,15 @@ class LBite_Installer {
 		}
 
 		// 2. Optionen löschen (lbite_ und altes oos_ Präfix).
+		// Direkte SQL-Abfrage notwendig: DELETE mit LIKE-Wildcard ist in WP-API nicht möglich (delete_option() nur für exakte Keys).
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s", $wpdb->esc_like( 'lbite_' ) . '%', $wpdb->esc_like( 'oos_' ) . '%' ) );
 
 		// 3. Metadaten löschen.
+		// Direkte SQL-Abfragen notwendig: Bulk-Delete mit LIKE-Pattern, kein WP-API-Äquivalent.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE %s OR meta_key LIKE %s", $wpdb->esc_like( '_lbite_' ) . '%', $wpdb->esc_like( '_oos_' ) . '%' ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE %s OR meta_key LIKE %s", $wpdb->esc_like( 'lbite_' ) . '%', $wpdb->esc_like( 'oos_' ) . '%' ) );
 
 		// 4. Rollen & Capabilities entfernen.
@@ -144,6 +149,8 @@ class LBite_Installer {
 		}
 
 		// 6. Transients löschen.
+		// Direkte SQL-Abfrage notwendig: delete_transient() nur für exakte Keys; Bulk-Delete mit Prefix nicht über WP-API möglich.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s", $wpdb->esc_like( '_transient_lbite_' ) . '%', $wpdb->esc_like( '_transient_timeout_lbite_' ) . '%' ) );
 	}
 

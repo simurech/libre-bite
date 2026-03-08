@@ -17,32 +17,32 @@ if ( ! current_user_can( 'manage_options' ) ) {
 }
 
 // Aktuelle Einstellungen abrufen
-$custom_plugin_name = get_option( 'lbite_custom_plugin_name', '' );
-$menu_visibility    = get_option( 'lbite_menu_visibility', array() );
+$lbite_custom_plugin_name = get_option( 'lbite_custom_plugin_name', '' );
+$lbite_menu_visibility    = get_option( 'lbite_menu_visibility', array() );
 
 // Alle Menüeinträge und Rollen abrufen
-$all_menu_items       = LBite_Admin_Settings::get_all_menu_items();
-$all_roles            = LBite_Admin_Settings::get_all_roles();
+$lbite_all_menu_items       = LBite_Admin_Settings::get_all_menu_items();
+$lbite_all_roles            = LBite_Admin_Settings::get_all_roles();
 $lbite_standard_roles = LBite_Admin_Settings::get_standard_roles();
 
 // Debug: Menüs anzeigen (nur für Admins)
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Debug-Ausgabe.
 if ( isset( $_GET['debug_menus'] ) && current_user_can( 'manage_options' ) ) {
 	echo '<div class="notice notice-info"><pre style="max-height: 300px; overflow: auto;">';
-	echo 'Gefundene Menüeinträge (' . count( $all_menu_items ) . '):<br><br>';
-	foreach ( $all_menu_items as $slug => $data ) {
-		echo 'Slug: ' . esc_html( $slug ) . ' | Titel: ' . esc_html( $data['title'] ) . ' | Parent: ' . esc_html( $data['parent'] ) . '<br>';
+	echo 'Gefundene Menüeinträge (' . count( $lbite_all_menu_items ) . '):<br><br>';
+	foreach ( $lbite_all_menu_items as $lbite_slug => $lbite_data ) {
+		echo 'Slug: ' . esc_html( $lbite_slug ) . ' | Titel: ' . esc_html( $lbite_data['title'] ) . ' | Parent: ' . esc_html( $lbite_data['parent'] ) . '<br>';
 	}
 	echo '</pre></div>';
 }
 
 // Plugin-Name für Titel
-$plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'Libre Bite';
+$lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custom_plugin_name : 'Libre Bite';
 ?>
 
 <?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap">
-	<h1><?php echo esc_html( $plugin_display_name ); ?> - <?php esc_html_e( 'Admin-Einstellungen', 'libre-bite' ); ?></h1>
+	<h1><?php echo esc_html( $lbite_plugin_display_name ); ?> - <?php esc_html_e( 'Admin-Einstellungen', 'libre-bite' ); ?></h1>
 <?php endif; ?>
 
 	<p class="description">
@@ -68,7 +68,7 @@ $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'L
 						type="text"
 						id="lbite_custom_plugin_name"
 						name="lbite_custom_plugin_name"
-						value="<?php echo esc_attr( $custom_plugin_name ); ?>"
+						value="<?php echo esc_attr( $lbite_custom_plugin_name ); ?>"
 						class="regular-text"
 						placeholder="Libre Bite"
 					>
@@ -131,37 +131,37 @@ $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'L
 			</thead>
 			<tbody>
 			<?php
-			$all_roles_with_admin = LBite_Admin_Settings::get_all_roles( true );
-			$custom_role_names = get_option( 'lbite_custom_role_names', array() );
-			$disabled_roles = get_option( 'lbite_disabled_roles', array() );
+			$lbite_all_roles_with_admin = LBite_Admin_Settings::get_all_roles( true );
+			$lbite_custom_role_names = get_option( 'lbite_custom_role_names', array() );
+			$lbite_disabled_roles = get_option( 'lbite_disabled_roles', array() );
 
-			foreach ( $all_roles_with_admin as $role_key => $role_name ) :
-				$custom_name = isset( $custom_role_names[ $role_key ] ) ? $custom_role_names[ $role_key ] : '';
-				$is_disabled = in_array( $role_key, $disabled_roles, true );
-				$is_admin = $role_key === 'administrator';
+			foreach ( $lbite_all_roles_with_admin as $lbite_role_key => $lbite_role_name ) :
+				$lbite_custom_name = isset( $lbite_custom_role_names[ $lbite_role_key ] ) $lbite_custom_role_names[ $lbite_role_key ] : '';
+				$lbite_is_disabled = in_array( $lbite_role_key, $lbite_disabled_roles, true );
+				$lbite_is_admin = $lbite_role_key === 'administrator';
 				?>
 				<tr>
 					<th scope="row">
-						<label for="lbite_role_name_<?php echo esc_attr( $role_key ); ?>">
-							<?php echo esc_html( $role_name ); ?>
+						<label for="lbite_role_name_<?php echo esc_attr( $lbite_role_key ); ?>">
+							<?php echo esc_html( $lbite_role_name ); ?>
 							<span style="color: #646970; font-weight: normal; font-size: 12px;">
-								(<?php echo esc_html( $role_key ); ?>)
+								(<?php echo esc_html( $lbite_role_key ); ?>)
 							</span>
 						</label>
 					</th>
 					<td>
 						<input
 							type="text"
-							id="lbite_role_name_<?php echo esc_attr( $role_key ); ?>"
-							name="lbite_custom_role_names[<?php echo esc_attr( $role_key ); ?>]"
-							value="<?php echo esc_attr( $custom_name ); ?>"
+							id="lbite_role_name_<?php echo esc_attr( $lbite_role_key ); ?>"
+							name="lbite_custom_role_names[<?php echo esc_attr( $lbite_role_key ); ?>]"
+							value="<?php echo esc_attr( $lbite_custom_name ); ?>"
 							class="regular-text"
-							placeholder="<?php echo esc_attr( $role_name ); ?>"
-							<?php disabled( $is_disabled && ! $is_admin ); ?>
+							placeholder="<?php echo esc_attr( $lbite_role_name ); ?>"
+							<?php disabled( $lbite_is_disabled && ! $lbite_is_admin ); ?>
 						>
 					</td>
 					<td>
-						<?php if ( $is_admin ) : ?>
+						<?php if ( $lbite_is_admin ) : ?>
 							<span style="color: #646970; font-style: italic;">
 								<?php esc_html_e( 'Kann nicht deaktiviert werden', 'libre-bite' ); ?>
 							</span>
@@ -170,10 +170,10 @@ $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'L
 								<input
 									type="checkbox"
 									name="lbite_disabled_roles[]"
-									value="<?php echo esc_attr( $role_key ); ?>"
-									<?php checked( $is_disabled ); ?>
+									value="<?php echo esc_attr( $lbite_role_key ); ?>"
+									<?php checked( $lbite_is_disabled ); ?>
 									class="lbite-disable-role-checkbox"
-									data-role="<?php echo esc_attr( $role_key ); ?>"
+									data-role="<?php echo esc_attr( $lbite_role_key ); ?>"
 								>
 								<?php esc_html_e( 'Deaktivieren', 'libre-bite' ); ?>
 							</label>
@@ -193,23 +193,23 @@ $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'L
 			<?php esc_html_e( 'Wählen Sie für jede Nutzerrolle, welche Menüeinträge ausgeblendet werden sollen. Administratoren haben immer vollen Zugriff.', 'libre-bite' ); ?>
 		</p>
 
-		<?php if ( empty( $all_roles ) ) : ?>
+		<?php if ( empty( $lbite_all_roles ) ) : ?>
 			<p><?php esc_html_e( 'Keine zusätzlichen Benutzerrollen gefunden (außer Administrator).', 'libre-bite' ); ?></p>
 		<?php else : ?>
 			<div class="lbite-menu-visibility-settings">
 				<?php
-				$custom_role_names_display = get_option( 'lbite_custom_role_names', array() );
-				foreach ( $all_roles as $role_key => $role_name ) :
+				$lbite_custom_role_names_display = get_option( 'lbite_custom_role_names', array() );
+				foreach ( $lbite_all_roles as $lbite_role_key => $lbite_role_name ) :
 					// Angepassten Rollennamen verwenden, falls vorhanden
-					$display_name = isset( $custom_role_names_display[ $role_key ] ) && ! empty( $custom_role_names_display[ $role_key ] )
-						? $custom_role_names_display[ $role_key ]
-						: $role_name;
+					$lbite_display_name = isset( $lbite_custom_role_names_display[ $lbite_role_key ] ) && ! empty( $custom_role_names_display[ $role_key ] )
+						$lbite_custom_role_names_display[ $lbite_role_key ]
+						: $lbite_role_name;
 					?>
-					<div class="lbite-role-section" style="margin-bottom: 30px; padding: 15px; background: #fff; border: 1px solid #ccd0d4; border-radius: 4px;" data-role="<?php echo esc_attr( $role_key ); ?>">
+					<div class="lbite-role-section" style="margin-bottom: 30px; padding: 15px; background: #fff; border: 1px solid #ccd0d4; border-radius: 4px;" data-role="<?php echo esc_attr( $lbite_role_key ); ?>">
 						<h3 style="margin-top: 0;">
-							<?php echo esc_html( $display_name ); ?>
+							<?php echo esc_html( $lbite_display_name ); ?>
 							<span style="font-weight: normal; color: #666; font-size: 13px;">
-								(<?php echo esc_html( $role_key ); ?>)
+								(<?php echo esc_html( $lbite_role_key ); ?>)
 							</span>
 						</h3>
 
@@ -218,7 +218,7 @@ $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'L
 							printf(
 								/* translators: %s: Rollenname */
 								esc_html__( 'Wählen Sie die Menüeinträge, die für Benutzer mit der Rolle "%s" ausgeblendet werden sollen.', 'libre-bite' ),
-								esc_html( $display_name )
+								esc_html( $lbite_display_name )
 							);
 							?>
 						</p>
@@ -228,7 +228,7 @@ $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'L
 								<input
 									type="checkbox"
 									class="lbite-toggle-all-menus"
-									data-role="<?php echo esc_attr( $role_key ); ?>"
+									data-role="<?php echo esc_attr( $lbite_role_key ); ?>"
 								>
 								<?php esc_html_e( 'Alle auswählen / abwählen', 'libre-bite' ); ?>
 							</label>
@@ -236,27 +236,27 @@ $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'L
 
 						<?php
 						// Menüs nach Parent gruppieren - besser strukturiert
-						$main_menus = array();
-						$submenus = array();
+						$lbite_main_menus = array();
+						$lbite_submenus = array();
 
 						// Erst alle Menüs sortieren
-						foreach ( $all_menu_items as $menu_slug => $menu_data ) {
-							if ( empty( $menu_data['parent'] ) ) {
-								$main_menus[ $menu_slug ] = $menu_data;
+						foreach ( $lbite_all_menu_items as $lbite_menu_slug => $lbite_menu_data ) {
+							if ( empty( $lbite_menu_data['parent'] ) ) {
+								$lbite_main_menus[ $lbite_menu_slug ] = $lbite_menu_data;
 							} else {
-								if ( ! isset( $submenus[ $menu_data['parent'] ] ) ) {
-									$submenus[ $menu_data['parent'] ] = array();
+								if ( ! isset( $lbite_submenus[ $lbite_menu_data['parent'] ] ) ) {
+									$lbite_submenus[ $lbite_menu_data['parent'] ] = array();
 								}
-								$submenus[ $menu_data['parent'] ][ $menu_slug ] = $menu_data;
+								$lbite_submenus[ $lbite_menu_data['parent'] ][ $lbite_menu_slug ] = $lbite_menu_data;
 							}
 						}
 						?>
 
 						<div class="lbite-menu-items">
-							<?php foreach ( $main_menus as $parent_slug => $parent_data ) : ?>
+							<?php foreach ( $lbite_main_menus as $lbite_parent_slug => $lbite_parent_data ) : ?>
 								<?php
-								$has_submenus = isset( $submenus[ $parent_slug ] ) && ! empty( $submenus[ $parent_slug ] );
-								$is_parent_checked = isset( $menu_visibility[ $role_key ] ) && in_array( $parent_slug, $menu_visibility[ $role_key ], true );
+								$lbite_has_submenus = isset( $lbite_submenus[ $lbite_parent_slug ] ) && ! empty( $lbite_submenus[ $lbite_parent_slug ] );
+								$lbite_is_parent_checked = isset( $lbite_menu_visibility[ $lbite_role_key ] ) && in_array( $lbite_parent_slug, $lbite_menu_visibility[ $lbite_role_key ], true );
 								?>
 
 								<div class="lbite-menu-group">
@@ -265,30 +265,30 @@ $plugin_display_name = ! empty( $custom_plugin_name ) ? $custom_plugin_name : 'L
 										<label>
 											<input
 												type="checkbox"
-												name="lbite_menu_visibility[<?php echo esc_attr( $role_key ); ?>][]"
-												value="<?php echo esc_attr( $parent_slug ); ?>"
-												<?php checked( $is_parent_checked ); ?>
+												name="lbite_menu_visibility[<?php echo esc_attr( $lbite_role_key ); ?>][]"
+												value="<?php echo esc_attr( $lbite_parent_slug ); ?>"
+												<?php checked( $lbite_is_parent_checked ); ?>
 											/>
-											<strong><?php echo esc_html( $parent_data['title'] ); ?></strong>
+											<strong><?php echo esc_html( $lbite_parent_data['title'] ); ?></strong>
 											<span class="lbite-menu-badge"><?php esc_html_e( 'Hauptmenü', 'libre-bite' ); ?></span>
 										</label>
 									</div>
 
 									<!-- Untermenüs -->
-									<?php if ( $has_submenus ) : ?>
+									<?php if ( $lbite_has_submenus ) : ?>
 										<div class="lbite-submenu-items">
-											<?php foreach ( $submenus[ $parent_slug ] as $submenu_slug => $submenu_data ) : ?>
+											<?php foreach ( $lbite_submenus[ $lbite_parent_slug ] as $lbite_submenu_slug => $lbite_submenu_data ) : ?>
 												<?php
-												$is_submenu_checked = isset( $menu_visibility[ $role_key ] ) && in_array( $submenu_slug, $menu_visibility[ $role_key ], true );
+												$lbite_is_submenu_checked = isset( $lbite_menu_visibility[ $lbite_role_key ] ) && in_array( $lbite_submenu_slug, $lbite_menu_visibility[ $lbite_role_key ], true );
 												?>
 												<label>
 													<input
 														type="checkbox"
-														name="lbite_menu_visibility[<?php echo esc_attr( $role_key ); ?>][]"
-														value="<?php echo esc_attr( $submenu_slug ); ?>"
-														<?php checked( $is_submenu_checked ); ?>
+														name="lbite_menu_visibility[<?php echo esc_attr( $lbite_role_key ); ?>][]"
+														value="<?php echo esc_attr( $lbite_submenu_slug ); ?>"
+														<?php checked( $lbite_is_submenu_checked ); ?>
 													/>
-													<?php echo esc_html( $submenu_data['title'] ); ?>
+													<?php echo esc_html( $lbite_submenu_data['title'] ); ?>
 												</label>
 											<?php endforeach; ?>
 										</div>

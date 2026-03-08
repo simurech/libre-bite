@@ -9,11 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$pickup_time      = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
-$location_name    = get_post_meta( $order->get_id(), '_lbite_location_name', true );
-$location_id      = get_post_meta( $order->get_id(), '_lbite_location_id', true );
-$location_address = $location_id ? LBite_Locations::get_formatted_address( $location_id ) : '';
-$location_maps    = $location_id ? LBite_Locations::get_maps_url( $location_id ) : '';
+$lbite_pickup_time      = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
+$lbite_location_name    = get_post_meta( $order->get_id(), '_lbite_location_name', true );
+$lbite_location_id      = get_post_meta( $order->get_id(), '_lbite_location_id', true );
+$lbite_location_address = $lbite_location_id ? LBite_Locations::get_formatted_address( $lbite_location_id ) : '';
+$lbite_location_maps    = $lbite_location_id ? LBite_Locations::get_maps_url( $lbite_location_id ) : '';
 
 do_action( 'woocommerce_email_header', $email_heading, $email );
 ?>
@@ -23,23 +23,23 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
 
 <p><?php esc_html_e( 'dies ist eine Erinnerung an Ihre bevorstehende Bestellung.', 'libre-bite' ); ?></p>
 
-<?php if ( $pickup_time ) : ?>
+<?php if ( $lbite_pickup_time ) : ?>
 	<p>
 		<strong><?php esc_html_e( 'Abholzeit:', 'libre-bite' ); ?></strong>
-		<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $pickup_time ) ) ); ?>
+		<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $lbite_pickup_time ) ) ); ?>
 	</p>
 <?php endif; ?>
 
-<?php if ( $location_name ) : ?>
+<?php if ( $lbite_location_name ) : ?>
 	<p>
 		<strong><?php esc_html_e( 'Standort:', 'libre-bite' ); ?></strong>
-		<?php echo esc_html( $location_name ); ?>
-		<?php if ( $location_address ) : ?>
+		<?php echo esc_html( $lbite_location_name ); ?>
+		<?php if ( $lbite_location_address ) : ?>
 			<br>
-			<?php if ( $location_maps ) : ?>
-				<a href="<?php echo esc_url( $location_maps ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $location_address ); ?></a>
+			<?php if ( $lbite_location_maps ) : ?>
+				<a href="<?php echo esc_url( $lbite_location_maps ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $lbite_location_address ); ?></a>
 			<?php else : ?>
-				<?php echo esc_html( $location_address ); ?>
+				<?php echo esc_html( $lbite_location_address ); ?>
 			<?php endif; ?>
 		<?php endif; ?>
 	</p>

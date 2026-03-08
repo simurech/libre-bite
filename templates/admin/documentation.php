@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wrap">
 	<h1>
 		<?php
-		$plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) );
-		echo esc_html( $plugin_name . ' - ' . __( 'Dokumentation', 'libre-bite' ) );
+		$lbite_plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) );
+		echo esc_html( $lbite_plugin_name . ' - ' . __( 'Dokumentation', 'libre-bite' ) );
 		?>
 	</h1>
 
@@ -115,8 +115,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<?php
 				// Verfügbare Standorte auflisten
-				$locations = LBite_Locations::get_all_locations();
-				if ( ! empty( $locations ) ) :
+				$lbite_locations = LBite_Locations::get_all_locations();
+				if ( ! empty( $lbite_locations ) ) :
 					?>
 					<h4><?php esc_html_e( 'Ihre Standorte:', 'libre-bite' ); ?></h4>
 					<table class="wp-list-table widefat fixed striped">
@@ -128,13 +128,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</tr>
 						</thead>
 						<tbody>
-							<?php foreach ( $locations as $location ) : ?>
+							<?php foreach ( $lbite_locations as $lbite_location ) : ?>
 								<tr>
-									<td><strong><?php echo esc_html( $location->post_title ); ?></strong></td>
-									<td><code><?php echo esc_html( $location->ID ); ?></code></td>
+									<td><strong><?php echo esc_html( $lbite_location->post_title ); ?></strong></td>
+									<td><code><?php echo esc_html( $lbite_location->ID ); ?></code></td>
 									<td>
-										<code><?php echo esc_url( home_url( '/?location=' . $location->ID ) ); ?></code>
-										<button type="button" class="button button-small lbite-copy-btn" data-text="<?php echo esc_attr( home_url( '/?location=' . $location->ID ) ); ?>">
+										<code><?php echo esc_url( home_url( '/?location=' . $lbite_location->ID ) ); ?></code>
+										<button type="button" class="button button-small lbite-copy-btn" data-text="<?php echo esc_attr( home_url( '/?location=' . $lbite_location->ID ) ); ?>">
 											<?php esc_html_e( 'Kopieren', 'libre-bite' ); ?>
 										</button>
 									</td>

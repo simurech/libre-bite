@@ -16,44 +16,44 @@ if ( ! class_exists( 'WooCommerce' ) ) {
 	return;
 }
 
-$brand_name = get_option( 'lbite_brand_name', get_bloginfo( 'name' ) );
-$brand_logo = get_option( 'lbite_brand_logo', 0 );
-$logo_url   = $brand_logo ? wp_get_attachment_image_url( $brand_logo, 'medium' ) : '';
+$lbite_brand_name = get_option( 'lbite_brand_name', get_bloginfo( 'name' ) );
+$lbite_brand_logo = get_option( 'lbite_brand_logo', 0 );
+$lbite_logo_url   = $lbite_brand_logo ? wp_get_attachment_image_url( $lbite_brand_logo, 'medium' ) : '';
 
 // Standort aus Session.
-$location_id   = WC()->session ? WC()->session->get( 'lbite_location_id' ) : 0;
-$location_name = '';
-if ( $location_id ) {
-	$location = get_post( $location_id );
-	if ( $location ) {
-		$location_name = $location->post_title;
+$lbite_location_id   = WC()->session ? WC()->session->get( 'lbite_location_id' ) : 0;
+$lbite_location_name = '';
+if ( $lbite_location_id ) {
+	$lbite_location = get_post( $lbite_location_id );
+	if ( $lbite_location ) {
+		$lbite_location_name = $lbite_location->post_title;
 	}
 }
 
 // Bestelltyp und Zeit.
-$order_type  = WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now';
-$pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time', '' ) : '';
+$lbite_order_type  = WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now';
+$lbite_pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time', '' ) : '';
 ?>
 
 <div class="lbite-checkout-optimized">
-	<?php if ( $logo_url ) : ?>
+	<?php if ( $lbite_logo_url ) : ?>
 		<div class="lbite-checkout-logo">
-			<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( $brand_name ); ?>">
+			<img src="<?php echo esc_url( $lbite_logo_url ); ?>" alt="<?php echo esc_attr( $lbite_brand_name ); ?>">
 		</div>
 	<?php endif; ?>
 
 	<h2 class="lbite-checkout-title"><?php esc_html_e( 'Bestellung abschliessen', 'libre-bite' ); ?></h2>
 
-	<?php if ( $location_name ) : ?>
+	<?php if ( $lbite_location_name ) : ?>
 		<div class="lbite-checkout-info">
 			<p>
 				<strong><?php esc_html_e( 'Standort:', 'libre-bite' ); ?></strong>
-				<?php echo esc_html( $location_name ); ?>
+				<?php echo esc_html( $lbite_location_name ); ?>
 			</p>
-			<?php if ( 'later' === $order_type && $pickup_time ) : ?>
+			<?php if ( 'later' === $lbite_order_type && $lbite_pickup_time ) : ?>
 				<p>
 					<strong><?php esc_html_e( 'Abholung:', 'libre-bite' ); ?></strong>
-					<?php echo esc_html( wp_date( 'd.m.Y H:i', strtotime( $pickup_time ) ) ); ?> <?php esc_html_e( 'Uhr', 'libre-bite' ); ?>
+					<?php echo esc_html( wp_date( 'd.m.Y H:i', strtotime( $lbite_pickup_time ) ) ); ?> <?php esc_html_e( 'Uhr', 'libre-bite' ); ?>
 				</p>
 			<?php else : ?>
 				<p>

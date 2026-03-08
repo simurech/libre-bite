@@ -27,40 +27,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<select id="lbite-pos-location" class="lbite-pos-location-select">
 				<option value=""><?php esc_html_e( 'Bitte Standort wählen', 'libre-bite' ); ?></option>
 				<?php
-				$locations = LBite_Locations::get_all_locations();
-				$selected_location = get_user_meta( get_current_user_id(), 'lbite_pos_location', true );
-				foreach ( $locations as $location ) :
+				$lbite_locations = LBite_Locations::get_all_locations();
+				$lbite_selected_location = get_user_meta( get_current_user_id(), 'lbite_pos_location', true );
+				foreach ( $lbite_locations as $lbite_location ) :
 					?>
-					<option value="<?php echo esc_attr( $location->ID ); ?>" <?php selected( $selected_location, $location->ID ); ?>>
-						<?php echo esc_html( $location->post_title ); ?>
+					<option value="<?php echo esc_attr( $lbite_location->ID ); ?>" <?php selected( $lbite_selected_location, $lbite_location->ID ); ?>>
+						<?php echo esc_html( $lbite_location->post_title ); ?>
 					</option>
 				<?php endforeach; ?>
 			</select>
 		</div>
 
 		<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
-		<div id="lbite-pos-table-selector-container" style="<?php echo ! $selected_location ? 'display: none;' : ''; ?>">
+		<div id="lbite-pos-table-selector-container" style="<?php echo ! $lbite_selected_location ? 'display: none;' : ''; ?>">
 			<label for="lbite-pos-table">
 				<strong><?php esc_html_e( 'Tisch (optional):', 'libre-bite' ); ?></strong>
 			</label>
 			<select id="lbite-pos-table" class="lbite-pos-table-select">
 				<option value=""><?php esc_html_e( 'Kein Tisch', 'libre-bite' ); ?></option>
 				<?php
-				if ( $selected_location ) {
-					$tables = get_posts( array(
+				if ( $lbite_selected_location ) {
+					$lbite_tables = get_posts( array(
 						'post_type'      => 'lbite_table',
 						'posts_per_page' => 100,
 						'meta_query'     => array(
 							array(
 								'key'   => '_lbite_location_id',
-								'value' => $selected_location,
+								'value' => $lbite_selected_location,
 							),
 						),
 					) );
-					foreach ( $tables as $table ) :
+					foreach ( $lbite_tables as $lbite_table ) :
 						?>
-						<option value="<?php echo esc_attr( $table->ID ); ?>">
-							<?php echo esc_html( $table->post_title ); ?>
+						<option value="<?php echo esc_attr( $lbite_table->ID ); ?>">
+							<?php echo esc_html( $lbite_table->post_title ); ?>
 						</option>
 						<?php
 					endforeach;
@@ -72,22 +72,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="lbite-pos-container">
-		<div class="lbite-pos-products">
+		<div class="lbite-pos-products" data-no-location-text="<?php esc_attr_e( 'Bitte zuerst einen Standort wählen', 'libre-bite' ); ?>">
 			<div class="lbite-pos-categories">
 				<button class="lbite-category-btn active" data-category="all">
 					<?php esc_html_e( 'Alle', 'libre-bite' ); ?>
 				</button>
 				<?php
-				$product_categories = get_terms(
+				$lbite_product_categories = get_terms(
 					array(
 						'taxonomy'   => 'product_cat',
 						'hide_empty' => true,
 					)
 				);
-				foreach ( $product_categories as $category ) :
+				foreach ( $lbite_product_categories as $lbite_category ) :
 					?>
-					<button class="lbite-category-btn" data-category="<?php echo esc_attr( $category->term_id ); ?>">
-						<?php echo esc_html( $category->name ); ?>
+					<button class="lbite-category-btn" data-category="<?php echo esc_attr( $lbite_category->term_id ); ?>">
+						<?php echo esc_html( $lbite_category->name ); ?>
 					</button>
 				<?php endforeach; ?>
 			</div>
@@ -151,37 +151,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<!-- Zahlungsart wählen -->
 				<?php
-				$icons = array( 'cash' => '💵', 'card' => '💳', 'twint' => '📱', 'other' => '💱' );
-				$saved_pm = get_option( 'lbite_pos_payment_methods', array() );
+				$lbite_icons = array( 'cash' => '💵', 'card' => '💳', 'twint' => '📱', 'other' => '💱' );
+				$lbite_saved_pm = get_option( 'lbite_pos_payment_methods', array() );
 				// Fallback: alle vier aktiv wenn Option leer
-				if ( empty( $saved_pm ) ) {
-					$saved_pm = array(
+				if ( empty( $lbite_saved_pm ) ) {
+					$lbite_saved_pm = array(
 						array( 'key' => 'cash',  'label' => 'Bar',    'enabled' => true ),
 						array( 'key' => 'card',  'label' => 'Karte',  'enabled' => true ),
 						array( 'key' => 'twint', 'label' => 'Twint',  'enabled' => true ),
 						array( 'key' => 'other', 'label' => 'Andere', 'enabled' => true ),
 					);
 				}
-				$active_pm = array_filter( $saved_pm, fn( $m ) => ! empty( $m['enabled'] ) );
-				$active_pm = array_values( $active_pm );
-				$first     = true;
+				$lbite_active_pm = array_filter( $lbite_saved_pm, fn( $m ) => ! empty( $m['enabled'] ) );
+				$lbite_active_pm = array_values( $lbite_active_pm );
+				$lbite_first = true;
 				?>
 				<div class="lbite-payment-method-group">
 					<p class="lbite-payment-method-label"><strong><?php esc_html_e( 'Zahlungsart:', 'libre-bite' ); ?></strong></p>
 					<div class="lbite-payment-method-options">
-						<?php foreach ( $active_pm as $pm ) : ?>
+						<?php foreach ( $lbite_active_pm as $lbite_pm ) : ?>
 						<label class="lbite-payment-method-option">
 							<input
 								type="radio"
-								id="lbite-payment-method-<?php echo esc_attr( $pm['key'] ); ?>"
+								id="lbite-payment-method-<?php echo esc_attr( $lbite_pm['key'] ); ?>"
 								name="lbite-payment-method"
-								value="<?php echo esc_attr( $pm['key'] ); ?>"
-								<?php echo $first ? 'checked' : ''; ?>
+								value="<?php echo esc_attr( $lbite_pm['key'] ); ?>"
+								<?php echo $lbite_first ? 'checked' : ''; ?>
 							>
-							<span class="lbite-payment-method-icon"><?php echo esc_html( $icons[ $pm['key'] ] ?? '💱' ); ?></span>
-							<span><?php echo esc_html( $pm['label'] ); ?></span>
+							<span class="lbite-payment-method-icon"><?php echo esc_html( $lbite_icons[ $lbite_pm['key'] ] ?? '💱' ); ?></span>
+							<span><?php echo esc_html( $lbite_pm['label'] ); ?></span>
 						</label>
-						<?php $first = false; ?>
+						<?php $lbite_first = false; ?>
 						<?php endforeach; ?>
 					</div>
 				</div>

@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wrap lbite-admin-dashboard">
 	<h1>
 		<?php
-		$plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) );
-		echo esc_html( $plugin_name . ' - ' . __( 'Dashboard', 'libre-bite' ) );
+		$lbite_plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) );
+		echo esc_html( $lbite_plugin_name . ' - ' . __( 'Dashboard', 'libre-bite' ) );
 		?>
 	</h1>
 
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<h2><?php esc_html_e( 'Heutige Bestellungen', 'libre-bite' ); ?></h2>
 			<p class="lbite-stat-number">
 				<?php
-				$today_orders = wc_get_orders(
+				$lbite_today_orders = wc_get_orders(
 					array(
 						'limit'        => 50,
 						'date_created' => '>' . strtotime( 'today' ),
 						'return'       => 'ids',
 					)
 				);
-				echo count( $today_orders );
+				echo count( $lbite_today_orders );
 				?>
 			</p>
 		</div>
@@ -39,14 +39,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<h2><?php esc_html_e( 'Standorte', 'libre-bite' ); ?></h2>
 			<p class="lbite-stat-number">
 				<?php
-				$locations = get_posts(
+				$lbite_locations = get_posts(
 					array(
 						'post_type'      => 'lbite_location',
 						'posts_per_page' => 100, // Begrenzt für Performance.
 						'post_status'    => 'publish',
 					)
 				);
-				echo count( $locations );
+				echo count( $lbite_locations );
 				?>
 			</p>
 			<p><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_location' ) ); ?>"><?php esc_html_e( 'Verwalten', 'libre-bite' ); ?></a></p>

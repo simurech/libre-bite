@@ -15,42 +15,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$support_settings = get_option( 'lbite_support_settings', array() );
-$features         = get_option( 'lbite_features', array() );
+$lbite_support_settings = get_option( 'lbite_support_settings', array() );
+$lbite_features         = get_option( 'lbite_features', array() );
 
 // Aktiver Tab
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Tab-Navigation.
-$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
+$lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 ?>
 <div class="wrap lbite-help-wrap">
 	<h1><?php esc_html_e( 'Dokumentation', 'libre-bite' ); ?></h1>
 
 	<nav class="nav-tab-wrapper">
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=overview' ) ); ?>"
-		   class="nav-tab <?php echo 'overview' === $active_tab ? 'nav-tab-active' : ''; ?>">
+		   class="nav-tab <?php echo 'overview' === $lbite_active_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Übersicht', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=features' ) ); ?>"
-		   class="nav-tab <?php echo 'features' === $active_tab ? 'nav-tab-active' : ''; ?>">
+		   class="nav-tab <?php echo 'features' === $lbite_active_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Feature-Toggles', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=roles' ) ); ?>"
-		   class="nav-tab <?php echo 'roles' === $active_tab ? 'nav-tab-active' : ''; ?>">
+		   class="nav-tab <?php echo 'roles' === $lbite_active_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Rollen', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=technical' ) ); ?>"
-		   class="nav-tab <?php echo 'technical' === $active_tab ? 'nav-tab-active' : ''; ?>">
+		   class="nav-tab <?php echo 'technical' === $lbite_active_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Technisch', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=troubleshooting' ) ); ?>"
-		   class="nav-tab <?php echo 'troubleshooting' === $active_tab ? 'nav-tab-active' : ''; ?>">
+		   class="nav-tab <?php echo 'troubleshooting' === $lbite_active_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Troubleshooting', 'libre-bite' ); ?>
 		</a>
 	</nav>
 
 	<div class="lbite-help-content">
 		<?php
-		switch ( $active_tab ) {
+		switch ( $lbite_active_tab ) {
 			case 'features':
 				?>
 				<div class="lbite-help-section">
@@ -67,11 +67,11 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 								</tr>
 							</thead>
 							<tbody>
-								<?php foreach ( $features as $key => $enabled ) : ?>
+								<?php foreach ( $lbite_features as $lbite_key => $lbite_enabled ) : ?>
 									<tr>
-										<td><code><?php echo esc_html( $key ); ?></code></td>
+										<td><code><?php echo esc_html( $lbite_key ); ?></code></td>
 										<td>
-											<?php if ( $enabled ) : ?>
+											<?php if ( $lbite_enabled ) : ?>
 												<span class="lbite-status-enabled"><?php esc_html_e( 'Aktiviert', 'libre-bite' ); ?></span>
 											<?php else : ?>
 												<span class="lbite-status-disabled"><?php esc_html_e( 'Deaktiviert', 'libre-bite' ); ?></span>

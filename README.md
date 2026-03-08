@@ -6,7 +6,7 @@
 
 **Die WooCommerce-Erweiterung für Restaurants, Take-Aways, Cafés und Bars.**
 
-[![Stable Tag](https://img.shields.io/badge/stable-1.1.2-blue.svg)](https://github.com/simurech/libre-bite/releases)
+[![Stable Tag](https://img.shields.io/badge/stable-1.1.3-blue.svg)](https://github.com/simurech/libre-bite/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.0%2B-96588a.svg)](https://woocommerce.com/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-8892be.svg)](https://php.net/)
@@ -16,7 +16,31 @@
 
 ---
 
+## Kostenlos starten — Abo nur für Premium-Features
+
+**Libre Bite ist vollständig kostenlos nutzbar.** Alle Kernfunktionen — Kassensystem, Bestellboard, Standortverwaltung, Produkt-Add-ons, Zeitfenster — sind ohne Abo verfügbar.
+
+Ein Abo (Libre Bite Pro) ist nur dann erforderlich, wenn du erweiterte Funktionen wie Mehrstandort-Verwaltung, optimierten Checkout, Trinkgeld, Tischbestellung oder Abholungserinnerungen nutzen möchtest. Die Pro-Preise sind bewusst günstig gehalten — günstiger als vergleichbare Restaurant-SaaS-Lösungen, die oft hohe monatliche Gebühren verlangen.
+
+**7 Tage Pro gratis testen — ohne Zahlungspflicht.**
+
+---
+
+## Aufgebaut auf WordPress & WooCommerce
+
+Libre Bite ist ein **WordPress-Plugin** und baut vollständig auf **WooCommerce** auf — dem meistgenutzten Open-Source-Shop-System der Welt.
+
+Das bedeutet für dich:
+- **Keine neue Plattform lernen** — du arbeitest in deinem vertrauten WordPress-Dashboard.
+- **Deine Produkte bleiben WooCommerce-Produkte** — du pflegst sie einmal, sie sind sofort im POS, Checkout und Online-Shop verfügbar.
+- **Zahlungen über jeden WooCommerce-kompatiblen Payment-Gateway** — bar, Karte, Twint, PayPal, Stripe oder jeden anderen Gateway, den du bereits nutzt. Libre Bite erhebt dabei **keine Transaktionsgebühren**.
+- **Offline-Zahlungen ebenfalls möglich** — «Barzahlung», «Kartenzahlung bei Abholung» oder eigene Zahlungsarten über WooCommerce-Standard.
+
+---
+
 ## Für wen ist Libre Bite?
+
+Libre Bite wurde für **Kleinstbetriebe** im Gastgewerbe entwickelt — Betriebe, die eine ernsthafte Software brauchen, aber keine Enterprise-Kosten stemmen können oder wollen.
 
 | Betriebsart | Was Libre Bite hinzufügt |
 |---|---|
@@ -24,6 +48,12 @@
 | Take-Away / Schnellgastronomie | Kassensystem für Thekenpersonal, schneller Bestellprozess |
 | Café / Bar | Produkt-Add-ons, Trinkgeldsystem, Bestellnotizen |
 | Gastrobetrieb mit mehreren Standorten | Filialen verwalten, standortbezogenes Kanban (Pro) |
+
+---
+
+## Modular — nur aktivieren, was du brauchst
+
+Libre Bite ist vollständig modular aufgebaut. Du aktivierst im Admin-Bereich nur die Module, die dein Betrieb tatsächlich benötigt — alles andere bleibt ausgeblendet. Keine überflüssigen Menüpunkte, keine unerwünschten Funktionen.
 
 ---
 
@@ -35,23 +65,36 @@
 |---|---|
 | **Live Kanban-Bestellboard** | Echtzeit-Bestellkarten, Drag-&-Drop-Statusaktualisierung (Neu → In Bearbeitung → Bereit → Abgeschlossen) |
 | **Integriertes Kassensystem (POS)** | Browserbasierte Kassenoberfläche für Lauf- und Thekenkundschaft |
-| **Standortverwaltung** | Einzelfiliale mit Adresse, Öffnungszeiten und Bestellweiterleitung |
+| **Standortverwaltung** | Filiale mit Adresse, Öffnungszeiten und Bestellweiterleitung |
 | **Schweizer 5-Rappen-Rundung** | Automatische Rundung auf 5 Rappen für CHF-Barzahlungen |
 | **Zeitfenster im Checkout** | Kunden wählen ein Abholungs- oder Lieferzeitfenster beim Bestellen |
 | **Produkt-Add-ons** | Konfigurierbare Extras pro Produkt (Toppings, Saucen, Grössen) mit Preisaufschlägen |
 | **Modulsteuerung** | Nur die Funktionen aktivieren, die der Betrieb wirklich braucht |
 | **HPOS-kompatibel** | Vollständig getestet mit WooCommerce High-Performance Order Storage |
 
-### Pro-Funktionen
+### Pro-Funktionen (Abo erforderlich)
 
 | Funktion | Beschreibung |
 |---|---|
-| **Mehrstandort-Verwaltung** | Beliebig viele Filialen, jede mit eigenem Kanban-Board und POS-Konfiguration |
+| **Tischbestellung (QR-Code)** | QR-Codes pro Tisch, Gäste bestellen direkt am Tisch ohne Adressfelder |
+| **Mehrstandort-Verwaltung** | Beliebig viele Filialen, jede mit eigenem Kanban-Board und POS |
 | **Optimierter Bestellvorgang** | Konversionsorientierter Checkout für Gastronomiebetriebe |
 | **Erweitertes Trinkgeldsystem** | Prozentuale Vorschläge + freie Eingabe, pro Bestellung gespeichert |
 | **Automatische Abholungserinnerungen** | E-Mail-Erinnerungen X Minuten vor geplantem Abholzeitpunkt |
 | **Nährwertangaben & Allergenkennzeichnung** | EU-konforme Kennzeichnung auf Produktseiten und im Checkout |
 | **Erweiterte Sound-Benachrichtigungen** | Browsersignal bei neuer Bestellung, pro Standort konfigurierbar |
+
+---
+
+## Zahlungen
+
+Libre Bite integriert **keine eigene Zahlungsabwicklung**. Alle Zahlungen laufen über WooCommerce-Standard-Gateways:
+
+- **Bar / Offline** — Kunden bezahlen bei Abholung oder am Tisch
+- **Karte, Twint, PayPal, Stripe** — über die jeweiligen WooCommerce-Plugins
+- **Jeder andere WooCommerce-kompatible Gateway** — du bist vollständig frei in der Wahl
+
+**Libre Bite erhebt keine Transaktionsgebühren.** Du zahlst ausschliesslich das Abo für Pro-Features.
 
 ---
 
@@ -118,6 +161,16 @@ libre-bite/
 | 4 | Zeitfenster im Checkout — Kundenauswahl des Abholzeitfensters |
 | 5 | Produkt-Add-ons — konfigurierbare Extras pro Menüpunkt |
 | 6 | Moduleinstellungen — Funktionen nach Bedarf ein-/ausschalten |
+
+---
+
+## Roadmap
+
+| Feature | Geplant für |
+|---|---|
+| Tischreservierungen (Frontend-Formular, Kapazitätsprüfung via Sitzplätze) | v1.2.0 |
+| Tisch-Plan (visueller Grundriss, Drag & Drop Tischpositionen) | v1.2.0 |
+| Speed-Optimierung (Backend & Frontend) | v1.2.x |
 
 ---
 

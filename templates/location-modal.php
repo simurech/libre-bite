@@ -17,18 +17,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<p><?php esc_html_e( 'Bitte wählen Sie Ihren gewünschten Standort:', 'libre-bite' ); ?></p>
 
 		<div class="lbite-location-list">
-			<?php foreach ( $lbite_locations as $location ) : ?>
+			<?php foreach ( $lbite_locations as $lbite_location ) : ?>
 				<?php
-				$street = get_post_meta( $location->ID, '_lbite_street', true );
-				$zip    = get_post_meta( $location->ID, '_lbite_zip', true );
-				$city   = get_post_meta( $location->ID, '_lbite_city', true );
+				$lbite_street = get_post_meta( $lbite_location->ID, '_lbite_street', true );
+				$lbite_zip    = get_post_meta( $lbite_location->ID, '_lbite_zip', true );
+				$lbite_city   = get_post_meta( $lbite_location->ID, '_lbite_city', true );
 				?>
-				<div class="lbite-location-item" data-location-id="<?php echo esc_attr( $location->ID ); ?>">
-					<h3><?php echo esc_html( $location->post_title ); ?></h3>
-					<?php if ( $street || $city ) : ?>
+				<div class="lbite-location-item" data-location-id="<?php echo esc_attr( $lbite_location->ID ); ?>">
+					<h3><?php echo esc_html( $lbite_location->post_title ); ?></h3>
+					<?php if ( $lbite_street || $lbite_city ) : ?>
 						<p class="lbite-location-address">
-							<?php echo esc_html( $street ); ?><br>
-							<?php echo esc_html( $zip . ' ' . $city ); ?>
+							<?php echo esc_html( $lbite_street ); ?><br>
+							<?php echo esc_html( $lbite_zip . ' ' . $lbite_city ); ?>
 						</p>
 					<?php endif; ?>
 				</div>

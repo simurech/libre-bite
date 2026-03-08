@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,18 +13,47 @@ Transforms WooCommerce into a restaurant management powerhouse — with POS, liv
 
 == Description ==
 
-**Libre Bite transforms WooCommerce into a complete restaurant management system.** Whether for a restaurant, take-away, café, or bar — Libre Bite brings everything your gastronomy business needs directly into WordPress.
+**Libre Bite transforms WooCommerce into a complete restaurant management system.** Built on top of WordPress and WooCommerce — the world's most popular open-source e-commerce platform — Libre Bite adds everything a small gastronomy business needs: a live order board, an integrated POS, location management, time slots, and more.
 
-No monthly platform fees. Your data stays within your own WordPress installation.
+**Start for free. Upgrade only when you need more.**
 
 ---
 
-= For whom is Libre Bite? =
+= Free to Start =
+
+All core features are available completely free of charge — no credit card, no trial period, no hidden limits.
+
+A Pro subscription is only required for advanced features such as multi-location management, table ordering, optimised checkout, tipping, and pickup reminders. Pro plans are priced to be affordable — significantly cheaper than dedicated restaurant SaaS platforms.
+
+**7-day free Pro trial — no payment required.**
+
+---
+
+= Built on WordPress & WooCommerce =
+
+Libre Bite is a WordPress plugin. It extends WooCommerce — the proven e-commerce foundation used by millions of sites worldwide.
+
+* **No new platform to learn** — manage everything inside your existing WordPress dashboard.
+* **Your products stay WooCommerce products** — set them up once and they appear in the POS, checkout, and online shop automatically.
+* **Use any WooCommerce-compatible payment gateway** — cash, card, Twint, Stripe, PayPal, or any other gateway you already have. Libre Bite charges **no transaction fees**.
+* **Offline payments supported** — "Pay at pickup", "Pay at table", or any custom payment method via standard WooCommerce.
+
+---
+
+= For Whom Is Libre Bite? =
+
+Libre Bite is designed for **small and micro gastronomy businesses** — operations that need serious software without enterprise-level costs.
 
 * **Restaurants** — Manage dine-in and take-away orders via a single dashboard.
 * **Take-Away & Fast Food** — Simplify counter operations with an integrated POS system.
 * **Cafés & Bars** — Manage products, tips, and daily orders clearly.
-* **Multi-location businesses** — Manage branches centrally in one installation.
+* **Multi-location businesses** — Manage branches centrally in one installation (Pro).
+
+---
+
+= Modular by Design =
+
+Only activate the features your business actually needs. Unused modules stay hidden — no cluttered menus, no unnecessary complexity.
 
 ---
 
@@ -34,7 +63,7 @@ No monthly platform fees. Your data stays within your own WordPress installation
 A real-time kitchen display that visualizes every incoming WooCommerce order as a card. Drag & drop cards between columns (New → Preparing → Ready → Completed) to update order statuses instantly — without reloading the page.
 
 **Integrated Point of Sale (POS)**
-A clear POS interface for walk-in customers. Add products to the order, apply discounts, accept payments — all without leaving WordPress.
+A clear POS interface for walk-in customers. Add products to the order, accept payments — all without leaving WordPress.
 
 **Location Management**
 Create and manage branches, each with its own address, opening hours, and order routing. Works immediately for single-location businesses.
@@ -58,6 +87,9 @@ Fully tested with WooCommerce High-Performance Order Storage (HPOS). Safe for mo
 
 = Pro Features (Subscription required) =
 
+**Table Ordering (QR Code)**
+Generate a QR code for each table. Guests scan it and order directly — no address or pickup time fields required. Orders appear in the dashboard with the table name.
+
 **Multi-Location Management**
 Manage an unlimited number of branches. Each location gets its own Kanban board, POS configuration, and separate order flow — managed centrally via one WordPress installation.
 
@@ -65,7 +97,7 @@ Manage an unlimited number of branches. Each location gets its own Kanban board,
 A conversion-focused checkout process for gastronomy businesses — fewer steps, cleaner layout, mobile-first.
 
 **Advanced Tipping System**
-Customers can enter percentage tip suggestions (e.g., 5%, 10%, 15%) or a custom amount. Tip amounts are saved per order and displayed in the dashboard.
+Customers can select percentage tip suggestions (e.g., 5%, 10%, 15%) or enter a custom amount. Tip amounts are saved per order and displayed in the dashboard.
 
 **Automatic Pickup Reminders**
 Automatic email reminders to customers X minutes before the scheduled pickup time. Fewer no-shows, better pickup experience.
@@ -80,13 +112,15 @@ A browser signal tone when a new order arrives on the Kanban board. Configurable
 
 = Why Libre Bite? =
 
-Most restaurant plugins for WordPress are either too simple (just a menu display) or too complex (with expensive SaaS subscriptions). Libre Bite finds the right balance: a serious operational tool built on the proven WooCommerce foundation — with full data ownership, no transaction fees, and a familiar WordPress interface.
+Most restaurant plugins for WordPress are either too simple (just a menu display) or too expensive (recurring SaaS fees with transaction costs). Libre Bite finds the right balance: a serious operational tool built on the proven WooCommerce foundation — with full data ownership, no transaction fees, and a familiar WordPress interface.
 
-* Full control over your order data
-* No transaction fees
-* Familiar WordPress interface
-* Core features free — pay only for advanced features
-* 7-day free trial for Pro features
+* **Start free** — core features cost nothing
+* **No transaction fees** — ever
+* **Use any payment gateway** WooCommerce supports
+* **Modular** — only pay for and use what you need
+* **Your data stays yours** — in your own WordPress installation
+* **Affordable Pro plans** — designed for small businesses, not enterprise budgets
+* **7-day free Pro trial** — no payment required
 
 ---
 
@@ -118,6 +152,14 @@ The Table Management feature (Pro) uses the **goQR.me API** (https://goqr.me/api
 = Is WooCommerce mandatory? =
 
 Yes. Libre Bite is a WooCommerce extension. WooCommerce must be installed and active for Libre Bite to work. WooCommerce 8.0 or later is recommended.
+
+= Which payment methods are supported? =
+
+Libre Bite uses WooCommerce's standard payment system. Any WooCommerce-compatible payment gateway works — including Stripe, PayPal, Twint, cash on pickup, card at counter, and more. Libre Bite charges **no transaction fees**. You pay only for your payment gateway (if any) and the optional Pro subscription.
+
+= Can customers pay in cash or at the counter? =
+
+Yes. WooCommerce includes offline payment methods such as "Cash on Delivery" or "Pay in Person". You can rename and configure these freely — for example "Pay at pickup" or "Pay at the counter".
 
 = Is the plugin compatible with WooCommerce HPOS? =
 
@@ -160,6 +202,14 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.1.3 =
+* Feature: Location colors — color-coded highlight for location dropdowns in POS and Order Board.
+* Feature: POS blocks product area when no location is selected.
+* Feature: Seats per table — configurable seat count per table (preparation for reservations).
+* Feature: Bulk table creation — create multiple tables at once with prefix and numbering.
+* Feature: Location filter in table list.
+* Improvement: Help section updated with full table management documentation and location color info.
 
 = 1.1.2 =
 * Improvement: Consolidated settings tabs – Checkout and Checkout Fields merged, Dashboard renamed to Order Board, Features tab shown first.

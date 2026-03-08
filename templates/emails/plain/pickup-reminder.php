@@ -9,11 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$pickup_time      = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
-$location_name    = get_post_meta( $order->get_id(), '_lbite_location_name', true );
-$location_id      = get_post_meta( $order->get_id(), '_lbite_location_id', true );
-$location_address = $location_id ? LBite_Locations::get_formatted_address( $location_id ) : '';
-$location_maps    = $location_id ? LBite_Locations::get_maps_url( $location_id ) : '';
+$lbite_pickup_time      = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
+$lbite_location_name    = get_post_meta( $order->get_id(), '_lbite_location_name', true );
+$lbite_location_id      = get_post_meta( $order->get_id(), '_lbite_location_id', true );
+$lbite_location_address = $lbite_location_id ? LBite_Locations::get_formatted_address( $lbite_location_id ) : '';
+$lbite_location_maps    = $lbite_location_id ? LBite_Locations::get_maps_url( $lbite_location_id ) : '';
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
 echo esc_html( wp_strip_all_tags( $email_heading ) );
@@ -28,21 +28,21 @@ echo esc_html__( 'dies ist eine Erinnerung an Ihre bevorstehende Bestellung.', '
 
 echo "\n\n";
 
-if ( $pickup_time ) {
+if ( $lbite_pickup_time ) {
 	echo esc_html__( 'Abholzeit:', 'libre-bite' ) . ' ';
-	echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $pickup_time ) ) );
+	echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $lbite_pickup_time ) ) );
 	echo "\n";
 }
 
-if ( $location_name ) {
+if ( $lbite_location_name ) {
 	echo esc_html__( 'Standort:', 'libre-bite' ) . ' ';
-	echo esc_html( $location_name );
+	echo esc_html( $lbite_location_name );
 	echo "\n";
-	if ( $location_address ) {
-		echo esc_html( $location_address );
+	if ( $lbite_location_address ) {
+		echo esc_html( $lbite_location_address );
 		echo "\n";
-		if ( $location_maps ) {
-			echo esc_html__( 'Karte:', 'libre-bite' ) . ' ' . esc_url( $location_maps );
+		if ( $lbite_location_maps ) {
+			echo esc_html__( 'Karte:', 'libre-bite' ) . ' ' . esc_url( $lbite_location_maps );
 			echo "\n";
 		}
 	}
