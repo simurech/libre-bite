@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="lbite-reservation-form-container" id="lbite-reservation-form-container">
 
 		<form id="lbite-reservation-form" class="lbite-reservation-form" novalidate>
-			<?php wp_nonce_field( 'lbite_reservation_form', 'lbite_reservation_nonce', true, false ); ?>
 
 			<?php if ( count( $lbite_locations ) > 1 || 0 === $lbite_preselected_location ) : ?>
 			<div class="lbite-res-field">

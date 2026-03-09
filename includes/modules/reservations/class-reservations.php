@@ -398,7 +398,8 @@ class LBite_Reservations {
 	 * Frontend-Assets laden
 	 */
 	public function enqueue_frontend_assets() {
-		if ( ! is_singular() && ! has_shortcode( get_post()->post_content ?? '', 'lbite_reservation_form' ) ) {
+		// Assets nur auf Einzelseiten laden, die den Shortcode enthalten.
+		if ( ! is_singular() || ! has_shortcode( get_post()->post_content ?? '', 'lbite_reservation_form' ) ) {
 			return;
 		}
 

@@ -393,7 +393,9 @@ class LBite_Tables {
 				'status_label'   => isset( $status_labels[ $wc_status ] ) ? $status_labels[ $wc_status ] : ucfirst( $wc_status ),
 				'time'           => $date_created ? $date_created->date_i18n( get_option( 'time_format' ) ) : '',
 				'items_count'    => count( $order->get_items() ),
-				'total'          => wp_strip_all_tags( $order->get_formatted_order_total() ),
+				// html_entity_decode() wandelt HTML-Entities (z.B. &nbsp; &#67;) in echte Zeichen um,
+			// damit escHtml() im JS nicht doppelt encoded.
+			'total'          => html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ),
 			);
 		}
 

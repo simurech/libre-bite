@@ -136,7 +136,7 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 			$lbite_disabled_roles = get_option( 'lbite_disabled_roles', array() );
 
 			foreach ( $lbite_all_roles_with_admin as $lbite_role_key => $lbite_role_name ) :
-				$lbite_custom_name = isset( $lbite_custom_role_names[ $lbite_role_key ] ) $lbite_custom_role_names[ $lbite_role_key ] : '';
+				$lbite_custom_name = isset( $lbite_custom_role_names[ $lbite_role_key ] ) ? $lbite_custom_role_names[ $lbite_role_key ] : '';
 				$lbite_is_disabled = in_array( $lbite_role_key, $lbite_disabled_roles, true );
 				$lbite_is_admin = $lbite_role_key === 'administrator';
 				?>
