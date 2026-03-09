@@ -820,7 +820,7 @@ class LBite_Tables {
 					<p>
 						<?php
 						/* translators: %d: Anzahl erstellter Tische */
-						printf( esc_html__( '%d Tische wurden erfolgreich erstellt.', 'libre-bite' ), $created );
+						printf( esc_html__( '%d Tische wurden erfolgreich erstellt.', 'libre-bite' ), (int) $created );
 						?>
 					</p>
 				</div>

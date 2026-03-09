@@ -635,6 +635,7 @@ class LBite_Reservations {
 		/* translators: %s: Website-Name */
 		$lbite_subject = sprintf( __( 'Ihre Reservierungsanfrage bei %s', 'libre-bite' ), $lbite_site_name );
 
+		/* translators: %s: Name des Gastes */
 		$lbite_message  = sprintf( __( 'Hallo %s,', 'libre-bite' ), $data['lbite_name'] ) . "\n\n";
 		$lbite_message .= __( 'Ihre Reservierungsanfrage wurde erfolgreich entgegengenommen. Wir werden Sie in Kürze kontaktieren, um die Reservierung zu bestätigen.', 'libre-bite' ) . "\n\n";
 		$lbite_message .= "---\n";
