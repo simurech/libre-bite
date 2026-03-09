@@ -1,0 +1,173 @@
+/* ==========================================================
+   Reservierungsformular – Frontend
+   ========================================================== */
+
+.lbite-reservation-wrap {
+	max-width: 680px;
+	margin: 0 auto;
+}
+
+.lbite-reservation-form-container {
+	background: #fff;
+	border: 1px solid #e2e4e7;
+	border-radius: 8px;
+	padding: 32px;
+}
+
+/* Reihen */
+.lbite-res-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+}
+
+@media ( max-width: 540px ) {
+	.lbite-res-row {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Felder */
+.lbite-res-field {
+	margin-bottom: 20px;
+}
+
+.lbite-res-row .lbite-res-field {
+	margin-bottom: 0;
+}
+
+.lbite-res-row + .lbite-res-field,
+.lbite-res-row + .lbite-res-row {
+	margin-top: 20px;
+}
+
+/* Labels */
+.lbite-res-label {
+	display: block;
+	margin-bottom: 6px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.lbite-res-required::after {
+	content: ' *';
+	color: #dc3232;
+}
+
+/* Inputs */
+.lbite-res-input,
+.lbite-res-select,
+.lbite-res-textarea {
+	display: block;
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	font-size: 15px;
+	color: #1d2327;
+	background: #fff;
+	box-sizing: border-box;
+	transition: border-color .15s;
+	font-family: inherit;
+	appearance: auto;
+}
+
+.lbite-res-input:focus,
+.lbite-res-select:focus,
+.lbite-res-textarea:focus {
+	outline: none;
+	border-color: var(--wp--preset--color--primary, #007cba);
+	box-shadow: 0 0 0 2px rgba(0, 124, 186, .15);
+}
+
+.lbite-res-select:disabled {
+	background: #f6f7f7;
+	color: #888;
+	cursor: not-allowed;
+}
+
+.lbite-res-textarea {
+	resize: vertical;
+	min-height: 80px;
+}
+
+/* Trennlinie */
+.lbite-res-divider {
+	border: none;
+	border-top: 1px solid #f0f0f1;
+	margin: 8px 0 24px;
+}
+
+/* Fehlermeldung */
+.lbite-res-notice {
+	padding: 12px 16px;
+	border-radius: 4px;
+	font-size: 14px;
+	margin-bottom: 16px;
+}
+
+.lbite-res-notice--error {
+	background: #fef2f2;
+	border: 1px solid #fca5a5;
+	color: #dc2626;
+}
+
+/* Submit-Button */
+.lbite-res-actions {
+	margin-top: 24px;
+}
+
+.lbite-res-submit {
+	display: inline-block;
+	padding: 12px 28px;
+	background: var(--wp--preset--color--primary, #007cba);
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background .15s, opacity .15s;
+	font-family: inherit;
+}
+
+.lbite-res-submit:hover {
+	background: var(--wp--preset--color--primary, #006ba1);
+	opacity: .9;
+}
+
+.lbite-res-submit:disabled {
+	opacity: .6;
+	cursor: not-allowed;
+}
+
+/* Erfolgsmeldung */
+.lbite-res-success {
+	text-align: center;
+	padding: 40px 24px;
+}
+
+.lbite-res-success-icon {
+	width: 64px;
+	height: 64px;
+	line-height: 64px;
+	border-radius: 50%;
+	background: #dcfce7;
+	color: #16a34a;
+	font-size: 32px;
+	margin: 0 auto 20px;
+}
+
+.lbite-res-success h3 {
+	margin: 0 0 12px;
+	font-size: 20px;
+	color: #1d2327;
+}
+
+.lbite-res-success p {
+	color: #555;
+	margin: 0;
+	font-size: 15px;
+	line-height: 1.6;
+}

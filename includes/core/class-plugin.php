@@ -107,6 +107,10 @@ class LBite_Plugin {
 		if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
 			$this->load_module( 'tables', 'LBite_Tables' );
 		}
+
+		if ( lbite_feature_enabled( 'enable_reservations' ) ) {
+			$this->load_module( 'reservations', 'LBite_Reservations' );
+		}
 	}
 
 	/**

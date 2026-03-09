@@ -74,3 +74,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Tische verwalten', 'libre-bite' ); ?>
 	</a>
 </div>
+
+<div class="lbite-help-section">
+	<h2><?php esc_html_e( 'Tischplan', 'libre-bite' ); ?></h2>
+	<p>
+		<?php esc_html_e( 'Der Tischplan zeigt alle Tische eines Standorts als frei positionierbare Kacheln auf einer Zeichenfläche. Er dient sowohl zur Pflege des Grundrisses als auch zur Live-Übersicht der Tischbelegung.', 'libre-bite' ); ?>
+		<span class="lbite-pro-badge">Pro</span>
+	</p>
+
+	<!-- Grundriss einrichten -->
+	<div class="lbite-help-article">
+		<h3><?php esc_html_e( 'Grundriss einrichten', 'libre-bite' ); ?></h3>
+		<ol>
+			<li><?php esc_html_e( 'Gehen Sie zu "Libre Bite" → "Tischplan"', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Wählen Sie einen Standort', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Ziehe Tische auf die gewünschte Position im Grundriss', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Hover über einen Tisch: ◐ wechselt Form (eckig/rund), ⊞ wechselt Grösse (S/M/L)', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Klicken Sie auf "Positionen speichern"', 'libre-bite' ); ?></li>
+		</ol>
+	</div>
+
+	<!-- Belegung überwachen -->
+	<div class="lbite-help-article">
+		<h3><?php esc_html_e( 'Tischbelegung überwachen', 'libre-bite' ); ?></h3>
+		<p><?php esc_html_e( 'Sobald ein Standort gewählt ist, färben sich die Tische automatisch entsprechend dem aktuellen Bestellstatus:', 'libre-bite' ); ?></p>
+		<ul>
+			<li><strong style="color:#46b450;"><?php esc_html_e( 'Grün', 'libre-bite' ); ?></strong> — <?php esc_html_e( 'Frei (keine aktive Bestellung)', 'libre-bite' ); ?></li>
+			<li><strong style="color:#dc3232;"><?php esc_html_e( 'Rot', 'libre-bite' ); ?></strong> — <?php esc_html_e( 'Besetzt (offene Bestellung)', 'libre-bite' ); ?></li>
+			<li><strong style="color:#ffb900;"><?php esc_html_e( 'Orange', 'libre-bite' ); ?></strong> — <?php esc_html_e( 'In Zubereitung', 'libre-bite' ); ?></li>
+			<li><strong style="color:#00a0d2;"><?php esc_html_e( 'Blau', 'libre-bite' ); ?></strong> — <?php esc_html_e( 'Bereit zur Abholung', 'libre-bite' ); ?></li>
+		</ul>
+		<p><?php esc_html_e( 'Klicken Sie auf einen besetzten Tisch, um Bestellnummer, Uhrzeit, Artikelanzahl und Total zu sehen. Ein Klick auf "In Bestellübersicht anzeigen" öffnet das Kanban-Board. Der Status aktualisiert sich automatisch alle 30 Sekunden.', 'libre-bite' ); ?></p>
+	</div>
+
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-floor-plan' ) ); ?>" class="button button-primary">
+		<?php esc_html_e( 'Zum Tischplan', 'libre-bite' ); ?>
+	</a>
+</div>

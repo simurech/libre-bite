@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -202,6 +202,15 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.1.4 =
+* Feature: Visual floor plan — drag-and-drop canvas per location with shape/size controls and live table status (free, occupied, preparing, ready).
+* Feature: Table reservations — frontend form via shortcode [lbite_reservation_form], email notifications, and admin management view.
+* Feature: POS table selector shows live occupancy status (free/occupied) for each table.
+* Improvement: Floor plan link moved under Tables in admin menu.
+* Improvement: Order board popup links to Order Board instead of individual orders.
+* Improvement: Help section updated with floor plan documentation.
+* Fix: Tables without saved order meta are now correctly shown in the floor plan.
 
 = 1.1.3 =
 * Feature: Location colors — color-coded highlight for location dropdowns in POS and Order Board.

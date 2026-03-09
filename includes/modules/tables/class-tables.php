@@ -67,7 +67,8 @@ class LBite_Tables {
 
 		// AJAX: Tischplan
 		$this->loader->add_action( 'wp_ajax_lbite_get_floor_plan_tables', $this, 'ajax_get_floor_plan_tables' );
-		$this->loader->add_action( 'wp_ajax_lbite_save_floor_plan_order', $this, 'ajax_save_floor_plan_order' );
+		$this->loader->add_action( 'wp_ajax_lbite_save_floor_plan_positions', $this, 'ajax_save_floor_plan_positions' );
+		$this->loader->add_action( 'wp_ajax_lbite_get_table_statuses', $this, 'ajax_get_table_statuses' );
 
 		// Frontend: URL Parameter verarbeiten
 		$this->loader->add_action( 'template_redirect', $this, 'process_table_url_parameters' );
@@ -162,29 +163,30 @@ class LBite_Tables {
 			'lbite-admin-table-plan',
 			'lbiteFloorPlan',
 			array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'lbite_admin_nonce' ),
-				'editUrl' => admin_url( 'post.php?post=%d&action=edit' ),
-				'strings' => array(
-					'saving'    => __( 'Wird gespeichert …', 'libre-bite' ),
-					'saved'     => __( 'Gespeichert ✓', 'libre-bite' ),
-					'saveError' => __( 'Fehler beim Speichern', 'libre-bite' ),
-					'loadError' => __( 'Fehler beim Laden der Tische', 'libre-bite' ),
-					'editTable' => __( 'Tisch bearbeiten', 'libre-bite' ),
+				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
+				'nonce'        => wp_create_nonce( 'lbite_admin_nonce' ),
+				'editUrl'      => admin_url( 'post.php?post=%d&action=edit' ),
+				'orderUrl'     => admin_url( 'admin.php?page=lbite-order-board' ),
+				'orderEditUrl' => admin_url( 'post.php?post=%d&action=edit' ),
+				'strings'  => array(
+					'loading'     => __( 'Lade Tische …', 'libre-bite' ),
+					'saving'      => __( 'Wird gespeichert …', 'libre-bite' ),
+					'saved'       => __( 'Gespeichert ✓', 'libre-bite' ),
+					'saveError'   => __( 'Fehler beim Speichern', 'libre-bite' ),
+					'loadError'   => __( 'Fehler beim Laden der Tische', 'libre-bite' ),
+					'editTable'   => __( 'Tisch bearbeiten', 'libre-bite' ),
+					'toggleShape' => __( 'Form wechseln (rund/eckig)', 'libre-bite' ),
+					'cycleSize'   => __( 'Grösse ändern (S/M/L)', 'libre-bite' ),
+					'tableFree'   => __( 'Tisch ist frei.', 'libre-bite' ),
+					'order'       => __( 'Bestellung', 'libre-bite' ),
+					'time'        => __( 'Uhrzeit', 'libre-bite' ),
+					'items'       => __( 'Artikel', 'libre-bite' ),
+					'total'       => __( 'Total', 'libre-bite' ),
+					'status'      => __( 'Status', 'libre-bite' ),
+					'viewOrder'   => __( 'In Bestellübersicht anzeigen', 'libre-bite' ),
 				),
 			)
 		);
-	}
-
-	/**
-	 * Tischplan-Seite rendern
-	 */
-	public function render_floor_plan_page() {
-		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
-			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
-		}
-
-		include LBITE_PLUGIN_DIR . 'templates/admin/table-plan.php';
 	}
 
 	/**
@@ -206,7 +208,7 @@ class LBite_Tables {
 		// Letzten Standort merken
 		update_user_meta( get_current_user_id(), '_lbite_floor_plan_location', $location_id );
 
-		// Tische für diesen Standort laden, sortiert nach _lbite_table_order
+		// Tische für diesen Standort laden (alle, unabhängig ob Reihenfolge gespeichert)
 		$posts = get_posts(
 			array(
 				'post_type'      => self::POST_TYPE,
@@ -218,20 +220,35 @@ class LBite_Tables {
 						'value' => $location_id,
 					),
 				),
-				'meta_key'       => '_lbite_table_order', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-				'orderby'        => array(
-					'meta_value_num' => 'ASC',
-					'title'          => 'ASC',
-				),
+				'orderby'        => 'title',
+				'order'          => 'ASC',
 			)
+		);
+
+		// Reihenfolge in PHP anwenden (fehlende _lbite_table_order-Werte ans Ende)
+		usort(
+			$posts,
+			function( $a, $b ) {
+				$order_a = intval( get_post_meta( $a->ID, '_lbite_table_order', true ) );
+				$order_b = intval( get_post_meta( $b->ID, '_lbite_table_order', true ) );
+				$order_a = $order_a > 0 ? $order_a : PHP_INT_MAX;
+				$order_b = $order_b > 0 ? $order_b : PHP_INT_MAX;
+				return $order_a - $order_b;
+			}
 		);
 
 		$tables = array();
 		foreach ( $posts as $lbite_post ) {
+			$x_raw = get_post_meta( $lbite_post->ID, '_lbite_table_x', true );
+			$y_raw = get_post_meta( $lbite_post->ID, '_lbite_table_y', true );
 			$tables[] = array(
 				'id'    => $lbite_post->ID,
 				'title' => $lbite_post->post_title,
 				'seats' => intval( get_post_meta( $lbite_post->ID, '_lbite_table_seats', true ) ),
+				'x'     => '' !== $x_raw ? floatval( $x_raw ) : null,
+				'y'     => '' !== $y_raw ? floatval( $y_raw ) : null,
+				'shape' => get_post_meta( $lbite_post->ID, '_lbite_table_shape', true ) ?: 'rect',
+				'size'  => get_post_meta( $lbite_post->ID, '_lbite_table_size', true ) ?: 'medium',
 			);
 		}
 
@@ -266,6 +283,121 @@ class LBite_Tables {
 		}
 
 		wp_send_json_success();
+	}
+
+	/**
+	 * AJAX: Tischpositionen, -form und -grösse speichern
+	 */
+	public function ajax_save_floor_plan_positions() {
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+		}
+
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$tables_raw  = isset( $_POST['tables'] ) ? (array) wp_unslash( $_POST['tables'] ) : array();
+
+		if ( ! $location_id ) {
+			wp_send_json_error( array( 'message' => __( 'Kein Standort angegeben', 'libre-bite' ) ) );
+		}
+
+		$allowed_shapes = array( 'rect', 'circle' );
+		$allowed_sizes  = array( 'small', 'medium', 'large' );
+
+		foreach ( $tables_raw as $table_data ) {
+			if ( ! is_array( $table_data ) ) {
+				continue;
+			}
+
+			$table_id = isset( $table_data['id'] ) ? intval( $table_data['id'] ) : 0;
+			if ( ! $table_id ) {
+				continue;
+			}
+
+			// Sicherheitsprüfung: Tisch muss zum Standort gehören
+			$stored_location = intval( get_post_meta( $table_id, '_lbite_location_id', true ) );
+			if ( $stored_location !== $location_id ) {
+				continue;
+			}
+
+			$x     = isset( $table_data['x'] ) ? round( floatval( $table_data['x'] ), 4 ) : 0;
+			$y     = isset( $table_data['y'] ) ? round( floatval( $table_data['y'] ), 4 ) : 0;
+			$shape = isset( $table_data['shape'] ) && in_array( $table_data['shape'], $allowed_shapes, true ) ? $table_data['shape'] : 'rect';
+			$size  = isset( $table_data['size'] ) && in_array( $table_data['size'], $allowed_sizes, true ) ? $table_data['size'] : 'medium';
+
+			$x = max( 0, min( 100, $x ) );
+			$y = max( 0, min( 100, $y ) );
+
+			update_post_meta( $table_id, '_lbite_table_x', $x );
+			update_post_meta( $table_id, '_lbite_table_y', $y );
+			update_post_meta( $table_id, '_lbite_table_shape', $shape );
+			update_post_meta( $table_id, '_lbite_table_size', $size );
+		}
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * AJAX: Aktuellen Bestellstatus pro Tisch laden
+	 */
+	public function ajax_get_table_statuses() {
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_view_dashboard' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+		}
+
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+
+		if ( ! $location_id ) {
+			wp_send_json_success( array( 'statuses' => array() ) );
+		}
+
+		// Aktive Bestellungen für diesen Standort laden
+		$orders = wc_get_orders(
+			array(
+				'limit'      => 100,
+				'status'     => array( 'wc-processing', 'wc-on-hold', 'wc-pending' ),
+				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					array(
+						'key'   => '_lbite_location_id',
+						'value' => $location_id,
+					),
+				),
+			)
+		);
+
+		$status_labels = array(
+			'processing' => __( 'In Zubereitung', 'libre-bite' ),
+			'on-hold'    => __( 'Neu', 'libre-bite' ),
+			'pending'    => __( 'Ausstehend', 'libre-bite' ),
+		);
+
+		$statuses = array();
+		foreach ( $orders as $order ) {
+			$table_id = $order->get_meta( '_lbite_table_id' );
+			if ( ! $table_id ) {
+				continue;
+			}
+
+			$wc_status      = $order->get_status();
+			$display_status = 'processing' === $wc_status ? 'preparing' : 'occupied';
+			$date_created   = $order->get_date_created();
+
+			$statuses[ $table_id ] = array(
+				'order_id'       => $order->get_id(),
+				'order_number'   => $order->get_order_number(),
+				'wc_status'      => $wc_status,
+				'display_status' => $display_status,
+				'status_label'   => isset( $status_labels[ $wc_status ] ) ? $status_labels[ $wc_status ] : ucfirst( $wc_status ),
+				'time'           => $date_created ? $date_created->date_i18n( get_option( 'time_format' ) ) : '',
+				'items_count'    => count( $order->get_items() ),
+				'total'          => wp_strip_all_tags( $order->get_formatted_order_total() ),
+			);
+		}
+
+		wp_send_json_success( array( 'statuses' => $statuses ) );
 	}
 
 	/**
@@ -644,16 +776,6 @@ class LBite_Tables {
 		if ( ! lbite_feature_enabled( 'enable_table_ordering' ) ) {
 			return;
 		}
-
-		// Tischplan – sichtbarer Menüpunkt
-		add_submenu_page(
-			'libre-bite',
-			__( 'Tischplan', 'libre-bite' ),
-			__( 'Tischplan', 'libre-bite' ),
-			'lbite_manage_locations',
-			'lbite-floor-plan',
-			array( $this, 'render_floor_plan_page' )
-		);
 
 		// Seite registrieren, aber aus dem sichtbaren Menü entfernen.
 		// Zugänglich via Tischliste-Ansicht (add_bulk_create_link).

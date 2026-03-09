@@ -82,7 +82,7 @@ class LBite_Installer {
 		global $wpdb;
 
 		// 1. Custom Post Types löschen (Standorte, Produkt-Optionen).
-		$post_types = array( 'lbite_location', 'oos_location', 'lbite_product_option', 'oos_product_option', 'lbite_table' );
+		$post_types = array( 'lbite_location', 'oos_location', 'lbite_product_option', 'oos_product_option', 'lbite_table', 'lbite_reservation' );
 		foreach ( $post_types as $post_type ) {
 			// Begrenzt auf 500 zur Sicherheit, in der Regel gibt es nicht so viele Standorte/Optionen.
 			$posts = get_posts(
@@ -223,6 +223,8 @@ class LBite_Installer {
 			'enable_scheduled_orders'   => false,
 			'enable_order_notes'        => false,
 			'enable_order_cancellation' => false,
+			'enable_table_ordering'    => false,
+			'enable_reservations'      => false,
 
 			// Checkout
 			'enable_optimized_checkout' => false,

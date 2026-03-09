@@ -1,113 +1,339 @@
-/**
- * Tischplan – Admin-Seite
- */
+/* ==========================================================
+   Tischplan – Admin-Seite
+   ========================================================== */
 
 /* Toolbar */
-.lbite-floor-plan-toolbar {
+.lbite-fp-toolbar {
 	display: flex;
 	align-items: center;
 	gap: 12px;
-	margin: 16px 0 20px;
 	flex-wrap: wrap;
+	margin-bottom: 10px;
 }
 
-.lbite-floor-plan-toolbar label {
-	font-weight: 600;
+.lbite-fp-toolbar-left {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 1;
 }
 
-.lbite-floor-plan-toolbar select {
-	min-width: 220px;
+.lbite-fp-toolbar-right {
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
 
-#lbite-floor-plan-status {
-	font-style: italic;
-	color: #646970;
-}
-
-/* Grid */
-.lbite-floor-plan-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-	gap: 16px;
-	max-width: 960px;
-	margin-bottom: 16px;
-}
-
-/* Tisch-Kachel */
-.lbite-floor-plan-table {
-	background: #fff;
-	border: 1px solid #ddd;
-	border-radius: 6px;
-	padding: 14px 12px;
-	cursor: default;
-	position: relative;
-	text-align: center;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
-	transition: box-shadow .15s;
-}
-
-.lbite-floor-plan-table:hover {
-	box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
-}
-
-.lbite-floor-plan-table-handle {
+#lbite-fp-refresh {
+	min-width: 34px;
 	font-size: 18px;
-	color: #bbb;
-	cursor: grab;
-	margin-bottom: 8px;
+	padding: 0 6px;
 	line-height: 1;
-	user-select: none;
 }
 
-.lbite-floor-plan-table-handle:active {
-	cursor: grabbing;
-}
-
-.lbite-floor-plan-table-name {
+#lbite-fp-status {
+	font-size: 13px;
+	color: #46b450;
 	font-weight: 600;
-	font-size: 15px;
-	margin-bottom: 6px;
+}
+
+/* Canvas-Wrapper */
+.lbite-fp-canvas-wrap {
+	position: relative;
+	border: 2px solid #c3c4c7;
+	border-radius: 6px;
+	overflow: visible;
+	background: #fff;
+	margin: 0 0 12px;
+}
+
+/* Eigentliche Zeichenfläche */
+.lbite-fp-canvas {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	background-color: #f8f9fa;
+	background-image:
+		linear-gradient(to right, #e2e4e7 1px, transparent 1px),
+		linear-gradient(to bottom, #e2e4e7 1px, transparent 1px);
+	background-size: 5% 5%;
+	border-radius: 4px;
+	cursor: default;
+	overflow: visible;
+}
+
+/* Tisch-Kacheln */
+.lbite-fp-table {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #fff;
+	border: 2px solid #c3c4c7;
+	border-radius: 6px;
+	cursor: move;
+	user-select: none;
+	box-sizing: border-box;
+	transition: border-color .2s, background .2s, box-shadow .2s;
+	z-index: 1;
+}
+
+/* Grössen */
+.lbite-fp-table--small  { width: 72px;  height: 72px;  font-size: 11px; }
+.lbite-fp-table--medium { width: 100px; height: 100px; font-size: 12px; }
+.lbite-fp-table--large  { width: 140px; height: 140px; font-size: 13px; }
+
+/* Form: Kreis */
+.lbite-fp-table--circle { border-radius: 50%; }
+
+/* Status */
+.lbite-fp-table--free      { border-color: #46b450; background: #f0fff4; }
+.lbite-fp-table--occupied  { border-color: #dc3232; background: #fef2f2; }
+.lbite-fp-table--preparing { border-color: #ffb900; background: #fffbeb; }
+.lbite-fp-table--ready     { border-color: #00a0d2; background: #e0f2fe; }
+
+/* Hover + Drag */
+.lbite-fp-table:hover {
+	z-index: 10;
+	box-shadow: 0 4px 12px rgba(0,0,0,.12);
+}
+
+.lbite-fp-table--dragging {
+	opacity: .85;
+	box-shadow: 0 8px 24px rgba(0,0,0,.2);
+	z-index: 100;
+	transition: none;
+}
+
+/* Tisch-Inhalt */
+.lbite-fp-table-inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	padding: 6px;
+	box-sizing: border-box;
+	gap: 2px;
+	pointer-events: none;
+	text-align: center;
+}
+
+.lbite-fp-table-name {
+	font-weight: 700;
+	line-height: 1.2;
 	word-break: break-word;
+	overflow: hidden;
+	max-height: 2.8em;
 }
 
-.lbite-floor-plan-table-seats {
-	font-size: 12px;
-	color: #646970;
-	margin-bottom: 8px;
+.lbite-fp-table-seats {
+	font-size: .85em;
+	opacity: .65;
 }
 
-.lbite-floor-plan-table-edit {
-	font-size: 14px;
-	text-decoration: none;
-	opacity: .45;
+/* Schwebende Steuerleiste (erscheint beim Hover) */
+.lbite-fp-table-controls {
+	position: absolute;
+	bottom: calc(100% + 4px);
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	gap: 2px;
+	background: #1d2327;
+	border-radius: 4px;
+	padding: 3px 4px;
+	opacity: 0;
+	pointer-events: none;
 	transition: opacity .15s;
-	display: inline-block;
+	white-space: nowrap;
+	z-index: 20;
 }
 
-.lbite-floor-plan-table-edit:hover {
+.lbite-fp-table:hover .lbite-fp-table-controls {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.lbite-fp-ctrl {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
+	background: transparent;
+	border: none;
+	border-radius: 3px;
+	color: #fff;
+	font-size: 14px;
+	cursor: pointer;
+	text-decoration: none;
+	padding: 0;
+	line-height: 1;
+	transition: background .1s;
+}
+
+.lbite-fp-ctrl:hover {
+	background: rgba(255,255,255,.18);
+	color: #fff;
+}
+
+/* Leer-Zustand */
+#lbite-fp-empty {
+	padding: 24px;
+	background: #f6f7f7;
+	border: 1px dashed #c3c4c7;
+	border-radius: 4px;
+	margin: 12px 0;
+}
+
+/* Lade-Anzeige */
+.lbite-fp-loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	min-height: 200px;
+	font-size: 16px;
+	color: #888;
+	gap: 8px;
+}
+
+/* Fehler */
+.lbite-fp-error {
+	color: #dc3232;
+	padding: 20px;
+	text-align: center;
+}
+
+/* Legende */
+.lbite-fp-legend {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	flex-wrap: wrap;
+	margin-bottom: 12px;
+	font-size: 12px;
+}
+
+.lbite-fp-legend-item {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.lbite-fp-legend-item::before {
+	content: '';
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	border-radius: 3px;
+	border: 2px solid currentColor;
+}
+
+.lbite-fp-legend-item.lbite-fp-legend--free      { color: #46b450; }
+.lbite-fp-legend-item.lbite-fp-legend--occupied   { color: #dc3232; }
+.lbite-fp-legend-item.lbite-fp-legend--preparing  { color: #ffb900; }
+.lbite-fp-legend-item.lbite-fp-legend--ready      { color: #00a0d2; }
+
+.lbite-fp-legend--free::before      { background: #f0fff4; }
+.lbite-fp-legend--occupied::before  { background: #fef2f2; }
+.lbite-fp-legend--preparing::before { background: #fffbeb; }
+.lbite-fp-legend--ready::before     { background: #e0f2fe; }
+
+.lbite-fp-legend-hint {
+	color: #777;
+	margin-left: auto;
+}
+
+/* Popup */
+.lbite-fp-popup {
+	position: fixed;
+	z-index: 99999;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 6px;
+	box-shadow: 0 4px 20px rgba(0,0,0,.15);
+	min-width: 210px;
+	max-width: 270px;
+	font-size: 13px;
+	opacity: 0;
+	transition: opacity .15s;
+	top: 0;
+	left: 0;
+}
+
+.lbite-fp-popup--visible {
 	opacity: 1;
 }
 
-/* Sortable-Zustände */
-.lbite-floor-plan-ghost {
-	opacity: .35;
-	border: 2px dashed #0073aa;
+.lbite-fp-popup-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 12px 8px;
+	border-bottom: 1px solid #f0f0f1;
 }
 
-.lbite-floor-plan-dragging {
-	box-shadow: 0 8px 20px rgba(0, 0, 0, .18) !important;
+.lbite-fp-popup-title {
+	font-size: 14px;
 }
 
-/* Leer-/Lade-Zustand */
-.lbite-floor-plan-loading {
-	font-size: 22px;
-	padding: 16px;
+.lbite-fp-popup-close {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 20px;
+	line-height: 1;
+	color: #888;
+	padding: 0 2px;
+	border-radius: 3px;
 }
 
-.lbite-floor-plan-error {
-	color: #d63638;
+.lbite-fp-popup-close:hover { color: #333; }
+
+.lbite-fp-popup-body {
+	padding: 10px 12px;
 }
 
-.lbite-floor-plan-empty {
-	margin: 16px 0;
+.lbite-fp-popup-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	padding: 3px 0;
+}
+
+.lbite-fp-popup-label {
+	color: #666;
+	flex-shrink: 0;
+}
+
+.lbite-fp-popup-link {
+	font-weight: 600;
+}
+
+.lbite-fp-popup-free {
+	color: #46b450;
+	text-align: center;
+	margin: 4px 0;
+	font-weight: 600;
+}
+
+.lbite-fp-popup-status {
+	padding: 2px 8px;
+	border-radius: 12px;
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.lbite-fp-popup-status--occupied  { background: #fef2f2; color: #dc3232; }
+.lbite-fp-popup-status--preparing { background: #fffbeb; color: #996800; }
+.lbite-fp-popup-status--ready     { background: #e0f2fe; color: #0077a8; }
+
+.lbite-fp-popup-actions {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid #f0f0f1;
 }

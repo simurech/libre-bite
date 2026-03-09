@@ -73,6 +73,13 @@ class LBite_Features {
 			'label'       => 'Tischverwaltung & Tischbestellung',
 			'description' => 'Tische anlegen, Sitzplätze definieren, QR-Codes generieren und Bestellungen direkt am Tisch ermöglichen',
 		),
+		'enable_reservations'       => array(
+			'group'       => 'order_system',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Tischreservierungen',
+			'description' => 'Kunden können Tische online reservieren – Frontend-Formular via Shortcode [lbite_reservation_form]',
+		),
 
 		// Checkout
 		'enable_optimized_checkout' => array(

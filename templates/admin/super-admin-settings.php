@@ -89,6 +89,12 @@ $feature_groups = array(
 				'default'     => false,
 				'premium'     => true,
 			),
+			'enable_reservations'      => array(
+				'label'       => __( 'Tischreservierungen', 'libre-bite' ),
+				'description' => __( 'Kunden können Tische online reservieren – Frontend-Formular via Shortcode [lbite_reservation_form]', 'libre-bite' ),
+				'default'     => false,
+				'premium'     => true,
+			),
 		),
 	),
 	'notifications' => array(

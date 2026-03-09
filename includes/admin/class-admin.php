@@ -177,7 +177,7 @@ class LBite_Admin {
 			);
 		}
 
-		// Tische (CPT) – nur wenn Tischbestellung aktiv
+		// Tische (CPT) + Tischplan – nur wenn Tischbestellung aktiv
 		if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
 			add_submenu_page(
 				'libre-bite',
@@ -185,6 +185,14 @@ class LBite_Admin {
 				__( 'Tische', 'libre-bite' ),
 				'lbite_manage_locations',
 				'edit.php?post_type=lbite_table'
+			);
+			add_submenu_page(
+				'libre-bite',
+				__( 'Tischplan', 'libre-bite' ),
+				__( 'Tischplan', 'libre-bite' ),
+				'lbite_manage_locations',
+				'lbite-floor-plan',
+				array( $this, 'render_floor_plan_page' )
 			);
 		}
 
@@ -298,17 +306,22 @@ class LBite_Admin {
 	 * @return string
 	 */
 	public function fix_menu_submenu_file( $submenu_file ) {
-		global $post_type, $pagenow;
+		global $post_type;
 		$lbite_post_types = array( 'lbite_location', 'lbite_table', 'lbite_product_option' );
 		if ( in_array( $post_type, $lbite_post_types, true ) ) {
 			return 'edit.php?post_type=' . $post_type;
 		}
-		// Auf der Tischplan-Seite "Tische" im Submenü aktiv lassen
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( 'admin.php' === $pagenow && isset( $_GET['page'] ) && 'lbite-floor-plan' === $_GET['page'] ) {
-			return 'edit.php?post_type=lbite_table';
-		}
 		return $submenu_file;
+	}
+
+	/**
+	 * Tischplan-Seite rendern
+	 */
+	public function render_floor_plan_page() {
+		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
+			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
+		}
+		include LBITE_PLUGIN_DIR . 'templates/admin/table-plan.php';
 	}
 
 	/**
@@ -1220,7 +1233,9 @@ class LBite_Admin {
 		$tables = get_posts( array(
 			'post_type'      => 'lbite_table',
 			'posts_per_page' => 100,
-			'meta_query'     => array(
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+			'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(
 					'key'   => '_lbite_location_id',
 					'value' => $location_id,
@@ -1228,11 +1243,33 @@ class LBite_Admin {
 			),
 		) );
 
+		// Aktive Bestellungen für diesen Standort abrufen, um Tischstatus zu ermitteln.
+		$active_orders = wc_get_orders( array(
+			'limit'      => 200,
+			'status'     => array( 'wc-processing', 'wc-on-hold', 'wc-pending' ),
+			'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				array(
+					'key'   => '_lbite_location_id',
+					'value' => $location_id,
+				),
+			),
+		) );
+
+		// Belegte Tisch-IDs sammeln.
+		$occupied_tables = array();
+		foreach ( $active_orders as $order ) {
+			$table_id = $order->get_meta( '_lbite_table_id' );
+			if ( $table_id ) {
+				$occupied_tables[ intval( $table_id ) ] = true;
+			}
+		}
+
 		$formatted_tables = array();
 		foreach ( $tables as $table ) {
 			$formatted_tables[] = array(
-				'id'    => $table->ID,
-				'title' => $table->post_title,
+				'id'       => $table->ID,
+				'title'    => $table->post_title,
+				'occupied' => isset( $occupied_tables[ $table->ID ] ),
 			);
 		}
 
