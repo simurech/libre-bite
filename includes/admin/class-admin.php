@@ -519,6 +519,7 @@ class LBite_Admin {
 
 			// Nach Kategorie filtern.
 			if ( $category_id > 0 ) {
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Produkt-Standort-Filterung via Taxonomy ist für WooCommerce-Plugins unvermeidbar; Limit begrenzt die Abfrage.
 				$args['tax_query'] = array(
 					array(
 						'taxonomy' => 'product_cat',

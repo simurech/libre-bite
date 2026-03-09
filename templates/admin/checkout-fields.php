@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template-Datei, wird innerhalb einer Klassen-Methode via include geladen; Variablen befinden sich im Methoden-Scope, nicht im globalen Namespace.
+
 // Speichern.
 if ( isset( $_POST['lbite_save_checkout_fields'] ) && check_admin_referer( 'lbite_checkout_fields_save' ) ) {
 	// Standard-Feldliste definieren.

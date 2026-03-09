@@ -66,7 +66,8 @@ $lbite_pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time', ''
 
 	<form name="checkout" method="post" class="checkout woocommerce-checkout lbite-checkout-form" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data">
 
-		<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
+		<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
+		do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 
 		<div class="lbite-checkout-step" id="lbite-step-name">
 			<h3><?php esc_html_e( 'Wie heisst du?', 'libre-bite' ); ?></h3>
@@ -103,19 +104,24 @@ $lbite_pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time', ''
 			</div>
 		</div>
 
-		<?php do_action( 'woocommerce_checkout_after_customer_details' ); ?>
+		<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
+		do_action( 'woocommerce_checkout_after_customer_details' ); ?>
 
 		<div class="lbite-checkout-step" id="lbite-step-review">
 			<h3><?php esc_html_e( 'Deine Bestellung', 'libre-bite' ); ?></h3>
 
-			<?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
-			<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
+			<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
+			do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
+			<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
+			do_action( 'woocommerce_checkout_before_order_review' ); ?>
 
 			<div id="order_review" class="woocommerce-checkout-review-order">
-				<?php do_action( 'woocommerce_checkout_order_review' ); ?>
+				<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
+				do_action( 'woocommerce_checkout_order_review' ); ?>
 			</div>
 
-			<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
+			<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
+			do_action( 'woocommerce_checkout_after_order_review' ); ?>
 		</div>
 
 		<?php wp_nonce_field( 'woocommerce-process_checkout', 'woocommerce-process-checkout-nonce' ); ?>

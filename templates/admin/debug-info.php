@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template-Datei, wird innerhalb einer Klassen-Methode via include geladen; Variablen befinden sich im Methoden-Scope, nicht im globalen Namespace.
+
 // Nur für Administratoren.
 if ( ! current_user_can( 'manage_options' ) ) {
 	wp_die( esc_html__( 'Keine Berechtigung', 'libre-bite' ) );

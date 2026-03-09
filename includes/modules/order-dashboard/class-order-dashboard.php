@@ -113,6 +113,7 @@ class LBite_Order_Dashboard {
 			'status'     => array( 'processing', 'pending', 'on-hold' ),
 			'orderby'    => 'ID',
 			'order'      => 'ASC',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- WooCommerce-Bestellfilterung nach Plugin-Metadaten; Abfragen auf max. 200 Einträge begrenzt.
 			'meta_query' => array(
 				array(
 					'key'   => '_lbite_location_id',
@@ -128,6 +129,7 @@ class LBite_Order_Dashboard {
 			'orderby'    => 'ID',
 			'order'      => 'ASC',
 			'date_after' => $today_midnight,
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- WooCommerce-Bestellfilterung nach Plugin-Metadaten; Abfragen auf max. 200 Einträge begrenzt.
 			'meta_query' => array(
 				array(
 					'key'   => '_lbite_location_id',
@@ -384,6 +386,7 @@ class LBite_Order_Dashboard {
 			'orderby'    => 'ID',
 			'order'      => 'DESC',
 			'date_after' => $today_midnight, // Only orders from today.
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- WooCommerce-Bestellfilterung nach Plugin-Metadaten; Abfragen auf max. 200 Einträge begrenzt.
 			'meta_query' => array(
 				array(
 					'key'     => '_lbite_location_id',
@@ -432,6 +435,7 @@ class LBite_Order_Dashboard {
 			array(
 				'limit'      => 100,
 				'status'     => array( 'processing', 'pending' ),
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- WooCommerce-Bestellfilterung nach Plugin-Metadaten; Abfragen auf max. 200 Einträge begrenzt.
 				'meta_query' => array(
 					array(
 						'key'     => '_lbite_order_type',

@@ -331,6 +331,7 @@ class LBite_POS {
 
 		// Nach Kategorie filtern
 		if ( $category_id ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Kategorie-Filterung via Taxonomy; Abfrage auf 500 Produkte begrenzt.
 			$args['tax_query'] = array(
 				array(
 					'taxonomy' => 'product_cat',

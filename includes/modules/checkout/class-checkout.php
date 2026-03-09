@@ -712,7 +712,8 @@ class LBite_Checkout {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce wird im jeweiligen AJAX-Handler geprüft.
 		if ( isset( $_POST['post_data'] ) ) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing
-			parse_str( wp_unslash( $_POST['post_data'] ), $form_data );
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- post_data ist ein serialisierter WooCommerce-Formulardatenstring; Sanitierung würde parse_str() zerstören. Felder werden nach dem Parsen einzeln validiert.
+		parse_str( wp_unslash( $_POST['post_data'] ), $form_data );
 		} else {
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$form_data = wp_unslash( $_POST );

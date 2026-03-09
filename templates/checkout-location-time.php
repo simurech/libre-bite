@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template-Datei, wird innerhalb einer Klassen-Methode via include geladen; Variablen befinden sich im Methoden-Scope, nicht im globalen Namespace.
+
 $lbite_location = $lbite_location_id ? get_post( $lbite_location_id ) : null;
 $lbite_location_image_id = $lbite_location_id ? get_post_meta( $lbite_location_id, '_lbite_location_image', true ) : '';
 $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_url( $lbite_location_image_id, 'thumbnail' ) : '';

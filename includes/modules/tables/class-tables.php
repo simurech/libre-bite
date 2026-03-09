@@ -296,7 +296,8 @@ class LBite_Tables {
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
-		$tables_raw  = isset( $_POST['tables'] ) ? (array) wp_unslash( $_POST['tables'] ) : array();
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array-Elemente werden im Loop unten Feld für Feld validiert (shape, size, position).
+	$tables_raw  = isset( $_POST['tables'] ) ? (array) wp_unslash( $_POST['tables'] ) : array();
 
 		if ( ! $location_id ) {
 			wp_send_json_error( array( 'message' => __( 'Kein Standort angegeben', 'libre-bite' ) ) );

@@ -15,6 +15,7 @@ $lbite_location_id      = get_post_meta( $order->get_id(), '_lbite_location_id',
 $lbite_location_address = $lbite_location_id ? LBite_Locations::get_formatted_address( $lbite_location_id ) : '';
 $lbite_location_maps    = $lbite_location_id ? LBite_Locations::get_maps_url( $lbite_location_id ) : '';
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
 do_action( 'woocommerce_email_header', $email_heading, $email );
 ?>
 
@@ -49,14 +50,18 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
 <h2><?php printf( esc_html__( 'Bestellung #%s', 'libre-bite' ), esc_html( $order->get_order_number() ) ); ?></h2>
 
 <?php
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
 do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
 do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, $email );
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
 do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
 
 if ( $additional_content ) {
 	echo wp_kses_post( wpautop( wptexturize( $additional_content ) ) );
 }
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
 do_action( 'woocommerce_email_footer', $email );

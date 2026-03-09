@@ -70,6 +70,7 @@ class LBite_Notifications {
 			array(
 				'limit'      => 100,
 				'status'     => array( 'processing', 'on-hold' ),
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Cron-Abfrage für Abholbenachrichtigungen nach Metadaten; auf 100 Bestellungen begrenzt.
 				'meta_query' => array(
 					array(
 						'key'     => '_lbite_order_type',

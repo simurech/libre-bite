@@ -50,6 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$lbite_tables = get_posts( array(
 						'post_type'      => 'lbite_table',
 						'posts_per_page' => 100,
+						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Tischabfrage für POS-Standort; auf 100 Tische begrenzt.
 						'meta_query'     => array(
 							array(
 								'key'   => '_lbite_location_id',

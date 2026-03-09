@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template-Datei, wird innerhalb einer Klassen-Methode via include geladen; Variablen befinden sich im Methoden-Scope, nicht im globalen Namespace.
+
 $support_settings = get_option( 'lbite_support_settings', array() );
 
 $support_email        = isset( $support_settings['support_email'] ) ? $support_settings['support_email'] : get_option( 'admin_email' );
