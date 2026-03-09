@@ -201,8 +201,8 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 				$lbite_custom_role_names_display = get_option( 'lbite_custom_role_names', array() );
 				foreach ( $lbite_all_roles as $lbite_role_key => $lbite_role_name ) :
 					// Angepassten Rollennamen verwenden, falls vorhanden
-					$lbite_display_name = isset( $lbite_custom_role_names_display[ $lbite_role_key ] ) && ! empty( $custom_role_names_display[ $role_key ] )
-						$lbite_custom_role_names_display[ $lbite_role_key ]
+					$lbite_display_name = isset( $lbite_custom_role_names_display[ $lbite_role_key ] ) && ! empty( $lbite_custom_role_names_display[ $lbite_role_key ] )
+						? $lbite_custom_role_names_display[ $lbite_role_key ]
 						: $lbite_role_name;
 					?>
 					<div class="lbite-role-section" style="margin-bottom: 30px; padding: 15px; background: #fff; border: 1px solid #ccd0d4; border-radius: 4px;" data-role="<?php echo esc_attr( $lbite_role_key ); ?>">
