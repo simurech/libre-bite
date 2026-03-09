@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -202,6 +202,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.1.5 =
+* Performance: POS product data cached for 1 hour via transient, invalidated on product and location save.
+* Performance: Location colors cached via transient (lbite_location_colors), invalidated on location save.
+* Performance: Admin settings JS now loaded only on the settings page (not on all Libre Bite admin pages).
+* Improvement: Default dashboard refresh interval increased from 30s to 45s for new installations.
 
 = 1.1.4 =
 * Feature: Visual floor plan — drag-and-drop canvas per location with shape/size controls and live table status (free, occupied, preparing, ready).

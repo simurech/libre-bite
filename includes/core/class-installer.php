@@ -198,7 +198,7 @@ class LBite_Installer {
 			'lbite_timeslot_interval'         => 15, // Minuten
 
 			// Dashboard-Einstellungen
-			'lbite_dashboard_refresh_interval' => 30, // Sekunden
+			'lbite_dashboard_refresh_interval' => 45, // Sekunden
 			'lbite_sound_enabled'             => true,
 
 			// E-Mail-Einstellungen

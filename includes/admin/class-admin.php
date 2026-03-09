@@ -411,8 +411,8 @@ class LBite_Admin {
 			)
 		);
 
-		// Einstellungen-Seite JS
-		if ( strpos( $hook, 'lbite-settings' ) !== false || strpos( $hook, 'libre-bite' ) !== false ) {
+		// Einstellungen-Seite JS (nur auf Settings- und Haupt-Plugin-Seite laden).
+		if ( strpos( $hook, 'lbite-settings' ) !== false || 'toplevel_page_libre-bite' === $hook ) {
 			wp_enqueue_script(
 				'lbite-admin-settings',
 				LBITE_PLUGIN_URL . 'assets/js/admin-settings-page.js',
@@ -448,20 +448,8 @@ class LBite_Admin {
 				true
 			);
 
-			// Standort-Farben für Dashboard-Hervorhebung.
-			$lbite_dashboard_colors = array();
-			$lbite_locations_for_colors = get_posts( array(
-				'post_type'      => 'lbite_location',
-				'posts_per_page' => 100,
-				'post_status'    => 'publish',
-				'fields'         => 'ids',
-			) );
-			foreach ( $lbite_locations_for_colors as $lbite_loc_id ) {
-				$lbite_color = get_post_meta( $lbite_loc_id, '_lbite_location_color', true );
-				if ( $lbite_color ) {
-					$lbite_dashboard_colors[ $lbite_loc_id ] = $lbite_color;
-				}
-			}
+			// Standort-Farben für Dashboard-Hervorhebung (gecacht via LBite_Locations).
+			$lbite_dashboard_colors = LBite_Locations::get_all_location_colors();
 
 			wp_localize_script(
 				'lbite-dashboard',
@@ -751,14 +739,17 @@ class LBite_Admin {
 				}
 
 				// Client-Preis ignorieren – echten Produktpreis aus WooCommerce verwenden.
-				$price = (float) $product->get_price();
+				// WC erwartet Netto-Preise als subtotal/total; wc_get_price_excluding_tax()
+				// berücksichtigt die globale Einstellung «Preise inkl. Steuern» korrekt,
+				// damit calculate_totals() keine Steuer doppelt aufschlägt.
+				$price_excl_tax = wc_get_price_excluding_tax( $product, array( 'qty' => $item['quantity'] ) );
 
 				$order_item_id = $order->add_product(
 					$product,
 					$item['quantity'],
 					array(
-						'subtotal' => $price * $item['quantity'],
-						'total'    => $price * $item['quantity'],
+						'subtotal' => $price_excl_tax,
+						'total'    => $price_excl_tax,
 					)
 				);
 

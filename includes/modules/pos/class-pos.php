@@ -41,6 +41,30 @@ class LBite_POS {
 		// AJAX-Endpoints (Haupthandler sind in class-admin.php definiert)
 		// Diese bleiben als Fallback erhalten, werden aber normalerweise nicht verwendet.
 		$this->loader->add_action( 'wp_ajax_lbite_pos_get_products', $this, 'ajax_get_products' );
+
+		// POS-Produkt-Cache invalidieren bei Produkt- oder Standort-Änderungen.
+		$this->loader->add_action( 'save_post_product', $this, 'clear_all_product_caches' );
+		$this->loader->add_action( 'woocommerce_update_product', $this, 'clear_all_product_caches' );
+		$this->loader->add_action( 'save_post_lbite_location', $this, 'clear_all_product_caches' );
+	}
+
+	/**
+	 * Alle POS-Produkt-Caches löschen (alle Standort-Varianten)
+	 *
+	 * Nutzt direktes SQL mit LIKE-Pattern, da WordPress keine Wildcard-Suche
+	 * für Transients bietet. Betrifft alle lbite_pos_products_* Transients.
+	 */
+	public function clear_all_product_caches() {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Bulk-Löschung von Transients via LIKE, WP-API unterstützt kein Wildcard-Delete.
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+				$wpdb->esc_like( '_transient_lbite_pos_products_' ) . '%',
+				$wpdb->esc_like( '_transient_timeout_lbite_pos_products_' ) . '%'
+			)
+		);
 	}
 
 	/**
@@ -93,17 +117,11 @@ class LBite_POS {
 		);
 
 		// Produktdaten direkt einbetten (kein zusätzlicher HTTP-Request nötig).
-		$product_data = $this->get_pos_product_data();
+		// Location-ID 0 = alle Produkte (kein Standort-Filter aktiv).
+		$product_data = $this->get_pos_product_data( 0 );
 
-		// Standort-Farben für POS-Hervorhebung.
-		$pos_location_colors = array();
-		$pos_all_locations   = LBite_Locations::get_all_locations();
-		foreach ( $pos_all_locations as $pos_loc ) {
-			$pos_color = get_post_meta( $pos_loc->ID, '_lbite_location_color', true );
-			if ( $pos_color ) {
-				$pos_location_colors[ $pos_loc->ID ] = $pos_color;
-			}
-		}
+		// Standort-Farben für POS-Hervorhebung (gecacht via LBite_Locations).
+		$pos_location_colors = LBite_Locations::get_all_location_colors();
 
 		// Lokalisierte Daten.
 		wp_localize_script(
@@ -131,15 +149,26 @@ class LBite_POS {
 	/**
 	 * Produktdaten für POS abrufen
 	 *
+	 * Ergebnis wird 1 Stunde gecacht (Transient, Key pro Standort-ID).
+	 * Invalidierung bei Produkt- oder Standort-Speicherung via clear_all_product_caches().
+	 *
+	 * @param int $location_id Standort-ID (0 = alle Produkte, kein Filter).
 	 * @return array Produktdaten mit Kategorien, Produkten und Details.
 	 */
-	private function get_pos_product_data() {
+	private function get_pos_product_data( $location_id = 0 ) {
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return array(
 				'categories' => array(),
 				'products'   => array(),
 				'details'    => array(),
 			);
+		}
+
+		// Cache prüfen (Key enthält Standort-ID für spätere standortspezifische Filterung).
+		$transient_key = 'lbite_pos_products_' . (int) $location_id;
+		$cached        = get_transient( $transient_key );
+		if ( false !== $cached ) {
+			return $cached;
 		}
 
 		$products = get_posts(
@@ -269,11 +298,15 @@ class LBite_POS {
 			}
 		}
 
-		return array(
+		$result = array(
 			'categories' => $categories_data,
 			'products'   => $products_data,
 			'details'    => $products_details,
 		);
+
+		set_transient( $transient_key, $result, HOUR_IN_SECONDS );
+
+		return $result;
 	}
 
 	/**

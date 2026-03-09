@@ -416,6 +416,9 @@ class LBite_Locations {
 			}
 			update_post_meta( $post_id, '_lbite_opening_hours', $hours );
 		}
+
+		// Farben-Cache invalidieren (Standort-Farbe kann sich geändert haben).
+		delete_transient( 'lbite_location_colors' );
 	}
 
 	/**
@@ -557,6 +560,35 @@ class LBite_Locations {
 	 */
 	public static function get_location_color( $location_id ) {
 		return (string) get_post_meta( $location_id, '_lbite_location_color', true );
+	}
+
+	/**
+	 * Farben aller Standorte abrufen (gecacht)
+	 *
+	 * Ergebnis wird 1 Stunde gecacht (Transient lbite_location_colors).
+	 * Invalidierung in save_location_meta() bei Standort-Speicherung.
+	 *
+	 * @return array Assoziatives Array: Standort-ID => Hex-Farbe.
+	 */
+	public static function get_all_location_colors() {
+		$cached = get_transient( 'lbite_location_colors' );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
+		$colors    = array();
+		$locations = self::get_all_locations();
+
+		foreach ( $locations as $loc ) {
+			$color = get_post_meta( $loc->ID, '_lbite_location_color', true );
+			if ( $color ) {
+				$colors[ $loc->ID ] = $color;
+			}
+		}
+
+		set_transient( 'lbite_location_colors', $colors, HOUR_IN_SECONDS );
+
+		return $colors;
 	}
 
 	/**
