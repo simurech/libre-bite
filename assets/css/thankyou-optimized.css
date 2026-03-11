@@ -343,33 +343,30 @@ a.lbite-maps-link:hover {
 	color: #fff;
 }
 
-/* Drucklayout */
+/* Drucklayout – visibility-Ansatz damit verschachtelte Eltern nicht versteckt werden */
 @media print {
-	body > * {
-		display: none !important;
+	body * {
+		visibility: hidden !important;
 	}
 
-	body .lbite-thankyou-optimized,
-	body .lbite-thankyou-optimized * {
-		display: revert !important;
+	.lbite-thankyou-optimized,
+	.lbite-thankyou-optimized * {
+		visibility: visible !important;
+	}
+
+	.lbite-thankyou-optimized {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		max-width: 100%;
+		padding: 20px;
+		margin: 0;
 	}
 
 	.lbite-thankyou-print-btn-wrap {
 		display: none !important;
-	}
-
-	.lbite-thankyou-optimized {
-		max-width: 100%;
-		padding: 0;
-		margin: 0;
-	}
-
-	/* WooCommerce-Versteckte Elemente nicht mitdrucken */
-	.woocommerce-order-received .woocommerce-notice,
-	.woocommerce-order-received .woocommerce-thankyou-order-received,
-	.woocommerce-order-details,
-	.woocommerce-customer-details {
-		display: none !important;
+		visibility: hidden !important;
 	}
 }
 
