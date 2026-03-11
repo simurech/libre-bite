@@ -595,11 +595,20 @@ class LBite_Tables {
 			<tr>
 				<th><label><?php esc_html_e( 'QR-Code Link', 'libre-bite' ); ?></label></th>
 				<td>
-					<?php if ( $location_id ) : 
+					<?php if ( $location_id ) :
+						// Zielseite: konfigurierbare Menü-Seite oder Standard-Shop.
+						$lbite_target_page_id = (int) get_option( 'lbite_table_order_page_id', 0 );
+						if ( $lbite_target_page_id ) {
+							$lbite_base_url = get_permalink( $lbite_target_page_id );
+						} elseif ( function_exists( 'wc_get_page_permalink' ) ) {
+							$lbite_base_url = wc_get_page_permalink( 'shop' );
+						} else {
+							$lbite_base_url = home_url();
+						}
 						$url = add_query_arg( array(
 							'lbite_location' => $location_id,
-							'lbite_table'    => $post->ID
-						), home_url() );
+							'lbite_table'    => $post->ID,
+						), $lbite_base_url );
 					?>
 						<div class="lbite-qr-meta-url">
 							<input type="text" value="<?php echo esc_url( $url ); ?>" class="large-text" readonly onclick="this.select();">

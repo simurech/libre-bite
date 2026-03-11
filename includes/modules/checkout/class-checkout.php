@@ -112,8 +112,9 @@ class LBite_Checkout {
 
 		if ( $table_id ) {
 			// Bei Tischbestellung brauchen wir keine Adressdaten.
-			// Wir behalten nur Name und E-Mail (für den Beleg).
-			$keep_fields = array( 'billing_first_name', 'billing_last_name', 'billing_email' );
+			// billing_last_name bewusst NICHT in der Liste: wird im Template nicht angezeigt,
+			// würde aber von WooCommerce als Pflichtfeld validiert.
+			$keep_fields = array( 'billing_first_name', 'billing_email' );
 
 			foreach ( $fields['billing'] as $key => $field ) {
 				if ( ! in_array( $key, $keep_fields, true ) ) {

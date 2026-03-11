@@ -33,6 +33,16 @@ if ( $lbite_location_id ) {
 // Bestelltyp und Zeit.
 $lbite_order_type  = WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now';
 $lbite_pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time', '' ) : '';
+
+// Tischbestellung.
+$lbite_table_id   = WC()->session ? WC()->session->get( 'lbite_table_id', 0 ) : 0;
+$lbite_table_name = '';
+if ( $lbite_table_id ) {
+	$lbite_table_post = get_post( $lbite_table_id );
+	if ( $lbite_table_post ) {
+		$lbite_table_name = $lbite_table_post->post_title;
+	}
+}
 ?>
 
 <div class="lbite-checkout-optimized">
@@ -50,7 +60,12 @@ $lbite_pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time', ''
 				<strong><?php esc_html_e( 'Standort:', 'libre-bite' ); ?></strong>
 				<?php echo esc_html( $lbite_location_name ); ?>
 			</p>
-			<?php if ( 'later' === $lbite_order_type && $lbite_pickup_time ) : ?>
+			<?php if ( $lbite_table_name ) : ?>
+				<p>
+					<strong><?php esc_html_e( 'Tisch:', 'libre-bite' ); ?></strong>
+					<?php echo esc_html( $lbite_table_name ); ?>
+				</p>
+			<?php elseif ( 'later' === $lbite_order_type && $lbite_pickup_time ) : ?>
 				<p>
 					<strong><?php esc_html_e( 'Abholung:', 'libre-bite' ); ?></strong>
 					<?php echo esc_html( wp_date( 'd.m.Y H:i', strtotime( $lbite_pickup_time ) ) ); ?> <?php esc_html_e( 'Uhr', 'libre-bite' ); ?>

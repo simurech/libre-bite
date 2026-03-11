@@ -43,6 +43,9 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		update_option( 'lbite_pickup_reminder_time', isset( $_POST['lbite_pickup_reminder_time'] ) ? intval( wp_unslash( $_POST['lbite_pickup_reminder_time'] ) ) : 15 );
 		update_option( 'lbite_timeslot_interval', isset( $_POST['lbite_timeslot_interval'] ) ? intval( wp_unslash( $_POST['lbite_timeslot_interval'] ) ) : 15 );
 
+		// Tischbestellung
+		update_option( 'lbite_table_order_page_id', isset( $_POST['lbite_table_order_page_id'] ) ? intval( wp_unslash( $_POST['lbite_table_order_page_id'] ) ) : 0 );
+
 		// Branding
 		update_option( 'lbite_brand_name', isset( $_POST['lbite_brand_name'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_brand_name'] ) ) : '' );
 		update_option( 'lbite_brand_logo', isset( $_POST['lbite_brand_logo'] ) ? intval( wp_unslash( $_POST['lbite_brand_logo'] ) ) : 0 );
@@ -75,6 +78,7 @@ $lbite_color_primary    = get_option( 'lbite_color_primary', '#0073aa' );
 $lbite_color_secondary  = get_option( 'lbite_color_secondary', '#23282d' );
 $lbite_color_accent     = get_option( 'lbite_color_accent', '#00a32a' );
 $lbite_all_pages        = get_pages( array( 'post_status' => 'publish' ) );
+$lbite_table_order_page = get_option( 'lbite_table_order_page_id', 0 );
 
 wp_enqueue_media();
 wp_enqueue_style( 'wp-color-picker' );
@@ -141,7 +145,25 @@ wp_enqueue_script( 'wp-color-picker' );
 		</tr>
 	</table>
 
-	<h2><?php esc_html_e( 'Branding', 'libre-bite' ); ?></h2>
+	<h2><?php esc_html_e( 'Tischbestellung', 'libre-bite' ); ?></h2>
+	<table class="form-table">
+		<tr>
+			<th><?php esc_html_e( 'Menü-Seite', 'libre-bite' ); ?></th>
+			<td>
+				<select name="lbite_table_order_page_id">
+					<option value="0"><?php esc_html_e( '— Standard (Shop-Seite) —', 'libre-bite' ); ?></option>
+					<?php foreach ( $lbite_all_pages as $lbite_p ) : ?>
+						<option value="<?php echo esc_attr( $lbite_p->ID ); ?>" <?php selected( $lbite_table_order_page, $lbite_p->ID ); ?>>
+							<?php echo esc_html( $lbite_p->post_title ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+				<p class="description"><?php esc_html_e( 'Auf welche Seite werden Gäste nach dem Scannen des QR-Codes weitergeleitet? Standard: WooCommerce-Shop-Seite.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+	</table>
+
+		<h2><?php esc_html_e( 'Branding', 'libre-bite' ); ?></h2>
 	<table class="form-table">
 		<tr>
 			<th><?php esc_html_e( 'Markenname', 'libre-bite' ); ?></th>
