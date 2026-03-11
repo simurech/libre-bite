@@ -34,6 +34,37 @@ class LBite_Order_Dashboard {
 	);
 
 	/**
+	 * Anzahl eingehender Bestellungen für Menü-Badge zurückgeben (gecacht)
+	 *
+	 * @return int
+	 */
+	public static function get_incoming_orders_count() {
+		$cached = get_transient( 'lbite_incoming_orders_count' );
+		if ( false !== $cached ) {
+			return (int) $cached;
+		}
+
+		$order_ids = wc_get_orders( array(
+			'limit'  => 500,
+			'status' => array( 'processing', 'pending', 'on-hold' ),
+			'return' => 'ids',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Eingehende Bestellungen für Menü-Badge; Abfrage auf 500 begrenzt und gecacht.
+			'meta_query' => array(
+				array(
+					'key'     => '_lbite_order_status',
+					'value'   => 'incoming',
+					'compare' => '=',
+				),
+			),
+		) );
+
+		$count = count( $order_ids );
+		set_transient( 'lbite_incoming_orders_count', $count, 2 * MINUTE_IN_SECONDS );
+
+		return $count;
+	}
+
+	/**
 	 * Übersetzte Status-Labels zurückgeben
 	 *
 	 * @return array
@@ -315,6 +346,9 @@ class LBite_Order_Dashboard {
 		$order->update_meta_data( '_lbite_status_changed', current_time( 'mysql' ) );
 		$order->save();
 
+		// Menü-Badge-Cache invalidieren.
+		delete_transient( 'lbite_incoming_orders_count' );
+
 		// Bei "Abholbereit" - Kunde benachrichtigen (optional)
 		if ( 'ready' === $new_status ) {
 			do_action( 'lbite_order_ready', $order_id );
@@ -523,6 +557,9 @@ class LBite_Order_Dashboard {
 		if ( ! $lbite_status ) {
 			$order->update_meta_data( '_lbite_order_status', 'incoming' );
 			$order->save();
+
+			// Menü-Badge-Cache invalidieren.
+			delete_transient( 'lbite_incoming_orders_count' );
 		}
 
 		// Fallback: Location-Meta aus Session setzen falls nicht vorhanden.

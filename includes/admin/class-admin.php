@@ -78,6 +78,9 @@ class LBite_Admin {
 		$this->loader->add_action( 'wp_ajax_lbite_get_location_tables', $this, 'ajax_get_location_tables' );
 		$this->loader->add_action( 'wp_ajax_lbite_restart_onboarding', $this, 'ajax_restart_onboarding' );
 
+		// Bestellungs-Counter im Menü-Badge (nach Menü-Aufbau)
+		$this->loader->add_action( 'admin_menu', $this, 'inject_order_count_badge', 999 );
+
 		// Support-Box im Admin-Footer
 		$this->loader->add_action( 'admin_footer', $this, 'render_support_footer' );
 	}
@@ -987,6 +990,29 @@ class LBite_Admin {
 		update_option( 'lbite_do_activation_redirect', true );
 
 		wp_send_json_success( array( 'redirect' => admin_url( 'admin.php?page=lbite-onboarding' ) ) );
+	}
+
+	/**
+	 * Bestellungs-Counter als Badge im Untermenü «Bestellübersicht» anzeigen
+	 */
+	public function inject_order_count_badge() {
+		global $submenu;
+
+		if ( ! isset( $submenu['libre-bite'] ) ) {
+			return;
+		}
+
+		$count = LBite_Order_Dashboard::get_incoming_orders_count();
+		if ( $count <= 0 ) {
+			return;
+		}
+
+		foreach ( $submenu['libre-bite'] as &$item ) {
+			if ( isset( $item[2] ) && 'lbite-order-board' === $item[2] ) {
+				$item[0] .= ' <span class="update-plugins count-' . absint( $count ) . '"><span class="plugin-count">' . absint( $count ) . '</span></span>';
+				break;
+			}
+		}
 	}
 
 	/**

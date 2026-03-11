@@ -19,6 +19,12 @@ $feature_groups = array(
 		'title'       => __( 'Bestellsystem', 'libre-bite' ),
 		'description' => __( 'Grundlegende Bestellfunktionen', 'libre-bite' ),
 		'features'    => array(
+			'enable_kanban_board'     => array(
+				'label'       => __( 'Bestellübersicht aktivieren', 'libre-bite' ),
+				'description' => __( 'Kanban-Board für eingehende Bestellungen mit Statusverfolgung und Vollbild-Modus', 'libre-bite' ),
+				'default'     => true,
+				'premium'     => false,
+			),
 			'enable_pos'              => array(
 				'label'       => __( 'Kassensystem (POS)', 'libre-bite' ),
 				'description' => __( 'Kassensystem für Vor-Ort-Bestellungen aktivieren', 'libre-bite' ),
@@ -144,18 +150,6 @@ $feature_groups = array(
 				'description' => __( 'Allergen-Warnungen bei Produkten anzeigen', 'libre-bite' ),
 				'default'     => false,
 				'premium'     => true,
-			),
-		),
-	),
-	'dashboard'    => array(
-		'title'       => __( 'Bestellübersicht', 'libre-bite' ),
-		'description' => __( 'Bestellübersicht-Funktionen', 'libre-bite' ),
-		'features'    => array(
-			'enable_kanban_board' => array(
-				'label'       => __( 'Bestellübersicht aktivieren', 'libre-bite' ),
-				'description' => __( 'Kanban-Board für eingehende Bestellungen mit Statusverfolgung und Vollbild-Modus', 'libre-bite' ),
-				'default'     => true,
-				'premium'     => false,
 			),
 		),
 	),

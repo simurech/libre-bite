@@ -58,6 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-order-board' ) ); ?>"><?php esc_html_e( 'Bestellübersicht', 'libre-bite' ); ?></a></li>
 				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-pos' ) ); ?>"><?php esc_html_e( 'Kassensystem', 'libre-bite' ); ?></a></li>
 				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings' ) ); ?>"><?php esc_html_e( 'Einstellungen', 'libre-bite' ); ?></a></li>
+				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help' ) ); ?>"><?php esc_html_e( 'Hilfe & Support', 'libre-bite' ); ?></a></li>
 			</ul>
 		</div>
 	</div>
