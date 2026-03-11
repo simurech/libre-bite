@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, gastronomy, food
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -202,6 +202,19 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.1.6 =
+* Fix: PHP-Warning "Undefined property: WC_Order_Item_Fee::$total_tax" auf der Bestellbestätigungsseite behoben.
+* Fix: Zahlungsart wird auf der Bestellbestätigungsseite nun als eigene Box angezeigt (nicht mehr als unformatierter Text).
+* Fix: Vorbestellungen zeigen im Kanban-Board jetzt Datum und Uhrzeit an (nicht mehr nur die Uhrzeit).
+* Fix: Bestellungen im Kanban-Board werden nach Dringlichkeit sortiert (Sofort: Erstellungszeit, Vorbestellung: Abholzeit).
+* Fix: «Reservierungen» erscheint im Backend-Menü neu unter «Tischplan» statt ganz oben.
+* Fix: Reservierungsformular zeigt keine Tischauswahl mehr – Tischzuweisung erfolgt durch das Personal im Backend.
+* Fix: Sofort-Bestellungen werden blockiert, wenn der gewählte Standort aktuell geschlossen ist.
+* Fix: Status-Badge auf der Standort-Übersicht zeigt nun den korrekten Öffnungsstatus (robuster Zeitvergleich).
+* Fix: Nährwerttabelle auf der Produktdetailseite hat nun horizontales Innenabstand.
+* Improvement: «Produkt-Optionen» ist neu unter WooCommerce → Produkte eingetragen.
+* Improvement: Hilfe-Bereich um Tab und Inhalt für «Reservierungen» erweitert.
 
 = 1.1.5 =
 * Performance: POS product data cached for 1 hour via transient, invalidated on product and location save.

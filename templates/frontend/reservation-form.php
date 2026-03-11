@@ -76,14 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						required>
 				</div>
 
-				<div class="lbite-res-field">
-					<label class="lbite-res-label" for="lbite-res-table">
-						<?php esc_html_e( 'Tisch (optional)', 'libre-bite' ); ?>
-					</label>
-					<select id="lbite-res-table" name="table_id" class="lbite-res-select" disabled>
-						<option value=""><?php esc_html_e( '— Zuerst Standort wählen —', 'libre-bite' ); ?></option>
-					</select>
-				</div>
+				<input type="hidden" name="table_id" value="0">
 			</div>
 
 			<hr class="lbite-res-divider">

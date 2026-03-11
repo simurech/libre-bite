@@ -53,6 +53,10 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 		   class="nav-tab <?php echo 'tables' === $active_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Tische', 'libre-bite' ); ?>
 		</a>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=reservations' ) ); ?>"
+		   class="nav-tab <?php echo 'reservations' === $active_tab ? 'nav-tab-active' : ''; ?>">
+			<?php esc_html_e( 'Reservierungen', 'libre-bite' ); ?>
+		</a>
 		<?php endif; ?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=settings' ) ); ?>"
 		   class="nav-tab <?php echo 'settings' === $active_tab ? 'nav-tab-active' : ''; ?>">
@@ -85,6 +89,11 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 			case 'tables':
 				if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
 					include __DIR__ . '/help-partials/tables.php';
+				}
+				break;
+			case 'reservations':
+				if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
+					include __DIR__ . '/help-partials/reservations.php';
 				}
 				break;
 			case 'settings':
@@ -186,6 +195,21 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 							<li><?php esc_html_e( 'Mehrere Tische auf einmal erstellen', 'libre-bite' ); ?></li>
 						</ul>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=tables' ) ); ?>" class="button">
+							<?php esc_html_e( 'Mehr erfahren', 'libre-bite' ); ?>
+						</a>
+					</div>
+					
+
+					<!-- Reservierungen -->
+					<div class="lbite-help-card">
+						<h2><span class="dashicons dashicons-calendar-alt"></span> <?php esc_html_e( 'Reservierungen', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'Tischanfragen über ein Frontend-Formular entgegennehmen, verwalten und per E-Mail bestätigen.', 'libre-bite' ); ?></p>
+						<ul>
+							<li><?php esc_html_e( 'Shortcode [lbite_reservation_form] einbinden', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Anfragen im Backend verwalten und Status setzen', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Automatische E-Mail an Gast und Admin', 'libre-bite' ); ?></li>
+						</ul>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=reservations' ) ); ?>" class="button">
 							<?php esc_html_e( 'Mehr erfahren', 'libre-bite' ); ?>
 						</a>
 					</div>

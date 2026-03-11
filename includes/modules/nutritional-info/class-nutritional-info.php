@@ -283,7 +283,7 @@ class LBite_Nutritional_Info {
 				<tbody>
 					<?php if ( $energy_kcal || $energy_kj ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 0;"><strong><?php esc_html_e( 'Energie', 'libre-bite' ); ?></strong></td>
+							<td style="padding: 8px 10px;"><strong><?php esc_html_e( 'Energie', 'libre-bite' ); ?></strong></td>
 							<td style="padding: 8px 0; text-align: right;">
 								<?php if ( $energy_kcal ) : ?>
 									<?php echo esc_html( $energy_kcal ); ?> kcal
@@ -296,37 +296,37 @@ class LBite_Nutritional_Info {
 					<?php endif; ?>
 					<?php if ( $fat ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 0;"><?php esc_html_e( 'Fett', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px;"><?php esc_html_e( 'Fett', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 0; text-align: right;"><?php echo esc_html( $fat ); ?> g</td>
 						</tr>
 					<?php endif; ?>
 					<?php if ( $saturated ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 0 8px 20px; font-size: 13px;"><?php esc_html_e( 'davon gesättigte Fettsäuren', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px 8px 25px; font-size: 13px;"><?php esc_html_e( 'davon gesättigte Fettsäuren', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 0; text-align: right; font-size: 13px;"><?php echo esc_html( $saturated ); ?> g</td>
 						</tr>
 					<?php endif; ?>
 					<?php if ( $carbs ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 0;"><?php esc_html_e( 'Kohlenhydrate', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px;"><?php esc_html_e( 'Kohlenhydrate', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 0; text-align: right;"><?php echo esc_html( $carbs ); ?> g</td>
 						</tr>
 					<?php endif; ?>
 					<?php if ( $sugar ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 0 8px 20px; font-size: 13px;"><?php esc_html_e( 'davon Zucker', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px 8px 25px; font-size: 13px;"><?php esc_html_e( 'davon Zucker', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 0; text-align: right; font-size: 13px;"><?php echo esc_html( $sugar ); ?> g</td>
 						</tr>
 					<?php endif; ?>
 					<?php if ( $protein ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 0;"><?php esc_html_e( 'Eiweiß', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px;"><?php esc_html_e( 'Eiweiß', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 0; text-align: right;"><?php echo esc_html( $protein ); ?> g</td>
 						</tr>
 					<?php endif; ?>
 					<?php if ( $salt ) : ?>
 						<tr>
-							<td style="padding: 8px 0;"><?php esc_html_e( 'Salz', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px;"><?php esc_html_e( 'Salz', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 0; text-align: right;"><?php echo esc_html( $salt ); ?> g</td>
 						</tr>
 					<?php endif; ?>

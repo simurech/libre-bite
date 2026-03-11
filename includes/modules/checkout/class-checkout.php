@@ -625,6 +625,15 @@ class LBite_Checkout {
 				wc_add_notice( __( 'Bitte wählen Sie eine Abholzeit.', 'libre-bite' ), 'error' );
 			}
 		}
+
+		// Sofort-Bestellungen: Standort muss geöffnet sein.
+		if ( 'now' === $order_type && $location_id ) {
+			$lbite_opening_hours = LBite_Locations::get_opening_hours( $location_id );
+			$lbite_status        = LBite_Locations::get_location_status( $lbite_opening_hours );
+			if ( $lbite_status && 'open' !== $lbite_status['type'] && 'closing-soon' !== $lbite_status['type'] ) {
+				wc_add_notice( __( 'Der gewählte Standort ist aktuell geschlossen. Bitte wählen Sie eine Vorbestellungszeit.', 'libre-bite' ), 'error' );
+			}
+		}
 	}
 
 	/**
@@ -1058,6 +1067,15 @@ class LBite_Checkout {
 		// Standard WooCommerce Thank-You Actions entfernen.
 		remove_action( 'woocommerce_thankyou', 'woocommerce_order_details_table', 10 );
 		remove_action( 'woocommerce_order_details_after_order_table', 'woocommerce_order_again_button' );
+
+		// Zahlungsart-spezifische Hinweise ausblenden (werden im Template als Box angezeigt).
+		$order_id = absint( get_query_var( 'order-received' ) );
+		if ( $order_id ) {
+			$lbite_tmp_order = wc_get_order( $order_id );
+			if ( $lbite_tmp_order ) {
+				remove_all_actions( 'woocommerce_thankyou_' . $lbite_tmp_order->get_payment_method() );
+			}
+		}
 
 		// Bestelldetails-Hook komplett entfernen.
 		remove_all_actions( 'woocommerce_order_details_before_order_table' );

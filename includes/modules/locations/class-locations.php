@@ -660,17 +660,18 @@ class LBite_Locations {
 
 		$current_time     = current_time( 'timestamp' );
 		$current_day      = strtolower( wp_date( 'l', $current_time ) );
-		$current_hour_min = wp_date( 'H:i', $current_time );
 
 		// Prüfen ob heute geöffnet.
 		if ( isset( $opening_hours[ $current_day ] ) && ! $opening_hours[ $current_day ]['closed'] ) {
 			$open_time  = $opening_hours[ $current_day ]['open'];
 			$close_time = $opening_hours[ $current_day ]['close'];
 
+			// Timestamps für heutigen Öffnungs-/Schliessungszeitpunkt (robust: korrekt auch ohne führende Null).
+			$open_timestamp  = strtotime( wp_date( 'Y-m-d', $current_time ) . ' ' . $open_time );
+			$close_timestamp = strtotime( wp_date( 'Y-m-d', $current_time ) . ' ' . $close_time );
+
 			// Ist aktuell geöffnet?
-			if ( $current_hour_min >= $open_time && $current_hour_min < $close_time ) {
-				// Prüfen ob in weniger als 1 Stunde schliesst.
-				$close_timestamp  = strtotime( 'today ' . $close_time );
+			if ( $current_time >= $open_timestamp && $current_time < $close_timestamp ) {
 				$time_until_close = $close_timestamp - $current_time;
 
 				if ( $time_until_close <= 3600 && $time_until_close > 0 ) {
@@ -688,8 +689,7 @@ class LBite_Locations {
 			}
 
 			// Öffnet bald (30 Min vor Öffnung).
-			if ( $current_hour_min < $open_time ) {
-				$open_timestamp  = strtotime( 'today ' . $open_time );
+			if ( $current_time < $open_timestamp ) {
 				$time_until_open = $open_timestamp - $current_time;
 
 				if ( $time_until_open <= 1800 && $time_until_open > 0 ) {

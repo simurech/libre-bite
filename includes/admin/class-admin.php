@@ -177,7 +177,7 @@ class LBite_Admin {
 			);
 		}
 
-		// Tische (CPT) + Tischplan – nur wenn Tischbestellung aktiv
+		// Tische (CPT) + Tischplan + Reservierungen – nur wenn Tischbestellung aktiv
 		if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
 			add_submenu_page(
 				'libre-bite',
@@ -194,12 +194,19 @@ class LBite_Admin {
 				'lbite-floor-plan',
 				array( $this, 'render_floor_plan_page' )
 			);
-		}
-
-		// Produkt-Optionen (CPT) – nur wenn Feature aktiv
-		if ( lbite_feature_enabled( 'enable_product_options' ) ) {
 			add_submenu_page(
 				'libre-bite',
+				__( 'Reservierungen', 'libre-bite' ),
+				__( 'Reservierungen', 'libre-bite' ),
+				'lbite_manage_options',
+				'edit.php?post_type=lbite_reservation'
+			);
+		}
+
+		// Produkt-Optionen (CPT) – unter WooCommerce/Produkte
+		if ( lbite_feature_enabled( 'enable_product_options' ) ) {
+			add_submenu_page(
+				'edit.php?post_type=product',
 				__( 'Produkt-Optionen', 'libre-bite' ),
 				__( 'Produkt-Optionen', 'libre-bite' ),
 				'lbite_manage_options',
@@ -292,9 +299,14 @@ class LBite_Admin {
 	 */
 	public function fix_menu_parent_file( $parent_file ) {
 		global $post_type;
-		$lbite_post_types = array( 'lbite_location', 'lbite_table', 'lbite_product_option' );
-		if ( in_array( $post_type, $lbite_post_types, true ) ) {
+		// Reservierungen und Tisch-CPTs bleiben unter libre-bite.
+		$lbite_libre_types = array( 'lbite_location', 'lbite_table', 'lbite_reservation' );
+		if ( in_array( $post_type, $lbite_libre_types, true ) ) {
 			return 'libre-bite';
+		}
+		// Produkt-Optionen bleibt unter WooCommerce/Produkte.
+		if ( 'lbite_product_option' === $post_type ) {
+			return 'edit.php?post_type=product';
 		}
 		return $parent_file;
 	}
@@ -307,9 +319,12 @@ class LBite_Admin {
 	 */
 	public function fix_menu_submenu_file( $submenu_file ) {
 		global $post_type;
-		$lbite_post_types = array( 'lbite_location', 'lbite_table', 'lbite_product_option' );
-		if ( in_array( $post_type, $lbite_post_types, true ) ) {
+		$lbite_libre_types = array( 'lbite_location', 'lbite_table', 'lbite_reservation' );
+		if ( in_array( $post_type, $lbite_libre_types, true ) ) {
 			return 'edit.php?post_type=' . $post_type;
+		}
+		if ( 'lbite_product_option' === $post_type ) {
+			return 'edit.php?post_type=lbite_product_option';
 		}
 		return $submenu_file;
 	}

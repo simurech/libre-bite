@@ -122,6 +122,30 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 				</span>
 			</div>
 		</div>
+
+		<?php
+		// Zahlungsart anzeigen.
+		$lbite_payment_method       = $lbite_order->get_payment_method_title();
+		$lbite_payment_instructions = '';
+		$lbite_gateway              = WC()->payment_gateways ? WC()->payment_gateways->payment_gateways()[ $lbite_order->get_payment_method() ] ?? null : null;
+		if ( $lbite_gateway ) {
+			$lbite_payment_instructions = $lbite_gateway->instructions ?? '';
+		}
+		if ( $lbite_payment_method ) :
+			?>
+		<div class="lbite-thankyou-detail">
+			<svg class="lbite-detail-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+				<path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+			</svg>
+			<div class="lbite-detail-content">
+				<span class="lbite-detail-label"><?php esc_html_e( 'Bezahlung', 'libre-bite' ); ?></span>
+				<span class="lbite-detail-value"><?php echo esc_html( $lbite_payment_method ); ?></span>
+				<?php if ( $lbite_payment_instructions ) : ?>
+					<span class="lbite-detail-sub"><?php echo wp_kses_post( $lbite_payment_instructions ); ?></span>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php endif; ?>
 	</div>
 
 	<div class="lbite-thankyou-order">
@@ -163,12 +187,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 				$has_tax = $lbite_order->get_total_tax() > 0 && 'excl' === $tax_display;
 				$has_extras = ! empty( $fees ) || ! empty( $coupons ) || $has_shipping || $has_tax;
 
-				// Zwischensumme berechnen (inkl. oder exkl. MwSt.).
-				$subtotal = 'incl' === $tax_display
-					? $lbite_order->get_subtotal() + $lbite_order->get_cart_tax() - array_sum( wp_list_pluck( $fees, 'total_tax' ) )
-					: $lbite_order->get_subtotal();
-
-				// Einfacher: Summe aller Artikelpreise.
+				// Zwischensumme = Summe aller Artikelpreise (inkl. oder exkl. MwSt.).
 				$subtotal = 0;
 				foreach ( $lbite_order->get_items() as $calc_item ) {
 					$subtotal += 'incl' === $tax_display

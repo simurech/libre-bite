@@ -148,6 +148,23 @@ class LBite_Order_Dashboard {
 			'completed' => array(),
 		);
 
+		// Aktive Bestellungen nach Dringlichkeit sortieren:
+		// «now»-Bestellungen nach Erstellungszeit, «later»-Bestellungen nach Abholzeit.
+		usort(
+			$orders_active,
+			function ( $a, $b ) {
+				$a_type   = $a->get_meta( '_lbite_order_type', true );
+				$b_type   = $b->get_meta( '_lbite_order_type', true );
+				$a_pickup = $a->get_meta( '_lbite_pickup_time', true );
+				$b_pickup = $b->get_meta( '_lbite_pickup_time', true );
+
+				$a_ts = ( 'later' === $a_type && $a_pickup ) ? strtotime( $a_pickup ) : $a->get_date_created()->getTimestamp();
+				$b_ts = ( 'later' === $b_type && $b_pickup ) ? strtotime( $b_pickup ) : $b->get_date_created()->getTimestamp();
+
+				return $a_ts - $b_ts;
+			}
+		);
+
 		// Process active orders.
 		foreach ( $orders_active as $order ) {
 			$lbite_status = $order->get_meta( '_lbite_order_status', true );
@@ -211,7 +228,7 @@ class LBite_Order_Dashboard {
 			'number'      => $order->get_order_number(),
 			'date'        => $order->get_date_created()->format( 'H:i' ),
 			'type'        => $order_type,
-			'pickup_time' => $pickup_time ? wp_date( 'H:i', strtotime( $pickup_time ) ) : '',
+			'pickup_time' => $pickup_time ? $this->format_pickup_time_for_display( $pickup_time ) : '',
 			'location'    => $location,
 			'table_id'    => $table_id,
 			'customer'    => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
@@ -221,6 +238,24 @@ class LBite_Order_Dashboard {
 		);
 
 		return apply_filters( 'lbite_dashboard_order_data', $data, $order );
+	}
+
+	/**
+	 * Abholzeit für Anzeige formatieren: Datum nur wenn nicht heute
+	 *
+	 * @param string $pickup_time Abholzeitstempel (Y-m-d H:i)
+	 * @return string
+	 */
+	private function format_pickup_time_for_display( $pickup_time ) {
+		$ts    = strtotime( $pickup_time );
+		$today = wp_date( 'Y-m-d' );
+		$day   = wp_date( 'Y-m-d', $ts );
+
+		if ( $day !== $today ) {
+			return wp_date( 'd.m. H:i', $ts );
+		}
+
+		return wp_date( 'H:i', $ts );
 	}
 
 	/**

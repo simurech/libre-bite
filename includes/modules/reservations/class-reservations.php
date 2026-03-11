@@ -97,7 +97,7 @@ class LBite_Reservations {
 				),
 				'public'       => false,
 				'show_ui'      => true,
-				'show_in_menu' => 'libre-bite',
+				'show_in_menu' => false,
 				'supports'     => array( 'title' ),
 				'capability_type' => 'post',
 				'capabilities' => array(
