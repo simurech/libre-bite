@@ -71,6 +71,8 @@ class LBite_Checkout {
 			$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_timeslots', $this, 'ajax_get_timeslots' );
 			$this->loader->add_action( 'wp_ajax_lbite_get_opening_days', $this, 'ajax_get_opening_days' );
 			$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_opening_days', $this, 'ajax_get_opening_days' );
+			$this->loader->add_action( 'wp_ajax_lbite_get_location_status', $this, 'ajax_get_location_status' );
+			$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_location_status', $this, 'ajax_get_location_status' );
 		}
 
 		// Trinkgeld (Feature-abhängig)
@@ -943,6 +945,24 @@ class LBite_Checkout {
 		}
 
 		wp_send_json_success( array( 'closed_days' => $closed_days ) );
+	}
+
+	/**
+	 * AJAX: Aktuellen Öffnungsstatus eines Standorts abrufen
+	 */
+	public function ajax_get_location_status() {
+		check_ajax_referer( 'lbite_frontend_nonce', 'nonce' );
+
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+
+		if ( ! $location_id ) {
+			wp_send_json_error();
+		}
+
+		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
+		$status        = LBite_Locations::get_location_status( $opening_hours );
+
+		wp_send_json_success( array( 'status' => $status ) );
 	}
 
 	/**

@@ -338,8 +338,9 @@ a.lbite-maps-link:hover {
 }
 
 .lbite-print-btn:hover {
+	background-color: var(--lbite-color-primary, #0073aa);
 	border-color: var(--lbite-color-primary, #0073aa);
-	color: var(--lbite-color-primary, #0073aa);
+	color: #fff;
 }
 
 /* Drucklayout */

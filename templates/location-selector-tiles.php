@@ -109,6 +109,11 @@ $lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector
 		<?php if ( 'yes' === $atts['show_time'] ) : ?>
 			<h2 class="lbite-step-title"><?php esc_html_e( 'Wann möchten Sie bestellen?', 'libre-bite' ); ?></h2>
 
+			<div class="lbite-closed-now-notice" id="lbite-closed-now-notice" style="display: none;">
+				<span class="dashicons dashicons-info"></span>
+				<span><?php esc_html_e( 'Sofort-Bestellung nicht möglich –', 'libre-bite' ); ?> <span id="lbite-closed-notice-text"></span></span>
+			</div>
+
 			<div class="lbite-time-selection">
 				<div class="lbite-time-option" data-time-type="now">
 					<div class="lbite-time-icon">
@@ -217,6 +222,18 @@ jQuery(document).ready(function($) {
 			$status.text('');
 		}
 
+		// "Sofort" sperren wenn Standort geschlossen
+		const $nowOption = $('.lbite-time-option[data-time-type="now"]');
+		const $closedNotice = $('#lbite-closed-now-notice');
+		if (statusType === 'closed') {
+			$nowOption.addClass('lbite-time-option-disabled');
+			$('#lbite-closed-notice-text').text(statusText || '<?php echo esc_js( __( 'Aktuell geschlossen', 'libre-bite' ) ); ?>');
+			$closedNotice.show();
+		} else {
+			$nowOption.removeClass('lbite-time-option-disabled');
+			$closedNotice.hide();
+		}
+
 		// Geschlossene Tage laden
 		updateDisabledDates();
 	});
@@ -229,6 +246,10 @@ jQuery(document).ready(function($) {
 
 	// Zeit-Option auswählen
 	$('.lbite-time-option').on('click', function() {
+		if ($(this).hasClass('lbite-time-option-disabled')) {
+			return;
+		}
+
 		const $option = $(this);
 
 		$('.lbite-time-option').removeClass('selected');

@@ -114,9 +114,9 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 				<?php esc_html_e( 'Bestellart', 'libre-bite' ); ?> <span class="required">*</span>
 			</label>
 			<div class="lbite-radio-group">
-				<label class="lbite-radio-option">
+				<label class="lbite-radio-option" id="lbite-now-radio-option">
 					<input type="radio" name="lbite_order_type_select" value="now" <?php checked( $lbite_order_type, 'now' ); ?>>
-					<span><?php 
+					<span><?php
 					if ( WC()->session && WC()->session->get( 'lbite_table_id' ) ) {
 						esc_html_e( 'Service am Tisch', 'libre-bite' );
 					} else {
@@ -128,6 +128,10 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 					<input type="radio" name="lbite_order_type_select" value="later" <?php checked( $lbite_order_type, 'later' ); ?>>
 					<span><?php esc_html_e( 'Für später vorbestellen', 'libre-bite' ); ?></span>
 				</label>
+			</div>
+			<div class="lbite-closed-now-notice" id="lbite-now-closed-notice" style="display: none;">
+				<span class="dashicons dashicons-info"></span>
+				<span><?php esc_html_e( 'Sofort-Bestellung nicht möglich –', 'libre-bite' ); ?> <span id="lbite-checkout-closed-text"></span></span>
 			</div>
 		</div>
 
@@ -201,6 +205,7 @@ jQuery(document).ready(function($) {
 
 	// Zeitslots laden wenn Standort geändert wird
 	$('#lbite_location_select').on('change', function() {
+		updateNowOptionState($(this).val());
 		if ($('input[name="lbite_order_type_select"]:checked').val() === 'later') {
 			loadTimeslots();
 			updateDisabledDates();
@@ -440,6 +445,55 @@ jQuery(document).ready(function($) {
 		var year = date.getFullYear();
 
 		return day + '.' + month + '.' + year;
+	}
+
+	// "Sofort"-Option sperren wenn Standort aktuell geschlossen
+	function updateNowOptionState(locationId) {
+		if (!locationId) {
+			return;
+		}
+
+		$.ajax({
+			url: lbiteData.ajaxUrl,
+			type: 'POST',
+			data: {
+				action: 'lbite_get_location_status',
+				nonce: lbiteData.nonce,
+				location_id: locationId
+			},
+			success: function(response) {
+				if (!response.success) {
+					return;
+				}
+
+				var status = response.data.status;
+				var $nowRadio = $('input[name="lbite_order_type_select"][value="now"]');
+				var $nowLabel = $('#lbite-now-radio-option');
+				var $notice  = $('#lbite-now-closed-notice');
+
+				if (status && status.type === 'closed') {
+					$nowRadio.prop('disabled', true);
+					$nowLabel.addClass('lbite-radio-option-disabled');
+					$('#lbite-checkout-closed-text').text(status.text || '');
+					$notice.show();
+
+					// Zu "später" wechseln wenn "sofort" aktiv
+					if ($nowRadio.is(':checked')) {
+						$('input[name="lbite_order_type_select"][value="later"]').prop('checked', true).trigger('change');
+					}
+				} else {
+					$nowRadio.prop('disabled', false);
+					$nowLabel.removeClass('lbite-radio-option-disabled');
+					$notice.hide();
+				}
+			}
+		});
+	}
+
+	// Status des vorgewählten Standorts beim Laden prüfen
+	var lbiteInitialLocation = $('#lbite_location_select').val();
+	if (lbiteInitialLocation) {
+		updateNowOptionState(lbiteInitialLocation);
 	}
 });
 <?php wp_add_inline_script( 'lbite-frontend', ob_get_clean() ); ?>

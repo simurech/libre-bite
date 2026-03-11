@@ -190,6 +190,36 @@
 	color: #333;
 }
 
+/* Deaktivierte Radio-Option (z.B. "Sofort" bei geschlossenem Standort) */
+.lbite-radio-option-disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+/* Hinweis: Sofort-Bestellung nicht möglich (Checkout) */
+.lbite-closed-now-notice {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 10px 12px;
+	background: #fff8ed;
+	border: 1px solid #f59e0b;
+	border-radius: 6px;
+	color: #92400e;
+	font-size: 14px;
+	margin-top: 8px;
+}
+
+.lbite-closed-now-notice .dashicons {
+	color: #f59e0b;
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
 .lbite-form-actions {
 	display: flex;
 	gap: 10px;

@@ -634,6 +634,36 @@ a.lbite-location-address.lbite-maps-link:hover {
 	animation: spin 0.6s linear infinite;
 }
 
+/* Deaktivierte Zeit-Option (z.B. "Sofort" bei geschlossenem Standort) */
+.lbite-time-option-disabled {
+	opacity: 0.4;
+	cursor: not-allowed !important;
+	pointer-events: none;
+}
+
+/* Hinweis: Sofort-Bestellung nicht möglich */
+.lbite-closed-now-notice {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 12px 16px;
+	background: #fff8ed;
+	border: 1px solid #f59e0b;
+	border-radius: 8px;
+	color: #92400e;
+	font-size: 14px;
+	margin-bottom: 20px;
+}
+
+.lbite-closed-now-notice .dashicons {
+	color: #f59e0b;
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
 /* Loading State für Zeit-Optionen */
 .lbite-time-option.loading {
 	opacity: 0.6;
