@@ -343,10 +343,12 @@ class LBite_Checkout {
 			return;
 		}
 
+		wp_enqueue_style( 'dashicons' );
+
 		wp_enqueue_style(
 			'lbite-frontend',
 			LBITE_PLUGIN_URL . 'assets/css/frontend.css',
-			array(),
+			array( 'dashicons' ),
 			LBITE_VERSION
 		);
 
@@ -496,10 +498,11 @@ class LBite_Checkout {
 	public function shortcode_location_selector( $atts ) {
 		// CSS laden
 		if ( ! wp_style_is( 'lbite-frontend', 'enqueued' ) ) {
+			wp_enqueue_style( 'dashicons' );
 			wp_enqueue_style(
 				'lbite-frontend',
 				LBITE_PLUGIN_URL . 'assets/css/frontend.css',
-				array(),
+				array( 'dashicons' ),
 				LBITE_VERSION
 			);
 		}

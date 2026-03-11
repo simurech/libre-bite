@@ -423,6 +423,39 @@ a.lbite-location-address.lbite-maps-link:hover {
 	font-size: 14px;
 }
 
+.lbite-selected-location-status {
+	margin-top: 6px !important;
+	display: inline-block;
+	font-size: 13px;
+	font-weight: 500;
+	padding: 2px 8px;
+	border-radius: 4px;
+}
+
+.lbite-selected-location-status:empty {
+	display: none;
+}
+
+.lbite-selected-location-status.lbite-status-open {
+	background: rgba(16, 185, 129, 0.12);
+	color: #047857;
+}
+
+.lbite-selected-location-status.lbite-status-closing-soon {
+	background: rgba(245, 158, 11, 0.12);
+	color: #92400e;
+}
+
+.lbite-selected-location-status.lbite-status-opening-soon {
+	background: rgba(59, 130, 246, 0.12);
+	color: #1d4ed8;
+}
+
+.lbite-selected-location-status.lbite-status-closed {
+	background: rgba(107, 114, 128, 0.12);
+	color: #374151;
+}
+
 .lbite-time-selection {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

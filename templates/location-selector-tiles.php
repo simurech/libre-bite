@@ -43,7 +43,11 @@ $lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector
 				$lbite_opening_hours = LBite_Locations::get_opening_hours( $lbite_location->ID );
 				$lbite_status_data = LBite_Locations::get_location_status( $lbite_opening_hours );
 				?>
-				<div class="lbite-location-card" data-location-id="<?php echo esc_attr( $lbite_location->ID ); ?>">
+				<div class="lbite-location-card"
+					data-location-id="<?php echo esc_attr( $lbite_location->ID ); ?>"
+					data-maps-url="<?php echo esc_attr( $lbite_maps_url ); ?>"
+					data-status-text="<?php echo $lbite_status_data ? esc_attr( $lbite_status_data['text'] ) : ''; ?>"
+					data-status-type="<?php echo $lbite_status_data ? esc_attr( $lbite_status_data['type'] ) : ''; ?>">
 					<?php if ( $lbite_image_url ) : ?>
 						<div class="lbite-location-image" style="background-image: url('<?php echo esc_url( $lbite_image_url ); ?>');"></div>
 					<?php else : ?>
@@ -92,6 +96,7 @@ $lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector
 			<div class="lbite-selected-location-details">
 				<h3 class="lbite-selected-location-name"></h3>
 				<p class="lbite-selected-location-address"></p>
+				<p class="lbite-selected-location-status"></p>
 			</div>
 		</div>
 
@@ -176,6 +181,9 @@ jQuery(document).ready(function($) {
 	// Standort-Karte auswählen
 	$('.lbite-location-card').on('click', function() {
 		selectedLocationId = $(this).data('location-id');
+		const mapsUrl    = $(this).data('maps-url');
+		const statusText = $(this).data('status-text');
+		const statusType = $(this).data('status-type');
 
 		// Standort-Daten speichern
 		selectedLocationData = {
@@ -190,8 +198,24 @@ jQuery(document).ready(function($) {
 
 		// Standort-Info anzeigen
 		$('.lbite-selected-location-name').text(selectedLocationData.name);
-		$('.lbite-selected-location-address').text(selectedLocationData.address);
 		$('.lbite-selected-location-image').css('background-image', selectedLocationData.image);
+
+		// Adresse ggf. als Maps-Link anzeigen
+		const $addr = $('.lbite-selected-location-address');
+		if (mapsUrl) {
+			$addr.html($('<a>').attr({href: mapsUrl, target: '_blank', rel: 'noopener noreferrer'}).text(selectedLocationData.address));
+		} else {
+			$addr.text(selectedLocationData.address);
+		}
+
+		// Öffnungsstatus anzeigen
+		const $status = $('.lbite-selected-location-status');
+		$status.attr('class', 'lbite-selected-location-status');
+		if (statusText) {
+			$status.addClass('lbite-status-' + statusType).text(statusText);
+		} else {
+			$status.text('');
+		}
 
 		// Geschlossene Tage laden
 		updateDisabledDates();
