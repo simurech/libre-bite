@@ -1069,13 +1069,18 @@ class LBite_Checkout {
 		remove_action( 'woocommerce_order_details_after_order_table', 'woocommerce_order_again_button' );
 
 		// Zahlungsart-spezifische Hinweise ausblenden (werden im Template als Box angezeigt).
-		$order_id = absint( get_query_var( 'order-received' ) );
-		if ( $order_id ) {
-			$lbite_tmp_order = wc_get_order( $order_id );
-			if ( $lbite_tmp_order ) {
-				remove_all_actions( 'woocommerce_thankyou_' . $lbite_tmp_order->get_payment_method() );
-			}
-		}
+		// Muss auf woocommerce_before_thankyou erfolgen, da Payment-Gateways ihre Hooks
+		// u.U. erst nach dem wp-Hook registrieren (lazy init).
+		add_action(
+			'woocommerce_before_thankyou',
+			function ( $order_id ) {
+				$lbite_order = wc_get_order( $order_id );
+				if ( $lbite_order ) {
+					remove_all_actions( 'woocommerce_thankyou_' . $lbite_order->get_payment_method() );
+				}
+			},
+			1
+		);
 
 		// Bestelldetails-Hook komplett entfernen.
 		remove_all_actions( 'woocommerce_order_details_before_order_table' );
