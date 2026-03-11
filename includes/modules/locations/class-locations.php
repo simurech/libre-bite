@@ -648,6 +648,17 @@ class LBite_Locations {
 	}
 
 	/**
+	 * Zeitstring (z.B. «9:00» oder «09:00») normalisiert auf «HH:MM» zurückgeben.
+	 *
+	 * @param string $time Zeitstring.
+	 * @return string Normalisierter Zeitstring im Format HH:MM.
+	 */
+	private static function normalize_time( $time ) {
+		// strtotime mit festem Datum, damit Sommer-/Winterzeit keine Rolle spielt.
+		return date( 'H:i', strtotime( '2000-01-01 ' . $time ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+	}
+
+	/**
 	 * Status eines Standorts berechnen
 	 *
 	 * @param array $opening_hours Öffnungszeiten.
@@ -658,27 +669,27 @@ class LBite_Locations {
 			return null;
 		}
 
-		$current_time     = current_time( 'timestamp' );
-		$current_day      = strtolower( wp_date( 'l', $current_time ) );
+		// wp_date() ohne Timestamp-Argument liefert die aktuelle Zeit in der WP-Timezone.
+		$current_hhmm = wp_date( 'H:i' );
+		$current_day  = strtolower( wp_date( 'l' ) );
 
 		// Prüfen ob heute geöffnet.
 		if ( isset( $opening_hours[ $current_day ] ) && ! $opening_hours[ $current_day ]['closed'] ) {
-			$open_time  = $opening_hours[ $current_day ]['open'];
-			$close_time = $opening_hours[ $current_day ]['close'];
-
-			// Timestamps für heutigen Öffnungs-/Schliessungszeitpunkt (robust: korrekt auch ohne führende Null).
-			$open_timestamp  = strtotime( wp_date( 'Y-m-d', $current_time ) . ' ' . $open_time );
-			$close_timestamp = strtotime( wp_date( 'Y-m-d', $current_time ) . ' ' . $close_time );
+			$open_hhmm  = self::normalize_time( $opening_hours[ $current_day ]['open'] );
+			$close_hhmm = self::normalize_time( $opening_hours[ $current_day ]['close'] );
 
 			// Ist aktuell geöffnet?
-			if ( $current_time >= $open_timestamp && $current_time < $close_timestamp ) {
-				$time_until_close = $close_timestamp - $current_time;
+			if ( $current_hhmm >= $open_hhmm && $current_hhmm < $close_hhmm ) {
+				// Schliesst in weniger als 60 Minuten?
+				$close_ts   = strtotime( wp_date( 'Y-m-d' ) . ' ' . $close_hhmm ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+				$current_ts = strtotime( wp_date( 'Y-m-d' ) . ' ' . $current_hhmm ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+				$remaining  = $close_ts - $current_ts;
 
-				if ( $time_until_close <= 3600 && $time_until_close > 0 ) {
+				if ( $remaining <= 3600 && $remaining > 0 ) {
 					return array(
 						'type' => 'closing-soon',
 						/* translators: %s: closing time */
-						'text' => sprintf( __( 'Schliesst um %s', 'libre-bite' ), $close_time ),
+						'text' => sprintf( __( 'Schliesst um %s', 'libre-bite' ), $close_hhmm ),
 					);
 				}
 
@@ -688,15 +699,15 @@ class LBite_Locations {
 				);
 			}
 
-			// Öffnet bald (30 Min vor Öffnung).
-			if ( $current_time < $open_timestamp ) {
-				$time_until_open = $open_timestamp - $current_time;
-
-				if ( $time_until_open <= 1800 && $time_until_open > 0 ) {
+			// Öffnet bald (30 Min vor Öffnung)?
+			if ( $current_hhmm < $open_hhmm ) {
+				$open_ts    = strtotime( wp_date( 'Y-m-d' ) . ' ' . $open_hhmm ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+				$current_ts = strtotime( wp_date( 'Y-m-d' ) . ' ' . $current_hhmm ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+				if ( ( $open_ts - $current_ts ) <= 1800 ) {
 					return array(
 						'type' => 'opening-soon',
 						/* translators: %s: opening time */
-						'text' => sprintf( __( 'Öffnet um %s', 'libre-bite' ), $open_time ),
+						'text' => sprintf( __( 'Öffnet um %s', 'libre-bite' ), $open_hhmm ),
 					);
 				}
 			}
@@ -736,8 +747,8 @@ class LBite_Locations {
 			'sunday'    => 'So',
 		);
 
-		$current_time      = current_time( 'timestamp' );
-		$current_day_index = ( (int) wp_date( 'N', $current_time ) - 1 ); // 0 = Montag.
+		$current_hhmm      = wp_date( 'H:i' );
+		$current_day_index = ( (int) wp_date( 'N' ) - 1 ); // 0 = Montag.
 
 		// Bis zu 7 Tage in die Zukunft suchen.
 		for ( $i = 0; $i <= 7; $i++ ) {
@@ -745,21 +756,21 @@ class LBite_Locations {
 			$day_name        = $day_names[ $check_day_index ];
 
 			if ( isset( $opening_hours[ $day_name ] ) && ! $opening_hours[ $day_name ]['closed'] ) {
-				$open_time = $opening_hours[ $day_name ]['open'];
+				$open_hhmm = self::normalize_time( $opening_hours[ $day_name ]['open'] );
 
 				if ( 0 === $i ) {
-					// Heute: nur wenn Öffnung noch bevorsteht.
-					if ( wp_date( 'H:i', $current_time ) < $open_time ) {
+					// Heute: nur wenn Öffnung noch bevorsteht (robuster HH:MM-Vergleich).
+					if ( $current_hhmm < $open_hhmm ) {
 						/* translators: %s: opening time */
-						return sprintf( __( 'Öffnet heute %s', 'libre-bite' ), $open_time );
+						return sprintf( __( 'Öffnet heute %s', 'libre-bite' ), $open_hhmm );
 					}
 				} elseif ( 1 === $i ) {
 					/* translators: %s: opening time */
-					return sprintf( __( 'Öffnet morgen %s', 'libre-bite' ), $open_time );
+					return sprintf( __( 'Öffnet morgen %s', 'libre-bite' ), $open_hhmm );
 				} else {
 					$day_abbr = $day_names_de[ $day_name ];
 					/* translators: %1$s: day abbreviation, %2$s: opening time */
-					return sprintf( __( 'Öffnet %1$s %2$s', 'libre-bite' ), $day_abbr, $open_time );
+					return sprintf( __( 'Öffnet %1$s %2$s', 'libre-bite' ), $day_abbr, $open_hhmm );
 				}
 			}
 		}
