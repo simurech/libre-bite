@@ -669,9 +669,10 @@ class LBite_Locations {
 			return null;
 		}
 
-		// wp_date() ohne Timestamp-Argument liefert die aktuelle Zeit in der WP-Timezone.
-		$current_hhmm = wp_date( 'H:i' );
-		$current_day  = strtolower( wp_date( 'l' ) );
+		// DateTime mit WP-Timezone: format('l') gibt immer englische Tagnamen zurück.
+		$lbite_now    = new DateTime( 'now', wp_timezone() );
+		$current_hhmm = $lbite_now->format( 'H:i' );
+		$current_day  = strtolower( $lbite_now->format( 'l' ) );
 
 		// Prüfen ob heute geöffnet.
 		if ( isset( $opening_hours[ $current_day ] ) && ! $opening_hours[ $current_day ]['closed'] ) {
@@ -747,8 +748,9 @@ class LBite_Locations {
 			'sunday'    => 'So',
 		);
 
-		$current_hhmm      = wp_date( 'H:i' );
-		$current_day_index = ( (int) wp_date( 'N' ) - 1 ); // 0 = Montag.
+		$lbite_now         = new DateTime( 'now', wp_timezone() );
+		$current_hhmm      = $lbite_now->format( 'H:i' );
+		$current_day_index = ( (int) $lbite_now->format( 'N' ) - 1 ); // 0 = Montag.
 
 		// Bis zu 7 Tage in die Zukunft suchen.
 		for ( $i = 0; $i <= 7; $i++ ) {

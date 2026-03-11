@@ -950,15 +950,18 @@ class LBite_Checkout {
 	 */
 	private function get_available_timeslots( $location_id, $date ) {
 		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
-		$interval      = get_option( 'lbite_timeslot_interval', 15 );
+		$interval      = (int) get_option( 'lbite_timeslot_interval', 15 );
 
 		if ( ! $opening_hours || ! is_array( $opening_hours ) ) {
 			return array();
 		}
 
-		// Wochentag ermitteln (englische Namen).
-		$timestamp = strtotime( $date );
-		$day_name  = strtolower( gmdate( 'l', $timestamp ) );
+		// WP-Timezone explizit verwenden, damit alle Zeitberechnungen konsistent sind.
+		$tz = wp_timezone();
+
+		// Wochentag des gewählten Datums in der WP-Timezone ermitteln (englische Namen).
+		$lbite_date_dt = new DateTime( $date, $tz );
+		$day_name      = strtolower( $lbite_date_dt->format( 'l' ) );
 
 		if ( ! isset( $opening_hours[ $day_name ] ) || ! empty( $opening_hours[ $day_name ]['closed'] ) ) {
 			return array();
@@ -967,24 +970,27 @@ class LBite_Checkout {
 		$open  = isset( $opening_hours[ $day_name ]['open'] ) ? $opening_hours[ $day_name ]['open'] : '09:00';
 		$close = isset( $opening_hours[ $day_name ]['close'] ) ? $opening_hours[ $day_name ]['close'] : '18:00';
 
-		$timeslots = array();
+		// Timestamps in WP-Timezone berechnen (korrekt für Sommer-/Winterzeit).
+		$open_dt  = new DateTime( $date . ' ' . $open, $tz );
+		$close_dt = new DateTime( $date . ' ' . $close, $tz );
 
-		// Zeitstempel für den gewählten Tag mit Öffnungs- und Schließzeit.
-		$open_timestamp  = strtotime( $date . ' ' . $open );
-		$close_timestamp = strtotime( $date . ' ' . $close );
+		$open_timestamp  = $open_dt->getTimestamp();
+		$close_timestamp = $close_dt->getTimestamp();
 
-		// Vorbereitungszeit und aktueller Zeitstempel.
-		$prep_time      = get_option( 'lbite_preparation_time', 30 );
-		$now            = current_time( 'timestamp' );
-		$earliest_slot  = $now + ( $prep_time * 60 );
+		// Aktueller Zeitpunkt und frühstmöglicher Slot (Vorbereitungszeit).
+		$prep_time     = (int) get_option( 'lbite_preparation_time', 30 );
+		$now_dt        = new DateTime( 'now', $tz );
+		$now_ts        = $now_dt->getTimestamp();
+		$earliest_slot = $now_ts + ( $prep_time * 60 );
 
-		// Nur zukünftige Slots für heute.
-		$is_today = ( $date === current_time( 'Y-m-d' ) );
+		// Nur zukünftige Slots für heute (Datum in WP-Timezone vergleichen).
+		$is_today = ( $date === $now_dt->format( 'Y-m-d' ) );
 
+		$timeslots    = array();
 		$current_slot = $open_timestamp;
 
 		while ( $current_slot < $close_timestamp ) {
-			// Für heute: Nur zukünftige Slots nach Vorbereitungszeit.
+			// Für heute: Nur Slots nach Vorbereitungszeit anzeigen.
 			if ( $is_today && $current_slot < $earliest_slot ) {
 				$current_slot += $interval * 60;
 				continue;
