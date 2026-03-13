@@ -6,7 +6,7 @@
 
 **Die WooCommerce-Erweiterung für Restaurants, Take-Aways, Cafés und Bars.**
 
-[![Stable Tag](https://img.shields.io/badge/stable-1.1.7-blue.svg)](https://github.com/simurech/libre-bite/releases)
+[![Stable Tag](https://img.shields.io/badge/stable-1.1.8-blue.svg)](https://github.com/simurech/libre-bite/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.0%2B-96588a.svg)](https://woocommerce.com/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-8892be.svg)](https://php.net/)
@@ -171,7 +171,8 @@ libre-bite/
 | Tischreservierungen (Frontend-Formular, E-Mail-Flow, Backend-Verwaltung) | **Umgesetzt** (v1.1.4) |
 | Tisch-Plan (visueller Grundriss, Drag & Drop, Live-Belegung) | **Umgesetzt** (v1.1.4) |
 | Beleg als PDF auf der Bestellbestätigung | **Umgesetzt** (v1.1.7) |
-| Benachrichtigungs-Counter im Backend-Menü | **Umgesetzt** (v1.1.7) |
+| Benachrichtigungs-Counter im Backend-Menü (Bestellungen & Reservierungen) | **Umgesetzt** (v1.1.8) |
+| Kommunikation & Marketing verbessern | Geplant (v1.1.9) |
 | Branding-Ausbau (Farbpresets, Live-Vorschau) | Geplant (v2.0) |
 
 ---

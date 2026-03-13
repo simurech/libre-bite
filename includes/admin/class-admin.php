@@ -993,7 +993,7 @@ class LBite_Admin {
 	}
 
 	/**
-	 * Bestellungs-Counter als Badge im Untermenü «Bestellübersicht» anzeigen
+	 * Bestellungs- und Reservierungs-Counter als Badge im Untermenü anzeigen
 	 */
 	public function inject_order_count_badge() {
 		global $submenu;
@@ -1002,17 +1002,20 @@ class LBite_Admin {
 			return;
 		}
 
-		$count = LBite_Order_Dashboard::get_incoming_orders_count();
-		if ( $count <= 0 ) {
-			return;
-		}
+		$order_count       = LBite_Order_Dashboard::get_incoming_orders_count();
+		$reservation_count = class_exists( 'LBite_Reservations' ) ? LBite_Reservations::get_pending_reservations_count() : 0;
 
 		foreach ( $submenu['libre-bite'] as &$item ) {
-			if ( isset( $item[2] ) && 'lbite-order-board' === $item[2] ) {
-				$item[0] .= ' <span class="update-plugins count-' . absint( $count ) . '"><span class="plugin-count">' . absint( $count ) . '</span></span>';
-				break;
+			if ( ! isset( $item[2] ) ) {
+				continue;
+			}
+			if ( 'lbite-order-board' === $item[2] && $order_count > 0 ) {
+				$item[0] .= ' <span class="update-plugins count-' . absint( $order_count ) . '"><span class="plugin-count">' . absint( $order_count ) . '</span></span>';
+			} elseif ( 'edit.php?post_type=lbite_reservation' === $item[2] && $reservation_count > 0 ) {
+				$item[0] .= ' <span class="update-plugins count-' . absint( $reservation_count ) . '"><span class="plugin-count">' . absint( $reservation_count ) . '</span></span>';
 			}
 		}
+		unset( $item );
 	}
 
 	/**

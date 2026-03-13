@@ -36,6 +36,42 @@ class LBite_Reservations {
 	);
 
 	/**
+	 * Anzahl ausstehender Reservierungen für Menü-Badge zurückgeben (gecacht)
+	 *
+	 * @return int
+	 */
+	public static function get_pending_reservations_count() {
+		$cached = get_transient( 'lbite_pending_reservations_count' );
+		if ( false !== $cached ) {
+			return (int) $cached;
+		}
+
+		$count = (int) wp_count_posts( self::POST_TYPE )->publish ?? 0;
+
+		// Nur ausstehende zählen
+		$args = array(
+			'post_type'      => self::POST_TYPE,
+			'post_status'    => 'publish',
+			'posts_per_page' => 500,
+			'fields'         => 'ids',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Ausstehende Reservierungen für Menü-Badge; Abfrage auf 500 begrenzt und gecacht.
+			'meta_query'     => array(
+				array(
+					'key'     => '_lbite_reservation_status',
+					'value'   => 'pending',
+					'compare' => '=',
+				),
+			),
+		);
+		$query = new WP_Query( $args );
+		$count = $query->found_posts;
+
+		set_transient( 'lbite_pending_reservations_count', $count, 2 * MINUTE_IN_SECONDS );
+
+		return $count;
+	}
+
+	/**
 	 * Loader-Instanz
 	 *
 	 * @var LBite_Loader
@@ -234,6 +270,7 @@ class LBite_Reservations {
 			$lbite_status = sanitize_key( wp_unslash( $_POST['lbite_reservation_status'] ) );
 			if ( array_key_exists( $lbite_status, self::STATUSES ) ) {
 				update_post_meta( $post_id, '_lbite_reservation_status', $lbite_status );
+				delete_transient( 'lbite_pending_reservations_count' );
 			}
 		}
 	}
@@ -587,7 +624,8 @@ class LBite_Reservations {
 			wp_send_json_error( array( 'message' => __( 'Fehler beim Erstellen der Reservierung.', 'libre-bite' ) ) );
 		}
 
-		// Meta speichern
+		// Meta speichern + Badge-Cache invalidieren
+		delete_transient( 'lbite_pending_reservations_count' );
 		update_post_meta( $lbite_post_id, '_lbite_reservation_status', 'pending' );
 		update_post_meta( $lbite_post_id, '_lbite_location_id', $lbite_location_id );
 		update_post_meta( $lbite_post_id, '_lbite_table_id', $lbite_table_id );
