@@ -199,6 +199,14 @@ class LBite_Admin {
 			);
 			add_submenu_page(
 				'libre-bite',
+				__( 'Reservierungsübersicht', 'libre-bite' ),
+				__( 'Reservierungsübersicht', 'libre-bite' ),
+				'lbite_manage_options',
+				'lbite-reservation-board',
+				array( $this, 'render_reservation_board_page' )
+			);
+			add_submenu_page(
+				'libre-bite',
 				__( 'Reservierungen', 'libre-bite' ),
 				__( 'Reservierungen', 'libre-bite' ),
 				'lbite_manage_options',
@@ -267,6 +275,16 @@ class LBite_Admin {
 	 */
 	public function render_order_board_page() {
 		include LBITE_PLUGIN_DIR . 'templates/admin/order-board.php';
+	}
+
+	/**
+	 * Reservierungsübersicht-Seite rendern
+	 */
+	public function render_reservation_board_page() {
+		if ( ! current_user_can( 'lbite_manage_options' ) ) {
+			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
+		}
+		include LBITE_PLUGIN_DIR . 'templates/admin/reservation-board.php';
 	}
 
 	/**
@@ -483,6 +501,40 @@ class LBite_Admin {
 						'updateError'   => __( 'Fehler beim Aktualisieren', 'libre-bite' ),
 						'soundActive'   => __( 'Sound aktiv', 'libre-bite' ),
 						'soundInactive' => __( 'Sound aus', 'libre-bite' ),
+					),
+				)
+			);
+		}
+
+		// Reservierungsboard-Assets
+		if ( strpos( $hook, 'lbite-reservation-board' ) !== false ) {
+			wp_enqueue_style(
+				'lbite-reservation-board',
+				LBITE_PLUGIN_URL . 'assets/css/admin-reservation-board.css',
+				array( 'lbite-admin' ),
+				LBITE_VERSION
+			);
+
+			wp_enqueue_script(
+				'lbite-reservation-board',
+				LBITE_PLUGIN_URL . 'assets/js/reservation-board.js',
+				array( 'jquery' ),
+				LBITE_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'lbite-reservation-board',
+				'lbiteReservationBoard',
+				array(
+					'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
+					'nonce'           => wp_create_nonce( 'lbite_reservation_board_nonce' ),
+					'refreshInterval' => (int) get_option( 'lbite_reservation_refresh_interval', 60 ) * 1000,
+					'strings'         => array(
+						'reservation'  => __( 'Reservierung', 'libre-bite' ),
+						'reservations' => __( 'Reservierungen', 'libre-bite' ),
+						'table'        => __( 'Tisch', 'libre-bite' ),
+						'noTable'      => __( 'Kein Tisch', 'libre-bite' ),
 					),
 				)
 			);
@@ -1011,7 +1063,7 @@ class LBite_Admin {
 			}
 			if ( 'lbite-order-board' === $item[2] && $order_count > 0 ) {
 				$item[0] .= ' <span class="update-plugins count-' . absint( $order_count ) . '"><span class="plugin-count">' . absint( $order_count ) . '</span></span>';
-			} elseif ( 'edit.php?post_type=lbite_reservation' === $item[2] && $reservation_count > 0 ) {
+			} elseif ( 'lbite-reservation-board' === $item[2] && $reservation_count > 0 ) {
 				$item[0] .= ' <span class="update-plugins count-' . absint( $reservation_count ) . '"><span class="plugin-count">' . absint( $reservation_count ) . '</span></span>';
 			}
 		}

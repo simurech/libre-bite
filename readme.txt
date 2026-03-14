@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.9
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,25 @@ Delivery platforms take up to 30% commission. Dedicated restaurant SaaS tools ch
 
 ---
 
+= Works on Any Device =
+
+Libre Bite works on any device — no app installation required. Use it with a mouse and keyboard on a desktop or laptop, or with touch input on a tablet. The Kanban order board, POS interface, and reservation dashboard are optimised for touch-first operation, making them well-suited for use on a tablet mounted at the counter or kitchen pass.
+
+---
+
+= How to Run Libre Bite =
+
+**Option 1 — Extend your existing website**
+Install Libre Bite directly into your existing WordPress/WooCommerce site. Any theme is compatible — no design changes required.
+
+**Option 2 — Standalone installation (subdomain)**
+Run Libre Bite as a dedicated installation on a subdomain, such as `order.myrestaurant.com` — completely independent from your main website, purpose-built for your gastronomy operation.
+
+**Option 3 — Managed hosting by Libre Bite**
+Libre Bite handles the complete setup: installation, configuration, hosting, and ongoing maintenance — from A to Z. Available as a paid service. Contact via GitHub.
+
+---
+
 = External Services =
 
 This plugin uses **Freemius**, a third-party platform for managing licenses, subscriptions, and plugin updates for the Pro version.
@@ -204,6 +223,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.2.0 =
+* Feature: Reservierungs-Dashboard — neue Tagesansicht (Libre Bite → Reservierungsübersicht) mit Standort-Dropdown, Datums-Navigation, Status-Badge und Tisch-Zuweisung direkt auf der Karte.
+* Improvement: Aktualisierungsintervall für Reservierungsübersicht in den Einstellungen konfigurierbar (Standard: 60 Sekunden).
+* Improvement: Benachrichtigungs-Badge im Backend-Menü zeigt jetzt auf die neue Reservierungsübersicht.
+* Improvement: Gerätkompatibilität und Betriebsmodelle in der Plugin-Beschreibung dokumentiert.
 
 = 1.1.9 =
 * Improvement: Plugin-Beschreibung auf Nutzen statt Features ausgerichtet (Kurzbeschreibung, Description, Why Libre Bite).

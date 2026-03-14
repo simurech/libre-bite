@@ -111,6 +111,14 @@ class LBite_Plugin {
 		if ( lbite_feature_enabled( 'enable_reservations' ) ) {
 			$this->load_module( 'reservations', 'LBite_Reservations' );
 		}
+
+		if ( lbite_feature_enabled( 'enable_table_ordering' ) && lbite_feature_enabled( 'enable_reservations' ) ) {
+			$lbite_res_dashboard_file = LBITE_PLUGIN_DIR . 'includes/modules/reservations/class-reservation-dashboard.php';
+			if ( file_exists( $lbite_res_dashboard_file ) ) {
+				require_once $lbite_res_dashboard_file;
+				$this->modules['reservation-dashboard'] = new LBite_Reservation_Dashboard( $this->loader );
+			}
+		}
 	}
 
 	/**

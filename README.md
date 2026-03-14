@@ -6,7 +6,7 @@
 
 **Die WooCommerce-Erweiterung für Restaurants, Take-Aways, Cafés und Bars.**
 
-[![Stable Tag](https://img.shields.io/badge/stable-1.1.9-blue.svg)](https://github.com/simurech/libre-bite/releases)
+[![Stable Tag](https://img.shields.io/badge/stable-1.2.0-blue.svg)](https://github.com/simurech/libre-bite/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.0%2B-96588a.svg)](https://woocommerce.com/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-8892be.svg)](https://php.net/)
@@ -119,6 +119,25 @@ libre-bite/
 
 ---
 
+## Gerät & Betrieb
+
+### Gerätekompatibilität
+
+Libre Bite funktioniert auf jedem Gerät — keine App-Installation nötig. Die Bestellübersicht (Kanban-Board), das Kassensystem (POS) und die Reservierungsübersicht sind für Touch-First-Bedienung optimiert und eignen sich gut für ein Tablet, das an der Theke oder im Küchenbereich montiert ist.
+
+### Betriebsmodelle
+
+**Option 1 — Bestehende Website erweitern**
+Das Plugin lässt sich in jeden bestehenden WordPress/WooCommerce-Shop integrieren. Jedes Theme ist kompatibel — keine Änderungen am Design nötig.
+
+**Option 2 — Eigenständige Installation (Subdomain)**
+Als eigene Installation betreiben, z. B. auf einer Subdomain wie `order.meinrestaurant.ch` — komplett unabhängig vom Hauptauftritt, nur für den Gastronomie-Betrieb.
+
+**Option 3 — Managed Hosting durch Libre Bite**
+Libre Bite übernimmt die komplette Einrichtung: Installation, Konfiguration, Hosting und laufende Wartung — von A bis Z. Kostenpflichtig. Kontakt via [GitHub](https://github.com/simurech/libre-bite).
+
+---
+
 ## Systemanforderungen
 
 | Komponente | Minimum | Empfohlen |
@@ -172,7 +191,9 @@ libre-bite/
 | Tisch-Plan (visueller Grundriss, Drag & Drop, Live-Belegung) | **Umgesetzt** (v1.1.4) |
 | Beleg als PDF auf der Bestellbestätigung | **Umgesetzt** (v1.1.7) |
 | Benachrichtigungs-Counter im Backend-Menü (Bestellungen & Reservierungen) | **Umgesetzt** (v1.1.8) |
-| Kommunikation & Marketing verbessern | Geplant (v1.1.9) |
+| Kommunikation & Marketing verbessern | **Umgesetzt** (v1.1.9) |
+| Gerätkompatibilität & Betriebsmodelle dokumentieren | **Umgesetzt** (v1.1.10) |
+| Reservierungs-Dashboard (Tagesansicht) | **Umgesetzt** (v1.2.0) |
 | Branding-Ausbau (Farbpresets, Live-Vorschau) | Geplant (v2.0) |
 
 ---

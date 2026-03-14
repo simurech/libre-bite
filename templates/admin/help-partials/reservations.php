@@ -88,3 +88,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<h3><?php esc_html_e( 'Tisch zuweisen', 'libre-bite' ); ?></h3>
 	<p><?php esc_html_e( 'Öffnen Sie eine Reservierung und tragen Sie im Feld «Tisch» den gewünschten Tisch ein. Diese Zuweisung ist nur intern sichtbar und dient der Planung im Restaurant.', 'libre-bite' ); ?></p>
 </div>
+
+<div class="lbite-help-section">
+	<h3><?php esc_html_e( 'Reservierungsübersicht (Tagesansicht)', 'libre-bite' ); ?></h3>
+	<p>
+		<?php
+		printf(
+			/* translators: %s: link to reservation board */
+			esc_html__( 'Die operative Tagesansicht finden Sie unter %s.', 'libre-bite' ),
+			'<a href="' . esc_url( admin_url( 'admin.php?page=lbite-reservation-board' ) ) . '">' . esc_html__( 'Libre Bite → Reservierungsübersicht', 'libre-bite' ) . '</a>'
+		);
+		?>
+	</p>
+	<ul>
+		<li>
+			<strong><?php esc_html_e( 'Standort wählen', 'libre-bite' ); ?></strong> —
+			<?php esc_html_e( 'Die Standort-Auswahl wird pro Benutzer gespeichert und beim nächsten Besuch automatisch vorausgewählt.', 'libre-bite' ); ?>
+		</li>
+		<li>
+			<strong><?php esc_html_e( 'Datum navigieren', 'libre-bite' ); ?></strong> —
+			<?php esc_html_e( 'Mit den Pfeiltasten ‹ und › navigieren Sie tageweise. Das Datumfeld akzeptiert auch direkte Eingaben. Klicken Sie auf «Heute», um zum aktuellen Tag zurückzukehren.', 'libre-bite' ); ?>
+		</li>
+		<li>
+			<strong><?php esc_html_e( 'Status ändern', 'libre-bite' ); ?></strong> —
+			<?php esc_html_e( 'Klicken Sie auf das farbige Status-Badge einer Reservierung, um den Status weiterzuschalten (Ausstehend → Bestätigt → Abgeschlossen → Storniert).', 'libre-bite' ); ?>
+		</li>
+		<li>
+			<strong><?php esc_html_e( 'Tisch zuweisen', 'libre-bite' ); ?></strong> —
+			<?php esc_html_e( 'Wählen Sie im Dropdown einer Reservierungskarte den gewünschten Tisch aus. Nur Tische des aktuell gewählten Standorts werden angezeigt.', 'libre-bite' ); ?>
+		</li>
+		<li>
+			<strong><?php esc_html_e( 'Automatische Aktualisierung', 'libre-bite' ); ?></strong> —
+			<?php
+			printf(
+				/* translators: %s: link to settings */
+				esc_html__( 'Die Ansicht aktualisiert sich automatisch. Das Intervall kann unter %s angepasst werden.', 'libre-bite' ),
+				'<a href="' . esc_url( admin_url( 'admin.php?page=lbite-settings&tab=orders_settings' ) ) . '">' . esc_html__( 'Einstellungen → Bestellübersicht', 'libre-bite' ) . '</a>'
+			);
+			?>
+		</li>
+	</ul>
+</div>

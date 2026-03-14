@@ -75,6 +75,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 
 		case 'orders_settings':
 			update_option( 'lbite_dashboard_refresh_interval', isset( $_POST['lbite_dashboard_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_dashboard_refresh_interval'] ) ) : 30 );
+			update_option( 'lbite_reservation_refresh_interval', isset( $_POST['lbite_reservation_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_reservation_refresh_interval'] ) ) : 60 );
 			update_option( 'lbite_notification_sound', isset( $_POST['lbite_notification_sound'] ) ? esc_url_raw( wp_unslash( $_POST['lbite_notification_sound'] ) ) : '' );
 			$lbite_did_save = true;
 			break;
@@ -257,7 +258,8 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				break;
 
 			case 'orders_settings':
-				$lbite_refresh          = get_option( 'lbite_dashboard_refresh_interval', 30 );
+				$lbite_refresh              = get_option( 'lbite_dashboard_refresh_interval', 30 );
+				$lbite_res_refresh          = get_option( 'lbite_reservation_refresh_interval', 60 );
 				$lbite_default_sound_url    = LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3';
 				$lbite_default_sound_exists = file_exists( LBITE_PLUGIN_DIR . 'assets/sounds/notification.mp3' );
 				$lbite_notification_sound   = get_option( 'lbite_notification_sound', $lbite_default_sound_exists ? $lbite_default_sound_url : '' );
@@ -271,10 +273,19 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					<table class="form-table">
 						<?php if ( lbite_feature_enabled( 'enable_kanban_board' ) ) : ?>
 						<tr>
-							<th><?php esc_html_e( 'Aktualisierungsintervall', 'libre-bite' ); ?></th>
+							<th><?php esc_html_e( 'Aktualisierungsintervall Bestellübersicht', 'libre-bite' ); ?></th>
 							<td>
 								<input type="number" min="10" name="lbite_dashboard_refresh_interval" value="<?php echo esc_attr( $lbite_refresh ); ?>" class="small-text"> <?php esc_html_e( 'Sekunden', 'libre-bite' ); ?>
-								<p class="description"><?php esc_html_e( 'Wie oft das Dashboard nach neuen Bestellungen prüft.', 'libre-bite' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Wie oft die Bestellübersicht nach neuen Bestellungen prüft.', 'libre-bite' ); ?></p>
+							</td>
+						</tr>
+						<?php endif; ?>
+						<?php if ( lbite_feature_enabled( 'enable_reservations' ) ) : ?>
+						<tr>
+							<th><?php esc_html_e( 'Aktualisierungsintervall Reservierungsübersicht', 'libre-bite' ); ?></th>
+							<td>
+								<input type="number" min="10" name="lbite_reservation_refresh_interval" value="<?php echo esc_attr( $lbite_res_refresh ); ?>" class="small-text"> <?php esc_html_e( 'Sekunden', 'libre-bite' ); ?>
+								<p class="description"><?php esc_html_e( 'Wie oft die Reservierungsübersicht aktualisiert wird. Standard: 60 Sekunden.', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
 						<?php endif; ?>

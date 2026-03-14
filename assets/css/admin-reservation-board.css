@@ -1,0 +1,214 @@
+/* Reservierungsübersicht CSS */
+
+.lbite-res-board-controls {
+	flex-wrap: wrap;
+	gap: 15px;
+}
+
+.lbite-res-date-nav {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.lbite-res-date-nav input[type="date"] {
+	padding: 4px 8px;
+	border: 1px solid #8c8f94;
+	border-radius: 3px;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.lbite-res-count-badge {
+	background: #2271b1;
+	color: #fff;
+	padding: 4px 14px;
+	border-radius: 20px;
+	font-size: 13px;
+	font-weight: 600;
+	margin-left: auto;
+	white-space: nowrap;
+}
+
+.lbite-res-loading {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 20px 0;
+	color: #666;
+}
+
+.lbite-res-empty-state {
+	background: #fff;
+	border: 2px dashed #ccc;
+	border-radius: 8px;
+	padding: 40px;
+	text-align: center;
+	margin: 20px 0;
+	color: #666;
+}
+
+/* Reservierungsliste */
+#lbite-reservation-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 16px;
+	margin-top: 20px;
+}
+
+/* Reservierungskarte */
+.lbite-res-card {
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 6px;
+	overflow: hidden;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.lbite-res-card__header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 12px 16px;
+	background: #f6f7f7;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.lbite-res-card__time {
+	font-size: 20px;
+	font-weight: 700;
+	color: #1d2327;
+}
+
+.lbite-res-card__guests {
+	font-size: 13px;
+	font-weight: 600;
+	color: #555;
+	background: #e0e0e0;
+	padding: 3px 8px;
+	border-radius: 12px;
+	white-space: nowrap;
+}
+
+.lbite-res-status-badge {
+	margin-left: auto;
+	color: #fff !important;
+	border: none !important;
+	padding: 4px 12px !important;
+	border-radius: 12px !important;
+	font-size: 12px !important;
+	font-weight: 600 !important;
+	cursor: pointer;
+	white-space: nowrap;
+	line-height: 1.4;
+}
+
+.lbite-res-status-badge:hover {
+	opacity: 0.85;
+}
+
+.lbite-res-status-badge:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.lbite-res-card__body {
+	padding: 14px 16px;
+}
+
+.lbite-res-card__name {
+	font-weight: 600;
+	font-size: 15px;
+	margin-bottom: 6px;
+	color: #1d2327;
+}
+
+.lbite-res-card__phone {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 6px;
+}
+
+.lbite-res-card__phone .dashicons {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+	flex-shrink: 0;
+}
+
+.lbite-res-card__notes {
+	font-size: 12px;
+	color: #888;
+	background: #f9f9f9;
+	border-left: 3px solid #ddd;
+	padding: 6px 10px;
+	margin-bottom: 10px;
+	border-radius: 0 4px 4px 0;
+}
+
+.lbite-res-card__table-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 10px;
+	border-top: 1px solid #f0f0f0;
+	padding-top: 10px;
+}
+
+.lbite-res-card__table-row label {
+	font-size: 13px;
+	color: #666;
+	white-space: nowrap;
+}
+
+.lbite-res-table-select {
+	flex: 1;
+	font-size: 13px;
+}
+
+/* Responsive: auf kleinen Bildschirmen einzelne Spalte */
+@media (max-width: 600px) {
+	#lbite-reservation-list {
+		grid-template-columns: 1fr;
+	}
+
+	.lbite-res-board-controls {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.lbite-res-count-badge {
+		margin-left: 0;
+	}
+}
+
+/* Touch-Optimierung: grössere Trefferflächen auf Tablet */
+@media (hover: none) and (pointer: coarse) {
+	.lbite-res-status-badge {
+		padding: 8px 16px !important;
+		font-size: 14px !important;
+	}
+
+	.lbite-res-table-select {
+		font-size: 16px;
+		padding: 8px;
+		min-height: 44px;
+	}
+
+	.lbite-res-card__header {
+		padding: 16px;
+	}
+
+	.lbite-res-date-nav .button {
+		padding: 6px 14px;
+		font-size: 16px;
+	}
+
+	.lbite-res-date-nav input[type="date"] {
+		font-size: 16px;
+		padding: 8px;
+	}
+}
