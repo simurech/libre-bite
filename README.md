@@ -6,13 +6,13 @@
 
 **Die WooCommerce-Erweiterung für Restaurants, Take-Aways, Cafés und Bars.**
 
-[![Stable Tag](https://img.shields.io/badge/stable-1.1.8-blue.svg)](https://github.com/simurech/libre-bite/releases)
+[![Stable Tag](https://img.shields.io/badge/stable-1.1.9-blue.svg)](https://github.com/simurech/libre-bite/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.0%2B-96588a.svg)](https://woocommerce.com/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-8892be.svg)](https://php.net/)
 [![Lizenz](https://img.shields.io/badge/Lizenz-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
-> Libre Bite verwandelt WooCommerce in ein vollständiges Restaurantverwaltungssystem — mit Live-Kanban-Bestellboard, integriertem Kassensystem, Standortverwaltung, individuellem Checkout und mehr. Deine Daten bleiben in deiner eigenen WordPress-Installation. Keine Plattformgebühren. Kein Vendor-Lock-in.
+> Stressfreier Service, volle Teller, glückliche Gäste — Libre Bite ist das WooCommerce-Plugin für Restaurants, Take-Aways und Cafés, die ihre Bestellungen direkt und provisionsfrei abwickeln wollen. Deine Daten bleiben in deiner eigenen WordPress-Installation. Keine Plattformgebühren. Kein Vendor-Lock-in.
 
 ---
 
@@ -20,7 +20,7 @@
 
 **Libre Bite ist vollständig kostenlos nutzbar.** Alle Kernfunktionen — Kassensystem, Bestellboard, Standortverwaltung, Produkt-Add-ons, Zeitfenster — sind ohne Abo verfügbar.
 
-Ein Abo (Libre Bite Pro) ist nur dann erforderlich, wenn du erweiterte Funktionen wie Mehrstandort-Verwaltung, optimierten Checkout, Trinkgeld, Tischbestellung oder Abholungserinnerungen nutzen möchtest. Die Pro-Preise sind bewusst günstig gehalten — günstiger als vergleichbare Restaurant-SaaS-Lösungen, die oft hohe monatliche Gebühren verlangen.
+Ein Abo (Libre Bite Pro) ist nur dann erforderlich, wenn du erweiterte Funktionen wie Mehrstandort-Verwaltung, optimierten Checkout, Trinkgeld, Tischbestellung (QR-Code) oder Abholungserinnerungen nutzen möchtest. Die Pro-Preise sind bewusst günstig gehalten — ein Bruchteil der Provisionen, die Lieferplattformen monatlich einbehalten.
 
 **7 Tage Pro gratis testen — ohne Zahlungspflicht.**
 
@@ -42,12 +42,12 @@ Das bedeutet für dich:
 
 Libre Bite wurde für **Kleinstbetriebe** im Gastgewerbe entwickelt — Betriebe, die eine ernsthafte Software brauchen, aber keine Enterprise-Kosten stemmen können oder wollen.
 
-| Betriebsart | Was Libre Bite hinzufügt |
+| Betriebsart | Was Libre Bite bringt |
 |---|---|
-| Restaurant | Live-Küchenboard, Bestellweiterleitung, Zeitfenster |
-| Take-Away / Schnellgastronomie | Kassensystem für Thekenpersonal, schneller Bestellprozess |
-| Café / Bar | Produkt-Add-ons, Trinkgeldsystem, Bestellnotizen |
-| Gastrobetrieb mit mehreren Standorten | Filialen verwalten, standortbezogenes Kanban (Pro) |
+| Restaurant | Volle Teller ohne Provisionen — Bestellungen direkt, Küche informiert, Gäste zufrieden |
+| Take-Away / Schnellgastronomie | Schneller Thekenverkauf mit POS, Twint & Karte akzeptieren, keine Drittgebühren |
+| Café / Bar | Extras, Trinkgeld und Tagesgeschäft ohne Mehrfach-Tools verwalten |
+| Gastrobetrieb mit mehreren Standorten | Alle Filialen aus einer WordPress-Installation — eigenes Kanban und POS pro Standort (Pro) |
 
 ---
 

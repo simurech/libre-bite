@@ -1,19 +1,19 @@
 === Libre Bite ===
 Contributors: simon61
 Donate link: https://github.com/simurech/libre-bite
-Tags: woocommerce, restaurant, pos, gastronomy, food
+Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Transforms WooCommerce into a restaurant management powerhouse — with POS, live order board, location management, and more.
+Stress-free orders, happy guests, full tables — the WooCommerce plugin built for restaurants, take-aways, and cafés.
 
 == Description ==
 
-**Libre Bite transforms WooCommerce into a complete restaurant management system.** Built on top of WordPress and WooCommerce — the world's most popular open-source e-commerce platform — Libre Bite adds everything a small gastronomy business needs: a live order board, an integrated POS, location management, time slots, and more.
+**More orders, less stress — Libre Bite turns WooCommerce into your restaurant's operational backbone.** No commission fees, no SaaS lock-in: your guests order online or at the table via QR code, pay with card, cash, or Twint, and your kitchen sees every order live on the board — all inside WordPress.
 
 **Start for free. Upgrade only when you need more.**
 
@@ -42,12 +42,12 @@ Libre Bite is a WordPress plugin. It extends WooCommerce — the proven e-commer
 
 = For Whom Is Libre Bite? =
 
-Libre Bite is designed for **small and micro gastronomy businesses** — operations that need serious software without enterprise-level costs.
+Libre Bite is built for **small and micro gastronomy businesses** — operations that want serious software without enterprise-level costs or delivery platform commissions.
 
-* **Restaurants** — Manage dine-in and take-away orders via a single dashboard.
-* **Take-Away & Fast Food** — Simplify counter operations with an integrated POS system.
-* **Cafés & Bars** — Manage products, tips, and daily orders clearly.
-* **Multi-location businesses** — Manage branches centrally in one installation (Pro).
+* **Restaurants** — Take dine-in and take-away orders, keep the kitchen informed, delight guests with smooth service.
+* **Take-Away & Fast Food** — Serve walk-ins fast with an integrated counter POS, accept card and Twint payments, no third-party fees.
+* **Cafés & Bars** — Handle product extras, tips, and order flow without juggling multiple tools.
+* **Multi-location businesses** — Run all branches from one WordPress installation, each with its own order board and POS (Pro).
 
 ---
 
@@ -112,12 +112,14 @@ A browser signal tone when a new order arrives on the Kanban board. Configurable
 
 = Why Libre Bite? =
 
-Most restaurant plugins for WordPress are either too simple (just a menu display) or too expensive (recurring SaaS fees with transaction costs). Libre Bite finds the right balance: a serious operational tool built on the proven WooCommerce foundation — with full data ownership, no transaction fees, and a familiar WordPress interface.
+Delivery platforms take up to 30% commission. Dedicated restaurant SaaS tools charge monthly fees on top of that. Libre Bite is different: own your ordering system, pay no commissions, and keep every franc.
 
-* **Start free** — core features cost nothing
+* **Commission-free ordering** — guests order directly on your website, no platform cut
 * **No transaction fees** — ever
-* **Use any payment gateway** WooCommerce supports
-* **Modular** — only pay for and use what you need
+* **Twint, card, cash** — accept any payment WooCommerce supports
+* **Swiss 5-cent rounding built in** — essential for CHF cash payments
+* **QR code ordering at the table** — guests scan, choose, and pay in seconds (Pro)
+* **Modular** — activate only what your business needs, nothing else
 * **Your data stays yours** — in your own WordPress installation
 * **Affordable Pro plans** — designed for small businesses, not enterprise budgets
 * **7-day free Pro trial** — no payment required
@@ -202,6 +204,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.1.9 =
+* Improvement: Plugin-Beschreibung auf Nutzen statt Features ausgerichtet (Kurzbeschreibung, Description, Why Libre Bite).
+* Improvement: SEO-Keywords für Schweizer Gastronomie eingebaut (Twint, QR-Code-Bestellung, 5-Rappen-Rundung, provisionsfrei).
+* Improvement: Tags auf WP.org optimiert.
 
 = 1.1.8 =
 * Feature: Benachrichtigungs-Badge für ausstehende Reservierungen im Backend-Menü ergänzt.
