@@ -56,9 +56,11 @@
 }
 
 /* Inputs */
+/* input[type="date"].lbite-res-input: Theme-Übersteuerung (z.B. Astra) via erhöhter Spezifität */
 .lbite-res-input,
 .lbite-res-select,
-.lbite-res-textarea {
+.lbite-res-textarea,
+input[type="date"].lbite-res-input {
 	display: block;
 	width: 100%;
 	padding: 10px 12px;

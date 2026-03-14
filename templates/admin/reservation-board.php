@@ -21,7 +21,10 @@ $lbite_saved_location = get_user_meta( get_current_user_id(), 'lbite_reservation
 
 <div class="wrap lbite-reservation-board">
 	<div class="lbite-board-header">
-		<h1><?php esc_html_e( 'Reservierungsübersicht', 'libre-bite' ); ?></h1>
+		<h1><?php esc_html_e( 'Reservierungen', 'libre-bite' ); ?></h1>
+		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_reservation' ) ); ?>" class="button">
+			<?php esc_html_e( 'Alle Reservierungen', 'libre-bite' ); ?>
+		</a>
 	</div>
 
 	<div class="lbite-board-controls lbite-res-board-controls">

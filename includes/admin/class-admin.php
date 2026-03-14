@@ -200,18 +200,11 @@ class LBite_Admin {
 			add_submenu_page(
 				'libre-bite',
 				__( 'Reservierungsübersicht', 'libre-bite' ),
-				__( 'Reservierungsübersicht', 'libre-bite' ),
+				__( 'Reservierungen', 'libre-bite' ),
 				'lbite_manage_options',
 				'lbite-reservation-board',
 				array( $this, 'render_reservation_board_page' )
-			);
-			add_submenu_page(
-				'libre-bite',
-				__( 'Reservierungen', 'libre-bite' ),
-				__( 'Reservierungen', 'libre-bite' ),
-				'lbite_manage_options',
-				'edit.php?post_type=lbite_reservation'
-			);
+			); // CPT-Liste via Link im Template erreichbar
 		}
 
 		// Produkt-Optionen (CPT) – unter WooCommerce/Produkte
@@ -340,9 +333,14 @@ class LBite_Admin {
 	 */
 	public function fix_menu_submenu_file( $submenu_file ) {
 		global $post_type;
-		$lbite_libre_types = array( 'lbite_location', 'lbite_table', 'lbite_reservation' );
-		if ( in_array( $post_type, $lbite_libre_types, true ) ) {
+		// Standorte und Tische: CPT-Liste im Menü vorhanden → direkt darauf zeigen
+		$lbite_cpt_types = array( 'lbite_location', 'lbite_table' );
+		if ( in_array( $post_type, $lbite_cpt_types, true ) ) {
 			return 'edit.php?post_type=' . $post_type;
+		}
+		// Reservierungen: kein eigener CPT-Menüeintrag mehr → Dashboard-Seite hervorheben
+		if ( 'lbite_reservation' === $post_type ) {
+			return 'lbite-reservation-board';
 		}
 		if ( 'lbite_product_option' === $post_type ) {
 			return 'edit.php?post_type=lbite_product_option';

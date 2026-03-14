@@ -145,6 +145,12 @@
 	transition: border-color 0.3s;
 }
 
+/* Theme-Übersteuerung: Astra setzt input[type="date"] auf eine farbige Variable */
+input[type="date"].lbite-select {
+	background: #fff;
+	border-color: #ddd;
+}
+
 .lbite-select:focus {
 	outline: none;
 	border-color: #0073aa;
