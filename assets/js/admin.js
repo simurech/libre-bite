@@ -87,3 +87,31 @@
 	});
 
 })(jQuery);
+
+/* Hilfe-Button & Support-Panel */
+(function() {
+	var btn   = document.getElementById('lbite-help-btn');
+	var panel = document.getElementById('lbite-help-panel');
+	if (!btn || !panel) return;
+
+	function openPanel() {
+		panel.classList.add('is-open');
+		btn.setAttribute('aria-expanded', 'true');
+	}
+	function closePanel() {
+		panel.classList.remove('is-open');
+		btn.setAttribute('aria-expanded', 'false');
+	}
+
+	btn.addEventListener('click', function(e) {
+		if (e.target.classList.contains('lbite-help-panel-close')) {
+			closePanel();
+		} else {
+			panel.classList.contains('is-open') ? closePanel() : openPanel();
+		}
+	});
+
+	document.addEventListener('click', function(e) {
+		if (!btn.contains(e.target)) closePanel();
+	});
+})();

@@ -88,8 +88,11 @@ class LBite_Plugin {
 			$this->load_module( 'product-options', 'LBite_Product_Options' );
 		}
 
-		if ( lbite_feature_enabled( 'enable_nutritional_info' ) ) {
-			$this->load_module( 'nutritional-info', 'LBite_Nutritional_Info' );
+		// Nur in Premium-Version laden (Klassen-Dateien existieren in Free Version nicht).
+		if ( lbite_freemius()->is__premium_only() ) {
+			if ( lbite_feature_enabled( 'enable_nutritional_info' ) || lbite_feature_enabled( 'enable_allergens' ) ) {
+				$this->load_module( 'nutritional-info', 'LBite_Nutritional_Info' );
+			}
 		}
 
 		if ( lbite_feature_enabled( 'enable_kanban_board' ) ) {
@@ -104,19 +107,22 @@ class LBite_Plugin {
 			$this->load_module( 'notifications', 'LBite_Notifications' );
 		}
 
-		if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
-			$this->load_module( 'tables', 'LBite_Tables' );
-		}
+		// Nur in Premium-Version laden (Klassen-Dateien existieren in Free Version nicht).
+		if ( lbite_freemius()->is__premium_only() ) {
+			if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
+				$this->load_module( 'tables', 'LBite_Tables' );
+			}
 
-		if ( lbite_feature_enabled( 'enable_reservations' ) ) {
-			$this->load_module( 'reservations', 'LBite_Reservations' );
-		}
+			if ( lbite_feature_enabled( 'enable_reservations' ) ) {
+				$this->load_module( 'reservations', 'LBite_Reservations' );
+			}
 
-		if ( lbite_feature_enabled( 'enable_table_ordering' ) && lbite_feature_enabled( 'enable_reservations' ) ) {
-			$lbite_res_dashboard_file = LBITE_PLUGIN_DIR . 'includes/modules/reservations/class-reservation-dashboard.php';
-			if ( file_exists( $lbite_res_dashboard_file ) ) {
-				require_once $lbite_res_dashboard_file;
-				$this->modules['reservation-dashboard'] = new LBite_Reservation_Dashboard( $this->loader );
+			if ( lbite_feature_enabled( 'enable_table_ordering' ) && lbite_feature_enabled( 'enable_reservations' ) ) {
+				$lbite_res_dashboard_file = LBITE_PLUGIN_DIR . 'includes/modules/reservations/class-reservation-dashboard.php';
+				if ( file_exists( $lbite_res_dashboard_file ) ) {
+					require_once $lbite_res_dashboard_file;
+					$this->modules['reservation-dashboard'] = new LBite_Reservation_Dashboard( $this->loader );
+				}
 			}
 		}
 	}

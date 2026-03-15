@@ -75,13 +75,23 @@ class LBite_Checkout {
 			$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_location_status', $this, 'ajax_get_location_status' );
 		}
 
-		// Trinkgeld (Feature-abhängig)
-		if ( lbite_feature_enabled( 'enable_tips' ) ) {
-			// Priorität 15: zwischen Bestelltabelle (Prio 10) und Zahlungsbereich (Prio 20).
-			// So landet das Trinkgeld ausserhalb von #payment und wird nicht vom Theme transformiert.
-			$this->loader->add_action( 'woocommerce_checkout_order_review', $this, 'render_tip_selection', 15 );
-			$this->loader->add_action( 'woocommerce_cart_calculate_fees', $this, 'add_tip_fee' );
-			$this->loader->add_action( 'woocommerce_checkout_update_order_meta', $this, 'save_tip_meta' );
+		// Trinkgeld & optimierter Checkout: nur in Premium-Version (dieser Block wird in Gratis-Version entfernt).
+		if ( lbite_freemius()->is__premium_only() ) {
+			if ( lbite_feature_enabled( 'enable_tips' ) ) {
+				// Priorität 15: zwischen Bestelltabelle (Prio 10) und Zahlungsbereich (Prio 20).
+				// So landet das Trinkgeld ausserhalb von #payment und wird nicht vom Theme transformiert.
+				$this->loader->add_action( 'woocommerce_checkout_order_review', $this, 'render_tip_selection__premium_only', 15 );
+				$this->loader->add_action( 'woocommerce_cart_calculate_fees', $this, 'add_tip_fee__premium_only' );
+				$this->loader->add_action( 'woocommerce_checkout_update_order_meta', $this, 'save_tip_meta__premium_only' );
+			}
+
+			if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
+				$this->loader->add_filter( 'wc_get_template', $this, 'maybe_use_optimized_checkout__premium_only', 10, 2 );
+				$this->loader->add_action( 'woocommerce_thankyou', $this, 'render_optimized_thankyou__premium_only', 1 );
+				$this->loader->add_action( 'wp', $this, 'maybe_remove_thankyou_actions__premium_only' );
+				$this->loader->add_filter( 'woocommerce_checkout_fields', $this, 'maybe_make_email_optional__premium_only', 999 );
+				$this->loader->add_action( 'woocommerce_checkout_process', $this, 'maybe_set_placeholder_email__premium_only', 5 );
+			}
 		}
 
 		// Shortcode
@@ -89,15 +99,6 @@ class LBite_Checkout {
 
 		// URL-Parameter verarbeiten
 		$this->loader->add_action( 'template_redirect', $this, 'process_url_parameters' );
-
-		// Optimierter Checkout-Modus (Feature-abhängig)
-		if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
-			$this->loader->add_filter( 'wc_get_template', $this, 'maybe_use_optimized_checkout', 10, 2 );
-			$this->loader->add_action( 'woocommerce_thankyou', $this, 'render_optimized_thankyou', 1 );
-			$this->loader->add_action( 'wp', $this, 'maybe_remove_thankyou_actions' );
-			$this->loader->add_filter( 'woocommerce_checkout_fields', $this, 'maybe_make_email_optional', 999 );
-			$this->loader->add_action( 'woocommerce_checkout_process', $this, 'maybe_set_placeholder_email', 5 );
-		}
 	}
 
 	/**
@@ -373,41 +374,44 @@ class LBite_Checkout {
 		}
 
 		// Checkout JS-Dateien
-		if ( is_checkout() ) {
-			wp_enqueue_script(
-				'lbite-checkout-receipt',
-				LBITE_PLUGIN_URL . 'assets/js/checkout-optimized-receipt.js',
-				array( 'jquery' ),
-				LBITE_VERSION,
-				true
-			);
-
-			if ( lbite_feature_enabled( 'enable_tips' ) ) {
+		// Premium-Assets nur in Premium-Version laden (dieser Block wird in Gratis-Version entfernt).
+		if ( lbite_freemius()->is__premium_only() ) {
+			if ( is_checkout() ) {
 				wp_enqueue_script(
-					'lbite-checkout-tip',
-					LBITE_PLUGIN_URL . 'assets/js/checkout-tip.js',
+					'lbite-checkout-receipt',
+					LBITE_PLUGIN_URL . 'assets/js/checkout-optimized-receipt.js',
 					array( 'jquery' ),
 					LBITE_VERSION,
 					true
 				);
+
+				if ( lbite_feature_enabled( 'enable_tips' ) ) {
+					wp_enqueue_script(
+						'lbite-checkout-tip',
+						LBITE_PLUGIN_URL . 'assets/js/checkout-tip.js',
+						array( 'jquery' ),
+						LBITE_VERSION,
+						true
+					);
+				}
 			}
-		}
 
-		// Optimiertes Checkout CSS laden wenn Feature aktiviert
-		if ( is_checkout() && lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
-			wp_enqueue_style(
-				'lbite-checkout-optimized',
-				LBITE_PLUGIN_URL . 'assets/css/checkout-optimized.css',
-				array( 'lbite-frontend' ),
-				LBITE_VERSION
-			);
+			// Optimiertes Checkout CSS laden wenn Feature aktiviert.
+			if ( is_checkout() && lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
+				wp_enqueue_style(
+					'lbite-checkout-optimized',
+					LBITE_PLUGIN_URL . 'assets/css/checkout-optimized.css',
+					array( 'lbite-frontend' ),
+					LBITE_VERSION
+				);
 
-			wp_enqueue_style(
-				'lbite-thankyou-optimized',
-				LBITE_PLUGIN_URL . 'assets/css/thankyou-optimized.css',
-				array( 'lbite-frontend' ),
-				LBITE_VERSION
-			);
+				wp_enqueue_style(
+					'lbite-thankyou-optimized',
+					LBITE_PLUGIN_URL . 'assets/css/thankyou-optimized.css',
+					array( 'lbite-frontend' ),
+					LBITE_VERSION
+				);
+			}
 		}
 
 		// Branding CSS Custom Properties hinzufügen.
@@ -695,9 +699,9 @@ class LBite_Checkout {
 	}
 
 	/**
-	 * Trinkgeld-Auswahl rendern
+	 * Trinkgeld-Auswahl rendern (nur Premium)
 	 */
-	public function render_tip_selection() {
+	public function render_tip_selection__premium_only() {
 		// Prüfen ob Trinkgeld-Feature aktiviert ist (standardmäßig aktiviert)
 		$custom_fields = get_option( 'lbite_checkout_fields', array() );
 		$tip_enabled = isset( $custom_fields['_enable_tip_selection'] ) ? $custom_fields['_enable_tip_selection'] : true;
@@ -715,23 +719,40 @@ class LBite_Checkout {
 	}
 
 	/**
-	 * Trinkgeld als Fee hinzufügen
+	 * Trinkgeld als Fee hinzufügen (nur Premium)
 	 */
-	public function add_tip_fee() {
+	public function add_tip_fee__premium_only() {
 		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+			return;
+		}
+
+		// WooCommerce-Nonce prüfen: entweder process_checkout oder update_order_review.
+		if ( isset( $_POST['woocommerce-process-checkout-nonce'] ) ) {
+			$nonce_value = sanitize_text_field( wp_unslash( $_POST['woocommerce-process-checkout-nonce'] ) );
+			if ( ! wp_verify_nonce( $nonce_value, 'woocommerce-process_checkout' ) ) {
+				return;
+			}
+		} elseif ( isset( $_POST['security'] ) ) {
+			$nonce_value = sanitize_text_field( wp_unslash( $_POST['security'] ) );
+			if ( ! wp_verify_nonce( $nonce_value, 'update-order-review' ) ) {
+				return;
+			}
+		} else {
 			return;
 		}
 
 		// Formulardaten ermitteln: Bei update_order_review als serialisierter String in post_data,
 		// bei process_checkout direkt in $_POST.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce wird im jeweiligen AJAX-Handler geprüft.
 		if ( isset( $_POST['post_data'] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- post_data ist ein serialisierter WooCommerce-Formulardatenstring; Sanitierung würde parse_str() zerstören. Felder werden nach dem Parsen einzeln validiert.
-		parse_str( wp_unslash( $_POST['post_data'] ), $form_data );
+			parse_str( wp_unslash( $_POST['post_data'] ), $form_data );
 		} else {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$form_data = wp_unslash( $_POST );
+			// Nur benötigte Felder extrahieren (nicht ganzen $_POST kopieren).
+			$form_data = array(
+				'lbite_tip_type'       => isset( $_POST['lbite_tip_type'] ) ? wp_unslash( $_POST['lbite_tip_type'] ) : '',
+				'lbite_tip_percentage' => isset( $_POST['lbite_tip_percentage'] ) ? wp_unslash( $_POST['lbite_tip_percentage'] ) : '',
+				'lbite_tip_custom'     => isset( $_POST['lbite_tip_custom'] ) ? wp_unslash( $_POST['lbite_tip_custom'] ) : '',
+			);
 		}
 
 		if ( ! isset( $form_data['lbite_tip_type'] ) || 'none' === $form_data['lbite_tip_type'] ) {
@@ -830,11 +851,11 @@ class LBite_Checkout {
 	}
 
 	/**
-	 * Trinkgeld in Bestellung speichern
+	 * Trinkgeld in Bestellung speichern (nur Premium)
 	 *
 	 * @param int $order_id Bestellungs-ID
 	 */
-	public function save_tip_meta( $order_id ) {
+	public function save_tip_meta__premium_only( $order_id ) {
 		// Nonce wird von WooCommerce beim Checkout verifiziert.
 		if ( ! isset( $_POST['woocommerce-process-checkout-nonce'] )
 			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['woocommerce-process-checkout-nonce'] ) ), 'woocommerce-process_checkout' ) ) {
@@ -1054,13 +1075,13 @@ class LBite_Checkout {
 	}
 
 	/**
-	 * Optimiertes Checkout-Template verwenden wenn aktiviert
+	 * Optimiertes Checkout-Template verwenden wenn aktiviert (nur Premium)
 	 *
 	 * @param string $template      Template-Pfad.
 	 * @param string $template_name Template-Name.
 	 * @return string
 	 */
-	public function maybe_use_optimized_checkout( $template, $template_name ) {
+	public function maybe_use_optimized_checkout__premium_only( $template, $template_name ) {
 		if ( 'checkout/form-checkout.php' !== $template_name ) {
 			return $template;
 		}
@@ -1081,9 +1102,9 @@ class LBite_Checkout {
 	}
 
 	/**
-	 * WooCommerce Thank-You Actions entfernen wenn optimierter Modus aktiv
+	 * WooCommerce Thank-You Actions entfernen wenn optimierter Modus aktiv (nur Premium)
 	 */
-	public function maybe_remove_thankyou_actions() {
+	public function maybe_remove_thankyou_actions__premium_only() {
 		if ( ! is_wc_endpoint_url( 'order-received' ) ) {
 			return;
 		}
@@ -1119,11 +1140,11 @@ class LBite_Checkout {
 	}
 
 	/**
-	 * Optimierte Thank-You-Seite rendern
+	 * Optimierte Thank-You-Seite rendern (nur Premium)
 	 *
 	 * @param int $order_id Bestellungs-ID.
 	 */
-	public function render_optimized_thankyou( $order_id ) {
+	public function render_optimized_thankyou__premium_only( $order_id ) {
 		$checkout_mode = get_option( 'lbite_checkout_mode', 'standard' );
 
 		if ( 'optimized' !== $checkout_mode ) {
@@ -1141,12 +1162,12 @@ class LBite_Checkout {
 	}
 
 	/**
-	 * E-Mail-Feld im optimierten Modus als optional markieren
+	 * E-Mail-Feld im optimierten Modus als optional markieren (nur Premium)
 	 *
 	 * @param array $fields Checkout-Felder.
 	 * @return array
 	 */
-	public function maybe_make_email_optional( $fields ) {
+	public function maybe_make_email_optional__premium_only( $fields ) {
 		$checkout_mode = get_option( 'lbite_checkout_mode', 'standard' );
 
 		if ( 'optimized' !== $checkout_mode ) {
@@ -1162,9 +1183,9 @@ class LBite_Checkout {
 	}
 
 	/**
-	 * Platzhalter-E-Mail setzen wenn im optimierten Modus keine E-Mail angegeben
+	 * Platzhalter-E-Mail setzen wenn im optimierten Modus keine E-Mail angegeben (nur Premium)
 	 */
-	public function maybe_set_placeholder_email() {
+	public function maybe_set_placeholder_email__premium_only() {
 		$checkout_mode = get_option( 'lbite_checkout_mode', 'standard' );
 
 		if ( 'optimized' !== $checkout_mode ) {

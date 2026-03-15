@@ -38,8 +38,10 @@ class LBite_Notifications {
 		// E-Mail-Templates
 		$this->loader->add_filter( 'woocommerce_email_classes', $this, 'add_custom_emails' );
 
-		// Pickup-Reminder Cron
-		$this->loader->add_action( 'lbite_send_pickup_reminders', $this, 'send_pickup_reminders' );
+		// Pickup-Reminder Cron: nur in Premium-Version (dieser Block wird in Gratis-Version entfernt).
+		if ( lbite_freemius()->is__premium_only() ) {
+			$this->loader->add_action( 'lbite_send_pickup_reminders', $this, 'send_pickup_reminders__premium_only' );
+		}
 	}
 
 	/**
@@ -56,9 +58,9 @@ class LBite_Notifications {
 	}
 
 	/**
-	 * Pickup-Reminder versenden
+	 * Pickup-Reminder versenden (nur Premium)
 	 */
-	public function send_pickup_reminders() {
+	public function send_pickup_reminders__premium_only() {
 		if ( ! get_option( 'lbite_email_pickup_reminder', true ) ) {
 			return;
 		}

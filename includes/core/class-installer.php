@@ -165,7 +165,8 @@ class LBite_Installer {
 		// Tabelle für Standorte (wenn nicht Custom Post Type verwendet wird)
 		// Aktuell verwenden wir Custom Post Types, daher keine separate Tabelle nötig
 
-		// upgrade.php wird fuer dbDelta() benoetigt (offizielle WordPress-Methode fuer DB-Schema-Updates).
+		// Offiziell dokumentierter Weg fuer dbDelta() – upgrade.php ist explizit fuer Plugin-Nutzung
+		// vorgesehen: https://developer.wordpress.org/reference/functions/dbdelta/
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	}
 

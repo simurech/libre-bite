@@ -270,12 +270,8 @@ class LBite_Features {
 		$is_premium_feature = isset( self::$feature_definitions[ $feature ]['premium'] ) && self::$feature_definitions[ $feature ]['premium'];
 
 		if ( $is_premium_feature ) {
-			if ( function_exists( 'lbite_freemius' ) ) {
-				/**
-				 * Wir nutzen hier can_use_premium_code__premium_only().
-				 * Dieser Block wird vom Freemius-Generator in der Gratis-Version automatisch entfernt.
-				 */
-
+			// Dieser Block wird vom Freemius-Generator in der Gratis-Version automatisch entfernt.
+			if ( lbite_freemius()->is__premium_only() ) {
 				// Entwickler-Override via Konstante (nur in Premium-Version verfügbar)
 				if ( defined( 'LBITE_PREMIUM_OVERRIDE' ) && LBITE_PREMIUM_OVERRIDE ) {
 					return apply_filters( 'lbite_feature_enabled', true, $feature );
@@ -285,7 +281,7 @@ class LBite_Features {
 					return apply_filters( 'lbite_feature_enabled', false, $feature );
 				}
 			} else {
-				// Falls Freemius nicht geladen ist (Sicherheits-Fallback)
+				// Gratis-Version: Premium-Features immer deaktiviert.
 				return apply_filters( 'lbite_feature_enabled', false, $feature );
 			}
 		}

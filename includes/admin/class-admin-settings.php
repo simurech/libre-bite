@@ -79,7 +79,38 @@ class LBite_Admin_Settings {
 		if ( ! is_array( $input ) ) {
 			return array();
 		}
-		return $input;
+
+		$sanitized = array();
+
+		if ( isset( $input['lbite_custom_plugin_name'] ) ) {
+			$sanitized['lbite_custom_plugin_name'] = sanitize_text_field( $input['lbite_custom_plugin_name'] );
+		}
+
+		if ( isset( $input['lbite_custom_role_names'] ) && is_array( $input['lbite_custom_role_names'] ) ) {
+			$sanitized['lbite_custom_role_names'] = array();
+			foreach ( $input['lbite_custom_role_names'] as $role_key => $role_name ) {
+				$sanitized['lbite_custom_role_names'][ sanitize_key( $role_key ) ] = sanitize_text_field( $role_name );
+			}
+		}
+
+		if ( isset( $input['lbite_disabled_roles'] ) && is_array( $input['lbite_disabled_roles'] ) ) {
+			$sanitized['lbite_disabled_roles'] = array_map( 'sanitize_text_field', $input['lbite_disabled_roles'] );
+		}
+
+		if ( isset( $input['lbite_allowed_standard_roles'] ) && is_array( $input['lbite_allowed_standard_roles'] ) ) {
+			$sanitized['lbite_allowed_standard_roles'] = array_map( 'sanitize_key', $input['lbite_allowed_standard_roles'] );
+		}
+
+		if ( isset( $input['lbite_menu_visibility'] ) && is_array( $input['lbite_menu_visibility'] ) ) {
+			$sanitized['lbite_menu_visibility'] = array();
+			foreach ( $input['lbite_menu_visibility'] as $role => $menus ) {
+				if ( is_array( $menus ) ) {
+					$sanitized['lbite_menu_visibility'][ sanitize_key( $role ) ] = array_map( 'sanitize_text_field', $menus );
+				}
+			}
+		}
+
+		return $sanitized;
 	}
 
 	/**

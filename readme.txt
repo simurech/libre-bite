@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.2.1 =
+* Fix: Freemius-Deployment-Strategie korrigiert — Premium-Code korrekt mit @fs_premium_only-Header und is__premium_only()-Guards markiert, sodass die von Freemius generierte Free Version keinerlei Premium-Code enthält.
+* Fix: Inline <style>- und <script>-Tags in class-admin.php in bestehende enqueued Stylesheet- und Script-Dateien ausgelagert.
+* Fix: sanitize_admin_settings() implementiert — alle Felder werden nun mit den passenden WordPress-Sanitize-Funktionen bereinigt.
+* Fix: add_tip_fee() prüft nun explizit den WooCommerce-Nonce (woocommerce-process_checkout bzw. update-order-review) und extrahiert nur die benötigten $_POST-Felder statt den ganzen Array zu kopieren.
 
 = 1.2.0 =
 * Feature: Reservierungs-Dashboard — neue Tagesansicht (Libre Bite → Reservierungsübersicht) mit Standort-Dropdown, Datums-Navigation, Status-Badge und Tisch-Zuweisung direkt auf der Karte.
