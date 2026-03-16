@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,9 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.2.2 =
+* Fix: @fs_premium_only-Header um Tischmodul und zugehörige Assets erweitert — /includes/modules/tables/, /templates/admin/table-plan.php, admin-tables.js, admin-table-plan.js, reservation-board.js, admin-tables.css, admin-table-plan.css, admin-reservation-board.css werden nun korrekt aus der von Freemius generierten Free Version entfernt.
 
 = 1.2.1 =
 * Fix: Freemius-Deployment-Strategie korrigiert — Premium-Code korrekt mit @fs_premium_only-Header und is__premium_only()-Guards markiert, sodass die von Freemius generierte Free Version keinerlei Premium-Code enthält.
