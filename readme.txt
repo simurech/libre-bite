@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,13 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.2.5 =
+* Fix: Zeitzonenfehler in Kanban-Sortierung und Auto-Statuswechsel behoben — strtotime() durch lbite_local_time_to_timestamp() ersetzt (class-order-dashboard.php, Zeilen 192–193 und 531).
+* Fix: Anzeigefehler «Zuletzt geändert» in Order-Meta-Box korrigiert — strtotime() auf current_time('mysql')-Strings durch lbite_local_time_to_timestamp() ersetzt.
+* Fix: Heutige Bestellungen im Dashboard-Widget zählten bei abweichender Server/WordPress-Timezone falsch — strtotime('today') durch timezone-bewusstes Mitternacht-Timestamp ersetzt.
+* Fix: DateTime::createFromFormat() in checkout-location-time.php ohne Timezone-Parameter — auf DateTimeImmutable::createFromFormat() mit wp_timezone() umgestellt.
+* Improvement: Produkt-Optionen im Warenkorb werden nun als ein gruppierter Eintrag «Optionen» angezeigt statt als separate «Option»-Zeilen pro Auswahl.
 
 = 1.2.4 =
 * Fix: Zeitzonenfehler bei Checkout-Bestätigung, Kanban-Board und E-Mails behoben — lokale Zeit-Strings werden nun korrekt mit lbite_local_time_to_timestamp() in Unix-Timestamps umgewandelt statt mit strtotime() (Doppelkonvertierung).

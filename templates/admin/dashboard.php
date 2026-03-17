@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$lbite_today_orders = wc_get_orders(
 					array(
 						'limit'        => 50,
-						'date_created' => '>' . strtotime( 'today' ),
+						'date_created' => '>' . ( new DateTimeImmutable( wp_date( 'Y-m-d' ) . ' 00:00:00', wp_timezone() ) )->getTimestamp(),
 						'return'       => 'ids',
 					)
 				);

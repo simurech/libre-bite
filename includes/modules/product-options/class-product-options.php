@@ -331,20 +331,23 @@ class LBite_Product_Options {
 	 */
 	public function display_cart_item_data( $item_data, $cart_item ) {
 		if ( ! empty( $cart_item['lbite_options'] ) ) {
+			$option_labels = array();
 			foreach ( $cart_item['lbite_options'] as $option_id ) {
 				$option = get_post( $option_id );
 				if ( $option ) {
 					$price = get_post_meta( $option_id, '_lbite_price', true );
-					$value = $option->post_title;
+					$label = $option->post_title;
 					if ( $price ) {
-						$value .= ' (+' . wc_price( $price ) . ')';
+						$label .= ' (+' . wp_strip_all_tags( wc_price( $price ) ) . ')';
 					}
-
-					$item_data[] = array(
-						'name'  => __( 'Option', 'libre-bite' ),
-						'value' => $value,
-					);
+					$option_labels[] = $label;
 				}
+			}
+			if ( ! empty( $option_labels ) ) {
+				$item_data[] = array(
+					'name'  => __( 'Optionen', 'libre-bite' ),
+					'value' => implode( ', ', $option_labels ),
+				);
 			}
 		}
 

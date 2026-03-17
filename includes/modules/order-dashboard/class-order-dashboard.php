@@ -189,8 +189,8 @@ class LBite_Order_Dashboard {
 				$a_pickup = $a->get_meta( '_lbite_pickup_time', true );
 				$b_pickup = $b->get_meta( '_lbite_pickup_time', true );
 
-				$a_ts = ( 'later' === $a_type && $a_pickup ) ? strtotime( $a_pickup ) : $a->get_date_created()->getTimestamp();
-				$b_ts = ( 'later' === $b_type && $b_pickup ) ? strtotime( $b_pickup ) : $b->get_date_created()->getTimestamp();
+				$a_ts = ( 'later' === $a_type && $a_pickup ) ? lbite_local_time_to_timestamp( $a_pickup ) : $a->get_date_created()->getTimestamp();
+				$b_ts = ( 'later' === $b_type && $b_pickup ) ? lbite_local_time_to_timestamp( $b_pickup ) : $b->get_date_created()->getTimestamp();
 
 				return $a_ts - $b_ts;
 			}
@@ -528,7 +528,7 @@ class LBite_Order_Dashboard {
 				continue;
 			}
 
-			$pickup_timestamp = strtotime( $pickup_time );
+			$pickup_timestamp = lbite_local_time_to_timestamp( $pickup_time );
 			$prep_start_time  = $pickup_timestamp - ( $prep_time * 60 );
 
 			// Wenn Vorbereitungszeit erreicht ist
@@ -646,7 +646,7 @@ class LBite_Order_Dashboard {
 			<?php if ( $status_changed ) : ?>
 				<p>
 					<small><?php esc_html_e( 'Zuletzt geändert:', 'libre-bite' ); ?><br>
-					<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $status_changed ) ) ); ?></small>
+					<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), lbite_local_time_to_timestamp( $status_changed ) ) ); ?></small>
 				</p>
 			<?php endif; ?>
 

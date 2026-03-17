@@ -70,7 +70,7 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 								</svg>
 								<?php
 								// Datum und Zeit formatieren
-								$datetime = DateTime::createFromFormat( 'Y-m-d H:i', $lbite_pickup_time );
+								$datetime = DateTimeImmutable::createFromFormat( 'Y-m-d H:i', $lbite_pickup_time, wp_timezone() );
 								$formatted_date = $datetime ? $datetime->format( 'd.m.Y' ) : '';
 								$formatted_time = $datetime ? $datetime->format( 'H:i' ) : $lbite_pickup_time;
 								?>
