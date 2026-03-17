@@ -68,7 +68,7 @@ if ( $lbite_table_id ) {
 			<?php elseif ( 'later' === $lbite_order_type && $lbite_pickup_time ) : ?>
 				<p>
 					<strong><?php esc_html_e( 'Abholung:', 'libre-bite' ); ?></strong>
-					<?php echo esc_html( wp_date( 'd.m.Y H:i', strtotime( $lbite_pickup_time ) ) ); ?> <?php esc_html_e( 'Uhr', 'libre-bite' ); ?>
+					<?php echo esc_html( wp_date( 'd.m.Y H:i', lbite_local_time_to_timestamp( $lbite_pickup_time ) ) ); ?> <?php esc_html_e( 'Uhr', 'libre-bite' ); ?>
 				</p>
 			<?php else : ?>
 				<p>

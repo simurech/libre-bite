@@ -30,7 +30,7 @@ echo "\n\n";
 
 if ( $lbite_pickup_time ) {
 	echo esc_html__( 'Abholzeit:', 'libre-bite' ) . ' ';
-	echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $lbite_pickup_time ) ) );
+	echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), lbite_local_time_to_timestamp( $lbite_pickup_time ) ) );
 	echo "\n";
 }
 

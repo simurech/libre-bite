@@ -278,7 +278,7 @@ class LBite_Order_Dashboard {
 	 * @return string
 	 */
 	private function format_pickup_time_for_display( $pickup_time ) {
-		$ts    = strtotime( $pickup_time );
+		$ts    = lbite_local_time_to_timestamp( $pickup_time );
 		$today = wp_date( 'Y-m-d' );
 		$day   = wp_date( 'Y-m-d', $ts );
 

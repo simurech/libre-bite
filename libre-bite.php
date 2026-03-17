@@ -3,7 +3,7 @@
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://github.com/simurech/libre-bite
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
- * Version:           1.2.3
+ * Version:           1.2.4
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Simon Urech
@@ -74,7 +74,7 @@ if ( function_exists( 'lbite_freemius' ) ) {
 }
 
 // Plugin-Konstanten definieren
-define( 'LBITE_VERSION', '1.2.3' );
+define( 'LBITE_VERSION', '1.2.4' );
 define( 'LBITE_PLUGIN_FILE', __FILE__ );
 define( 'LBITE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LBITE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -208,6 +208,27 @@ function lbite_deactivate_plugin() {
 	LBite_Installer::deactivate();
 }
 register_deactivation_hook( __FILE__, 'lbite_deactivate_plugin' );
+
+/**
+ * Lokalen Zeit-String timezone-korrekt in Unix-Timestamp umwandeln.
+ * Verhindert Doppelkonvertierung bei strtotime() + wp_date()/date_i18n():
+ * wp_date() speichert Zeiten als lokale Strings; strtotime() würde diese als UTC
+ * interpretieren, wodurch wp_date() bei der Anzeige den Offset nochmals addiert.
+ *
+ * @param string $time_str Lokaler Zeit-String (z.B. «2024-01-15 14:30»).
+ * @return int Unix-Timestamp (UTC), 0 bei ungültigem Input.
+ */
+function lbite_local_time_to_timestamp( $time_str ) {
+	if ( empty( $time_str ) ) {
+		return 0;
+	}
+	try {
+		$dt = new DateTimeImmutable( $time_str, wp_timezone() );
+		return $dt->getTimestamp();
+	} catch ( Exception $e ) {
+		return 0;
+	}
+}
 
 /**
  * HPOS-Kompatibilität deklarieren

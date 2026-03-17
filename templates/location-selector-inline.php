@@ -82,7 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				if ( $location ) {
 					echo esc_html( $location->post_title );
 					if ( 'later' === $lbite_order_type && $lbite_pickup_time ) {
-						echo ' - ' . esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $lbite_pickup_time ) ) );
+						echo ' - ' . esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), lbite_local_time_to_timestamp( $lbite_pickup_time ) ) );
 					} elseif ( 'now' === $lbite_order_type ) {
 						echo ' - ' . esc_html__( 'Sofort', 'libre-bite' );
 					}

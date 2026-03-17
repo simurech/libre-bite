@@ -27,7 +27,7 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
 <?php if ( $lbite_pickup_time ) : ?>
 	<p>
 		<strong><?php esc_html_e( 'Abholzeit:', 'libre-bite' ); ?></strong>
-		<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $lbite_pickup_time ) ) ); ?>
+		<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), lbite_local_time_to_timestamp( $lbite_pickup_time ) ) ); ?>
 	</p>
 <?php endif; ?>
 

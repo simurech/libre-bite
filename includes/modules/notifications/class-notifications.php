@@ -95,7 +95,7 @@ class LBite_Notifications {
 				continue;
 			}
 
-			$pickup_timestamp = strtotime( $pickup_time );
+			$pickup_timestamp = lbite_local_time_to_timestamp( $pickup_time );
 			$reminder_timestamp = $pickup_timestamp - ( $reminder_time * 60 );
 
 			// Wenn Reminder-Zeit erreicht ist

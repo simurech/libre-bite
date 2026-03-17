@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.2.4 =
+* Fix: Zeitzonenfehler bei Checkout-Bestätigung, Kanban-Board und E-Mails behoben — lokale Zeit-Strings werden nun korrekt mit lbite_local_time_to_timestamp() in Unix-Timestamps umgewandelt statt mit strtotime() (Doppelkonvertierung).
+* Fix: Zeitzonenfehler bei POS-Bestellungen behoben (gleiche Ursache wie oben).
+* Fix: Uhrzeit-Auswahlfelder im Checkout: Text wurde auf iOS/Safari unten abgeschnitten — line-height und height: auto ergänzt.
 
 = 1.2.3 =
 * Improvement: Capability-Dokumentation in class-roles.php erweitert — alle lbite_-Capabilities mit Inline-Kommentaren zur Funktion versehen.

@@ -111,9 +111,9 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 				<span class="lbite-detail-value">
 					<?php
 					if ( 'later' === $lbite_order_type && $lbite_pickup_time ) {
-						echo esc_html( wp_date( 'd.m.Y', strtotime( $lbite_pickup_time ) ) );
+						echo esc_html( wp_date( 'd.m.Y', lbite_local_time_to_timestamp( $lbite_pickup_time ) ) );
 						echo ' ' . esc_html__( 'um', 'libre-bite' ) . ' ';
-						echo esc_html( wp_date( 'H:i', strtotime( $lbite_pickup_time ) ) );
+						echo esc_html( wp_date( 'H:i', lbite_local_time_to_timestamp( $lbite_pickup_time ) ) );
 						echo ' ' . esc_html__( 'Uhr', 'libre-bite' );
 					} else {
 						esc_html_e( 'Sobald fertig', 'libre-bite' );

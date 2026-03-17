@@ -140,6 +140,8 @@
 	border: 1px solid #ddd;
 	border-radius: 6px;
 	font-size: 14px;
+	line-height: 1.5;
+	height: auto;
 	background: #fff;
 	cursor: pointer;
 	transition: border-color 0.3s;
