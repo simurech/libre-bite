@@ -13,7 +13,7 @@
  * Text Domain:       libre-bite
  * WC requires at least: 8.0
  * WC tested up to: 9.0
- * @fs_premium_only /includes/modules/nutritional-info/, /includes/modules/reservations/, /includes/modules/tables/, /templates/checkout-optimized.php, /templates/admin/reservation-board.php, /templates/admin/table-plan.php, /assets/js/reservation-form.js, /assets/js/admin-tables.js, /assets/js/admin-table-plan.js, /assets/js/reservation-board.js, /assets/css/reservation-form.css, /assets/css/admin-tables.css, /assets/css/admin-table-plan.css, /assets/css/admin-reservation-board.css
+ * @fs_premium_only /includes/modules/nutritional-info/, /includes/modules/reservations/, /includes/modules/tables/, /templates/checkout-optimized.php, /templates/admin/reservation-board.php, /templates/admin/table-plan.php, /templates/frontend/reservation-form.php, /templates/admin/help-partials/reservations.php, /templates/admin/help-partials/tables.php, /assets/js/reservation-form.js, /assets/js/admin-tables.js, /assets/js/admin-table-plan.js, /assets/js/reservation-board.js, /assets/css/reservation-form.css, /assets/css/admin-tables.css, /assets/css/admin-table-plan.css, /assets/css/admin-reservation-board.css
  */
 
 // Direkten Dateizugriff verhindern.
