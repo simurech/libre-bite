@@ -187,13 +187,19 @@ Libre Bite übernimmt die komplette Einrichtung: Installation, Konfiguration, Ho
 
 | Feature | Status |
 |---|---|
-| Tischreservierungen (Frontend-Formular, E-Mail-Flow, Backend-Verwaltung) | **Umgesetzt** (v1.1.4) |
-| Tisch-Plan (visueller Grundriss, Drag & Drop, Live-Belegung) | **Umgesetzt** (v1.1.4) |
-| Beleg als PDF auf der Bestellbestätigung | **Umgesetzt** (v1.1.7) |
-| Benachrichtigungs-Counter im Backend-Menü (Bestellungen & Reservierungen) | **Umgesetzt** (v1.1.8) |
-| Kommunikation & Marketing verbessern | **Umgesetzt** (v1.1.9) |
-| Gerätkompatibilität & Betriebsmodelle dokumentieren | **Umgesetzt** (v1.1.10) |
 | Reservierungs-Dashboard (Tagesansicht) | **Umgesetzt** (v1.2.0) |
+| Zeitzonenfehler bei Checkout/Kanban/E-Mails beheben | **Umgesetzt** (v1.2.4) |
+| Produkt-Optionen: Mehrfachauswahl | Geplant |
+| Öffnungszeiten: 2 Zeitfenster pro Tag (Mittagspause) | Geplant |
+| Öffnungszeiten: Feiertage (zentral, pro Standort wählbar) | Geplant |
+| Öffnungszeiten: Google Maps API-Integration | Geplant (Pro) |
+| Zeitslots: Blocker (erste/letzte Bestellung n Minuten nach/vor Öffnung) | Geplant (Pro) |
+| Rechteverwaltung pro Standort (POS + Kanban) | Geplant (Pro) |
+| Vorbestellungen: ausgegraut + gesperrt + Sichtbarkeits-Checkbox | Geplant (Pro) |
+| Optimierter Checkout: Beleg-Frage entfernen, Buttons auf Bestätigungsseite | Geplant (Pro) |
+| Beleg nachträglich per E-Mail senden (aus Bestellansicht) | Geplant (Pro) |
+| Trinkgeld: Fixbeträge + konfigurierbare Texte/Titel | Geplant (Pro) |
+| Reservierungen: Tischübersicht, Auto-Freigabe, Zeitfenster, Auto-Zuweisung | Geplant (Pro) |
 | Branding-Ausbau (Farbpresets, Live-Vorschau) | Geplant (v2.0) |
 
 ---
