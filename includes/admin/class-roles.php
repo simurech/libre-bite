@@ -19,27 +19,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 class LBite_Roles {
 
 	/**
-	 * Alle Plugin-spezifischen Capabilities
+	 * Alle Plugin-spezifischen Capabilities mit zugewiesenen Rollen.
+	 *
+	 * Alle Capabilities tragen das Präfix «lbite_» und werden ausschliesslich
+	 * von diesem Plugin registriert, geprüft und beim Deinstallieren wieder entfernt.
+	 * Es werden keine WordPress-Kern-Capabilities überschrieben oder erweitert.
+	 *
+	 * Rollen: lbite_staff (Personal), administrator, shop_manager
 	 *
 	 * @var array
 	 */
 	private static $capabilities = array(
-		// Personal-Capabilities
-		'lbite_view_dashboard'   => array( 'lbite_staff', 'administrator' ),
-		'lbite_view_orders'      => array( 'lbite_staff', 'administrator' ),
-		'lbite_manage_orders'    => array( 'lbite_staff', 'administrator' ),
-		'lbite_use_pos'          => array( 'lbite_staff', 'administrator' ),
+		// Personal-Capabilities: lbite_staff + administrator + shop_manager
+		'lbite_view_dashboard'   => array( 'lbite_staff', 'administrator' ), // Bestellübersicht (Kanban-Board) einsehen
+		'lbite_view_orders'      => array( 'lbite_staff', 'administrator' ), // Einzelne Bestellungen einsehen
+		'lbite_manage_orders'    => array( 'lbite_staff', 'administrator' ), // Bestellstatus ändern und Bestellungen verwalten
+		'lbite_use_pos'          => array( 'lbite_staff', 'administrator' ), // POS-Terminal (Point of Sale) verwenden
 
-		// Admin-Capabilities (nur administrator)
-		'lbite_manage_locations' => array( 'administrator' ),
-		'lbite_manage_products'  => array( 'administrator' ),
-		'lbite_manage_options'   => array( 'administrator' ),
-		'lbite_manage_checkout'  => array( 'administrator' ),
-		'lbite_manage_settings'  => array( 'administrator' ),
-		'lbite_manage_features'  => array( 'administrator' ),
-		'lbite_manage_roles'     => array( 'administrator' ),
-		'lbite_manage_support'   => array( 'administrator' ),
-		'lbite_view_debug'       => array( 'administrator' ),
+		// Admin-Capabilities: nur administrator + shop_manager
+		'lbite_manage_locations' => array( 'administrator' ), // Standorte (CPT lbite_location) erstellen und bearbeiten
+		'lbite_manage_products'  => array( 'administrator' ), // Plugin-spezifische Produktdaten (Nährwerte, Allergene) bearbeiten
+		'lbite_manage_options'   => array( 'administrator' ), // Produkt-Optionen (CPT lbite_product_option) verwalten
+		'lbite_manage_checkout'  => array( 'administrator' ), // Checkout-Einstellungen (Zeitfenster, Felder, Trinkgeld) ändern
+		'lbite_manage_settings'  => array( 'administrator' ), // Allgemeine Plugin-Einstellungen speichern
+		'lbite_manage_features'  => array( 'administrator' ), // Feature-Toggles aktivieren und deaktivieren
+		'lbite_manage_roles'     => array( 'administrator' ), // Rollenbezeichnungen und Menü-Sichtbarkeit anpassen
+		'lbite_manage_support'   => array( 'administrator' ), // Support-Kontaktdaten hinterlegen
+		'lbite_view_debug'       => array( 'administrator' ), // Debug-Informationen im Hilfe-Bereich einsehen
 	);
 
 	/**

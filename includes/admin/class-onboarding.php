@@ -50,7 +50,7 @@ class LBite_Onboarding {
 		}
 
 		// Nur wenn kein Bulk-Aktivierungs-Request
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter zur Erkennung von Bulk-Aktivierungen; kein DB-Schreibzugriff.
 		if ( isset( $_GET['activate-multi'] ) ) {
 			return;
 		}
@@ -137,7 +137,7 @@ class LBite_Onboarding {
 			wp_die( -1 );
 		}
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON-String wird nach dem Decode über sanitize_key() und sanitize_text_field() validiert.
 		$features_json = isset( $_POST['features'] ) ? wp_unslash( $_POST['features'] ) : '';
 		$features      = json_decode( $features_json, true );
 

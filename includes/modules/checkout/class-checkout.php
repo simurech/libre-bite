@@ -478,9 +478,9 @@ class LBite_Checkout {
 
 		// Standort via URL-Parameter setzen (?location=123).
 		// Oeffentlicher Deep-Link, keine Nonce moeglich (z.B. QR-Code, Flyer).
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link (QR-Code/Flyer); Wert wird nur in Session geschrieben, kein DB-Write.
 		if ( isset( $_GET['location'] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link (QR-Code/Flyer); Wert wird nur in Session geschrieben, kein DB-Write.
 			$location_id = intval( $_GET['location'] );
 			$location = get_post( $location_id );
 
@@ -491,9 +491,9 @@ class LBite_Checkout {
 
 		// Bestelltyp via URL-Parameter setzen (?order_type=now oder ?order_type=later).
 		// Oeffentlicher Deep-Link, keine Nonce moeglich.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; Wert wird nur in Session geschrieben, kein DB-Write.
 		if ( isset( $_GET['order_type'] ) && in_array( sanitize_text_field( wp_unslash( $_GET['order_type'] ) ), array( 'now', 'later' ), true ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; Wert wird nur in Session geschrieben, kein DB-Write.
 			WC()->session->set( 'lbite_order_type', sanitize_text_field( wp_unslash( $_GET['order_type'] ) ) );
 		}
 	}

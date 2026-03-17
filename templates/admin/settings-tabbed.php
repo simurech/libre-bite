@@ -91,7 +91,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			foreach ( $lbite_pos_defaults as $lbite_pos_default ) {
 				$lbite_pm_key     = $lbite_pos_default['key'];
 				$lbite_pm_enabled = isset( $_POST['lbite_pm_enabled'][ $lbite_pm_key ] );
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wert wird unmittelbar durch sanitize_text_field() und wp_unslash() bereinigt.
 				$lbite_pm_label = isset( $_POST['lbite_pm_label'][ $lbite_pm_key ] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pm_label'][ $lbite_pm_key ] ) ) : $lbite_pos_default['label'];
 				if ( empty( $lbite_pm_label ) ) {
 					$lbite_pm_label = $lbite_pos_default['label'];
@@ -134,7 +134,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 <div class="wrap">
 	<h1><?php echo esc_html( $lbite_plugin_name . ' – ' . __( 'Einstellungen', 'libre-bite' ) ); ?></h1>
 
-	<?php // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+	<?php // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Erfolgs-Hinweis nach Speichern; kein DB-Schreibzugriff. ?>
 	<?php if ( isset( $_GET['updated'] ) && '1' === sanitize_key( wp_unslash( $_GET['updated'] ) ) ) : ?>
 		<div class="notice notice-success is-dismissible">
 			<p><?php esc_html_e( 'Einstellungen gespeichert', 'libre-bite' ); ?></p>

@@ -361,7 +361,7 @@ class LBite_Reservations {
 				'order'          => 'ASC',
 			)
 		);
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter zur Anzeige des vorselektierten Filterwerts; kein DB-Schreibzugriff.
 		$lbite_sel_loc = isset( $_GET['lbite_res_location'] ) ? intval( $_GET['lbite_res_location'] ) : 0;
 		echo '<select name="lbite_res_location">';
 		echo '<option value="">' . esc_html__( 'Alle Standorte', 'libre-bite' ) . '</option>';
@@ -376,7 +376,7 @@ class LBite_Reservations {
 		echo '</select>';
 
 		// Status-Filter
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter zur Anzeige des vorselektierten Filterwerts; kein DB-Schreibzugriff.
 		$lbite_sel_status = isset( $_GET['lbite_res_status'] ) ? sanitize_key( $_GET['lbite_res_status'] ) : '';
 		echo '<select name="lbite_res_status">';
 		echo '<option value="">' . esc_html__( 'Alle Status', 'libre-bite' ) . '</option>';
@@ -401,28 +401,26 @@ class LBite_Reservations {
 		if ( ! is_admin() || 'edit.php' !== $pagenow ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für WP-Admin-Filter (pre_get_posts); kein schreibender DB-Zugriff.
 		if ( ! isset( $_GET['post_type'] ) || self::POST_TYPE !== sanitize_key( $_GET['post_type'] ) ) {
 			return;
 		}
 
 		$lbite_meta_query = array();
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für WP-Admin-Filter (pre_get_posts); kein schreibender DB-Zugriff.
 		if ( ! empty( $_GET['lbite_res_location'] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$lbite_meta_query[] = array(
 				'key'   => '_lbite_location_id',
-				'value' => intval( $_GET['lbite_res_location'] ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				'value' => intval( $_GET['lbite_res_location'] ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für WP-Admin-Filter (pre_get_posts); kein schreibender DB-Zugriff.
 			);
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für WP-Admin-Filter (pre_get_posts); kein schreibender DB-Zugriff.
 		if ( ! empty( $_GET['lbite_res_status'] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$lbite_meta_query[] = array(
 				'key'   => '_lbite_reservation_status',
-				'value' => sanitize_key( $_GET['lbite_res_status'] ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				'value' => sanitize_key( $_GET['lbite_res_status'] ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für WP-Admin-Filter (pre_get_posts); kein schreibender DB-Zugriff.
 			);
 		}
 

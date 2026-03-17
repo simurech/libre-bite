@@ -447,9 +447,8 @@ class LBite_Tables {
 
 		// Öffentlicher QR-Code-Deeplink: keine Nonce möglich, da der Link extern geteilt wird (QR-Codes, Schilder).
 		// Werte werden ausschliesslich in der Session gespeichert (kein direkter DB-Write), daher kein Sicherheitsrisiko.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$location_id = isset( $_GET['lbite_location'] ) ? intval( wp_unslash( $_GET['lbite_location'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$table_id    = isset( $_GET['lbite_table'] ) ? intval( wp_unslash( $_GET['lbite_table'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$location_id = isset( $_GET['lbite_location'] ) ? intval( wp_unslash( $_GET['lbite_location'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher QR-Code-Deeplink; nur Session-Schreibzugriff, kein DB-Write.
+		$table_id    = isset( $_GET['lbite_table'] ) ? intval( wp_unslash( $_GET['lbite_table'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher QR-Code-Deeplink; nur Session-Schreibzugriff, kein DB-Write.
 
 		if ( ! $location_id ) {
 			return;
