@@ -187,9 +187,6 @@ Libre Bite übernimmt die komplette Einrichtung: Installation, Konfiguration, Ho
 
 | Feature | Status |
 |---|---|
-| Reservierungs-Dashboard (Tagesansicht) | **Umgesetzt** (v1.2.0) |
-| Zeitzonenfehler bei Checkout/Kanban/E-Mails beheben | **Umgesetzt** (v1.2.4) |
-| Produkt-Optionen: Mehrfachauswahl | Geplant |
 | Öffnungszeiten: 2 Zeitfenster pro Tag (Mittagspause) | Geplant |
 | Öffnungszeiten: Feiertage (zentral, pro Standort wählbar) | Geplant |
 | Öffnungszeiten: Google Maps API-Integration | Geplant (Pro) |
