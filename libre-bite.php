@@ -126,6 +126,14 @@ spl_autoload_register( function ( $class ) {
 } );
 
 /**
+ * Übersetzungen laden
+ */
+function lbite_load_textdomain() {
+	load_plugin_textdomain( 'libre-bite', false, dirname( plugin_basename( LBITE_PLUGIN_FILE ) ) . '/languages' );
+}
+add_action( 'plugins_loaded', 'lbite_load_textdomain', 10 );
+
+/**
  * Hauptklasse des Plugins laden und initialisieren
  */
 function lbite_init_plugin() {
