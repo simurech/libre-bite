@@ -94,10 +94,10 @@ class LBite_Locations {
 				'lbite-admin-location-image',
 				'lbiteLocationImage',
 				array(
-					'title'      => __( 'Standort-Bild wählen', 'libre-bite' ),
-					'buttonText' => __( 'Bild verwenden', 'libre-bite' ),
-					'noImageText' => __( 'Kein Bild ausgewählt', 'libre-bite' ),
-					'errorText'  => __( 'Fehler: Media-Library nicht geladen', 'libre-bite' ),
+					'title'      => __( 'Choose Location Image', 'libre-bite' ),
+					'buttonText' => __( 'Use Image', 'libre-bite' ),
+					'noImageText' => __( 'No image selected', 'libre-bite' ),
+					'errorText'  => __( 'Error: Media library not loaded', 'libre-bite' ),
 				)
 			);
 		}
@@ -120,17 +120,17 @@ class LBite_Locations {
 	 */
 	public function register_post_type() {
 		$labels = array(
-			'name'               => __( 'Standorte', 'libre-bite' ),
-			'singular_name'      => __( 'Standort', 'libre-bite' ),
-			'menu_name'          => __( 'Standorte', 'libre-bite' ),
-			'add_new'            => __( 'Neuer Standort', 'libre-bite' ),
-			'add_new_item'       => __( 'Neuen Standort hinzufügen', 'libre-bite' ),
-			'edit_item'          => __( 'Standort bearbeiten', 'libre-bite' ),
-			'new_item'           => __( 'Neuer Standort', 'libre-bite' ),
-			'view_item'          => __( 'Standort ansehen', 'libre-bite' ),
-			'search_items'       => __( 'Standorte suchen', 'libre-bite' ),
-			'not_found'          => __( 'Keine Standorte gefunden', 'libre-bite' ),
-			'not_found_in_trash' => __( 'Keine Standorte im Papierkorb', 'libre-bite' ),
+			'name'               => __( 'Locations', 'libre-bite' ),
+			'singular_name'      => __( 'Location', 'libre-bite' ),
+			'menu_name'          => __( 'Locations', 'libre-bite' ),
+			'add_new'            => __( 'New Location', 'libre-bite' ),
+			'add_new_item'       => __( 'Add New Location', 'libre-bite' ),
+			'edit_item'          => __( 'Edit Location', 'libre-bite' ),
+			'new_item'           => __( 'New Location', 'libre-bite' ),
+			'view_item'          => __( 'View Location', 'libre-bite' ),
+			'search_items'       => __( 'Search Locations', 'libre-bite' ),
+			'not_found'          => __( 'No locations found', 'libre-bite' ),
+			'not_found_in_trash' => __( 'No locations in trash', 'libre-bite' ),
 		);
 
 		$args = array(
@@ -157,7 +157,7 @@ class LBite_Locations {
 	public function add_meta_boxes() {
 		add_meta_box(
 			'lbite_location_image',
-			__( 'Standort-Bild', 'libre-bite' ),
+			__( 'Location Image', 'libre-bite' ),
 			array( $this, 'render_image_meta_box' ),
 			self::POST_TYPE,
 			'side',
@@ -166,7 +166,7 @@ class LBite_Locations {
 
 		add_meta_box(
 			'lbite_location_color',
-			__( 'Farbe', 'libre-bite' ),
+			__( 'Color', 'libre-bite' ),
 			array( $this, 'render_color_meta_box' ),
 			self::POST_TYPE,
 			'side',
@@ -175,7 +175,7 @@ class LBite_Locations {
 
 		add_meta_box(
 			'lbite_location_address',
-			__( 'Adresse', 'libre-bite' ),
+			__( 'Address', 'libre-bite' ),
 			array( $this, 'render_address_meta_box' ),
 			self::POST_TYPE,
 			'normal',
@@ -184,7 +184,7 @@ class LBite_Locations {
 
 		add_meta_box(
 			'lbite_location_hours',
-			__( 'Öffnungszeiten', 'libre-bite' ),
+			__( 'Opening Hours', 'libre-bite' ),
 			array( $this, 'render_hours_meta_box' ),
 			self::POST_TYPE,
 			'normal',
@@ -207,19 +207,19 @@ class LBite_Locations {
 					<img src="<?php echo esc_url( $image_url ); ?>" style="max-width: 100%; height: auto; display: block;">
 				<?php else : ?>
 					<p style="text-align: center; padding: 20px; background: #f5f5f5; border: 2px dashed #ddd;">
-						<?php esc_html_e( 'Kein Bild ausgewählt', 'libre-bite' ); ?>
+						<?php esc_html_e( 'No image selected', 'libre-bite' ); ?>
 					</p>
 				<?php endif; ?>
 			</div>
 			<input type="hidden" id="lbite_location_image" name="lbite_location_image" value="<?php echo esc_attr( $image_id ); ?>">
 			<button type="button" class="button button-secondary lbite-upload-image-button" style="width: 100%; margin-bottom: 5px;">
-				<?php esc_html_e( 'Bild auswählen', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Select Image', 'libre-bite' ); ?>
 			</button>
 			<button type="button" class="button button-secondary lbite-remove-image-button" style="width: 100%; <?php echo $image_id ? '' : 'display:none;'; ?>">
-				<?php esc_html_e( 'Bild entfernen', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Remove Image', 'libre-bite' ); ?>
 			</button>
 			<p class="description" style="margin-top: 10px;">
-				<?php esc_html_e( 'Optional: Wird in der Standort-Auswahl als Kachel-Bild angezeigt.', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Optional: Displayed as tile image in location selection.', 'libre-bite' ); ?>
 			</p>
 		</div>
 		<?php
@@ -234,7 +234,7 @@ class LBite_Locations {
 		$color = get_post_meta( $post->ID, '_lbite_location_color', true );
 		?>
 		<p>
-			<label for="lbite_location_color"><?php esc_html_e( 'Wird in POS und Bestellübersicht als Akzentfarbe angezeigt.', 'libre-bite' ); ?></label>
+			<label for="lbite_location_color"><?php esc_html_e( 'Displayed as accent color in POS and order overview.', 'libre-bite' ); ?></label>
 		</p>
 		<input type="text"
 			id="lbite_location_color"
@@ -259,25 +259,25 @@ class LBite_Locations {
 		?>
 		<table class="form-table">
 			<tr>
-				<th><label for="lbite_street"><?php esc_html_e( 'Straße & Nr.', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_street"><?php esc_html_e( 'Street & Number', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="text" id="lbite_street" name="lbite_street" value="<?php echo esc_attr( $street ); ?>" class="regular-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_zip"><?php esc_html_e( 'PLZ', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_zip"><?php esc_html_e( 'ZIP Code', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="text" id="lbite_zip" name="lbite_zip" value="<?php echo esc_attr( $zip ); ?>" class="regular-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_city"><?php esc_html_e( 'Ort', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_city"><?php esc_html_e( 'City', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="text" id="lbite_city" name="lbite_city" value="<?php echo esc_attr( $city ); ?>" class="regular-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_country"><?php esc_html_e( 'Land', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_country"><?php esc_html_e( 'Country', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="text" id="lbite_country" name="lbite_country" value="<?php echo esc_attr( $country ); ?>" class="regular-text">
 				</td>
@@ -286,7 +286,7 @@ class LBite_Locations {
 				<th><label for="lbite_maps_url"><?php esc_html_e( 'Google Maps Link', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="url" id="lbite_maps_url" name="lbite_maps_url" value="<?php echo esc_attr( $maps_url ); ?>" class="large-text" placeholder="https://maps.google.com/...">
-					<p class="description"><?php esc_html_e( 'Optional: Link zu Google Maps für diesen Standort. Die Adresse wird auf der Bestellbestätigung und in E-Mails verlinkt.', 'libre-bite' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Optional: Link to Google Maps for this location. The address will be linked on order confirmation and in emails.', 'libre-bite' ); ?></p>
 				</td>
 			</tr>
 		</table>
@@ -305,13 +305,13 @@ class LBite_Locations {
 		}
 
 		$days = array(
-			'monday'    => __( 'Montag', 'libre-bite' ),
-			'tuesday'   => __( 'Dienstag', 'libre-bite' ),
-			'wednesday' => __( 'Mittwoch', 'libre-bite' ),
-			'thursday'  => __( 'Donnerstag', 'libre-bite' ),
-			'friday'    => __( 'Freitag', 'libre-bite' ),
-			'saturday'  => __( 'Samstag', 'libre-bite' ),
-			'sunday'    => __( 'Sonntag', 'libre-bite' ),
+			'monday'    => __( 'Monday', 'libre-bite' ),
+			'tuesday'   => __( 'Tuesday', 'libre-bite' ),
+			'wednesday' => __( 'Wednesday', 'libre-bite' ),
+			'thursday'  => __( 'Thursday', 'libre-bite' ),
+			'friday'    => __( 'Friday', 'libre-bite' ),
+			'saturday'  => __( 'Saturday', 'libre-bite' ),
+			'sunday'    => __( 'Sunday', 'libre-bite' ),
 		);
 		?>
 		<table class="form-table">
@@ -326,15 +326,15 @@ class LBite_Locations {
 					<td>
 						<label>
 							<input type="checkbox" name="lbite_hours[<?php echo esc_attr( $day_key ); ?>][closed]" value="1" <?php checked( $is_closed, true ); ?>>
-							<?php esc_html_e( 'Geschlossen', 'libre-bite' ); ?>
+							<?php esc_html_e( 'Closed', 'libre-bite' ); ?>
 						</label>
 						<br>
 						<label>
-							<?php esc_html_e( 'Von', 'libre-bite' ); ?>
+							<?php esc_html_e( 'From', 'libre-bite' ); ?>
 							<input type="time" name="lbite_hours[<?php echo esc_attr( $day_key ); ?>][open]" value="<?php echo esc_attr( $open ); ?>">
 						</label>
 						<label>
-							<?php esc_html_e( 'Bis', 'libre-bite' ); ?>
+							<?php esc_html_e( 'To', 'libre-bite' ); ?>
 							<input type="time" name="lbite_hours[<?php echo esc_attr( $day_key ); ?>][close]" value="<?php echo esc_attr( $close ); ?>">
 						</label>
 					</td>
@@ -427,7 +427,7 @@ class LBite_Locations {
 	public function add_product_meta_box() {
 		add_meta_box(
 			'lbite_product_locations',
-			__( 'Standorte', 'libre-bite' ),
+			__( 'Locations', 'libre-bite' ),
 			array( $this, 'render_product_locations_meta_box' ),
 			'product',
 			'side',
@@ -458,7 +458,7 @@ class LBite_Locations {
 		);
 
 		if ( empty( $locations ) ) {
-			echo '<p>' . esc_html__( 'Noch keine Standorte vorhanden.', 'libre-bite' ) . '</p>';
+			echo '<p>' . esc_html__( 'No locations available yet.', 'libre-bite' ) . '</p>';
 			return;
 		}
 
@@ -509,7 +509,7 @@ class LBite_Locations {
 		$new_columns = array();
 		$new_columns['cb']      = $columns['cb'];
 		$new_columns['title']   = $columns['title'];
-		$new_columns['address'] = __( 'Adresse', 'libre-bite' );
+		$new_columns['address'] = __( 'Address', 'libre-bite' );
 		$new_columns['date']    = $columns['date'];
 
 		return $new_columns;
@@ -690,13 +690,13 @@ class LBite_Locations {
 					return array(
 						'type' => 'closing-soon',
 						/* translators: %s: closing time */
-						'text' => sprintf( __( 'Schliesst um %s', 'libre-bite' ), $close_hhmm ),
+						'text' => sprintf( __( 'Closes at %s', 'libre-bite' ), $close_hhmm ),
 					);
 				}
 
 				return array(
 					'type' => 'open',
-					'text' => __( 'Geöffnet', 'libre-bite' ),
+					'text' => __( 'Open', 'libre-bite' ),
 				);
 			}
 
@@ -708,7 +708,7 @@ class LBite_Locations {
 					return array(
 						'type' => 'opening-soon',
 						/* translators: %s: opening time */
-						'text' => sprintf( __( 'Öffnet um %s', 'libre-bite' ), $open_hhmm ),
+						'text' => sprintf( __( 'Opens at %s', 'libre-bite' ), $open_hhmm ),
 					);
 				}
 			}
@@ -726,7 +726,7 @@ class LBite_Locations {
 
 		return array(
 			'type' => 'closed',
-			'text' => __( 'Geschlossen', 'libre-bite' ),
+			'text' => __( 'Closed', 'libre-bite' ),
 		);
 	}
 
@@ -764,15 +764,15 @@ class LBite_Locations {
 					// Heute: nur wenn Öffnung noch bevorsteht (robuster HH:MM-Vergleich).
 					if ( $current_hhmm < $open_hhmm ) {
 						/* translators: %s: opening time */
-						return sprintf( __( 'Öffnet heute %s', 'libre-bite' ), $open_hhmm );
+						return sprintf( __( 'Opens today %s', 'libre-bite' ), $open_hhmm );
 					}
 				} elseif ( 1 === $i ) {
 					/* translators: %s: opening time */
-					return sprintf( __( 'Öffnet morgen %s', 'libre-bite' ), $open_hhmm );
+					return sprintf( __( 'Opens tomorrow %s', 'libre-bite' ), $open_hhmm );
 				} else {
 					$day_abbr = $day_names_de[ $day_name ];
 					/* translators: %1$s: day abbreviation, %2$s: opening time */
-					return sprintf( __( 'Öffnet %1$s %2$s', 'libre-bite' ), $day_abbr, $open_hhmm );
+					return sprintf( __( 'Opens %1$s %2$s', 'libre-bite' ), $day_abbr, $open_hhmm );
 				}
 			}
 		}

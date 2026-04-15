@@ -23,24 +23,24 @@ $lbite_features         = get_option( 'lbite_features', array() );
 $lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 ?>
 <div class="wrap lbite-help-wrap">
-	<h1><?php esc_html_e( 'Dokumentation', 'libre-bite' ); ?></h1>
+	<h1><?php esc_html_e( 'Documentation', 'libre-bite' ); ?></h1>
 
 	<nav class="nav-tab-wrapper">
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=overview' ) ); ?>"
 		   class="nav-tab <?php echo 'overview' === $lbite_active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Übersicht', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Overview', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=features' ) ); ?>"
 		   class="nav-tab <?php echo 'features' === $lbite_active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Feature-Toggles', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Feature Toggles', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=roles' ) ); ?>"
 		   class="nav-tab <?php echo 'roles' === $lbite_active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Rollen', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Roles', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=technical' ) ); ?>"
 		   class="nav-tab <?php echo 'technical' === $lbite_active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Technisch', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Technical', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=troubleshooting' ) ); ?>"
 		   class="nav-tab <?php echo 'troubleshooting' === $lbite_active_tab ? 'nav-tab-active' : ''; ?>">
@@ -54,11 +54,11 @@ $lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'over
 			case 'features':
 				?>
 				<div class="lbite-help-section">
-					<h2><?php esc_html_e( 'Feature-Toggles', 'libre-bite' ); ?></h2>
-					<p><?php esc_html_e( 'Mit Feature-Toggles können Sie einzelne Funktionen des Libre Bites aktivieren oder deaktivieren.', 'libre-bite' ); ?></p>
+					<h2><?php esc_html_e( 'Feature Toggles', 'libre-bite' ); ?></h2>
+					<p><?php esc_html_e( 'With feature toggles, you can enable or disable individual Libre Bite features.', 'libre-bite' ); ?></p>
 
 					<div class="lbite-help-article">
-						<h3><?php esc_html_e( 'Aktuelle Konfiguration', 'libre-bite' ); ?></h3>
+						<h3><?php esc_html_e( 'Current Configuration', 'libre-bite' ); ?></h3>
 						<table class="widefat">
 							<thead>
 								<tr>
@@ -72,9 +72,9 @@ $lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'over
 										<td><code><?php echo esc_html( $lbite_key ); ?></code></td>
 										<td>
 											<?php if ( $lbite_enabled ) : ?>
-												<span class="lbite-status-enabled"><?php esc_html_e( 'Aktiviert', 'libre-bite' ); ?></span>
+												<span class="lbite-status-enabled"><?php esc_html_e( 'Enabled', 'libre-bite' ); ?></span>
 											<?php else : ?>
-												<span class="lbite-status-disabled"><?php esc_html_e( 'Deaktiviert', 'libre-bite' ); ?></span>
+												<span class="lbite-status-disabled"><?php esc_html_e( 'Disabled', 'libre-bite' ); ?></span>
 											<?php endif; ?>
 										</td>
 									</tr>
@@ -84,14 +84,14 @@ $lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'over
 
 						<p>
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-features' ) ); ?>" class="button button-primary">
-								<?php esc_html_e( 'Feature-Toggles bearbeiten', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Edit Feature Toggles', 'libre-bite' ); ?>
 							</a>
 						</p>
 					</div>
 
 					<div class="lbite-help-article">
-						<h3><?php esc_html_e( 'Feature-Checks im Code', 'libre-bite' ); ?></h3>
-						<p><?php esc_html_e( 'Features können im Code wie folgt geprüft werden:', 'libre-bite' ); ?></p>
+						<h3><?php esc_html_e( 'Feature Checks in Code', 'libre-bite' ); ?></h3>
+						<p><?php esc_html_e( 'Features can be checked in code as follows:', 'libre-bite' ); ?></p>
 
 						<pre><code>// Feature-Manager laden
 $features = get_option( 'lbite_features', array() );
@@ -108,33 +108,33 @@ if ( ! empty( $features['enable_tips'] ) ) {
 			case 'roles':
 				?>
 				<div class="lbite-help-section">
-					<h2><?php esc_html_e( 'Benutzerrollen', 'libre-bite' ); ?></h2>
+					<h2><?php esc_html_e( 'User Roles', 'libre-bite' ); ?></h2>
 
 					<div class="lbite-help-article">
-						<h3><?php esc_html_e( 'Rollenübersicht', 'libre-bite' ); ?></h3>
+						<h3><?php esc_html_e( 'Role Overview', 'libre-bite' ); ?></h3>
 						<table class="widefat">
 							<thead>
 								<tr>
-									<th><?php esc_html_e( 'Rolle', 'libre-bite' ); ?></th>
-									<th><?php esc_html_e( 'Zielgruppe', 'libre-bite' ); ?></th>
-									<th><?php esc_html_e( 'Zugriff', 'libre-bite' ); ?></th>
+									<th><?php esc_html_e( 'Role', 'libre-bite' ); ?></th>
+									<th><?php esc_html_e( 'Target Group', 'libre-bite' ); ?></th>
+									<th><?php esc_html_e( 'Access', 'libre-bite' ); ?></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
 									<td><strong>lbite_staff</strong></td>
-									<td><?php esc_html_e( 'Laden-Personal', 'libre-bite' ); ?></td>
-									<td><?php esc_html_e( 'Dashboard, Bestellübersicht, POS', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Store Staff', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Dashboard, Order Overview, POS', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
 									<td><strong>lbite_admin</strong></td>
-									<td><?php esc_html_e( 'Filialleiter', 'libre-bite' ); ?></td>
-									<td><?php esc_html_e( '+ Standorte, Produkt-Optionen, Einstellungen', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Branch Manager', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( '+ Locations, Product Options, Settings', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
 									<td><strong>administrator</strong></td>
-									<td><?php esc_html_e( 'Super-Admin', 'libre-bite' ); ?></td>
-									<td><?php esc_html_e( '+ Feature-Toggles, Admin-Einstellungen, Debug', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Super Admin', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( '+ Feature Toggles, Admin Settings, Debug', 'libre-bite' ); ?></td>
 								</tr>
 							</tbody>
 						</table>
@@ -146,7 +146,7 @@ if ( ! empty( $features['enable_tips'] ) ) {
 							<thead>
 								<tr>
 									<th><?php esc_html_e( 'Capability', 'libre-bite' ); ?></th>
-									<th><?php esc_html_e( 'Beschreibung', 'libre-bite' ); ?></th>
+									<th><?php esc_html_e( 'Description', 'libre-bite' ); ?></th>
 									<th>Staff</th>
 									<th>Admin</th>
 									<th>Super</th>
@@ -155,42 +155,42 @@ if ( ! empty( $features['enable_tips'] ) ) {
 							<tbody>
 								<tr>
 									<td><code>lbite_view_dashboard</code></td>
-									<td><?php esc_html_e( 'Dashboard anzeigen', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'View Dashboard', 'libre-bite' ); ?></td>
 									<td>&#10003;</td>
 									<td>&#10003;</td>
 									<td>&#10003;</td>
 								</tr>
 								<tr>
 									<td><code>lbite_view_orders</code></td>
-									<td><?php esc_html_e( 'Bestellungen anzeigen', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'View Orders', 'libre-bite' ); ?></td>
 									<td>&#10003;</td>
 									<td>&#10003;</td>
 									<td>&#10003;</td>
 								</tr>
 								<tr>
 									<td><code>lbite_use_pos</code></td>
-									<td><?php esc_html_e( 'POS nutzen', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Use POS', 'libre-bite' ); ?></td>
 									<td>&#10003;</td>
 									<td>&#10003;</td>
 									<td>&#10003;</td>
 								</tr>
 								<tr>
 									<td><code>lbite_manage_locations</code></td>
-									<td><?php esc_html_e( 'Standorte verwalten', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Manage Locations', 'libre-bite' ); ?></td>
 									<td>-</td>
 									<td>&#10003;</td>
 									<td>&#10003;</td>
 								</tr>
 								<tr>
 									<td><code>lbite_manage_settings</code></td>
-									<td><?php esc_html_e( 'Einstellungen bearbeiten', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Edit Settings', 'libre-bite' ); ?></td>
 									<td>-</td>
 									<td>&#10003;</td>
 									<td>&#10003;</td>
 								</tr>
 								<tr>
 									<td><code>lbite_manage_features</code></td>
-									<td><?php esc_html_e( 'Feature-Toggles verwalten', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Manage Feature Toggles', 'libre-bite' ); ?></td>
 									<td>-</td>
 									<td>-</td>
 									<td>&#10003;</td>
@@ -200,12 +200,12 @@ if ( ! empty( $features['enable_tips'] ) ) {
 					</div>
 
 					<div class="lbite-help-article">
-						<h3><?php esc_html_e( 'Benutzer einer Rolle zuweisen', 'libre-bite' ); ?></h3>
+						<h3><?php esc_html_e( 'Assign User to Role', 'libre-bite' ); ?></h3>
 						<ol>
-							<li><?php esc_html_e( 'Gehen Sie zu "Benutzer" → "Alle Benutzer"', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Bearbeiten Sie den gewünschten Benutzer', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Wählen Sie unter "Rolle" die gewünschte OOS-Rolle', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Speichern Sie die Änderungen', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Go to "Users" → "All Users"', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Edit the desired user', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Select the desired POS role under "Role"', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Save changes', 'libre-bite' ); ?></li>
 						</ol>
 					</div>
 				</div>
@@ -215,10 +215,10 @@ if ( ! empty( $features['enable_tips'] ) ) {
 			case 'technical':
 				?>
 				<div class="lbite-help-section">
-					<h2><?php esc_html_e( 'Technische Details', 'libre-bite' ); ?></h2>
+					<h2><?php esc_html_e( 'Technical Details', 'libre-bite' ); ?></h2>
 
 					<div class="lbite-help-article">
-						<h3><?php esc_html_e( 'Plugin-Informationen', 'libre-bite' ); ?></h3>
+						<h3><?php esc_html_e( 'Plugin Information', 'libre-bite' ); ?></h3>
 						<table class="widefat">
 							<tbody>
 								<tr>
@@ -226,11 +226,11 @@ if ( ! empty( $features['enable_tips'] ) ) {
 									<td><?php echo esc_html( LBITE_VERSION ); ?></td>
 								</tr>
 								<tr>
-									<th><?php esc_html_e( 'Installationsdatum', 'libre-bite' ); ?></th>
+									<th><?php esc_html_e( 'Installation Date', 'libre-bite' ); ?></th>
 									<td><?php echo esc_html( get_option( 'lbite_installed_date', '-' ) ); ?></td>
 								</tr>
 								<tr>
-									<th><?php esc_html_e( 'Plugin-Pfad', 'libre-bite' ); ?></th>
+									<th><?php esc_html_e( 'Plugin Path', 'libre-bite' ); ?></th>
 									<td><code><?php echo esc_html( LBITE_PLUGIN_DIR ); ?></code></td>
 								</tr>
 								<tr>
@@ -250,34 +250,34 @@ if ( ! empty( $features['enable_tips'] ) ) {
 					</div>
 
 					<div class="lbite-help-article">
-						<h3><?php esc_html_e( 'Options (Datenbank)', 'libre-bite' ); ?></h3>
+						<h3><?php esc_html_e( 'Options (Database)', 'libre-bite' ); ?></h3>
 						<table class="widefat">
 							<thead>
 								<tr>
 									<th><?php esc_html_e( 'Option', 'libre-bite' ); ?></th>
-									<th><?php esc_html_e( 'Beschreibung', 'libre-bite' ); ?></th>
+									<th><?php esc_html_e( 'Description', 'libre-bite' ); ?></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
 									<td><code>lbite_version</code></td>
-									<td><?php esc_html_e( 'Installierte Plugin-Version', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Installed Plugin Version', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
 									<td><code>lbite_features</code></td>
-									<td><?php esc_html_e( 'Feature-Toggle-Einstellungen', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Feature Toggle Settings', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
 									<td><code>lbite_support_settings</code></td>
-									<td><?php esc_html_e( 'Support-Kontaktdaten', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Support Contact Information', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
 									<td><code>lbite_checkout_fields</code></td>
-									<td><?php esc_html_e( 'Checkout-Feld-Konfiguration', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Checkout Field Configuration', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
 									<td><code>lbite_preparation_time</code></td>
-									<td><?php esc_html_e( 'Vorbereitungszeit in Minuten', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Preparation Time in Minutes', 'libre-bite' ); ?></td>
 								</tr>
 							</tbody>
 						</table>
@@ -286,8 +286,8 @@ if ( ! empty( $features['enable_tips'] ) ) {
 					<div class="lbite-help-article">
 						<h3><?php esc_html_e( 'Custom Post Types', 'libre-bite' ); ?></h3>
 						<ul>
-							<li><code>lbite_location</code> - <?php esc_html_e( 'Standorte', 'libre-bite' ); ?></li>
-							<li><code>lbite_product_option</code> - <?php esc_html_e( 'Produkt-Optionen', 'libre-bite' ); ?></li>
+							<li><code>lbite_location</code> - <?php esc_html_e( 'Locations', 'libre-bite' ); ?></li>
+							<li><code>lbite_product_option</code> - <?php esc_html_e( 'Product Options', 'libre-bite' ); ?></li>
 						</ul>
 					</div>
 
@@ -296,30 +296,30 @@ if ( ! empty( $features['enable_tips'] ) ) {
 						<table class="widefat">
 							<thead>
 								<tr>
-									<th><?php esc_html_e( 'Meta-Key', 'libre-bite' ); ?></th>
-									<th><?php esc_html_e( 'Beschreibung', 'libre-bite' ); ?></th>
+									<th><?php esc_html_e( 'Meta Key', 'libre-bite' ); ?></th>
+									<th><?php esc_html_e( 'Description', 'libre-bite' ); ?></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
 									<td><code>_lbite_location_id</code></td>
-									<td><?php esc_html_e( 'Standort-ID', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Location ID', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
 									<td><code>_lbite_location_name</code></td>
-									<td><?php esc_html_e( 'Standort-Name', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Location Name', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
 									<td><code>_lbite_order_type</code></td>
-									<td><?php esc_html_e( 'Bestelltyp (now/scheduled)', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Order Type (now/scheduled)', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
 									<td><code>_lbite_pickup_time</code></td>
-									<td><?php esc_html_e( 'Geplante Abholzeit', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Scheduled Pickup Time', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
 									<td><code>_lbite_order_source</code></td>
-									<td><?php esc_html_e( 'Quelle (pos/website)', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Source (pos/website)', 'libre-bite' ); ?></td>
 								</tr>
 							</tbody>
 						</table>
@@ -334,65 +334,65 @@ if ( ! empty( $features['enable_tips'] ) ) {
 					<h2><?php esc_html_e( 'Troubleshooting', 'libre-bite' ); ?></h2>
 
 					<div class="lbite-help-article">
-						<h3><?php esc_html_e( 'Häufige Probleme', 'libre-bite' ); ?></h3>
+						<h3><?php esc_html_e( 'Common Issues', 'libre-bite' ); ?></h3>
 
 						<div class="lbite-faq-item">
-							<h4><?php esc_html_e( 'Menüs werden nicht korrekt angezeigt', 'libre-bite' ); ?></h4>
-							<p><strong><?php esc_html_e( 'Ursache:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Capabilities wurden nicht korrekt zugewiesen.', 'libre-bite' ); ?></p>
-							<p><strong><?php esc_html_e( 'Lösung:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Plugin deaktivieren und wieder aktivieren, um Rollen neu zu erstellen.', 'libre-bite' ); ?></p>
+							<h4><?php esc_html_e( 'Menus are not displaying correctly', 'libre-bite' ); ?></h4>
+							<p><strong><?php esc_html_e( 'Cause:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Capabilities were not assigned correctly.', 'libre-bite' ); ?></p>
+							<p><strong><?php esc_html_e( 'Solution:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Disable and re-enable the plugin to recreate roles.', 'libre-bite' ); ?></p>
 						</div>
 
 						<div class="lbite-faq-item">
-							<h4><?php esc_html_e( 'AJAX-Fehler im Dashboard', 'libre-bite' ); ?></h4>
-							<p><strong><?php esc_html_e( 'Ursache:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Nonce-Fehler oder Berechtigungsproblem.', 'libre-bite' ); ?></p>
-							<p><strong><?php esc_html_e( 'Lösung:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Seite neu laden, Browser-Cache leeren, Benutzerberechtigungen prüfen.', 'libre-bite' ); ?></p>
+							<h4><?php esc_html_e( 'AJAX Error in Dashboard', 'libre-bite' ); ?></h4>
+							<p><strong><?php esc_html_e( 'Cause:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Nonce error or permission issue.', 'libre-bite' ); ?></p>
+							<p><strong><?php esc_html_e( 'Solution:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Reload page, clear browser cache, check user permissions.', 'libre-bite' ); ?></p>
 						</div>
 
 						<div class="lbite-faq-item">
-							<h4><?php esc_html_e( 'Öffnungszeiten werden nicht berücksichtigt', 'libre-bite' ); ?></h4>
-							<p><strong><?php esc_html_e( 'Ursache:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Zeitzone oder Serverzeit falsch konfiguriert.', 'libre-bite' ); ?></p>
-							<p><strong><?php esc_html_e( 'Lösung:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'WordPress Zeitzone in Einstellungen → Allgemein prüfen.', 'libre-bite' ); ?></p>
+							<h4><?php esc_html_e( 'Opening Hours Not Being Applied', 'libre-bite' ); ?></h4>
+							<p><strong><?php esc_html_e( 'Cause:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Timezone or server time misconfigured.', 'libre-bite' ); ?></p>
+							<p><strong><?php esc_html_e( 'Solution:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Check WordPress timezone in Settings → General.', 'libre-bite' ); ?></p>
 						</div>
 
 						<div class="lbite-faq-item">
-							<h4><?php esc_html_e( 'E-Mail-Erinnerungen werden nicht versendet', 'libre-bite' ); ?></h4>
-							<p><strong><?php esc_html_e( 'Ursache:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'WP-Cron läuft nicht oder E-Mail-Versand fehlerhaft.', 'libre-bite' ); ?></p>
-							<p><strong><?php esc_html_e( 'Lösung:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'WP-Cron prüfen, SMTP-Plugin verwenden, E-Mail-Logs prüfen.', 'libre-bite' ); ?></p>
+							<h4><?php esc_html_e( 'Email Reminders Not Being Sent', 'libre-bite' ); ?></h4>
+							<p><strong><?php esc_html_e( 'Cause:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'WP-Cron not running or email delivery faulty.', 'libre-bite' ); ?></p>
+							<p><strong><?php esc_html_e( 'Solution:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Check WP-Cron, use SMTP plugin, check email logs.', 'libre-bite' ); ?></p>
 						</div>
 					</div>
 
 					<div class="lbite-help-article">
-						<h3><?php esc_html_e( 'Debug-Modus', 'libre-bite' ); ?></h3>
-						<p><?php esc_html_e( 'Aktivieren Sie WP_DEBUG in der wp-config.php für detaillierte Fehlermeldungen:', 'libre-bite' ); ?></p>
+						<h3><?php esc_html_e( 'Debug Mode', 'libre-bite' ); ?></h3>
+						<p><?php esc_html_e( 'Enable WP_DEBUG in wp-config.php for detailed error messages:', 'libre-bite' ); ?></p>
 
 						<pre><code>define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', true );
 define( 'WP_DEBUG_DISPLAY', false );</code></pre>
 
-						<p><?php esc_html_e( 'Fehler werden in /wp-content/debug.log gespeichert.', 'libre-bite' ); ?></p>
+						<p><?php esc_html_e( 'Errors are stored in /wp-content/debug.log.', 'libre-bite' ); ?></p>
 
 						<?php if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) : ?>
 							<p>
 								<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-debug-info' ) ); ?>" class="button">
-									<?php esc_html_e( 'Debug-Info anzeigen', 'libre-bite' ); ?>
+									<?php esc_html_e( 'Show Debug Info', 'libre-bite' ); ?>
 								</a>
 							</p>
 						<?php endif; ?>
 					</div>
 
 					<div class="lbite-help-article">
-						<h3><?php esc_html_e( 'Plugin zurücksetzen', 'libre-bite' ); ?></h3>
-						<p><?php esc_html_e( 'Falls schwerwiegende Probleme auftreten:', 'libre-bite' ); ?></p>
+						<h3><?php esc_html_e( 'Reset Plugin', 'libre-bite' ); ?></h3>
+						<p><?php esc_html_e( 'If serious problems occur:', 'libre-bite' ); ?></p>
 						<ol>
-							<li><?php esc_html_e( 'Plugin deaktivieren', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Plugin löschen (Daten bleiben erhalten)', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Plugin neu installieren', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Plugin aktivieren', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Disable Plugin', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Delete Plugin (Data Preserved)', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Reinstall Plugin', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Activate Plugin', 'libre-bite' ); ?></li>
 						</ol>
 
 						<div class="lbite-help-notice lbite-help-warning">
 							<span class="dashicons dashicons-warning"></span>
-							<p><?php esc_html_e( 'Warnung: Um alle Daten zu löschen, muss das Plugin über die WordPress-Oberfläche gelöscht werden (nicht nur deaktiviert).', 'libre-bite' ); ?></p>
+							<p><?php esc_html_e( 'Warning: To delete all data, the plugin must be deleted via the WordPress interface (not just deactivated).', 'libre-bite' ); ?></p>
 						</div>
 					</div>
 				</div>
@@ -404,47 +404,47 @@ define( 'WP_DEBUG_DISPLAY', false );</code></pre>
 				?>
 				<div class="lbite-help-grid">
 					<div class="lbite-help-card lbite-help-quickstart">
-						<h2><span class="dashicons dashicons-superhero"></span> <?php esc_html_e( 'Super-Admin Übersicht', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Als Super-Admin haben Sie vollen Zugriff auf alle Funktionen und Einstellungen des Libre Bites.', 'libre-bite' ); ?></p>
+						<h2><span class="dashicons dashicons-superhero"></span> <?php esc_html_e( 'Super Admin Overview', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'As a Super Admin, you have full access to all Libre Bite features and settings.', 'libre-bite' ); ?></p>
 
 						<div class="lbite-quick-links">
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-features' ) ); ?>" class="button button-primary">
 								<span class="dashicons dashicons-admin-plugins"></span>
-								<?php esc_html_e( 'Feature-Toggles', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Feature Toggles', 'libre-bite' ); ?>
 							</a>
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-admin-settings' ) ); ?>" class="button">
 								<span class="dashicons dashicons-admin-settings"></span>
-								<?php esc_html_e( 'Admin-Einstellungen', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Admin Settings', 'libre-bite' ); ?>
 							</a>
 							<?php if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) : ?>
 								<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-debug-info' ) ); ?>" class="button">
 									<span class="dashicons dashicons-info"></span>
-									<?php esc_html_e( 'Debug-Info', 'libre-bite' ); ?>
+									<?php esc_html_e( 'Debug Info', 'libre-bite' ); ?>
 								</a>
 							<?php endif; ?>
 						</div>
 					</div>
 
 					<div class="lbite-help-card">
-						<h2><span class="dashicons dashicons-admin-plugins"></span> <?php esc_html_e( 'Feature-Toggles', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Aktivieren oder deaktivieren Sie einzelne Funktionen des Plugins.', 'libre-bite' ); ?></p>
-						<p><strong><?php esc_html_e( 'Aktive Features:', 'libre-bite' ); ?></strong> <?php echo esc_html( count( array_filter( $features ) ) ); ?> / <?php echo esc_html( count( $features ) ); ?></p>
+						<h2><span class="dashicons dashicons-admin-plugins"></span> <?php esc_html_e( 'Feature Toggles', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'Enable or disable individual plugin features.', 'libre-bite' ); ?></p>
+						<p><strong><?php esc_html_e( 'Active Features:', 'libre-bite' ); ?></strong> <?php echo esc_html( count( array_filter( $features ) ) ); ?> / <?php echo esc_html( count( $features ) ); ?></p>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=features' ) ); ?>" class="button">
 							<?php esc_html_e( 'Details', 'libre-bite' ); ?>
 						</a>
 					</div>
 
 					<div class="lbite-help-card">
-						<h2><span class="dashicons dashicons-groups"></span> <?php esc_html_e( 'Rollen & Berechtigungen', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Verwalten Sie die drei Benutzerebenen: Personal, Admin, Super-Admin.', 'libre-bite' ); ?></p>
+						<h2><span class="dashicons dashicons-groups"></span> <?php esc_html_e( 'Roles & Permissions', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'Manage the three user levels: Staff, Admin, Super Admin.', 'libre-bite' ); ?></p>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=roles' ) ); ?>" class="button">
 							<?php esc_html_e( 'Details', 'libre-bite' ); ?>
 						</a>
 					</div>
 
 					<div class="lbite-help-card">
-						<h2><span class="dashicons dashicons-editor-code"></span> <?php esc_html_e( 'Technische Details', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Plugin-Informationen, Datenbank-Optionen, Meta-Keys.', 'libre-bite' ); ?></p>
+						<h2><span class="dashicons dashicons-editor-code"></span> <?php esc_html_e( 'Technical Details', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'Plugin information, database options, meta keys.', 'libre-bite' ); ?></p>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=technical' ) ); ?>" class="button">
 							<?php esc_html_e( 'Details', 'libre-bite' ); ?>
 						</a>
@@ -452,7 +452,7 @@ define( 'WP_DEBUG_DISPLAY', false );</code></pre>
 
 					<div class="lbite-help-card">
 						<h2><span class="dashicons dashicons-sos"></span> <?php esc_html_e( 'Troubleshooting', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Lösungen für häufige Probleme und Debug-Tipps.', 'libre-bite' ); ?></p>
+						<p><?php esc_html_e( 'Solutions for common issues and debugging tips.', 'libre-bite' ); ?></p>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=troubleshooting' ) ); ?>" class="button">
 							<?php esc_html_e( 'Details', 'libre-bite' ); ?>
 						</a>
@@ -462,7 +462,7 @@ define( 'WP_DEBUG_DISPLAY', false );</code></pre>
 						<h2><span class="dashicons dashicons-phone"></span> <?php esc_html_e( 'Support', 'libre-bite' ); ?></h2>
 						<p>
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-support-settings' ) ); ?>" class="button">
-								<?php esc_html_e( 'Support-Einstellungen', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Support Settings', 'libre-bite' ); ?>
 							</a>
 						</p>
 					</div>

@@ -66,9 +66,9 @@ class LBite_Onboarding {
 	 */
 	public function register_onboarding_page() {
 		add_submenu_page(
-			null, // Kein Eltern-Menü – versteckte Seite
-			__( 'Einrichtung', 'libre-bite' ),
-			__( 'Einrichtung', 'libre-bite' ),
+			null, // No parent menu – hidden page
+			__( 'Setup', 'libre-bite' ),
+			__( 'Setup', 'libre-bite' ),
 			'lbite_manage_features',
 			'lbite-onboarding',
 			array( $this, 'render_onboarding_page' )
@@ -108,9 +108,9 @@ class LBite_Onboarding {
 				'nonce'        => wp_create_nonce( 'lbite_onboarding_nonce' ),
 				'dashboardUrl' => admin_url( 'admin.php?page=libre-bite' ),
 				'strings'      => array(
-					'saving'  => __( 'Wird gespeichert...', 'libre-bite' ),
-					'success' => __( 'Einrichtung abgeschlossen!', 'libre-bite' ),
-					'error'   => __( 'Fehler beim Speichern. Bitte versuche es erneut.', 'libre-bite' ),
+					'saving'  => __( 'Saving...', 'libre-bite' ),
+					'success' => __( 'Setup completed!', 'libre-bite' ),
+					'error'   => __( 'Error saving. Please try again.', 'libre-bite' ),
 				),
 			)
 		);
@@ -121,7 +121,7 @@ class LBite_Onboarding {
 	 */
 	public function render_onboarding_page() {
 		if ( ! current_user_can( 'lbite_manage_features' ) ) {
-			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
 		}
 
 		include LBITE_PLUGIN_DIR . 'templates/admin/onboarding.php';
@@ -142,7 +142,7 @@ class LBite_Onboarding {
 		$features      = json_decode( $features_json, true );
 
 		if ( ! is_array( $features ) ) {
-			wp_send_json_error( array( 'message' => __( 'Ungültige Daten', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid data', 'libre-bite' ) ) );
 		}
 
 		// Feature-Werte als boolean validieren

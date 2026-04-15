@@ -19,7 +19,7 @@ $billing_note     = isset( $support_settings['support_billing_note'] ) ? $suppor
 $custom_text      = isset( $support_settings['support_custom_text'] ) ? $support_settings['support_custom_text'] : '';
 ?>
 <div class="lbite-help-section">
-	<h2><?php esc_html_e( 'Support kontaktieren', 'libre-bite' ); ?></h2>
+	<h2><?php esc_html_e( 'Contact Support', 'libre-bite' ); ?></h2>
 
 	<div class="lbite-support-card">
 		<div class="lbite-support-info">
@@ -27,7 +27,7 @@ $custom_text      = isset( $support_settings['support_custom_text'] ) ? $support
 				<div class="lbite-support-item">
 					<span class="dashicons dashicons-email"></span>
 					<div>
-						<strong><?php esc_html_e( 'E-Mail', 'libre-bite' ); ?></strong>
+						<strong><?php esc_html_e( 'Email', 'libre-bite' ); ?></strong>
 						<a href="mailto:<?php echo esc_attr( $support_email ); ?>"><?php echo esc_html( $support_email ); ?></a>
 					</div>
 				</div>
@@ -37,7 +37,7 @@ $custom_text      = isset( $support_settings['support_custom_text'] ) ? $support
 				<div class="lbite-support-item">
 					<span class="dashicons dashicons-phone"></span>
 					<div>
-						<strong><?php esc_html_e( 'Telefon', 'libre-bite' ); ?></strong>
+						<strong><?php esc_html_e( 'Phone', 'libre-bite' ); ?></strong>
 						<a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $support_phone ) ); ?>"><?php echo esc_html( $support_phone ); ?></a>
 					</div>
 				</div>
@@ -47,7 +47,7 @@ $custom_text      = isset( $support_settings['support_custom_text'] ) ? $support
 				<div class="lbite-support-item">
 					<span class="dashicons dashicons-clock"></span>
 					<div>
-						<strong><?php esc_html_e( 'Erreichbarkeit', 'libre-bite' ); ?></strong>
+						<strong><?php esc_html_e( 'Availability', 'libre-bite' ); ?></strong>
 						<span><?php echo esc_html( $support_hours ); ?></span>
 					</div>
 				</div>
@@ -69,33 +69,33 @@ $custom_text      = isset( $support_settings['support_custom_text'] ) ? $support
 	</div>
 
 	<div class="lbite-help-article">
-		<h3><?php esc_html_e( 'Bevor Sie uns kontaktieren', 'libre-bite' ); ?></h3>
-		<p><?php esc_html_e( 'Um Ihnen schnell helfen zu können, bereiten Sie bitte folgende Informationen vor:', 'libre-bite' ); ?></p>
+		<h3><?php esc_html_e( 'Before Contacting Us', 'libre-bite' ); ?></h3>
+		<p><?php esc_html_e( 'To help you quickly, please prepare the following information:', 'libre-bite' ); ?></p>
 
 		<ul>
-			<li><?php esc_html_e( 'Beschreibung des Problems', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Schritte zum Reproduzieren des Fehlers', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Screenshots (falls relevant)', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Fehlermeldungen (falls vorhanden)', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Description of the issue', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Steps to reproduce the error', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Screenshots (if relevant)', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Error messages (if any)', 'libre-bite' ); ?></li>
 		</ul>
 	</div>
 
 	<div class="lbite-help-article">
-		<h3><?php esc_html_e( 'Häufige Probleme', 'libre-bite' ); ?></h3>
+		<h3><?php esc_html_e( 'Common Issues', 'libre-bite' ); ?></h3>
 
 		<div class="lbite-faq-item">
-			<h4><?php esc_html_e( 'Keine Bestellbenachrichtigungen?', 'libre-bite' ); ?></h4>
-			<p><?php esc_html_e( 'Prüfen Sie in den Einstellungen, ob Sound-Benachrichtigungen aktiviert sind. Stellen Sie sicher, dass der Browser Sound-Wiedergabe erlaubt.', 'libre-bite' ); ?></p>
+			<h4><?php esc_html_e( 'No order notifications?', 'libre-bite' ); ?></h4>
+			<p><?php esc_html_e( 'Check in the settings whether sound notifications are enabled. Make sure the browser allows sound playback.', 'libre-bite' ); ?></p>
 		</div>
 
 		<div class="lbite-faq-item">
-			<h4><?php esc_html_e( 'Standort wird nicht angezeigt?', 'libre-bite' ); ?></h4>
-			<p><?php esc_html_e( 'Stellen Sie sicher, dass der Standort veröffentlicht ist und Öffnungszeiten eingetragen sind.', 'libre-bite' ); ?></p>
+			<h4><?php esc_html_e( 'Location not showing?', 'libre-bite' ); ?></h4>
+			<p><?php esc_html_e( 'Make sure the location is published and opening hours are configured.', 'libre-bite' ); ?></p>
 		</div>
 
 		<div class="lbite-faq-item">
-			<h4><?php esc_html_e( 'Produkt-Optionen erscheinen nicht?', 'libre-bite' ); ?></h4>
-			<p><?php esc_html_e( 'Überprüfen Sie, ob die Option veröffentlicht und dem Produkt zugewiesen ist.', 'libre-bite' ); ?></p>
+			<h4><?php esc_html_e( 'Product options not appearing?', 'libre-bite' ); ?></h4>
+			<p><?php esc_html_e( 'Check whether the option is published and assigned to the product.', 'libre-bite' ); ?></p>
 		</div>
 	</div>
 </div>

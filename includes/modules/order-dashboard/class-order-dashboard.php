@@ -71,10 +71,10 @@ class LBite_Order_Dashboard {
 	 */
 	public static function get_status_labels() {
 		return array(
-			'incoming'  => __( 'Eingang', 'libre-bite' ),
-			'preparing' => __( 'Zubereiten', 'libre-bite' ),
-			'ready'     => __( 'Abholbereit', 'libre-bite' ),
-			'completed' => __( 'Abgeschlossen', 'libre-bite' ),
+			'incoming'  => __( 'Incoming', 'libre-bite' ),
+			'preparing' => __( 'Preparing', 'libre-bite' ),
+			'ready'     => __( 'Ready for Pickup', 'libre-bite' ),
+			'completed' => __( 'Completed', 'libre-bite' ),
 		);
 	}
 
@@ -116,7 +116,7 @@ class LBite_Order_Dashboard {
 		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_view_orders' ) && ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
@@ -327,7 +327,7 @@ class LBite_Order_Dashboard {
 		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_manage_orders' ) && ! current_user_can( 'edit_shop_orders' ) && ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$order_id   = isset( $_POST['order_id'] ) ? intval( wp_unslash( $_POST['order_id'] ) ) : 0;
@@ -339,7 +339,7 @@ class LBite_Order_Dashboard {
 
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
-			wp_send_json_error( array( 'message' => __( 'Bestellung nicht gefunden', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
 		}
 
 		$order->update_meta_data( '_lbite_order_status', $new_status );
@@ -356,12 +356,12 @@ class LBite_Order_Dashboard {
 
 		// Bei "Abgeschlossen" - WooCommerce Status ändern
 		if ( 'completed' === $new_status ) {
-			$order->update_status( 'completed', __( 'Bestellung abgeschlossen via Dashboard', 'libre-bite' ) );
+			$order->update_status( 'completed', __( 'Order completed via Dashboard', 'libre-bite' ) );
 		}
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Status aktualisiert', 'libre-bite' ),
+				'message' => __( 'Status updated', 'libre-bite' ),
 			)
 		);
 	}
@@ -373,7 +373,7 @@ class LBite_Order_Dashboard {
 		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
@@ -391,18 +391,18 @@ class LBite_Order_Dashboard {
 		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$order_id = isset( $_POST['order_id'] ) ? intval( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = wc_get_order( $order_id );
 
 		if ( ! $order ) {
-			wp_send_json_error( array( 'message' => __( 'Bestellung nicht gefunden', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
 		}
 
 		// Bestellung stornieren
-		$order->update_status( 'cancelled', __( 'Storniert über Dashboard', 'libre-bite' ) );
+		$order->update_status( 'cancelled', __( 'Cancelled via Dashboard', 'libre-bite' ) );
 
 		// Rückerstattung erstellen wenn Bestellung bezahlt wurde
 		if ( $order->get_total() > 0 && $order->is_paid() ) {
@@ -410,12 +410,12 @@ class LBite_Order_Dashboard {
 				array(
 					'order_id' => $order_id,
 					'amount'   => $order->get_total(),
-					'reason'   => __( 'Bestellung storniert', 'libre-bite' ),
+					'reason'   => __( 'Order cancelled', 'libre-bite' ),
 				)
 			);
 
 			if ( is_wp_error( $refund ) ) {
-				wp_send_json_error( array( 'message' => __( 'Bestellung storniert, aber Rückerstattung fehlgeschlagen: ', 'libre-bite' ) . $refund->get_error_message() ) );
+				wp_send_json_error( array( 'message' => __( 'Order cancelled but refund failed: ', 'libre-bite' ) . $refund->get_error_message() ) );
 			}
 		}
 
@@ -425,7 +425,7 @@ class LBite_Order_Dashboard {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Bestellung erfolgreich storniert', 'libre-bite' ),
+				'message' => __( 'Order successfully cancelled', 'libre-bite' ),
 			)
 		);
 	}
@@ -437,7 +437,7 @@ class LBite_Order_Dashboard {
 		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_view_orders' ) && ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
@@ -597,7 +597,7 @@ class LBite_Order_Dashboard {
 	public function add_order_meta_box() {
 		add_meta_box(
 			'lbite_order_dashboard_status',
-			__( 'Dashboard-Status', 'libre-bite' ),
+			__( 'Dashboard Status', 'libre-bite' ),
 			array( $this, 'render_order_meta_box' ),
 			'shop_order',
 			'side',
@@ -608,7 +608,7 @@ class LBite_Order_Dashboard {
 		$screen = class_exists( '\Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController' ) ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order';
 		add_meta_box(
 			'lbite_order_dashboard_status',
-			__( 'Dashboard-Status', 'libre-bite' ),
+			__( 'Dashboard Status', 'libre-bite' ),
 			array( $this, 'render_order_meta_box' ),
 			$screen,
 			'side',
@@ -637,7 +637,7 @@ class LBite_Order_Dashboard {
 		?>
 		<div class="lbite-order-status-meta">
 			<p>
-				<strong><?php esc_html_e( 'Aktueller Status:', 'libre-bite' ); ?></strong><br>
+				<strong><?php esc_html_e( 'Current Status:', 'libre-bite' ); ?></strong><br>
 				<span class="lbite-status-badge lbite-status-<?php echo esc_attr( $current_status ); ?>">
 					<?php echo esc_html( self::get_status_labels()[ $current_status ] ); ?>
 				</span>
@@ -645,14 +645,14 @@ class LBite_Order_Dashboard {
 
 			<?php if ( $status_changed ) : ?>
 				<p>
-					<small><?php esc_html_e( 'Zuletzt geändert:', 'libre-bite' ); ?><br>
+					<small><?php esc_html_e( 'Last Changed:', 'libre-bite' ); ?><br>
 					<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), lbite_local_time_to_timestamp( $status_changed ) ) ); ?></small>
 				</p>
 			<?php endif; ?>
 
 			<p>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-order-board' ) ); ?>" class="button">
-					<?php esc_html_e( 'Zum Dashboard', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Go to Dashboard', 'libre-bite' ); ?>
 				</a>
 			</p>
 		</div>

@@ -19,11 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- Standort-Auswahl -->
 		<div class="lbite-form-group">
 			<label for="lbite-location-select">
-				<?php esc_html_e( 'Standort wählen', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Select Location', 'libre-bite' ); ?>
 				<span class="required">*</span>
 			</label>
 			<select id="lbite-location-select" name="lbite_location_id" class="lbite-select" required>
-				<option value=""><?php esc_html_e( 'Bitte wählen...', 'libre-bite' ); ?></option>
+				<option value=""><?php esc_html_e( 'Please choose...', 'libre-bite' ); ?></option>
 				<?php foreach ( $lbite_locations as $location ) : ?>
 					<option value="<?php echo esc_attr( $location->ID ); ?>" <?php selected( $lbite_location_id, $location->ID ); ?>>
 						<?php echo esc_html( $location->post_title ); ?>
@@ -35,15 +35,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( 'yes' === $atts['show_time'] ) : ?>
 			<!-- Bestelltyp-Auswahl -->
 			<div class="lbite-form-group">
-				<label><?php esc_html_e( 'Wann möchten Sie bestellen?', 'libre-bite' ); ?></label>
+				<label><?php esc_html_e( 'When would you like to order?', 'libre-bite' ); ?></label>
 				<div class="lbite-radio-group">
 					<label class="lbite-radio-label">
 						<input type="radio" name="lbite_order_type" value="now" <?php checked( $lbite_order_type, 'now' ); ?>>
-						<span><?php esc_html_e( 'Sofort', 'libre-bite' ); ?></span>
+						<span><?php esc_html_e( 'Immediately', 'libre-bite' ); ?></span>
 					</label>
 					<label class="lbite-radio-label">
 						<input type="radio" name="lbite_order_type" value="later" <?php checked( $lbite_order_type, 'later' ); ?>>
-						<span><?php esc_html_e( 'Für später vorbestellen', 'libre-bite' ); ?></span>
+						<span><?php esc_html_e( 'Pre-order for later', 'libre-bite' ); ?></span>
 					</label>
 				</div>
 			</div>
@@ -51,17 +51,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<!-- Zeitslot-Auswahl (nur bei "später") -->
 			<div class="lbite-form-group lbite-timeslot-group" style="display: none;">
 				<label for="lbite-pickup-date">
-					<?php esc_html_e( 'Datum', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Date', 'libre-bite' ); ?>
 					<span class="required">*</span>
 				</label>
 				<input type="date" id="lbite-pickup-date" class="lbite-input" min="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>">
 
 				<label for="lbite-pickup-time" style="margin-top: 10px;">
-					<?php esc_html_e( 'Uhrzeit', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Time', 'libre-bite' ); ?>
 					<span class="required">*</span>
 				</label>
 				<select id="lbite-pickup-time" name="lbite_pickup_time" class="lbite-select">
-					<option value=""><?php esc_html_e( 'Bitte Datum wählen', 'libre-bite' ); ?></option>
+					<option value=""><?php esc_html_e( 'Please select a date', 'libre-bite' ); ?></option>
 				</select>
 			</div>
 		<?php endif; ?>
@@ -69,14 +69,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- Submit Button -->
 		<div class="lbite-form-group">
 			<button type="submit" class="lbite-button lbite-button-primary">
-				<?php esc_html_e( 'Auswahl bestätigen', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Confirm Selection', 'libre-bite' ); ?>
 			</button>
 		</div>
 
 		<!-- Aktuelle Auswahl anzeigen -->
 		<?php if ( $lbite_location_id ) : ?>
 			<div class="lbite-current-selection">
-				<strong><?php esc_html_e( 'Aktuelle Auswahl:', 'libre-bite' ); ?></strong><br>
+				<strong><?php esc_html_e( 'Current Selection:', 'libre-bite' ); ?></strong><br>
 				<?php
 				$location = get_post( $lbite_location_id );
 				if ( $location ) {
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					if ( 'later' === $lbite_order_type && $lbite_pickup_time ) {
 						echo ' - ' . esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), lbite_local_time_to_timestamp( $lbite_pickup_time ) ) );
 					} elseif ( 'now' === $lbite_order_type ) {
-						echo ' - ' . esc_html__( 'Sofort', 'libre-bite' );
+						echo ' - ' . esc_html__( 'Immediately', 'libre-bite' );
 					}
 				}
 				?>
@@ -142,17 +142,17 @@ jQuery(document).ready(function($) {
 			},
 			success: function(response) {
 				if (response.success && response.data.timeslots) {
-					let options = '<option value=""><?php echo esc_js( __( 'Bitte wählen...', 'libre-bite' ) ); ?></option>';
+					let options = '<option value=""><?php echo esc_js( __( 'Please choose...', 'libre-bite' ) ); ?></option>';
 					response.data.timeslots.forEach(function(slot) {
 						options += '<option value="' + slot.value + '">' + slot.label + '</option>';
 					});
 					$pickupTime.html(options).prop('disabled', false);
 				} else {
-					$pickupTime.html('<option value=""><?php echo esc_js( __( 'Keine Zeitslots verfügbar', 'libre-bite' ) ); ?></option>');
+					$pickupTime.html('<option value=""><?php echo esc_js( __( 'No time slots available', 'libre-bite' ) ); ?></option>');
 				}
 			},
 			error: function() {
-				$pickupTime.html('<option value=""><?php echo esc_js( __( 'Fehler beim Laden', 'libre-bite' ) ); ?></option>');
+				$pickupTime.html('<option value=""><?php echo esc_js( __( 'Error loading', 'libre-bite' ) ); ?></option>');
 			}
 		});
 	});

@@ -52,28 +52,28 @@ if ( $lbite_table_id ) {
 		</div>
 	<?php endif; ?>
 
-	<h2 class="lbite-checkout-title"><?php esc_html_e( 'Bestellung abschliessen', 'libre-bite' ); ?></h2>
+	<h2 class="lbite-checkout-title"><?php esc_html_e( 'Complete Order', 'libre-bite' ); ?></h2>
 
 	<?php if ( $lbite_location_name ) : ?>
 		<div class="lbite-checkout-info">
 			<p>
-				<strong><?php esc_html_e( 'Standort:', 'libre-bite' ); ?></strong>
+				<strong><?php esc_html_e( 'Location:', 'libre-bite' ); ?></strong>
 				<?php echo esc_html( $lbite_location_name ); ?>
 			</p>
 			<?php if ( $lbite_table_name ) : ?>
 				<p>
-					<strong><?php esc_html_e( 'Tisch:', 'libre-bite' ); ?></strong>
+					<strong><?php esc_html_e( 'Table:', 'libre-bite' ); ?></strong>
 					<?php echo esc_html( $lbite_table_name ); ?>
 				</p>
 			<?php elseif ( 'later' === $lbite_order_type && $lbite_pickup_time ) : ?>
 				<p>
-					<strong><?php esc_html_e( 'Abholung:', 'libre-bite' ); ?></strong>
-					<?php echo esc_html( wp_date( 'd.m.Y H:i', lbite_local_time_to_timestamp( $lbite_pickup_time ) ) ); ?> <?php esc_html_e( 'Uhr', 'libre-bite' ); ?>
+					<strong><?php esc_html_e( 'Pickup:', 'libre-bite' ); ?></strong>
+					<?php echo esc_html( wp_date( 'd.m.Y H:i', lbite_local_time_to_timestamp( $lbite_pickup_time ) ) ); ?>
 				</p>
 			<?php else : ?>
 				<p>
-					<strong><?php esc_html_e( 'Abholung:', 'libre-bite' ); ?></strong>
-					<?php esc_html_e( 'Sobald fertig', 'libre-bite' ); ?>
+					<strong><?php esc_html_e( 'Pickup:', 'libre-bite' ); ?></strong>
+					<?php esc_html_e( 'As soon as ready', 'libre-bite' ); ?>
 				</p>
 			<?php endif; ?>
 		</div>
@@ -85,36 +85,36 @@ if ( $lbite_table_id ) {
 		do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 
 		<div class="lbite-checkout-step" id="lbite-step-name">
-			<h3><?php esc_html_e( 'Wie heisst du?', 'libre-bite' ); ?></h3>
+			<h3><?php esc_html_e( 'What\'s your name?', 'libre-bite' ); ?></h3>
 			<p class="form-row form-row-wide">
 				<label for="billing_first_name"><?php esc_html_e( 'Name', 'libre-bite' ); ?> <span class="required">*</span></label>
-				<input type="text" class="input-text" name="billing_first_name" id="billing_first_name" placeholder="<?php esc_attr_e( 'Dein Name', 'libre-bite' ); ?>" value="<?php echo esc_attr( WC()->checkout->get_value( 'billing_first_name' ) ); ?>" required>
+				<input type="text" class="input-text" name="billing_first_name" id="billing_first_name" placeholder="<?php esc_attr_e( 'Your Name', 'libre-bite' ); ?>" value="<?php echo esc_attr( WC()->checkout->get_value( 'billing_first_name' ) ); ?>" required>
 			</p>
 		</div>
 
 		<div class="lbite-checkout-step" id="lbite-step-receipt">
-			<h3><?php esc_html_e( 'Beleg erhalten?', 'libre-bite' ); ?></h3>
+			<h3><?php esc_html_e( 'Get Receipt?', 'libre-bite' ); ?></h3>
 			<div class="lbite-receipt-options">
 				<label class="lbite-receipt-option">
 					<input type="radio" name="lbite_receipt_option" value="none" checked>
 					<span class="lbite-receipt-option-label">
 						<span class="lbite-receipt-option-icon dashicons dashicons-no-alt"></span>
-						<?php esc_html_e( 'Kein Beleg', 'libre-bite' ); ?>
+						<?php esc_html_e( 'No Receipt', 'libre-bite' ); ?>
 					</span>
 				</label>
 				<label class="lbite-receipt-option">
 					<input type="radio" name="lbite_receipt_option" value="email">
 					<span class="lbite-receipt-option-label">
 						<span class="lbite-receipt-option-icon dashicons dashicons-email"></span>
-						<?php esc_html_e( 'Per E-Mail', 'libre-bite' ); ?>
+						<?php esc_html_e( 'By Email', 'libre-bite' ); ?>
 					</span>
 				</label>
 			</div>
 
 			<div class="lbite-email-field" id="lbite-email-field" style="display: none;">
 				<p class="form-row form-row-wide">
-					<label for="billing_email"><?php esc_html_e( 'E-Mail-Adresse', 'libre-bite' ); ?> <span class="required">*</span></label>
-					<input type="email" class="input-text" name="billing_email" id="billing_email" placeholder="<?php esc_attr_e( 'deine@email.ch', 'libre-bite' ); ?>" value="<?php echo esc_attr( WC()->checkout->get_value( 'billing_email' ) ); ?>">
+					<label for="billing_email"><?php esc_html_e( 'Email Address', 'libre-bite' ); ?> <span class="required">*</span></label>
+					<input type="email" class="input-text" name="billing_email" id="billing_email" placeholder="<?php esc_attr_e( 'your@email.com', 'libre-bite' ); ?>" value="<?php echo esc_attr( WC()->checkout->get_value( 'billing_email' ) ); ?>">
 				</p>
 			</div>
 		</div>
@@ -123,7 +123,7 @@ if ( $lbite_table_id ) {
 		do_action( 'woocommerce_checkout_after_customer_details' ); ?>
 
 		<div class="lbite-checkout-step" id="lbite-step-review">
-			<h3><?php esc_html_e( 'Deine Bestellung', 'libre-bite' ); ?></h3>
+			<h3><?php esc_html_e( 'Your Order', 'libre-bite' ); ?></h3>
 
 			<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
 			do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>

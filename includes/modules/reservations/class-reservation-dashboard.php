@@ -50,20 +50,20 @@ class LBite_Reservation_Dashboard {
 		check_ajax_referer( 'lbite_reservation_board_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 		$date        = isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
 
 		if ( ! $location_id || ! $date ) {
-			wp_send_json_error( array( 'message' => __( 'Standort und Datum erforderlich', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Location and date required', 'libre-bite' ) ) );
 		}
 
 		// Datum validieren und normalisieren
 		$timestamp = strtotime( $date );
 		if ( ! $timestamp ) {
-			wp_send_json_error( array( 'message' => __( 'Ungültiges Datum', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid date', 'libre-bite' ) ) );
 		}
 		$date = gmdate( 'Y-m-d', $timestamp );
 
@@ -152,19 +152,19 @@ class LBite_Reservation_Dashboard {
 		check_ajax_referer( 'lbite_reservation_board_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$reservation_id = isset( $_POST['reservation_id'] ) ? intval( wp_unslash( $_POST['reservation_id'] ) ) : 0;
 		$status         = isset( $_POST['status'] ) ? sanitize_key( wp_unslash( $_POST['status'] ) ) : '';
 
 		if ( ! $reservation_id || ! array_key_exists( $status, LBite_Reservations::STATUSES ) ) {
-			wp_send_json_error( array( 'message' => __( 'Ungültige Anfrage', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid request', 'libre-bite' ) ) );
 		}
 
 		$post = get_post( $reservation_id );
 		if ( ! $post || LBite_Reservations::POST_TYPE !== $post->post_type ) {
-			wp_send_json_error( array( 'message' => __( 'Reservierung nicht gefunden', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Reservation not found', 'libre-bite' ) ) );
 		}
 
 		update_post_meta( $reservation_id, '_lbite_reservation_status', $status );
@@ -182,19 +182,19 @@ class LBite_Reservation_Dashboard {
 		check_ajax_referer( 'lbite_reservation_board_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$reservation_id = isset( $_POST['reservation_id'] ) ? intval( wp_unslash( $_POST['reservation_id'] ) ) : 0;
 		$table_id       = isset( $_POST['table_id'] ) ? intval( wp_unslash( $_POST['table_id'] ) ) : 0;
 
 		if ( ! $reservation_id ) {
-			wp_send_json_error( array( 'message' => __( 'Ungültige Reservierung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid reservation', 'libre-bite' ) ) );
 		}
 
 		$post = get_post( $reservation_id );
 		if ( ! $post || LBite_Reservations::POST_TYPE !== $post->post_type ) {
-			wp_send_json_error( array( 'message' => __( 'Reservierung nicht gefunden', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Reservation not found', 'libre-bite' ) ) );
 		}
 
 		// Cross-Location-Check: Tisch muss zum Standort der Reservierung gehören
@@ -203,7 +203,7 @@ class LBite_Reservation_Dashboard {
 			$table_location       = intval( get_post_meta( $table_id, '_lbite_location_id', true ) );
 
 			if ( $reservation_location && $table_location && $reservation_location !== $table_location ) {
-				wp_send_json_error( array( 'message' => __( 'Tisch gehört zu einem anderen Standort', 'libre-bite' ) ) );
+				wp_send_json_error( array( 'message' => __( 'Table belongs to a different location', 'libre-bite' ) ) );
 			}
 		}
 
@@ -220,7 +220,7 @@ class LBite_Reservation_Dashboard {
 		check_ajax_referer( 'lbite_reservation_board_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;

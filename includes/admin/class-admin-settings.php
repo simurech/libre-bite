@@ -200,7 +200,7 @@ class LBite_Admin_Settings {
 		add_settings_error(
 			'lbite_admin_settings',
 			'lbite_admin_settings_saved',
-			__( 'Einstellungen erfolgreich gespeichert.', 'libre-bite' ),
+			__( 'Settings saved successfully.', 'libre-bite' ),
 			'success'
 		);
 	}

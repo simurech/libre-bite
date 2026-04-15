@@ -21,10 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( count( $lbite_locations ) > 1 || 0 === $lbite_preselected_location ) : ?>
 			<div class="lbite-res-field">
 				<label class="lbite-res-label lbite-res-required" for="lbite-res-location">
-					<?php esc_html_e( 'Standort', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Location', 'libre-bite' ); ?>
 				</label>
 				<select id="lbite-res-location" name="location_id" class="lbite-res-select" required>
-					<option value=""><?php esc_html_e( '— Standort wählen —', 'libre-bite' ); ?></option>
+					<option value=""><?php esc_html_e( '— Select Location —', 'libre-bite' ); ?></option>
 					<?php foreach ( $lbite_locations as $lbite_loc ) : ?>
 						<option value="<?php echo esc_attr( $lbite_loc->ID ); ?>"
 							<?php selected( $lbite_preselected_location, $lbite_loc->ID ); ?>>
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="lbite-res-row">
 				<div class="lbite-res-field">
 					<label class="lbite-res-label lbite-res-required" for="lbite-res-date">
-						<?php esc_html_e( 'Datum', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Date', 'libre-bite' ); ?>
 					</label>
 					<input type="date"
 						id="lbite-res-date"
@@ -52,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<div class="lbite-res-field">
 					<label class="lbite-res-label lbite-res-required" for="lbite-res-time">
-						<?php esc_html_e( 'Uhrzeit', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Time', 'libre-bite' ); ?>
 					</label>
 					<input type="time"
 						id="lbite-res-time"
@@ -65,7 +65,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="lbite-res-row">
 				<div class="lbite-res-field">
 					<label class="lbite-res-label lbite-res-required" for="lbite-res-guests">
-						<?php esc_html_e( 'Anzahl Personen', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Number of Guests', 'libre-bite' ); ?>
 					</label>
 					<input type="number"
 						id="lbite-res-guests"
@@ -96,7 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="lbite-res-row">
 				<div class="lbite-res-field">
 					<label class="lbite-res-label lbite-res-required" for="lbite-res-email">
-						<?php esc_html_e( 'E-Mail', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Email', 'libre-bite' ); ?>
 					</label>
 					<input type="email"
 						id="lbite-res-email"
@@ -108,7 +108,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<div class="lbite-res-field">
 					<label class="lbite-res-label" for="lbite-res-phone">
-						<?php esc_html_e( 'Telefon (optional)', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Phone (optional)', 'libre-bite' ); ?>
 					</label>
 					<input type="tel"
 						id="lbite-res-phone"
@@ -120,7 +120,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<div class="lbite-res-field">
 				<label class="lbite-res-label" for="lbite-res-notes">
-					<?php esc_html_e( 'Anmerkungen (optional)', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Notes (optional)', 'libre-bite' ); ?>
 				</label>
 				<textarea id="lbite-res-notes"
 					name="notes"
@@ -132,15 +132,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<div class="lbite-res-actions">
 				<button type="submit" class="lbite-res-submit" id="lbite-res-submit">
-					<?php esc_html_e( 'Reservierungsanfrage senden', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Send Reservation Request', 'libre-bite' ); ?>
 				</button>
 			</div>
 		</form>
 
 		<div class="lbite-res-success" id="lbite-res-success" style="display:none;">
 			<div class="lbite-res-success-icon">&#10003;</div>
-			<h3><?php esc_html_e( 'Anfrage erfolgreich gesendet!', 'libre-bite' ); ?></h3>
-			<p><?php esc_html_e( 'Ihre Reservierungsanfrage wurde erfolgreich übermittelt. Wir werden uns in Kürze bei Ihnen melden, um die Reservierung zu bestätigen.', 'libre-bite' ); ?></p>
+			<h3><?php esc_html_e( 'Request sent successfully!', 'libre-bite' ); ?></h3>
+			<p><?php esc_html_e( 'Your reservation request has been submitted successfully. We will get back to you shortly to confirm the reservation.', 'libre-bite' ); ?></p>
 		</div>
 
 	</div>

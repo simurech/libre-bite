@@ -50,7 +50,7 @@ class LBite_Nutritional_Info {
 	public function add_meta_boxes() {
 		add_meta_box(
 			'lbite_nutritional_info',
-			__( 'Nährwertangaben', 'libre-bite' ),
+			__( 'Nutritional Information', 'libre-bite' ),
 			array( $this, 'render_nutritional_meta_box' ),
 			'product',
 			'normal',
@@ -59,7 +59,7 @@ class LBite_Nutritional_Info {
 
 		add_meta_box(
 			'lbite_allergens',
-			__( 'Allergene & Inhaltsstoffe', 'libre-bite' ),
+			__( 'Allergens & Ingredients', 'libre-bite' ),
 			array( $this, 'render_allergens_meta_box' ),
 			'product',
 			'normal',
@@ -87,56 +87,56 @@ class LBite_Nutritional_Info {
 		?>
 		<table class="form-table">
 			<tr>
-				<th><label for="lbite_serving_size"><?php esc_html_e( 'Portionsgröße', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_serving_size"><?php esc_html_e( 'Serving Size', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="text" id="lbite_serving_size" name="lbite_serving_size" value="<?php echo esc_attr( $serving_size ); ?>" class="regular-text">
-					<p class="description"><?php esc_html_e( 'z.B. "100g" oder "1 Portion (250g)"', 'libre-bite' ); ?></p>
+					<p class="description"><?php esc_html_e( 'E.g. "100g" or "1 serving (250g)"', 'libre-bite' ); ?></p>
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_energy_kcal"><?php esc_html_e( 'Energie (kcal)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_energy_kcal"><?php esc_html_e( 'Energy (kcal)', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="number" step="0.1" min="0" id="lbite_energy_kcal" name="lbite_energy_kcal" value="<?php echo esc_attr( $energy_kcal ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_energy_kj"><?php esc_html_e( 'Energie (kJ)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_energy_kj"><?php esc_html_e( 'Energy (kJ)', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="number" step="0.1" min="0" id="lbite_energy_kj" name="lbite_energy_kj" value="<?php echo esc_attr( $energy_kj ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_fat"><?php esc_html_e( 'Fett (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_fat"><?php esc_html_e( 'Fat (g)', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="number" step="0.1" min="0" id="lbite_fat" name="lbite_fat" value="<?php echo esc_attr( $fat ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_saturated"><?php esc_html_e( 'davon gesättigte Fettsäuren (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_saturated"><?php esc_html_e( 'of which saturated fatty acids (g)', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="number" step="0.1" min="0" id="lbite_saturated" name="lbite_saturated" value="<?php echo esc_attr( $saturated ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_carbs"><?php esc_html_e( 'Kohlenhydrate (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_carbs"><?php esc_html_e( 'Carbohydrates (g)', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="number" step="0.1" min="0" id="lbite_carbs" name="lbite_carbs" value="<?php echo esc_attr( $carbs ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_sugar"><?php esc_html_e( 'davon Zucker (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_sugar"><?php esc_html_e( 'of which sugars (g)', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="number" step="0.1" min="0" id="lbite_sugar" name="lbite_sugar" value="<?php echo esc_attr( $sugar ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_protein"><?php esc_html_e( 'Eiweiß (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_protein"><?php esc_html_e( 'Protein (g)', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="number" step="0.1" min="0" id="lbite_protein" name="lbite_protein" value="<?php echo esc_attr( $protein ); ?>" class="small-text">
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_salt"><?php esc_html_e( 'Salz (g)', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_salt"><?php esc_html_e( 'Salt (g)', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="number" step="0.1" min="0" id="lbite_salt" name="lbite_salt" value="<?php echo esc_attr( $salt ); ?>" class="small-text">
 				</td>
@@ -160,23 +160,23 @@ class LBite_Nutritional_Info {
 
 		$allergen_list = array(
 			'gluten'      => __( 'Gluten', 'libre-bite' ),
-			'crustaceans' => __( 'Krebstiere', 'libre-bite' ),
-			'eggs'        => __( 'Eier', 'libre-bite' ),
-			'fish'        => __( 'Fisch', 'libre-bite' ),
-			'peanuts'     => __( 'Erdnüsse', 'libre-bite' ),
-			'soy'         => __( 'Soja', 'libre-bite' ),
-			'milk'        => __( 'Milch/Laktose', 'libre-bite' ),
-			'nuts'        => __( 'Schalenfrüchte', 'libre-bite' ),
-			'celery'      => __( 'Sellerie', 'libre-bite' ),
-			'mustard'     => __( 'Senf', 'libre-bite' ),
-			'sesame'      => __( 'Sesam', 'libre-bite' ),
-			'sulfites'    => __( 'Sulfite', 'libre-bite' ),
-			'lupine'      => __( 'Lupinen', 'libre-bite' ),
-			'molluscs'    => __( 'Weichtiere', 'libre-bite' ),
+			'crustaceans' => __( 'Crustaceans', 'libre-bite' ),
+			'eggs'        => __( 'Eggs', 'libre-bite' ),
+			'fish'        => __( 'Fish', 'libre-bite' ),
+			'peanuts'     => __( 'Peanuts', 'libre-bite' ),
+			'soy'         => __( 'Soy', 'libre-bite' ),
+			'milk'        => __( 'Milk/Lactose', 'libre-bite' ),
+			'nuts'        => __( 'Tree nuts', 'libre-bite' ),
+			'celery'      => __( 'Celery', 'libre-bite' ),
+			'mustard'     => __( 'Mustard', 'libre-bite' ),
+			'sesame'      => __( 'Sesame', 'libre-bite' ),
+			'sulfites'    => __( 'Sulfites', 'libre-bite' ),
+			'lupine'      => __( 'Lupins', 'libre-bite' ),
+			'molluscs'    => __( 'Molluscs', 'libre-bite' ),
 		);
 		?>
 		<div style="padding: 10px;">
-			<p><strong><?php esc_html_e( 'Allergene auswählen:', 'libre-bite' ); ?></strong></p>
+			<p><strong><?php esc_html_e( 'Select allergens:', 'libre-bite' ); ?></strong></p>
 			<div style="column-count: 2; column-gap: 20px;">
 				<?php foreach ( $allergen_list as $key => $label ) : ?>
 					<label style="display: block; margin-bottom: 8px;">
@@ -188,9 +188,9 @@ class LBite_Nutritional_Info {
 
 			<hr style="margin: 20px 0;">
 
-			<p><strong><?php esc_html_e( 'Weitere Inhaltsstoffe:', 'libre-bite' ); ?></strong></p>
+			<p><strong><?php esc_html_e( 'Other Ingredients:', 'libre-bite' ); ?></strong></p>
 			<textarea name="lbite_other_ingredients" rows="4" style="width: 100%;"><?php echo esc_textarea( $other_ingredients ); ?></textarea>
-			<p class="description"><?php esc_html_e( 'Weitere Inhaltsstoffe oder Hinweise (optional)', 'libre-bite' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Other ingredients or notes (optional)', 'libre-bite' ); ?></p>
 		</div>
 		<?php
 	}
@@ -270,12 +270,12 @@ class LBite_Nutritional_Info {
 
 		?>
 		<div class="lbite-nutritional-info" style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 4px;">
-			<h3 style="margin-top: 0;"><?php esc_html_e( 'Nährwertangaben', 'libre-bite' ); ?></h3>
+			<h3 style="margin-top: 0;"><?php esc_html_e( 'Nutritional Information', 'libre-bite' ); ?></h3>
 			<?php if ( $serving_size ) : ?>
 				<p style="font-size: 13px; color: #666; margin-bottom: 10px;">
 					<?php
 					/* translators: %s: serving size (e.g., "100g") */
-					echo esc_html( sprintf( __( 'pro %s', 'libre-bite' ), $serving_size ) );
+					echo esc_html( sprintf( __( 'per %s', 'libre-bite' ), $serving_size ) );
 					?>
 				</p>
 			<?php endif; ?>
@@ -283,7 +283,7 @@ class LBite_Nutritional_Info {
 				<tbody>
 					<?php if ( $energy_kcal || $energy_kj ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 10px;"><strong><?php esc_html_e( 'Energie', 'libre-bite' ); ?></strong></td>
+							<td style="padding: 8px 10px;"><strong><?php esc_html_e( 'Energy', 'libre-bite' ); ?></strong></td>
 							<td style="padding: 8px 10px; text-align: right;">
 								<?php if ( $energy_kcal ) : ?>
 									<?php echo esc_html( $energy_kcal ); ?> kcal
@@ -296,37 +296,37 @@ class LBite_Nutritional_Info {
 					<?php endif; ?>
 					<?php if ( $fat ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 10px;"><?php esc_html_e( 'Fett', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px;"><?php esc_html_e( 'Fat', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 10px; text-align: right;"><?php echo esc_html( $fat ); ?> g</td>
 						</tr>
 					<?php endif; ?>
 					<?php if ( $saturated ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 10px; font-size: 13px; color: #555;"><?php esc_html_e( 'davon gesättigte Fettsäuren', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px; font-size: 13px; color: #555;"><?php esc_html_e( 'of which saturated fatty acids', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 10px; text-align: right; font-size: 13px;"><?php echo esc_html( $saturated ); ?> g</td>
 						</tr>
 					<?php endif; ?>
 					<?php if ( $carbs ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 10px;"><?php esc_html_e( 'Kohlenhydrate', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px;"><?php esc_html_e( 'Carbohydrates', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 10px; text-align: right;"><?php echo esc_html( $carbs ); ?> g</td>
 						</tr>
 					<?php endif; ?>
 					<?php if ( $sugar ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 10px; font-size: 13px; color: #555;"><?php esc_html_e( 'davon Zucker', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px; font-size: 13px; color: #555;"><?php esc_html_e( 'of which sugars', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 10px; text-align: right; font-size: 13px;"><?php echo esc_html( $sugar ); ?> g</td>
 						</tr>
 					<?php endif; ?>
 					<?php if ( $protein ) : ?>
 						<tr style="border-bottom: 1px solid #eee;">
-							<td style="padding: 8px 10px;"><?php esc_html_e( 'Eiweiß', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px;"><?php esc_html_e( 'Protein', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 10px; text-align: right;"><?php echo esc_html( $protein ); ?> g</td>
 						</tr>
 					<?php endif; ?>
 					<?php if ( $salt ) : ?>
 						<tr>
-							<td style="padding: 8px 10px;"><?php esc_html_e( 'Salz', 'libre-bite' ); ?></td>
+							<td style="padding: 8px 10px;"><?php esc_html_e( 'Salt', 'libre-bite' ); ?></td>
 							<td style="padding: 8px 10px; text-align: right;"><?php echo esc_html( $salt ); ?> g</td>
 						</tr>
 					<?php endif; ?>
@@ -355,26 +355,26 @@ class LBite_Nutritional_Info {
 
 		$allergen_labels = array(
 			'gluten'      => __( 'Gluten', 'libre-bite' ),
-			'crustaceans' => __( 'Krebstiere', 'libre-bite' ),
-			'eggs'        => __( 'Eier', 'libre-bite' ),
-			'fish'        => __( 'Fisch', 'libre-bite' ),
-			'peanuts'     => __( 'Erdnüsse', 'libre-bite' ),
-			'soy'         => __( 'Soja', 'libre-bite' ),
-			'milk'        => __( 'Milch/Laktose', 'libre-bite' ),
-			'nuts'        => __( 'Schalenfrüchte', 'libre-bite' ),
-			'celery'      => __( 'Sellerie', 'libre-bite' ),
-			'mustard'     => __( 'Senf', 'libre-bite' ),
-			'sesame'      => __( 'Sesam', 'libre-bite' ),
-			'sulfites'    => __( 'Sulfite', 'libre-bite' ),
-			'lupine'      => __( 'Lupinen', 'libre-bite' ),
-			'molluscs'    => __( 'Weichtiere', 'libre-bite' ),
+			'crustaceans' => __( 'Crustaceans', 'libre-bite' ),
+			'eggs'        => __( 'Eggs', 'libre-bite' ),
+			'fish'        => __( 'Fish', 'libre-bite' ),
+			'peanuts'     => __( 'Peanuts', 'libre-bite' ),
+			'soy'         => __( 'Soy', 'libre-bite' ),
+			'milk'        => __( 'Milk/Lactose', 'libre-bite' ),
+			'nuts'        => __( 'Tree nuts', 'libre-bite' ),
+			'celery'      => __( 'Celery', 'libre-bite' ),
+			'mustard'     => __( 'Mustard', 'libre-bite' ),
+			'sesame'      => __( 'Sesame', 'libre-bite' ),
+			'sulfites'    => __( 'Sulfites', 'libre-bite' ),
+			'lupine'      => __( 'Lupins', 'libre-bite' ),
+			'molluscs'    => __( 'Molluscs', 'libre-bite' ),
 		);
 		?>
 		<div class="lbite-allergens" style="margin: 20px 0; padding: 15px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
-			<h3 style="margin-top: 0; color: #856404;"><?php esc_html_e( 'Allergene & Inhaltsstoffe', 'libre-bite' ); ?></h3>
+			<h3 style="margin-top: 0; color: #856404;"><?php esc_html_e( 'Allergens & Ingredients', 'libre-bite' ); ?></h3>
 
 			<?php if ( ! empty( $allergens ) && is_array( $allergens ) ) : ?>
-				<p><strong><?php esc_html_e( 'Enthält:', 'libre-bite' ); ?></strong></p>
+				<p><strong><?php esc_html_e( 'Contains:', 'libre-bite' ); ?></strong></p>
 				<ul style="margin: 10px 0; padding-left: 20px;">
 					<?php foreach ( $allergens as $allergen ) : ?>
 						<?php if ( isset( $allergen_labels[ $allergen ] ) ) : ?>
@@ -385,7 +385,7 @@ class LBite_Nutritional_Info {
 			<?php endif; ?>
 
 			<?php if ( $other_ingredients ) : ?>
-				<p><strong><?php esc_html_e( 'Weitere Inhaltsstoffe:', 'libre-bite' ); ?></strong></p>
+				<p><strong><?php esc_html_e( 'Other Ingredients:', 'libre-bite' ); ?></strong></p>
 				<p style="margin: 10px 0;"><?php echo esc_html( $other_ingredients ); ?></p>
 			<?php endif; ?>
 		</div>

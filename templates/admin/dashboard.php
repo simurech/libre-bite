@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="lbite-dashboard-widgets">
 		<div class="lbite-widget">
-			<h2><?php esc_html_e( 'Heutige Bestellungen', 'libre-bite' ); ?></h2>
+			<h2><?php esc_html_e( 'Today\'s Orders', 'libre-bite' ); ?></h2>
 			<p class="lbite-stat-number">
 				<?php
 				$lbite_today_orders = wc_get_orders(
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="lbite-widget">
-			<h2><?php esc_html_e( 'Standorte', 'libre-bite' ); ?></h2>
+			<h2><?php esc_html_e( 'Locations', 'libre-bite' ); ?></h2>
 			<p class="lbite-stat-number">
 				<?php
 				$lbite_locations = get_posts(
@@ -49,16 +49,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 				echo count( $lbite_locations );
 				?>
 			</p>
-			<p><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_location' ) ); ?>"><?php esc_html_e( 'Verwalten', 'libre-bite' ); ?></a></p>
+			<p><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_location' ) ); ?>"><?php esc_html_e( 'Manage', 'libre-bite' ); ?></a></p>
 		</div>
 
 		<div class="lbite-widget">
-			<h2><?php esc_html_e( 'Schnellzugriff', 'libre-bite' ); ?></h2>
+			<h2><?php esc_html_e( 'Quick Access', 'libre-bite' ); ?></h2>
 			<ul>
-				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-order-board' ) ); ?>"><?php esc_html_e( 'Bestellübersicht', 'libre-bite' ); ?></a></li>
-				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-pos' ) ); ?>"><?php esc_html_e( 'Kassensystem', 'libre-bite' ); ?></a></li>
-				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings' ) ); ?>"><?php esc_html_e( 'Einstellungen', 'libre-bite' ); ?></a></li>
-				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help' ) ); ?>"><?php esc_html_e( 'Hilfe & Support', 'libre-bite' ); ?></a></li>
+				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-order-board' ) ); ?>"><?php esc_html_e( 'Order Overview', 'libre-bite' ); ?></a></li>
+				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-pos' ) ); ?>"><?php esc_html_e( 'POS System', 'libre-bite' ); ?></a></li>
+				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings' ) ); ?>"><?php esc_html_e( 'Settings', 'libre-bite' ); ?></a></li>
+				<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help' ) ); ?>"><?php esc_html_e( 'Help & Support', 'libre-bite' ); ?></a></li>
 			</ul>
 		</div>
 	</div>

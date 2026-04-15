@@ -117,7 +117,7 @@ class LBite_Tables {
 			'lbite-admin-tables',
 			'lbiteTableData',
 			array(
-				'scanText' => __( 'Hier scannen zum Bestellen', 'libre-bite' ),
+				'scanText' => __( 'Scan here to order', 'libre-bite' ),
 			)
 		);
 	}
@@ -169,21 +169,21 @@ class LBite_Tables {
 				'orderUrl'     => admin_url( 'admin.php?page=lbite-order-board' ),
 				'orderEditUrl' => admin_url( 'post.php?post=%d&action=edit' ),
 				'strings'  => array(
-					'loading'     => __( 'Lade Tische …', 'libre-bite' ),
-					'saving'      => __( 'Wird gespeichert …', 'libre-bite' ),
-					'saved'       => __( 'Gespeichert ✓', 'libre-bite' ),
-					'saveError'   => __( 'Fehler beim Speichern', 'libre-bite' ),
-					'loadError'   => __( 'Fehler beim Laden der Tische', 'libre-bite' ),
-					'editTable'   => __( 'Tisch bearbeiten', 'libre-bite' ),
-					'toggleShape' => __( 'Form wechseln (rund/eckig)', 'libre-bite' ),
-					'cycleSize'   => __( 'Grösse ändern (S/M/L)', 'libre-bite' ),
-					'tableFree'   => __( 'Tisch ist frei.', 'libre-bite' ),
-					'order'       => __( 'Bestellung', 'libre-bite' ),
-					'time'        => __( 'Uhrzeit', 'libre-bite' ),
-					'items'       => __( 'Artikel', 'libre-bite' ),
+					'loading'     => __( 'Loading tables…', 'libre-bite' ),
+					'saving'      => __( 'Saving…', 'libre-bite' ),
+					'saved'       => __( 'Saved ✓', 'libre-bite' ),
+					'saveError'   => __( 'Error saving', 'libre-bite' ),
+					'loadError'   => __( 'Error loading tables', 'libre-bite' ),
+					'editTable'   => __( 'Edit Table', 'libre-bite' ),
+					'toggleShape' => __( 'Toggle shape (round/square)', 'libre-bite' ),
+					'cycleSize'   => __( 'Change size (S/M/L)', 'libre-bite' ),
+					'tableFree'   => __( 'Table is free.', 'libre-bite' ),
+					'order'       => __( 'Order', 'libre-bite' ),
+					'time'        => __( 'Time', 'libre-bite' ),
+					'items'       => __( 'Items', 'libre-bite' ),
 					'total'       => __( 'Total', 'libre-bite' ),
 					'status'      => __( 'Status', 'libre-bite' ),
-					'viewOrder'   => __( 'In Bestellübersicht anzeigen', 'libre-bite' ),
+					'viewOrder'   => __( 'Show in Order Overview', 'libre-bite' ),
 				),
 			)
 		);
@@ -196,13 +196,13 @@ class LBite_Tables {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
 		if ( ! $location_id ) {
-			wp_send_json_error( array( 'message' => __( 'Kein Standort angegeben', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No location specified', 'libre-bite' ) ) );
 		}
 
 		// Letzten Standort merken
@@ -262,14 +262,14 @@ class LBite_Tables {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 		$order       = isset( $_POST['order'] ) ? array_map( 'intval', wp_unslash( (array) $_POST['order'] ) ) : array();
 
 		if ( ! $location_id || empty( $order ) ) {
-			wp_send_json_error( array( 'message' => __( 'Ungültige Daten', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid data', 'libre-bite' ) ) );
 		}
 
 		// Reihenfolge als _lbite_table_order (1-basiert) in Postmeta speichern
@@ -292,7 +292,7 @@ class LBite_Tables {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
@@ -300,7 +300,7 @@ class LBite_Tables {
 	$tables_raw  = isset( $_POST['tables'] ) ? (array) wp_unslash( $_POST['tables'] ) : array();
 
 		if ( ! $location_id ) {
-			wp_send_json_error( array( 'message' => __( 'Kein Standort angegeben', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No location specified', 'libre-bite' ) ) );
 		}
 
 		$allowed_shapes = array( 'rect', 'circle' );
@@ -346,7 +346,7 @@ class LBite_Tables {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_view_dashboard' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
@@ -370,9 +370,9 @@ class LBite_Tables {
 		);
 
 		$status_labels = array(
-			'processing' => __( 'In Zubereitung', 'libre-bite' ),
-			'on-hold'    => __( 'Neu', 'libre-bite' ),
-			'pending'    => __( 'Ausstehend', 'libre-bite' ),
+			'processing' => __( 'Preparing', 'libre-bite' ),
+			'on-hold'    => __( 'New', 'libre-bite' ),
+			'pending'    => __( 'Pending', 'libre-bite' ),
 		);
 
 		$statuses = array();
@@ -426,10 +426,10 @@ class LBite_Tables {
 			<div class="lbite-table-info-flex">
 				<span class="dashicons dashicons-grid-view lbite-table-icon"></span>
 				<div>
-					<strong><?php esc_html_e( 'Bestellung am Tisch', 'libre-bite' ); ?></strong><br>
+					<strong><?php esc_html_e( 'Table Order', 'libre-bite' ); ?></strong><br>
 					<?php 
 					/* translators: %s: table name */
-					printf( esc_html__( 'Sie bestellen aktuell für %s.', 'libre-bite' ), '<strong>' . esc_html( $table->post_title ) . '</strong>' ); 
+					printf( esc_html__( 'You are currently ordering for %s.', 'libre-bite' ), '<strong>' . esc_html( $table->post_title ) . '</strong>' ); 
 					?>
 				</div>
 			</div>
@@ -508,17 +508,17 @@ class LBite_Tables {
 	 */
 	public function register_post_type() {
 		$labels = array(
-			'name'               => __( 'Tische', 'libre-bite' ),
-			'singular_name'      => __( 'Tisch', 'libre-bite' ),
-			'menu_name'          => __( 'Tische', 'libre-bite' ),
-			'add_new'            => __( 'Neuer Tisch', 'libre-bite' ),
-			'add_new_item'       => __( 'Neuen Tisch hinzufügen', 'libre-bite' ),
-			'edit_item'          => __( 'Tisch bearbeiten', 'libre-bite' ),
-			'new_item'           => __( 'Neuer Tisch', 'libre-bite' ),
-			'view_item'          => __( 'Tisch ansehen', 'libre-bite' ),
-			'search_items'       => __( 'Tische suchen', 'libre-bite' ),
-			'not_found'          => __( 'Keine Tische gefunden', 'libre-bite' ),
-			'not_found_in_trash' => __( 'Keine Tische im Papierkorb', 'libre-bite' ),
+			'name'               => __( 'Tables', 'libre-bite' ),
+			'singular_name'      => __( 'Table', 'libre-bite' ),
+			'menu_name'          => __( 'Tables', 'libre-bite' ),
+			'add_new'            => __( 'New Table', 'libre-bite' ),
+			'add_new_item'       => __( 'Add New Table', 'libre-bite' ),
+			'edit_item'          => __( 'Edit Table', 'libre-bite' ),
+			'new_item'           => __( 'New Table', 'libre-bite' ),
+			'view_item'          => __( 'View Table', 'libre-bite' ),
+			'search_items'       => __( 'Search Tables', 'libre-bite' ),
+			'not_found'          => __( 'No Tables Found', 'libre-bite' ),
+			'not_found_in_trash' => __( 'No Tables in Trash', 'libre-bite' ),
 		);
 
 		$args = array(
@@ -545,7 +545,7 @@ class LBite_Tables {
 	public function add_meta_boxes() {
 		add_meta_box(
 			'lbite_table_details',
-			__( 'Tisch-Details', 'libre-bite' ),
+			__( 'Table Details', 'libre-bite' ),
 			array( $this, 'render_table_meta_box' ),
 			self::POST_TYPE,
 			'normal',
@@ -571,28 +571,28 @@ class LBite_Tables {
 		?>
 		<table class="form-table">
 			<tr>
-				<th><label for="lbite_location_id"><?php esc_html_e( 'Standort', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_location_id"><?php esc_html_e( 'Location', 'libre-bite' ); ?></label></th>
 				<td>
 					<select name="lbite_location_id" id="lbite_location_id" class="regular-text">
-						<option value=""><?php esc_html_e( 'Bitte wählen...', 'libre-bite' ); ?></option>
+						<option value=""><?php esc_html_e( 'Please select...', 'libre-bite' ); ?></option>
 						<?php foreach ( $locations as $loc ) : ?>
 							<option value="<?php echo esc_attr( $loc->ID ); ?>" <?php selected( $location_id, $loc->ID ); ?>>
 								<?php echo esc_html( $loc->post_title ); ?>
 							</option>
 						<?php endforeach; ?>
 					</select>
-					<p class="description"><?php esc_html_e( 'Zu welchem Standort gehört dieser Tisch?', 'libre-bite' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Which location does this table belong to?', 'libre-bite' ); ?></p>
 				</td>
 			</tr>
 			<tr>
-				<th><label for="lbite_table_seats"><?php esc_html_e( 'Sitzplätze', 'libre-bite' ); ?></label></th>
+				<th><label for="lbite_table_seats"><?php esc_html_e( 'Seats', 'libre-bite' ); ?></label></th>
 				<td>
 					<input type="number" name="lbite_table_seats" id="lbite_table_seats" value="<?php echo esc_attr( $seats ); ?>" min="1" class="small-text">
-					<p class="description"><?php esc_html_e( 'Anzahl Sitzplätze an diesem Tisch (optional, für Reservationen).', 'libre-bite' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Number of seats at this table (optional, for reservations).', 'libre-bite' ); ?></p>
 				</td>
 			</tr>
 			<tr>
-				<th><label><?php esc_html_e( 'QR-Code Link', 'libre-bite' ); ?></label></th>
+				<th><label><?php esc_html_e( 'QR Code Link', 'libre-bite' ); ?></label></th>
 				<td>
 					<?php if ( $location_id ) :
 						// Zielseite: konfigurierbare Menü-Seite oder Standard-Shop.
@@ -620,15 +620,15 @@ class LBite_Tables {
 							<img src="<?php echo esc_url( $qr_url ); ?>" alt="QR Code">
 						</div>
 						<p class="description">
-							<?php esc_html_e( 'Diesen Link oder QR-Code können Sie für den Tisch verwenden.', 'libre-bite' ); ?><br>
-							<a href="<?php echo esc_url( $qr_url ); ?>&format=png" target="_blank" download="qr-table-<?php echo esc_attr( $post->ID ); ?>.png" class="button"><?php esc_html_e( 'QR-Code herunterladen', 'libre-bite' ); ?></a>
+							<?php esc_html_e( 'You can use this link or QR code for the table.', 'libre-bite' ); ?><br>
+							<a href="<?php echo esc_url( $qr_url ); ?>&format=png" target="_blank" download="qr-table-<?php echo esc_attr( $post->ID ); ?>.png" class="button"><?php esc_html_e( 'Download QR Code', 'libre-bite' ); ?></a>
 							<button type="button" class="button lbite-print-qr-btn" data-title="<?php echo esc_attr( $post->post_title ); ?>" data-qr="<?php echo esc_url( $qr_url ); ?>">
-								<?php esc_html_e( 'QR-Code drucken', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Print QR Code', 'libre-bite' ); ?>
 							</button>
 						</p>
 
 					<?php else : ?>
-						<p class="description"><?php esc_html_e( 'Bitte wählen Sie zuerst einen Standort und speichern Sie, um den Link zu generieren.', 'libre-bite' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Please select a location first and save to generate the link.', 'libre-bite' ); ?></p>
 					<?php endif; ?>
 				</td>
 			</tr>
@@ -675,8 +675,8 @@ class LBite_Tables {
 		$new_columns = array();
 		$new_columns['cb']       = $columns['cb'];
 		$new_columns['title']    = $columns['title'];
-		$new_columns['location'] = __( 'Standort', 'libre-bite' );
-		$new_columns['seats']    = __( 'Sitzplätze', 'libre-bite' );
+		$new_columns['location'] = __( 'Location', 'libre-bite' );
+		$new_columns['seats']    = __( 'Seats', 'libre-bite' );
 		$new_columns['date']     = $columns['date'];
 
 		return $new_columns;
@@ -726,7 +726,7 @@ class LBite_Tables {
 		$selected = isset( $_GET['lbite_location_filter'] ) ? intval( $_GET['lbite_location_filter'] ) : 0;
 		?>
 		<select name="lbite_location_filter">
-			<option value=""><?php esc_html_e( 'Alle Standorte', 'libre-bite' ); ?></option>
+			<option value=""><?php esc_html_e( 'All Locations', 'libre-bite' ); ?></option>
 			<?php foreach ( $locations as $loc ) : ?>
 				<option value="<?php echo esc_attr( $loc->ID ); ?>" <?php selected( $selected, $loc->ID ); ?>>
 					<?php echo esc_html( $loc->post_title ); ?>
@@ -776,7 +776,7 @@ class LBite_Tables {
 	 */
 	public function add_bulk_create_link( $views ) {
 		$url = admin_url( 'admin.php?page=lbite-table-bulk-create' );
-		$views['bulk_create'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Mehrere Tische erstellen', 'libre-bite' ) . '</a>';
+		$views['bulk_create'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Create Multiple Tables', 'libre-bite' ) . '</a>';
 		return $views;
 	}
 
@@ -792,8 +792,8 @@ class LBite_Tables {
 		// Zugänglich via Tischliste-Ansicht (add_bulk_create_link).
 		add_submenu_page(
 			'libre-bite',
-			__( 'Mehrere Tische erstellen', 'libre-bite' ),
-			__( 'Mehrere Tische erstellen', 'libre-bite' ),
+			__( 'Create Multiple Tables', 'libre-bite' ),
+			__( 'Create Multiple Tables', 'libre-bite' ),
 			'lbite_manage_locations',
 			'lbite-table-bulk-create',
 			array( $this, 'render_bulk_create_page' )
@@ -806,7 +806,7 @@ class LBite_Tables {
 	 */
 	public function render_bulk_create_page() {
 		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
-			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
+			wp_die( esc_html__( 'You do not have permission for this page.', 'libre-bite' ) );
 		}
 
 		$locations = get_posts( array(
@@ -822,14 +822,14 @@ class LBite_Tables {
 		$created = isset( $_GET['lbite_created'] ) ? intval( $_GET['lbite_created'] ) : 0;
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Mehrere Tische erstellen', 'libre-bite' ); ?></h1>
+			<h1><?php esc_html_e( 'Create Multiple Tables', 'libre-bite' ); ?></h1>
 
 			<?php if ( $created > 0 ) : ?>
 				<div class="notice notice-success is-dismissible">
 					<p>
 						<?php
 						/* translators: %d: Anzahl erstellter Tische */
-						printf( esc_html__( '%d Tische wurden erfolgreich erstellt.', 'libre-bite' ), (int) $created );
+						printf( esc_html__( '%d tables were successfully created.', 'libre-bite' ), (int) $created );
 						?>
 					</p>
 				</div>
@@ -841,10 +841,10 @@ class LBite_Tables {
 
 				<table class="form-table">
 					<tr>
-						<th><label for="lbite_bulk_location"><?php esc_html_e( 'Standort', 'libre-bite' ); ?></label></th>
+						<th><label for="lbite_bulk_location"><?php esc_html_e( 'Location', 'libre-bite' ); ?></label></th>
 						<td>
 							<select name="lbite_bulk_location" id="lbite_bulk_location" required>
-								<option value=""><?php esc_html_e( 'Bitte wählen...', 'libre-bite' ); ?></option>
+								<option value=""><?php esc_html_e( 'Please select...', 'libre-bite' ); ?></option>
 								<?php foreach ( $locations as $loc ) : ?>
 									<option value="<?php echo esc_attr( $loc->ID ); ?>">
 										<?php echo esc_html( $loc->post_title ); ?>
@@ -854,38 +854,38 @@ class LBite_Tables {
 						</td>
 					</tr>
 					<tr>
-						<th><label for="lbite_bulk_prefix"><?php esc_html_e( 'Präfix', 'libre-bite' ); ?></label></th>
+						<th><label for="lbite_bulk_prefix"><?php esc_html_e( 'Prefix', 'libre-bite' ); ?></label></th>
 						<td>
-							<input type="text" name="lbite_bulk_prefix" id="lbite_bulk_prefix" value="<?php esc_attr_e( 'Tisch', 'libre-bite' ); ?>" class="regular-text">
-							<p class="description"><?php esc_html_e( 'Präfix für den Tischnamen, z.B. "Tisch" → "Tisch 1", "Tisch 2" …', 'libre-bite' ); ?></p>
+							<input type="text" name="lbite_bulk_prefix" id="lbite_bulk_prefix" value="<?php esc_attr_e( 'Table', 'libre-bite' ); ?>" class="regular-text">
+							<p class="description"><?php esc_html_e( 'Prefix for the table name, e.g. "Table" → "Table 1", "Table 2"…', 'libre-bite' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th><?php esc_html_e( 'Nummerierung', 'libre-bite' ); ?></th>
+						<th><?php esc_html_e( 'Numbering', 'libre-bite' ); ?></th>
 						<td>
-							<label for="lbite_bulk_from"><?php esc_html_e( 'Von', 'libre-bite' ); ?></label>
+							<label for="lbite_bulk_from"><?php esc_html_e( 'From', 'libre-bite' ); ?></label>
 							<input type="number" name="lbite_bulk_from" id="lbite_bulk_from" value="1" min="1" class="small-text" required>
 							&nbsp;
-							<label for="lbite_bulk_to"><?php esc_html_e( 'Bis', 'libre-bite' ); ?></label>
+							<label for="lbite_bulk_to"><?php esc_html_e( 'To', 'libre-bite' ); ?></label>
 							<input type="number" name="lbite_bulk_to" id="lbite_bulk_to" value="10" min="1" max="50" class="small-text" required>
-							<p class="description"><?php esc_html_e( 'Maximal 50 Tische auf einmal erstellen.', 'libre-bite' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Create maximum 50 tables at once.', 'libre-bite' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="lbite_bulk_seats"><?php esc_html_e( 'Sitzplätze', 'libre-bite' ); ?></label></th>
+						<th><label for="lbite_bulk_seats"><?php esc_html_e( 'Seats', 'libre-bite' ); ?></label></th>
 						<td>
 							<input type="number" name="lbite_bulk_seats" id="lbite_bulk_seats" value="" min="1" class="small-text" placeholder="—">
-							<p class="description"><?php esc_html_e( 'Optional: Gleiche Sitzplatzanzahl für alle Tische.', 'libre-bite' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Optional: Same number of seats for all tables.', 'libre-bite' ); ?></p>
 						</td>
 					</tr>
 				</table>
 
-				<?php submit_button( __( 'Tische erstellen', 'libre-bite' ) ); ?>
+				<?php submit_button( __( 'Create Tables', 'libre-bite' ) ); ?>
 			</form>
 
 			<p>
 				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_table' ) ); ?>">
-					&larr; <?php esc_html_e( 'Zurück zur Tischliste', 'libre-bite' ); ?>
+					&larr; <?php esc_html_e( 'Back to Table List', 'libre-bite' ); ?>
 				</a>
 			</p>
 		</div>
@@ -897,11 +897,11 @@ class LBite_Tables {
 	 */
 	public function handle_bulk_create() {
 		if ( ! isset( $_POST['lbite_bulk_create_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lbite_bulk_create_nonce'] ) ), 'lbite_bulk_create_tables' ) ) {
-			wp_die( esc_html__( 'Sicherheitsprüfung fehlgeschlagen.', 'libre-bite' ) );
+			wp_die( esc_html__( 'Security check failed.', 'libre-bite' ) );
 		}
 
 		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
-			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Aktion.', 'libre-bite' ) );
+			wp_die( esc_html__( 'You do not have permission for this action.', 'libre-bite' ) );
 		}
 
 		$location_id = isset( $_POST['lbite_bulk_location'] ) ? intval( wp_unslash( $_POST['lbite_bulk_location'] ) ) : 0;

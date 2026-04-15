@@ -29,10 +29,10 @@ class LBite_Reservations {
 	 * @var array
 	 */
 	const STATUSES = array(
-		'pending'   => 'Ausstehend',
-		'confirmed' => 'Bestätigt',
-		'cancelled' => 'Storniert',
-		'completed' => 'Abgeschlossen',
+		'pending'   => 'Pending',
+		'confirmed' => 'Confirmed',
+		'cancelled' => 'Cancelled',
+		'completed' => 'Completed',
 	);
 
 	/**
@@ -122,14 +122,14 @@ class LBite_Reservations {
 			self::POST_TYPE,
 			array(
 				'labels'       => array(
-					'name'               => __( 'Reservierungen', 'libre-bite' ),
-					'singular_name'      => __( 'Reservierung', 'libre-bite' ),
-					'add_new'            => __( 'Neue Reservierung', 'libre-bite' ),
-					'add_new_item'       => __( 'Neue Reservierung hinzufügen', 'libre-bite' ),
-					'edit_item'          => __( 'Reservierung bearbeiten', 'libre-bite' ),
-					'search_items'       => __( 'Reservierungen suchen', 'libre-bite' ),
-					'not_found'          => __( 'Keine Reservierungen gefunden', 'libre-bite' ),
-					'not_found_in_trash' => __( 'Keine Reservierungen im Papierkorb', 'libre-bite' ),
+					'name'               => __( 'Reservations', 'libre-bite' ),
+					'singular_name'      => __( 'Reservation', 'libre-bite' ),
+					'add_new'            => __( 'New Reservation', 'libre-bite' ),
+					'add_new_item'       => __( 'Add New Reservation', 'libre-bite' ),
+					'edit_item'          => __( 'Edit Reservation', 'libre-bite' ),
+					'search_items'       => __( 'Search Reservations', 'libre-bite' ),
+					'not_found'          => __( 'No Reservations Found', 'libre-bite' ),
+					'not_found_in_trash' => __( 'No Reservations in Trash', 'libre-bite' ),
 				),
 				'public'       => false,
 				'show_ui'      => true,
@@ -163,7 +163,7 @@ class LBite_Reservations {
 	public function add_meta_boxes() {
 		add_meta_box(
 			'lbite_reservation_details',
-			__( 'Reservierungsdetails', 'libre-bite' ),
+			__( 'Reservation Details', 'libre-bite' ),
 			array( $this, 'render_meta_box' ),
 			self::POST_TYPE,
 			'normal',
@@ -206,23 +206,23 @@ class LBite_Reservations {
 				</td>
 			</tr>
 			<tr>
-				<th><?php esc_html_e( 'Datum', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Date', 'libre-bite' ); ?></th>
 				<td><?php echo $lbite_date ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $lbite_date ) ) ) : '—'; ?></td>
 			</tr>
 			<tr>
-				<th><?php esc_html_e( 'Uhrzeit', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Time', 'libre-bite' ); ?></th>
 				<td><?php echo $lbite_time ? esc_html( $lbite_time ) : '—'; ?></td>
 			</tr>
 			<tr>
-				<th><?php esc_html_e( 'Personen', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Guests', 'libre-bite' ); ?></th>
 				<td><?php echo $lbite_guests ? esc_html( $lbite_guests ) : '—'; ?></td>
 			</tr>
 			<tr>
-				<th><?php esc_html_e( 'Tisch', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Table', 'libre-bite' ); ?></th>
 				<td><?php echo $lbite_table ? esc_html( $lbite_table->post_title ) : '—'; ?></td>
 			</tr>
 			<tr>
-				<th><?php esc_html_e( 'Standort', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Location', 'libre-bite' ); ?></th>
 				<td><?php echo $lbite_location ? esc_html( $lbite_location->post_title ) : '—'; ?></td>
 			</tr>
 			<tr>
@@ -230,16 +230,16 @@ class LBite_Reservations {
 				<td><?php echo $lbite_name ? esc_html( $lbite_name ) : '—'; ?></td>
 			</tr>
 			<tr>
-				<th><?php esc_html_e( 'E-Mail', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Email', 'libre-bite' ); ?></th>
 				<td><?php echo $lbite_email ? esc_html( $lbite_email ) : '—'; ?></td>
 			</tr>
 			<tr>
-				<th><?php esc_html_e( 'Telefon', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Phone', 'libre-bite' ); ?></th>
 				<td><?php echo $lbite_phone ? esc_html( $lbite_phone ) : '—'; ?></td>
 			</tr>
 			<?php if ( $lbite_notes ) : ?>
 			<tr>
-				<th><?php esc_html_e( 'Notiz', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Note', 'libre-bite' ); ?></th>
 				<td><?php echo esc_html( $lbite_notes ); ?></td>
 			</tr>
 			<?php endif; ?>
@@ -286,11 +286,11 @@ class LBite_Reservations {
 		return array_merge(
 			array_slice( $columns, 0, 2 ),
 			array(
-				'lbite_res_date'     => __( 'Datum', 'libre-bite' ),
-				'lbite_res_time'     => __( 'Uhrzeit', 'libre-bite' ),
-				'lbite_res_guests'   => __( 'Personen', 'libre-bite' ),
-				'lbite_res_table'    => __( 'Tisch', 'libre-bite' ),
-				'lbite_res_location' => __( 'Standort', 'libre-bite' ),
+				'lbite_res_date'     => __( 'Date', 'libre-bite' ),
+				'lbite_res_time'     => __( 'Time', 'libre-bite' ),
+				'lbite_res_guests'   => __( 'Guests', 'libre-bite' ),
+				'lbite_res_table'    => __( 'Table', 'libre-bite' ),
+				'lbite_res_location' => __( 'Location', 'libre-bite' ),
 				'lbite_res_status'   => __( 'Status', 'libre-bite' ),
 			),
 			array_slice( $columns, 2 )
@@ -364,7 +364,7 @@ class LBite_Reservations {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter zur Anzeige des vorselektierten Filterwerts; kein DB-Schreibzugriff.
 		$lbite_sel_loc = isset( $_GET['lbite_res_location'] ) ? intval( $_GET['lbite_res_location'] ) : 0;
 		echo '<select name="lbite_res_location">';
-		echo '<option value="">' . esc_html__( 'Alle Standorte', 'libre-bite' ) . '</option>';
+		echo '<option value="">' . esc_html__( 'All Locations', 'libre-bite' ) . '</option>';
 		foreach ( $lbite_locations as $lbite_loc ) {
 			printf(
 				'<option value="%d"%s>%s</option>',
@@ -379,7 +379,7 @@ class LBite_Reservations {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter zur Anzeige des vorselektierten Filterwerts; kein DB-Schreibzugriff.
 		$lbite_sel_status = isset( $_GET['lbite_res_status'] ) ? sanitize_key( $_GET['lbite_res_status'] ) : '';
 		echo '<select name="lbite_res_status">';
-		echo '<option value="">' . esc_html__( 'Alle Status', 'libre-bite' ) . '</option>';
+		echo '<option value="">' . esc_html__( 'All Status', 'libre-bite' ) . '</option>';
 		foreach ( self::STATUSES as $lbite_val => $lbite_label ) {
 			printf(
 				'<option value="%s"%s>%s</option>',
@@ -460,12 +460,12 @@ class LBite_Reservations {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'lbite_reservation_form' ),
 				'strings' => array(
-					'sending'     => __( 'Wird gesendet …', 'libre-bite' ),
-					'success'     => __( 'Ihre Reservierungsanfrage wurde erfolgreich übermittelt. Wir melden uns in Kürze.', 'libre-bite' ),
-					'error'       => __( 'Fehler beim Senden. Bitte versuchen Sie es erneut.', 'libre-bite' ),
-					'loadTables'  => __( 'Tische werden geladen …', 'libre-bite' ),
-					'noTables'    => __( 'Keine Tische für diesen Standort vorhanden.', 'libre-bite' ),
-					'selectTable' => __( '— Tisch wählen —', 'libre-bite' ),
+					'sending'     => __( 'Sending…', 'libre-bite' ),
+					'success'     => __( 'Your reservation request has been submitted successfully. We will contact you soon.', 'libre-bite' ),
+					'error'       => __( 'Error sending. Please try again.', 'libre-bite' ),
+					'loadTables'  => __( 'Loading tables…', 'libre-bite' ),
+					'noTables'    => __( 'No tables available for this location.', 'libre-bite' ),
+					'selectTable' => __( '— Select Table —', 'libre-bite' ),
 				),
 			)
 		);
@@ -575,17 +575,17 @@ class LBite_Reservations {
 
 		// Pflichtfelder prüfen
 		if ( ! $lbite_location_id || ! $lbite_date || ! $lbite_time || ! $lbite_guests || ! $lbite_name || ! $lbite_email ) {
-			wp_send_json_error( array( 'message' => __( 'Bitte füllen Sie alle Pflichtfelder aus.', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Please fill in all required fields.', 'libre-bite' ) ) );
 		}
 
 		// Datum nicht in der Vergangenheit
 		if ( strtotime( $lbite_date ) < strtotime( 'today' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Das Datum darf nicht in der Vergangenheit liegen.', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The date cannot be in the past.', 'libre-bite' ) ) );
 		}
 
 		// E-Mail prüfen
 		if ( ! is_email( $lbite_email ) ) {
-			wp_send_json_error( array( 'message' => __( 'Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Please enter a valid email address.', 'libre-bite' ) ) );
 		}
 
 		// Tisch-Kapazität prüfen
@@ -594,8 +594,8 @@ class LBite_Reservations {
 			if ( $lbite_seats > 0 && $lbite_guests > $lbite_seats ) {
 				wp_send_json_error(
 					array(
-						/* translators: %d: Anzahl Sitzplätze */
-						'message' => sprintf( __( 'Dieser Tisch hat maximal %d Sitzplätze.', 'libre-bite' ), $lbite_seats ),
+						/* translators: %d: number of seats */
+						'message' => sprintf( __( 'This table has a maximum of %d seats.', 'libre-bite' ), $lbite_seats ),
 					)
 				);
 			}
@@ -619,7 +619,7 @@ class LBite_Reservations {
 		);
 
 		if ( is_wp_error( $lbite_post_id ) || ! $lbite_post_id ) {
-			wp_send_json_error( array( 'message' => __( 'Fehler beim Erstellen der Reservierung.', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Error creating reservation.', 'libre-bite' ) ) );
 		}
 
 		// Meta speichern + Badge-Cache invalidieren
@@ -654,7 +654,7 @@ class LBite_Reservations {
 		$this->send_admin_notification( $lbite_post_id, $lbite_data );
 
 		wp_send_json_success(
-			array( 'message' => __( 'Reservierungsanfrage erfolgreich übermittelt!', 'libre-bite' ) )
+			array( 'message' => __( 'Reservation request successfully submitted!', 'libre-bite' ) )
 		);
 	}
 
@@ -669,27 +669,27 @@ class LBite_Reservations {
 		$lbite_to        = $data['lbite_email'];
 
 		/* translators: %s: Website-Name */
-		$lbite_subject = sprintf( __( 'Ihre Reservierungsanfrage bei %s', 'libre-bite' ), $lbite_site_name );
+		$lbite_subject = sprintf( __( 'Your reservation request at %s', 'libre-bite' ), $lbite_site_name );
 
 		/* translators: %s: Name des Gastes */
-		$lbite_message  = sprintf( __( 'Hallo %s,', 'libre-bite' ), $data['lbite_name'] ) . "\n\n";
-		$lbite_message .= __( 'Ihre Reservierungsanfrage wurde erfolgreich entgegengenommen. Wir werden Sie in Kürze kontaktieren, um die Reservierung zu bestätigen.', 'libre-bite' ) . "\n\n";
+		$lbite_message  = sprintf( __( 'Hello %s,', 'libre-bite' ), $data['lbite_name'] ) . "\n\n";
+		$lbite_message .= __( 'Your reservation request has been received. We will contact you shortly to confirm the reservation.', 'libre-bite' ) . "\n\n";
 		$lbite_message .= "---\n";
 		/* translators: %s: Standortname */
-		$lbite_message .= sprintf( __( 'Standort: %s', 'libre-bite' ), $data['lbite_location_name'] ) . "\n";
+		$lbite_message .= sprintf( __( 'Location: %s', 'libre-bite' ), $data['lbite_location_name'] ) . "\n";
 		if ( $data['lbite_table_name'] ) {
 			/* translators: %s: Tischname */
-			$lbite_message .= sprintf( __( 'Tisch: %s', 'libre-bite' ), $data['lbite_table_name'] ) . "\n";
+			$lbite_message .= sprintf( __( 'Table: %s', 'libre-bite' ), $data['lbite_table_name'] ) . "\n";
 		}
 		/* translators: %s: Datum */
-		$lbite_message .= sprintf( __( 'Datum: %s', 'libre-bite' ), date_i18n( get_option( 'date_format' ), strtotime( $data['lbite_date'] ) ) ) . "\n";
+		$lbite_message .= sprintf( __( 'Date: %s', 'libre-bite' ), date_i18n( get_option( 'date_format' ), strtotime( $data['lbite_date'] ) ) ) . "\n";
 		/* translators: %s: Uhrzeit */
-		$lbite_message .= sprintf( __( 'Uhrzeit: %s', 'libre-bite' ), $data['lbite_time'] ) . "\n";
+		$lbite_message .= sprintf( __( 'Time: %s', 'libre-bite' ), $data['lbite_time'] ) . "\n";
 		/* translators: %d: Anzahl Personen */
-		$lbite_message .= sprintf( __( 'Personen: %d', 'libre-bite' ), $data['lbite_guests'] ) . "\n";
+		$lbite_message .= sprintf( __( 'Guests: %d', 'libre-bite' ), $data['lbite_guests'] ) . "\n";
 		if ( $data['lbite_notes'] ) {
 			/* translators: %s: Notiz */
-			$lbite_message .= sprintf( __( 'Notiz: %s', 'libre-bite' ), $data['lbite_notes'] ) . "\n";
+			$lbite_message .= sprintf( __( 'Note: %s', 'libre-bite' ), $data['lbite_notes'] ) . "\n";
 		}
 		$lbite_message .= "---\n\n";
 		$lbite_message .= $lbite_site_name;
@@ -709,39 +709,39 @@ class LBite_Reservations {
 		$lbite_to        = get_option( 'admin_email' );
 
 		/* translators: %s: Website-Name */
-		$lbite_subject = sprintf( __( 'Neue Reservierungsanfrage – %s', 'libre-bite' ), $lbite_site_name );
+		$lbite_subject = sprintf( __( 'New Reservation Request – %s', 'libre-bite' ), $lbite_site_name );
 
 		$lbite_admin_url = admin_url( 'post.php?post=' . $reservation_id . '&action=edit' );
 
-		$lbite_message  = __( 'Eine neue Reservierungsanfrage ist eingegangen:', 'libre-bite' ) . "\n\n";
+		$lbite_message  = __( 'A new reservation request has been received:', 'libre-bite' ) . "\n\n";
 		/* translators: %s: Kundenname */
-		$lbite_message .= sprintf( __( 'Kunde: %s', 'libre-bite' ), $data['lbite_name'] ) . "\n";
+		$lbite_message .= sprintf( __( 'Customer: %s', 'libre-bite' ), $data['lbite_name'] ) . "\n";
 		/* translators: %s: E-Mail */
-		$lbite_message .= sprintf( __( 'E-Mail: %s', 'libre-bite' ), $data['lbite_email'] ) . "\n";
+		$lbite_message .= sprintf( __( 'Email: %s', 'libre-bite' ), $data['lbite_email'] ) . "\n";
 		if ( $data['lbite_phone'] ) {
 			/* translators: %s: Telefon */
-			$lbite_message .= sprintf( __( 'Telefon: %s', 'libre-bite' ), $data['lbite_phone'] ) . "\n";
+			$lbite_message .= sprintf( __( 'Phone: %s', 'libre-bite' ), $data['lbite_phone'] ) . "\n";
 		}
 		$lbite_message .= "---\n";
 		/* translators: %s: Standortname */
-		$lbite_message .= sprintf( __( 'Standort: %s', 'libre-bite' ), $data['lbite_location_name'] ) . "\n";
+		$lbite_message .= sprintf( __( 'Location: %s', 'libre-bite' ), $data['lbite_location_name'] ) . "\n";
 		if ( $data['lbite_table_name'] ) {
 			/* translators: %s: Tischname */
-			$lbite_message .= sprintf( __( 'Tisch: %s', 'libre-bite' ), $data['lbite_table_name'] ) . "\n";
+			$lbite_message .= sprintf( __( 'Table: %s', 'libre-bite' ), $data['lbite_table_name'] ) . "\n";
 		}
 		/* translators: %s: Datum */
-		$lbite_message .= sprintf( __( 'Datum: %s', 'libre-bite' ), date_i18n( get_option( 'date_format' ), strtotime( $data['lbite_date'] ) ) ) . "\n";
+		$lbite_message .= sprintf( __( 'Date: %s', 'libre-bite' ), date_i18n( get_option( 'date_format' ), strtotime( $data['lbite_date'] ) ) ) . "\n";
 		/* translators: %s: Uhrzeit */
-		$lbite_message .= sprintf( __( 'Uhrzeit: %s', 'libre-bite' ), $data['lbite_time'] ) . "\n";
+		$lbite_message .= sprintf( __( 'Time: %s', 'libre-bite' ), $data['lbite_time'] ) . "\n";
 		/* translators: %d: Anzahl Personen */
-		$lbite_message .= sprintf( __( 'Personen: %d', 'libre-bite' ), $data['lbite_guests'] ) . "\n";
+		$lbite_message .= sprintf( __( 'Guests: %d', 'libre-bite' ), $data['lbite_guests'] ) . "\n";
 		if ( $data['lbite_notes'] ) {
 			/* translators: %s: Notiz */
-			$lbite_message .= sprintf( __( 'Notiz: %s', 'libre-bite' ), $data['lbite_notes'] ) . "\n";
+			$lbite_message .= sprintf( __( 'Note: %s', 'libre-bite' ), $data['lbite_notes'] ) . "\n";
 		}
 		$lbite_message .= "---\n\n";
 		/* translators: %s: Admin-URL */
-		$lbite_message .= sprintf( __( 'Reservierung bearbeiten: %s', 'libre-bite' ), $lbite_admin_url );
+		$lbite_message .= sprintf( __( 'Edit Reservation: %s', 'libre-bite' ), $lbite_admin_url );
 
 		$lbite_headers = array( 'Content-Type: text/plain; charset=UTF-8' );
 		wp_mail( $lbite_to, $lbite_subject, $lbite_message, $lbite_headers );

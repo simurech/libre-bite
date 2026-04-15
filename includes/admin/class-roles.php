@@ -55,7 +55,7 @@ class LBite_Roles {
 		// Staff-Rolle erstellen
 		add_role(
 			'lbite_staff',
-			'Libre Bite Personal', // Keine Übersetzung bei Aktivierung um Early-Loading zu vermeiden
+			'Libre Bite Staff', // No translation during activation to avoid early-loading warnings
 			array(
 				'read'                 => true,
 				'edit_posts'           => false,

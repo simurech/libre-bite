@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="lbite-location-modal" class="lbite-modal" style="display: none;">
 	<div class="lbite-modal-overlay"></div>
 	<div class="lbite-modal-content">
-		<h2><?php esc_html_e( 'Standort wählen', 'libre-bite' ); ?></h2>
-		<p><?php esc_html_e( 'Bitte wählen Sie Ihren gewünschten Standort:', 'libre-bite' ); ?></p>
+		<h2><?php esc_html_e( 'Select Location', 'libre-bite' ); ?></h2>
+		<p><?php esc_html_e( 'Please select your desired location:', 'libre-bite' ); ?></p>
 
 		<div class="lbite-location-list">
 			<?php foreach ( $lbite_locations as $lbite_location ) : ?>
@@ -36,19 +36,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="lbite-order-type">
-			<h3><?php esc_html_e( 'Wann möchten Sie bestellen?', 'libre-bite' ); ?></h3>
+			<h3><?php esc_html_e( 'When would you like to order?', 'libre-bite' ); ?></h3>
 			<label class="lbite-order-type-option">
 				<input type="radio" name="lbite_order_type" value="now" checked>
-				<?php esc_html_e( 'Sofort bestellen', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Order Now', 'libre-bite' ); ?>
 			</label>
 			<label class="lbite-order-type-option">
 				<input type="radio" name="lbite_order_type" value="later">
-				<?php esc_html_e( 'Für später vorbestellen', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Pre-order for later', 'libre-bite' ); ?>
 			</label>
 		</div>
 
 		<button type="button" id="lbite-confirm-location" class="button">
-			<?php esc_html_e( 'Bestätigen', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Confirm', 'libre-bite' ); ?>
 		</button>
 	</div>
 </div>
@@ -73,7 +73,7 @@ jQuery(document).ready(function($) {
 	// Bestätigen
 	$('#lbite-confirm-location').on('click', function() {
 		if (!selectedLocation) {
-			alert('<?php esc_html_e( 'Bitte wählen Sie einen Standort', 'libre-bite' ); ?>');
+			alert('<?php esc_html_e( 'Please select a location', 'libre-bite' ); ?>');
 			return;
 		}
 

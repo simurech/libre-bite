@@ -134,13 +134,13 @@ class LBite_POS {
 				'preloadData'    => $product_data,
 				'locationColors' => $pos_location_colors,
 				'strings'        => array(
-					'addToCart'      => __( 'Zum Warenkorb', 'libre-bite' ),
-					'removeFromCart' => __( 'Entfernen', 'libre-bite' ),
-					'orderCreated'   => __( 'Bestellung erstellt', 'libre-bite' ),
-					'orderError'     => __( 'Fehler beim Erstellen der Bestellung', 'libre-bite' ),
-					'cartEmpty'      => __( 'Warenkorb ist leer', 'libre-bite' ),
-					'selectLocation' => __( 'Bitte Standort wählen', 'libre-bite' ),
-					'selectLocationFirst' => __( 'Bitte zuerst einen Standort wählen', 'libre-bite' ),
+					'addToCart'      => __( 'Add to Cart', 'libre-bite' ),
+					'removeFromCart' => __( 'Remove', 'libre-bite' ),
+					'orderCreated'   => __( 'Order created', 'libre-bite' ),
+					'orderError'     => __( 'Error creating order', 'libre-bite' ),
+					'cartEmpty'      => __( 'Cart is empty', 'libre-bite' ),
+					'selectLocation' => __( 'Please select a location', 'libre-bite' ),
+					'selectLocationFirst' => __( 'Please select a location first', 'libre-bite' ),
 				),
 			)
 		);
@@ -265,7 +265,7 @@ class LBite_POS {
 							'id'         => $variation['variation_id'],
 							'attributes' => $variation['attributes'],
 							'price'      => $variation_obj->get_price(),
-							'name'       => ! empty( $attr_labels ) ? implode( ', ', $attr_labels ) : __( 'Variante', 'libre-bite' ),
+							'name'       => ! empty( $attr_labels ) ? implode( ', ', $attr_labels ) : __( 'Variant', 'libre-bite' ),
 						);
 					}
 				}
@@ -316,7 +316,7 @@ class LBite_POS {
 		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$category_id = isset( $_POST['category_id'] ) ? intval( wp_unslash( $_POST['category_id'] ) ) : 0;
@@ -370,7 +370,7 @@ class LBite_POS {
 		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		// Rohes JSON laden und validieren.
@@ -378,14 +378,14 @@ class LBite_POS {
 		$cart_items_raw = isset( $_POST['cart_items'] ) ? wp_unslash( $_POST['cart_items'] ) : '';
 
 		if ( empty( $cart_items_raw ) ) {
-			wp_send_json_error( array( 'message' => __( 'Warenkorb ist leer', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Cart is empty', 'libre-bite' ) ) );
 		}
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON wird nach dem Decode Feld für Feld validiert.
 		$cart_items_decoded = json_decode( $cart_items_raw, true );
 
 		if ( ! is_array( $cart_items_decoded ) ) {
-			wp_send_json_error( array( 'message' => __( 'Ungültige Warenkorbdaten', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid cart data', 'libre-bite' ) ) );
 		}
 
 		$cart_items = array();
@@ -409,7 +409,7 @@ class LBite_POS {
 		}
 
 		if ( empty( $cart_items ) ) {
-			wp_send_json_error( array( 'message' => __( 'Warenkorb ist leer', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Cart is empty', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
@@ -417,7 +417,7 @@ class LBite_POS {
 		$pickup_time = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
 
 		if ( ! $location_id ) {
-			wp_send_json_error( array( 'message' => __( 'Kein Standort gewählt', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No location selected', 'libre-bite' ) ) );
 		}
 
 		try {
@@ -454,14 +454,14 @@ class LBite_POS {
 			$order->calculate_totals();
 
 			// Status setzen.
-			$order->set_status( 'processing', __( 'POS-Bestellung', 'libre-bite' ) );
+			$order->set_status( 'processing', __( 'POS Order', 'libre-bite' ) );
 
 			// Speichern.
 			$order->save();
 
 			wp_send_json_success(
 				array(
-					'message'      => __( 'Bestellung erfolgreich erstellt', 'libre-bite' ),
+					'message'      => __( 'Order successfully created', 'libre-bite' ),
 					'order_id'     => $order->get_id(),
 					'order_number' => $order->get_order_number(),
 					'total'        => $order->get_formatted_order_total(),
@@ -471,7 +471,7 @@ class LBite_POS {
 		} catch ( Exception $e ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Fehler beim Erstellen der Bestellung: ', 'libre-bite' ) . $e->getMessage(),
+					'message' => __( 'Error creating order: ', 'libre-bite' ) . $e->getMessage(),
 				)
 			);
 		}

@@ -189,8 +189,8 @@ function lbite_activate_plugin() {
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		wp_die(
-			'Libre Bite benötigt WooCommerce. Bitte installieren und aktivieren Sie WooCommerce zuerst.',
-			'Plugin-Abhängigkeit',
+			'Libre Bite requires WooCommerce. Please install and activate WooCommerce first.',
+			'Plugin Dependency',
 			array( 'back_link' => true )
 		);
 	}
@@ -249,7 +249,7 @@ add_action( 'before_woocommerce_init', function() {
 add_filter( 'cron_schedules', function( $schedules ) {
 	$schedules['every_minute'] = array(
 		'interval' => 60,
-		'display'  => 'Jede Minute', // Keine Übersetzung hier um Early-Loading-Warnung zu vermeiden
+		'display'  => 'Every Minute', // No translation here to avoid early-loading warnings
 	);
 	return $schedules;
 } );

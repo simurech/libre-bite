@@ -24,27 +24,27 @@ if ( $lbite_is_admin ) {
 	$lbite_tabs['features'] = __( 'Features', 'libre-bite' );
 }
 
-$lbite_tabs['general'] = __( 'Allgemein', 'libre-bite' );
+$lbite_tabs['general'] = __( 'General', 'libre-bite' );
 
 if ( lbite_feature_enabled( 'enable_tips' ) ) {
-	$lbite_tabs['tips'] = __( 'Trinkgeld', 'libre-bite' );
+	$lbite_tabs['tips'] = __( 'Tip', 'libre-bite' );
 }
 
 // Checkout-Tab immer anzeigen (enthält Checkout-Felder + ggf. Optimierter Checkout)
 $lbite_tabs['checkout'] = __( 'Checkout', 'libre-bite' );
 
 if ( lbite_feature_enabled( 'enable_kanban_board' ) || lbite_feature_enabled( 'enable_sound_notifications' ) ) {
-	$lbite_tabs['orders_settings'] = __( 'Bestellübersicht', 'libre-bite' );
+	$lbite_tabs['orders_settings'] = __( 'Order Overview', 'libre-bite' );
 }
 
 if ( lbite_feature_enabled( 'enable_pos' ) ) {
-	$lbite_tabs['pos'] = __( 'Kassensystem', 'libre-bite' );
+	$lbite_tabs['pos'] = __( 'POS System', 'libre-bite' );
 }
 
 if ( $lbite_is_admin ) {
-	$lbite_tabs['roles']   = __( 'Rollen & Menüs', 'libre-bite' );
+	$lbite_tabs['roles']   = __( 'Roles & Menus', 'libre-bite' );
 	$lbite_tabs['support'] = __( 'Support', 'libre-bite' );
-	$lbite_tabs['data']    = __( 'Daten', 'libre-bite' );
+	$lbite_tabs['data']    = __( 'Data', 'libre-bite' );
 }
 
 // Aktiven Tab validieren
@@ -82,10 +82,10 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 
 		case 'pos':
 			$lbite_pos_defaults = array(
-				array( 'key' => 'cash',  'label' => 'Bar',    'icon' => '💵' ),
-				array( 'key' => 'card',  'label' => 'Karte',  'icon' => '💳' ),
-				array( 'key' => 'twint', 'label' => 'Twint',  'icon' => '📱' ),
-				array( 'key' => 'other', 'label' => 'Andere', 'icon' => '💱' ),
+				array( 'key' => 'cash',  'label' => __( 'Cash', 'libre-bite' ),  'icon' => '💵' ),
+				array( 'key' => 'card',  'label' => __( 'Card', 'libre-bite' ),  'icon' => '💳' ),
+				array( 'key' => 'twint', 'label' => __( 'Twint', 'libre-bite' ), 'icon' => '📱' ),
+				array( 'key' => 'other', 'label' => __( 'Other', 'libre-bite' ), 'icon' => '💱' ),
 			);
 			$lbite_payment_methods = array();
 			foreach ( $lbite_pos_defaults as $lbite_pos_default ) {
@@ -132,12 +132,12 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 ?>
 
 <div class="wrap">
-	<h1><?php echo esc_html( $lbite_plugin_name . ' – ' . __( 'Einstellungen', 'libre-bite' ) ); ?></h1>
+	<h1><?php echo esc_html( $lbite_plugin_name . ' – ' . __( 'Settings', 'libre-bite' ) ); ?></h1>
 
 	<?php // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Erfolgs-Hinweis nach Speichern; kein DB-Schreibzugriff. ?>
 	<?php if ( isset( $_GET['updated'] ) && '1' === sanitize_key( wp_unslash( $_GET['updated'] ) ) ) : ?>
 		<div class="notice notice-success is-dismissible">
-			<p><?php esc_html_e( 'Einstellungen gespeichert', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'Settings saved', 'libre-bite' ); ?></p>
 		</div>
 	<?php endif; ?>
 
@@ -172,34 +172,34 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					<?php wp_nonce_field( 'lbite_settings' ); ?>
 					<input type="hidden" name="lbite_save_tab" value="tips">
 
-					<h2><?php esc_html_e( 'Trinkgeld-Einstellungen', 'libre-bite' ); ?></h2>
+					<h2><?php esc_html_e( 'Tip Settings', 'libre-bite' ); ?></h2>
 					<table class="form-table">
 						<tr>
-							<th><?php esc_html_e( 'Prozentwert 1', 'libre-bite' ); ?></th>
+							<th><?php esc_html_e( 'Percentage 1', 'libre-bite' ); ?></th>
 							<td><input type="number" step="0.1" min="0" name="lbite_tip_percentage_1" value="<?php echo esc_attr( $lbite_tip_pct_1 ); ?>" class="small-text"> %</td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Prozentwert 2', 'libre-bite' ); ?></th>
+							<th><?php esc_html_e( 'Percentage 2', 'libre-bite' ); ?></th>
 							<td><input type="number" step="0.1" min="0" name="lbite_tip_percentage_2" value="<?php echo esc_attr( $lbite_tip_pct_2 ); ?>" class="small-text"> %</td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Prozentwert 3', 'libre-bite' ); ?></th>
+							<th><?php esc_html_e( 'Percentage 3', 'libre-bite' ); ?></th>
 							<td><input type="number" step="0.1" min="0" name="lbite_tip_percentage_3" value="<?php echo esc_attr( $lbite_tip_pct_3 ); ?>" class="small-text"> %</td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Standard-Auswahl', 'libre-bite' ); ?></th>
+							<th><?php esc_html_e( 'Default Selection', 'libre-bite' ); ?></th>
 							<td>
 								<select name="lbite_tip_default_selection">
-									<option value="none" <?php selected( $lbite_tip_select, 'none' ); ?>><?php esc_html_e( 'Kein Trinkgeld (Standard)', 'libre-bite' ); ?></option>
+									<option value="none" <?php selected( $lbite_tip_select, 'none' ); ?>><?php esc_html_e( 'No Tip (Default)', 'libre-bite' ); ?></option>
 									<option value="percentage_1" <?php selected( $lbite_tip_select, 'percentage_1' ); ?>><?php echo esc_html( $lbite_tip_pct_1 ); ?>%</option>
 									<option value="percentage_2" <?php selected( $lbite_tip_select, 'percentage_2' ); ?>><?php echo esc_html( $lbite_tip_pct_2 ); ?>%</option>
 									<option value="percentage_3" <?php selected( $lbite_tip_select, 'percentage_3' ); ?>><?php echo esc_html( $lbite_tip_pct_3 ); ?>%</option>
 								</select>
-								<p class="description"><?php esc_html_e( 'Welche Option soll im Checkout standardmäßig vorausgewählt sein?', 'libre-bite' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Which option should be pre-selected by default in checkout?', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
 					</table>
-					<?php submit_button( __( 'Speichern', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
+					<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 				</form>
 				<?php
 				break;
@@ -211,7 +211,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					$lbite_enable_rounding = get_option( 'lbite_enable_rounding', false );
 					?>
 					<div class="postbox" style="margin-bottom: 20px;">
-						<h2 class="hndle" style="padding: 12px 15px;"><?php esc_html_e( 'Checkout-Optionen', 'libre-bite' ); ?></h2>
+						<h2 class="hndle" style="padding: 12px 15px;"><?php esc_html_e( 'Checkout Options', 'libre-bite' ); ?></h2>
 						<div class="inside">
 							<form method="post">
 								<?php wp_nonce_field( 'lbite_settings' ); ?>
@@ -219,30 +219,30 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 								<table class="form-table">
 									<?php if ( lbite_feature_enabled( 'enable_rounding' ) ) : ?>
 									<tr>
-										<th><?php esc_html_e( 'Gesamtbetrag runden', 'libre-bite' ); ?></th>
+										<th><?php esc_html_e( 'Round Total Amount', 'libre-bite' ); ?></th>
 										<td>
 											<label>
 												<input type="checkbox" name="lbite_enable_rounding" value="1" <?php checked( $lbite_enable_rounding ); ?>>
-												<?php esc_html_e( 'Gesamtbetrag auf 5 Rappen (0.05 CHF) runden', 'libre-bite' ); ?>
+												<?php esc_html_e( 'Round total to 5 cents (0.05 CHF)', 'libre-bite' ); ?>
 											</label>
-											<p class="description"><?php esc_html_e( 'Verhindert Rundungsfehler bei Kombination von Gutscheinen und Trinkgeld. Empfohlen für Schweizer Betriebe.', 'libre-bite' ); ?></p>
+											<p class="description"><?php esc_html_e( 'Prevents rounding errors when combining vouchers and tips. Recommended for Swiss businesses.', 'libre-bite' ); ?></p>
 										</td>
 									</tr>
 									<?php endif; ?>
 									<?php if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) : ?>
 									<tr>
-										<th><?php esc_html_e( 'Checkout-Modus', 'libre-bite' ); ?></th>
+										<th><?php esc_html_e( 'Checkout Mode', 'libre-bite' ); ?></th>
 										<td>
 											<select name="lbite_checkout_mode">
-												<option value="standard" <?php selected( $lbite_checkout_mode, 'standard' ); ?>><?php esc_html_e( 'Standard (alle WooCommerce-Felder)', 'libre-bite' ); ?></option>
-												<option value="optimized" <?php selected( $lbite_checkout_mode, 'optimized' ); ?>><?php esc_html_e( 'Optimiert (nur Name + Beleg-Option)', 'libre-bite' ); ?></option>
+												<option value="standard" <?php selected( $lbite_checkout_mode, 'standard' ); ?>><?php esc_html_e( 'Standard (all WooCommerce fields)', 'libre-bite' ); ?></option>
+												<option value="optimized" <?php selected( $lbite_checkout_mode, 'optimized' ); ?>><?php esc_html_e( 'Optimized (name + receipt option only)', 'libre-bite' ); ?></option>
 											</select>
-											<p class="description"><?php esc_html_e( 'Im optimierten Modus wird nur nach dem Namen gefragt und ob ein Beleg per E-Mail gewünscht ist.', 'libre-bite' ); ?></p>
+											<p class="description"><?php esc_html_e( 'In optimized mode, only the name is requested and whether a receipt by email is desired.', 'libre-bite' ); ?></p>
 										</td>
 									</tr>
 									<?php endif; ?>
 								</table>
-								<?php submit_button( __( 'Speichern', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
+								<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 							</form>
 						</div>
 					</div>
@@ -251,8 +251,8 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 
 				// Checkout-Felder (Standard-Checkout konfigurieren)
 				?>
-				<h2><?php esc_html_e( 'Felder im Standard-Checkout', 'libre-bite' ); ?></h2>
-				<p class="description"><?php esc_html_e( 'Wähle, welche Felder und Optionen im Checkout angezeigt werden.', 'libre-bite' ); ?></p>
+				<h2><?php esc_html_e( 'Fields in Standard Checkout', 'libre-bite' ); ?></h2>
+				<p class="description"><?php esc_html_e( 'Choose which fields and options are displayed at checkout.', 'libre-bite' ); ?></p>
 				<?php
 				include LBITE_PLUGIN_DIR . 'templates/admin/checkout-fields.php';
 				break;
@@ -269,34 +269,34 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					<?php wp_nonce_field( 'lbite_settings' ); ?>
 					<input type="hidden" name="lbite_save_tab" value="orders_settings">
 
-					<h2><?php esc_html_e( 'Bestellübersicht-Einstellungen', 'libre-bite' ); ?></h2>
+					<h2><?php esc_html_e( 'Order Overview Settings', 'libre-bite' ); ?></h2>
 					<table class="form-table">
 						<?php if ( lbite_feature_enabled( 'enable_kanban_board' ) ) : ?>
 						<tr>
-							<th><?php esc_html_e( 'Aktualisierungsintervall Bestellübersicht', 'libre-bite' ); ?></th>
+							<th><?php esc_html_e( 'Order Overview Refresh Interval', 'libre-bite' ); ?></th>
 							<td>
-								<input type="number" min="10" name="lbite_dashboard_refresh_interval" value="<?php echo esc_attr( $lbite_refresh ); ?>" class="small-text"> <?php esc_html_e( 'Sekunden', 'libre-bite' ); ?>
-								<p class="description"><?php esc_html_e( 'Wie oft die Bestellübersicht nach neuen Bestellungen prüft.', 'libre-bite' ); ?></p>
+								<input type="number" min="10" name="lbite_dashboard_refresh_interval" value="<?php echo esc_attr( $lbite_refresh ); ?>" class="small-text"> <?php esc_html_e( 'Seconds', 'libre-bite' ); ?>
+								<p class="description"><?php esc_html_e( 'How often the order overview checks for new orders.', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
 						<?php endif; ?>
 						<?php if ( lbite_feature_enabled( 'enable_reservations' ) ) : ?>
 						<tr>
-							<th><?php esc_html_e( 'Aktualisierungsintervall Reservierungsübersicht', 'libre-bite' ); ?></th>
+							<th><?php esc_html_e( 'Reservations Overview Refresh Interval', 'libre-bite' ); ?></th>
 							<td>
-								<input type="number" min="10" name="lbite_reservation_refresh_interval" value="<?php echo esc_attr( $lbite_res_refresh ); ?>" class="small-text"> <?php esc_html_e( 'Sekunden', 'libre-bite' ); ?>
-								<p class="description"><?php esc_html_e( 'Wie oft die Reservierungsübersicht aktualisiert wird. Standard: 60 Sekunden.', 'libre-bite' ); ?></p>
+								<input type="number" min="10" name="lbite_reservation_refresh_interval" value="<?php echo esc_attr( $lbite_res_refresh ); ?>" class="small-text"> <?php esc_html_e( 'Seconds', 'libre-bite' ); ?>
+								<p class="description"><?php esc_html_e( 'How often the reservations overview is updated. Default: 60 seconds.', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
 						<?php endif; ?>
 						<?php if ( lbite_feature_enabled( 'enable_sound_notifications' ) ) : ?>
 						<tr>
-							<th><?php esc_html_e( 'Benachrichtigungssound', 'libre-bite' ); ?></th>
+							<th><?php esc_html_e( 'Notification Sound', 'libre-bite' ); ?></th>
 							<td>
 								<div style="display: flex; align-items: center; gap: 10px;">
-									<input type="text" id="lbite_notification_sound" name="lbite_notification_sound" value="<?php echo esc_attr( $lbite_notification_sound ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Sound-URL', 'libre-bite' ); ?>" readonly>
-									<button type="button" class="button" id="lbite_upload_sound_button"><?php esc_html_e( 'Sound wählen', 'libre-bite' ); ?></button>
-									<button type="button" class="button" id="lbite_remove_sound_button" <?php echo empty( $lbite_notification_sound ) ? 'style="display:none;"' : ''; ?>><?php esc_html_e( 'Entfernen', 'libre-bite' ); ?></button>
+									<input type="text" id="lbite_notification_sound" name="lbite_notification_sound" value="<?php echo esc_attr( $lbite_notification_sound ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Sound URL', 'libre-bite' ); ?>" readonly>
+									<button type="button" class="button" id="lbite_upload_sound_button"><?php esc_html_e( 'Select Sound', 'libre-bite' ); ?></button>
+									<button type="button" class="button" id="lbite_remove_sound_button" <?php echo empty( $lbite_notification_sound ) ? 'style="display:none;"' : ''; ?>><?php esc_html_e( 'Remove', 'libre-bite' ); ?></button>
 								</div>
 								<?php if ( $lbite_notification_sound ) : ?>
 									<audio id="lbite_sound_preview" controls style="margin-top: 10px; max-width: 300px;">
@@ -304,13 +304,13 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 									</audio>
 								<?php endif; ?>
 								<p class="description">
-									<?php echo esc_html( $lbite_default_sound_exists ? __( 'Standard-Sound ist vorhanden. Sie können auch einen eigenen Sound aus der Mediathek wählen.', 'libre-bite' ) : __( 'Wählen Sie einen Sound aus Ihrer Mediathek.', 'libre-bite' ) ); ?>
+									<?php echo esc_html( $lbite_default_sound_exists ? __( 'Default sound is available. You can also select your own sound from the media library.', 'libre-bite' ) : __( 'Select a sound from your media library.', 'libre-bite' ) ); ?>
 								</p>
 							</td>
 						</tr>
 						<?php endif; ?>
 					</table>
-					<?php submit_button( __( 'Speichern', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
+					<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 				</form>
 				<?php ob_start(); ?>
 jQuery(document).ready(function($) {
@@ -319,8 +319,8 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		if (lbiteSoundFrame) { lbiteSoundFrame.open(); return; }
 		lbiteSoundFrame = wp.media({
-			title: '<?php esc_html_e( 'Sound-Datei wählen', 'libre-bite' ); ?>',
-			button: { text: '<?php esc_html_e( 'Sound verwenden', 'libre-bite' ); ?>' },
+			title: '<?php esc_html_e( 'Select Sound File', 'libre-bite' ); ?>',
+			button: { text: '<?php esc_html_e( 'Use Sound', 'libre-bite' ); ?>' },
 			library: { type: ['audio'] },
 			multiple: false
 		});
@@ -347,10 +347,10 @@ jQuery(document).ready(function($) {
 
 			case 'pos':
 				$lbite_pos_methods_default = array(
-					array( 'key' => 'cash',  'label' => 'Bar',    'icon' => '💵', 'enabled' => true ),
-					array( 'key' => 'card',  'label' => 'Karte',  'icon' => '💳', 'enabled' => true ),
-					array( 'key' => 'twint', 'label' => 'Twint',  'icon' => '📱', 'enabled' => true ),
-					array( 'key' => 'other', 'label' => 'Andere', 'icon' => '💱', 'enabled' => true ),
+					array( 'key' => 'cash',  'label' => __( 'Cash', 'libre-bite' ),  'icon' => '💵', 'enabled' => true ),
+					array( 'key' => 'card',  'label' => __( 'Card', 'libre-bite' ),  'icon' => '💳', 'enabled' => true ),
+					array( 'key' => 'twint', 'label' => __( 'Twint', 'libre-bite' ), 'icon' => '📱', 'enabled' => true ),
+					array( 'key' => 'other', 'label' => __( 'Other', 'libre-bite' ), 'icon' => '💱', 'enabled' => true ),
 				);
 				$lbite_saved_pos_methods = get_option( 'lbite_pos_payment_methods', array() );
 				$lbite_pos_payment_methods = array();
@@ -369,18 +369,18 @@ jQuery(document).ready(function($) {
 					<?php wp_nonce_field( 'lbite_settings' ); ?>
 					<input type="hidden" name="lbite_save_tab" value="pos">
 
-					<h2><?php esc_html_e( 'Kassensystem (POS)', 'libre-bite' ); ?></h2>
+					<h2><?php esc_html_e( 'POS System', 'libre-bite' ); ?></h2>
 					<table class="form-table">
 						<tr>
-							<th><?php esc_html_e( 'Zahlungsarten', 'libre-bite' ); ?></th>
+							<th><?php esc_html_e( 'Payment Methods', 'libre-bite' ); ?></th>
 							<td>
-								<p class="description" style="margin-bottom: 12px;"><?php esc_html_e( 'Wähle, welche Zahlungsarten im POS-Zahlungs-Modal angezeigt werden, und passe die Bezeichnungen an.', 'libre-bite' ); ?></p>
+								<p class="description" style="margin-bottom: 12px;"><?php esc_html_e( 'Choose which payment methods are displayed in the POS payment modal and customize the labels.', 'libre-bite' ); ?></p>
 								<table class="widefat" style="max-width: 480px;">
 									<thead>
 										<tr>
-											<th style="width: 40px;"><?php esc_html_e( 'Aktiv', 'libre-bite' ); ?></th>
+											<th style="width: 40px;"><?php esc_html_e( 'Active', 'libre-bite' ); ?></th>
 											<th style="width: 32px;"></th>
-											<th><?php esc_html_e( 'Bezeichnung', 'libre-bite' ); ?></th>
+											<th><?php esc_html_e( 'Label', 'libre-bite' ); ?></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -393,11 +393,11 @@ jQuery(document).ready(function($) {
 										<?php endforeach; ?>
 									</tbody>
 								</table>
-								<p class="description" style="margin-top: 8px;"><?php esc_html_e( 'Es muss mindestens eine Zahlungsart aktiv sein.', 'libre-bite' ); ?></p>
+								<p class="description" style="margin-top: 8px;"><?php esc_html_e( 'At least one payment method must be active.', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
 					</table>
-					<?php submit_button( __( 'Speichern', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
+					<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 				</form>
 				<?php
 				break;
@@ -429,23 +429,23 @@ jQuery(document).ready(function($) {
 						<?php wp_nonce_field( 'lbite_settings' ); ?>
 						<input type="hidden" name="lbite_save_tab" value="data">
 
-						<h2><?php esc_html_e( 'Deinstallation', 'libre-bite' ); ?></h2>
+						<h2><?php esc_html_e( 'Uninstallation', 'libre-bite' ); ?></h2>
 						<table class="form-table">
 							<tr>
-								<th><?php esc_html_e( 'Daten bei Deinstallation löschen', 'libre-bite' ); ?></th>
+								<th><?php esc_html_e( 'Delete Data on Uninstall', 'libre-bite' ); ?></th>
 								<td>
 									<label>
 										<input type="checkbox" name="lbite_delete_data_on_uninstall" value="1" <?php checked( $lbite_delete_data ); ?>>
-										<?php esc_html_e( 'Alle Plugin-Daten bei der Deinstallation vollständig löschen', 'libre-bite' ); ?>
+										<?php esc_html_e( 'Completely delete all plugin data on uninstall', 'libre-bite' ); ?>
 									</label>
 									<p class="description" style="color: #d63638;">
-										<strong><?php esc_html_e( 'Achtung:', 'libre-bite' ); ?></strong>
-										<?php esc_html_e( 'Diese Option löscht alle Standorte, Produktoptionen, Einstellungen und Bestellungs-Metadaten unwiderruflich!', 'libre-bite' ); ?>
+										<strong><?php esc_html_e( 'Important:', 'libre-bite' ); ?></strong>
+										<?php esc_html_e( 'This option will permanently delete all locations, product options, settings, and order metadata!', 'libre-bite' ); ?>
 									</p>
 								</td>
 							</tr>
 						</table>
-						<?php submit_button( __( 'Speichern', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
+						<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 					</form>
 					<?php
 				endif;

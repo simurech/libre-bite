@@ -59,19 +59,19 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 				<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
 			</svg>
 		</div>
-		<h1><?php esc_html_e( 'Bestellung erfolgreich!', 'libre-bite' ); ?></h1>
+		<h1><?php esc_html_e( 'Order successful!', 'libre-bite' ); ?></h1>
 		<?php if ( $lbite_customer_name ) : ?>
 			<p class="lbite-thankyou-greeting">
 				<?php
 				/* translators: %s: customer name */
-				printf( esc_html__( 'Danke, %s!', 'libre-bite' ), esc_html( $lbite_customer_name ) );
+				printf( esc_html__( 'Thank you, %s!', 'libre-bite' ), esc_html( $lbite_customer_name ) );
 				?>
 			</p>
 		<?php endif; ?>
 	</div>
 
 	<div class="lbite-thankyou-pickup-number">
-		<span class="lbite-pickup-label"><?php esc_html_e( 'Deine Abholnummer', 'libre-bite' ); ?></span>
+		<span class="lbite-pickup-label"><?php esc_html_e( 'Your Pickup Number', 'libre-bite' ); ?></span>
 		<span class="lbite-pickup-number"><?php echo esc_html( $pickup_number ); ?></span>
 	</div>
 
@@ -82,7 +82,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 					<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
 				</svg>
 				<div class="lbite-detail-content">
-					<span class="lbite-detail-label"><?php esc_html_e( 'Standort', 'libre-bite' ); ?></span>
+					<span class="lbite-detail-label"><?php esc_html_e( 'Location', 'libre-bite' ); ?></span>
 					<span class="lbite-detail-value"><?php echo esc_html( $location_name ); ?></span>
 					<?php if ( $location_address ) : ?>
 						<?php if ( $location_maps_url ) : ?>
@@ -107,16 +107,15 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 				<path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
 			</svg>
 			<div class="lbite-detail-content">
-				<span class="lbite-detail-label"><?php esc_html_e( 'Abholung', 'libre-bite' ); ?></span>
+				<span class="lbite-detail-label"><?php esc_html_e( 'Pickup', 'libre-bite' ); ?></span>
 				<span class="lbite-detail-value">
 					<?php
 					if ( 'later' === $lbite_order_type && $lbite_pickup_time ) {
 						echo esc_html( wp_date( 'd.m.Y', lbite_local_time_to_timestamp( $lbite_pickup_time ) ) );
-						echo ' ' . esc_html__( 'um', 'libre-bite' ) . ' ';
+						echo ' ' . esc_html__( 'at', 'libre-bite' ) . ' ';
 						echo esc_html( wp_date( 'H:i', lbite_local_time_to_timestamp( $lbite_pickup_time ) ) );
-						echo ' ' . esc_html__( 'Uhr', 'libre-bite' );
 					} else {
-						esc_html_e( 'Sobald fertig', 'libre-bite' );
+						esc_html_e( 'As soon as ready', 'libre-bite' );
 					}
 					?>
 				</span>
@@ -138,7 +137,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 				<path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
 			</svg>
 			<div class="lbite-detail-content">
-				<span class="lbite-detail-label"><?php esc_html_e( 'Bezahlung', 'libre-bite' ); ?></span>
+				<span class="lbite-detail-label"><?php esc_html_e( 'Payment', 'libre-bite' ); ?></span>
 				<span class="lbite-detail-value"><?php echo esc_html( $lbite_payment_method ); ?></span>
 				<?php if ( $lbite_payment_instructions ) : ?>
 					<span class="lbite-detail-sub"><?php echo wp_kses_post( $lbite_payment_instructions ); ?></span>
@@ -149,7 +148,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 	</div>
 
 	<div class="lbite-thankyou-order">
-		<h3><?php esc_html_e( 'Deine Bestellung', 'libre-bite' ); ?></h3>
+		<h3><?php esc_html_e( 'Your Order', 'libre-bite' ); ?></h3>
 
 		<table class="lbite-order-items">
 			<tbody>
@@ -199,7 +198,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 					?>
 					<!-- Zwischensumme -->
 					<tr class="lbite-subtotal-row">
-						<td colspan="2"><?php esc_html_e( 'Zwischensumme', 'libre-bite' ); ?></td>
+						<td colspan="2"><?php esc_html_e( 'Subtotal', 'libre-bite' ); ?></td>
 						<td><?php echo wp_kses_post( wc_price( $subtotal ) ); ?></td>
 					</tr>
 
@@ -211,7 +210,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 							<td colspan="2">
 								<?php
 								/* translators: %s: coupon code */
-								printf( esc_html__( 'Gutschein: %s', 'libre-bite' ), esc_html( $coupon->get_code() ) );
+								printf( esc_html__( 'Coupon: %s', 'libre-bite' ), esc_html( $coupon->get_code() ) );
 								?>
 							</td>
 							<td>-<?php echo wp_kses_post( wc_price( $coupon->get_discount() ) ); ?></td>
@@ -235,7 +234,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 					if ( $has_shipping ) :
 						?>
 						<tr class="lbite-shipping-row">
-							<td colspan="2"><?php esc_html_e( 'Versand', 'libre-bite' ); ?></td>
+							<td colspan="2"><?php esc_html_e( 'Shipping', 'libre-bite' ); ?></td>
 							<td><?php echo wp_kses_post( wc_price( $lbite_order->get_shipping_total() ) ); ?></td>
 						</tr>
 					<?php endif; ?>
@@ -245,7 +244,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 					if ( $has_tax ) :
 						?>
 						<tr class="lbite-tax-row">
-							<td colspan="2"><?php esc_html_e( 'MwSt.', 'libre-bite' ); ?></td>
+							<td colspan="2"><?php esc_html_e( 'VAT', 'libre-bite' ); ?></td>
 							<td><?php echo wp_kses_post( wc_price( $lbite_order->get_total_tax() ) ); ?></td>
 						</tr>
 					<?php endif; ?>
@@ -266,7 +265,7 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
 				<path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/>
 			</svg>
-			<?php esc_html_e( 'Beleg drucken / als PDF speichern', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Print Receipt / Save as PDF', 'libre-bite' ); ?>
 		</button>
 	</div>
 

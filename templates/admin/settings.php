@@ -24,7 +24,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			if ( 'create_new' === $lbite_loc_page ) {
 				$lbite_new_page_id = wp_insert_post(
 					array(
-						'post_title'   => __( 'Standorte', 'libre-bite' ),
+						'post_title'   => __( 'Locations', 'libre-bite' ),
 						'post_content' => '[lbite_location_selector]',
 						'post_status'  => 'publish',
 						'post_type'    => 'page',
@@ -87,21 +87,21 @@ wp_enqueue_script( 'wp-color-picker' );
 
 <?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap">
-	<h1><?php echo esc_html( apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) ) . ' - ' . __( 'Einstellungen', 'libre-bite' ) ); ?></h1>
+	<h1><?php echo esc_html( apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) ) . ' - ' . __( 'Settings', 'libre-bite' ) ); ?></h1>
 <?php endif; ?>
 
 <form method="post">
 	<?php wp_nonce_field( 'lbite_settings' ); ?>
 	<input type="hidden" name="lbite_save_tab" value="general">
 
-	<h2><?php esc_html_e( 'Standort-Seite', 'libre-bite' ); ?></h2>
+	<h2><?php esc_html_e( 'Location Page', 'libre-bite' ); ?></h2>
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Standort-Seite', 'libre-bite' ); ?></th>
+			<th><?php esc_html_e( 'Location Page', 'libre-bite' ); ?></th>
 			<td>
 				<select name="lbite_location_page_id">
-					<option value="0"><?php esc_html_e( '-- Bitte wählen --', 'libre-bite' ); ?></option>
-					<option value="create_new"><?php esc_html_e( '+ Neue Seite erstellen', 'libre-bite' ); ?></option>
+					<option value="0"><?php esc_html_e( '-- Please select --', 'libre-bite' ); ?></option>
+					<option value="create_new"><?php esc_html_e( '+ Create New Page', 'libre-bite' ); ?></option>
 					<?php foreach ( $lbite_all_pages as $lbite_page ) : ?>
 						<option value="<?php echo esc_attr( $lbite_page->ID ); ?>" <?php selected( $lbite_location_page_id, $lbite_page->ID ); ?>>
 							<?php echo esc_html( $lbite_page->post_title ); ?>
@@ -109,56 +109,56 @@ wp_enqueue_script( 'wp-color-picker' );
 					<?php endforeach; ?>
 				</select>
 				<p class="description">
-					<?php esc_html_e( 'Wählen Sie die Seite, auf der der Shortcode [lbite_location_selector] eingebunden ist, oder erstellen Sie eine neue Seite.', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Select the page where the shortcode [lbite_location_selector] is included, or create a new page.', 'libre-bite' ); ?>
 					<?php if ( $lbite_location_page_id ) : ?>
-						<br><a href="<?php echo esc_url( get_edit_post_link( $lbite_location_page_id ) ); ?>" target="_blank"><?php esc_html_e( 'Seite bearbeiten', 'libre-bite' ); ?></a>
+						<br><a href="<?php echo esc_url( get_edit_post_link( $lbite_location_page_id ) ); ?>" target="_blank"><?php esc_html_e( 'Edit Page', 'libre-bite' ); ?></a>
 						|
-						<a href="<?php echo esc_url( get_permalink( $lbite_location_page_id ) ); ?>" target="_blank"><?php esc_html_e( 'Seite ansehen', 'libre-bite' ); ?></a>
+						<a href="<?php echo esc_url( get_permalink( $lbite_location_page_id ) ); ?>" target="_blank"><?php esc_html_e( 'View Page', 'libre-bite' ); ?></a>
 					<?php endif; ?>
 				</p>
 			</td>
 		</tr>
 	</table>
 
-	<h2><?php esc_html_e( 'Zeiteinstellungen', 'libre-bite' ); ?></h2>
+	<h2><?php esc_html_e( 'Time Settings', 'libre-bite' ); ?></h2>
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Vorbereitungszeit', 'libre-bite' ); ?></th>
+			<th><?php esc_html_e( 'Preparation Time', 'libre-bite' ); ?></th>
 			<td>
-				<input type="number" min="0" name="lbite_preparation_time" value="<?php echo esc_attr( $lbite_preparation_time ); ?>" class="small-text"> <?php esc_html_e( 'Minuten', 'libre-bite' ); ?>
-				<p class="description"><?php esc_html_e( 'Vorbestellungen werden X Minuten vor der Abholzeit automatisch von "Eingang" zu "Zubereiten" verschoben.', 'libre-bite' ); ?></p>
+				<input type="number" min="0" name="lbite_preparation_time" value="<?php echo esc_attr( $lbite_preparation_time ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+				<p class="description"><?php esc_html_e( 'Pre-orders are automatically moved from "Incoming" to "Preparing" X minutes before pickup time.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Erinnerung vor Abholung', 'libre-bite' ); ?></th>
+			<th><?php esc_html_e( 'Reminder Before Pickup', 'libre-bite' ); ?></th>
 			<td>
-				<input type="number" min="0" name="lbite_pickup_reminder_time" value="<?php echo esc_attr( $lbite_pickup_reminder ); ?>" class="small-text"> <?php esc_html_e( 'Minuten', 'libre-bite' ); ?>
-				<p class="description"><?php esc_html_e( 'Reminder-E-Mail X Minuten vor der Abholzeit versenden.', 'libre-bite' ); ?></p>
+				<input type="number" min="0" name="lbite_pickup_reminder_time" value="<?php echo esc_attr( $lbite_pickup_reminder ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+				<p class="description"><?php esc_html_e( 'Send reminder email X minutes before pickup time.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Zeitslot-Intervall', 'libre-bite' ); ?></th>
+			<th><?php esc_html_e( 'Time Slot Interval', 'libre-bite' ); ?></th>
 			<td>
-				<input type="number" min="5" step="5" name="lbite_timeslot_interval" value="<?php echo esc_attr( $lbite_timeslot_int ); ?>" class="small-text"> <?php esc_html_e( 'Minuten', 'libre-bite' ); ?>
-				<p class="description"><?php esc_html_e( 'Abstand zwischen den Zeitslots für Vorbestellungen.', 'libre-bite' ); ?></p>
+				<input type="number" min="5" step="5" name="lbite_timeslot_interval" value="<?php echo esc_attr( $lbite_timeslot_int ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+				<p class="description"><?php esc_html_e( 'Distance between time slots for pre-orders.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 	</table>
 
-	<h2><?php esc_html_e( 'Tischbestellung', 'libre-bite' ); ?></h2>
+	<h2><?php esc_html_e( 'Table Ordering', 'libre-bite' ); ?></h2>
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Menü-Seite', 'libre-bite' ); ?></th>
+			<th><?php esc_html_e( 'Menu Page', 'libre-bite' ); ?></th>
 			<td>
 				<select name="lbite_table_order_page_id">
-					<option value="0"><?php esc_html_e( '— Standard (Shop-Seite) —', 'libre-bite' ); ?></option>
+					<option value="0"><?php esc_html_e( '— Default (Shop Page) —', 'libre-bite' ); ?></option>
 					<?php foreach ( $lbite_all_pages as $lbite_p ) : ?>
 						<option value="<?php echo esc_attr( $lbite_p->ID ); ?>" <?php selected( $lbite_table_order_page, $lbite_p->ID ); ?>>
 							<?php echo esc_html( $lbite_p->post_title ); ?>
 						</option>
 					<?php endforeach; ?>
 				</select>
-				<p class="description"><?php esc_html_e( 'Auf welche Seite werden Gäste nach dem Scannen des QR-Codes weitergeleitet? Standard: WooCommerce-Shop-Seite.', 'libre-bite' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Which page are guests redirected to after scanning the QR code? Default: WooCommerce shop page.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 	</table>
@@ -166,10 +166,10 @@ wp_enqueue_script( 'wp-color-picker' );
 		<h2><?php esc_html_e( 'Branding', 'libre-bite' ); ?></h2>
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Markenname', 'libre-bite' ); ?></th>
+			<th><?php esc_html_e( 'Brand Name', 'libre-bite' ); ?></th>
 			<td>
-				<input type="text" name="lbite_brand_name" value="<?php echo esc_attr( $lbite_brand_name ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'z.B. Mein Restaurant', 'libre-bite' ); ?>">
-				<p class="description"><?php esc_html_e( 'Wird auf der Bestätigungsseite und in E-Mails angezeigt.', 'libre-bite' ); ?></p>
+				<input type="text" name="lbite_brand_name" value="<?php echo esc_attr( $lbite_brand_name ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'E.g. My Restaurant', 'libre-bite' ); ?>">
+				<p class="description"><?php esc_html_e( 'Displayed on the confirmation page and in emails.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -183,45 +183,45 @@ wp_enqueue_script( 'wp-color-picker' );
 						<?php endif; ?>
 					</div>
 					<input type="hidden" id="lbite_brand_logo" name="lbite_brand_logo" value="<?php echo esc_attr( $lbite_brand_logo ); ?>">
-					<button type="button" class="button" id="lbite_upload_logo_button"><?php esc_html_e( 'Logo wählen', 'libre-bite' ); ?></button>
-					<button type="button" class="button" id="lbite_remove_logo_button" <?php echo ! $lbite_brand_logo ? 'style="display:none;"' : ''; ?>><?php esc_html_e( 'Entfernen', 'libre-bite' ); ?></button>
+					<button type="button" class="button" id="lbite_upload_logo_button"><?php esc_html_e( 'Choose Logo', 'libre-bite' ); ?></button>
+					<button type="button" class="button" id="lbite_remove_logo_button" <?php echo ! $lbite_brand_logo ? 'style="display:none;"' : ''; ?>><?php esc_html_e( 'Remove', 'libre-bite' ); ?></button>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Primärfarbe', 'libre-bite' ); ?></th>
+			<th><?php esc_html_e( 'Primary Color', 'libre-bite' ); ?></th>
 			<td>
 				<input type="text" name="lbite_color_primary" value="<?php echo esc_attr( $lbite_color_primary ); ?>" class="lbite-color-picker" data-default-color="#0073aa">
-				<p class="description"><?php esc_html_e( 'Hauptfarbe für Buttons und wichtige Elemente.', 'libre-bite' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Main color for buttons and important elements.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Sekundärfarbe', 'libre-bite' ); ?></th>
+			<th><?php esc_html_e( 'Secondary Color', 'libre-bite' ); ?></th>
 			<td>
 				<input type="text" name="lbite_color_secondary" value="<?php echo esc_attr( $lbite_color_secondary ); ?>" class="lbite-color-picker" data-default-color="#23282d">
-				<p class="description"><?php esc_html_e( 'Für Texte und sekundäre Elemente.', 'libre-bite' ); ?></p>
+				<p class="description"><?php esc_html_e( 'For texts and secondary elements.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Akzentfarbe', 'libre-bite' ); ?></th>
+			<th><?php esc_html_e( 'Accent Color', 'libre-bite' ); ?></th>
 			<td>
 				<input type="text" name="lbite_color_accent" value="<?php echo esc_attr( $lbite_color_accent ); ?>" class="lbite-color-picker" data-default-color="#00a32a">
-				<p class="description"><?php esc_html_e( 'Für Erfolgs- und Bestätigungselemente.', 'libre-bite' ); ?></p>
+				<p class="description"><?php esc_html_e( 'For success and confirmation elements.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Vom Theme übernehmen', 'libre-bite' ); ?></th>
+			<th><?php esc_html_e( 'Inherit from Theme', 'libre-bite' ); ?></th>
 			<td>
 				<button type="button" class="button" id="lbite_inherit_theme_colors">
-					<?php esc_html_e( 'Farben vom Theme übernehmen', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Inherit Colors from Theme', 'libre-bite' ); ?>
 				</button>
 				<span class="spinner" id="lbite_theme_colors_spinner" style="float: none; margin-top: 0;"></span>
-				<p class="description"><?php esc_html_e( 'Versucht, die Farben aus Ihrem aktiven Theme zu übernehmen.', 'libre-bite' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Attempts to inherit colors from your active theme.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 	</table>
 
-	<?php submit_button( __( 'Einstellungen speichern', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
+	<?php submit_button( __( 'Save Settings', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 </form>
 
 <?php if ( empty( $lbite_is_tab ) ) : ?>
@@ -238,8 +238,8 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		if (lbiteLogoFrame) { lbiteLogoFrame.open(); return; }
 		lbiteLogoFrame = wp.media({
-			title: '<?php esc_html_e( 'Logo wählen', 'libre-bite' ); ?>',
-			button: { text: '<?php esc_html_e( 'Logo verwenden', 'libre-bite' ); ?>' },
+			title: '<?php esc_html_e( 'Choose Logo', 'libre-bite' ); ?>',
+			button: { text: '<?php esc_html_e( 'Use Logo', 'libre-bite' ); ?>' },
 			library: { type: ['image'] },
 			multiple: false
 		});
@@ -275,13 +275,13 @@ jQuery(document).ready(function($) {
 					if (response.data.primary) $('input[name="lbite_color_primary"]').wpColorPicker('color', response.data.primary);
 					if (response.data.secondary) $('input[name="lbite_color_secondary"]').wpColorPicker('color', response.data.secondary);
 					if (response.data.accent) $('input[name="lbite_color_accent"]').wpColorPicker('color', response.data.accent);
-					alert('<?php esc_html_e( 'Farben wurden übernommen!', 'libre-bite' ); ?>');
-				} else { alert('<?php esc_html_e( 'Konnte keine Farben vom Theme finden.', 'libre-bite' ); ?>'); }
+					alert('<?php esc_html_e( 'Colors inherited!', 'libre-bite' ); ?>');
+				} else { alert('<?php esc_html_e( 'Could not find colors from theme.', 'libre-bite' ); ?>'); }
 			},
 			error: function() {
 				$btn.prop('disabled', false);
 				$spinner.removeClass('is-active');
-				alert('<?php esc_html_e( 'Fehler beim Abrufen der Theme-Farben.', 'libre-bite' ); ?>');
+				alert('<?php esc_html_e( 'Error retrieving theme colors.', 'libre-bite' ); ?>');
 			}
 		});
 	});

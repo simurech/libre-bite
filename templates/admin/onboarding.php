@@ -15,25 +15,25 @@ $lbite_current_features = get_option( 'lbite_features', array() );
 // Feature-Gruppen mit Metadaten für die Darstellung
 $lbite_feature_groups = array(
 	array(
-		'label'    => __( 'Bestellsystem', 'libre-bite' ),
+		'label'    => __( 'Order System', 'libre-bite' ),
 		'icon'     => '🍽️',
 		'features' => array(
 			array(
 				'key'         => 'enable_kanban_board',
-				'label'       => __( 'Bestellübersicht', 'libre-bite' ),
-				'description' => __( 'Kanban-Board für eingehende Bestellungen mit Statusverfolgung und Vollbild-Modus.', 'libre-bite' ),
+				'label'       => __( 'Order Overview', 'libre-bite' ),
+				'description' => __( 'Kanban board for incoming orders with status tracking and fullscreen mode.', 'libre-bite' ),
 				'pro'         => false,
 			),
 			array(
 				'key'         => 'enable_pos',
-				'label'       => __( 'Kassensystem (POS)', 'libre-bite' ),
-				'description' => __( 'Internes Kassensystem für Bestellungen direkt vor Ort.', 'libre-bite' ),
+				'label'       => __( 'POS System', 'libre-bite' ),
+				'description' => __( 'Internal POS system for orders placed on-site.', 'libre-bite' ),
 				'pro'         => false,
 			),
 			array(
 				'key'         => 'enable_scheduled_orders',
-				'label'       => __( 'Vorbestellungen', 'libre-bite' ),
-				'description' => __( 'Kunden können Abholzeiten im Voraus wählen.', 'libre-bite' ),
+				'label'       => __( 'Pre-Orders', 'libre-bite' ),
+				'description' => __( 'Customers can choose pickup times in advance.', 'libre-bite' ),
 				'pro'         => false,
 			),
 		),
@@ -44,104 +44,104 @@ $lbite_feature_groups = array(
 		'features' => array(
 			array(
 				'key'         => 'enable_optimized_checkout',
-				'label'       => __( 'Optimierter Checkout', 'libre-bite' ),
-				'description' => __( 'Vereinfachter Checkout-Prozess speziell für Gastronomie.', 'libre-bite' ),
+				'label'       => __( 'Optimized Checkout', 'libre-bite' ),
+				'description' => __( 'Simplified checkout process tailored for the food service industry.', 'libre-bite' ),
 				'pro'         => true,
 			),
 			array(
 				'key'         => 'enable_tips',
-				'label'       => __( 'Trinkgeld', 'libre-bite' ),
-				'description' => __( 'Kunden können beim Checkout ein Trinkgeld auswählen.', 'libre-bite' ),
+				'label'       => __( 'Tips', 'libre-bite' ),
+				'description' => __( 'Customers can select a tip at checkout.', 'libre-bite' ),
 				'pro'         => true,
 			),
 			array(
 				'key'         => 'enable_rounding',
-				'label'       => __( '5-Rappen-Rundung', 'libre-bite' ),
-				'description' => __( 'Beträge auf 5 Rappen runden (CH).', 'libre-bite' ),
+				'label'       => __( '5-Centime Rounding', 'libre-bite' ),
+				'description' => __( 'Round amounts to the nearest 5 centimes (CH).', 'libre-bite' ),
 				'pro'         => false,
 			),
 			array(
 				'key'         => 'enable_guest_checkout',
-				'label'       => __( 'Gast-Checkout', 'libre-bite' ),
-				'description' => __( 'Bestellungen ohne Kundenkonto ermöglichen.', 'libre-bite' ),
+				'label'       => __( 'Guest Checkout', 'libre-bite' ),
+				'description' => __( 'Allow orders without a customer account.', 'libre-bite' ),
 				'pro'         => false,
 			),
 		),
 	),
 	array(
-		'label'    => __( 'Standorte', 'libre-bite' ),
+		'label'    => __( 'Locations', 'libre-bite' ),
 		'icon'     => '📍',
 		'features' => array(
 			array(
 				'key'         => 'enable_location_selector',
-				'label'       => __( 'Standortauswahl', 'libre-bite' ),
-				'description' => __( 'Kunden wählen beim Bestellen ihren Abholstandort.', 'libre-bite' ),
+				'label'       => __( 'Location Selection', 'libre-bite' ),
+				'description' => __( 'Customers choose their pickup location when ordering.', 'libre-bite' ),
 				'pro'         => false,
 			),
 			array(
 				'key'         => 'enable_opening_hours',
-				'label'       => __( 'Öffnungszeiten', 'libre-bite' ),
-				'description' => __( 'Bestellungen nur während der konfigurierten Öffnungszeiten erlauben.', 'libre-bite' ),
+				'label'       => __( 'Opening Hours', 'libre-bite' ),
+				'description' => __( 'Only allow orders during configured opening hours.', 'libre-bite' ),
 				'pro'         => false,
 			),
 			array(
 				'key'         => 'enable_multi_location',
-				'label'       => __( 'Multi-Standort', 'libre-bite' ),
-				'description' => __( 'Mehrere Standorte mit eigenen Einstellungen verwalten.', 'libre-bite' ),
+				'label'       => __( 'Multi-Location', 'libre-bite' ),
+				'description' => __( 'Manage multiple locations with individual settings.', 'libre-bite' ),
 				'pro'         => true,
 			),
 			array(
 				'key'         => 'enable_table_ordering',
-				'label'       => __( 'Tischverwaltung & Tischbestellung', 'libre-bite' ),
-				'description' => __( 'Tische anlegen, Sitzplätze definieren, QR-Codes generieren und Bestellungen direkt am Tisch ermöglichen.', 'libre-bite' ),
+				'label'       => __( 'Table Management & Table Ordering', 'libre-bite' ),
+				'description' => __( 'Create tables, define seats, generate QR codes, and enable ordering directly at the table.', 'libre-bite' ),
 				'pro'         => true,
 			),
 		),
 	),
 	array(
-		'label'    => __( 'Benachrichtigungen', 'libre-bite' ),
+		'label'    => __( 'Notifications', 'libre-bite' ),
 		'icon'     => '🔔',
 		'features' => array(
 			array(
 				'key'         => 'enable_admin_email',
-				'label'       => __( 'Admin-E-Mail', 'libre-bite' ),
-				'description' => __( 'E-Mail-Benachrichtigung bei neuen Bestellungen.', 'libre-bite' ),
+				'label'       => __( 'Admin Email', 'libre-bite' ),
+				'description' => __( 'Email notification for new orders.', 'libre-bite' ),
 				'pro'         => false,
 			),
 			array(
 				'key'         => 'enable_sound_notifications',
-				'label'       => __( 'Sound-Benachrichtigungen', 'libre-bite' ),
-				'description' => __( 'Akustisches Signal bei neuen Bestellungen im Dashboard.', 'libre-bite' ),
+				'label'       => __( 'Sound Notifications', 'libre-bite' ),
+				'description' => __( 'Audible alert for new orders in the dashboard.', 'libre-bite' ),
 				'pro'         => true,
 			),
 			array(
 				'key'         => 'enable_pickup_reminders',
-				'label'       => __( 'Abhol-Erinnerungen', 'libre-bite' ),
-				'description' => __( 'Automatische E-Mail-Erinnerung an Kunden kurz vor der Abholzeit.', 'libre-bite' ),
+				'label'       => __( 'Pickup Reminders', 'libre-bite' ),
+				'description' => __( 'Automatic email reminder to customers shortly before their pickup time.', 'libre-bite' ),
 				'pro'         => true,
 			),
 		),
 	),
 	array(
-		'label'    => __( 'Produkte', 'libre-bite' ),
+		'label'    => __( 'Products', 'libre-bite' ),
 		'icon'     => '🧩',
 		'features' => array(
 			array(
 				'key'         => 'enable_product_options',
-				'label'       => __( 'Produkt-Optionen', 'libre-bite' ),
-				'description' => __( 'Zusatzoptionen und Extras pro Produkt konfigurieren (z.B. Saucen, Beilagen).', 'libre-bite' ),
+				'label'       => __( 'Product Options', 'libre-bite' ),
+				'description' => __( 'Configure add-ons and extras per product (e.g. sauces, side dishes).', 'libre-bite' ),
 				'pro'         => false,
 			),
 			array(
 				'key'         => 'enable_nutritional_info',
-				'label'       => __( 'Nährwertangaben', 'libre-bite' ),
-				'description' => __( 'Kalorien und Nährwerte pro Produkt anzeigen.', 'libre-bite' ),
+				'label'       => __( 'Nutritional Information', 'libre-bite' ),
+				'description' => __( 'Display calories and nutritional values per product.', 'libre-bite' ),
 				'pro'         => true,
 			),
 			array(
 				'key'         => 'enable_allergens',
-				'label'       => __( 'Allergene', 'libre-bite' ),
-				'description' => __( 'Allergenkennzeichnung nach EU-Lebensmittelinformationsverordnung.', 'libre-bite' ),
+				'label'       => __( 'Allergens', 'libre-bite' ),
+				'description' => __( 'Allergen labelling in accordance with EU food information regulation.', 'libre-bite' ),
 				'pro'         => true,
 			),
 		),
@@ -155,8 +155,8 @@ $lbite_is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->is_
 
 	<div class="lbite-onboarding-header">
 		<div class="lbite-onboarding-header-inner">
-			<h1><?php esc_html_e( 'Willkommen bei Libre Bite!', 'libre-bite' ); ?></h1>
-			<p><?php esc_html_e( 'Aktiviere die Funktionen, die du für dein Restaurant oder Café brauchst. Du kannst diese Auswahl jederzeit unter Einstellungen → Features anpassen.', 'libre-bite' ); ?></p>
+			<h1><?php esc_html_e( 'Welcome to Libre Bite!', 'libre-bite' ); ?></h1>
+			<p><?php esc_html_e( 'Activate the features you need for your restaurant or café. You can adjust this selection at any time under Settings → Features.', 'libre-bite' ); ?></p>
 		</div>
 	</div>
 
@@ -191,7 +191,7 @@ $lbite_is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->is_
 								<span class="lbite-onboarding-toggle-thumb"></span>
 							</span>
 							<span class="lbite-onboarding-toggle-label">
-								<?php echo $lbite_is_enabled ? esc_html__( 'AN', 'libre-bite' ) : esc_html__( 'AUS', 'libre-bite' ); ?>
+								<?php echo $lbite_is_enabled ? esc_html__( 'ON', 'libre-bite' ) : esc_html__( 'OFF', 'libre-bite' ); ?>
 							</span>
 						</button>
 					</div>
@@ -204,7 +204,7 @@ $lbite_is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->is_
 							/* translators: %s: URL zu Upgrade-Seite */
 							'<a href="%s" target="_blank">%s</a>',
 							esc_url( admin_url( 'admin.php?page=lbite-pricing' ) ),
-							esc_html__( 'Pro-Version freischalten →', 'libre-bite' )
+							esc_html__( 'Unlock Pro Version →', 'libre-bite' )
 						);
 						?>
 					</div>
@@ -216,39 +216,39 @@ $lbite_is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->is_
 		<?php endforeach; ?>
 
 		<div class="lbite-onboarding-next-steps">
-			<h2><?php esc_html_e( 'Nächste Schritte', 'libre-bite' ); ?></h2>
+			<h2><?php esc_html_e( 'Next Steps', 'libre-bite' ); ?></h2>
 			<ul class="lbite-onboarding-checklist">
 				<li>
 					<span class="lbite-onboarding-check-icon">☐</span>
 					<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=lbite_location' ) ); ?>">
-						<?php esc_html_e( 'Ersten Standort anlegen', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Create your first location', 'libre-bite' ); ?>
 					</a>
-					<span class="lbite-onboarding-check-hint"><?php esc_html_e( 'Ohne Standort können keine Bestellungen angenommen werden.', 'libre-bite' ); ?></span>
+					<span class="lbite-onboarding-check-hint"><?php esc_html_e( 'Orders cannot be accepted without a location.', 'libre-bite' ); ?></span>
 				</li>
 				<li>
 					<span class="lbite-onboarding-check-icon">☐</span>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings' ) ); ?>">
-						<?php esc_html_e( 'Öffnungszeiten und Zeitslots konfigurieren', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Configure opening hours and time slots', 'libre-bite' ); ?>
 					</a>
-					<span class="lbite-onboarding-check-hint"><?php esc_html_e( 'Lege fest, wann Bestellungen möglich sind.', 'libre-bite' ); ?></span>
+					<span class="lbite-onboarding-check-hint"><?php esc_html_e( 'Define when orders are possible.', 'libre-bite' ); ?></span>
 				</li>
 				<li>
 					<span class="lbite-onboarding-check-icon">☐</span>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-order-board' ) ); ?>">
-						<?php esc_html_e( 'Bestellübersicht ausprobieren', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Try the order overview', 'libre-bite' ); ?>
 					</a>
-					<span class="lbite-onboarding-check-hint"><?php esc_html_e( 'Hier siehst du alle eingehenden Bestellungen.', 'libre-bite' ); ?></span>
+					<span class="lbite-onboarding-check-hint"><?php esc_html_e( 'Here you can see all incoming orders.', 'libre-bite' ); ?></span>
 				</li>
 			</ul>
 		</div>
 
 		<div class="lbite-onboarding-footer">
 			<button type="button" id="lbite-onboarding-complete" class="button button-primary button-hero">
-				<?php esc_html_e( 'Einrichtung abschliessen', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Complete Setup', 'libre-bite' ); ?>
 				<span class="dashicons dashicons-arrow-right-alt" style="margin-left: 5px; margin-top: 2px;"></span>
 			</button>
 			<p class="lbite-onboarding-footer-hint">
-				<?php esc_html_e( 'Du kannst alle Features jederzeit unter Einstellungen → Features anpassen.', 'libre-bite' ); ?>
+				<?php esc_html_e( 'You can adjust all features at any time under Settings → Features.', 'libre-bite' ); ?>
 			</p>
 		</div>
 

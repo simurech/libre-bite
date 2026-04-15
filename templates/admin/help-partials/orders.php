@@ -10,119 +10,119 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="lbite-help-section">
-	<h2><?php esc_html_e( 'Bestellungen mit Libre Bite', 'libre-bite' ); ?></h2>
-	<p><?php esc_html_e( 'Libre Bite fügt deinem WooCommerce-Shop eine vollständige Bestellverwaltung für Gastronomiebetriebe hinzu. Neue Bestellungen erscheinen automatisch in der Bestellübersicht – ohne dass du WooCommerce-Bestellungen manuell durchsuchen musst.', 'libre-bite' ); ?></p>
+	<h2><?php esc_html_e( 'Orders with Libre Bite', 'libre-bite' ); ?></h2>
+	<p><?php esc_html_e( 'Libre Bite adds a complete order management system for food service businesses to your WooCommerce store. New orders appear automatically in the order overview – no need to manually search WooCommerce orders.', 'libre-bite' ); ?></p>
 
 	<!-- Wie läuft eine Bestellung ab? -->
 	<div class="lbite-help-article">
-		<h3><?php esc_html_e( 'Wie läuft eine Bestellung ab?', 'libre-bite' ); ?></h3>
-		<p><?php esc_html_e( 'Der typische Ablauf einer Online-Bestellung:', 'libre-bite' ); ?></p>
+		<h3><?php esc_html_e( 'How does an order work?', 'libre-bite' ); ?></h3>
+		<p><?php esc_html_e( 'The typical flow of an online order:', 'libre-bite' ); ?></p>
 		<ol>
-			<li><strong><?php esc_html_e( 'Kunde bestellt online', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Über die Webseite wählt der Kunde Produkte, einen Standort und eine Abholzeit.', 'libre-bite' ); ?></li>
-			<li><strong><?php esc_html_e( 'Bestellung erscheint im Dashboard', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Die Bestellung erscheint sofort in der Spalte "Eingang" der Bestellübersicht. Optional wird ein Sound abgespielt.', 'libre-bite' ); ?></li>
-			<li><strong><?php esc_html_e( 'Personal bereitet vor', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Bestellung wird auf "Zubereitung" verschoben. Bei Vorbestellungen passiert das automatisch X Minuten vor der Abholzeit.', 'libre-bite' ); ?></li>
-			<li><strong><?php esc_html_e( 'Bestellung ist bereit', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Status auf "Bereit" setzen. Optional erhält der Kunde automatisch eine Erinnerungs-E-Mail.', 'libre-bite' ); ?></li>
-			<li><strong><?php esc_html_e( 'Abholung', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Nach der Abholung wird die Bestellung auf "Abgeholt" gesetzt und verschwindet aus der aktiven Ansicht.', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Customer orders online', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'The customer selects products, a location and a pickup time on the website.', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Order appears in the dashboard', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'The order immediately appears in the "Incoming" column of the order overview. Optionally a sound plays.', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Staff prepares the order', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Order is moved to "Preparing". For pre-orders, this happens automatically X minutes before pickup time.', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Order is ready', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Set status to "Ready". Optionally the customer receives an automatic reminder email.', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Pickup', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'After pickup, the order is set to "Picked Up" and disappears from the active view.', 'libre-bite' ); ?></li>
 		</ol>
 	</div>
 
 	<!-- Bestellübersicht (Kanban) -->
 	<div class="lbite-help-article">
-		<h3><?php esc_html_e( 'Die Bestellübersicht (Kanban-Board)', 'libre-bite' ); ?></h3>
-		<p><?php esc_html_e( 'Das Kanban-Board ist deine Echtzeit-Übersicht über alle laufenden Bestellungen. Du siehst auf einen Blick, was gerade ankommt, was in Arbeit ist und was bereit zur Abholung steht.', 'libre-bite' ); ?></p>
+		<h3><?php esc_html_e( 'The Order Overview (Kanban Board)', 'libre-bite' ); ?></h3>
+		<p><?php esc_html_e( 'The Kanban board is your real-time overview of all active orders. At a glance you can see what is incoming, what is being prepared, and what is ready for pickup.', 'libre-bite' ); ?></p>
 
 		<table class="widefat">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Spalte', 'libre-bite' ); ?></th>
-					<th><?php esc_html_e( 'Bedeutung', 'libre-bite' ); ?></th>
-					<th><?php esc_html_e( 'Nächster Schritt', 'libre-bite' ); ?></th>
+					<th><?php esc_html_e( 'Column', 'libre-bite' ); ?></th>
+					<th><?php esc_html_e( 'Meaning', 'libre-bite' ); ?></th>
+					<th><?php esc_html_e( 'Next Step', 'libre-bite' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td><strong><?php esc_html_e( 'Eingang', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Neue Bestellungen, die noch nicht bearbeitet wurden. Neue Bestellungen werden hier farblich hervorgehoben.', 'libre-bite' ); ?></td>
-					<td><?php esc_html_e( 'Bestellung ansehen und mit der Zubereitung beginnen.', 'libre-bite' ); ?></td>
+					<td><strong><?php esc_html_e( 'Incoming', 'libre-bite' ); ?></strong></td>
+					<td><?php esc_html_e( 'New orders that have not yet been processed. New orders are highlighted here in color.', 'libre-bite' ); ?></td>
+					<td><?php esc_html_e( 'View the order and start preparing.', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
-					<td><strong><?php esc_html_e( 'Zubereitung', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Bestellungen, die gerade zubereitet werden. Vorbestellungen werden automatisch kurz vor der Abholzeit hier abgelegt.', 'libre-bite' ); ?></td>
-					<td><?php esc_html_e( 'Fertigmelden, sobald die Bestellung abholbereit ist.', 'libre-bite' ); ?></td>
+					<td><strong><?php esc_html_e( 'Preparing', 'libre-bite' ); ?></strong></td>
+					<td><?php esc_html_e( 'Orders currently being prepared. Pre-orders are automatically placed here shortly before the pickup time.', 'libre-bite' ); ?></td>
+					<td><?php esc_html_e( 'Mark as done when the order is ready for pickup.', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
-					<td><strong><?php esc_html_e( 'Bereit', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Bestellungen warten auf den Kunden. Kundin wird ggf. per E-Mail informiert.', 'libre-bite' ); ?></td>
-					<td><?php esc_html_e( 'Nach der Abholung als "Abgeholt" markieren.', 'libre-bite' ); ?></td>
+					<td><strong><?php esc_html_e( 'Ready', 'libre-bite' ); ?></strong></td>
+					<td><?php esc_html_e( 'Orders waiting for the customer. The customer may be notified by email.', 'libre-bite' ); ?></td>
+					<td><?php esc_html_e( 'Mark as "Picked Up" after collection.', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
-					<td><strong><?php esc_html_e( 'Abgeholt', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Erledigte Bestellungen des heutigen Tages. Ältere Bestellungen werden separat gespeichert.', 'libre-bite' ); ?></td>
-					<td><?php esc_html_e( 'Erledigt.', 'libre-bite' ); ?></td>
+					<td><strong><?php esc_html_e( 'Picked Up', 'libre-bite' ); ?></strong></td>
+					<td><?php esc_html_e( 'Completed orders for today. Older orders are stored separately.', 'libre-bite' ); ?></td>
+					<td><?php esc_html_e( 'Done.', 'libre-bite' ); ?></td>
 				</tr>
 			</tbody>
 		</table>
 
-		<h4 style="margin-top: 16px;"><?php esc_html_e( 'Status verschieben', 'libre-bite' ); ?></h4>
+		<h4 style="margin-top: 16px;"><?php esc_html_e( 'Moving Status', 'libre-bite' ); ?></h4>
 		<ul>
-			<li><strong><?php esc_html_e( 'Drag & Drop:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Bestellkarte in die nächste Spalte ziehen – ideal auf Touchscreens und Tablets.', 'libre-bite' ); ?></li>
-			<li><strong><?php esc_html_e( 'Button:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Den Status-Button direkt auf der Bestellkarte anklicken.', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Drag & Drop:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Drag an order card to the next column – ideal on touchscreens and tablets.', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Button:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Click the status button directly on the order card.', 'libre-bite' ); ?></li>
 		</ul>
 
 		<div class="lbite-help-tip">
 			<span class="dashicons dashicons-lightbulb"></span>
-			<p><?php esc_html_e( 'Tipp: Das Dashboard aktualisiert sich automatisch. Du musst die Seite nicht manuell neu laden, um neue Bestellungen zu sehen. Das Intervall kannst du unter Einstellungen → Dashboard anpassen.', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'Tip: The dashboard updates automatically. You do not need to manually reload the page to see new orders. The interval can be adjusted under Settings → Dashboard.', 'libre-bite' ); ?></p>
 		</div>
 	</div>
 
 	<!-- Sound-Benachrichtigungen -->
 	<div class="lbite-help-article">
-		<h3><?php esc_html_e( 'Sound-Benachrichtigungen bei neuen Bestellungen', 'libre-bite' ); ?></h3>
-		<p><?php esc_html_e( 'Sobald eine neue Bestellung eingeht, spielt das Dashboard automatisch einen Signalton ab – damit du keine Bestellung übersiehst, auch wenn du gerade nicht auf den Bildschirm schaust.', 'libre-bite' ); ?></p>
+		<h3><?php esc_html_e( 'Sound Notifications for New Orders', 'libre-bite' ); ?></h3>
+		<p><?php esc_html_e( 'As soon as a new order arrives, the dashboard automatically plays an alert sound – so you never miss an order, even if you are not looking at the screen.', 'libre-bite' ); ?></p>
 		<ul>
-			<li><?php esc_html_e( 'Der Sound spielt nur, wenn der Browser-Tab mit dem Dashboard geöffnet ist.', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Manche Browser erlauben Sounds erst nach einer Interaktion (z.B. einmal auf die Seite klicken).', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Den Sound kannst du unter Einstellungen → Dashboard anpassen oder deaktivieren.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'The sound only plays when the browser tab with the dashboard is open.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Some browsers only allow sounds after an interaction (e.g. clicking on the page once).', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'You can customize or disable the sound under Settings → Dashboard.', 'libre-bite' ); ?></li>
 		</ul>
 	</div>
 
 	<!-- Vorbestellungen -->
 	<div class="lbite-help-article">
-		<h3><?php esc_html_e( 'Vorbestellungen (geplante Abholzeiten)', 'libre-bite' ); ?></h3>
-		<p><?php esc_html_e( 'Kunden können beim Checkout eine bestimmte Abholzeit wählen – z.B. "heute um 12:30 Uhr". Libre Bite verwaltet diese Vorbestellungen automatisch:', 'libre-bite' ); ?></p>
+		<h3><?php esc_html_e( 'Pre-Orders (Scheduled Pickup Times)', 'libre-bite' ); ?></h3>
+		<p><?php esc_html_e( 'Customers can select a specific pickup time at checkout – e.g. "today at 12:30". Libre Bite manages these pre-orders automatically:', 'libre-bite' ); ?></p>
 		<ul>
-			<li><?php esc_html_e( 'Vorbestellungen erscheinen zunächst im "Eingang" mit Angabe der Abholzeit.', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'X Minuten vor der Abholzeit (konfigurierbar in Einstellungen → Allgemein) werden sie automatisch in die Spalte "Zubereitung" verschoben.', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'So weisst du immer genau, wann du mit der Zubereitung beginnen musst.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Pre-orders initially appear in "Incoming" with the pickup time shown.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'X minutes before pickup time (configurable under Settings → General), they are automatically moved to the "Preparing" column.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'This way you always know exactly when to start preparing.', 'libre-bite' ); ?></li>
 		</ul>
 	</div>
 
 	<!-- POS -->
 	<div class="lbite-help-article">
-		<h3><?php esc_html_e( 'Kassensystem (POS) für Bestellungen vor Ort', 'libre-bite' ); ?></h3>
-		<p><?php esc_html_e( 'Das Kassensystem ermöglicht es, Bestellungen direkt an der Kasse entgegenzunehmen – z.B. für Laufkundschaft, Telefonbestellungen oder Tischbestellungen.', 'libre-bite' ); ?></p>
+		<h3><?php esc_html_e( 'POS System for On-Site Orders', 'libre-bite' ); ?></h3>
+		<p><?php esc_html_e( 'The POS system allows orders to be placed directly at the counter – e.g. for walk-in customers, phone orders, or table orders.', 'libre-bite' ); ?></p>
 
-		<h4><?php esc_html_e( 'So funktioniert der POS', 'libre-bite' ); ?></h4>
+		<h4><?php esc_html_e( 'How the POS works', 'libre-bite' ); ?></h4>
 		<ol>
-			<li><?php esc_html_e( 'Standort wählen (falls mehrere Standorte vorhanden)', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Produkte durch Antippen in den Warenkorb legen – inkl. Varianten und Produkt-Optionen', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Optional: Kundennamen und Tisch eingeben', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( '"Bestellung abschliessen" → Zahlungsart wählen (Bar, Karte, Twint etc.)', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Die Bestellung erscheint sofort im Kanban-Board unter "Eingang"', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Select location (if multiple locations available)', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Add products to the cart by tapping – including variants and product options', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Optional: enter customer name and table', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( '"Complete Order" → choose payment method (cash, card, Twint, etc.)', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'The order immediately appears in the Kanban board under "Incoming"', 'libre-bite' ); ?></li>
 		</ol>
 
 		<div class="lbite-help-tip">
 			<span class="dashicons dashicons-lightbulb"></span>
-			<p><?php esc_html_e( 'Tipp: Das Kassensystem ist für die Nutzung auf Tablets oder einem zweiten Monitor optimiert – so kann das Personal unabhängig vom Dashboard arbeiten.', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'Tip: The POS system is optimized for use on tablets or a second monitor – allowing staff to work independently from the dashboard.', 'libre-bite' ); ?></p>
 		</div>
 	</div>
 
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-order-board' ) ); ?>" class="button button-primary">
-		<?php esc_html_e( 'Zur Bestellübersicht', 'libre-bite' ); ?>
+		<?php esc_html_e( 'Go to Order Overview', 'libre-bite' ); ?>
 	</a>
 	<?php if ( lbite_feature_enabled( 'enable_pos' ) ) : ?>
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-pos' ) ); ?>" class="button" style="margin-left: 8px;">
-		<?php esc_html_e( 'Zum Kassensystem', 'libre-bite' ); ?>
+		<?php esc_html_e( 'Go to POS System', 'libre-bite' ); ?>
 	</a>
 	<?php endif; ?>
 </div>

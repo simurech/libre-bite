@@ -20,7 +20,7 @@ class LBite_Email_Pickup_Reminder extends WC_Email {
 	public function __construct() {
 		$this->id             = 'lbite_pickup_reminder';
 		$this->title          = __( 'Libre Bite - Pickup Reminder', 'libre-bite' );
-		$this->description    = __( 'Erinnerung an bevorstehende Abholzeit', 'libre-bite' );
+		$this->description    = __( 'Reminder about upcoming pickup time', 'libre-bite' );
 		$this->template_html  = 'emails/pickup-reminder.php';
 		$this->template_plain = 'emails/plain/pickup-reminder.php';
 		$this->template_base  = LBITE_PLUGIN_DIR . 'templates/';
@@ -124,7 +124,7 @@ class LBite_Email_Pickup_Reminder extends WC_Email {
 	 * @return string
 	 */
 	public function get_default_subject() {
-		return __( 'Ihre Bestellung {order_number} ist bald abholbereit', 'libre-bite' );
+		return __( 'Your order {order_number} will be ready for pickup soon', 'libre-bite' );
 	}
 
 	/**
@@ -133,7 +133,7 @@ class LBite_Email_Pickup_Reminder extends WC_Email {
 	 * @return string
 	 */
 	public function get_default_heading() {
-		return __( 'Abholung in Kürze', 'libre-bite' );
+		return __( 'Pickup Soon', 'libre-bite' );
 	}
 
 	/**
@@ -142,32 +142,32 @@ class LBite_Email_Pickup_Reminder extends WC_Email {
 	public function init_form_fields() {
 		$this->form_fields = array(
 			'enabled'            => array(
-				'title'   => __( 'Aktivieren/Deaktivieren', 'libre-bite' ),
+				'title'   => __( 'Enable/Disable', 'libre-bite' ),
 				'type'    => 'checkbox',
-				'label'   => __( 'Diese E-Mail-Benachrichtigung aktivieren', 'libre-bite' ),
+				'label'   => __( 'Enable this email notification', 'libre-bite' ),
 				'default' => 'yes',
 			),
 			'subject'            => array(
-				'title'       => __( 'Betreff', 'libre-bite' ),
+				'title'       => __( 'Subject', 'libre-bite' ),
 				'type'        => 'text',
 				'desc_tip'    => true,
 				/* translators: %s: default email subject */
-				'description' => sprintf( __( 'Standard: %s', 'libre-bite' ), $this->get_default_subject() ),
+				'description' => sprintf( __( 'Default: %s', 'libre-bite' ), $this->get_default_subject() ),
 				'placeholder' => $this->get_default_subject(),
 				'default'     => '',
 			),
 			'heading'            => array(
-				'title'       => __( 'Überschrift', 'libre-bite' ),
+				'title'       => __( 'Heading', 'libre-bite' ),
 				'type'        => 'text',
 				'desc_tip'    => true,
 				/* translators: %s: default email heading */
-				'description' => sprintf( __( 'Standard: %s', 'libre-bite' ), $this->get_default_heading() ),
+				'description' => sprintf( __( 'Default: %s', 'libre-bite' ), $this->get_default_heading() ),
 				'placeholder' => $this->get_default_heading(),
 				'default'     => '',
 			),
 			'additional_content' => array(
-				'title'       => __( 'Zusätzlicher Inhalt', 'libre-bite' ),
-				'description' => __( 'Text unterhalb der E-Mail.', 'libre-bite' ),
+				'title'       => __( 'Additional Content', 'libre-bite' ),
+				'description' => __( 'Text below the email.', 'libre-bite' ),
 				'css'         => 'width:400px; height: 75px;',
 				'placeholder' => __( 'N/A', 'libre-bite' ),
 				'type'        => 'textarea',
@@ -175,9 +175,9 @@ class LBite_Email_Pickup_Reminder extends WC_Email {
 				'desc_tip'    => true,
 			),
 			'email_type'         => array(
-				'title'       => __( 'E-Mail-Typ', 'libre-bite' ),
+				'title'       => __( 'Email Type', 'libre-bite' ),
 				'type'        => 'select',
-				'description' => __( 'Wählen Sie das Format für diese E-Mail.', 'libre-bite' ),
+				'description' => __( 'Choose the format for this email.', 'libre-bite' ),
 				'default'     => 'html',
 				'class'       => 'email_type wc-enhanced-select',
 				'options'     => $this->get_email_type_options(),

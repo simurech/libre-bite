@@ -451,8 +451,8 @@ class LBite_Checkout {
 				'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
 				'nonce'         => wp_create_nonce( 'lbite_frontend_nonce' ),
 				'strings'       => array(
-					'selectLocation' => __( 'Bitte wählen Sie einen Standort', 'libre-bite' ),
-					'selectTime'     => __( 'Bitte wählen Sie eine Abholzeit', 'libre-bite' ),
+					'selectLocation' => __( 'Please select a location', 'libre-bite' ),
+					'selectTime'     => __( 'Please select a pickup time', 'libre-bite' ),
 				),
 				'hasLocation'   => ( WC()->session ? ! empty( WC()->session->get( 'lbite_location_id' ) ) : false ),
 				'locationId'    => ( WC()->session ? WC()->session->get( 'lbite_location_id' ) : null ),
@@ -531,8 +531,8 @@ class LBite_Checkout {
 					'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
 					'nonce'         => wp_create_nonce( 'lbite_frontend_nonce' ),
 					'strings'       => array(
-						'selectLocation' => __( 'Bitte wählen Sie einen Standort', 'libre-bite' ),
-						'selectTime'     => __( 'Bitte wählen Sie eine Abholzeit', 'libre-bite' ),
+						'selectLocation' => __( 'Please select a location', 'libre-bite' ),
+						'selectTime'     => __( 'Please select a pickup time', 'libre-bite' ),
 					),
 					'hasLocation'   => ( WC()->session ? ! empty( WC()->session->get( 'lbite_location_id' ) ) : false ),
 					'locationId'    => ( WC()->session ? WC()->session->get( 'lbite_location_id' ) : null ),
@@ -553,7 +553,7 @@ class LBite_Checkout {
 		$lbite_locations = LBite_Locations::get_all_locations();
 
 		if ( empty( $lbite_locations ) ) {
-			return '<p>' . esc_html__( 'Keine Standorte verfügbar.', 'libre-bite' ) . '</p>';
+			return '<p>' . esc_html__( 'No locations available.', 'libre-bite' ) . '</p>';
 		}
 
 		$lbite_location_id = WC()->session ? WC()->session->get( 'lbite_location_id' ) : null;
@@ -621,18 +621,18 @@ class LBite_Checkout {
 		$order_type  = isset( $_POST['lbite_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_type'] ) ) : '';
 
 		if ( ! $location_id ) {
-			wc_add_notice( __( 'Bitte wählen Sie einen Standort.', 'libre-bite' ), 'error' );
+			wc_add_notice( __( 'Please select a location.', 'libre-bite' ), 'error' );
 		}
 
 		if ( ! in_array( $order_type, array( 'now', 'later' ), true ) ) {
-			wc_add_notice( __( 'Bitte wählen Sie eine Bestellart.', 'libre-bite' ), 'error' );
+			wc_add_notice( __( 'Please select an order type.', 'libre-bite' ), 'error' );
 		}
 
 		if ( 'later' === $order_type ) {
 			// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
 			$pickup_time = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
 			if ( ! $pickup_time ) {
-				wc_add_notice( __( 'Bitte wählen Sie eine Abholzeit.', 'libre-bite' ), 'error' );
+				wc_add_notice( __( 'Please select a pickup time.', 'libre-bite' ), 'error' );
 			}
 		}
 
@@ -641,7 +641,7 @@ class LBite_Checkout {
 			$lbite_opening_hours = LBite_Locations::get_opening_hours( $location_id );
 			$lbite_status        = LBite_Locations::get_location_status( $lbite_opening_hours );
 			if ( $lbite_status && 'open' !== $lbite_status['type'] && 'closing-soon' !== $lbite_status['type'] ) {
-				wc_add_notice( __( 'Der gewählte Standort ist aktuell geschlossen. Bitte wählen Sie eine Vorbestellungszeit.', 'libre-bite' ), 'error' );
+				wc_add_notice( __( 'The selected location is currently closed. Please select a pre-order time.', 'libre-bite' ), 'error' );
 			}
 		}
 	}
@@ -789,7 +789,7 @@ class LBite_Checkout {
 				$tip_amount = $rounded_total - $cart_total;
 			}
 
-			WC()->cart->add_fee( __( 'Trinkgeld', 'libre-bite' ), $tip_amount );
+			WC()->cart->add_fee( __( 'Tip', 'libre-bite' ), $tip_amount );
 		}
 	}
 
@@ -812,7 +812,7 @@ class LBite_Checkout {
 		// Prüfen ob Trinkgeld vorhanden ist.
 		$has_tip = false;
 		foreach ( $cart->get_fees() as $fee ) {
-			if ( $fee->name === __( 'Trinkgeld', 'libre-bite' ) ) {
+			if ( $fee->name === __( 'Tip', 'libre-bite' ) ) {
 				$has_tip = true;
 				break;
 			}
@@ -830,7 +830,7 @@ class LBite_Checkout {
 
 		// Alle Fees außer Rundung addieren (inkl. deren Steuern).
 		foreach ( $cart->get_fees() as $fee ) {
-			if ( $fee->name !== __( 'Rundung', 'libre-bite' ) ) {
+			if ( $fee->name !== __( 'Rounding', 'libre-bite' ) ) {
 				$fees_total += $fee->amount + $fee->tax;
 			}
 		}
@@ -846,7 +846,7 @@ class LBite_Checkout {
 		// Nur hinzufügen wenn Differenz nicht 0 ist (mit Toleranz für Floating-Point-Fehler).
 		// Third parameter false = tax-exempt fee.
 		if ( abs( $rounding_amount ) > 0.001 ) {
-			$cart->add_fee( __( 'Rundung', 'libre-bite' ), $rounding_amount, false );
+			$cart->add_fee( __( 'Rounding', 'libre-bite' ), $rounding_amount, false );
 		}
 	}
 
@@ -887,7 +887,7 @@ class LBite_Checkout {
 		$pickup_time = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
 
 		if ( ! $location_id ) {
-			wp_send_json_error( array( 'message' => __( 'Ungültiger Standort', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid location', 'libre-bite' ) ) );
 		}
 
 		// Session initialisieren falls nötig.
@@ -914,7 +914,7 @@ class LBite_Checkout {
 
 		wp_send_json_success(
 			array(
-				'message'       => __( 'Standort gesetzt', 'libre-bite' ),
+				'message'       => __( 'Location set', 'libre-bite' ),
 				'location_name' => $location ? $location->post_title : '',
 			)
 		);
@@ -947,7 +947,7 @@ class LBite_Checkout {
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
 		if ( ! $location_id ) {
-			wp_send_json_error( array( 'message' => __( 'Ungültiger Standort', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid location', 'libre-bite' ) ) );
 		}
 
 		$opening_hours = LBite_Locations::get_opening_hours( $location_id );

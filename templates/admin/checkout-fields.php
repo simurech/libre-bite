@@ -54,7 +54,7 @@ if ( isset( $_POST['lbite_save_checkout_fields'] ) && check_admin_referer( 'lbit
 	$checkout_fields['_billing_details_title']       = isset( $_POST['lbite_billing_details_title'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_billing_details_title'] ) ) : '';
 
 	update_option( 'lbite_checkout_fields', $checkout_fields );
-	echo '<div class="notice notice-success"><p>' . esc_html__( 'Einstellungen gespeichert.', 'libre-bite' ) . '</p></div>';
+	echo '<div class="notice notice-success"><p>' . esc_html__( 'Settings saved.', 'libre-bite' ) . '</p></div>';
 }
 
 // Aktuelle Einstellungen laden
@@ -63,39 +63,39 @@ $saved_fields = get_option( 'lbite_checkout_fields', array() );
 // Standard WooCommerce Felder
 $default_fields = array(
 	'billing'  => array(
-		'first_name' => __( 'Vorname', 'libre-bite' ),
-		'last_name'  => __( 'Nachname', 'libre-bite' ),
-		'company'    => __( 'Firma', 'libre-bite' ),
-		'address_1'  => __( 'Straße und Hausnummer', 'libre-bite' ),
-		'address_2'  => __( 'Adresszusatz', 'libre-bite' ),
-		'city'       => __( 'Ort', 'libre-bite' ),
-		'postcode'   => __( 'Postleitzahl', 'libre-bite' ),
-		'country'    => __( 'Land', 'libre-bite' ),
-		'state'      => __( 'Bundesland', 'libre-bite' ),
-		'email'      => __( 'E-Mail', 'libre-bite' ),
-		'phone'      => __( 'Telefon', 'libre-bite' ),
+		'first_name' => __( 'First Name', 'libre-bite' ),
+		'last_name'  => __( 'Last Name', 'libre-bite' ),
+		'company'    => __( 'Company', 'libre-bite' ),
+		'address_1'  => __( 'Street and Number', 'libre-bite' ),
+		'address_2'  => __( 'Address Line 2', 'libre-bite' ),
+		'city'       => __( 'City', 'libre-bite' ),
+		'postcode'   => __( 'Postal Code', 'libre-bite' ),
+		'country'    => __( 'Country', 'libre-bite' ),
+		'state'      => __( 'State', 'libre-bite' ),
+		'email'      => __( 'Email', 'libre-bite' ),
+		'phone'      => __( 'Phone', 'libre-bite' ),
 	),
 	'shipping' => array(
-		'first_name' => __( 'Vorname', 'libre-bite' ),
-		'last_name'  => __( 'Nachname', 'libre-bite' ),
-		'company'    => __( 'Firma', 'libre-bite' ),
-		'address_1'  => __( 'Straße und Hausnummer', 'libre-bite' ),
-		'address_2'  => __( 'Adresszusatz', 'libre-bite' ),
-		'city'       => __( 'Ort', 'libre-bite' ),
-		'postcode'   => __( 'Postleitzahl', 'libre-bite' ),
-		'country'    => __( 'Land', 'libre-bite' ),
-		'state'      => __( 'Bundesland', 'libre-bite' ),
+		'first_name' => __( 'First Name', 'libre-bite' ),
+		'last_name'  => __( 'Last Name', 'libre-bite' ),
+		'company'    => __( 'Company', 'libre-bite' ),
+		'address_1'  => __( 'Street and Number', 'libre-bite' ),
+		'address_2'  => __( 'Address Line 2', 'libre-bite' ),
+		'city'       => __( 'City', 'libre-bite' ),
+		'postcode'   => __( 'Postal Code', 'libre-bite' ),
+		'country'    => __( 'Country', 'libre-bite' ),
+		'state'      => __( 'State', 'libre-bite' ),
 	),
 );
 ?>
 
 <?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap">
-	<h1><?php esc_html_e( 'Checkout-Felder verwalten', 'libre-bite' ); ?></h1>
+	<h1><?php esc_html_e( 'Manage Checkout Fields', 'libre-bite' ); ?></h1>
 <?php endif; ?>
 
 	<p class="description">
-		<?php esc_html_e( 'Hier können Sie festlegen, welche Felder im Checkout angezeigt werden sollen und die Feldbezeichnungen anpassen.', 'libre-bite' ); ?>
+		<?php esc_html_e( 'Here you can specify which fields should be displayed in checkout and customize field labels.', 'libre-bite' ); ?>
 	</p>
 
 	<form method="post" action="">
@@ -104,7 +104,7 @@ $default_fields = array(
 		<!-- Allgemeine Einstellungen -->
 		<div class="postbox" style="margin-top: 20px;">
 			<h2 class="hndle" style="padding: 15px;">
-				<?php esc_html_e( 'Allgemeine Einstellungen', 'libre-bite' ); ?>
+				<?php esc_html_e( 'General Settings', 'libre-bite' ); ?>
 			</h2>
 			<div class="inside">
 				<table class="form-table">
@@ -115,10 +115,10 @@ $default_fields = array(
 									name="lbite_enable_shipping_address"
 									value="1"
 									<?php checked( isset( $saved_fields['_enable_shipping_address'] ) ? $saved_fields['_enable_shipping_address'] : false ); ?>>
-								<strong><?php esc_html_e( 'Option "Lieferung an eine andere Adresse" anzeigen', 'libre-bite' ); ?></strong>
+								<strong><?php esc_html_e( 'Show "Ship to a different address" option', 'libre-bite' ); ?></strong>
 							</label>
 							<p class="description" style="margin-left: 30px; margin-top: 5px;">
-								<?php esc_html_e( 'Wenn deaktiviert, wird die Checkbox und die Lieferadress-Felder im Checkout nicht angezeigt.', 'libre-bite' ); ?>
+								<?php esc_html_e( 'If disabled, the checkbox and shipping address fields will not be shown in checkout.', 'libre-bite' ); ?>
 							</p>
 						</td>
 					</tr>
@@ -129,10 +129,10 @@ $default_fields = array(
 									name="lbite_show_shipping_info"
 									value="1"
 									<?php checked( isset( $saved_fields['_show_shipping_info'] ) ? $saved_fields['_show_shipping_info'] : false ); ?>>
-								<strong><?php esc_html_e( 'Versand-Informationen anzeigen', 'libre-bite' ); ?></strong>
+								<strong><?php esc_html_e( 'Show Shipping Information', 'libre-bite' ); ?></strong>
 							</label>
 							<p class="description" style="margin-left: 30px; margin-top: 5px;">
-								<?php esc_html_e( 'Wenn aktiviert, werden Versand-Informationen in Warenkorb und Checkout angezeigt (Versandkosten, Versandmethoden, etc.).', 'libre-bite' ); ?>
+								<?php esc_html_e( 'If enabled, shipping information will be displayed in cart and checkout (shipping costs, shipping methods, etc.).', 'libre-bite' ); ?>
 							</p>
 						</td>
 					</tr>
@@ -143,10 +143,10 @@ $default_fields = array(
 									name="lbite_enable_tip_selection"
 									value="1"
 									<?php checked( isset( $saved_fields['_enable_tip_selection'] ) ? $saved_fields['_enable_tip_selection'] : true ); ?>>
-								<strong><?php esc_html_e( 'Trinkgeld-Auswahl im Checkout anzeigen', 'libre-bite' ); ?></strong>
+								<strong><?php esc_html_e( 'Show Tip Selection in Checkout', 'libre-bite' ); ?></strong>
 							</label>
 							<p class="description" style="margin-left: 30px; margin-top: 5px;">
-								<?php esc_html_e( 'Wenn deaktiviert, wird die Trinkgeld-Auswahl im Checkout nicht angezeigt.', 'libre-bite' ); ?>
+								<?php esc_html_e( 'If disabled, the tip selection will not be shown in checkout.', 'libre-bite' ); ?>
 							</p>
 						</td>
 					</tr>
@@ -157,10 +157,10 @@ $default_fields = array(
 									name="lbite_enable_order_comments"
 									value="1"
 									<?php checked( isset( $saved_fields['_enable_order_comments'] ) ? $saved_fields['_enable_order_comments'] : true ); ?>>
-								<strong><?php esc_html_e( 'Feld "Anmerkungen zur Bestellung" anzeigen', 'libre-bite' ); ?></strong>
+								<strong><?php esc_html_e( 'Show "Order Notes" field', 'libre-bite' ); ?></strong>
 							</label>
 							<p class="description" style="margin-left: 30px; margin-top: 5px;">
-								<?php esc_html_e( 'Wenn deaktiviert, wird das Anmerkungen-Feld im Checkout nicht angezeigt.', 'libre-bite' ); ?>
+								<?php esc_html_e( 'If disabled, the notes field will not be shown in checkout.', 'libre-bite' ); ?>
 							</p>
 							<div style="margin-top: 10px; margin-left: 30px;">
 								<label style="display: block; margin-bottom: 5px;">
@@ -169,25 +169,25 @@ $default_fields = array(
 								<input type="text"
 									name="lbite_order_comments_label"
 									value="<?php echo esc_attr( isset( $saved_fields['_order_comments_label'] ) ? $saved_fields['_order_comments_label'] : '' ); ?>"
-									placeholder="<?php esc_attr_e( 'Anmerkungen zur Bestellung', 'libre-bite' ); ?>"
+									placeholder="<?php esc_attr_e( 'Order Notes', 'libre-bite' ); ?>"
 									class="regular-text"
 									style="width: 100%; max-width: 400px;">
 								<p class="description">
-									<?php esc_html_e( 'Eigene Feldbezeichnung (optional)', 'libre-bite' ); ?>
+									<?php esc_html_e( 'Custom field label (optional)', 'libre-bite' ); ?>
 								</p>
 							</div>
 							<div style="margin-top: 10px; margin-left: 30px;">
 								<label style="display: block; margin-bottom: 5px;">
-									<strong><?php esc_html_e( 'Platzhalter:', 'libre-bite' ); ?></strong>
+									<strong><?php esc_html_e( 'Placeholder:', 'libre-bite' ); ?></strong>
 								</label>
 								<input type="text"
 									name="lbite_order_comments_placeholder"
 									value="<?php echo esc_attr( isset( $saved_fields['_order_comments_placeholder'] ) ? $saved_fields['_order_comments_placeholder'] : '' ); ?>"
-									placeholder="<?php esc_attr_e( 'Hinweise zu Ihrer Bestellung, z.B. besondere Hinweise für die Lieferung.', 'libre-bite' ); ?>"
+									placeholder="<?php esc_attr_e( 'Notes about your order, e.g. special delivery instructions.', 'libre-bite' ); ?>"
 									class="regular-text"
 									style="width: 100%; max-width: 400px;">
 								<p class="description">
-									<?php esc_html_e( 'Eigener Platzhalter-Text (optional)', 'libre-bite' ); ?>
+									<?php esc_html_e( 'Custom placeholder text (optional)', 'libre-bite' ); ?>
 								</p>
 							</div>
 						</td>
@@ -195,16 +195,16 @@ $default_fields = array(
 					<tr>
 						<td style="padding: 10px; border-top: 1px solid #ddd;">
 							<label style="display: block; margin-bottom: 5px;">
-								<strong><?php esc_html_e( 'Titel für Rechnungsdetails überschreiben', 'libre-bite' ); ?></strong>
+								<strong><?php esc_html_e( 'Override Billing Details Title', 'libre-bite' ); ?></strong>
 							</label>
 							<input type="text"
 								name="lbite_billing_details_title"
 								value="<?php echo esc_attr( isset( $saved_fields['_billing_details_title'] ) ? $saved_fields['_billing_details_title'] : '' ); ?>"
-								placeholder="<?php esc_attr_e( 'Rechnungsdetails', 'libre-bite' ); ?>"
+								placeholder="<?php esc_attr_e( 'Billing Details', 'libre-bite' ); ?>"
 								class="regular-text"
 								style="width: 100%; max-width: 400px;">
 							<p class="description">
-								<?php esc_html_e( 'Eigener Titel für den Abschnitt "Rechnungsdetails" im Checkout (optional)', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Custom title for the "Billing Details" section in checkout (optional)', 'libre-bite' ); ?>
 							</p>
 						</td>
 					</tr>
@@ -214,14 +214,14 @@ $default_fields = array(
 
 		<p class="description" style="margin-top: 16px;">
 			<span class="dashicons dashicons-info" style="vertical-align: middle;"></span>
-			<?php esc_html_e( 'Haken gesetzt = Feld wird im Checkout angezeigt. Haken entfernt = Feld wird ausgeblendet. Die Bezeichnung kann optional überschrieben werden.', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Checked = field is shown in checkout. Unchecked = field is hidden. The label can optionally be overridden.', 'libre-bite' ); ?>
 		</p>
 
 		<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
 			<!-- Rechnungsadresse -->
 			<div class="postbox">
 				<h2 class="hndle" style="padding: 15px;">
-					<?php esc_html_e( 'Rechnungsadresse', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Billing Address', 'libre-bite' ); ?>
 				</h2>
 				<div class="inside">
 					<table class="form-table">
@@ -247,7 +247,7 @@ $default_fields = array(
 											class="regular-text"
 											style="width: 100%;">
 										<p class="description">
-											<?php esc_html_e( 'Eigene Bezeichnung (optional)', 'libre-bite' ); ?>
+											<?php esc_html_e( 'Custom label (optional)', 'libre-bite' ); ?>
 										</p>
 									</div>
 								</td>
@@ -260,7 +260,7 @@ $default_fields = array(
 			<!-- Lieferadresse -->
 			<div class="postbox">
 				<h2 class="hndle" style="padding: 15px;">
-					<?php esc_html_e( 'Lieferadresse', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Shipping Address', 'libre-bite' ); ?>
 				</h2>
 				<div class="inside">
 					<table class="form-table">
@@ -286,7 +286,7 @@ $default_fields = array(
 											class="regular-text"
 											style="width: 100%;">
 										<p class="description">
-											<?php esc_html_e( 'Eigene Bezeichnung (optional)', 'libre-bite' ); ?>
+											<?php esc_html_e( 'Custom label (optional)', 'libre-bite' ); ?>
 										</p>
 									</div>
 								</td>
@@ -299,7 +299,7 @@ $default_fields = array(
 
 		<p class="submit">
 			<button type="submit" name="lbite_save_checkout_fields" class="button button-primary button-large">
-				<?php esc_html_e( 'Einstellungen speichern', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Save Settings', 'libre-bite' ); ?>
 			</button>
 		</p>
 	</form>

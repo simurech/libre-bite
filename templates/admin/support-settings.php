@@ -21,21 +21,21 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 ?>
 <?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap lbite-admin-wrap">
-	<h1><?php esc_html_e( 'Support-Einstellungen', 'libre-bite' ); ?></h1>
+	<h1><?php esc_html_e( 'Support Settings', 'libre-bite' ); ?></h1>
 <?php endif; ?>
-	<p class="description"><?php esc_html_e( 'Konfigurieren Sie die Support-Kontaktdaten, die auf den Hilfe-Seiten angezeigt werden.', 'libre-bite' ); ?></p>
+	<p class="description"><?php esc_html_e( 'Configure the support contact information displayed on the help pages.', 'libre-bite' ); ?></p>
 
 	<form id="lbite-support-settings-form" method="post">
 		<?php wp_nonce_field( 'lbite_admin_nonce', 'lbite_nonce' ); ?>
 
 		<div class="lbite-settings-card">
-			<h2><?php esc_html_e( 'Kontaktdaten', 'libre-bite' ); ?></h2>
+			<h2><?php esc_html_e( 'Contact Information', 'libre-bite' ); ?></h2>
 
 			<table class="form-table">
 				<tbody>
 					<tr>
 						<th scope="row">
-							<label for="support_email"><?php esc_html_e( 'Support E-Mail', 'libre-bite' ); ?></label>
+							<label for="support_email"><?php esc_html_e( 'Support Email', 'libre-bite' ); ?></label>
 						</th>
 						<td>
 							<input type="email"
@@ -43,13 +43,13 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 								   name="support_email"
 								   value="<?php echo esc_attr( $support_email ); ?>"
 								   class="regular-text">
-							<p class="description"><?php esc_html_e( 'E-Mail-Adresse für Support-Anfragen', 'libre-bite' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Email address for support requests', 'libre-bite' ); ?></p>
 						</td>
 					</tr>
 
 					<tr>
 						<th scope="row">
-							<label for="support_phone"><?php esc_html_e( 'Support Telefon', 'libre-bite' ); ?></label>
+							<label for="support_phone"><?php esc_html_e( 'Support Phone', 'libre-bite' ); ?></label>
 						</th>
 						<td>
 							<input type="text"
@@ -57,14 +57,14 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 								   name="support_phone"
 								   value="<?php echo esc_attr( $support_phone ); ?>"
 								   class="regular-text"
-								   placeholder="<?php esc_attr_e( 'z.B. +41 44 123 45 67', 'libre-bite' ); ?>">
-							<p class="description"><?php esc_html_e( 'Telefonnummer für Support (optional)', 'libre-bite' ); ?></p>
+								   placeholder="<?php esc_attr_e( 'E.g. +41 44 123 45 67', 'libre-bite' ); ?>">
+							<p class="description"><?php esc_html_e( 'Phone number for support (optional)', 'libre-bite' ); ?></p>
 						</td>
 					</tr>
 
 					<tr>
 						<th scope="row">
-							<label for="support_hours"><?php esc_html_e( 'Support-Zeiten', 'libre-bite' ); ?></label>
+							<label for="support_hours"><?php esc_html_e( 'Support Hours', 'libre-bite' ); ?></label>
 						</th>
 						<td>
 							<input type="text"
@@ -72,8 +72,8 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 								   name="support_hours"
 								   value="<?php echo esc_attr( $support_hours ); ?>"
 								   class="regular-text"
-								   placeholder="<?php esc_attr_e( 'z.B. Mo-Fr 9-17 Uhr', 'libre-bite' ); ?>">
-							<p class="description"><?php esc_html_e( 'Zeiten, zu denen Support verfügbar ist', 'libre-bite' ); ?></p>
+								   placeholder="<?php esc_attr_e( 'E.g. Mon–Fri 9 AM–5 PM', 'libre-bite' ); ?>">
+							<p class="description"><?php esc_html_e( 'Times when support is available', 'libre-bite' ); ?></p>
 						</td>
 					</tr>
 				</tbody>
@@ -81,35 +81,35 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 		</div>
 
 		<div class="lbite-settings-card">
-			<h2><?php esc_html_e( 'Zusätzliche Informationen', 'libre-bite' ); ?></h2>
+			<h2><?php esc_html_e( 'Additional Information', 'libre-bite' ); ?></h2>
 
 			<table class="form-table">
 				<tbody>
 					<tr>
 						<th scope="row">
-							<label for="support_billing_note"><?php esc_html_e( 'Hinweis zur Verrechnung', 'libre-bite' ); ?></label>
+							<label for="support_billing_note"><?php esc_html_e( 'Billing Note', 'libre-bite' ); ?></label>
 						</th>
 						<td>
 							<textarea id="support_billing_note"
 									  name="support_billing_note"
 									  rows="3"
 									  class="large-text"
-									  placeholder="<?php esc_attr_e( 'z.B. Support wird nach Aufwand verrechnet (CHF 120.-/Stunde)', 'libre-bite' ); ?>"><?php echo esc_textarea( $support_billing_note ); ?></textarea>
-							<p class="description"><?php esc_html_e( 'Informationen zur Support-Verrechnung (erscheint auf Hilfe-Seiten)', 'libre-bite' ); ?></p>
+									  placeholder="<?php esc_attr_e( 'E.g. Support is billed at hourly rate (CHF 120.-/hour)', 'libre-bite' ); ?>"><?php echo esc_textarea( $support_billing_note ); ?></textarea>
+							<p class="description"><?php esc_html_e( 'Information about support billing (appears on help pages)', 'libre-bite' ); ?></p>
 						</td>
 					</tr>
 
 					<tr>
 						<th scope="row">
-							<label for="support_custom_text"><?php esc_html_e( 'Zusätzlicher Text', 'libre-bite' ); ?></label>
+							<label for="support_custom_text"><?php esc_html_e( 'Additional Text', 'libre-bite' ); ?></label>
 						</th>
 						<td>
 							<textarea id="support_custom_text"
 									  name="support_custom_text"
 									  rows="5"
 									  class="large-text"
-									  placeholder="<?php esc_attr_e( 'Zusätzliche Hinweise oder Informationen...', 'libre-bite' ); ?>"><?php echo esc_textarea( $support_custom_text ); ?></textarea>
-							<p class="description"><?php esc_html_e( 'Freier Text für zusätzliche Hinweise', 'libre-bite' ); ?></p>
+									  placeholder="<?php esc_attr_e( 'Additional notes or information...', 'libre-bite' ); ?>"><?php echo esc_textarea( $support_custom_text ); ?></textarea>
+							<p class="description"><?php esc_html_e( 'Free text for additional information', 'libre-bite' ); ?></p>
 						</td>
 					</tr>
 				</tbody>
@@ -117,12 +117,12 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 		</div>
 
 		<div class="lbite-settings-card">
-			<h2><?php esc_html_e( 'Vorschau', 'libre-bite' ); ?></h2>
-			<p class="description"><?php esc_html_e( 'So werden die Support-Informationen auf den Hilfe-Seiten angezeigt:', 'libre-bite' ); ?></p>
+			<h2><?php esc_html_e( 'Preview', 'libre-bite' ); ?></h2>
+			<p class="description"><?php esc_html_e( 'This is how support information will be displayed on the help pages:', 'libre-bite' ); ?></p>
 
 			<div class="lbite-support-preview">
 				<div class="lbite-support-preview-content">
-					<h3><?php esc_html_e( 'Support kontaktieren', 'libre-bite' ); ?></h3>
+					<h3><?php esc_html_e( 'Contact Support', 'libre-bite' ); ?></h3>
 					<p id="preview-email">
 						<span class="dashicons dashicons-email"></span>
 						<a href="mailto:<?php echo esc_attr( $support_email ); ?>"><?php echo esc_html( $support_email ); ?></a>
@@ -147,7 +147,7 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 		</div>
 
 		<p class="submit">
-			<button type="submit" class="button button-primary"><?php esc_html_e( 'Einstellungen speichern', 'libre-bite' ); ?></button>
+			<button type="submit" class="button button-primary"><?php esc_html_e( 'Save Settings', 'libre-bite' ); ?></button>
 			<span class="lbite-save-status"></span>
 		</p>
 	</form>
@@ -196,7 +196,7 @@ jQuery(document).ready(function($) {
 		var $button = $form.find('button[type="submit"]');
 
 		$button.prop('disabled', true);
-		$status.text('<?php echo esc_js( __( 'Speichern...', 'libre-bite' ) ); ?>');
+		$status.text('<?php echo esc_js( __( 'Saving...', 'libre-bite' ) ); ?>');
 
 		$.ajax({
 			url: ajaxurl,
@@ -212,16 +212,16 @@ jQuery(document).ready(function($) {
 			},
 			success: function(response) {
 				if (response.success) {
-					$status.text('<?php echo esc_js( __( 'Gespeichert!', 'libre-bite' ) ); ?>');
+					$status.text('<?php echo esc_js( __( 'Saved!', 'libre-bite' ) ); ?>');
 					setTimeout(function() {
 						$status.text('');
 					}, 2000);
 				} else {
-					$status.text(response.data.message || '<?php echo esc_js( __( 'Fehler beim Speichern', 'libre-bite' ) ); ?>');
+					$status.text(response.data.message || '<?php echo esc_js( __( 'Error saving', 'libre-bite' ) ); ?>');
 				}
 			},
 			error: function() {
-				$status.text('<?php echo esc_js( __( 'Fehler beim Speichern', 'libre-bite' ) ); ?>');
+				$status.text('<?php echo esc_js( __( 'Error saving', 'libre-bite' ) ); ?>');
 			},
 			complete: function() {
 				$button.prop('disabled', false);

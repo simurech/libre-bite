@@ -29,38 +29,38 @@ $custom_text      = isset( $support_settings['support_custom_text'] ) ? $support
 $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 ?>
 <div class="wrap lbite-help-wrap">
-	<h1><?php esc_html_e( 'Hilfe & Support', 'libre-bite' ); ?></h1>
+	<h1><?php esc_html_e( 'Help & Support', 'libre-bite' ); ?></h1>
 
 	<nav class="nav-tab-wrapper">
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=overview' ) ); ?>"
 		   class="nav-tab <?php echo 'overview' === $active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Übersicht', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Overview', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=orders' ) ); ?>"
 		   class="nav-tab <?php echo 'orders' === $active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Bestellungen', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Orders', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=products' ) ); ?>"
 		   class="nav-tab <?php echo 'products' === $active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Produkte', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Products', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=locations' ) ); ?>"
 		   class="nav-tab <?php echo 'locations' === $active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Standorte', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Locations', 'libre-bite' ); ?>
 		</a>
 		<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=tables' ) ); ?>"
 		   class="nav-tab <?php echo 'tables' === $active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Tische', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Tables', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=reservations' ) ); ?>"
 		   class="nav-tab <?php echo 'reservations' === $active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Reservierungen', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Reservations', 'libre-bite' ); ?>
 		</a>
 		<?php endif; ?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=settings' ) ); ?>"
 		   class="nav-tab <?php echo 'settings' === $active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Einstellungen', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Settings', 'libre-bite' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=support' ) ); ?>"
 		   class="nav-tab <?php echo 'support' === $active_tab ? 'nav-tab-active' : ''; ?>">
@@ -69,7 +69,7 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 		<?php if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) : ?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=debug' ) ); ?>"
 		   class="nav-tab <?php echo 'debug' === $active_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Debug-Info', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Debug Info', 'libre-bite' ); ?>
 		</a>
 		<?php endif; ?>
 	</nav>
@@ -114,21 +114,21 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 				<div class="lbite-help-grid">
 					<!-- Schnellstart -->
 					<div class="lbite-help-card lbite-help-quickstart">
-						<h2><span class="dashicons dashicons-flag"></span> <?php esc_html_e( 'Administrator-Übersicht', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Als Administrator können Sie Bestellungen verwalten, Produkte konfigurieren, Standorte einrichten und Einstellungen anpassen.', 'libre-bite' ); ?></p>
+						<h2><span class="dashicons dashicons-flag"></span> <?php esc_html_e( 'Administrator Overview', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'As an administrator you can manage orders, configure products, set up locations and customize settings.', 'libre-bite' ); ?></p>
 
 						<div class="lbite-quick-links">
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-order-board' ) ); ?>" class="button button-primary">
 								<span class="dashicons dashicons-clipboard"></span>
-								<?php esc_html_e( 'Bestellübersicht', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Order Overview', 'libre-bite' ); ?>
 							</a>
 							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_location' ) ); ?>" class="button">
 								<span class="dashicons dashicons-location"></span>
-								<?php esc_html_e( 'Standorte', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Locations', 'libre-bite' ); ?>
 							</a>
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings' ) ); ?>" class="button">
 								<span class="dashicons dashicons-admin-settings"></span>
-								<?php esc_html_e( 'Einstellungen', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Settings', 'libre-bite' ); ?>
 							</a>
 						</div>
 
@@ -136,7 +136,7 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 						<p style="margin: 0;">
 							<span class="dashicons dashicons-welcome-learn-more" style="vertical-align: middle;"></span>
 							<button type="button" id="lbite-restart-onboarding" class="button button-secondary" style="margin-left: 4px;">
-								<?php esc_html_e( 'Ersteinrichtung erneut öffnen', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Restart Setup', 'libre-bite' ); ?>
 							</button>
 							<span id="lbite-onboarding-status" style="margin-left: 8px; color: #646970;"></span>
 						</p>
@@ -144,95 +144,95 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 
 					<!-- Bestellungen -->
 					<div class="lbite-help-card">
-						<h2><span class="dashicons dashicons-clipboard"></span> <?php esc_html_e( 'Bestellungen', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Verwalten Sie eingehende Bestellungen mit dem Kanban-Board oder dem Kassensystem.', 'libre-bite' ); ?></p>
+						<h2><span class="dashicons dashicons-clipboard"></span> <?php esc_html_e( 'Orders', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'Manage incoming orders with the Kanban board or POS system.', 'libre-bite' ); ?></p>
 						<ul>
-							<li><?php esc_html_e( 'Bestellstatus per Drag & Drop ändern', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Sound-Benachrichtigung bei neuen Bestellungen', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Bestelldetails und Kundeninformationen einsehen', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Change order status via drag & drop', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Sound notification for new orders', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'View order details and customer information', 'libre-bite' ); ?></li>
 						</ul>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=orders' ) ); ?>" class="button">
-							<?php esc_html_e( 'Mehr erfahren', 'libre-bite' ); ?>
+							<?php esc_html_e( 'Learn More', 'libre-bite' ); ?>
 						</a>
 					</div>
 
 					<!-- Produkte -->
 					<div class="lbite-help-card">
-						<h2><span class="dashicons dashicons-products"></span> <?php esc_html_e( 'Produkte', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Konfigurieren Sie Produkt-Optionen und Zusätze für Ihre Bestellungen.', 'libre-bite' ); ?></p>
+						<h2><span class="dashicons dashicons-products"></span> <?php esc_html_e( 'Products', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'Configure product options and add-ons for your orders.', 'libre-bite' ); ?></p>
 						<ul>
-							<li><?php esc_html_e( 'Produkt-Optionen (Add-ons) erstellen', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Optionen mit Aufpreisen versehen', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Optionen Produkten zuweisen', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Create product options (add-ons)', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Add surcharges to options', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Assign options to products', 'libre-bite' ); ?></li>
 						</ul>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=products' ) ); ?>" class="button">
-							<?php esc_html_e( 'Mehr erfahren', 'libre-bite' ); ?>
+							<?php esc_html_e( 'Learn More', 'libre-bite' ); ?>
 						</a>
 					</div>
 
 					<!-- Standorte -->
 					<div class="lbite-help-card">
-						<h2><span class="dashicons dashicons-location"></span> <?php esc_html_e( 'Standorte', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Verwalten Sie Ihre Standorte mit Öffnungszeiten und Kontaktdaten.', 'libre-bite' ); ?></p>
+						<h2><span class="dashicons dashicons-location"></span> <?php esc_html_e( 'Locations', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'Manage your locations with opening hours and contact information.', 'libre-bite' ); ?></p>
 						<ul>
-							<li><?php esc_html_e( 'Standorte anlegen und bearbeiten', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Öffnungszeiten pro Tag festlegen', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Adresse und Kontaktdaten hinterlegen', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Create and edit locations', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Set opening hours per day', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Store address and contact information', 'libre-bite' ); ?></li>
 						</ul>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=locations' ) ); ?>" class="button">
-							<?php esc_html_e( 'Mehr erfahren', 'libre-bite' ); ?>
+							<?php esc_html_e( 'Learn More', 'libre-bite' ); ?>
 						</a>
 					</div>
 
 					<!-- Tische -->
 					<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
 					<div class="lbite-help-card">
-						<h2><span class="dashicons dashicons-grid-view"></span> <?php esc_html_e( 'Tische', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'QR-Code-basierte Tischbestellung – Gäste scannen und bestellen direkt am Tisch.', 'libre-bite' ); ?></p>
+						<h2><span class="dashicons dashicons-grid-view"></span> <?php esc_html_e( 'Tables', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'QR code-based table ordering – guests scan and order directly at the table.', 'libre-bite' ); ?></p>
 						<ul>
-							<li><?php esc_html_e( 'Tische anlegen und QR-Codes generieren', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Sitzplätze pro Tisch konfigurieren', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Mehrere Tische auf einmal erstellen', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Create tables and generate QR codes', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Configure seats per table', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Create multiple tables at once', 'libre-bite' ); ?></li>
 						</ul>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=tables' ) ); ?>" class="button">
-							<?php esc_html_e( 'Mehr erfahren', 'libre-bite' ); ?>
+							<?php esc_html_e( 'Learn More', 'libre-bite' ); ?>
 						</a>
 					</div>
 					
 
 					<!-- Reservierungen -->
 					<div class="lbite-help-card">
-						<h2><span class="dashicons dashicons-calendar-alt"></span> <?php esc_html_e( 'Reservierungen', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Tischanfragen über ein Frontend-Formular entgegennehmen, verwalten und per E-Mail bestätigen.', 'libre-bite' ); ?></p>
+						<h2><span class="dashicons dashicons-calendar-alt"></span> <?php esc_html_e( 'Reservations', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'Receive table inquiries via a frontend form, manage and confirm via email.', 'libre-bite' ); ?></p>
 						<ul>
-							<li><?php esc_html_e( 'Shortcode [lbite_reservation_form] einbinden', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Anfragen im Backend verwalten und Status setzen', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Automatische E-Mail an Gast und Admin', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Include shortcode [lbite_reservation_form]', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Manage requests in the backend and set status', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Automatic email to guest and admin', 'libre-bite' ); ?></li>
 						</ul>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=reservations' ) ); ?>" class="button">
-							<?php esc_html_e( 'Mehr erfahren', 'libre-bite' ); ?>
+							<?php esc_html_e( 'Learn More', 'libre-bite' ); ?>
 						</a>
 					</div>
 					<?php endif; ?>
 
 				<!-- Einstellungen -->
 					<div class="lbite-help-card">
-						<h2><span class="dashicons dashicons-admin-settings"></span> <?php esc_html_e( 'Einstellungen', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Passen Sie das Libre Bite an Ihre Bedürfnisse an.', 'libre-bite' ); ?></p>
+						<h2><span class="dashicons dashicons-admin-settings"></span> <?php esc_html_e( 'Settings', 'libre-bite' ); ?></h2>
+						<p><?php esc_html_e( 'Customize Libre Bite to your needs.', 'libre-bite' ); ?></p>
 						<ul>
-							<li><?php esc_html_e( 'Checkout-Felder konfigurieren', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Trinkgeld-Optionen anpassen', 'libre-bite' ); ?></li>
-							<li><?php esc_html_e( 'Vorbereitungszeit und Zeitslots einstellen', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Configure checkout fields', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Customize tip options', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Set preparation time and time slots', 'libre-bite' ); ?></li>
 						</ul>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=settings' ) ); ?>" class="button">
-							<?php esc_html_e( 'Mehr erfahren', 'libre-bite' ); ?>
+							<?php esc_html_e( 'Learn More', 'libre-bite' ); ?>
 						</a>
 					</div>
 
 					<!-- Support -->
 					<div class="lbite-help-card lbite-help-support">
 						<h2><span class="dashicons dashicons-sos"></span> <?php esc_html_e( 'Support', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Nicht fündig geworden? Ich helfe dir gerne weiter.', 'libre-bite' ); ?></p>
+						<p><?php esc_html_e( "Didn't find what you were looking for? I'm happy to help.", 'libre-bite' ); ?></p>
 
 						<div class="lbite-support-info">
 							<?php if ( $support_hours ) : ?>
@@ -278,7 +278,7 @@ jQuery(function($) {
 		var $btn = $(this);
 		var $status = $('#lbite-onboarding-status');
 		$btn.prop('disabled', true);
-		$status.text('<?php echo esc_js( __( 'Wird geöffnet…', 'libre-bite' ) ); ?>');
+		$status.text('<?php echo esc_js( __( 'Opening...', 'libre-bite' ) ); ?>');
 		$.post(ajaxurl, {
 			action: 'lbite_restart_onboarding',
 			nonce: lbiteAdmin.nonce
@@ -287,7 +287,7 @@ jQuery(function($) {
 				window.location.href = response.data.redirect;
 			} else {
 				$btn.prop('disabled', false);
-				$status.text('<?php echo esc_js( __( 'Fehler – bitte Seite neu laden.', 'libre-bite' ) ); ?>');
+				$status.text('<?php echo esc_js( __( 'Error – please reload the page.', 'libre-bite' ) ); ?>');
 			}
 		}).fail(function() {
 			$btn.prop('disabled', false);

@@ -23,72 +23,72 @@ $billing_note     = isset( $support_settings['support_billing_note'] ) ? $suppor
 $custom_text      = isset( $support_settings['support_custom_text'] ) ? $support_settings['support_custom_text'] : '';
 ?>
 <div class="wrap lbite-help-wrap">
-	<h1><?php esc_html_e( 'Hilfe & Support', 'libre-bite' ); ?></h1>
+	<h1><?php esc_html_e( 'Help & Support', 'libre-bite' ); ?></h1>
 
 	<div class="lbite-help-grid">
 		<!-- Schnellstart -->
 		<div class="lbite-help-card lbite-help-quickstart">
-			<h2><span class="dashicons dashicons-flag"></span> <?php esc_html_e( 'Schnellstart', 'libre-bite' ); ?></h2>
-			<p><?php esc_html_e( 'Als Personal haben Sie Zugriff auf die Bestellübersicht und das Kassensystem.', 'libre-bite' ); ?></p>
+			<h2><span class="dashicons dashicons-flag"></span> <?php esc_html_e( 'Quick Start', 'libre-bite' ); ?></h2>
+			<p><?php esc_html_e( 'As staff, you have access to the order overview and the POS system.', 'libre-bite' ); ?></p>
 
 			<div class="lbite-quick-links">
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-order-board' ) ); ?>" class="button button-primary">
 					<span class="dashicons dashicons-clipboard"></span>
-					<?php esc_html_e( 'Bestellübersicht öffnen', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Open Order Overview', 'libre-bite' ); ?>
 				</a>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-pos' ) ); ?>" class="button">
 					<span class="dashicons dashicons-cart"></span>
-					<?php esc_html_e( 'Kassensystem öffnen', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Open POS System', 'libre-bite' ); ?>
 				</a>
 			</div>
 		</div>
 
 		<!-- Bestellungen bearbeiten -->
 		<div class="lbite-help-card">
-			<h2><span class="dashicons dashicons-clipboard"></span> <?php esc_html_e( 'Bestellungen bearbeiten', 'libre-bite' ); ?></h2>
+			<h2><span class="dashicons dashicons-clipboard"></span> <?php esc_html_e( 'Manage Orders', 'libre-bite' ); ?></h2>
 
-			<h3><?php esc_html_e( 'Bestellstatus ändern', 'libre-bite' ); ?></h3>
+			<h3><?php esc_html_e( 'Change Order Status', 'libre-bite' ); ?></h3>
 			<ol>
-				<li><?php esc_html_e( 'Öffnen Sie die Bestellübersicht', 'libre-bite' ); ?></li>
-				<li><?php esc_html_e( 'Ziehen Sie eine Bestellung in die nächste Spalte oder klicken Sie auf den Status-Button', 'libre-bite' ); ?></li>
-				<li><?php esc_html_e( 'Status-Ablauf: Eingehend → In Bearbeitung → Bereit → Abgeholt', 'libre-bite' ); ?></li>
+				<li><?php esc_html_e( 'Open the order overview', 'libre-bite' ); ?></li>
+				<li><?php esc_html_e( 'Drag an order to the next column or click the status button', 'libre-bite' ); ?></li>
+				<li><?php esc_html_e( 'Status flow: Incoming → In Progress → Ready → Picked Up', 'libre-bite' ); ?></li>
 			</ol>
 
-			<h3><?php esc_html_e( 'Bestelldetails anzeigen', 'libre-bite' ); ?></h3>
-			<p><?php esc_html_e( 'Klicken Sie auf eine Bestellung, um alle Details wie Produkte, Kundenname und Abholzeit zu sehen.', 'libre-bite' ); ?></p>
+			<h3><?php esc_html_e( 'View Order Details', 'libre-bite' ); ?></h3>
+			<p><?php esc_html_e( 'Click on an order to view all details such as products, customer name, and pickup time.', 'libre-bite' ); ?></p>
 
 			<div class="lbite-help-tip">
 				<span class="dashicons dashicons-lightbulb"></span>
-				<p><?php esc_html_e( 'Tipp: Bei neuen Bestellungen ertönt ein Signalton. Stellen Sie sicher, dass der Ton aktiviert ist.', 'libre-bite' ); ?></p>
+				<p><?php esc_html_e( 'Tip: A sound plays when new orders arrive. Make sure the sound is enabled.', 'libre-bite' ); ?></p>
 			</div>
 		</div>
 
 		<!-- Kassensystem (POS) -->
 		<div class="lbite-help-card">
-			<h2><span class="dashicons dashicons-cart"></span> <?php esc_html_e( 'Kassensystem (POS)', 'libre-bite' ); ?></h2>
+			<h2><span class="dashicons dashicons-cart"></span> <?php esc_html_e( 'POS System', 'libre-bite' ); ?></h2>
 
-			<h3><?php esc_html_e( 'Neue Bestellung erstellen', 'libre-bite' ); ?></h3>
+			<h3><?php esc_html_e( 'Create New Order', 'libre-bite' ); ?></h3>
 			<ol>
-				<li><?php esc_html_e( 'Wählen Sie den Standort aus (falls mehrere vorhanden)', 'libre-bite' ); ?></li>
-				<li><?php esc_html_e( 'Klicken Sie auf Produkte, um sie zum Warenkorb hinzuzufügen', 'libre-bite' ); ?></li>
-				<li><?php esc_html_e( 'Wählen Sie ggf. Varianten und Optionen aus', 'libre-bite' ); ?></li>
-				<li><?php esc_html_e( 'Geben Sie optional einen Kundennamen ein', 'libre-bite' ); ?></li>
-				<li><?php esc_html_e( 'Klicken Sie auf "Bestellung abschliessen"', 'libre-bite' ); ?></li>
+				<li><?php esc_html_e( 'Select the location (if multiple are available)', 'libre-bite' ); ?></li>
+				<li><?php esc_html_e( 'Click on products to add them to the cart', 'libre-bite' ); ?></li>
+				<li><?php esc_html_e( 'Select variants and options if applicable', 'libre-bite' ); ?></li>
+				<li><?php esc_html_e( 'Optionally enter a customer name', 'libre-bite' ); ?></li>
+				<li><?php esc_html_e( 'Click "Complete Order"', 'libre-bite' ); ?></li>
 			</ol>
 
-			<h3><?php esc_html_e( 'Warenkorb bearbeiten', 'libre-bite' ); ?></h3>
+			<h3><?php esc_html_e( 'Edit Cart', 'libre-bite' ); ?></h3>
 			<ul>
-				<li><?php esc_html_e( 'Menge ändern: +/- Buttons beim Produkt', 'libre-bite' ); ?></li>
-				<li><?php esc_html_e( 'Produkt entfernen: X-Button klicken', 'libre-bite' ); ?></li>
-				<li><?php esc_html_e( 'Warenkorb leeren: "Warenkorb leeren" Button', 'libre-bite' ); ?></li>
+				<li><?php esc_html_e( 'Change quantity: +/- buttons next to the product', 'libre-bite' ); ?></li>
+				<li><?php esc_html_e( 'Remove product: click the X button', 'libre-bite' ); ?></li>
+				<li><?php esc_html_e( 'Clear cart: "Clear Cart" button', 'libre-bite' ); ?></li>
 			</ul>
 		</div>
 
 		<!-- Support-Kontakt -->
 		<div class="lbite-help-card lbite-help-support">
-			<h2><span class="dashicons dashicons-sos"></span> <?php esc_html_e( 'Support kontaktieren', 'libre-bite' ); ?></h2>
+			<h2><span class="dashicons dashicons-sos"></span> <?php esc_html_e( 'Contact Support', 'libre-bite' ); ?></h2>
 
-			<p><?php esc_html_e( 'Bei Problemen oder Fragen wenden Sie sich an:', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'For issues or questions, please contact:', 'libre-bite' ); ?></p>
 
 			<div class="lbite-support-info">
 				<?php if ( $support_email ) : ?>

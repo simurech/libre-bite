@@ -145,8 +145,8 @@ class LBite_Admin {
 		if ( lbite_feature_enabled( 'enable_kanban_board' ) ) {
 			add_submenu_page(
 				'libre-bite',
-				__( 'Bestellübersicht', 'libre-bite' ),
-				__( 'Bestellübersicht', 'libre-bite' ),
+				__( 'Order Overview', 'libre-bite' ),
+				__( 'Order Overview', 'libre-bite' ),
 				'lbite_view_orders',
 				'lbite-order-board',
 				array( $this, 'render_order_board_page' )
@@ -157,8 +157,8 @@ class LBite_Admin {
 		if ( lbite_feature_enabled( 'enable_pos' ) ) {
 			add_submenu_page(
 				'libre-bite',
-				__( 'Kassensystem', 'libre-bite' ),
-				__( 'Kassensystem', 'libre-bite' ),
+				__( 'POS System', 'libre-bite' ),
+				__( 'POS System', 'libre-bite' ),
 				'lbite_use_pos',
 				'lbite-pos',
 				array( $this, 'render_pos_page' )
@@ -173,8 +173,8 @@ class LBite_Admin {
 		if ( lbite_feature_enabled( 'enable_location_selector' ) || lbite_feature_enabled( 'enable_multi_location' ) ) {
 			add_submenu_page(
 				'libre-bite',
-				__( 'Standorte', 'libre-bite' ),
-				__( 'Standorte', 'libre-bite' ),
+				__( 'Locations', 'libre-bite' ),
+				__( 'Locations', 'libre-bite' ),
 				'lbite_manage_locations',
 				'edit.php?post_type=lbite_location'
 			);
@@ -184,23 +184,23 @@ class LBite_Admin {
 		if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
 			add_submenu_page(
 				'libre-bite',
-				__( 'Tische', 'libre-bite' ),
-				__( 'Tische', 'libre-bite' ),
+				__( 'Tables', 'libre-bite' ),
+				__( 'Tables', 'libre-bite' ),
 				'lbite_manage_locations',
 				'edit.php?post_type=lbite_table'
 			);
 			add_submenu_page(
 				'libre-bite',
-				__( 'Tischplan', 'libre-bite' ),
-				__( 'Tischplan', 'libre-bite' ),
+				__( 'Table Plan', 'libre-bite' ),
+				__( 'Table Plan', 'libre-bite' ),
 				'lbite_manage_locations',
 				'lbite-floor-plan',
 				array( $this, 'render_floor_plan_page' )
 			);
 			add_submenu_page(
 				'libre-bite',
-				__( 'Reservierungsübersicht', 'libre-bite' ),
-				__( 'Reservierungen', 'libre-bite' ),
+				__( 'Reservations Overview', 'libre-bite' ),
+				__( 'Reservations', 'libre-bite' ),
 				'lbite_manage_options',
 				'lbite-reservation-board',
 				array( $this, 'render_reservation_board_page' )
@@ -211,8 +211,8 @@ class LBite_Admin {
 		if ( lbite_feature_enabled( 'enable_product_options' ) ) {
 			add_submenu_page(
 				'edit.php?post_type=product',
-				__( 'Produkt-Optionen', 'libre-bite' ),
-				__( 'Produkt-Optionen', 'libre-bite' ),
+				__( 'Product Options', 'libre-bite' ),
+				__( 'Product Options', 'libre-bite' ),
 				'lbite_manage_options',
 				'edit.php?post_type=lbite_product_option'
 			);
@@ -221,8 +221,8 @@ class LBite_Admin {
 		// Einstellungen (konsolidiert mit Tabs)
 		add_submenu_page(
 			'libre-bite',
-			__( 'Einstellungen', 'libre-bite' ),
-			__( 'Einstellungen', 'libre-bite' ),
+			__( 'Settings', 'libre-bite' ),
+			__( 'Settings', 'libre-bite' ),
 			'lbite_manage_settings',
 			'lbite-settings',
 			array( $this, 'render_settings_page' )
@@ -235,8 +235,8 @@ class LBite_Admin {
 		// Hilfe & Support - für alle sichtbar, Inhalt variiert nach Rolle
 		add_submenu_page(
 			'libre-bite',
-			__( 'Hilfe & Support', 'libre-bite' ),
-			__( 'Hilfe & Support', 'libre-bite' ),
+			__( 'Help & Support', 'libre-bite' ),
+			__( 'Help & Support', 'libre-bite' ),
 			'lbite_view_dashboard',
 			'lbite-help',
 			array( $this, 'render_help_page' )
@@ -246,7 +246,7 @@ class LBite_Admin {
 		if ( function_exists( 'lbite_freemius' ) && ! lbite_freemius()->is_premium() ) {
 			add_submenu_page(
 				'libre-bite',
-				__( 'Upgrade auf Pro', 'libre-bite' ),
+				__( 'Upgrade to Pro', 'libre-bite' ),
 				'<span style="color: #f18500; font-weight: bold;">' . __( 'Pricing', 'libre-bite' ) . '</span>',
 				'manage_options',
 				'lbite-pricing',
@@ -275,7 +275,7 @@ class LBite_Admin {
 	 */
 	public function render_reservation_board_page() {
 		if ( ! current_user_can( 'lbite_manage_options' ) ) {
-			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
 		}
 		include LBITE_PLUGIN_DIR . 'templates/admin/reservation-board.php';
 	}
@@ -353,7 +353,7 @@ class LBite_Admin {
 	 */
 	public function render_floor_plan_page() {
 		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
-			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
 		}
 		include LBITE_PLUGIN_DIR . 'templates/admin/table-plan.php';
 	}
@@ -363,7 +363,7 @@ class LBite_Admin {
 	 */
 	public function render_debug_page() {
 		if ( ! current_user_can( 'lbite_view_debug' ) ) {
-			wp_die( esc_html__( 'Sie haben keine Berechtigung für diese Seite.', 'libre-bite' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
 		}
 		include LBITE_PLUGIN_DIR . 'templates/admin/debug-info.php';
 	}
@@ -376,9 +376,9 @@ class LBite_Admin {
 			lbite_freemius()->get_upgrade_url(); // Dies triggert den Freemius Checkout/Pricing Frame
 			
 			// Fallback falls der Frame nicht sofort lädt
-			echo '<div class="wrap"><h1>' . esc_html__( 'Upgrade auf Libre Bite Pro', 'libre-bite' ) . '</h1>';
-			echo '<p>' . esc_html__( 'Schalten Sie alle Premium-Funktionen frei, um das volle Potenzial von Libre Bite zu nutzen.', 'libre-bite' ) . '</p>';
-			echo '<a href="' . esc_url( lbite_freemius()->get_upgrade_url() ) . '" class="button button-primary">' . esc_html__( 'Preise anzeigen', 'libre-bite' ) . '</a>';
+			echo '<div class="wrap"><h1>' . esc_html__( 'Upgrade to Libre Bite Pro', 'libre-bite' ) . '</h1>';
+			echo '<p>' . esc_html__( 'Unlock all premium features to realize the full potential of Libre Bite.', 'libre-bite' ) . '</p>';
+			echo '<a href="' . esc_url( lbite_freemius()->get_upgrade_url() ) . '" class="button button-primary">' . esc_html__( 'View Pricing', 'libre-bite' ) . '</a>';
 			echo '</div>';
 		}
 	}
@@ -437,10 +437,10 @@ class LBite_Admin {
 				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
 				'nonce'        => wp_create_nonce( 'lbite_admin_nonce' ),
 				'strings'      => array(
-					'confirmDelete' => __( 'Wirklich löschen?', 'libre-bite' ),
-					'saveSuccess'   => __( 'Erfolgreich gespeichert', 'libre-bite' ),
-					'saveError'     => __( 'Fehler beim Speichern', 'libre-bite' ),
-					'noTable'       => __( 'Kein Tisch', 'libre-bite' ),
+					'confirmDelete' => __( 'Really delete?', 'libre-bite' ),
+					'saveSuccess'   => __( 'Successfully saved', 'libre-bite' ),
+					'saveError'     => __( 'Error saving', 'libre-bite' ),
+					'noTable'       => __( 'No table', 'libre-bite' ),
 				),
 			)
 		);
@@ -495,10 +495,10 @@ class LBite_Admin {
 					'refreshInterval' => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
 					'locationColors'  => $lbite_dashboard_colors,
 					'strings'         => array(
-						'orderUpdated'  => __( 'Status aktualisiert', 'libre-bite' ),
-						'updateError'   => __( 'Fehler beim Aktualisieren', 'libre-bite' ),
-						'soundActive'   => __( 'Sound aktiv', 'libre-bite' ),
-						'soundInactive' => __( 'Sound aus', 'libre-bite' ),
+						'orderUpdated'  => __( 'Status updated', 'libre-bite' ),
+						'updateError'   => __( 'Error updating', 'libre-bite' ),
+						'soundActive'   => __( 'Sound active', 'libre-bite' ),
+						'soundInactive' => __( 'Sound off', 'libre-bite' ),
 					),
 				)
 			);
@@ -529,10 +529,10 @@ class LBite_Admin {
 					'nonce'           => wp_create_nonce( 'lbite_reservation_board_nonce' ),
 					'refreshInterval' => (int) get_option( 'lbite_reservation_refresh_interval', 60 ) * 1000,
 					'strings'         => array(
-						'reservation'  => __( 'Reservierung', 'libre-bite' ),
-						'reservations' => __( 'Reservierungen', 'libre-bite' ),
-						'table'        => __( 'Tisch', 'libre-bite' ),
-						'noTable'      => __( 'Kein Tisch', 'libre-bite' ),
+						'reservation'  => __( 'Reservation', 'libre-bite' ),
+						'reservations' => __( 'Reservations', 'libre-bite' ),
+						'table'        => __( 'Table', 'libre-bite' ),
+						'noTable'      => __( 'No table', 'libre-bite' ),
 					),
 				)
 			);
@@ -548,7 +548,7 @@ class LBite_Admin {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( $_POST['location_id'] ) : 0;
@@ -566,7 +566,7 @@ class LBite_Admin {
 		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$category_id = isset( $_POST['category_id'] ) ? intval( $_POST['category_id'] ) : 0;
@@ -637,19 +637,19 @@ class LBite_Admin {
 		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
 
 		if ( ! $product_id ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Produkt-ID angegeben', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No Product ID specified', 'libre-bite' ) ) );
 		}
 
 		$product = wc_get_product( $product_id );
 
 		if ( ! $product ) {
-			wp_send_json_error( array( 'message' => __( 'Produkt nicht gefunden', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Product not found', 'libre-bite' ) ) );
 		}
 
 		try {
@@ -686,7 +686,7 @@ class LBite_Admin {
 					'id'         => $variation['variation_id'],
 					'attributes' => $variation['attributes'],
 					'price'      => $variation_obj->get_price(),
-					'name'       => ! empty( $attr_labels ) ? implode( ', ', $attr_labels ) : __( 'Variante', 'libre-bite' ),
+					'name'       => ! empty( $attr_labels ) ? implode( ', ', $attr_labels ) : __( 'Variant', 'libre-bite' ),
 				);
 			}
 		}
@@ -732,7 +732,7 @@ class LBite_Admin {
 		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		// Rohes JSON laden und validieren.
@@ -740,14 +740,14 @@ class LBite_Admin {
 		$cart_items_raw = isset( $_POST['cart_items'] ) ? wp_unslash( $_POST['cart_items'] ) : '';
 
 		if ( empty( $cart_items_raw ) ) {
-			wp_send_json_error( array( 'message' => __( 'Warenkorb ist leer', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Cart is empty', 'libre-bite' ) ) );
 		}
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON wird nach dem Decode Feld für Feld validiert.
 		$cart_items_decoded = json_decode( $cart_items_raw, true );
 
 		if ( ! is_array( $cart_items_decoded ) ) {
-			wp_send_json_error( array( 'message' => __( 'Ungültige Warenkorbdaten', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid cart data', 'libre-bite' ) ) );
 		}
 
 		$cart_items = array();
@@ -773,7 +773,7 @@ class LBite_Admin {
 		}
 
 		if ( empty( $cart_items ) ) {
-			wp_send_json_error( array( 'message' => __( 'Warenkorb ist leer', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Cart is empty', 'libre-bite' ) ) );
 		}
 
 		$location_id    = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
@@ -793,7 +793,7 @@ class LBite_Admin {
 		}
 
 		if ( ! $location_id ) {
-			wp_send_json_error( array( 'message' => __( 'Kein Standort ausgewählt', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No location selected', 'libre-bite' ) ) );
 		}
 
 		try {
@@ -867,7 +867,7 @@ class LBite_Admin {
 			$order->calculate_totals();
 
 			// Status setzen.
-			$order->update_status( 'processing', __( 'Bestellung über Kassensystem erstellt.', 'libre-bite' ) );
+			$order->update_status( 'processing', __( 'Order created via POS system.', 'libre-bite' ) );
 
 			// Währungssymbol dekodieren (z.B. &#67;&#72;&#70; -> CHF).
 			$currency = html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' );
@@ -891,7 +891,7 @@ class LBite_Admin {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$colors = array(
@@ -981,7 +981,7 @@ class LBite_Admin {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_manage_features' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -989,7 +989,7 @@ class LBite_Admin {
 		$features      = json_decode( $features_json, true );
 
 		if ( ! is_array( $features ) ) {
-			wp_send_json_error( array( 'message' => __( 'Ungültige Daten', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid data', 'libre-bite' ) ) );
 		}
 
 		// Alle Feature-Werte als boolean konvertieren
@@ -1000,7 +1000,7 @@ class LBite_Admin {
 
 		update_option( 'lbite_features', $sanitized_features );
 
-		wp_send_json_success( array( 'message' => __( 'Einstellungen gespeichert', 'libre-bite' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Settings saved', 'libre-bite' ) ) );
 	}
 
 	/**
@@ -1010,7 +1010,7 @@ class LBite_Admin {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_manage_support' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$settings = array(
@@ -1023,7 +1023,7 @@ class LBite_Admin {
 
 		update_option( 'lbite_support_settings', $settings );
 
-		wp_send_json_success( array( 'message' => __( 'Support-Einstellungen gespeichert', 'libre-bite' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Support settings saved', 'libre-bite' ) ) );
 	}
 
 	/**
@@ -1033,7 +1033,7 @@ class LBite_Admin {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		delete_option( 'lbite_onboarding_completed' );
@@ -1095,28 +1095,28 @@ class LBite_Admin {
 		?>
 		<div id="lbite-help-btn" aria-expanded="false">
 			<span class="dashicons dashicons-editor-help"></span>
-			<span><?php esc_html_e( 'Hilfe', 'libre-bite' ); ?></span>
+			<span><?php esc_html_e( 'Help', 'libre-bite' ); ?></span>
 
-			<div id="lbite-help-panel" role="dialog" aria-label="<?php esc_attr_e( 'Hilfe & Support', 'libre-bite' ); ?>">
+			<div id="lbite-help-panel" role="dialog" aria-label="<?php esc_attr_e( 'Help & Support', 'libre-bite' ); ?>">
 				<div class="lbite-help-panel-head">
-					<strong><?php esc_html_e( 'Hilfe & Support', 'libre-bite' ); ?></strong>
-					<button type="button" class="lbite-help-panel-close" aria-label="<?php esc_attr_e( 'Schliessen', 'libre-bite' ); ?>">&#x2715;</button>
+					<strong><?php esc_html_e( 'Help & Support', 'libre-bite' ); ?></strong>
+					<button type="button" class="lbite-help-panel-close" aria-label="<?php esc_attr_e( 'Close', 'libre-bite' ); ?>">&#x2715;</button>
 				</div>
 
 				<!-- Hilfe-Bereich: primäre Aktion -->
 				<div class="lbite-help-panel-primary">
 					<p class="lbite-help-panel-primary-text">
-						<?php esc_html_e( 'Zuerst im Hilfe-Bereich nachschauen – dort findest du Anleitungen zu allen Funktionen.', 'libre-bite' ); ?>
+						<?php esc_html_e( 'First check the help area – you\'ll find guides for all features there.', 'libre-bite' ); ?>
 					</p>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help' ) ); ?>" class="button button-primary button-large lbite-help-panel-cta">
 						<span class="dashicons dashicons-book-alt"></span>
-						<?php esc_html_e( 'Hilfe-Bereich öffnen', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Open Help Area', 'libre-bite' ); ?>
 					</a>
 				</div>
 
 				<!-- Support-Kontakt: sekundäre Aktion -->
 				<div class="lbite-help-panel-support">
-					<p class="lbite-help-panel-divider"><?php esc_html_e( 'Nicht fündig geworden?', 'libre-bite' ); ?></p>
+					<p class="lbite-help-panel-divider"><?php esc_html_e( 'Didn\'t find what you\'re looking for?', 'libre-bite' ); ?></p>
 
 					<?php if ( $support_hours ) : ?>
 						<p>
@@ -1155,7 +1155,7 @@ class LBite_Admin {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'lbite_use_pos' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Keine Berechtigung', 'libre-bite' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;

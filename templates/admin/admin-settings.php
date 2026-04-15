@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Nur Administratoren haben Zugriff
 if ( ! current_user_can( 'manage_options' ) ) {
-	wp_die( esc_html__( 'Sie haben keine Berechtigung, auf diese Seite zuzugreifen.', 'libre-bite' ) );
+	wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
 }
 
 // Aktuelle Einstellungen abrufen
@@ -42,11 +42,11 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 
 <?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap">
-	<h1><?php echo esc_html( $lbite_plugin_display_name ); ?> - <?php esc_html_e( 'Admin-Einstellungen', 'libre-bite' ); ?></h1>
+	<h1><?php echo esc_html( $lbite_plugin_display_name ); ?> - <?php esc_html_e( 'Admin Settings', 'libre-bite' ); ?></h1>
 <?php endif; ?>
 
 	<p class="description">
-		<?php esc_html_e( 'Diese Einstellungen sind nur für Administratoren sichtbar und ermöglichen erweiterte Anpassungen.', 'libre-bite' ); ?>
+		<?php esc_html_e( 'These settings are only visible to administrators and allow advanced customizations.', 'libre-bite' ); ?>
 	</p>
 
 	<?php settings_errors( 'lbite_admin_settings' ); ?>
@@ -55,12 +55,12 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 		<?php wp_nonce_field( 'lbite_save_admin_settings', 'lbite_admin_settings_nonce' ); ?>
 
 		<!-- Plugin-Name anpassen -->
-		<h2><?php esc_html_e( 'Plugin-Name anpassen', 'libre-bite' ); ?></h2>
+		<h2><?php esc_html_e( 'Customize Plugin Name', 'libre-bite' ); ?></h2>
 		<table class="form-table">
 			<tr>
 				<th scope="row">
 					<label for="lbite_custom_plugin_name">
-						<?php esc_html_e( 'Angezeigter Plugin-Name', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Displayed Plugin Name', 'libre-bite' ); ?>
 					</label>
 				</th>
 				<td>
@@ -73,7 +73,7 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 						placeholder="Libre Bite"
 					>
 					<p class="description">
-						<?php esc_html_e( 'Überschreiben Sie den angezeigten Namen des Plugins im Backend-Menü und auf Seiten. Leer lassen für Standard "Libre Bite".', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Override the displayed name of the plugin in the backend menu and on pages. Leave empty for the default "Libre Bite".', 'libre-bite' ); ?>
 					</p>
 				</td>
 			</tr>
@@ -81,9 +81,9 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 
 		<!-- Zugriff für andere Rollen -->
 		<?php if ( ! empty( $lbite_standard_roles ) ) : ?>
-		<h2><?php esc_html_e( 'Zugriff für andere Benutzerrollen', 'libre-bite' ); ?></h2>
+		<h2><?php esc_html_e( 'Access for Other User Roles', 'libre-bite' ); ?></h2>
 		<p class="description">
-			<?php esc_html_e( 'Wählen Sie, welche Standard-Rollen auf das Plugin zugreifen dürfen. Aktivierte Rollen erhalten denselben Zugriff wie Libre Bite Personal (Bestellübersicht, POS).', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Choose which standard roles are allowed to access the plugin. Enabled roles receive the same access as Libre Bite Personal (Order Overview, POS).', 'libre-bite' ); ?>
 		</p>
 		<?php
 		$lbite_allowed_standard_roles = get_option( 'lbite_allowed_standard_roles', array() );
@@ -101,7 +101,7 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 								value="<?php echo esc_attr( $lbite_std_role_key ); ?>"
 								<?php checked( in_array( $lbite_std_role_key, $lbite_allowed_standard_roles, true ) ); ?>
 							>
-							<?php esc_html_e( 'Kann Plugin nutzen', 'libre-bite' ); ?>
+							<?php esc_html_e( 'Can use plugin', 'libre-bite' ); ?>
 						</label>
 					</td>
 				</tr>
@@ -111,21 +111,21 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 		<?php endif; ?>
 
 		<!-- Rollennamen anpassen -->
-		<h2><?php esc_html_e( 'Nutzerrollen verwalten', 'libre-bite' ); ?></h2>
+		<h2><?php esc_html_e( 'Manage User Roles', 'libre-bite' ); ?></h2>
 		<p class="description">
-			<?php esc_html_e( 'Passen Sie die angezeigten Namen der Benutzerrollen im Backend an oder deaktivieren Sie ungenutzte Rollen komplett.', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Customize the displayed names of user roles in the backend or completely disable unused roles.', 'libre-bite' ); ?>
 		</p>
 		<table class="form-table">
 			<thead>
 				<tr>
 					<th style="padding-left: 0; font-weight: 600;">
-						<?php esc_html_e( 'Rolle', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Role', 'libre-bite' ); ?>
 					</th>
 					<th style="font-weight: 600;">
-						<?php esc_html_e( 'Angezeigter Name', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Displayed Name', 'libre-bite' ); ?>
 					</th>
 					<th style="font-weight: 600;">
-						<?php esc_html_e( 'Rolle deaktivieren', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Disable Role', 'libre-bite' ); ?>
 					</th>
 				</tr>
 			</thead>
@@ -163,7 +163,7 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 					<td>
 						<?php if ( $lbite_is_admin ) : ?>
 							<span style="color: #646970; font-style: italic;">
-								<?php esc_html_e( 'Kann nicht deaktiviert werden', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Cannot be disabled', 'libre-bite' ); ?>
 							</span>
 						<?php else : ?>
 							<label>
@@ -175,10 +175,10 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 									class="lbite-disable-role-checkbox"
 									data-role="<?php echo esc_attr( $lbite_role_key ); ?>"
 								>
-								<?php esc_html_e( 'Deaktivieren', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Disable', 'libre-bite' ); ?>
 							</label>
 							<p class="description" style="margin-top: 5px;">
-								<?php esc_html_e( 'Die Rolle wird im Backend nicht mehr verfügbar sein.', 'libre-bite' ); ?>
+								<?php esc_html_e( 'The role will no longer be available in the backend.', 'libre-bite' ); ?>
 							</p>
 						<?php endif; ?>
 					</td>
@@ -188,13 +188,13 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 		</table>
 
 		<!-- Menü-Sichtbarkeit nach Nutzerrollen -->
-		<h2><?php esc_html_e( 'Menü-Sichtbarkeit nach Nutzerrollen', 'libre-bite' ); ?></h2>
+		<h2><?php esc_html_e( 'Menu Visibility by User Role', 'libre-bite' ); ?></h2>
 		<p class="description">
-			<?php esc_html_e( 'Wählen Sie für jede Nutzerrolle, welche Menüeinträge ausgeblendet werden sollen. Administratoren haben immer vollen Zugriff.', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Choose which menu items should be hidden for each user role. Administrators always have full access.', 'libre-bite' ); ?>
 		</p>
 
 		<?php if ( empty( $lbite_all_roles ) ) : ?>
-			<p><?php esc_html_e( 'Keine zusätzlichen Benutzerrollen gefunden (außer Administrator).', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'No additional user roles found (other than Administrator).', 'libre-bite' ); ?></p>
 		<?php else : ?>
 			<div class="lbite-menu-visibility-settings">
 				<?php
@@ -216,8 +216,8 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 						<p class="description" style="margin-bottom: 15px;">
 							<?php
 							printf(
-								/* translators: %s: Rollenname */
-								esc_html__( 'Wählen Sie die Menüeinträge, die für Benutzer mit der Rolle "%s" ausgeblendet werden sollen.', 'libre-bite' ),
+								/* translators: %s: Role name */
+								esc_html__( 'Choose the menu items that should be hidden for users with the role "%s".', 'libre-bite' ),
 								esc_html( $lbite_display_name )
 							);
 							?>
@@ -230,7 +230,7 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 									class="lbite-toggle-all-menus"
 									data-role="<?php echo esc_attr( $lbite_role_key ); ?>"
 								>
-								<?php esc_html_e( 'Alle auswählen / abwählen', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Select All / Deselect All', 'libre-bite' ); ?>
 							</label>
 						</p>
 
@@ -270,7 +270,7 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 												<?php checked( $lbite_is_parent_checked ); ?>
 											/>
 											<strong><?php echo esc_html( $lbite_parent_data['title'] ); ?></strong>
-											<span class="lbite-menu-badge"><?php esc_html_e( 'Hauptmenü', 'libre-bite' ); ?></span>
+											<span class="lbite-menu-badge"><?php esc_html_e( 'Main Menu', 'libre-bite' ); ?></span>
 										</label>
 									</div>
 
@@ -301,7 +301,7 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 			</div>
 		<?php endif; ?>
 
-		<?php submit_button( __( 'Einstellungen speichern', 'libre-bite' ), 'primary' ); ?>
+		<?php submit_button( __( 'Save Settings', 'libre-bite' ), 'primary' ); ?>
 	</form>
 <?php if ( empty( $lbite_is_tab ) ) : ?>
 </div>

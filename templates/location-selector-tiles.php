@@ -18,7 +18,7 @@ $lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector
 	<!-- Schritt 1: Standort-Auswahl -->
 	<div class="lbite-step lbite-step-location active" id="lbite-step-location">
 		<?php if ( ! $lbite_is_single_location ) : ?>
-			<h2 class="lbite-step-title"><?php esc_html_e( 'Wählen Sie Ihren Standort', 'libre-bite' ); ?></h2>
+			<h2 class="lbite-step-title"><?php esc_html_e( 'Select Your Location', 'libre-bite' ); ?></h2>
 		<?php endif; ?>
 
 		<div class="lbite-location-grid<?php echo $lbite_is_single_location ? ' lbite-single' : ''; ?>">
@@ -88,7 +88,7 @@ $lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector
 	<div class="lbite-step lbite-step-time" id="lbite-step-time">
 		<button type="button" class="lbite-back-button">
 			<span class="dashicons dashicons-arrow-left-alt2"></span>
-			<?php esc_html_e( 'Zurück', 'libre-bite' ); ?>
+			<?php esc_html_e( 'Back', 'libre-bite' ); ?>
 		</button>
 
 		<div class="lbite-selected-location-info">
@@ -107,11 +107,11 @@ $lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector
 		</div>
 
 		<?php if ( 'yes' === $atts['show_time'] ) : ?>
-			<h2 class="lbite-step-title"><?php esc_html_e( 'Wann möchten Sie bestellen?', 'libre-bite' ); ?></h2>
+			<h2 class="lbite-step-title"><?php esc_html_e( 'When would you like to order?', 'libre-bite' ); ?></h2>
 
 			<div class="lbite-closed-now-notice" id="lbite-closed-now-notice" style="display: none;">
 				<span class="dashicons dashicons-info"></span>
-				<span><?php esc_html_e( 'Sofort-Bestellung nicht möglich –', 'libre-bite' ); ?> <span id="lbite-closed-notice-text"></span></span>
+				<span><?php esc_html_e( 'Immediate order not available –', 'libre-bite' ); ?> <span id="lbite-closed-notice-text"></span></span>
 			</div>
 
 			<div class="lbite-time-selection">
@@ -120,8 +120,8 @@ $lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector
 						<span class="dashicons dashicons-clock"></span>
 					</div>
 					<div class="lbite-time-content">
-						<h4><?php esc_html_e( 'Sofort', 'libre-bite' ); ?></h4>
-						<p><?php esc_html_e( 'Abholung so schnell wie möglich', 'libre-bite' ); ?></p>
+						<h4><?php esc_html_e( 'Immediately', 'libre-bite' ); ?></h4>
+						<p><?php esc_html_e( 'Pickup as soon as possible', 'libre-bite' ); ?></p>
 					</div>
 				</div>
 
@@ -130,8 +130,8 @@ $lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector
 						<span class="dashicons dashicons-calendar-alt"></span>
 					</div>
 					<div class="lbite-time-content">
-						<h4><?php esc_html_e( 'Für später vorbestellen', 'libre-bite' ); ?></h4>
-						<p><?php esc_html_e( 'Wunschzeit auswählen', 'libre-bite' ); ?></p>
+						<h4><?php esc_html_e( 'Pre-order for later', 'libre-bite' ); ?></h4>
+						<p><?php esc_html_e( 'Choose your preferred time', 'libre-bite' ); ?></p>
 					</div>
 				</div>
 			</div>
@@ -140,14 +140,14 @@ $lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector
 			<div class="lbite-timeslot-selection" style="display: none;">
 				<div class="lbite-form-group">
 					<label for="lbite-pickup-date">
-						<?php esc_html_e( 'Datum', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Date', 'libre-bite' ); ?>
 						<span class="required">*</span>
 					</label>
 					<input type="date" id="lbite-pickup-date" class="lbite-input" min="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>">
 					<div class="lbite-date-error" id="lbite-date-error" style="display: none;">
 						<span class="dashicons dashicons-warning"></span>
 						<span class="lbite-error-message">
-							<?php esc_html_e( 'Der Standort ist an diesem Tag geschlossen.', 'libre-bite' ); ?>
+							<?php esc_html_e( 'The location is closed on this day.', 'libre-bite' ); ?>
 							<span id="lbite-next-opening"></span>
 						</span>
 					</div>
@@ -155,22 +155,22 @@ $lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector
 
 				<div class="lbite-form-group">
 					<label for="lbite-pickup-time">
-						<?php esc_html_e( 'Uhrzeit', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Time', 'libre-bite' ); ?>
 						<span class="required">*</span>
 					</label>
 					<select id="lbite-pickup-time" class="lbite-select">
-						<option value=""><?php esc_html_e( 'Bitte Datum wählen', 'libre-bite' ); ?></option>
+						<option value=""><?php esc_html_e( 'Please select a date', 'libre-bite' ); ?></option>
 					</select>
 				</div>
 
 				<button type="button" class="lbite-button lbite-button-primary lbite-confirm-time">
-					<?php esc_html_e( 'Weiter zum Menü', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Continue to Menu', 'libre-bite' ); ?>
 				</button>
 			</div>
 		<?php else : ?>
 			<!-- Wenn keine Zeit-Auswahl, direkt weiter -->
 			<button type="button" class="lbite-button lbite-button-primary lbite-confirm-no-time" style="margin-top: 20px;">
-				<?php esc_html_e( 'Weiter zum Menü', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Continue to Menu', 'libre-bite' ); ?>
 			</button>
 		<?php endif; ?>
 	</div>
@@ -227,7 +227,7 @@ jQuery(document).ready(function($) {
 		const $closedNotice = $('#lbite-closed-now-notice');
 		if (statusType === 'closed') {
 			$nowOption.addClass('lbite-time-option-disabled');
-			$('#lbite-closed-notice-text').text(statusText || '<?php echo esc_js( __( 'Aktuell geschlossen', 'libre-bite' ) ); ?>');
+			$('#lbite-closed-notice-text').text(statusText || '<?php echo esc_js( __( 'Currently closed', 'libre-bite' ) ); ?>');
 			$closedNotice.show();
 		} else {
 			$nowOption.removeClass('lbite-time-option-disabled');
@@ -311,7 +311,7 @@ jQuery(document).ready(function($) {
 		}
 
 		const $select = $('#lbite-pickup-time');
-		$select.html('<option value=""><?php echo esc_js( __( 'Laden...', 'libre-bite' ) ); ?></option>').prop('disabled', true);
+		$select.html('<option value=""><?php echo esc_js( __( 'Loading...', 'libre-bite' ) ); ?></option>').prop('disabled', true);
 
 		// Visuelles Feedback
 		$select.css('opacity', '0.6');
@@ -327,18 +327,18 @@ jQuery(document).ready(function($) {
 			},
 			success: function(response) {
 				if (response.success && response.data.timeslots) {
-					let options = '<option value=""><?php echo esc_js( __( 'Bitte wählen...', 'libre-bite' ) ); ?></option>';
+					let options = '<option value=""><?php echo esc_js( __( 'Please choose...', 'libre-bite' ) ); ?></option>';
 					response.data.timeslots.forEach(function(slot) {
 						options += '<option value="' + slot.value + '">' + slot.label + '</option>';
 					});
 					$select.html(options).prop('disabled', false);
 				} else {
-					$select.html('<option value=""><?php echo esc_js( __( 'Keine Zeitslots verfügbar', 'libre-bite' ) ); ?></option>');
+					$select.html('<option value=""><?php echo esc_js( __( 'No time slots available', 'libre-bite' ) ); ?></option>');
 				}
 				$select.css('opacity', '1');
 			},
 			error: function() {
-				$select.html('<option value=""><?php echo esc_js( __( 'Fehler beim Laden', 'libre-bite' ) ); ?></option>');
+				$select.html('<option value=""><?php echo esc_js( __( 'Error loading', 'libre-bite' ) ); ?></option>');
 				$select.css('opacity', '1');
 			}
 		});
@@ -440,7 +440,7 @@ jQuery(document).ready(function($) {
 			// Fehlermeldung mit nächstem Öffnungsdatum anzeigen
 			if (nextOpenDate) {
 				const formattedDate = formatDate(nextOpenDate);
-				$('#lbite-next-opening').html('<br><?php echo esc_js( __( 'Nächste Öffnung:', 'libre-bite' ) ); ?> <strong>' + formattedDate + '</strong>');
+				$('#lbite-next-opening').html('<br><?php echo esc_js( __( 'Next opening:', 'libre-bite' ) ); ?> <strong>' + formattedDate + '</strong>');
 			} else {
 				$('#lbite-next-opening').html('');
 			}

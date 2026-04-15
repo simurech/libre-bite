@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="wrap lbite-pos">
 	<div class="lbite-pos-header">
-		<h1><?php esc_html_e( 'Kassensystem', 'libre-bite' ); ?></h1>
+		<h1><?php esc_html_e( 'POS System', 'libre-bite' ); ?></h1>
 		<button type="button" id="lbite-pos-fullscreen" class="button button-large" title="Vollbild">
 			<span class="dashicons dashicons-editor-expand"></span>
 		</button>
@@ -22,10 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="lbite-pos-location-selector" style="display: flex; gap: 20px; align-items: flex-end; margin-bottom: 20px;">
 		<div>
 			<label for="lbite-pos-location">
-				<strong><?php esc_html_e( 'Standort:', 'libre-bite' ); ?></strong>
+				<strong><?php esc_html_e( 'Location:', 'libre-bite' ); ?></strong>
 			</label>
 			<select id="lbite-pos-location" class="lbite-pos-location-select">
-				<option value=""><?php esc_html_e( 'Bitte Standort wählen', 'libre-bite' ); ?></option>
+				<option value=""><?php esc_html_e( 'Please select a location', 'libre-bite' ); ?></option>
 				<?php
 				$lbite_locations = LBite_Locations::get_all_locations();
 				$lbite_selected_location = get_user_meta( get_current_user_id(), 'lbite_pos_location', true );
@@ -41,10 +41,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
 		<div id="lbite-pos-table-selector-container" style="<?php echo ! $lbite_selected_location ? 'display: none;' : ''; ?>">
 			<label for="lbite-pos-table">
-				<strong><?php esc_html_e( 'Tisch (optional):', 'libre-bite' ); ?></strong>
+				<strong><?php esc_html_e( 'Table (optional):', 'libre-bite' ); ?></strong>
 			</label>
 			<select id="lbite-pos-table" class="lbite-pos-table-select">
-				<option value=""><?php esc_html_e( 'Kein Tisch', 'libre-bite' ); ?></option>
+				<option value=""><?php esc_html_e( 'No table', 'libre-bite' ); ?></option>
 				<?php
 				if ( $lbite_selected_location ) {
 					$lbite_tables = get_posts( array(
@@ -73,10 +73,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="lbite-pos-container">
-		<div class="lbite-pos-products" data-no-location-text="<?php esc_attr_e( 'Bitte zuerst einen Standort wählen', 'libre-bite' ); ?>">
+		<div class="lbite-pos-products" data-no-location-text="<?php esc_attr_e( 'Please select a location first', 'libre-bite' ); ?>">
 			<div class="lbite-pos-categories">
 				<button class="lbite-category-btn active" data-category="all">
-					<?php esc_html_e( 'Alle', 'libre-bite' ); ?>
+					<?php esc_html_e( 'All', 'libre-bite' ); ?>
 				</button>
 				<?php
 				$lbite_product_categories = get_terms(
@@ -99,16 +99,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="lbite-pos-cart">
-			<h2><?php esc_html_e( 'Warenkorb', 'libre-bite' ); ?></h2>
+			<h2><?php esc_html_e( 'Cart', 'libre-bite' ); ?></h2>
 			<div id="lbite-pos-cart-items"></div>
 
 			<div class="lbite-pos-totals">
 				<div class="lbite-total-line">
-					<span><?php esc_html_e( 'Zwischensumme:', 'libre-bite' ); ?></span>
+					<span><?php esc_html_e( 'Subtotal:', 'libre-bite' ); ?></span>
 					<span id="lbite-pos-subtotal">0,00 <?php echo esc_html( get_woocommerce_currency_symbol() ); ?></span>
 				</div>
 				<div class="lbite-total-line lbite-total-grand">
-					<span><?php esc_html_e( 'Gesamt:', 'libre-bite' ); ?></span>
+					<span><?php esc_html_e( 'Total:', 'libre-bite' ); ?></span>
 					<span id="lbite-pos-total">0,00 <?php echo esc_html( get_woocommerce_currency_symbol() ); ?></span>
 				</div>
 			</div>
@@ -116,16 +116,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="lbite-pos-customer-name" style="margin: 15px 0;">
 			<label for="lbite-pos-customer-name" style="display: block; margin-bottom: 5px; font-weight: 600;">
-				<?php esc_html_e( 'Vorname (optional):', 'libre-bite' ); ?>
+				<?php esc_html_e( 'First Name (optional):', 'libre-bite' ); ?>
 			</label>
-			<input type="text" id="lbite-pos-customer-name" class="lbite-input-large" placeholder="<?php esc_attr_e( 'z.B. Max', 'libre-bite' ); ?>" style="width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 4px;">
+			<input type="text" id="lbite-pos-customer-name" class="lbite-input-large" placeholder="<?php esc_attr_e( 'e.g. Max', 'libre-bite' ); ?>" style="width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 4px;">
 		</div>
 			<div class="lbite-pos-actions">
 				<button type="button" class="button button-large" id="lbite-pos-clear">
-					<?php esc_html_e( 'Leeren', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Clear', 'libre-bite' ); ?>
 				</button>
 				<button type="button" class="button button-primary button-large" id="lbite-pos-checkout">
-					<?php esc_html_e( 'Bestellung erstellen', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Create Order', 'libre-bite' ); ?>
 				</button>
 			</div>
 		</div>
@@ -136,7 +136,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div id="lbite-payment-modal-overlay" class="lbite-modal-overlay"></div>
 		<div class="lbite-modal-content lbite-payment-modal-content">
 			<div class="lbite-modal-header">
-				<h2><?php esc_html_e( 'Zahlungsbestätigung', 'libre-bite' ); ?></h2>
+				<h2><?php esc_html_e( 'Payment Confirmation', 'libre-bite' ); ?></h2>
 			</div>
 			<div class="lbite-modal-body">
 
@@ -146,7 +146,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 
 				<div class="lbite-payment-modal-total-row">
-					<span><?php esc_html_e( 'Gesamtbetrag:', 'libre-bite' ); ?></span>
+					<span><?php esc_html_e( 'Total Amount:', 'libre-bite' ); ?></span>
 					<span id="lbite-payment-modal-total" class="lbite-payment-modal-total-amount"></span>
 				</div>
 
@@ -168,7 +168,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$lbite_first = true;
 				?>
 				<div class="lbite-payment-method-group">
-					<p class="lbite-payment-method-label"><strong><?php esc_html_e( 'Zahlungsart:', 'libre-bite' ); ?></strong></p>
+					<p class="lbite-payment-method-label"><strong><?php esc_html_e( 'Payment Method:', 'libre-bite' ); ?></strong></p>
 					<div class="lbite-payment-method-options">
 						<?php foreach ( $lbite_active_pm as $lbite_pm ) : ?>
 						<label class="lbite-payment-method-option">
@@ -190,10 +190,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<div class="lbite-modal-footer">
 				<button type="button" class="button button-large" id="lbite-payment-modal-cancel">
-					<?php esc_html_e( 'Zurück', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Back', 'libre-bite' ); ?>
 				</button>
 				<button type="button" class="button button-primary button-hero" id="lbite-payment-modal-confirm">
-					<?php esc_html_e( 'Zahlung bestätigt – Bestellung anlegen', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Payment Confirmed – Create Order', 'libre-bite' ); ?>
 				</button>
 			</div>
 		</div>
@@ -204,15 +204,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="lbite-modal-overlay"></div>
 		<div class="lbite-modal-content">
 			<div class="lbite-modal-header">
-				<h2 id="lbite-modal-product-name"><?php esc_html_e( 'Produkt konfigurieren', 'libre-bite' ); ?></h2>
+				<h2 id="lbite-modal-product-name"><?php esc_html_e( 'Configure Product', 'libre-bite' ); ?></h2>
 				<button type="button" class="lbite-modal-close">&times;</button>
 			</div>
 			<div class="lbite-modal-body" id="lbite-modal-body">
 				<!-- Wird dynamisch gefüllt -->
 			</div>
 			<div class="lbite-modal-footer">
-				<button type="button" class="button button-large" id="lbite-modal-cancel"><?php esc_html_e( 'Abbrechen', 'libre-bite' ); ?></button>
-				<button type="button" class="button button-primary button-large" id="lbite-modal-add"><?php esc_html_e( 'Hinzufügen', 'libre-bite' ); ?></button>
+				<button type="button" class="button button-large" id="lbite-modal-cancel"><?php esc_html_e( 'Cancel', 'libre-bite' ); ?></button>
+				<button type="button" class="button button-primary button-large" id="lbite-modal-add"><?php esc_html_e( 'Add', 'libre-bite' ); ?></button>
 			</div>
 		</div>
 	</div>

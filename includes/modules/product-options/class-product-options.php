@@ -70,17 +70,17 @@ class LBite_Product_Options {
 	 */
 	public function register_post_type() {
 		$labels = array(
-			'name'               => __( 'Produkt-Optionen', 'libre-bite' ),
-			'singular_name'      => __( 'Produkt-Option', 'libre-bite' ),
-			'menu_name'          => __( 'Produkt-Optionen', 'libre-bite' ),
-			'add_new'            => __( 'Neue Option', 'libre-bite' ),
-			'add_new_item'       => __( 'Neue Option hinzufügen', 'libre-bite' ),
-			'edit_item'          => __( 'Option bearbeiten', 'libre-bite' ),
-			'new_item'           => __( 'Neue Option', 'libre-bite' ),
-			'view_item'          => __( 'Option ansehen', 'libre-bite' ),
-			'search_items'       => __( 'Optionen suchen', 'libre-bite' ),
-			'not_found'          => __( 'Keine Optionen gefunden', 'libre-bite' ),
-			'not_found_in_trash' => __( 'Keine Optionen im Papierkorb', 'libre-bite' ),
+			'name'               => __( 'Product Options', 'libre-bite' ),
+			'singular_name'      => __( 'Product Option', 'libre-bite' ),
+			'menu_name'          => __( 'Product Options', 'libre-bite' ),
+			'add_new'            => __( 'New Option', 'libre-bite' ),
+			'add_new_item'       => __( 'Add New Option', 'libre-bite' ),
+			'edit_item'          => __( 'Edit Option', 'libre-bite' ),
+			'new_item'           => __( 'New Option', 'libre-bite' ),
+			'view_item'          => __( 'View Option', 'libre-bite' ),
+			'search_items'       => __( 'Search Options', 'libre-bite' ),
+			'not_found'          => __( 'No options found', 'libre-bite' ),
+			'not_found_in_trash' => __( 'No options in trash', 'libre-bite' ),
 		);
 
 		$args = array(
@@ -107,7 +107,7 @@ class LBite_Product_Options {
 	public function add_meta_boxes() {
 		add_meta_box(
 			'lbite_option_price',
-			__( 'Preis', 'libre-bite' ),
+			__( 'Price', 'libre-bite' ),
 			array( $this, 'render_price_meta_box' ),
 			self::POST_TYPE,
 			'side',
@@ -126,11 +126,11 @@ class LBite_Product_Options {
 		$price = get_post_meta( $post->ID, '_lbite_price', true );
 		?>
 		<p>
-			<label for="lbite_option_price"><?php esc_html_e( 'Preis', 'libre-bite' ); ?> (<?php echo esc_html( get_woocommerce_currency_symbol() ); ?>)</label><br>
+			<label for="lbite_option_price"><?php esc_html_e( 'Price', 'libre-bite' ); ?> (<?php echo esc_html( get_woocommerce_currency_symbol() ); ?>)</label><br>
 			<input type="number" step="0.01" min="0" id="lbite_option_price" name="lbite_option_price" value="<?php echo esc_attr( $price ); ?>" style="width: 100%;">
 		</p>
 		<p class="description">
-			<?php esc_html_e( 'Dieser Preis wird zum Produktpreis addiert, wenn die Option ausgewählt wird.', 'libre-bite' ); ?>
+			<?php esc_html_e( 'This price is added to the product price when the option is selected.', 'libre-bite' ); ?>
 		</p>
 		<?php
 	}
@@ -170,7 +170,7 @@ class LBite_Product_Options {
 	public function add_product_meta_box() {
 		add_meta_box(
 			'lbite_product_options',
-			__( 'Produkt-Optionen', 'libre-bite' ),
+			__( 'Product Options', 'libre-bite' ),
 			array( $this, 'render_product_options_meta_box' ),
 			'product',
 			'normal',
@@ -201,8 +201,8 @@ class LBite_Product_Options {
 		);
 
 		if ( empty( $options ) ) {
-			echo '<p>' . esc_html__( 'Noch keine Optionen vorhanden.', 'libre-bite' ) . ' ';
-			echo '<a href="' . esc_url( admin_url( 'post-new.php?post_type=' . self::POST_TYPE ) ) . '">' . esc_html__( 'Jetzt erstellen', 'libre-bite' ) . '</a></p>';
+			echo '<p>' . esc_html__( 'No options available yet.', 'libre-bite' ) . ' ';
+			echo '<a href="' . esc_url( admin_url( 'post-new.php?post_type=' . self::POST_TYPE ) ) . '">' . esc_html__( 'Create Now', 'libre-bite' ) . '</a></p>';
 			return;
 		}
 
@@ -281,7 +281,7 @@ class LBite_Product_Options {
 
 		?>
 		<div class="lbite-product-options" style="margin: 20px 0;">
-			<h4><?php esc_html_e( 'Optionen', 'libre-bite' ); ?></h4>
+			<h4><?php esc_html_e( 'Options', 'libre-bite' ); ?></h4>
 			<?php foreach ( $options as $option ) : ?>
 				<?php
 				$price       = get_post_meta( $option->ID, '_lbite_price', true );
@@ -345,7 +345,7 @@ class LBite_Product_Options {
 			}
 			if ( ! empty( $option_labels ) ) {
 				$item_data[] = array(
-					'name'  => __( 'Optionen', 'libre-bite' ),
+					'name'  => __( 'Options', 'libre-bite' ),
 					'value' => implode( ', ', $option_labels ),
 				);
 			}
@@ -397,7 +397,7 @@ class LBite_Product_Options {
 			}
 
 			if ( ! empty( $option_names ) ) {
-				$item->add_meta_data( __( 'Optionen', 'libre-bite' ), implode( ', ', $option_names ), true );
+				$item->add_meta_data( __( 'Options', 'libre-bite' ), implode( ', ', $option_names ), true );
 			}
 		}
 	}
@@ -412,7 +412,7 @@ class LBite_Product_Options {
 		$new_columns = array();
 		$new_columns['cb']    = $columns['cb'];
 		$new_columns['title'] = $columns['title'];
-		$new_columns['price'] = __( 'Preis', 'libre-bite' );
+		$new_columns['price'] = __( 'Price', 'libre-bite' );
 		$new_columns['date']  = $columns['date'];
 
 		return $new_columns;

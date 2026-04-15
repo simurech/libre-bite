@@ -16,24 +16,24 @@ $features = get_option( 'lbite_features', array() );
 // Feature-Gruppen definieren
 $feature_groups = array(
 	'order_system' => array(
-		'title'       => __( 'Bestellsystem', 'libre-bite' ),
-		'description' => __( 'Grundlegende Bestellfunktionen', 'libre-bite' ),
+		'title'       => __( 'Order System', 'libre-bite' ),
+		'description' => __( 'Basic order functions', 'libre-bite' ),
 		'features'    => array(
 			'enable_kanban_board'     => array(
-				'label'       => __( 'Bestellübersicht aktivieren', 'libre-bite' ),
-				'description' => __( 'Kanban-Board für eingehende Bestellungen mit Statusverfolgung und Vollbild-Modus', 'libre-bite' ),
+				'label'       => __( 'Enable Order Overview', 'libre-bite' ),
+				'description' => __( 'Kanban board for incoming orders with status tracking and fullscreen mode', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),
 			'enable_pos'              => array(
-				'label'       => __( 'Kassensystem (POS)', 'libre-bite' ),
-				'description' => __( 'Kassensystem für Vor-Ort-Bestellungen aktivieren', 'libre-bite' ),
+				'label'       => __( 'POS System', 'libre-bite' ),
+				'description' => __( 'Enable POS system for on-site orders', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),
 			'enable_scheduled_orders' => array(
-				'label'       => __( 'Vorbestellungen', 'libre-bite' ),
-				'description' => __( 'Kunden können Bestellungen für später aufgeben', 'libre-bite' ),
+				'label'       => __( 'Pre-orders', 'libre-bite' ),
+				'description' => __( 'Customers can place orders for later', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),
@@ -41,113 +41,113 @@ $feature_groups = array(
 	),
 	'checkout'     => array(
 		'title'       => __( 'Checkout', 'libre-bite' ),
-		'description' => __( 'Checkout-Prozess Einstellungen', 'libre-bite' ),
+		'description' => __( 'Checkout process settings', 'libre-bite' ),
 		'features'    => array(
 			'enable_optimized_checkout' => array(
-				'label'       => __( 'Optimierter Checkout', 'libre-bite' ),
-				'description' => __( 'Vereinfachter Checkout-Flow', 'libre-bite' ),
+				'label'       => __( 'Optimized Checkout', 'libre-bite' ),
+				'description' => __( 'Simplified checkout flow', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => true,
 			),
 			'enable_tips'               => array(
-				'label'       => __( 'Trinkgeld-System', 'libre-bite' ),
-				'description' => __( 'Trinkgeld-Optionen im Checkout anzeigen', 'libre-bite' ),
+				'label'       => __( 'Tip System', 'libre-bite' ),
+				'description' => __( 'Show tip options in checkout', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => true,
 			),
 			'enable_rounding'           => array(
-				'label'       => __( '5-Rappen-Rundung', 'libre-bite' ),
-				'description' => __( 'Beträge auf 5 Rappen runden (Schweiz)', 'libre-bite' ),
+				'label'       => __( '5-cent rounding', 'libre-bite' ),
+				'description' => __( 'Round amounts to 5 cents (Switzerland)', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),
 			'enable_guest_checkout'     => array(
-				'label'       => __( 'Gast-Checkout', 'libre-bite' ),
-				'description' => __( 'Checkout ohne Kundenkonto ermöglichen', 'libre-bite' ),
+				'label'       => __( 'Guest Checkout', 'libre-bite' ),
+				'description' => __( 'Allow orders without a customer account', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),
 			),
 	),
 	'locations'    => array(
-		'title'       => __( 'Standorte', 'libre-bite' ),
-		'description' => __( 'Standort-Verwaltung', 'libre-bite' ),
+		'title'       => __( 'Locations', 'libre-bite' ),
+		'description' => __( 'Location management', 'libre-bite' ),
 		'features'    => array(
 			'enable_multi_location'    => array(
-				'label'       => __( 'Multi-Standort', 'libre-bite' ),
-				'description' => __( 'Mehrere Standorte verwalten', 'libre-bite' ),
+				'label'       => __( 'Multi-Location', 'libre-bite' ),
+				'description' => __( 'Manage multiple locations', 'libre-bite' ),
 				'default'     => false,
 				'premium'     => true,
 			),
 			'enable_location_selector' => array(
-				'label'       => __( 'Standort-Auswahl', 'libre-bite' ),
-				'description' => __( 'Standort-Auswahl im Frontend anzeigen', 'libre-bite' ),
+				'label'       => __( 'Location Selection', 'libre-bite' ),
+				'description' => __( 'Show location selection in frontend', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),
 			'enable_opening_hours'     => array(
-				'label'       => __( 'Öffnungszeiten', 'libre-bite' ),
-				'description' => __( 'Öffnungszeiten pro Standort verwalten', 'libre-bite' ),
+				'label'       => __( 'Opening Hours', 'libre-bite' ),
+				'description' => __( 'Manage opening hours per location', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),
 			'enable_table_ordering'    => array(
-				'label'       => __( 'Tischverwaltung & Tischbestellung', 'libre-bite' ),
-				'description' => __( 'Tische anlegen, Sitzplätze definieren, QR-Codes generieren und Bestellungen direkt am Tisch ermöglichen', 'libre-bite' ),
+				'label'       => __( 'Table Management & Table Ordering', 'libre-bite' ),
+				'description' => __( 'Create tables, define seats, generate QR codes and enable orders directly at the table', 'libre-bite' ),
 				'default'     => false,
 				'premium'     => true,
 			),
 			'enable_reservations'      => array(
-				'label'       => __( 'Tischreservierungen', 'libre-bite' ),
-				'description' => __( 'Kunden können Tische online reservieren – Frontend-Formular via Shortcode [lbite_reservation_form]', 'libre-bite' ),
+				'label'       => __( 'Table Reservations', 'libre-bite' ),
+				'description' => __( 'Customers can reserve tables online – frontend form via shortcode [lbite_reservation_form]', 'libre-bite' ),
 				'default'     => false,
 				'premium'     => true,
 			),
 		),
 	),
 	'notifications' => array(
-		'title'       => __( 'Benachrichtigungen', 'libre-bite' ),
-		'description' => __( 'E-Mail und Sound-Benachrichtigungen', 'libre-bite' ),
+		'title'       => __( 'Notifications', 'libre-bite' ),
+		'description' => __( 'Email and sound notifications', 'libre-bite' ),
 		'features'    => array(
 			'enable_pickup_reminders'    => array(
-				'label'       => __( 'Abhol-Erinnerungen', 'libre-bite' ),
-				'description' => __( 'E-Mail-Erinnerung vor Abholzeit senden', 'libre-bite' ),
+				'label'       => __( 'Pickup Reminders', 'libre-bite' ),
+				'description' => __( 'Send email reminder before pickup time', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => true,
 			),
 			'enable_sound_notifications' => array(
-				'label'       => __( 'Sound-Benachrichtigung', 'libre-bite' ),
-				'description' => __( 'Ton bei neuen Bestellungen abspielen', 'libre-bite' ),
+				'label'       => __( 'Sound Notifications', 'libre-bite' ),
+				'description' => __( 'Play sound alert for new orders', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => true,
 			),
 			'enable_admin_email'         => array(
-				'label'       => __( 'Admin-Benachrichtigung', 'libre-bite' ),
-				'description' => __( 'E-Mail an Admin bei neuen Bestellungen', 'libre-bite' ),
+				'label'       => __( 'Admin Email', 'libre-bite' ),
+				'description' => __( 'Email notification for new orders', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),
 		),
 	),
 	'products'     => array(
-		'title'       => __( 'Produkte', 'libre-bite' ),
-		'description' => __( 'Produkt-Erweiterungen', 'libre-bite' ),
+		'title'       => __( 'Products', 'libre-bite' ),
+		'description' => __( 'Product extensions', 'libre-bite' ),
 		'features'    => array(
 			'enable_product_options'  => array(
-				'label'       => __( 'Produkt-Optionen', 'libre-bite' ),
-				'description' => __( 'Zusatzoptionen für Produkte (Add-ons)', 'libre-bite' ),
+				'label'       => __( 'Product Options', 'libre-bite' ),
+				'description' => __( 'Additional options for products (add-ons)', 'libre-bite' ),
 				'default'     => true,
 				'premium'     => false,
 			),
 			'enable_nutritional_info' => array(
-				'label'       => __( 'Nährwertangaben', 'libre-bite' ),
-				'description' => __( 'Nährwertinformationen bei Produkten anzeigen', 'libre-bite' ),
+				'label'       => __( 'Nutritional Information', 'libre-bite' ),
+				'description' => __( 'Show nutritional information for products', 'libre-bite' ),
 				'default'     => false,
 				'premium'     => true,
 			),
 			'enable_allergens'        => array(
-				'label'       => __( 'Allergene', 'libre-bite' ),
-				'description' => __( 'Allergen-Warnungen bei Produkten anzeigen', 'libre-bite' ),
+				'label'       => __( 'Allergens', 'libre-bite' ),
+				'description' => __( 'Show allergen warnings for products', 'libre-bite' ),
 				'default'     => false,
 				'premium'     => true,
 			),
@@ -157,21 +157,21 @@ $feature_groups = array(
 ?>
 <?php if ( empty( $lbite_is_tab ) ) : ?>
 <div class="wrap lbite-admin-wrap">
-	<h1><?php esc_html_e( 'Feature-Toggles', 'libre-bite' ); ?></h1>
+	<h1><?php esc_html_e( 'Feature Toggles', 'libre-bite' ); ?></h1>
 <?php endif; ?>
-	<p class="description"><?php esc_html_e( 'Aktivieren oder deaktivieren Sie einzelne Funktionen des Libre Bites.', 'libre-bite' ); ?></p>
+	<p class="description"><?php esc_html_e( 'Enable or disable individual features of Libre Bite.', 'libre-bite' ); ?></p>
 
 	<?php if ( function_exists( 'lbite_freemius' ) && ! lbite_freemius()->is_premium() ) : ?>
 		<div class="lbite-upgrade-notice" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 25px; border-radius: 8px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
 			<div style="flex: 1;">
-				<h2 style="color: #fff; margin-top: 0; font-size: 22px;"><?php esc_html_e( 'Holen Sie sich Libre Bite Pro!', 'libre-bite' ); ?></h2>
+				<h2 style="color: #fff; margin-top: 0; font-size: 22px;"><?php esc_html_e( 'Get Libre Bite Pro!', 'libre-bite' ); ?></h2>
 				<p style="font-size: 16px; opacity: 0.9; margin-bottom: 0;">
-					<?php esc_html_e( 'Schalten Sie Multi-Standort-Verwaltung, Trinkgeld-Optionen, Abhol-Erinnerungen und vieles mehr frei.', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Unlock multi-location management, tip options, pickup reminders and much more.', 'libre-bite' ); ?>
 				</p>
 			</div>
 			<div style="margin-left: 20px;">
 				<a href="<?php echo esc_url( lbite_freemius()->get_upgrade_url() ); ?>" class="button button-primary button-hero" style="background: #fff; color: #764ba2; border: none; font-weight: bold;">
-					<?php esc_html_e( 'Jetzt upgraden', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Upgrade Now', 'libre-bite' ); ?>
 				</a>
 			</div>
 		</div>
@@ -198,7 +198,7 @@ $feature_groups = array(
 										<label for="<?php echo esc_attr( $feature_key ); ?>">
 											<?php echo esc_html( $feature['label'] ); ?>
 											<?php if ( $is_premium ) : ?>
-												<span class="lbite-premium-badge" title="<?php esc_attr_e( 'Premium-Feature', 'libre-bite' ); ?>">Premium</span>
+												<span class="lbite-premium-badge" title="<?php esc_attr_e( 'Premium Feature', 'libre-bite' ); ?>">Premium</span>
 											<?php endif; ?>
 										</label>
 									</th>
@@ -222,7 +222,7 @@ $feature_groups = array(
 		</div>
 
 		<p class="submit">
-			<button type="submit" class="button button-primary"><?php esc_html_e( 'Einstellungen speichern', 'libre-bite' ); ?></button>
+			<button type="submit" class="button button-primary"><?php esc_html_e( 'Save Settings', 'libre-bite' ); ?></button>
 			<span class="lbite-save-status"></span>
 		</p>
 	</form>
@@ -248,7 +248,7 @@ jQuery(document).ready(function($) {
 		});
 
 		$button.prop('disabled', true);
-		$status.text('<?php echo esc_js( __( 'Speichern...', 'libre-bite' ) ); ?>');
+		$status.text('<?php echo esc_js( __( 'Saving...', 'libre-bite' ) ); ?>');
 
 		$.ajax({
 			url: ajaxurl,
@@ -260,12 +260,12 @@ jQuery(document).ready(function($) {
 			},
 			success: function(response) {
 				if (response.success) {
-					$status.text('<?php echo esc_js( __( 'Gespeichert!', 'libre-bite' ) ); ?>');
+					$status.text('<?php echo esc_js( __( 'Saved!', 'libre-bite' ) ); ?>');
 					setTimeout(function() {
 						$status.text('');
 					}, 2000);
 				} else {
-					$status.text(response.data.message || '<?php echo esc_js( __( 'Fehler beim Speichern', 'libre-bite' ) ); ?>');
+					$status.text(response.data.message || '<?php echo esc_js( __( 'Error saving', 'libre-bite' ) ); ?>');
 				}
 			},
 			error: function() {

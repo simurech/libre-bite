@@ -17,7 +17,7 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 ?>
 
 <div class="lbite-checkout-selection">
-	<h3><?php esc_html_e( 'Standort & Abholzeit', 'libre-bite' ); ?></h3>
+	<h3><?php esc_html_e( 'Location & Pickup Time', 'libre-bite' ); ?></h3>
 
 	<!-- Versteckte Felder für das Formular -->
 	<input type="hidden" name="lbite_location_id" id="lbite_location_id" value="<?php echo esc_attr( $lbite_location_id ); ?>" required>
@@ -54,9 +54,9 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 								</svg>
 								<?php 
 								if ( WC()->session && WC()->session->get( 'lbite_table_id' ) ) {
-									esc_html_e( 'Service am Tisch', 'libre-bite' );
+									esc_html_e( 'Table Service', 'libre-bite' );
 								} else {
-									esc_html_e( 'Sofort bestellen', 'libre-bite' );
+									esc_html_e( 'Order Now', 'libre-bite' );
 								}
 								?>
 							</span>
@@ -74,7 +74,7 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 								$formatted_date = $datetime ? $datetime->format( 'd.m.Y' ) : '';
 								$formatted_time = $datetime ? $datetime->format( 'H:i' ) : $lbite_pickup_time;
 								?>
-								<?php esc_html_e( 'Vorbestellen:', 'libre-bite' ); ?> <?php echo esc_html( $formatted_date . ' ' . $formatted_time ); ?> <?php esc_html_e( 'Uhr', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Pre-order:', 'libre-bite' ); ?> <?php echo esc_html( $formatted_date . ' ' . $formatted_time ); ?>
 							</span>
 						<?php endif; ?>
 					</div>
@@ -82,14 +82,14 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 
 				<?php if ( ! ( WC()->session && WC()->session->get( 'lbite_table_id' ) ) ) : ?>
 					<button type="button" class="lbite-change-btn" id="lbite-change-selection">
-						<?php esc_html_e( 'Ändern', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Change', 'libre-bite' ); ?>
 					</button>
 				<?php endif; ?>
 			</div>
 		</div>
 	<?php else : ?>
 		<div class="lbite-no-selection">
-			<p><?php esc_html_e( 'Bitte wählen Sie einen Standort und eine Abholzeit.', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'Please select a location and pickup time.', 'libre-bite' ); ?></p>
 		</div>
 	<?php endif; ?>
 
@@ -97,10 +97,10 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 	<div class="lbite-edit-form" style="<?php echo $lbite_location ? 'display: none;' : ''; ?>">
 		<div class="lbite-form-group">
 			<label>
-				<?php esc_html_e( 'Standort', 'libre-bite' ); ?> <span class="required">*</span>
+				<?php esc_html_e( 'Location', 'libre-bite' ); ?> <span class="required">*</span>
 			</label>
 			<select id="lbite_location_select" class="lbite-select">
-				<option value=""><?php esc_html_e( 'Standort wählen...', 'libre-bite' ); ?></option>
+				<option value=""><?php esc_html_e( 'Select location...', 'libre-bite' ); ?></option>
 				<?php foreach ( $lbite_locations as $loc ) : ?>
 					<option value="<?php echo esc_attr( $loc->ID ); ?>" <?php selected( $lbite_location_id, $loc->ID ); ?>>
 						<?php echo esc_html( $loc->post_title ); ?>
@@ -111,33 +111,33 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 
 		<div class="lbite-form-group">
 			<label>
-				<?php esc_html_e( 'Bestellart', 'libre-bite' ); ?> <span class="required">*</span>
+				<?php esc_html_e( 'Order Type', 'libre-bite' ); ?> <span class="required">*</span>
 			</label>
 			<div class="lbite-radio-group">
 				<label class="lbite-radio-option" id="lbite-now-radio-option">
 					<input type="radio" name="lbite_order_type_select" value="now" <?php checked( $lbite_order_type, 'now' ); ?>>
 					<span><?php
 					if ( WC()->session && WC()->session->get( 'lbite_table_id' ) ) {
-						esc_html_e( 'Service am Tisch', 'libre-bite' );
+						esc_html_e( 'Table Service', 'libre-bite' );
 					} else {
-						esc_html_e( 'Sofort bestellen', 'libre-bite' );
+						esc_html_e( 'Order Now', 'libre-bite' );
 					}
 					?></span>
 				</label>
 				<label class="lbite-radio-option">
 					<input type="radio" name="lbite_order_type_select" value="later" <?php checked( $lbite_order_type, 'later' ); ?>>
-					<span><?php esc_html_e( 'Für später vorbestellen', 'libre-bite' ); ?></span>
+					<span><?php esc_html_e( 'Pre-order for Later', 'libre-bite' ); ?></span>
 				</label>
 			</div>
 			<div class="lbite-closed-now-notice" id="lbite-now-closed-notice" style="display: none;">
 				<span class="dashicons dashicons-info"></span>
-				<span><?php esc_html_e( 'Sofort-Bestellung nicht möglich –', 'libre-bite' ); ?> <span id="lbite-checkout-closed-text"></span></span>
+				<span><?php esc_html_e( 'Immediate order not available –', 'libre-bite' ); ?> <span id="lbite-checkout-closed-text"></span></span>
 			</div>
 		</div>
 
 		<div class="lbite-form-group lbite-pickup-time-group" style="display: none;">
 			<label>
-				<?php esc_html_e( 'Abholdatum', 'libre-bite' ); ?> <span class="required">*</span>
+				<?php esc_html_e( 'Pickup Date', 'libre-bite' ); ?> <span class="required">*</span>
 			</label>
 			<input type="date" id="lbite_pickup_date_select" class="lbite-select" value="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>" min="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>">
 			<div class="lbite-date-error" id="lbite_date_error" style="display: none;">
@@ -150,20 +150,20 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 
 		<div class="lbite-form-group lbite-pickup-time-group" style="display: none;">
 			<label>
-				<?php esc_html_e( 'Abholzeit', 'libre-bite' ); ?> <span class="required">*</span>
+				<?php esc_html_e( 'Pickup Time', 'libre-bite' ); ?> <span class="required">*</span>
 			</label>
 			<select id="lbite_pickup_time_select" class="lbite-select">
-				<option value=""><?php esc_html_e( 'Zeit wählen...', 'libre-bite' ); ?></option>
+				<option value=""><?php esc_html_e( 'Select time...', 'libre-bite' ); ?></option>
 			</select>
 		</div>
 
 		<div class="lbite-form-actions">
 			<button type="button" class="lbite-save-btn" id="lbite-save-selection">
-				<?php esc_html_e( 'Übernehmen', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Apply', 'libre-bite' ); ?>
 			</button>
 			<?php if ( $lbite_location ) : ?>
 				<button type="button" class="lbite-cancel-btn" id="lbite-cancel-selection">
-					<?php esc_html_e( 'Abbrechen', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Cancel', 'libre-bite' ); ?>
 				</button>
 			<?php endif; ?>
 		</div>
@@ -228,22 +228,22 @@ jQuery(document).ready(function($) {
 
 		// Validierung
 		if (!locationId) {
-			alert('<?php esc_html_e( 'Bitte wählen Sie einen Standort.', 'libre-bite' ); ?>');
+			alert('<?php esc_html_e( 'Please select a location.', 'libre-bite' ); ?>');
 			return;
 		}
 
 		if (!orderType) {
-			alert('<?php esc_html_e( 'Bitte wählen Sie eine Bestellart.', 'libre-bite' ); ?>');
+			alert('<?php esc_html_e( 'Please select an order type.', 'libre-bite' ); ?>');
 			return;
 		}
 
 		if (orderType === 'later' && !pickupTimeSlot) {
-			alert('<?php esc_html_e( 'Bitte wählen Sie eine Abholzeit.', 'libre-bite' ); ?>');
+			alert('<?php esc_html_e( 'Please select a pickup time.', 'libre-bite' ); ?>');
 			return;
 		}
 
 		// Button deaktivieren
-		$btn.prop('disabled', true).text('<?php esc_html_e( 'Speichere...', 'libre-bite' ); ?>');
+		$btn.prop('disabled', true).text('<?php esc_html_e( 'Saving...', 'libre-bite' ); ?>');
 
 		// AJAX-Anfrage um Session zu aktualisieren
 		$.ajax({
@@ -269,13 +269,13 @@ jQuery(document).ready(function($) {
 					// Seite neu laden
 					location.reload();
 				} else {
-					alert(response.data.message || '<?php esc_html_e( 'Fehler beim Speichern.', 'libre-bite' ); ?>');
-					$btn.prop('disabled', false).text('<?php esc_html_e( 'Übernehmen', 'libre-bite' ); ?>');
+					alert(response.data.message || '<?php esc_html_e( 'Error saving.', 'libre-bite' ); ?>');
+					$btn.prop('disabled', false).text('<?php esc_html_e( 'Apply', 'libre-bite' ); ?>');
 				}
 			},
 			error: function() {
-				alert('<?php esc_html_e( 'Fehler beim Speichern. Bitte versuchen Sie es erneut.', 'libre-bite' ); ?>');
-				$btn.prop('disabled', false).text('<?php esc_html_e( 'Übernehmen', 'libre-bite' ); ?>');
+				alert('<?php esc_html_e( 'Error saving. Please try again.', 'libre-bite' ); ?>');
+				$btn.prop('disabled', false).text('<?php esc_html_e( 'Apply', 'libre-bite' ); ?>');
 			}
 		});
 	});
@@ -302,7 +302,7 @@ jQuery(document).ready(function($) {
 					var $select = $('#lbite_pickup_time_select');
 					var currentValue = $('#lbite_pickup_time').val();
 					$select.empty();
-					$select.append('<option value=""><?php esc_html_e( 'Zeit wählen...', 'libre-bite' ); ?></option>');
+					$select.append('<option value=""><?php esc_html_e( 'Select time...', 'libre-bite' ); ?></option>');
 
 					response.data.timeslots.forEach(function(slot) {
 						var selected = currentValue === slot.value ? ' selected' : '';
@@ -396,7 +396,7 @@ jQuery(document).ready(function($) {
 
 				// Hinweis anzeigen dass Datum geändert wurde
 				var formattedDate = formatDate(nextOpenDate);
-				$('#lbite_next_opening').html('<?php echo esc_js( __( 'Automatisch geändert zu:', 'libre-bite' ) ); ?> <strong>' + formattedDate + '</strong>');
+				$('#lbite_next_opening').html('<?php echo esc_js( __( 'Automatically changed to:', 'libre-bite' ) ); ?> <strong>' + formattedDate + '</strong>');
 				$('#lbite_date_error').slideDown(300);
 				$('#lbite_pickup_date_select').addClass('lbite-error-input');
 
@@ -408,7 +408,7 @@ jQuery(document).ready(function($) {
 				}, 2500);
 			} else {
 				// Kein offener Tag in den nächsten 14 Tagen
-				$('#lbite_next_opening').html('<?php echo esc_js( __( 'Kein Öffnungstag in den nächsten 14 Tagen gefunden.', 'libre-bite' ) ); ?>');
+				$('#lbite_next_opening').html('<?php echo esc_js( __( 'No opening day found in the next 14 days.', 'libre-bite' ) ); ?>');
 				$('#lbite_date_error').slideDown(300);
 				$('#lbite_pickup_date_select').addClass('lbite-error-input');
 			}
