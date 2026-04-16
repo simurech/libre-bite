@@ -127,7 +127,7 @@ msgstr ""
 msgid ""
 "Activate the features you need in the Features tab. All core features are "
 "enabled by default – you can adjust this at any time."
-msgstr "Aktivieren Sie die benötigten Funktionen im Funktionen-Tab. Alle Kernfunktionen sind standardmässig aktiviert – Sie können dies jederzeit anpassen."
+msgstr "Aktiviere die benötigten Funktionen im Funktionen-Tab. Alle Kernfunktionen sind standardmässig aktiviert – du kannst dies jederzeit anpassen."
 
 #: templates/admin/settings-tabbed.php:391
 msgid "Active"
@@ -1383,7 +1383,7 @@ msgid ""
 "\n"
 "The payment will be automatically refunded."
 msgstr ""
-"Möchten Sie diese Bestellung wirklich stornieren?\n"
+"Möchtest du diese Bestellung wirklich stornieren?\n"
 "\n"
 "Die Zahlung wird automatisch zurückerstattet."
 
@@ -2847,7 +2847,7 @@ msgstr "Notizen (optional)"
 
 #: templates/admin/checkout-fields.php:186
 msgid "Notes about your order, e.g. special delivery instructions."
-msgstr "Hinweise zu Ihrer Bestellung, z. B. besondere Lieferanweisungen."
+msgstr "Hinweise zu deiner Bestellung, z. B. besondere Lieferhinweise."
 
 #: templates/admin/help-partials/settings.php:127
 #: templates/admin/settings-tabbed.php:304
@@ -3462,7 +3462,7 @@ msgstr "Bitte Standort wählen"
 
 #: templates/checkout-location-time.php:92
 msgid "Please select a location and pickup time."
-msgstr "Bitte wählen Sie einen Standort und eine Abholzeit."
+msgstr "Bitte wähle einen Standort und eine Abholzeit."
 
 #: includes/modules/pos/class-pos.php:144 templates/admin/pos.php:76
 msgid "Please select a location first"
@@ -3475,7 +3475,7 @@ msgstr "Bitte wählen Sie zuerst einen Standort und speichern Sie, um den Link z
 #: includes/modules/checkout/class-checkout.php:624
 #: templates/checkout-location-time.php:231
 msgid "Please select a location."
-msgstr "Bitte wählen Sie einen Standort."
+msgstr "Bitte wähle einen Standort."
 
 #: includes/modules/checkout/class-checkout.php:455
 #: includes/modules/checkout/class-checkout.php:535
@@ -3485,16 +3485,16 @@ msgstr "Bitte wählen Sie eine Abholzeit"
 #: includes/modules/checkout/class-checkout.php:635
 #: templates/checkout-location-time.php:241
 msgid "Please select a pickup time."
-msgstr "Bitte wählen Sie eine Abholzeit."
+msgstr "Bitte wähle eine Abholzeit."
 
 #: includes/modules/checkout/class-checkout.php:628
 #: templates/checkout-location-time.php:236
 msgid "Please select an order type."
-msgstr "Bitte wählen Sie eine Bestellart."
+msgstr "Bitte wähle eine Bestellart."
 
 #: templates/location-modal.php:17
 msgid "Please select your desired location:"
-msgstr "Bitte wählen Sie Ihren gewünschten Standort:"
+msgstr "Bitte wähle deinen gewünschten Standort:"
 
 #: includes/modules/tables/class-tables.php:577
 #: includes/modules/tables/class-tables.php:847
@@ -5256,7 +5256,7 @@ msgstr "Was der Gast ausfüllt"
 
 #: templates/checkout-optimized.php:88
 msgid "What's your name?"
-msgstr "Wie heissen Sie?"
+msgstr "Wie heisst du?"
 
 #: templates/admin/documentation.php:192
 msgid ""
@@ -5273,7 +5273,7 @@ msgstr "Wenn dieser Shortcode verwendet wird, ist das automatische Popup deaktiv
 #: templates/location-modal.php:39 templates/location-selector-inline.php:38
 #: templates/location-selector-tiles.php:110
 msgid "When would you like to order?"
-msgstr "Wann möchten Sie bestellen?"
+msgstr "Wann möchtest du bestellen?"
 
 #: includes/modules/tables/class-tables.php:584
 msgid "Which location does this table belong to?"
@@ -5348,7 +5348,7 @@ msgstr "WordPress-Version"
 
 #: templates/checkout-tip.php:15
 msgid "Would you like to leave a tip?"
-msgstr "Möchten Sie ein Trinkgeld hinterlassen?"
+msgstr "Möchtest du ein Trinkgeld hinterlassen?"
 
 #: templates/admin/help-partials/orders.php:95
 msgid ""
@@ -5450,15 +5450,15 @@ msgstr "Ihre Standorte:"
 
 #: templates/checkout-optimized.php:91
 msgid "Your Name"
-msgstr "Ihr Name"
+msgstr "Dein Name"
 
 #: templates/checkout-optimized.php:126 templates/thankyou-optimized.php:151
 msgid "Your Order"
-msgstr "Ihre Bestellung"
+msgstr "Deine Bestellung"
 
 #: templates/thankyou-optimized.php:74
 msgid "Your Pickup Number"
-msgstr "Ihre Abholnummer"
+msgstr "Deine Abholnummer"
 
 #: includes/modules/notifications/class-email-pickup-reminder.php:127
 msgid "Your order {order_number} will be ready for pickup soon"
@@ -5547,11 +5547,11 @@ msgstr "erfordert mindestens WooCommerce Version 8.0. Bitte aktualisieren Sie Wo
 #: templates/emails/pickup-reminder.php:25
 #: templates/emails/plain/pickup-reminder.php:27
 msgid "this is a reminder about your upcoming order."
-msgstr "dies ist eine Erinnerung an Ihre bevorstehende Bestellung."
+msgstr "dies ist eine Erinnerung an deine bevorstehende Bestellung."
 
 #: templates/checkout-optimized.php:117
 msgid "your@email.com"
-msgstr "ihre@email.ch"
+msgstr "deine@email.ch"
 
 #: templates/admin/settings.php:154
 msgid "— Default (Shop Page) —"

@@ -9,7 +9,7 @@ msgstr ""
 "PO-Revision-Date: 2026-04-14\n"
 "Last-Translator: Simon Urech\n"
 "Language-Team: Simon Urech\n"
-"Language: de_CH\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,7 +22,7 @@ msgstr " erstellt"
 #: templates/admin/help-partials/orders.php:110
 msgid "\"Complete Order\" → choose payment method (cash, card, Twint, etc.)"
 msgstr ""
-"«Bestellung abschliessen» → Zahlungsmethode wählen (Bar, Karte, Twint, usw.)"
+"«Bestellung abschließen» → Zahlungsmethode wählen (Bar, Karte, Twint, usw.)"
 
 #: templates/admin/help-partials/tables.php:54
 msgid "\"Print QR Code\" opens a print-optimized view with the table name."
@@ -584,7 +584,7 @@ msgstr "Menge ändern: +/- Buttons neben dem Produkt"
 
 #: includes/modules/tables/class-tables.php:179
 msgid "Change size (S/M/L)"
-msgstr "Grösse ändern (S/M/L)"
+msgstr "Größe ändern (S/M/L)"
 
 #: templates/admin/help-superadmin.php:360
 msgid "Check WP-Cron, use SMTP plugin, check email logs."
@@ -739,7 +739,7 @@ msgstr "Warenkorb leeren: Schaltfläche «Warenkorb leeren»"
 
 #: templates/admin/help-staff.php:76
 msgid "Click \"Complete Order\""
-msgstr "Auf «Bestellung abschliessen» klicken"
+msgstr "Auf «Bestellung abschließen» klicken"
 
 #: templates/admin/help-partials/tables.php:41
 msgid "Click \"Create Tables\""
@@ -800,7 +800,7 @@ msgstr "Klicken Sie direkt auf den Statusbutton auf der Bestellkarte."
 
 #: includes/admin/class-admin.php:1139
 msgid "Close"
-msgstr "Schliessen"
+msgstr "Schließen"
 
 #: includes/modules/locations/class-locations.php:333
 #: includes/modules/locations/class-locations.php:733
@@ -850,7 +850,7 @@ msgstr "Firma"
 
 #: templates/checkout-optimized.php:55
 msgid "Complete Order"
-msgstr "Bestellung abschliessen"
+msgstr "Bestellung abschließen"
 
 #: includes/modules/order-dashboard/class-order-dashboard.php:77
 #: templates/admin/help-partials/reservations.php:79
@@ -1329,7 +1329,7 @@ msgstr "Deaktiviert"
 
 #: templates/admin/settings-tabbed.php:143
 msgid "Dismiss"
-msgstr "Schliessen"
+msgstr "Schließen"
 
 #: templates/admin/help-partials/locations.php:107
 msgid "Display: Tiles (side by side) or inline (compact)"
@@ -1813,7 +1813,7 @@ msgstr "Bei Problemen oder Fragen wenden Sie sich bitte an:"
 
 #: templates/admin/help-partials/tables.php:35
 msgid "For larger setups, you can create multiple tables in one step:"
-msgstr "Für grössere Setups können Sie mehrere Tische in einem Schritt erstellen:"
+msgstr "Für größere Setups können Sie mehrere Tische in einem Schritt erstellen:"
 
 #: templates/admin/settings.php:209
 msgid "For success and confirmation elements."
@@ -1997,13 +1997,13 @@ msgid ""
 "Hover over a table: ◐ switches shape (square/round), ⊞ switches size (S/M/L)"
 msgstr ""
 "Über einen Tisch hovern: ◐ wechselt die Form (quadratisch/rund), ⊞ wechselt "
-"die Grösse (S/M/L)"
+"die Größe (S/M/L)"
 
 #: templates/admin/table-plan.php:70
 msgid ""
 "Hover over table → change shape (◐) and size (⊞) · Auto-refresh every 30 sec."
 msgstr ""
-"Hover über Tisch → Form (◐) und Grösse (⊞) ändern · Auto-Refresh alle 30 Sek."
+"Hover über Tisch → Form (◐) und Größe (⊞) ändern · Auto-Refresh alle 30 Sek."
 
 #: templates/admin/help-partials/tables.php:64
 msgid "How Guests Order"
@@ -2512,7 +2512,7 @@ msgstr "Tag als Ruhetag markieren"
 
 #: templates/admin/debug-info.php:60
 msgid "Max. Upload Size"
-msgstr "Max. Upload-Grösse"
+msgstr "Max. Upload-Größe"
 
 #: templates/admin/help-partials/orders.php:38
 #: templates/admin/help-partials/reservations.php:62
@@ -3739,16 +3739,16 @@ msgid ""
 "Products with variants – e.g. \"Pizza\" in sizes S, M, L with different "
 "prices."
 msgstr ""
-"Produkte mit Varianten – z.B. «Pizza» in den Grössen S, M, L mit "
+"Produkte mit Varianten – z.B. «Pizza» in den Größen S, M, L mit "
 "unterschiedlichen Preisen."
 
 #: includes/modules/nutritional-info/class-nutritional-info.php:323
 msgid "Protein"
-msgstr "Eiweiss"
+msgstr "Eiweiß"
 
 #: includes/modules/nutritional-info/class-nutritional-info.php:133
 msgid "Protein (g)"
-msgstr "Eiweiss (g)"
+msgstr "Eiweiß (g)"
 
 #: templates/admin/help-partials/locations.php:28
 msgid "Publish the location"
@@ -4183,7 +4183,7 @@ msgstr "Wird gesendet …"
 
 #: includes/modules/nutritional-info/class-nutritional-info.php:90
 msgid "Serving Size"
-msgstr "Portionsgrösse"
+msgstr "Portionsgröße"
 
 #: includes/modules/nutritional-info/class-nutritional-info.php:172
 #: includes/modules/nutritional-info/class-nutritional-info.php:367
@@ -4437,12 +4437,12 @@ msgstr "Adresse und Kontaktdaten hinterlegen"
 
 #: includes/modules/locations/class-locations.php:266
 msgid "Street & Number"
-msgstr "Strasse & Nr."
+msgstr "Straße & Nr."
 
 #: templates/admin/checkout-fields.php:69
 #: templates/admin/checkout-fields.php:82
 msgid "Street and Number"
-msgstr "Strasse und Hausnummer"
+msgstr "Straße und Hausnummer"
 
 #: includes/modules/notifications/class-email-pickup-reminder.php:151
 msgid "Subject"
@@ -5256,7 +5256,7 @@ msgstr "Was der Gast ausfüllt"
 
 #: templates/checkout-optimized.php:88
 msgid "What's your name?"
-msgstr "Wie heissen Sie?"
+msgstr "Wie heißen Sie?"
 
 #: templates/admin/documentation.php:192
 msgid ""
@@ -5551,7 +5551,7 @@ msgstr "dies ist eine Erinnerung an Ihre bevorstehende Bestellung."
 
 #: templates/checkout-optimized.php:117
 msgid "your@email.com"
-msgstr "ihre@email.ch"
+msgstr "ihre@email.de"
 
 #: templates/admin/settings.php:154
 msgid "— Default (Shop Page) —"
