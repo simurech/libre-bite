@@ -71,7 +71,7 @@ $feature_groups = array(
 	),
 	'locations'    => array(
 		'title'       => __( 'Locations', 'libre-bite' ),
-		'description' => __( 'Location management', 'libre-bite' ),
+		'description' => __( 'At least one location must always be set up (required for POS and order overview). These toggles control additional location features.', 'libre-bite' ),
 		'features'    => array(
 			'enable_multi_location'    => array(
 				'label'       => __( 'Multi-Location', 'libre-bite' ),

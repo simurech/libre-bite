@@ -169,16 +169,14 @@ class LBite_Admin {
 		// ADMIN-BEREICH (administrator)
 		// ============================================
 
-		// Standorte (CPT) – nur wenn Standort-Feature aktiv
-		if ( lbite_feature_enabled( 'enable_location_selector' ) || lbite_feature_enabled( 'enable_multi_location' ) ) {
-			add_submenu_page(
-				'libre-bite',
-				__( 'Locations', 'libre-bite' ),
-				__( 'Locations', 'libre-bite' ),
-				'lbite_manage_locations',
-				'edit.php?post_type=lbite_location'
-			);
-		}
+		// Standorte (CPT) – immer anzeigen, da mindestens 1 Standort für POS und Kanban benötigt wird
+		add_submenu_page(
+			'libre-bite',
+			__( 'Locations', 'libre-bite' ),
+			__( 'Locations', 'libre-bite' ),
+			'lbite_manage_locations',
+			'edit.php?post_type=lbite_location'
+		);
 
 		// Tische (CPT) + Tischplan + Reservierungen – nur wenn Tischbestellung aktiv
 		if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
