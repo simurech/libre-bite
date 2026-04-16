@@ -59,6 +59,10 @@ class LBite_Locations {
 		// Admin-Spalten
 		$this->loader->add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', $this, 'add_admin_columns' );
 		$this->loader->add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', $this, 'render_admin_columns', 10, 2 );
+
+		// Free-User auf 1 publizierten Standort begrenzen
+		$this->loader->add_action( 'transition_post_status', $this, 'enforce_location_limit', 10, 3 );
+		$this->loader->add_action( 'admin_notices', $this, 'show_location_limit_notice' );
 	}
 
 	/**
@@ -778,5 +782,95 @@ class LBite_Locations {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Free-User auf 1 publizierten Standort begrenzen.
+	 *
+	 * Feuert bei jeder Status-Änderung eines Posts. Wird ein lbite_location-Post
+	 * erstmals auf «publish» gesetzt und der User ist nicht Premium, wird der Post
+	 * wieder auf «draft» gesetzt sofern bereits ein publizierter Standort existiert.
+	 *
+	 * @param string  $new_status Neuer Post-Status.
+	 * @param string  $old_status Alter Post-Status.
+	 * @param WP_Post $post       Post-Objekt.
+	 */
+	public function enforce_location_limit( $new_status, $old_status, $post ) {
+		if ( self::POST_TYPE !== $post->post_type ) {
+			return;
+		}
+
+		// Nur neue Publizierungen prüfen, keine Updates bestehender published Posts.
+		if ( 'publish' !== $new_status || 'publish' === $old_status ) {
+			return;
+		}
+
+		// Premium-User sind nicht eingeschränkt.
+		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is_premium() ) {
+			return;
+		}
+
+		// Prüfen ob bereits ein anderer publizierter Standort existiert.
+		$existing = get_posts(
+			array(
+				'post_type'      => self::POST_TYPE,
+				'post_status'    => 'publish',
+				'posts_per_page' => 1,
+				'post__not_in'   => array( $post->ID ),
+				'fields'         => 'ids',
+			)
+		);
+
+		if ( empty( $existing ) ) {
+			return; // Erster Standort – erlaubt.
+		}
+
+		// Limit erreicht: zurück auf Draft setzen.
+		// Hook temporär entfernen um Rekursion zu verhindern.
+		remove_action( 'transition_post_status', array( $this, 'enforce_location_limit' ), 10 );
+		wp_update_post(
+			array(
+				'ID'          => $post->ID,
+				'post_status' => 'draft',
+			)
+		);
+		add_action( 'transition_post_status', array( $this, 'enforce_location_limit' ), 10, 3 );
+
+		// Notice via Transient (überlebt den Redirect nach dem Speichern).
+		set_transient( 'lbite_location_limit_notice_' . get_current_user_id(), true, 30 );
+	}
+
+	/**
+	 * Admin-Notice anzeigen wenn das Standort-Limit erreicht wurde.
+	 */
+	public function show_location_limit_notice() {
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return;
+		}
+
+		// Nur auf der Standort-Liste und im Standort-Editor anzeigen.
+		if ( 'edit-' . self::POST_TYPE !== $screen->id && self::POST_TYPE !== $screen->id ) {
+			return;
+		}
+
+		$transient_key = 'lbite_location_limit_notice_' . get_current_user_id();
+		if ( ! get_transient( $transient_key ) ) {
+			return;
+		}
+
+		delete_transient( $transient_key );
+		?>
+		<div class="notice notice-warning">
+			<p>
+				<strong><?php esc_html_e( 'Location not published – the Free plan is limited to 1 location.', 'libre-bite' ); ?></strong>
+				<?php if ( function_exists( 'lbite_freemius' ) ) : ?>
+					<a href="<?php echo esc_url( lbite_freemius()->get_upgrade_url() ); ?>" style="margin-left: 8px;">
+						<?php esc_html_e( 'Upgrade to Pro for unlimited locations →', 'libre-bite' ); ?>
+					</a>
+				<?php endif; ?>
+			</p>
+		</div>
+		<?php
 	}
 }
