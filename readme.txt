@@ -226,8 +226,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 
 = 1.2.7 =
 * Fix: HPOS compatibility – order meta now stored via HPOS API ($order->update_meta_data / $order->get_meta) instead of post meta functions.
+* Fix: Capability checks now use plugin-specific capabilities (lbite_use_pos, lbite_view_dashboard) instead of generic edit_posts.
+* Fix: Locations menu is now always visible – at least one location is required for POS and order overview.
+* Fix: Free plan is now limited to 1 published location; attempting to publish a second one keeps it as draft and shows an upgrade notice.
 * Fix: Removed orphaned onboarding assets and broken "Restart Setup" button in Help page.
 * Fix: All hardcoded German strings in dashboard.js and pos.js replaced with localizable strings via wp_localize_script.
+* New: Added de_CH_informal (informal Swiss German) and de_DE_formal (formal German) translation variants.
 
 = 1.2.6 =
 * Improvement: Alle Plugin-Strings auf Englisch umgestellt (WordPress i18n-Standard).
