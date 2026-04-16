@@ -132,14 +132,6 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 							</a>
 						</div>
 
-						<hr style="margin: 16px 0;">
-						<p style="margin: 0;">
-							<span class="dashicons dashicons-welcome-learn-more" style="vertical-align: middle;"></span>
-							<button type="button" id="lbite-restart-onboarding" class="button button-secondary" style="margin-left: 4px;">
-								<?php esc_html_e( 'Restart Setup', 'libre-bite' ); ?>
-							</button>
-							<span id="lbite-onboarding-status" style="margin-left: 8px; color: #646970;"></span>
-						</p>
 					</div>
 
 					<!-- Bestellungen -->
@@ -272,27 +264,3 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 	</div>
 </div>
 
-<?php ob_start(); ?>
-jQuery(function($) {
-	$('#lbite-restart-onboarding').on('click', function() {
-		var $btn = $(this);
-		var $status = $('#lbite-onboarding-status');
-		$btn.prop('disabled', true);
-		$status.text('<?php echo esc_js( __( 'Opening...', 'libre-bite' ) ); ?>');
-		$.post(ajaxurl, {
-			action: 'lbite_restart_onboarding',
-			nonce: lbiteAdmin.nonce
-		}, function(response) {
-			if (response.success && response.data.redirect) {
-				window.location.href = response.data.redirect;
-			} else {
-				$btn.prop('disabled', false);
-				$status.text('<?php echo esc_js( __( 'Error – please reload the page.', 'libre-bite' ) ); ?>');
-			}
-		}).fail(function() {
-			$btn.prop('disabled', false);
-			$status.text('<?php echo esc_js( __( 'Fehler – bitte Seite neu laden.', 'libre-bite' ) ); ?>');
-		});
-	});
-});
-<?php wp_add_inline_script( 'lbite-admin', ob_get_clean() ); ?>

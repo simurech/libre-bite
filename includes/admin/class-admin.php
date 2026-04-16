@@ -502,10 +502,19 @@ class LBite_Admin {
 					'refreshInterval' => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
 					'locationColors'  => $lbite_dashboard_colors,
 					'strings'         => array(
-						'orderUpdated'  => __( 'Status updated', 'libre-bite' ),
-						'updateError'   => __( 'Error updating', 'libre-bite' ),
-						'soundActive'   => __( 'Sound active', 'libre-bite' ),
-						'soundInactive' => __( 'Sound off', 'libre-bite' ),
+						'orderUpdated'    => __( 'Status updated', 'libre-bite' ),
+						'updateError'     => __( 'Error updating', 'libre-bite' ),
+						'soundActive'     => __( 'Sound active', 'libre-bite' ),
+						'soundInactive'   => __( 'Sound off', 'libre-bite' ),
+						'loadingOrders'   => __( 'Loading orders...', 'libre-bite' ),
+						'loadOrdersError' => __( 'Error loading orders', 'libre-bite' ),
+						'confirmCancel'   => __( "Do you really want to cancel this order?\n\nThe payment will be automatically refunded.", 'libre-bite' ),
+						'cancellingOrder' => __( 'Cancelling order...', 'libre-bite' ),
+						'orderCancelled'  => __( 'Order cancelled and payment refunded', 'libre-bite' ),
+						'cancelError'     => __( 'Error cancelling', 'libre-bite' ),
+						'cancelOrderError' => __( 'Error cancelling order', 'libre-bite' ),
+						'unknownError'    => __( 'Unknown error', 'libre-bite' ),
+						'moreOrders'      => __( 'more order(s)', 'libre-bite' ),
 					),
 				)
 			);

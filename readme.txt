@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.6
+Stable tag: 1.2.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.2.7 =
+* Fix: HPOS compatibility – order meta now stored via HPOS API ($order->update_meta_data / $order->get_meta) instead of post meta functions.
+* Fix: Removed orphaned onboarding assets and broken "Restart Setup" button in Help page.
+* Fix: All hardcoded German strings in dashboard.js and pos.js replaced with localizable strings via wp_localize_script.
 
 = 1.2.6 =
 * Improvement: Alle Plugin-Strings auf Englisch umgestellt (WordPress i18n-Standard).

@@ -322,7 +322,7 @@
 				this.isLoading = true;
 				// Nur beim ersten Laden Overlay zeigen
 				if (this.lastOrderCount === 0) {
-					this.showLoading('Bestellungen werden geladen...');
+					this.showLoading(lbiteDashboard.strings.loadingOrders || 'Loading orders...');
 				}
 			}
 
@@ -344,7 +344,7 @@
 				},
 				error: () => {
 					if (!silent) {
-						window.lbiteNotify && window.lbiteNotify.error('Fehler beim Laden der Bestellungen');
+						window.lbiteNotify && window.lbiteNotify.error(lbiteDashboard.strings.loadOrdersError || 'Error loading orders');
 					}
 				},
 				complete: () => {
@@ -539,7 +539,7 @@
 				return;
 			}
 
-			if (!confirm('Möchten Sie diese Bestellung wirklich stornieren?\n\nDie Zahlung wird automatisch zurückerstattet.')) {
+			if (!confirm(lbiteDashboard.strings.confirmCancel || 'Do you really want to cancel this order?\n\nThe payment will be automatically refunded.')) {
 				return;
 			}
 
@@ -549,7 +549,7 @@
 			const $card = $(`.lbite-kanban-card[data-order-id="${orderId}"]`);
 			$card.css('opacity', '0.5').find('button').prop('disabled', true);
 
-			this.showLoading('Bestellung wird storniert...');
+			this.showLoading(lbiteDashboard.strings.cancellingOrder || 'Cancelling order...');
 
 			$.ajax({
 				url: lbiteDashboard.ajaxUrl,
@@ -561,15 +561,15 @@
 				},
 				success: (response) => {
 					if (response.success) {
-						window.lbiteNotify && window.lbiteNotify.success('Bestellung storniert und Zahlung zurückerstattet');
+						window.lbiteNotify && window.lbiteNotify.success(lbiteDashboard.strings.orderCancelled || 'Order cancelled and payment refunded');
 						this.loadOrders();
 					} else {
-						window.lbiteNotify && window.lbiteNotify.error('Fehler beim Stornieren: ' + escapeHtml(response.data && response.data.message ? response.data.message : 'Unbekannter Fehler'));
+						window.lbiteNotify && window.lbiteNotify.error((lbiteDashboard.strings.cancelError || 'Error cancelling') + ': ' + escapeHtml(response.data && response.data.message ? response.data.message : (lbiteDashboard.strings.unknownError || 'Unknown error')));
 						$card.css('opacity', '1').find('button').prop('disabled', false);
 					}
 				},
 				error: () => {
-					window.lbiteNotify && window.lbiteNotify.error('Fehler beim Stornieren der Bestellung');
+					window.lbiteNotify && window.lbiteNotify.error(lbiteDashboard.strings.cancelOrderError || 'Error cancelling order');
 					$card.css('opacity', '1').find('button').prop('disabled', false);
 				},
 				complete: () => {
@@ -617,14 +617,14 @@
 					if (this.completedOffset < response.data.total_count) {
 						const remainingCount = response.data.total_count - this.completedOffset;
 						const $loadMoreBtn = $('<button class="lbite-load-more-completed"></button>')
-							.text(`📋 ${remainingCount} weitere Bestellung(en) anzeigen`)
+							.text(`📋 ${remainingCount} ` + (lbiteDashboard.strings.moreOrders || 'more order(s)'))
 							.on('click', () => this.loadMoreCompleted());
 						$column.append($loadMoreBtn);
 					}
 				}
 			},
 			error: () => {
-				window.lbiteNotify.error('Fehler beim Laden weiterer Bestellungen');
+				window.lbiteNotify.error(lbiteDashboard.strings.loadMoreError || 'Error loading more orders');
 			}
 		});
 	},

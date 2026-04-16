@@ -3,7 +3,7 @@
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://github.com/simurech/libre-bite
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
- * Version:           1.2.6
+ * Version:           1.2.7
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            urech.dev
@@ -74,7 +74,7 @@ if ( function_exists( 'lbite_freemius' ) ) {
 }
 
 // Plugin-Konstanten definieren
-define( 'LBITE_VERSION', '1.2.6' );
+define( 'LBITE_VERSION', '1.2.7' );
 define( 'LBITE_PLUGIN_FILE', __FILE__ );
 define( 'LBITE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LBITE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

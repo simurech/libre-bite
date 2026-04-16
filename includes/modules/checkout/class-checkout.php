@@ -665,13 +665,18 @@ class LBite_Checkout {
 			$location_id = WC()->session->get( 'lbite_location_id' );
 		}
 
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			return;
+		}
+
 		if ( $location_id ) {
-			update_post_meta( $order_id, '_lbite_location_id', $location_id );
+			$order->update_meta_data( '_lbite_location_id', $location_id );
 
 			// Standort-Name speichern.
 			$location = get_post( $location_id );
 			if ( $location ) {
-				update_post_meta( $order_id, '_lbite_location_name', $location->post_title );
+				$order->update_meta_data( '_lbite_location_name', $location->post_title );
 			}
 		}
 
@@ -683,7 +688,7 @@ class LBite_Checkout {
 		}
 
 		if ( $order_type ) {
-			update_post_meta( $order_id, '_lbite_order_type', $order_type );
+			$order->update_meta_data( '_lbite_order_type', $order_type );
 
 			$pickup_time = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
 
@@ -693,9 +698,11 @@ class LBite_Checkout {
 			}
 
 			if ( 'later' === $order_type && $pickup_time ) {
-				update_post_meta( $order_id, '_lbite_pickup_time', $pickup_time );
+				$order->update_meta_data( '_lbite_pickup_time', $pickup_time );
 			}
 		}
+
+		$order->save();
 	}
 
 	/**
@@ -862,17 +869,24 @@ class LBite_Checkout {
 			return;
 		}
 
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			return;
+		}
+
 		if ( isset( $_POST['lbite_tip_type'] ) && 'none' !== sanitize_text_field( wp_unslash( $_POST['lbite_tip_type'] ) ) ) {
 			$tip_type = sanitize_text_field( wp_unslash( $_POST['lbite_tip_type'] ) );
-			update_post_meta( $order_id, '_lbite_tip_type', $tip_type );
+			$order->update_meta_data( '_lbite_tip_type', $tip_type );
 
 			if ( 'percentage' === $tip_type && isset( $_POST['lbite_tip_percentage'] ) ) {
 				$percentage = floatval( wp_unslash( $_POST['lbite_tip_percentage'] ) );
-				update_post_meta( $order_id, '_lbite_tip_percentage', $percentage );
+				$order->update_meta_data( '_lbite_tip_percentage', $percentage );
 			} elseif ( 'custom' === $tip_type && isset( $_POST['lbite_tip_custom'] ) ) {
 				$percentage = floatval( wp_unslash( $_POST['lbite_tip_custom'] ) );
-				update_post_meta( $order_id, '_lbite_tip_percentage', $percentage );
+				$order->update_meta_data( '_lbite_tip_percentage', $percentage );
 			}
+
+			$order->save();
 		}
 	}
 

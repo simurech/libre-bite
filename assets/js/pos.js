@@ -248,8 +248,8 @@
 				},
 				error: () => {
 					const $error = $('<p class="lbite-pos-error-message"></p>');
-					$error.text('Fehler beim Laden der Produkte. ');
-					$error.append($('<button class="button">Erneut versuchen</button>').on('click', () => this.clearCacheAndReload()));
+					$error.text((lbitePos.strings.loadProductsError || 'Error loading products') + '. ');
+					$error.append($('<button class="button">' + (lbitePos.strings.tryAgain || 'Try again') + '</button>').on('click', () => this.clearCacheAndReload()));
 					$('#lbite-product-grid').html($error);
 				},
 				complete: () => {
@@ -689,7 +689,7 @@
 			this.isProcessingOrder = true;
 
 			// Loading-Overlay anzeigen
-			this.showLoading('Bestellung wird erstellt...');
+			this.showLoading(lbitePos.strings.creatingOrder || 'Creating order...');
 			$('#lbite-pos-checkout').prop('disabled', true);
 
 			$.ajax({
@@ -708,7 +708,7 @@
 				},
 				success: (response) => {
 					if (response.success) {
-						window.lbiteNotify && window.lbiteNotify.success(`Bestellung #${response.data.order_number} erstellt (${response.data.total})`);
+						window.lbiteNotify && window.lbiteNotify.success((lbitePos.strings.orderCreatedPrefix || 'Order #') + response.data.order_number + (lbitePos.strings.orderCreatedSuffix || ' created') + ' (' + response.data.total + ')');
 						this.clearCart();
 					} else {
 						window.lbiteNotify && window.lbiteNotify.error(lbitePos.strings.orderError + ': ' + (response.data.message || ''));

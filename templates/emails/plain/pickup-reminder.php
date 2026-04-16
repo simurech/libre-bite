@@ -9,9 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$lbite_pickup_time      = get_post_meta( $order->get_id(), '_lbite_pickup_time', true );
-$lbite_location_name    = get_post_meta( $order->get_id(), '_lbite_location_name', true );
-$lbite_location_id      = get_post_meta( $order->get_id(), '_lbite_location_id', true );
+$lbite_pickup_time      = $order->get_meta( '_lbite_pickup_time' );
+$lbite_location_name    = $order->get_meta( '_lbite_location_name' );
+$lbite_location_id      = $order->get_meta( '_lbite_location_id' );
 $lbite_location_address = $lbite_location_id ? LBite_Locations::get_formatted_address( $lbite_location_id ) : '';
 $lbite_location_maps    = $lbite_location_id ? LBite_Locations::get_maps_url( $lbite_location_id ) : '';
 
