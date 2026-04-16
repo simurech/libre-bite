@@ -497,6 +497,7 @@ class LBite_Admin {
 				'lbiteDashboard',
 				array(
 					'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
+					'orderEditUrl'    => admin_url( 'post.php' ),
 					'nonce'           => wp_create_nonce( 'lbite_dashboard_nonce' ),
 					'soundUrl'        => get_option( 'lbite_notification_sound', LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' ),
 					'refreshInterval' => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
@@ -563,7 +564,7 @@ class LBite_Admin {
 	public function ajax_save_pos_location() {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
@@ -581,7 +582,7 @@ class LBite_Admin {
 	public function ajax_pos_get_products() {
 		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
@@ -652,7 +653,7 @@ class LBite_Admin {
 	public function ajax_pos_get_product_details() {
 		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 

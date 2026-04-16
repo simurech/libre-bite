@@ -634,7 +634,7 @@
 		 */
 		viewOrder: function(orderId) {
 			window.open(
-				lbiteDashboard.ajaxUrl.replace('admin-ajax.php', 'post.php?post=' + orderId + '&action=edit'),
+				lbiteDashboard.orderEditUrl + '?post=' + orderId + '&action=edit',
 				'_blank'
 			);
 		},

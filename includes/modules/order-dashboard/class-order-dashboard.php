@@ -372,7 +372,7 @@ class LBite_Order_Dashboard {
 	public function ajax_save_board_location() {
 		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lbite_view_dashboard' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 

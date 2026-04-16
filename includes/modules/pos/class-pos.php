@@ -130,6 +130,7 @@ class LBite_POS {
 			array(
 				'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
 				'nonce'          => wp_create_nonce( 'lbite_pos_nonce' ),
+				'userId'         => get_current_user_id(),
 				'currency'       => get_woocommerce_currency_symbol(),
 				'preloadData'    => $product_data,
 				'locationColors' => $pos_location_colors,
@@ -320,7 +321,7 @@ class LBite_POS {
 	public function ajax_get_products() {
 		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lbite_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
@@ -374,7 +375,7 @@ class LBite_POS {
 	public function ajax_create_order() {
 		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lbite_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 

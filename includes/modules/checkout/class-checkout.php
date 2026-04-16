@@ -904,6 +904,11 @@ class LBite_Checkout {
 			wp_send_json_error( array( 'message' => __( 'Invalid location', 'libre-bite' ) ) );
 		}
 
+		$location_post = get_post( $location_id );
+		if ( ! $location_post || 'lbite_location' !== $location_post->post_type || 'publish' !== $location_post->post_status ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid location', 'libre-bite' ) ) );
+		}
+
 		// Session initialisieren falls nötig.
 		if ( ! WC()->session ) {
 			WC()->session = new WC_Session_Handler();
@@ -924,12 +929,10 @@ class LBite_Checkout {
 			WC()->session->__unset( 'lbite_pickup_time' );
 		}
 
-		$location = get_post( $location_id );
-
 		wp_send_json_success(
 			array(
 				'message'       => __( 'Location set', 'libre-bite' ),
-				'location_name' => $location ? $location->post_title : '',
+				'location_name' => $location_post->post_title,
 			)
 		);
 	}

@@ -735,21 +735,25 @@
 		/**
 		 * Warenkorb speichern (LocalStorage)
 		 */
+		cartKey: function() {
+			return 'lbite_pos_cart_' + (lbitePos.userId || '0');
+		},
+
 		saveCart: function() {
-			localStorage.setItem('lbite_pos_cart', JSON.stringify(this.cart));
+			localStorage.setItem(this.cartKey(), JSON.stringify(this.cart));
 		},
 
 		/**
 		 * Gespeicherten Warenkorb laden
 		 */
 		loadSavedCart: function() {
-			const saved = localStorage.getItem('lbite_pos_cart');
+			const saved = localStorage.getItem(this.cartKey());
 			if (saved) {
 				try {
 					this.cart = JSON.parse(saved);
 					this.updateCartDisplay();
 				} catch (e) {
-					console.error('Fehler beim Laden des Warenkorbs', e);
+					console.error('Error loading cart', e);
 				}
 			}
 		},
