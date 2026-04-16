@@ -50,9 +50,9 @@ class LBite_Installer {
 		update_option( 'lbite_version', LBITE_VERSION );
 		update_option( 'lbite_installed_date', current_time( 'mysql' ) );
 
-		// Einmaligen Redirect zur Onboarding-Seite setzen (nur bei Erstinstallation)
-		if ( ! get_option( 'lbite_onboarding_completed' ) ) {
-			add_option( 'lbite_do_activation_redirect', true );
+		// Welcome-Notice bei Erstinstallation anzeigen
+		if ( ! get_option( 'lbite_version' ) ) {
+			add_option( 'lbite_show_welcome_notice', true );
 		}
 	}
 
@@ -217,43 +217,42 @@ class LBite_Installer {
 	 * Standard Feature-Toggles setzen
 	 */
 	private static function set_default_features() {
-		// Bei Erstinstallation alle Features deaktiviert – Benutzer wählt im Onboarding.
 		$default_features = array(
-			// Bestellsystem
-			'enable_pos'                => false,
-			'enable_scheduled_orders'   => false,
-			'enable_order_notes'        => false,
-			'enable_order_cancellation' => false,
-			'enable_table_ordering'    => false,
-			'enable_reservations'      => false,
+			// Bestellsystem – Basis aktiv
+			'enable_pos'                => true,
+			'enable_scheduled_orders'   => true,
+			'enable_order_notes'        => true,
+			'enable_order_cancellation' => true,
+			'enable_table_ordering'     => false, // Pro
+			'enable_reservations'       => false, // Pro
 
-			// Checkout
-			'enable_optimized_checkout' => false,
-			'enable_tips'               => false,
-			'enable_rounding'           => false,
-			'enable_guest_checkout'     => false,
-			'enable_email_field'        => false,
-			'enable_phone_field'        => false,
+			// Checkout – Pro-Features deaktiviert
+			'enable_optimized_checkout' => false, // Pro
+			'enable_tips'               => false, // Pro
+			'enable_rounding'           => true,
+			'enable_guest_checkout'     => true,
+			'enable_email_field'        => true,
+			'enable_phone_field'        => true,
 
-			// Standorte
-			'enable_multi_location'     => false,
-			'enable_location_selector'  => false,
-			'enable_opening_hours'      => false,
+			// Standorte – Basis aktiv
+			'enable_multi_location'     => false, // Pro
+			'enable_location_selector'  => true,
+			'enable_opening_hours'      => true,
 
-			// Benachrichtigungen
-			'enable_pickup_reminders'   => false,
-			'enable_sound_notifications' => false,
-			'enable_admin_email'        => false,
+			// Benachrichtigungen – Pro-Features deaktiviert
+			'enable_pickup_reminders'   => false, // Pro
+			'enable_sound_notifications' => false, // Pro
+			'enable_admin_email'        => true,
 
 			// Produkte
-			'enable_product_options'    => false,
-			'enable_nutritional_info'   => false,
-			'enable_allergens'          => false,
+			'enable_product_options'    => true,
+			'enable_nutritional_info'   => false, // Pro
+			'enable_allergens'          => false, // Pro
 
-			// Dashboard
-			'enable_kanban_board'       => false,
-			'enable_auto_status_change' => false,
-			'enable_fullscreen_mode'    => false,
+			// Dashboard – Basis aktiv
+			'enable_kanban_board'       => true,
+			'enable_auto_status_change' => true,
+			'enable_fullscreen_mode'    => true,
 		);
 
 		if ( false === get_option( 'lbite_features' ) ) {

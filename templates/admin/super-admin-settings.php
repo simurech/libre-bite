@@ -46,13 +46,13 @@ $feature_groups = array(
 			'enable_optimized_checkout' => array(
 				'label'       => __( 'Optimized Checkout', 'libre-bite' ),
 				'description' => __( 'Simplified checkout flow', 'libre-bite' ),
-				'default'     => true,
+				'default'     => false,
 				'premium'     => true,
 			),
 			'enable_tips'               => array(
 				'label'       => __( 'Tip System', 'libre-bite' ),
 				'description' => __( 'Show tip options in checkout', 'libre-bite' ),
-				'default'     => true,
+				'default'     => false,
 				'premium'     => true,
 			),
 			'enable_rounding'           => array(
@@ -112,13 +112,13 @@ $feature_groups = array(
 			'enable_pickup_reminders'    => array(
 				'label'       => __( 'Pickup Reminders', 'libre-bite' ),
 				'description' => __( 'Send email reminder before pickup time', 'libre-bite' ),
-				'default'     => true,
+				'default'     => false,
 				'premium'     => true,
 			),
 			'enable_sound_notifications' => array(
 				'label'       => __( 'Sound Notifications', 'libre-bite' ),
 				'description' => __( 'Play sound alert for new orders', 'libre-bite' ),
-				'default'     => true,
+				'default'     => false,
 				'premium'     => true,
 			),
 			'enable_admin_email'         => array(
@@ -190,25 +190,29 @@ $feature_groups = array(
 						<tbody>
 							<?php foreach ( $group['features'] as $feature_key => $feature ) : ?>
 								<?php
-								$is_enabled = isset( $features[ $feature_key ] ) ? $features[ $feature_key ] : $feature['default'];
-								$is_premium = $feature['premium'];
+								$is_enabled  = isset( $features[ $feature_key ] ) ? $features[ $feature_key ] : $feature['default'];
+								$is_premium  = $feature['premium'];
+								$is_locked   = $is_premium && function_exists( 'lbite_freemius' ) && ! lbite_freemius()->is_premium();
 								?>
-								<tr class="<?php echo $is_premium ? 'lbite-premium-feature' : ''; ?>">
+								<tr class="<?php echo $is_premium ? 'lbite-premium-feature' : ''; ?><?php echo $is_locked ? ' lbite-feature-locked' : ''; ?>">
 									<th scope="row">
 										<label for="<?php echo esc_attr( $feature_key ); ?>">
 											<?php echo esc_html( $feature['label'] ); ?>
 											<?php if ( $is_premium ) : ?>
-												<span class="lbite-premium-badge" title="<?php esc_attr_e( 'Premium Feature', 'libre-bite' ); ?>">Premium</span>
+												<span class="lbite-premium-badge" title="<?php esc_attr_e( 'Premium Feature', 'libre-bite' ); ?>">
+													<?php if ( $is_locked ) : ?>🔒 <?php endif; ?>Premium
+												</span>
 											<?php endif; ?>
 										</label>
 									</th>
 									<td>
-										<label class="lbite-toggle">
+										<label class="lbite-toggle<?php echo $is_locked ? ' lbite-toggle--locked' : ''; ?>">
 											<input type="checkbox"
 												   id="<?php echo esc_attr( $feature_key ); ?>"
 												   name="features[<?php echo esc_attr( $feature_key ); ?>]"
 												   value="1"
-												   <?php checked( $is_enabled ); ?>>
+												   <?php checked( $is_enabled ); ?>
+												   <?php disabled( $is_locked, true ); ?>>
 											<span class="lbite-toggle-slider"></span>
 										</label>
 										<p class="description"><?php echo esc_html( $feature['description'] ); ?></p>

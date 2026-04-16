@@ -285,6 +285,59 @@ table.wp-list-table code {
 	background: #f9f9ff;
 }
 
+.lbite-feature-locked {
+	opacity: 0.6;
+}
+
+.lbite-feature-locked .lbite-toggle--locked {
+	cursor: not-allowed;
+}
+
+.lbite-feature-locked .lbite-toggle--locked input[disabled] + .lbite-toggle-slider {
+	background-color: #ccc;
+	cursor: not-allowed;
+}
+
+/* Welcome-Notice */
+.lbite-welcome-notice {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: #fff;
+	padding: 20px 24px;
+	border-radius: 8px;
+	margin: 0 0 20px;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.lbite-welcome-notice__content h2 {
+	color: #fff;
+	margin: 0 0 6px;
+	font-size: 18px;
+}
+
+.lbite-welcome-notice__content p {
+	margin: 0;
+	opacity: 0.9;
+}
+
+.lbite-welcome-notice__dismiss {
+	background: none;
+	border: none;
+	color: #fff;
+	font-size: 18px;
+	cursor: pointer;
+	opacity: 0.8;
+	padding: 4px 8px;
+	flex-shrink: 0;
+	margin-left: 16px;
+}
+
+.lbite-welcome-notice__dismiss:hover {
+	opacity: 1;
+}
+
 /* Toggle Switch */
 .lbite-toggle {
 	position: relative;

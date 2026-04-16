@@ -84,14 +84,14 @@ class LBite_Features {
 		// Checkout
 		'enable_optimized_checkout' => array(
 			'group'       => 'checkout',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Optimized Checkout',
 			'description' => 'Simplified checkout flow',
 		),
 		'enable_tips'               => array(
 			'group'       => 'checkout',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Tip System',
 			'description' => 'Show tip options at checkout',
@@ -151,14 +151,14 @@ class LBite_Features {
 		// Notifications
 		'enable_pickup_reminders'   => array(
 			'group'       => 'notifications',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Pickup Reminders',
 			'description' => 'Send email reminder before pickup time',
 		),
 		'enable_sound_notifications' => array(
 			'group'       => 'notifications',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Sound Notifications',
 			'description' => 'Play a sound for new orders',

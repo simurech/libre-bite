@@ -134,6 +134,16 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 <div class="wrap">
 	<h1><?php echo esc_html( $lbite_plugin_name . ' – ' . __( 'Settings', 'libre-bite' ) ); ?></h1>
 
+	<?php if ( get_option( 'lbite_show_welcome_notice' ) ) : ?>
+	<div class="lbite-welcome-notice" id="lbite-welcome-notice">
+		<div class="lbite-welcome-notice__content">
+			<h2><?php esc_html_e( 'Welcome to Libre Bite!', 'libre-bite' ); ?></h2>
+			<p><?php esc_html_e( 'Activate the features you need in the Features tab. All core features are enabled by default – you can adjust this at any time.', 'libre-bite' ); ?></p>
+		</div>
+		<button type="button" class="lbite-welcome-notice__dismiss" aria-label="<?php esc_attr_e( 'Dismiss', 'libre-bite' ); ?>">&#x2715;</button>
+	</div>
+	<?php endif; ?>
+
 	<?php // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Erfolgs-Hinweis nach Speichern; kein DB-Schreibzugriff. ?>
 	<?php if ( isset( $_GET['updated'] ) && '1' === sanitize_key( wp_unslash( $_GET['updated'] ) ) ) : ?>
 		<div class="notice notice-success is-dismissible">

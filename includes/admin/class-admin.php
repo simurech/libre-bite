@@ -76,7 +76,7 @@ class LBite_Admin {
 		$this->loader->add_action( 'wp_ajax_lbite_save_features', $this, 'ajax_save_features' );
 		$this->loader->add_action( 'wp_ajax_lbite_save_support_settings', $this, 'ajax_save_support_settings' );
 		$this->loader->add_action( 'wp_ajax_lbite_get_location_tables', $this, 'ajax_get_location_tables' );
-		$this->loader->add_action( 'wp_ajax_lbite_restart_onboarding', $this, 'ajax_restart_onboarding' );
+		$this->loader->add_action( 'wp_ajax_lbite_dismiss_welcome_notice', $this, 'ajax_dismiss_welcome_notice' );
 
 		// Bestellungs-Counter im Menü-Badge (nach Menü-Aufbau)
 		$this->loader->add_action( 'admin_menu', $this, 'inject_order_count_badge', 999 );
@@ -453,6 +453,13 @@ class LBite_Admin {
 				array( 'jquery' ),
 				LBITE_VERSION,
 				true
+			);
+			wp_localize_script(
+				'lbite-admin-settings',
+				'lbiteAdminSettings',
+				array(
+					'nonce' => wp_create_nonce( 'lbite_admin_nonce' ),
+				)
 			);
 		}
 
@@ -992,10 +999,33 @@ class LBite_Admin {
 			wp_send_json_error( array( 'message' => __( 'Invalid data', 'libre-bite' ) ) );
 		}
 
+		// Pro-Features in der Gratis-Version schützen
+		$is_premium    = function_exists( 'lbite_freemius' ) && lbite_freemius()->is_premium();
+		$premium_keys  = array(
+			'enable_optimized_checkout',
+			'enable_tips',
+			'enable_multi_location',
+			'enable_table_ordering',
+			'enable_reservations',
+			'enable_pickup_reminders',
+			'enable_sound_notifications',
+			'enable_nutritional_info',
+			'enable_allergens',
+		);
+
+		// Bestehende Werte laden um Pro-Features nicht zu überschreiben
+		$existing_features = get_option( 'lbite_features', array() );
+
 		// Alle Feature-Werte als boolean konvertieren
 		$sanitized_features = array();
 		foreach ( $features as $key => $value ) {
-			$sanitized_features[ sanitize_key( $key ) ] = (bool) $value;
+			$clean_key = sanitize_key( $key );
+			// Pro-Feature in Gratis-Version: bestehenden Wert beibehalten (immer false)
+			if ( ! $is_premium && in_array( $clean_key, $premium_keys, true ) ) {
+				$sanitized_features[ $clean_key ] = false;
+			} else {
+				$sanitized_features[ $clean_key ] = (bool) $value;
+			}
 		}
 
 		update_option( 'lbite_features', $sanitized_features );
@@ -1027,19 +1057,17 @@ class LBite_Admin {
 	}
 
 	/**
-	 * AJAX: Onboarding neu starten
+	 * AJAX: Welcome-Notice schliessen
 	 */
-	public function ajax_restart_onboarding() {
+	public function ajax_dismiss_welcome_notice() {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
-		delete_option( 'lbite_onboarding_completed' );
-		update_option( 'lbite_do_activation_redirect', true );
-
-		wp_send_json_success( array( 'redirect' => admin_url( 'admin.php?page=lbite-onboarding' ) ) );
+		update_option( 'lbite_show_welcome_notice', false );
+		wp_send_json_success();
 	}
 
 	/**

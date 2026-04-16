@@ -1,4 +1,14 @@
 jQuery(document).ready(function($) {
+	// Welcome-Notice schliessen
+	$('#lbite-welcome-notice').on('click', '.lbite-welcome-notice__dismiss', function() {
+		var $notice = $('#lbite-welcome-notice');
+		$notice.fadeOut(200);
+		$.post(ajaxurl, {
+			action: 'lbite_dismiss_welcome_notice',
+			nonce: lbiteAdminSettings.nonce
+		});
+	});
+
 	// "Alle auswählen/abwählen" Funktionalität
 	$('.lbite-toggle-all-menus').on('change', function() {
 		var roleKey = $(this).data('role');
