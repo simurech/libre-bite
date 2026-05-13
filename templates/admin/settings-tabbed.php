@@ -110,6 +110,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_dashboard_refresh_interval', isset( $_POST['lbite_dashboard_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_dashboard_refresh_interval'] ) ) : 30 );
 			update_option( 'lbite_reservation_refresh_interval', isset( $_POST['lbite_reservation_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_reservation_refresh_interval'] ) ) : 60 );
 			update_option( 'lbite_notification_sound', isset( $_POST['lbite_notification_sound'] ) ? esc_url_raw( wp_unslash( $_POST['lbite_notification_sound'] ) ) : '' );
+			update_option( 'lbite_show_future_orders', isset( $_POST['lbite_show_future_orders'] ) );
 			$lbite_did_save = true;
 			break;
 
@@ -356,6 +357,26 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 								<p class="description">
 									<?php echo esc_html( $lbite_default_sound_exists ? __( 'Default sound is available. You can also select your own sound from the media library.', 'libre-bite' ) : __( 'Select a sound from your media library.', 'libre-bite' ) ); ?>
 								</p>
+							</td>
+						</tr>
+						<?php endif; ?>
+						<?php
+						$lbite_is_premium_f7 = function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only();
+						?>
+						<?php if ( lbite_feature_enabled( 'enable_future_orders_dimmed' ) || $lbite_is_premium_f7 ) : ?>
+						<tr>
+							<th><?php esc_html_e( 'Show Future Pre-orders', 'libre-bite' ); ?></th>
+							<td>
+								<?php if ( ! $lbite_is_premium_f7 ) : ?>
+									<span class="lbite-pro-badge"><?php esc_html_e( 'Pro', 'libre-bite' ); ?></span>
+								<?php endif; ?>
+								<label>
+									<input type="checkbox" name="lbite_show_future_orders" value="1"
+										<?php checked( get_option( 'lbite_show_future_orders', true ) ); ?>
+										<?php echo $lbite_is_premium_f7 ? '' : 'disabled'; ?>>
+									<?php esc_html_e( 'Show pre-orders with a pickup time further in the future than the preparation time in the Kanban board (dimmed).', 'libre-bite' ); ?>
+								</label>
+								<p class="description"><?php esc_html_e( 'When disabled, future pre-orders are completely hidden from the Kanban board until they are within the preparation window.', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
 						<?php endif; ?>

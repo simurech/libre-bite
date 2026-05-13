@@ -460,3 +460,10 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 	}
 }
 
+
+.lbite-kanban-card--future {
+	opacity: 0.45;
+	filter: grayscale(50%);
+	border-left-color: #bbb;
+	cursor: default;
+}

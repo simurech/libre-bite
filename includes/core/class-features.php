@@ -209,12 +209,19 @@ class LBite_Features {
 			'label'       => 'Automatic Status Change',
 			'description' => 'Automatic status change on timeout',
 		),
-		'enable_fullscreen_mode'    => array(
+		'enable_fullscreen_mode'      => array(
 			'group'       => 'dashboard',
 			'default'     => true,
 			'premium'     => false,
 			'label'       => 'Fullscreen Mode',
 			'description' => 'Enable fullscreen view for tablets',
+		),
+		'enable_future_orders_dimmed' => array(
+			'group'       => 'dashboard',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Dim Future Pre-orders',
+			'description' => 'Grey out pre-orders with pickup time beyond preparation time in the Kanban board',
 		),
 	);
 

@@ -105,6 +105,7 @@
 					animation: 150,
 					ghostClass: 'lbite-ghost',
 					dragClass: 'lbite-dragging',
+					filter: '.lbite-kanban-card--future',
 					onEnd: (evt) => {
 						const orderId = evt.item.dataset.orderId;
 						const newStatus = evt.to.closest('.lbite-kanban-column').dataset.status;
@@ -412,6 +413,9 @@
 		 */
 		createOrderCard: function(order, currentStatus) {
 			const $card = $('<div class="lbite-kanban-card"></div>').attr('data-order-id', order.id);
+			if (order.is_future) {
+				$card.addClass('lbite-kanban-card--future');
+			}
 			
 			// Header (Nummer & Name)
 			const customerNameRaw = order.customer && order.customer.trim() ? order.customer.trim() : '';
@@ -450,31 +454,33 @@
 			
 			// Actions
 			const $actions = $('<div class="lbite-kanban-card-actions"></div>');
-			
-			// Status-Button
-			const statusButtons = {
-				'incoming': { next: 'preparing', label: 'Zubereitung starten', icon: '🔪', color: '#f39c12' },
-				'preparing': { next: 'ready', label: 'Abholbereit', icon: '✅', color: '#27ae60' },
-				'ready': { next: 'completed', label: 'Abgeschlossen', icon: '🎉', color: '#3498db' },
-				'completed': null
-			};
-			
-			const statusButton = statusButtons[currentStatus];
-			if (statusButton) {
-				const $sBtn = $('<button class="lbite-status-button"></button>')
-					.addClass(`lbite-status-button-${currentStatus}`)
-					.text(`${statusButton.icon} ${statusButton.label}`)
-					.on('click', () => this.moveToNextStatus(order.id, statusButton.next));
-				$actions.append($sBtn);
+
+			if (!order.is_future) {
+				// Status-Button
+				const statusButtons = {
+					'incoming': { next: 'preparing', label: 'Zubereitung starten', icon: '🔪', color: '#f39c12' },
+					'preparing': { next: 'ready', label: 'Abholbereit', icon: '✅', color: '#27ae60' },
+					'ready': { next: 'completed', label: 'Abgeschlossen', icon: '🎉', color: '#3498db' },
+					'completed': null
+				};
+
+				const statusButton = statusButtons[currentStatus];
+				if (statusButton) {
+					const $sBtn = $('<button class="lbite-status-button"></button>')
+						.addClass(`lbite-status-button-${currentStatus}`)
+						.text(`${statusButton.icon} ${statusButton.label}`)
+						.on('click', () => this.moveToNextStatus(order.id, statusButton.next));
+					$actions.append($sBtn);
+				}
+
+				// Stornieren-Button
+				if (currentStatus !== 'completed') {
+					const $cBtn = $('<button class="lbite-cancel-button" title="Bestellung stornieren">🗑️</button>')
+						.on('click', () => this.cancelOrder(order.id));
+					$actions.append($cBtn);
+				}
 			}
-			
-			// Stornieren-Button
-			if (currentStatus !== 'completed') {
-				const $cBtn = $('<button class="lbite-cancel-button" title="Bestellung stornieren">🗑️</button>')
-					.on('click', () => this.cancelOrder(order.id));
-				$actions.append($cBtn);
-			}
-			
+
 			$card.append($actions);
 			return $card;
 		},

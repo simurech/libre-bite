@@ -254,6 +254,13 @@ class LBite_Order_Dashboard {
 			);
 		}
 
+		// Vorbestellung in der Zukunft? (Premium-Feature enable_future_orders_dimmed)
+		$is_future = false;
+		if ( lbite_feature_enabled( 'enable_future_orders_dimmed' ) && 'later' === $order_type && $pickup_time ) {
+			$prep_time = (int) get_option( 'lbite_preparation_time', 30 );
+			$is_future = lbite_local_time_to_timestamp( $pickup_time ) > ( current_time( 'timestamp' ) + $prep_time * 60 );
+		}
+
 		$data = array(
 			'id'          => $order->get_id(),
 			'number'      => $order->get_order_number(),
@@ -266,6 +273,7 @@ class LBite_Order_Dashboard {
 			'total'       => $order->get_formatted_order_total(),
 			'items'       => $items,
 			'notes'       => $order->get_customer_note(),
+			'is_future'   => $is_future,
 		);
 
 		return apply_filters( 'lbite_dashboard_order_data', $data, $order );
