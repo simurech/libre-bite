@@ -324,6 +324,8 @@ class LBite_Locations {
 				$is_closed = isset( $opening_hours[ $day_key ]['closed'] ) ? $opening_hours[ $day_key ]['closed'] : false;
 				$open      = isset( $opening_hours[ $day_key ]['open'] ) ? $opening_hours[ $day_key ]['open'] : '09:00';
 				$close     = isset( $opening_hours[ $day_key ]['close'] ) ? $opening_hours[ $day_key ]['close'] : '18:00';
+				$open2     = isset( $opening_hours[ $day_key ]['open2'] ) ? $opening_hours[ $day_key ]['open2'] : '';
+				$close2    = isset( $opening_hours[ $day_key ]['close2'] ) ? $opening_hours[ $day_key ]['close2'] : '';
 				?>
 				<tr>
 					<th><?php echo esc_html( $day_label ); ?></th>
@@ -340,6 +342,16 @@ class LBite_Locations {
 						<label>
 							<?php esc_html_e( 'To', 'libre-bite' ); ?>
 							<input type="time" name="lbite_hours[<?php echo esc_attr( $day_key ); ?>][close]" value="<?php echo esc_attr( $close ); ?>">
+						</label>
+						<br>
+						<span style="color:#888; font-size:11px;"><?php esc_html_e( '2nd window (optional):', 'libre-bite' ); ?></span>
+						<label>
+							<?php esc_html_e( 'From', 'libre-bite' ); ?>
+							<input type="time" name="lbite_hours[<?php echo esc_attr( $day_key ); ?>][open2]" value="<?php echo esc_attr( $open2 ); ?>">
+						</label>
+						<label>
+							<?php esc_html_e( 'To', 'libre-bite' ); ?>
+							<input type="time" name="lbite_hours[<?php echo esc_attr( $day_key ); ?>][close2]" value="<?php echo esc_attr( $close2 ); ?>">
 						</label>
 					</td>
 				</tr>
@@ -416,6 +428,8 @@ class LBite_Locations {
 					'closed' => isset( $times['closed'] ),
 					'open'   => isset( $times['open'] ) ? sanitize_text_field( $times['open'] ) : '',
 					'close'  => isset( $times['close'] ) ? sanitize_text_field( $times['close'] ) : '',
+					'open2'  => isset( $times['open2'] ) ? sanitize_text_field( $times['open2'] ) : '',
+					'close2' => isset( $times['close2'] ) ? sanitize_text_field( $times['close2'] ) : '',
 				);
 			}
 			update_post_meta( $post_id, '_lbite_opening_hours', $hours );
@@ -680,40 +694,57 @@ class LBite_Locations {
 
 		// Prüfen ob heute geöffnet.
 		if ( isset( $opening_hours[ $current_day ] ) && ! $opening_hours[ $current_day ]['closed'] ) {
-			$open_hhmm  = self::normalize_time( $opening_hours[ $current_day ]['open'] );
-			$close_hhmm = self::normalize_time( $opening_hours[ $current_day ]['close'] );
+			$today      = wp_date( 'Y-m-d' );
+			$current_ts = strtotime( $today . ' ' . $current_hhmm ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
-			// Ist aktuell geöffnet?
-			if ( $current_hhmm >= $open_hhmm && $current_hhmm < $close_hhmm ) {
-				// Schliesst in weniger als 60 Minuten?
-				$close_ts   = strtotime( wp_date( 'Y-m-d' ) . ' ' . $close_hhmm ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-				$current_ts = strtotime( wp_date( 'Y-m-d' ) . ' ' . $current_hhmm ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-				$remaining  = $close_ts - $current_ts;
-
-				if ( $remaining <= 3600 && $remaining > 0 ) {
-					return array(
-						'type' => 'closing-soon',
-						/* translators: %s: closing time */
-						'text' => sprintf( __( 'Closes at %s', 'libre-bite' ), $close_hhmm ),
-					);
-				}
-
-				return array(
-					'type' => 'open',
-					'text' => __( 'Open', 'libre-bite' ),
+			// Beide Fenster prüfen.
+			$windows = array();
+			if ( ! empty( $opening_hours[ $current_day ]['open'] ) && ! empty( $opening_hours[ $current_day ]['close'] ) ) {
+				$windows[] = array(
+					'open'  => self::normalize_time( $opening_hours[ $current_day ]['open'] ),
+					'close' => self::normalize_time( $opening_hours[ $current_day ]['close'] ),
+				);
+			}
+			if ( ! empty( $opening_hours[ $current_day ]['open2'] ) && ! empty( $opening_hours[ $current_day ]['close2'] ) ) {
+				$windows[] = array(
+					'open'  => self::normalize_time( $opening_hours[ $current_day ]['open2'] ),
+					'close' => self::normalize_time( $opening_hours[ $current_day ]['close2'] ),
 				);
 			}
 
-			// Öffnet bald (30 Min vor Öffnung)?
-			if ( $current_hhmm < $open_hhmm ) {
-				$open_ts    = strtotime( wp_date( 'Y-m-d' ) . ' ' . $open_hhmm ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-				$current_ts = strtotime( wp_date( 'Y-m-d' ) . ' ' . $current_hhmm ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-				if ( ( $open_ts - $current_ts ) <= 1800 ) {
+			foreach ( $windows as $window ) {
+				$open_hhmm  = $window['open'];
+				$close_hhmm = $window['close'];
+
+				// Aktuell geöffnet?
+				if ( $current_hhmm >= $open_hhmm && $current_hhmm < $close_hhmm ) {
+					$close_ts  = strtotime( $today . ' ' . $close_hhmm ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+					$remaining = $close_ts - $current_ts;
+
+					if ( $remaining <= 3600 && $remaining > 0 ) {
+						return array(
+							'type' => 'closing-soon',
+							/* translators: %s: closing time */
+							'text' => sprintf( __( 'Closes at %s', 'libre-bite' ), $close_hhmm ),
+						);
+					}
+
 					return array(
-						'type' => 'opening-soon',
-						/* translators: %s: opening time */
-						'text' => sprintf( __( 'Opens at %s', 'libre-bite' ), $open_hhmm ),
+						'type' => 'open',
+						'text' => __( 'Open', 'libre-bite' ),
 					);
+				}
+
+				// Öffnet bald (30 Min vor Öffnung)?
+				if ( $current_hhmm < $open_hhmm ) {
+					$open_ts = strtotime( $today . ' ' . $open_hhmm ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+					if ( ( $open_ts - $current_ts ) <= 1800 ) {
+						return array(
+							'type' => 'opening-soon',
+							/* translators: %s: opening time */
+							'text' => sprintf( __( 'Opens at %s', 'libre-bite' ), $open_hhmm ),
+						);
+					}
 				}
 			}
 		}
@@ -762,14 +793,29 @@ class LBite_Locations {
 			$day_name        = $day_names[ $check_day_index ];
 
 			if ( isset( $opening_hours[ $day_name ] ) && ! $opening_hours[ $day_name ]['closed'] ) {
-				$open_hhmm = self::normalize_time( $opening_hours[ $day_name ]['open'] );
+				// Frühestes Fenster des Tages ermitteln.
+				$candidates = array();
+				if ( ! empty( $opening_hours[ $day_name ]['open'] ) ) {
+					$candidates[] = self::normalize_time( $opening_hours[ $day_name ]['open'] );
+				}
+				if ( ! empty( $opening_hours[ $day_name ]['open2'] ) ) {
+					$candidates[] = self::normalize_time( $opening_hours[ $day_name ]['open2'] );
+				}
+				if ( empty( $candidates ) ) {
+					continue;
+				}
+				sort( $candidates );
+				$open_hhmm = $candidates[0];
 
 				if ( 0 === $i ) {
-					// Heute: nur wenn Öffnung noch bevorsteht (robuster HH:MM-Vergleich).
-					if ( $current_hhmm < $open_hhmm ) {
-						/* translators: %s: opening time */
-						return sprintf( __( 'Opens today %s', 'libre-bite' ), $open_hhmm );
+					// Heute: frühestes noch bevorstehendes Fenster suchen.
+					$future_candidates = array_filter( $candidates, fn( $t ) => $t > $current_hhmm );
+					if ( empty( $future_candidates ) ) {
+						continue;
 					}
+					$open_hhmm = reset( $future_candidates );
+					/* translators: %s: opening time */
+					return sprintf( __( 'Opens today %s', 'libre-bite' ), $open_hhmm );
 				} elseif ( 1 === $i ) {
 					/* translators: %s: opening time */
 					return sprintf( __( 'Opens tomorrow %s', 'libre-bite' ), $open_hhmm );

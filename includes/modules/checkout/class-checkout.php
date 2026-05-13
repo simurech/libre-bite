@@ -1029,44 +1029,81 @@ class LBite_Checkout {
 			return array();
 		}
 
-		$open  = isset( $opening_hours[ $day_name ]['open'] ) ? $opening_hours[ $day_name ]['open'] : '09:00';
-		$close = isset( $opening_hours[ $day_name ]['close'] ) ? $opening_hours[ $day_name ]['close'] : '18:00';
-
-		// Timestamps in WP-Timezone berechnen (korrekt für Sommer-/Winterzeit).
-		$open_dt  = new DateTime( $date . ' ' . $open, $tz );
-		$close_dt = new DateTime( $date . ' ' . $close, $tz );
-
-		$open_timestamp  = $open_dt->getTimestamp();
-		$close_timestamp = $close_dt->getTimestamp();
-
 		// Aktueller Zeitpunkt und frühstmöglicher Slot (Vorbereitungszeit).
 		$prep_time     = (int) get_option( 'lbite_preparation_time', 30 );
 		$now_dt        = new DateTime( 'now', $tz );
 		$now_ts        = $now_dt->getTimestamp();
 		$earliest_slot = $now_ts + ( $prep_time * 60 );
+		$is_today      = ( $date === $now_dt->format( 'Y-m-d' ) );
 
-		// Nur zukünftige Slots für heute (Datum in WP-Timezone vergleichen).
-		$is_today = ( $date === $now_dt->format( 'Y-m-d' ) );
+		// Zeitfenster für diesen Tag zusammenstellen (Fenster 1 + optional Fenster 2).
+		$windows = array();
+		$day_hours = $opening_hours[ $day_name ];
+		if ( ! empty( $day_hours['open'] ) && ! empty( $day_hours['close'] ) ) {
+			$windows[] = array( 'open' => $day_hours['open'], 'close' => $day_hours['close'] );
+		}
+		if ( ! empty( $day_hours['open2'] ) && ! empty( $day_hours['close2'] ) ) {
+			$windows[] = array( 'open' => $day_hours['open2'], 'close' => $day_hours['close2'] );
+		}
 
-		$timeslots    = array();
-		$current_slot = $open_timestamp;
+		if ( empty( $windows ) ) {
+			return array();
+		}
 
-		while ( $current_slot < $close_timestamp ) {
-			// Für heute: Nur Slots nach Vorbereitungszeit anzeigen.
-			if ( $is_today && $current_slot < $earliest_slot ) {
-				$current_slot += $interval * 60;
+		// Slot-Buffer (Premium).
+		$buffer_start = 0;
+		$buffer_end   = 0;
+		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) {
+			$buffer_start = (int) get_option( 'lbite_slot_buffer_start', 0 );
+			$buffer_end   = (int) get_option( 'lbite_slot_buffer_end', 0 );
+		}
+
+		$timeslots = array();
+
+		foreach ( $windows as $window ) {
+			$open_dt  = new DateTime( $date . ' ' . $window['open'], $tz );
+			$close_dt = new DateTime( $date . ' ' . $window['close'], $tz );
+
+			$open_timestamp  = $open_dt->getTimestamp() + $buffer_start * 60;
+			$close_timestamp = $close_dt->getTimestamp() - $buffer_end * 60;
+
+			if ( $open_timestamp >= $close_timestamp ) {
 				continue;
 			}
 
-			$timeslots[] = array(
-				'value' => wp_date( 'Y-m-d H:i', $current_slot ),
-				'label' => wp_date( 'H:i', $current_slot ),
-			);
+			$current_slot = $open_timestamp;
 
-			$current_slot += $interval * 60;
+			while ( $current_slot < $close_timestamp ) {
+				// Für heute: Nur Slots nach Vorbereitungszeit anzeigen.
+				if ( $is_today && $current_slot < $earliest_slot ) {
+					$current_slot += $interval * 60;
+					continue;
+				}
+
+				$timeslots[] = array(
+					'value' => wp_date( 'Y-m-d H:i', $current_slot ),
+					'label' => wp_date( 'H:i', $current_slot ),
+				);
+
+				$current_slot += $interval * 60;
+			}
 		}
 
-		return $timeslots;
+		// Chronologisch sortieren und Duplikate entfernen.
+		usort( $timeslots, fn( $a, $b ) => strcmp( $a['value'], $b['value'] ) );
+		$seen      = array();
+		$timeslots = array_filter(
+			$timeslots,
+			function ( $slot ) use ( &$seen ) {
+				if ( isset( $seen[ $slot['value'] ] ) ) {
+					return false;
+				}
+				$seen[ $slot['value'] ] = true;
+				return true;
+			}
+		);
+
+		return array_values( $timeslots );
 	}
 
 	/**
