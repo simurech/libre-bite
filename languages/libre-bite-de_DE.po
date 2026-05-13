@@ -1010,7 +1010,7 @@ msgstr "Aktualisierungsintervall Reservierungsübersicht"
 
 #: templates/admin/settings-tabbed.php:339
 msgid "How often the reservations overview is updated. Default: 60 seconds."
-msgstr ""
+msgstr "Wie oft die Reservierungsübersicht aktualisiert wird. Standard: 60 Sekunden."
 "Wie oft die Reservierungsübersicht aktualisiert wird. Standard: 60 Sekunden."
 
 #: templates/admin/settings-tabbed.php:345
@@ -1667,7 +1667,7 @@ msgstr ""
 
 #: templates/admin/documentation.php:218
 msgid "Opening hours are automatically considered when selecting time slots"
-msgstr ""
+msgstr "Öffnungszeiten werden bei der Zeitslot-Auswahl automatisch berücksichtigt"
 "Öffnungszeiten werden bei der Auswahl von Zeitslots automatisch "
 "berücksichtigt."
 
@@ -1993,7 +1993,7 @@ msgstr "Bis"
 #: templates/admin/holidays-settings.php:99
 #: templates/admin/holidays-settings.php:158
 msgid "2nd window:"
-msgstr ""
+msgstr "2. Fenster:"
 
 #: templates/admin/holidays-settings.php:105
 #: templates/admin/holidays-settings.php:164
@@ -2002,7 +2002,7 @@ msgstr "Löschen"
 
 #: templates/admin/holidays-settings.php:114
 msgid "Add holiday"
-msgstr ""
+msgstr "Feiertag hinzufügen"
 
 #: templates/admin/holidays-settings.php:124
 msgid "e.g. Christmas"
@@ -3528,11 +3528,11 @@ msgstr ""
 
 #: templates/admin/help-partials/settings.php:87
 msgid "You can apply a holiday to all locations or only to specific ones."
-msgstr ""
+msgstr "Ein Feiertag kann auf alle Standorte oder nur auf bestimmte angewendet werden."
 
 #: templates/admin/help-partials/settings.php:91
 msgid "Open Holidays"
-msgstr ""
+msgstr "Feiertage öffnen"
 
 #: templates/admin/help-partials/settings.php:100
 msgid "Tips"
@@ -5442,11 +5442,11 @@ msgstr "Standort gesetzt"
 
 #: includes/modules/checkout/class-checkout.php:1307
 msgid "Receipt already sent."
-msgstr ""
+msgstr "Beleg wurde bereits gesendet."
 
 #: includes/modules/checkout/class-checkout.php:1323
 msgid "Receipt sent."
-msgstr ""
+msgstr "Beleg gesendet."
 
 #: includes/modules/pos/class-pos.php:138
 msgid "Add to Cart"
@@ -5608,7 +5608,7 @@ msgstr "Samstag"
 
 #: includes/modules/locations/class-locations.php:347
 msgid "2nd window (optional):"
-msgstr ""
+msgstr "2. Fenster (optional):"
 
 #: includes/modules/locations/class-locations.php:479
 msgid "No locations available yet."
