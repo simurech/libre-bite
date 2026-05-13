@@ -25,6 +25,205 @@
 	--lbite-font-size-base: 16px;
 }
 
+/* ============================================================
+ * Theme Isolation Reset
+ * Scoped hard resets to prevent themes from breaking the
+ * optimized checkout layout – applied with high specificity.
+ * ============================================================ */
+
+/* Font & base text */
+body .lbite-checkout-optimized,
+body .lbite-checkout-optimized p,
+body .lbite-checkout-optimized span,
+body .lbite-checkout-optimized label,
+body .lbite-checkout-optimized small,
+body .lbite-checkout-optimized em,
+body .lbite-checkout-optimized strong {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	font-size: 15px;
+	line-height: 1.5;
+	color: #1a1a1a;
+	text-transform: none;
+	letter-spacing: normal;
+	word-spacing: normal;
+}
+
+/* Headings */
+body .lbite-checkout-optimized h1,
+body .lbite-checkout-optimized h2,
+body .lbite-checkout-optimized h3,
+body .lbite-checkout-optimized h4 {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	font-weight: 600;
+	line-height: 1.3;
+	color: var(--lbite-color-secondary);
+	text-transform: none;
+	letter-spacing: normal;
+	border: none;
+	background: none;
+	padding: 0;
+	margin: 0 0 15px 0;
+}
+
+/* Paragraphs & lists */
+body .lbite-checkout-optimized p {
+	margin: 0 0 8px 0;
+}
+
+body .lbite-checkout-optimized ul,
+body .lbite-checkout-optimized ol {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+body .lbite-checkout-optimized li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+/* Inputs & textareas */
+body .lbite-checkout-optimized input[type="text"],
+body .lbite-checkout-optimized input[type="email"],
+body .lbite-checkout-optimized input[type="tel"],
+body .lbite-checkout-optimized input[type="number"],
+body .lbite-checkout-optimized input[type="password"],
+body .lbite-checkout-optimized select,
+body .lbite-checkout-optimized textarea {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	font-family: inherit;
+	font-size: 15px;
+	line-height: 1.5;
+	color: #1a1a1a;
+	background-color: #fff;
+	border: 2px solid var(--lbite-color-border);
+	border-radius: calc(var(--lbite-border-radius) - 2px);
+	padding: 12px 15px;
+	width: 100%;
+	box-sizing: border-box;
+	box-shadow: none;
+	transition: border-color 0.2s;
+	outline: none;
+}
+
+body .lbite-checkout-optimized input[type="text"]:focus,
+body .lbite-checkout-optimized input[type="email"]:focus,
+body .lbite-checkout-optimized input[type="tel"]:focus,
+body .lbite-checkout-optimized input[type="number"]:focus,
+body .lbite-checkout-optimized select:focus,
+body .lbite-checkout-optimized textarea:focus {
+	border-color: var(--lbite-color-primary);
+	outline: none;
+	box-shadow: none;
+}
+
+/* Radio & checkbox – leave visible */
+body .lbite-checkout-optimized input[type="radio"],
+body .lbite-checkout-optimized input[type="checkbox"] {
+	-webkit-appearance: auto;
+	-moz-appearance: auto;
+	appearance: auto;
+	width: auto;
+	padding: 0;
+	border: none;
+	box-shadow: none;
+}
+
+/* Labels */
+body .lbite-checkout-optimized label {
+	display: block;
+	font-weight: 500;
+	margin-bottom: 5px;
+	cursor: default;
+	float: none;
+	width: auto;
+}
+
+/* Buttons – reset any theme button base */
+body .lbite-checkout-optimized button,
+body .lbite-checkout-optimized input[type="submit"] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	font-family: inherit;
+	font-size: inherit;
+	line-height: 1.5;
+	cursor: pointer;
+	box-shadow: none;
+	text-shadow: none;
+	text-transform: none;
+	letter-spacing: normal;
+}
+
+/* Tables */
+body .lbite-checkout-optimized table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	background: transparent;
+}
+
+body .lbite-checkout-optimized table th,
+body .lbite-checkout-optimized table td {
+	text-align: left;
+	vertical-align: middle;
+	background: transparent;
+}
+
+/* Placeholder colour */
+body .lbite-checkout-optimized ::placeholder {
+	color: #999;
+	opacity: 1;
+}
+
+/* Prevent theme from adding bullets to payment method list */
+body .lbite-checkout-optimized .wc_payment_methods li,
+body .lbite-checkout-optimized .wc_payment_methods li::before,
+body .lbite-checkout-optimized .wc_payment_methods li::after {
+	list-style: none !important;
+	content: none !important;
+	background: none !important;
+	padding-left: 0 !important;
+	margin-left: 0 !important;
+}
+
+/* Prevent themes from adding icons/decorations to inputs via ::before/::after */
+body .lbite-checkout-optimized .form-row::before,
+body .lbite-checkout-optimized .form-row::after {
+	display: none !important;
+	content: none !important;
+}
+
+/* WooCommerce .form-row overrides */
+body .lbite-checkout-optimized .form-row {
+	display: block;
+	float: none;
+	width: 100%;
+	padding: 0;
+	margin: 0 0 15px 0;
+}
+
+body .lbite-checkout-optimized .form-row label {
+	display: block;
+	font-weight: 500;
+	margin-bottom: 5px;
+	float: none;
+	width: auto;
+}
+
+/* Remove outer decoration added by some themes */
+body .lbite-checkout-optimized .lbite-checkout-step,
+body .lbite-checkout-optimized .lbite-checkout-info {
+	border-radius: var(--lbite-border-radius);
+}
+
+/* ============================================================
+ * End of Theme Isolation Reset
+ * ============================================================ */
+
 /* Container */
 .lbite-checkout-optimized {
 	max-width: 600px;
@@ -77,22 +276,10 @@
 	color: var(--lbite-color-secondary);
 }
 
-/* Input-Felder */
+/* Input-Felder – Basisstyles vom Theme-Isolation-Reset übernommen */
 .lbite-checkout-step input[type="text"],
 .lbite-checkout-step input[type="email"] {
-	width: 100%;
-	padding: 12px 15px;
 	font-size: var(--lbite-font-size-base);
-	border: 2px solid var(--lbite-color-border);
-	border-radius: calc(var(--lbite-border-radius) - 2px);
-	transition: border-color 0.2s;
-	box-sizing: border-box;
-}
-
-.lbite-checkout-step input[type="text"]:focus,
-.lbite-checkout-step input[type="email"]:focus {
-	border-color: var(--lbite-color-primary);
-	outline: none;
 }
 
 /* Beleg-Optionen */
