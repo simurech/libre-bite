@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.8
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,18 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.3.0 =
+* Feature: Opening hours now support two time windows per day (e.g. lunch + dinner service).
+* Feature: Holidays management – define closures or custom hours per date, assignable to all or specific locations.
+* Feature (Pro): Slot buffers – configure the earliest first and latest last bookable time slot per day.
+* Feature (Pro): Future pre-orders are now dimmed and non-draggable in the Kanban board until within preparation window.
+* Feature (Pro): Optimized Checkout no longer asks for a receipt – print and email buttons now appear at the top of the thank-you page.
+* Feature (Pro): Admins can re-send the receipt email directly from the order detail page via a metabox button.
+
+= 1.2.9 =
+* Fix: Optimized Checkout now shows a warning when the WooCommerce Checkout Block is used instead of the classic shortcode.
+* Improvement: Added a note to the Checkout settings and the Help section explaining that the optimized checkout requires the [woocommerce_checkout] shortcode.
 
 = 1.2.8 =
 * Maintenance: Updated Freemius SDK to version 2.13.1.
