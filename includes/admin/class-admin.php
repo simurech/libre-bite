@@ -83,6 +83,14 @@ class LBite_Admin {
 
 		// Support-Box im Admin-Footer
 		$this->loader->add_action( 'admin_footer', $this, 'render_support_footer' );
+
+		// Beleg-Metabox in WooCommerce-Bestellansicht (nur Premium).
+		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) {
+			if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
+				$this->loader->add_action( 'add_meta_boxes', $this, 'add_receipt_metabox__premium_only' );
+				$this->loader->add_action( 'wp_ajax_lbite_admin_send_receipt', $this, 'ajax_admin_send_receipt__premium_only' );
+			}
+		}
 	}
 
 	/**
@@ -1244,5 +1252,129 @@ class LBite_Admin {
 		}
 
 		wp_send_json_success( array( 'tables' => $formatted_tables ) );
+	}
+
+	/**
+	 * Metabox «Beleg» in WooCommerce-Bestellansicht registrieren (nur Premium).
+	 */
+	public function add_receipt_metabox__premium_only() {
+		// HPOS-kompatibel: beide Screen-IDs registrieren.
+		$screens = array( 'shop_order', 'woocommerce_page_wc-orders' );
+		foreach ( $screens as $screen ) {
+			add_meta_box(
+				'lbite-receipt-metabox',
+				__( 'Receipt', 'libre-bite' ),
+				array( $this, 'render_receipt_metabox__premium_only' ),
+				$screen,
+				'side',
+				'default'
+			);
+		}
+	}
+
+	/**
+	 * Inhalt der Beleg-Metabox rendern (nur Premium).
+	 *
+	 * @param WP_Post|WC_Order $post_or_order Post- oder Order-Objekt.
+	 */
+	public function render_receipt_metabox__premium_only( $post_or_order ) {
+		$order = $post_or_order instanceof WC_Order ? $post_or_order : wc_get_order( $post_or_order->ID );
+		if ( ! $order ) {
+			return;
+		}
+
+		$order_id      = $order->get_id();
+		$sent_at       = $order->get_meta( '_lbite_receipt_sent' );
+		$billing_email = $order->get_billing_email();
+		$is_dummy      = empty( $billing_email ) || strpos( $billing_email, '@nomail.local' ) !== false;
+		$nonce         = wp_create_nonce( 'lbite_admin_nonce' );
+
+		if ( $is_dummy ) {
+			echo '<p>' . esc_html__( 'No email address on file for this order.', 'libre-bite' ) . '</p>';
+			return;
+		}
+		?>
+		<p style="margin-bottom: 6px;">
+			<strong><?php esc_html_e( 'To:', 'libre-bite' ); ?></strong> <?php echo esc_html( $billing_email ); ?>
+		</p>
+		<?php if ( $sent_at ) : ?>
+			<p style="margin-bottom: 10px; color: #46b450;">
+				<?php
+				/* translators: %s: date/time */
+				printf( esc_html__( 'Last sent: %s', 'libre-bite' ), esc_html( $sent_at ) );
+				?>
+			</p>
+		<?php endif; ?>
+		<button type="button" id="lbite-admin-send-receipt-btn" class="button"
+			style="width: 100%;"
+			data-order-id="<?php echo esc_attr( $order_id ); ?>"
+			data-nonce="<?php echo esc_attr( $nonce ); ?>"
+			<?php echo $sent_at ? 'disabled' : ''; ?>>
+			<?php esc_html_e( 'Send Receipt by Email', 'libre-bite' ); ?>
+		</button>
+		<p id="lbite-receipt-msg" style="margin-top: 6px; display: none;"></p>
+		<script>
+		jQuery(document).ready(function($) {
+			$('#lbite-admin-send-receipt-btn').on('click', function() {
+				var $btn = $(this);
+				$btn.prop('disabled', true);
+				$.post(ajaxurl, {
+					action: 'lbite_admin_send_receipt',
+					order_id: $btn.data('order-id'),
+					nonce: $btn.data('nonce')
+				}, function(response) {
+					var $msg = $('#lbite-receipt-msg');
+					$msg.show();
+					if (response.success) {
+						$msg.css('color', '#46b450').text(response.data);
+					} else {
+						$btn.prop('disabled', false);
+						$msg.css('color', '#dc3232').text(response.data || '<?php echo esc_js( __( 'Error', 'libre-bite' ) ); ?>');
+					}
+				}).fail(function() {
+					$btn.prop('disabled', false);
+				});
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * AJAX: Beleg per E-Mail senden (Admin, nur Premium).
+	 */
+	public function ajax_admin_send_receipt__premium_only() {
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_manage_orders' ) ) {
+			wp_send_json_error( __( 'Insufficient permissions.', 'libre-bite' ) );
+		}
+
+		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
+		if ( ! $order_id ) {
+			wp_send_json_error( __( 'Invalid order.', 'libre-bite' ) );
+		}
+
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			wp_send_json_error( __( 'Order not found.', 'libre-bite' ) );
+		}
+
+		$billing_email = $order->get_billing_email();
+		if ( empty( $billing_email ) || strpos( $billing_email, '@nomail.local' ) !== false ) {
+			wp_send_json_error( __( 'No valid email address on file.', 'libre-bite' ) );
+		}
+
+		$emails = WC()->mailer()->get_emails();
+		if ( isset( $emails['WC_Email_Customer_Invoice'] ) ) {
+			$emails['WC_Email_Customer_Invoice']->trigger( $order_id );
+		}
+
+		$sent_at = current_time( 'mysql' );
+		$order->update_meta_data( '_lbite_receipt_sent', $sent_at );
+		$order->save();
+
+		/* translators: %s: date/time */
+		wp_send_json_success( sprintf( __( 'Receipt sent (%s)', 'libre-bite' ), $sent_at ) );
 	}
 }
