@@ -166,7 +166,7 @@ $lbite_day_labels = array(
 	</tr>
 </template>
 
-<script>
+<?php ob_start(); ?>
 (function($) {
 	var lbiteHolidayIdx = <?php echo (int) count( $lbite_holidays ); ?>;
 
@@ -222,4 +222,4 @@ $lbite_day_labels = array(
 		}
 	});
 }(jQuery));
-</script>
+<?php wp_add_inline_script( 'lbite-admin-settings', ob_get_clean() ); ?>
