@@ -42,6 +42,8 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		update_option( 'lbite_preparation_time', isset( $_POST['lbite_preparation_time'] ) ? intval( wp_unslash( $_POST['lbite_preparation_time'] ) ) : 30 );
 		update_option( 'lbite_pickup_reminder_time', isset( $_POST['lbite_pickup_reminder_time'] ) ? intval( wp_unslash( $_POST['lbite_pickup_reminder_time'] ) ) : 15 );
 		update_option( 'lbite_timeslot_interval', isset( $_POST['lbite_timeslot_interval'] ) ? intval( wp_unslash( $_POST['lbite_timeslot_interval'] ) ) : 15 );
+		update_option( 'lbite_slot_buffer_start', isset( $_POST['lbite_slot_buffer_start'] ) ? intval( wp_unslash( $_POST['lbite_slot_buffer_start'] ) ) : 0 );
+		update_option( 'lbite_slot_buffer_end', isset( $_POST['lbite_slot_buffer_end'] ) ? intval( wp_unslash( $_POST['lbite_slot_buffer_end'] ) ) : 0 );
 
 		// Tischbestellung
 		update_option( 'lbite_table_order_page_id', isset( $_POST['lbite_table_order_page_id'] ) ? intval( wp_unslash( $_POST['lbite_table_order_page_id'] ) ) : 0 );
@@ -71,7 +73,10 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 $lbite_location_page_id = get_option( 'lbite_location_page_id', 0 );
 $lbite_preparation_time = get_option( 'lbite_preparation_time', 30 );
 $lbite_pickup_reminder  = get_option( 'lbite_pickup_reminder_time', 15 );
-$lbite_timeslot_int     = get_option( 'lbite_timeslot_interval', 15 );
+$lbite_timeslot_int        = get_option( 'lbite_timeslot_interval', 15 );
+$lbite_slot_buffer_start   = get_option( 'lbite_slot_buffer_start', 0 );
+$lbite_slot_buffer_end     = get_option( 'lbite_slot_buffer_end', 0 );
+$lbite_is_premium_for_f5   = function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only();
 $lbite_brand_name       = get_option( 'lbite_brand_name', '' );
 $lbite_brand_logo       = get_option( 'lbite_brand_logo', 0 );
 $lbite_color_primary    = get_option( 'lbite_color_primary', '#0073aa' );
@@ -141,6 +146,30 @@ wp_enqueue_script( 'wp-color-picker' );
 			<td>
 				<input type="number" min="5" step="5" name="lbite_timeslot_interval" value="<?php echo esc_attr( $lbite_timeslot_int ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'Distance between time slots for pre-orders.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<?php esc_html_e( 'Slot Buffer Start', 'libre-bite' ); ?>
+				<?php if ( ! $lbite_is_premium_for_f5 ) : ?>
+					<span class="lbite-pro-badge">Pro</span>
+				<?php endif; ?>
+			</th>
+			<td>
+				<input type="number" min="0" step="5" name="lbite_slot_buffer_start" value="<?php echo esc_attr( $lbite_slot_buffer_start ); ?>" class="small-text" <?php echo $lbite_is_premium_for_f5 ? '' : 'disabled'; ?>> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+				<p class="description"><?php esc_html_e( 'Cut off the first N minutes from each time window. Example: with 30 minutes, a window from 11:00 only shows slots from 11:30 onwards.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<?php esc_html_e( 'Slot Buffer End', 'libre-bite' ); ?>
+				<?php if ( ! $lbite_is_premium_for_f5 ) : ?>
+					<span class="lbite-pro-badge">Pro</span>
+				<?php endif; ?>
+			</th>
+			<td>
+				<input type="number" min="0" step="5" name="lbite_slot_buffer_end" value="<?php echo esc_attr( $lbite_slot_buffer_end ); ?>" class="small-text" <?php echo $lbite_is_premium_for_f5 ? '' : 'disabled'; ?>> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+				<p class="description"><?php esc_html_e( 'Cut off the last N minutes from each time window. Example: with 30 minutes, a window until 22:00 only shows slots up to 21:30.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 	</table>
