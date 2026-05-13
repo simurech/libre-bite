@@ -971,18 +971,23 @@ class LBite_Checkout {
 		$closed_days   = array();
 
 		if ( $opening_hours && is_array( $opening_hours ) ) {
-			// Alle Wochentage durchgehen
 			$weekdays = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
 
 			foreach ( $weekdays as $day ) {
-				// Wenn Tag nicht existiert oder als geschlossen markiert ist
 				if ( ! isset( $opening_hours[ $day ] ) || $opening_hours[ $day ]['closed'] ) {
 					$closed_days[] = $day;
 				}
 			}
 		}
 
-		wp_send_json_success( array( 'closed_days' => $closed_days ) );
+		$closed_dates = LBite_Locations::get_closed_holiday_dates( $location_id );
+
+		wp_send_json_success(
+			array(
+				'closed_days'  => $closed_days,
+				'closed_dates' => $closed_dates,
+			)
+		);
 	}
 
 	/**
@@ -1029,6 +1034,25 @@ class LBite_Checkout {
 			return array();
 		}
 
+		// Feiertag prüfen – überschreibt reguläre Öffnungszeiten.
+		$holiday = LBite_Locations::get_holiday_for_date( $location_id, $date );
+		if ( $holiday ) {
+			$holiday_type = isset( $holiday['type'] ) ? $holiday['type'] : 'closed';
+			if ( 'closed' === $holiday_type ) {
+				return array();
+			}
+			if ( 'custom' === $holiday_type ) {
+				// Custom-Feiertag-Zeiten als Tagesöffnungszeiten verwenden.
+				$opening_hours[ $day_name ] = array(
+					'closed' => false,
+					'open'   => isset( $holiday['open'] ) ? $holiday['open'] : '',
+					'close'  => isset( $holiday['close'] ) ? $holiday['close'] : '',
+					'open2'  => isset( $holiday['open2'] ) ? $holiday['open2'] : '',
+					'close2' => isset( $holiday['close2'] ) ? $holiday['close2'] : '',
+				);
+			}
+		}
+
 		// Aktueller Zeitpunkt und frühstmöglicher Slot (Vorbereitungszeit).
 		$prep_time     = (int) get_option( 'lbite_preparation_time', 30 );
 		$now_dt        = new DateTime( 'now', $tz );
@@ -1037,7 +1061,7 @@ class LBite_Checkout {
 		$is_today      = ( $date === $now_dt->format( 'Y-m-d' ) );
 
 		// Zeitfenster für diesen Tag zusammenstellen (Fenster 1 + optional Fenster 2).
-		$windows = array();
+		$windows   = array();
 		$day_hours = $opening_hours[ $day_name ];
 		if ( ! empty( $day_hours['open'] ) && ! empty( $day_hours['close'] ) ) {
 			$windows[] = array( 'open' => $day_hours['open'], 'close' => $day_hours['close'] );

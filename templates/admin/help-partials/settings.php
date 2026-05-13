@@ -63,6 +63,35 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 		<p style="margin-top: 8px;"><a href="<?php echo esc_url( add_query_arg( 'tab', 'general', $lbite_settings_url ) ); ?>" class="button"><?php esc_html_e( 'Open General Settings', 'libre-bite' ); ?></a></p>
 	</div>
 
+	<!-- Tab: Feiertage -->
+	<?php if ( lbite_feature_enabled( 'enable_opening_hours' ) ) : ?>
+	<div class="lbite-help-article">
+		<h3>
+			<span class="dashicons dashicons-calendar-alt" style="vertical-align: middle;"></span>
+			<?php esc_html_e( 'Holidays', 'libre-bite' ); ?>
+		</h3>
+		<p><?php esc_html_e( 'Define holidays on which a location is closed or has different opening hours. Holiday settings override the regular weekly schedule for a specific date.', 'libre-bite' ); ?></p>
+		<table class="widefat">
+			<thead><tr><th><?php esc_html_e( 'Setting', 'libre-bite' ); ?></th><th><?php esc_html_e( 'What it does', 'libre-bite' ); ?></th></tr></thead>
+			<tbody>
+				<tr>
+					<td><strong><?php esc_html_e( 'Type: Closed', 'libre-bite' ); ?></strong></td>
+					<td><?php esc_html_e( 'The location is completely closed on this date. The date is blocked in the customer\'s date picker.', 'libre-bite' ); ?></td>
+				</tr>
+				<tr>
+					<td><strong><?php esc_html_e( 'Type: Custom hours', 'libre-bite' ); ?></strong></td>
+					<td><?php esc_html_e( 'The location is open, but with different hours than usual. Enter one or two time windows (e.g. a shorter service on a public holiday).', 'libre-bite' ); ?></td>
+				</tr>
+				<tr>
+					<td><strong><?php esc_html_e( 'Locations', 'libre-bite' ); ?></strong></td>
+					<td><?php esc_html_e( 'You can apply a holiday to all locations or only to specific ones.', 'libre-bite' ); ?></td>
+				</tr>
+			</tbody>
+		</table>
+		<p style="margin-top: 8px;"><a href="<?php echo esc_url( add_query_arg( 'tab', 'holidays', $lbite_settings_url ) ); ?>" class="button"><?php esc_html_e( 'Open Holidays', 'libre-bite' ); ?></a></p>
+	</div>
+	<?php endif; ?>
+
 	<!-- Tab: Trinkgeld -->
 	<?php if ( lbite_feature_enabled( 'enable_tips' ) ) : ?>
 	<div class="lbite-help-article">
@@ -98,7 +127,11 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				<?php if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) : ?>
 				<tr>
 					<td><strong><?php esc_html_e( 'Checkout Mode', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( '"Standard" shows the normal WooCommerce checkout. "Optimized" (Pro) reduces it to the essentials: only name and receipt option – ideal for take-away without delivery.', 'libre-bite' ); ?></td>
+					<td>
+						<?php esc_html_e( '"Standard" shows the normal WooCommerce checkout. "Optimized" (Pro) reduces it to the essentials: only name and receipt option – ideal for take-away without delivery.', 'libre-bite' ); ?>
+						<br><br>
+						<strong><?php esc_html_e( 'Important:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode', 'libre-bite' ); ?> <code>[woocommerce_checkout]</code><?php esc_html_e( ', not the WooCommerce Checkout Block.', 'libre-bite' ); ?>
+					</td>
 				</tr>
 				<?php endif; ?>
 			</tbody>

@@ -313,8 +313,9 @@ jQuery(document).ready(function($) {
 		});
 	}
 
-	// Geschlossene Tage vom Server abrufen
-	var closedDaysCache = [];
+	// Geschlossene Tage und spezifische Feiertags-Daten vom Server abrufen
+	var closedDaysCache  = [];
+	var closedDatesCache = [];
 
 	function updateDisabledDates() {
 		var locationId = $('#lbite_location_select').val();
@@ -331,8 +332,9 @@ jQuery(document).ready(function($) {
 				location_id: locationId
 			},
 			success: function(response) {
-				if (response.success && response.data.closed_days) {
-					closedDaysCache = response.data.closed_days;
+				if (response.success) {
+					closedDaysCache  = response.data.closed_days  || [];
+					closedDatesCache = response.data.closed_dates || [];
 
 					// Erstes offenes Datum als Standardwert setzen
 					setInitialOpenDate();
@@ -341,29 +343,31 @@ jQuery(document).ready(function($) {
 		});
 	}
 
+	function isDateDisabled(isoDate) {
+		if (closedDatesCache.indexOf(isoDate) !== -1) {
+			return true;
+		}
+		var date    = new Date(isoDate + 'T00:00:00');
+		var dayName = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'][date.getDay()];
+		return closedDaysCache.indexOf(dayName) !== -1;
+	}
+
 	// Initiales Datum auf ersten offenen Tag setzen
 	function setInitialOpenDate() {
-		var today = new Date();
-		var dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-		var currentDate = new Date(today);
+		var currentDate = new Date();
 
 		// Maximal 14 Tage durchsuchen
 		for (var i = 0; i <= 14; i++) {
-			var dayName = dayNames[currentDate.getDay()];
+			var year    = currentDate.getFullYear();
+			var month   = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+			var day     = ('0' + currentDate.getDate()).slice(-2);
+			var isoDate = year + '-' + month + '-' + day;
 
-			if (!closedDaysCache.includes(dayName)) {
-				// Ersten offenen Tag gefunden
-				var year = currentDate.getFullYear();
-				var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
-				var day = ('0' + currentDate.getDate()).slice(-2);
-				var isoDate = year + '-' + month + '-' + day;
-
+			if (!isDateDisabled(isoDate)) {
 				$('#lbite_pickup_date_select').val(isoDate);
 				loadTimeslots();
 				return;
 			}
-
-			// Nächsten Tag prüfen
 			currentDate.setDate(currentDate.getDate() + 1);
 		}
 	}
@@ -371,49 +375,37 @@ jQuery(document).ready(function($) {
 	// Ausgewähltes Datum validieren und ggf. korrigieren
 	function validateSelectedDate() {
 		var selectedDate = $('#lbite_pickup_date_select').val();
-		if (!selectedDate || closedDaysCache.length === 0) {
+		if (!selectedDate) {
 			$('#lbite_date_error').slideUp(200);
 			return;
 		}
 
-		var date = new Date(selectedDate + 'T00:00:00');
-		var dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-		var dayName = dayNames[date.getDay()];
-
-		if (closedDaysCache.includes(dayName)) {
-			// Nächsten Öffnungstag finden
+		if (isDateDisabled(selectedDate)) {
 			var nextOpenDate = findNextOpenDate(selectedDate);
 
 			if (nextOpenDate) {
-				// Automatisch zum nächsten offenen Tag wechseln
-				var year = nextOpenDate.getFullYear();
+				var year  = nextOpenDate.getFullYear();
 				var month = ('0' + (nextOpenDate.getMonth() + 1)).slice(-2);
-				var day = ('0' + nextOpenDate.getDate()).slice(-2);
+				var day   = ('0' + nextOpenDate.getDate()).slice(-2);
 				var isoDate = year + '-' + month + '-' + day;
 
-				// Datum setzen
 				$('#lbite_pickup_date_select').val(isoDate);
-
-				// Hinweis anzeigen dass Datum geändert wurde
 				var formattedDate = formatDate(nextOpenDate);
 				$('#lbite_next_opening').html('<?php echo esc_js( __( 'Automatically changed to:', 'libre-bite' ) ); ?> <strong>' + formattedDate + '</strong>');
 				$('#lbite_date_error').slideDown(300);
 				$('#lbite_pickup_date_select').addClass('lbite-error-input');
 
-				// Nach kurzer Zeit Hinweis ausblenden und Timeslots laden
 				setTimeout(function() {
 					$('#lbite_date_error').slideUp(200);
 					$('#lbite_pickup_date_select').removeClass('lbite-error-input');
 					loadTimeslots();
 				}, 2500);
 			} else {
-				// Kein offener Tag in den nächsten 14 Tagen
 				$('#lbite_next_opening').html('<?php echo esc_js( __( 'No opening day found in the next 14 days.', 'libre-bite' ) ); ?>');
 				$('#lbite_date_error').slideDown(300);
 				$('#lbite_pickup_date_select').addClass('lbite-error-input');
 			}
 		} else {
-			// Fehlermeldung ausblenden wenn gültiges Datum
 			$('#lbite_date_error').slideUp(200);
 			$('#lbite_pickup_date_select').removeClass('lbite-error-input');
 			$('#lbite_next_opening').html('');
@@ -422,19 +414,19 @@ jQuery(document).ready(function($) {
 
 	// Nächsten Öffnungstag finden
 	function findNextOpenDate(fromDate) {
-		var dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 		var currentDate = new Date(fromDate + 'T00:00:00');
 
-		// Maximal 14 Tage in die Zukunft suchen
 		for (var i = 1; i <= 14; i++) {
 			currentDate.setDate(currentDate.getDate() + 1);
-			var dayName = dayNames[currentDate.getDay()];
+			var year    = currentDate.getFullYear();
+			var month   = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+			var day     = ('0' + currentDate.getDate()).slice(-2);
+			var isoDate = year + '-' + month + '-' + day;
 
-			if (!closedDaysCache.includes(dayName)) {
+			if (!isDateDisabled(isoDate)) {
 				return currentDate;
 			}
 		}
-
 		return null;
 	}
 

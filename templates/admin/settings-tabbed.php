@@ -26,6 +26,10 @@ if ( $lbite_is_admin ) {
 
 $lbite_tabs['general'] = __( 'General', 'libre-bite' );
 
+if ( lbite_feature_enabled( 'enable_opening_hours' ) ) {
+	$lbite_tabs['holidays'] = __( 'Holidays', 'libre-bite' );
+}
+
 if ( lbite_feature_enabled( 'enable_tips' ) ) {
 	$lbite_tabs['tips'] = __( 'Tip', 'libre-bite' );
 }
@@ -70,6 +74,35 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		case 'checkout':
 			update_option( 'lbite_enable_rounding', isset( $_POST['lbite_enable_rounding'] ) );
 			update_option( 'lbite_checkout_mode', isset( $_POST['lbite_checkout_mode'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_checkout_mode'] ) ) : 'standard' );
+			$lbite_did_save = true;
+			break;
+
+		case 'holidays':
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in loop below.
+			$lbite_raw_holidays = isset( $_POST['lbite_holidays'] ) && is_array( $_POST['lbite_holidays'] ) ? wp_unslash( $_POST['lbite_holidays'] ) : array();
+			$lbite_holidays     = array();
+			foreach ( $lbite_raw_holidays as $lbite_h ) {
+				if ( empty( $lbite_h['date'] ) || empty( $lbite_h['name'] ) ) {
+					continue;
+				}
+				$lbite_locs = isset( $lbite_h['locations'] ) ? $lbite_h['locations'] : 'all';
+				if ( is_array( $lbite_locs ) ) {
+					$lbite_locs = array_map( 'intval', $lbite_locs );
+				} else {
+					$lbite_locs = 'all';
+				}
+				$lbite_holidays[] = array(
+					'name'      => sanitize_text_field( $lbite_h['name'] ),
+					'date'      => sanitize_text_field( $lbite_h['date'] ),
+					'locations' => $lbite_locs,
+					'type'      => in_array( sanitize_key( $lbite_h['type'] ?? '' ), array( 'closed', 'custom' ), true ) ? sanitize_key( $lbite_h['type'] ) : 'closed',
+					'open'      => sanitize_text_field( $lbite_h['open'] ?? '' ),
+					'close'     => sanitize_text_field( $lbite_h['close'] ?? '' ),
+					'open2'     => sanitize_text_field( $lbite_h['open2'] ?? '' ),
+					'close2'    => sanitize_text_field( $lbite_h['close2'] ?? '' ),
+				);
+			}
+			update_option( 'lbite_holidays', $lbite_holidays );
 			$lbite_did_save = true;
 			break;
 
@@ -172,6 +205,10 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				include LBITE_PLUGIN_DIR . 'templates/admin/settings.php';
 				break;
 
+			case 'holidays':
+				include LBITE_PLUGIN_DIR . 'templates/admin/holidays-settings.php';
+				break;
+
 			case 'tips':
 				$lbite_tip_pct_1  = get_option( 'lbite_tip_percentage_1', 5 );
 				$lbite_tip_pct_2  = get_option( 'lbite_tip_percentage_2', 10 );
@@ -248,6 +285,9 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 												<option value="optimized" <?php selected( $lbite_checkout_mode, 'optimized' ); ?>><?php esc_html_e( 'Optimized (name + receipt option only)', 'libre-bite' ); ?></option>
 											</select>
 											<p class="description"><?php esc_html_e( 'In optimized mode, only the name is requested and whether a receipt by email is desired.', 'libre-bite' ); ?></p>
+											<div class="notice notice-warning inline" style="margin: 8px 0 0; padding: 8px 12px;">
+												<p><strong><?php esc_html_e( 'Important:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode', 'libre-bite' ); ?> <code>[woocommerce_checkout]</code><?php esc_html_e( ', not the WooCommerce Checkout Block.', 'libre-bite' ); ?></p>
+											</div>
 										</td>
 									</tr>
 									<?php endif; ?>

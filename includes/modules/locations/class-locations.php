@@ -610,6 +610,58 @@ class LBite_Locations {
 	}
 
 	/**
+	 * Feiertag für ein bestimmtes Datum und einen Standort abrufen
+	 *
+	 * @param int    $location_id Standort-ID.
+	 * @param string $date        Datum im Format Y-m-d.
+	 * @return array|null Feiertag-Array oder null wenn kein Feiertag.
+	 */
+	public static function get_holiday_for_date( $location_id, $date ) {
+		$holidays = get_option( 'lbite_holidays', array() );
+		if ( ! is_array( $holidays ) ) {
+			return null;
+		}
+		foreach ( $holidays as $holiday ) {
+			if ( empty( $holiday['date'] ) || $holiday['date'] !== $date ) {
+				continue;
+			}
+			$locations = isset( $holiday['locations'] ) ? $holiday['locations'] : 'all';
+			if ( 'all' === $locations ) {
+				return $holiday;
+			}
+			if ( is_array( $locations ) && in_array( (int) $location_id, array_map( 'intval', $locations ), true ) ) {
+				return $holiday;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Alle Feiertag-Daten für einen Standort als Y-m-d-Array zurückgeben
+	 *
+	 * @param int $location_id Standort-ID.
+	 * @return array
+	 */
+	public static function get_closed_holiday_dates( $location_id ) {
+		$holidays = get_option( 'lbite_holidays', array() );
+		if ( ! is_array( $holidays ) ) {
+			return array();
+		}
+		$dates = array();
+		foreach ( $holidays as $holiday ) {
+			if ( empty( $holiday['date'] ) ) {
+				continue;
+			}
+			$locations = isset( $holiday['locations'] ) ? $holiday['locations'] : 'all';
+			$matches   = ( 'all' === $locations ) || ( is_array( $locations ) && in_array( (int) $location_id, array_map( 'intval', $locations ), true ) );
+			if ( $matches ) {
+				$dates[] = $holiday['date'];
+			}
+		}
+		return $dates;
+	}
+
+	/**
 	 * Öffnungszeiten für einen Standort abrufen
 	 *
 	 * @param int $location_id Standort-ID

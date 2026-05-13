@@ -398,6 +398,8 @@ jQuery(document).ready(function($) {
 	// Geschlossene Tage vom Server abrufen
 	let closedDaysCache = [];
 
+	var closedDatesCache = [];
+
 	function updateDisabledDates() {
 		if (!selectedLocationId) {
 			return;
@@ -412,32 +414,35 @@ jQuery(document).ready(function($) {
 				location_id: selectedLocationId
 			},
 			success: function(response) {
-				if (response.success && response.data.closed_days) {
-					closedDaysCache = response.data.closed_days;
-					// Aktuelles Datum validieren
+				if (response.success) {
+					closedDaysCache  = response.data.closed_days  || [];
+					closedDatesCache = response.data.closed_dates || [];
 					validateSelectedDate();
 				}
 			}
 		});
 	}
 
+	function isDateDisabled(isoDate) {
+		if (closedDatesCache.indexOf(isoDate) !== -1) {
+			return true;
+		}
+		const date    = new Date(isoDate + 'T00:00:00');
+		const dayName = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'][date.getDay()];
+		return closedDaysCache.indexOf(dayName) !== -1;
+	}
+
 	// Ausgewähltes Datum validieren
 	function validateSelectedDate() {
 		const selectedDate = $('#lbite-pickup-date').val();
-		if (!selectedDate || closedDaysCache.length === 0) {
+		if (!selectedDate) {
 			$('#lbite-date-error').slideUp(200);
 			return;
 		}
 
-		const date = new Date(selectedDate + 'T00:00:00');
-		const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-		const dayName = dayNames[date.getDay()];
-
-		if (closedDaysCache.includes(dayName)) {
-			// Nächsten Öffnungstag finden
+		if (isDateDisabled(selectedDate)) {
 			const nextOpenDate = findNextOpenDate(selectedDate);
 
-			// Fehlermeldung mit nächstem Öffnungsdatum anzeigen
 			if (nextOpenDate) {
 				const formattedDate = formatDate(nextOpenDate);
 				$('#lbite-next-opening').html('<br><?php echo esc_js( __( 'Next opening:', 'libre-bite' ) ); ?> <strong>' + formattedDate + '</strong>');
@@ -445,11 +450,9 @@ jQuery(document).ready(function($) {
 				$('#lbite-next-opening').html('');
 			}
 
-			// Inline Fehlermeldung anzeigen (bleibt sichtbar!)
 			$('#lbite-date-error').slideDown(300);
 			$('#lbite-pickup-date').addClass('lbite-error-input');
 		} else {
-			// Fehlermeldung ausblenden wenn gültiges Datum
 			$('#lbite-date-error').slideUp(200);
 			$('#lbite-pickup-date').removeClass('lbite-error-input');
 			$('#lbite-next-opening').html('');
@@ -458,19 +461,19 @@ jQuery(document).ready(function($) {
 
 	// Nächsten Öffnungstag finden
 	function findNextOpenDate(fromDate) {
-		const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 		let currentDate = new Date(fromDate + 'T00:00:00');
 
-		// Maximal 14 Tage in die Zukunft suchen
 		for (let i = 1; i <= 14; i++) {
 			currentDate.setDate(currentDate.getDate() + 1);
-			const dayName = dayNames[currentDate.getDay()];
+			const year    = currentDate.getFullYear();
+			const month   = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+			const day     = ('0' + currentDate.getDate()).slice(-2);
+			const isoDate = year + '-' + month + '-' + day;
 
-			if (!closedDaysCache.includes(dayName)) {
+			if (!isDateDisabled(isoDate)) {
 				return currentDate;
 			}
 		}
-
 		return null;
 	}
 
