@@ -44,6 +44,14 @@ $pickup_number = substr( $order_number, -4 );
 
 // Steueranzeige-Einstellung (incl = Brutto, excl = Netto).
 $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
+
+// Beleg per E-Mail: Button nur anzeigen wenn echte E-Mail vorhanden und noch nicht versendet.
+$lbite_billing_email    = $lbite_order->get_billing_email();
+$lbite_is_dummy_email   = strpos( $lbite_billing_email, '@nomail.local' ) !== false || empty( $lbite_billing_email );
+$lbite_receipt_sent     = $lbite_order->get_meta( '_lbite_receipt_sent' );
+$lbite_show_email_btn   = ! $lbite_is_dummy_email && ! $lbite_receipt_sent;
+$lbite_order_id_for_nonce = $lbite_order->get_id();
+$lbite_receipt_nonce    = wp_create_nonce( 'lbite_send_receipt_' . $lbite_order_id_for_nonce );
 ?>
 
 <div class="lbite-thankyou-optimized">
@@ -73,6 +81,26 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 	<div class="lbite-thankyou-pickup-number">
 		<span class="lbite-pickup-label"><?php esc_html_e( 'Your Pickup Number', 'libre-bite' ); ?></span>
 		<span class="lbite-pickup-number"><?php echo esc_html( $pickup_number ); ?></span>
+	</div>
+
+	<div class="lbite-thankyou-actions">
+		<button type="button" class="lbite-print-btn" onclick="window.print()">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
+				<path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/>
+			</svg>
+			<?php esc_html_e( 'Print Receipt / Save as PDF', 'libre-bite' ); ?>
+		</button>
+		<?php if ( $lbite_show_email_btn ) : ?>
+		<button type="button" class="lbite-email-receipt-btn" id="lbite-send-receipt-btn"
+			data-order-id="<?php echo esc_attr( $lbite_order_id_for_nonce ); ?>"
+			data-nonce="<?php echo esc_attr( $lbite_receipt_nonce ); ?>"
+			data-ajaxurl="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
+				<path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+			</svg>
+			<?php esc_html_e( 'Send Receipt by Email', 'libre-bite' ); ?>
+		</button>
+		<?php endif; ?>
 	</div>
 
 	<div class="lbite-thankyou-details">
@@ -260,16 +288,31 @@ $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 		</table>
 	</div>
 
-	<div class="lbite-thankyou-print-btn-wrap">
-		<button type="button" class="lbite-print-btn" onclick="window.print()">
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
-				<path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/>
-			</svg>
-			<?php esc_html_e( 'Print Receipt / Save as PDF', 'libre-bite' ); ?>
-		</button>
-	</div>
-
 	<div class="lbite-thankyou-footer">
 		<p><?php echo esc_html( $brand_name ); ?></p>
 	</div>
 </div>
+<?php if ( $lbite_show_email_btn ) : ?>
+<script>
+jQuery(document).ready(function($) {
+	$('#lbite-send-receipt-btn').on('click', function() {
+		var $btn = $(this);
+		$btn.prop('disabled', true);
+		$.post($btn.data('ajaxurl'), {
+			action: 'lbite_send_receipt_email',
+			order_id: $btn.data('order-id'),
+			nonce: $btn.data('nonce')
+		}, function(response) {
+			if (response.success) {
+				$btn.text('<?php echo esc_js( __( 'Receipt Sent', 'libre-bite' ) ); ?>');
+			} else {
+				$btn.prop('disabled', false);
+				alert(response.data || '<?php echo esc_js( __( 'Error sending receipt.', 'libre-bite' ) ); ?>');
+			}
+		}).fail(function() {
+			$btn.prop('disabled', false);
+		});
+	});
+});
+</script>
+<?php endif; ?>

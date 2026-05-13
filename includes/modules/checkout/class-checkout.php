@@ -91,6 +91,8 @@ class LBite_Checkout {
 				$this->loader->add_action( 'wp', $this, 'maybe_remove_thankyou_actions__premium_only' );
 				$this->loader->add_filter( 'woocommerce_checkout_fields', $this, 'maybe_make_email_optional__premium_only', 999 );
 				$this->loader->add_action( 'woocommerce_checkout_process', $this, 'maybe_set_placeholder_email__premium_only', 5 );
+				$this->loader->add_action( 'wp_ajax_lbite_send_receipt_email', $this, 'ajax_send_receipt_email__premium_only' );
+				$this->loader->add_action( 'wp_ajax_nopriv_lbite_send_receipt_email', $this, 'ajax_send_receipt_email__premium_only' );
 			}
 		}
 
@@ -1280,5 +1282,44 @@ class LBite_Checkout {
 			$placeholder_email = 'guest-' . time() . '-' . wp_rand( 1000, 9999 ) . '@nomail.local';
 			$_POST['billing_email'] = $placeholder_email;
 		}
+	}
+
+	/**
+	 * AJAX: Beleg per E-Mail an Kunden senden (Bestätigungsseite)
+	 * Nur in Premium-Version verfügbar.
+	 */
+	public function ajax_send_receipt_email__premium_only() {
+		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
+
+		if ( ! $order_id ) {
+			wp_send_json_error( __( 'Invalid order.', 'libre-bite' ) );
+		}
+
+		check_ajax_referer( 'lbite_send_receipt_' . $order_id, 'nonce' );
+
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			wp_send_json_error( __( 'Order not found.', 'libre-bite' ) );
+		}
+
+		// Rate-Limit: nur einmal versenden.
+		if ( $order->get_meta( '_lbite_receipt_sent' ) ) {
+			wp_send_json_error( __( 'Receipt already sent.', 'libre-bite' ) );
+		}
+
+		$billing_email = $order->get_billing_email();
+		if ( empty( $billing_email ) || strpos( $billing_email, '@nomail.local' ) !== false ) {
+			wp_send_json_error( __( 'No valid email address on file.', 'libre-bite' ) );
+		}
+
+		$emails = WC()->mailer()->get_emails();
+		if ( isset( $emails['WC_Email_Customer_Invoice'] ) ) {
+			$emails['WC_Email_Customer_Invoice']->trigger( $order_id );
+		}
+
+		$order->update_meta_data( '_lbite_receipt_sent', current_time( 'mysql' ) );
+		$order->save();
+
+		wp_send_json_success( __( 'Receipt sent.', 'libre-bite' ) );
 	}
 }

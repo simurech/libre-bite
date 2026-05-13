@@ -92,33 +92,6 @@ if ( $lbite_table_id ) {
 			</p>
 		</div>
 
-		<div class="lbite-checkout-step" id="lbite-step-receipt">
-			<h3><?php esc_html_e( 'Get Receipt?', 'libre-bite' ); ?></h3>
-			<div class="lbite-receipt-options">
-				<label class="lbite-receipt-option">
-					<input type="radio" name="lbite_receipt_option" value="none" checked>
-					<span class="lbite-receipt-option-label">
-						<span class="lbite-receipt-option-icon dashicons dashicons-no-alt"></span>
-						<?php esc_html_e( 'No Receipt', 'libre-bite' ); ?>
-					</span>
-				</label>
-				<label class="lbite-receipt-option">
-					<input type="radio" name="lbite_receipt_option" value="email">
-					<span class="lbite-receipt-option-label">
-						<span class="lbite-receipt-option-icon dashicons dashicons-email"></span>
-						<?php esc_html_e( 'By Email', 'libre-bite' ); ?>
-					</span>
-				</label>
-			</div>
-
-			<div class="lbite-email-field" id="lbite-email-field" style="display: none;">
-				<p class="form-row form-row-wide">
-					<label for="billing_email"><?php esc_html_e( 'Email Address', 'libre-bite' ); ?> <span class="required">*</span></label>
-					<input type="email" class="input-text" name="billing_email" id="billing_email" placeholder="<?php esc_attr_e( 'your@email.com', 'libre-bite' ); ?>" value="<?php echo esc_attr( WC()->checkout->get_value( 'billing_email' ) ); ?>">
-				</p>
-			</div>
-		</div>
-
 		<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
 		do_action( 'woocommerce_checkout_after_customer_details' ); ?>
 

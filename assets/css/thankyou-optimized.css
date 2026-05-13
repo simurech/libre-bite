@@ -317,7 +317,15 @@ a.lbite-maps-link:hover {
 	margin: 5px 0;
 }
 
-/* Print Button */
+/* Action Buttons (Print + Email) */
+.lbite-thankyou-actions {
+	display: flex;
+	justify-content: center;
+	gap: 12px;
+	flex-wrap: wrap;
+	margin-bottom: 20px;
+}
+
 .lbite-thankyou-print-btn-wrap {
 	text-align: center;
 	margin-bottom: 20px;
@@ -343,6 +351,31 @@ a.lbite-maps-link:hover {
 	color: #fff;
 }
 
+.lbite-email-receipt-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background: none;
+	border: 1px solid var(--lbite-color-border, #e0e0e0);
+	border-radius: var(--lbite-border-radius, 8px);
+	padding: 10px 18px;
+	font-size: 14px;
+	color: #666;
+	cursor: pointer;
+	transition: border-color 0.2s, color 0.2s;
+}
+
+.lbite-email-receipt-btn:hover:not(:disabled) {
+	background-color: var(--lbite-color-primary, #0073aa);
+	border-color: var(--lbite-color-primary, #0073aa);
+	color: #fff;
+}
+
+.lbite-email-receipt-btn:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
 /* Drucklayout – visibility-Ansatz damit verschachtelte Eltern nicht versteckt werden */
 @media print {
 	body * {
@@ -364,7 +397,8 @@ a.lbite-maps-link:hover {
 		margin: 0;
 	}
 
-	.lbite-thankyou-print-btn-wrap {
+	.lbite-thankyou-print-btn-wrap,
+	.lbite-thankyou-actions {
 		display: none !important;
 		visibility: hidden !important;
 	}
