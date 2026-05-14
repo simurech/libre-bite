@@ -45,11 +45,12 @@ $pickup_number = substr( $order_number, -4 );
 // Steueranzeige-Einstellung (incl = Brutto, excl = Netto).
 $tax_display = get_option( 'woocommerce_tax_display_cart', 'incl' );
 
-// Beleg per E-Mail: Button nur anzeigen wenn echte E-Mail vorhanden und noch nicht versendet.
+// Beleg per E-Mail: Button für alle Gäste anzeigen, die noch keinen Beleg erhalten haben.
+// Eingeloggte Nutzer erhalten automatisch eine WooCommerce-Bestellbestätigung.
 $lbite_billing_email    = $lbite_order->get_billing_email();
 $lbite_is_dummy_email   = strpos( $lbite_billing_email, '@nomail.local' ) !== false || empty( $lbite_billing_email );
 $lbite_receipt_sent     = $lbite_order->get_meta( '_lbite_receipt_sent' );
-$lbite_show_email_btn   = ! $lbite_is_dummy_email && ! $lbite_receipt_sent;
+$lbite_show_email_btn   = ! is_user_logged_in() && ! $lbite_receipt_sent;
 $lbite_order_id_for_nonce = $lbite_order->get_id();
 $lbite_receipt_nonce    = wp_create_nonce( 'lbite_send_receipt_' . $lbite_order_id_for_nonce );
 ?>
@@ -91,9 +92,14 @@ $lbite_receipt_nonce    = wp_create_nonce( 'lbite_send_receipt_' . $lbite_order_
 			<?php esc_html_e( 'Print Receipt / Save as PDF', 'libre-bite' ); ?>
 		</button>
 		<?php if ( $lbite_show_email_btn ) : ?>
+		<?php if ( $lbite_is_dummy_email ) : ?>
+		<input type="email" id="lbite-receipt-email-input" class="lbite-receipt-email-input"
+			placeholder="<?php esc_attr_e( 'your@email.com', 'libre-bite' ); ?>">
+		<?php endif; ?>
 		<button type="button" class="lbite-email-receipt-btn" id="lbite-send-receipt-btn"
 			data-order-id="<?php echo esc_attr( $lbite_order_id_for_nonce ); ?>"
 			data-nonce="<?php echo esc_attr( $lbite_receipt_nonce ); ?>"
+			data-has-email="<?php echo $lbite_is_dummy_email ? '0' : '1'; ?>"
 			data-ajaxurl="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
 				<path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
@@ -297,14 +303,30 @@ $lbite_receipt_nonce    = wp_create_nonce( 'lbite_send_receipt_' . $lbite_order_
 jQuery(document).ready(function($) {
 	$('#lbite-send-receipt-btn').on('click', function() {
 		var $btn = $(this);
+		var hasEmail = $btn.data('has-email') === 1 || $btn.data('has-email') === '1';
+		var email = '';
+
+		if (!hasEmail) {
+			email = $('#lbite-receipt-email-input').val().trim();
+			if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+				alert('<?php echo esc_js( __( 'Please enter a valid email address.', 'libre-bite' ) ); ?>');
+				return;
+			}
+		}
+
 		$btn.prop('disabled', true);
-		$.post($btn.data('ajaxurl'), {
+		var postData = {
 			action: 'lbite_send_receipt_email',
 			order_id: $btn.data('order-id'),
 			nonce: $btn.data('nonce')
-		}, function(response) {
+		};
+		if (email) {
+			postData.email = email;
+		}
+		$.post($btn.data('ajaxurl'), postData, function(response) {
 			if (response.success) {
 				$btn.text('<?php echo esc_js( __( 'Receipt Sent', 'libre-bite' ) ); ?>');
+				$('#lbite-receipt-email-input').hide();
 			} else {
 				$btn.prop('disabled', false);
 				alert(response.data || '<?php echo esc_js( __( 'Error sending receipt.', 'libre-bite' ) ); ?>');

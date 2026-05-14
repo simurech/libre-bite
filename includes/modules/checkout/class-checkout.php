@@ -1407,8 +1407,16 @@ class LBite_Checkout {
 		}
 
 		$billing_email = $order->get_billing_email();
-		if ( empty( $billing_email ) || strpos( $billing_email, '@nomail.local' ) !== false ) {
-			wp_send_json_error( __( 'No valid email address on file.', 'libre-bite' ) );
+		$is_dummy      = empty( $billing_email ) || strpos( $billing_email, '@nomail.local' ) !== false;
+
+		if ( $is_dummy ) {
+			// phpcs:ignore WordPress.Security.NonceVerification -- Nonce wurde oben geprüft.
+			$guest_email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+			if ( ! is_email( $guest_email ) ) {
+				wp_send_json_error( __( 'Please enter a valid email address.', 'libre-bite' ) );
+			}
+			// Nur für diesen Versand setzen – wird nicht gespeichert.
+			$order->set_billing_email( $guest_email );
 		}
 
 		$emails = WC()->mailer()->get_emails();

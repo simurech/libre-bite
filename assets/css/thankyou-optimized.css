@@ -376,6 +376,16 @@ a.lbite-maps-link:hover {
 	cursor: default;
 }
 
+.lbite-receipt-email-input {
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid var(--lbite-color-border, #e0e0e0);
+	border-radius: var(--lbite-border-radius, 8px);
+	font-size: 14px;
+	box-sizing: border-box;
+	margin-bottom: 8px;
+}
+
 /* Drucklayout – visibility-Ansatz damit verschachtelte Eltern nicht versteckt werden */
 @media print {
 	body * {
