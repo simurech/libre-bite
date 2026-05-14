@@ -98,8 +98,8 @@ body .lbite-checkout-optimized textarea {
 	font-size: 15px;
 	line-height: 1.5;
 	color: #1a1a1a;
-	background-color: #fff;
-	border: 2px solid var(--lbite-color-border);
+	background-color: #fff !important;
+	border: 2px solid var(--lbite-color-border, #e0e0e0) !important;
 	border-radius: calc(var(--lbite-border-radius) - 2px);
 	padding: 12px 15px;
 	width: 100%;
@@ -265,7 +265,7 @@ body .lbite-checkout-optimized .lbite-checkout-info {
 .lbite-checkout-step {
 	margin-bottom: 30px;
 	padding: 20px;
-	background: #fff;
+	background: var(--lbite-color-background);
 	border: 1px solid var(--lbite-color-border);
 	border-radius: var(--lbite-border-radius);
 }
