@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="lbite-help-tip">
 			<span class="dashicons dashicons-lightbulb"></span>
-			<p><?php esc_html_e( 'Tip: The dashboard updates automatically. You do not need to manually reload the page to see new orders. The interval can be adjusted under Settings → Dashboard.', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'Tip: The dashboard updates automatically. You do not need to manually reload the page to see new orders. The interval can be adjusted under Settings → Order Overview.', 'libre-bite' ); ?></p>
 		</div>
 	</div>
 
@@ -96,6 +96,47 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<li><?php esc_html_e( 'This way you always know exactly when to start preparing.', 'libre-bite' ); ?></li>
 		</ul>
 	</div>
+
+	<!-- Vorbestellungen ausgegraut (F7, Pro) -->
+	<?php if ( lbite_feature_enabled( 'enable_future_orders_dimmed' ) || ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) ) : ?>
+	<div class="lbite-help-article">
+		<h3>
+			<?php esc_html_e( 'Future Pre-orders (Dimmed)', 'libre-bite' ); ?>
+			<?php if ( ! lbite_feature_enabled( 'enable_future_orders_dimmed' ) ) : ?>
+				<span class="lbite-pro-badge">Pro</span>
+			<?php endif; ?>
+		</h3>
+		<p><?php esc_html_e( 'When enabled, pre-orders with a pickup time far in the future are shown greyed out in the Kanban board. They cannot be dragged or processed until they are within the preparation window.', 'libre-bite' ); ?></p>
+		<ul>
+			<li><?php esc_html_e( 'Future pre-orders are displayed with reduced opacity in the "Incoming" column.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Drag & drop and status buttons are disabled until the order enters the preparation window.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'You can optionally hide future pre-orders completely until they are relevant.', 'libre-bite' ); ?></li>
+		</ul>
+		<div class="lbite-help-tip">
+			<span class="dashicons dashicons-lightbulb"></span>
+			<p><?php esc_html_e( 'Activate this feature under Settings → Features → "Dim Future Pre-orders". Configure visibility under Settings → Order Overview.', 'libre-bite' ); ?></p>
+		</div>
+	</div>
+	<?php endif; ?>
+
+	<!-- Beleg per E-Mail (F8/F9, Pro) -->
+	<?php if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) : ?>
+	<div class="lbite-help-article">
+		<h3>
+			<?php esc_html_e( 'Receipt by Email', 'libre-bite' ); ?>
+			<span class="lbite-pro-badge">Pro</span>
+		</h3>
+		<p><?php esc_html_e( 'With the optimized checkout, customers can request a receipt by email directly on the order confirmation page. Admins can also resend receipts from the order detail view.', 'libre-bite' ); ?></p>
+		<ul>
+			<li><strong><?php esc_html_e( 'Customer:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'After ordering, an "Email Receipt" button appears on the confirmation page (only if a valid email was entered).', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Admin:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'A "Send Receipt" button is available in the WooCommerce order detail view under the "Libre Bite" metabox.', 'libre-bite' ); ?></li>
+		</ul>
+		<div class="lbite-help-tip">
+			<span class="dashicons dashicons-lightbulb"></span>
+			<p><?php esc_html_e( 'The receipt email uses the standard WooCommerce invoice email. It can only be sent once per order to prevent duplicates.', 'libre-bite' ); ?></p>
+		</div>
+	</div>
+	<?php endif; ?>
 
 	<!-- POS -->
 	<div class="lbite-help-article">

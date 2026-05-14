@@ -62,6 +62,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div>
 
+		<!-- Reservierungsformular-Shortcode (Pro) -->
+		<?php if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) : ?>
+		<div class="lbite-doc-section">
+			<h2><?php esc_html_e( 'Shortcodes', 'libre-bite' ); ?> – <?php esc_html_e( 'Pro', 'libre-bite' ); ?></h2>
+
+			<div class="lbite-doc-card">
+				<h3>[lbite_reservation_form] <span class="lbite-pro-badge">Pro</span></h3>
+				<p><?php esc_html_e( 'Embeds a reservation request form on any page. Guests can submit a reservation inquiry which is managed in the reservation board.', 'libre-bite' ); ?></p>
+
+				<h4><?php esc_html_e( 'Usage:', 'libre-bite' ); ?></h4>
+				<code class="lbite-code-block">[lbite_reservation_form]</code>
+
+				<h4><?php esc_html_e( 'Parameters:', 'libre-bite' ); ?></h4>
+				<ul>
+					<li><code>location_id="42"</code> – <?php esc_html_e( 'Pre-select a specific location (use the location ID). Leave empty to let the customer choose.', 'libre-bite' ); ?></li>
+				</ul>
+
+				<h4><?php esc_html_e( 'Examples:', 'libre-bite' ); ?></h4>
+				<code class="lbite-code-block">[lbite_reservation_form]</code>
+				<p class="description"><?php esc_html_e( 'Form with location selector (all locations)', 'libre-bite' ); ?></p>
+
+				<code class="lbite-code-block">[lbite_reservation_form location_id="42"]</code>
+				<p class="description"><?php esc_html_e( 'Form pre-set to a specific location', 'libre-bite' ); ?></p>
+
+				<div class="notice notice-info inline" style="margin-top: 15px;">
+					<p><strong><?php esc_html_e( 'Note:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Reservations are managed under Libre Bite → Reservations. Two emails are sent automatically: one to the guest (confirmation) and one to the admin (notification).', 'libre-bite' ); ?></p>
+				</div>
+			</div>
+		</div>
+		<?php endif; ?>
+
 		<!-- URL-Parameter -->
 		<div class="lbite-doc-section">
 			<h2><?php esc_html_e( 'URL Parameters', 'libre-bite' ); ?></h2>

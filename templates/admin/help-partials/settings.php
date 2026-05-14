@@ -55,6 +55,14 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					<td><?php esc_html_e( 'X minutes before the selected pickup time, the customer is automatically sent a reminder email (if enabled).', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
+					<td><strong><?php esc_html_e( 'Slot Buffer Start', 'libre-bite' ); ?> <span class="lbite-pro-badge">Pro</span></strong></td>
+					<td><?php esc_html_e( 'Hides the first N minutes of each opening window. Example: 30 minutes with an opening at 11:00 → first available slot is 11:30.', 'libre-bite' ); ?></td>
+				</tr>
+				<tr>
+					<td><strong><?php esc_html_e( 'Slot Buffer End', 'libre-bite' ); ?> <span class="lbite-pro-badge">Pro</span></strong></td>
+					<td><?php esc_html_e( 'Hides the last N minutes of each opening window. Example: 30 minutes with closing at 22:00 → last available slot is 21:30.', 'libre-bite' ); ?></td>
+				</tr>
+				<tr>
 					<td><strong><?php esc_html_e( 'Branding', 'libre-bite' ); ?></strong></td>
 					<td><?php esc_html_e( 'Customize the logo, colors and name of the plugin in the backend – so the system matches your business.', 'libre-bite' ); ?></td>
 				</tr>
@@ -112,7 +120,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 		</h3>
 		<p><?php esc_html_e( 'The Checkout tab contains two sections: field configuration and additional checkout options.', 'libre-bite' ); ?></p>
 		<table class="widefat">
-			<thead><tr><th><?php esc_html_e( 'Einstellung', 'libre-bite' ); ?></th><th><?php esc_html_e( 'Was es bewirkt', 'libre-bite' ); ?></th></tr></thead>
+			<thead><tr><th><?php esc_html_e( 'Setting', 'libre-bite' ); ?></th><th><?php esc_html_e( 'What it does', 'libre-bite' ); ?></th></tr></thead>
 			<tbody>
 				<tr>
 					<td><strong><?php esc_html_e( 'Checkout Fields', 'libre-bite' ); ?></strong></td>
@@ -147,7 +155,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 			<?php esc_html_e( 'Order Overview', 'libre-bite' ); ?>
 		</h3>
 		<table class="widefat">
-			<thead><tr><th><?php esc_html_e( 'Einstellung', 'libre-bite' ); ?></th><th><?php esc_html_e( 'Was es bewirkt', 'libre-bite' ); ?></th></tr></thead>
+			<thead><tr><th><?php esc_html_e( 'Setting', 'libre-bite' ); ?></th><th><?php esc_html_e( 'What it does', 'libre-bite' ); ?></th></tr></thead>
 			<tbody>
 				<?php if ( lbite_feature_enabled( 'enable_kanban_board' ) ) : ?>
 				<tr>
@@ -159,6 +167,12 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				<tr>
 					<td><strong><?php esc_html_e( 'Notification Sound', 'libre-bite' ); ?></strong></td>
 					<td><?php esc_html_e( 'The sound played when new orders arrive. You can choose a custom sound from the media library or use the default sound.', 'libre-bite' ); ?></td>
+				</tr>
+				<?php endif; ?>
+				<?php if ( lbite_feature_enabled( 'enable_future_orders_dimmed' ) || ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) ) : ?>
+				<tr>
+					<td><strong><?php esc_html_e( 'Show Future Pre-orders', 'libre-bite' ); ?> <span class="lbite-pro-badge">Pro</span></strong></td>
+					<td><?php esc_html_e( 'When disabled, pre-orders far in the future are hidden from the Kanban board until they enter the preparation window. When enabled, they appear dimmed and cannot be moved.', 'libre-bite' ); ?></td>
 				</tr>
 				<?php endif; ?>
 			</tbody>

@@ -174,12 +174,17 @@ wp_enqueue_script( 'wp-color-picker' );
 		</tr>
 	</table>
 
-	<h2><?php esc_html_e( 'Table Ordering', 'libre-bite' ); ?></h2>
+	<h2>
+		<?php esc_html_e( 'Table Ordering', 'libre-bite' ); ?>
+		<?php if ( ! $lbite_is_premium_for_f5 ) : ?>
+			<span class="lbite-pro-badge">Pro</span>
+		<?php endif; ?>
+	</h2>
 	<table class="form-table">
 		<tr>
 			<th><?php esc_html_e( 'Menu Page', 'libre-bite' ); ?></th>
 			<td>
-				<select name="lbite_table_order_page_id">
+				<select name="lbite_table_order_page_id" <?php echo $lbite_is_premium_for_f5 ? '' : 'disabled'; ?>>
 					<option value="0"><?php esc_html_e( '— Default (Shop Page) —', 'libre-bite' ); ?></option>
 					<?php foreach ( $lbite_all_pages as $lbite_p ) : ?>
 						<option value="<?php echo esc_attr( $lbite_p->ID ); ?>" <?php selected( $lbite_table_order_page, $lbite_p->ID ); ?>>

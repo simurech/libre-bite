@@ -44,17 +44,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<tbody>
 				<tr>
 					<td><strong><?php esc_html_e( 'Opens at', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Time from which orders are possible', 'libre-bite' ); ?></td>
-					<td>08:00</td>
+					<td><?php esc_html_e( 'Time from which orders are possible (1st window)', 'libre-bite' ); ?></td>
+					<td>11:00</td>
 				</tr>
 				<tr>
 					<td><strong><?php esc_html_e( 'Closes at', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Time until which orders are possible', 'libre-bite' ); ?></td>
-					<td>18:00</td>
+					<td><?php esc_html_e( 'Time until which orders are possible (1st window)', 'libre-bite' ); ?></td>
+					<td>14:00</td>
+				</tr>
+				<tr>
+					<td><strong><?php esc_html_e( '2nd window: Opens at', 'libre-bite' ); ?></strong></td>
+					<td><?php esc_html_e( 'Start of an optional second opening window (e.g. for lunch break)', 'libre-bite' ); ?></td>
+					<td>17:00</td>
+				</tr>
+				<tr>
+					<td><strong><?php esc_html_e( '2nd window: Closes at', 'libre-bite' ); ?></strong></td>
+					<td><?php esc_html_e( 'End of the second opening window. Leave empty if not needed.', 'libre-bite' ); ?></td>
+					<td>22:00</td>
 				</tr>
 				<tr>
 					<td><strong><?php esc_html_e( 'Closed', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Mark day as closed', 'libre-bite' ); ?></td>
+					<td><?php esc_html_e( 'Mark day as closed – no time slots are offered', 'libre-bite' ); ?></td>
 					<td><?php esc_html_e( 'Sunday', 'libre-bite' ); ?></td>
 				</tr>
 			</tbody>
@@ -62,7 +72,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="lbite-help-tip">
 			<span class="dashicons dashicons-lightbulb"></span>
-			<p><?php esc_html_e( 'Tip: Leave the opening hours of a day empty if the location is closed on that day.', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'Two windows per day: Use both windows for locations with a midday break (e.g. 11:00–14:00 and 17:00–22:00). Leave the 2nd window empty if not needed.', 'libre-bite' ); ?></p>
 		</div>
 	</div>
 
