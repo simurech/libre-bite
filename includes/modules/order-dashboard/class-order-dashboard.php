@@ -215,6 +215,22 @@ class LBite_Order_Dashboard {
 			}
 		}
 
+		// Vorbestellungen ausblenden wenn Option deaktiviert (Pro).
+		$show_future = (bool) get_option( 'lbite_show_future_orders', true );
+		if ( ! $show_future ) {
+			foreach ( $orders_by_status as &$status_orders ) {
+				$status_orders = array_values(
+					array_filter(
+						$status_orders,
+						function( $o ) {
+							return ! $o['is_future'];
+						}
+					)
+				);
+			}
+			unset( $status_orders );
+		}
+
 		// Bei abgeschlossenen Bestellungen: Neueste zuerst, nur die letzten 3 initial anzeigen.
 		if ( ! empty( $orders_by_status['completed'] ) ) {
 			$orders_by_status['completed'] = array_reverse( $orders_by_status['completed'] );
@@ -254,9 +270,10 @@ class LBite_Order_Dashboard {
 			);
 		}
 
-		// Vorbestellung in der Zukunft? (Premium-Feature enable_future_orders_dimmed)
+		// Vorbestellung in der Zukunft? Immer berechnen (für Filterung und Dimming).
+		// Das Dimming im JS wird nur angewendet wenn futureDimmingEnabled aktiv ist.
 		$is_future = false;
-		if ( lbite_feature_enabled( 'enable_future_orders_dimmed' ) && 'later' === $order_type && $pickup_time ) {
+		if ( 'later' === $order_type && $pickup_time ) {
 			$prep_time = (int) get_option( 'lbite_preparation_time', 30 );
 			$is_future = lbite_local_time_to_timestamp( $pickup_time ) > ( current_time( 'timestamp' ) + $prep_time * 60 );
 		}

@@ -413,7 +413,7 @@
 		 */
 		createOrderCard: function(order, currentStatus) {
 			const $card = $('<div class="lbite-kanban-card"></div>').attr('data-order-id', order.id);
-			if (order.is_future) {
+			if (order.is_future && lbiteDashboard.futureDimmingEnabled) {
 				$card.addClass('lbite-kanban-card--future');
 			}
 			
