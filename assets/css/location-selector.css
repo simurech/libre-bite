@@ -46,7 +46,7 @@
 .lbite-location-item:hover,
 .lbite-location-item.selected {
 	border-color: var(--lbite-color-primary, #0073aa);
-	background: #f0f8ff;
+	background: var(--lbite-color-primary-bg, #f0f8ff);
 }
 
 .lbite-location-item h3 {
@@ -150,7 +150,7 @@ input[type="date"].lbite-input {
 
 .lbite-radio-label:hover {
 	border-color: var(--lbite-color-primary, #0073aa);
-	background: #f0f8ff;
+	background: var(--lbite-color-primary-bg, #f0f8ff);
 }
 
 .lbite-radio-label input[type="radio"] {
@@ -179,7 +179,7 @@ input[type="date"].lbite-input {
 }
 
 .lbite-button-primary:hover {
-	background: #005a87;
+	background: var(--lbite-color-primary-hover, #005a87);
 }
 
 .lbite-current-selection {
@@ -374,7 +374,7 @@ a.lbite-location-address.lbite-maps-link {
 }
 
 a.lbite-location-address.lbite-maps-link:hover {
-	color: #005a87;
+	color: var(--lbite-color-primary-hover, #005a87);
 	text-decoration: underline;
 }
 
@@ -399,7 +399,7 @@ a.lbite-location-address.lbite-maps-link:hover {
 }
 
 .lbite-back-button:hover {
-	color: #005a87;
+	color: var(--lbite-color-primary-hover, #005a87);
 	transform: translateX(-4px);
 }
 
@@ -493,7 +493,7 @@ a.lbite-location-address.lbite-maps-link:hover {
 
 .lbite-time-option.selected {
 	border-color: var(--lbite-color-primary, #0073aa);
-	background: #f0f8ff;
+	background: var(--lbite-color-primary-bg, #f0f8ff);
 }
 
 .lbite-time-icon {
@@ -582,7 +582,7 @@ a.lbite-location-address.lbite-maps-link:hover {
 }
 
 .lbite-button-primary:hover {
-	background: #005a87;
+	background: var(--lbite-color-primary-hover, #005a87);
 	transform: translateY(-2px);
 	box-shadow: 0 4px 12px rgba(0,115,170,0.3);
 }

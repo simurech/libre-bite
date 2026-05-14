@@ -92,7 +92,7 @@
 
 .lbite-change-btn {
 	padding: 8px 20px;
-	background: #0073aa;
+	background: var(--lbite-color-primary, #0073aa);
 	color: #fff;
 	border: none;
 	border-radius: 6px;
@@ -104,7 +104,7 @@
 }
 
 .lbite-change-btn:hover {
-	background: #005a87;
+	background: var(--lbite-color-primary-hover, #005a87);
 }
 
 /* Keine Auswahl */
@@ -157,8 +157,8 @@ input[type="date"].lbite-select {
 
 .lbite-select:focus {
 	outline: none;
-	border-color: #0073aa;
-	box-shadow: 0 0 0 1px #0073aa;
+	border-color: var(--lbite-color-primary, #0073aa);
+	box-shadow: 0 0 0 1px var(--lbite-color-primary, #0073aa);
 }
 
 .lbite-radio-group {
@@ -191,8 +191,8 @@ input[type="date"].lbite-select {
 }
 
 .lbite-radio-option:has(input[type="radio"]:checked) {
-	border-color: #0073aa;
-	background: #f0f8ff;
+	border-color: var(--lbite-color-primary, #0073aa);
+	background: var(--lbite-color-primary-bg, #f0f8ff);
 }
 
 .lbite-radio-option span {
@@ -248,12 +248,12 @@ input[type="date"].lbite-select {
 }
 
 .lbite-save-btn {
-	background: #0073aa;
+	background: var(--lbite-color-primary, #0073aa);
 	color: #fff;
 }
 
 .lbite-save-btn:hover {
-	background: #005a87;
+	background: var(--lbite-color-primary-hover, #005a87);
 }
 
 .lbite-cancel-btn {
@@ -451,17 +451,17 @@ select.lbite-select option {
 
 .lbite-tip-custom input[type="number"]:focus {
 	outline: none;
-	border-color: var(--lbite-color-primary, #0073aa);
+	border-color: var(--lbite-color-primary, var(--lbite-color-primary, #0073aa));
 }
 
 /* Ausgewählte Option */
 .lbite-tip-option:has(input[type="radio"]:checked) {
-	border-color: var(--lbite-color-primary, #0073aa);
+	border-color: var(--lbite-color-primary, var(--lbite-color-primary, #0073aa));
 	background: rgba(0, 115, 170, 0.05);
 }
 
 .lbite-tip-option:has(input[type="radio"]:checked) > span {
-	color: var(--lbite-color-primary, #0073aa);
+	color: var(--lbite-color-primary, var(--lbite-color-primary, #0073aa));
 }
 
 /* Lade-Status während Checkout-Aktualisierung */
@@ -480,7 +480,7 @@ select.lbite-select option {
 	height: 20px;
 	margin: -10px 0 0 -10px;
 	border: 2px solid #ddd;
-	border-top-color: var(--lbite-color-primary, #0073aa);
+	border-top-color: var(--lbite-color-primary, var(--lbite-color-primary, #0073aa));
 	border-radius: 50%;
 	animation: lbite-tip-spin 0.6s linear infinite;
 }

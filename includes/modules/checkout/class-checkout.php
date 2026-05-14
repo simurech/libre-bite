@@ -435,6 +435,13 @@ class LBite_Checkout {
 		$color_secondary = get_option( 'lbite_color_secondary', '#23282d' );
 		$color_accent    = get_option( 'lbite_color_accent', '#00a32a' );
 
+		// Hellen Hintergrund aus Primary berechnen (8 % Primary + 92 % Weiss).
+		$hex              = ltrim( $color_primary, '#' );
+		$r                = (int) round( hexdec( substr( $hex, 0, 2 ) ) * 0.08 + 255 * 0.92 );
+		$g                = (int) round( hexdec( substr( $hex, 2, 2 ) ) * 0.08 + 255 * 0.92 );
+		$b                = (int) round( hexdec( substr( $hex, 4, 2 ) ) * 0.08 + 255 * 0.92 );
+		$color_primary_bg = sprintf( '#%02x%02x%02x', $r, $g, $b );
+
 		$custom_css = sprintf(
 			':root {
 				--lbite-color-primary: %s;
@@ -442,12 +449,14 @@ class LBite_Checkout {
 				--lbite-color-accent: %s;
 				--lbite-color-primary-hover: %s;
 				--lbite-color-accent-hover: %s;
+				--lbite-color-primary-bg: %s;
 			}',
 			esc_attr( $color_primary ),
 			esc_attr( $color_secondary ),
 			esc_attr( $color_accent ),
 			esc_attr( $this->adjust_brightness( $color_primary, -20 ) ),
-			esc_attr( $this->adjust_brightness( $color_accent, -20 ) )
+			esc_attr( $this->adjust_brightness( $color_accent, -20 ) ),
+			esc_attr( $color_primary_bg )
 		);
 
 		wp_add_inline_style( 'lbite-frontend', $custom_css );
