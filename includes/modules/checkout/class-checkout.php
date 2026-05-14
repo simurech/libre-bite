@@ -101,6 +101,17 @@ class LBite_Checkout {
 
 		// URL-Parameter verarbeiten
 		$this->loader->add_action( 'template_redirect', $this, 'process_url_parameters' );
+
+		// Zeitslot-Cache invalidieren wenn Standort oder Feiertage geändert werden.
+		$this->loader->add_action( 'save_post_lbite_location', $this, 'invalidate_timeslot_cache' );
+		$this->loader->add_action( 'update_option_lbite_holidays', $this, 'invalidate_timeslot_cache' );
+	}
+
+	/**
+	 * Zeitslot-Cache-Version hochzählen, damit veraltete Transients ignoriert werden.
+	 */
+	public function invalidate_timeslot_cache() {
+		update_option( 'lbite_slots_cache_ver', (int) get_option( 'lbite_slots_cache_ver', 0 ) + 1, false );
 	}
 
 	/**
@@ -1018,6 +1029,21 @@ class LBite_Checkout {
 	 * @return array
 	 */
 	private function get_available_timeslots( $location_id, $date ) {
+		// WP-Timezone frühzeitig setzen – wird für $is_today und alle Zeitberechnungen benötigt.
+		$tz       = wp_timezone();
+		$is_today = ( $date === ( new DateTime( 'now', $tz ) )->format( 'Y-m-d' ) );
+
+		// Zukünftige Daten cachen (5 Min). Heutige Slots nicht cachen – sie ändern sich minütlich.
+		$cache_key = null;
+		if ( ! $is_today ) {
+			$cache_ver = (int) get_option( 'lbite_slots_cache_ver', 0 );
+			$cache_key = 'lbite_s_' . $cache_ver . '_' . absint( $location_id ) . '_' . sanitize_key( $date );
+			$cached    = get_transient( $cache_key );
+			if ( false !== $cached ) {
+				return $cached;
+			}
+		}
+
 		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
 		$interval      = (int) get_option( 'lbite_timeslot_interval', 15 );
 
@@ -1026,7 +1052,7 @@ class LBite_Checkout {
 		}
 
 		// WP-Timezone explizit verwenden, damit alle Zeitberechnungen konsistent sind.
-		$tz = wp_timezone();
+		// ($tz bereits oben gesetzt)
 
 		// Wochentag des gewählten Datums in der WP-Timezone ermitteln (englische Namen).
 		$lbite_date_dt = new DateTime( $date, $tz );
@@ -1060,7 +1086,7 @@ class LBite_Checkout {
 		$now_dt        = new DateTime( 'now', $tz );
 		$now_ts        = $now_dt->getTimestamp();
 		$earliest_slot = $now_ts + ( $prep_time * 60 );
-		$is_today      = ( $date === $now_dt->format( 'Y-m-d' ) );
+		// $is_today ist bereits oben für den Cache-Check gesetzt.
 
 		// Zeitfenster für diesen Tag zusammenstellen (Fenster 1 + optional Fenster 2).
 		$windows   = array();
@@ -1129,7 +1155,13 @@ class LBite_Checkout {
 			}
 		);
 
-		return array_values( $timeslots );
+		$result = array_values( $timeslots );
+
+		if ( $cache_key ) {
+			set_transient( $cache_key, $result, 5 * MINUTE_IN_SECONDS );
+		}
+
+		return $result;
 	}
 
 	/**
