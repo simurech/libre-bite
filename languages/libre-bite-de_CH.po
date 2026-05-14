@@ -6246,3 +6246,9 @@ msgstr "Deine E-Mail-Adresse"
 
 msgid "Email address"
 msgstr "E-Mail-Adresse"
+
+msgid "Send receipt"
+msgstr "Beleg senden"
+
+msgid "Enter customer email address:"
+msgstr "Kunden-E-Mail-Adresse eingeben:"

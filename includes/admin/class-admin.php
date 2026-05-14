@@ -530,6 +530,8 @@ class LBite_Admin {
 						'cancelOrder'        => __( 'Cancel order', 'libre-bite' ),
 						'fullscreen'         => __( 'Fullscreen', 'libre-bite' ),
 						'exitFullscreen'     => __( 'Exit fullscreen', 'libre-bite' ),
+						'sendReceipt'        => __( 'Send receipt', 'libre-bite' ),
+						'enterEmail'         => __( 'Enter customer email address:', 'libre-bite' ),
 					),
 				)
 			);

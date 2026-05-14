@@ -482,6 +482,13 @@
 				}
 			}
 
+			// Beleg-Button (für alle Bestellungen)
+			const $rBtn = $('<button class="lbite-receipt-button"></button>')
+				.attr('title', lbiteDashboard.strings.sendReceipt || 'Send receipt')
+				.text('✉')
+				.on('click', () => this.sendReceipt(order.id, order.has_email));
+			$actions.append($rBtn);
+
 			$card.append($actions);
 			return $card;
 		},
@@ -582,6 +589,34 @@
 				complete: () => {
 					this.pendingActions.delete(actionKey);
 					this.hideLoading();
+				}
+			});
+		},
+
+		/**
+		 * Beleg per E-Mail senden
+		 */
+		sendReceipt: function(orderId, hasEmail) {
+			var email = '';
+			if (!hasEmail) {
+				email = prompt(lbiteDashboard.strings.enterEmail || 'Enter customer email address:');
+				if (!email) {
+					return;
+				}
+			}
+			var postData = {
+				action: 'lbite_admin_send_receipt',
+				nonce: lbiteDashboard.nonce,
+				order_id: orderId
+			};
+			if (email) {
+				postData.email = email;
+			}
+			$.post(lbiteDashboard.ajaxUrl, postData, function(response) {
+				if (response.success) {
+					window.lbiteNotify && window.lbiteNotify.success(response.data || '');
+				} else {
+					window.lbiteNotify && window.lbiteNotify.error(response.data || '');
 				}
 			});
 		},

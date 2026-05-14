@@ -261,6 +261,8 @@ class LBite_Order_Dashboard {
 			$is_future = lbite_local_time_to_timestamp( $pickup_time ) > ( current_time( 'timestamp' ) + $prep_time * 60 );
 		}
 
+		$billing_email = $order->get_billing_email();
+
 		$data = array(
 			'id'          => $order->get_id(),
 			'number'      => $order->get_order_number(),
@@ -274,6 +276,7 @@ class LBite_Order_Dashboard {
 			'items'       => $items,
 			'notes'       => $order->get_customer_note(),
 			'is_future'   => $is_future,
+			'has_email'   => ! empty( $billing_email ) && strpos( $billing_email, '@nomail.local' ) === false,
 		);
 
 		return apply_filters( 'lbite_dashboard_order_data', $data, $order );
