@@ -1321,6 +1321,11 @@ class LBite_Checkout {
 	 * Nur in Premium-Version verfügbar.
 	 */
 	public function ajax_send_receipt_email__premium_only() {
+		// Dieser Handler ist nopriv by design: Gäste sind nach dem Checkout nicht eingeloggt
+		// und brauchen dennoch die Möglichkeit, einen Beleg anzufordern.
+		// Schutz erfolgt durch eine order-spezifische Nonce (lbite_send_receipt_{order_id})
+		// und das einmalige Rate-Limit via _lbite_receipt_sent Order-Meta.
+		// phpcs:ignore WordPress.Security.NonceVerification -- Nonce wird unten geprüft.
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 
 		if ( ! $order_id ) {
