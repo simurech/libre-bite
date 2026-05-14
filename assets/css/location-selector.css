@@ -45,7 +45,7 @@
 
 .lbite-location-item:hover,
 .lbite-location-item.selected {
-	border-color: #0073aa;
+	border-color: var(--lbite-color-primary, #0073aa);
 	background: #f0f8ff;
 }
 
@@ -113,6 +113,8 @@
 	font-size: 16px;
 	background: #fff;
 	transition: border-color 0.3s;
+	box-sizing: border-box;
+	height: auto !important;
 }
 
 /* Theme-Übersteuerung: Astra setzt input[type="date"] auf eine farbige Variable */
@@ -120,12 +122,13 @@ input[type="date"].lbite-select,
 input[type="date"].lbite-input {
 	background: #fff;
 	border-color: #ddd;
+	box-sizing: border-box;
 }
 
 .lbite-select:focus,
 .lbite-input:focus {
 	outline: none;
-	border-color: #0073aa;
+	border-color: var(--lbite-color-primary, #0073aa);
 }
 
 .lbite-radio-group {
@@ -146,7 +149,7 @@ input[type="date"].lbite-input {
 }
 
 .lbite-radio-label:hover {
-	border-color: #0073aa;
+	border-color: var(--lbite-color-primary, #0073aa);
 	background: #f0f8ff;
 }
 
@@ -156,7 +159,7 @@ input[type="date"].lbite-input {
 
 .lbite-radio-label input[type="radio"]:checked + span {
 	font-weight: 600;
-	color: #0073aa;
+	color: var(--lbite-color-primary, #0073aa);
 }
 
 .lbite-button {
@@ -170,7 +173,7 @@ input[type="date"].lbite-input {
 }
 
 .lbite-button-primary {
-	background: #0073aa;
+	background: var(--lbite-color-primary, #0073aa);
 	color: #fff;
 	width: 100%;
 }
@@ -183,7 +186,7 @@ input[type="date"].lbite-input {
 	margin-top: 20px;
 	padding: 15px;
 	background: #e7f7ff;
-	border-left: 4px solid #0073aa;
+	border-left: 4px solid var(--lbite-color-primary, #0073aa);
 	border-radius: 4px;
 }
 
@@ -281,7 +284,7 @@ input[type="date"].lbite-input {
 .lbite-location-card:hover {
 	transform: translateY(-4px);
 	box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-	border-color: #0073aa;
+	border-color: var(--lbite-color-primary, #0073aa);
 }
 
 .lbite-location-image {
@@ -365,7 +368,7 @@ a.lbite-location-address.lbite-maps-link {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
-	color: #0073aa;
+	color: var(--lbite-color-primary, #0073aa);
 	text-decoration: none;
 	transition: color 0.2s;
 }
@@ -384,7 +387,7 @@ a.lbite-location-address.lbite-maps-link:hover {
 .lbite-back-button {
 	background: none;
 	border: none;
-	color: #0073aa;
+	color: var(--lbite-color-primary, #0073aa);
 	font-size: 16px;
 	cursor: pointer;
 	padding: 8px 12px;
@@ -484,12 +487,12 @@ a.lbite-location-address.lbite-maps-link:hover {
 }
 
 .lbite-time-option:hover {
-	border-color: #0073aa;
+	border-color: var(--lbite-color-primary, #0073aa);
 	box-shadow: 0 4px 12px rgba(0,115,170,0.1);
 }
 
 .lbite-time-option.selected {
-	border-color: #0073aa;
+	border-color: var(--lbite-color-primary, #0073aa);
 	background: #f0f8ff;
 }
 
@@ -497,7 +500,7 @@ a.lbite-location-address.lbite-maps-link:hover {
 	width: 48px;
 	height: 48px;
 	border-radius: 50%;
-	background: #0073aa;
+	background: var(--lbite-color-primary, #0073aa);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -552,12 +555,14 @@ a.lbite-location-address.lbite-maps-link:hover {
 	border-radius: 8px;
 	font-size: 16px;
 	transition: border-color 0.3s;
+	box-sizing: border-box;
+	height: auto !important;
 }
 
 .lbite-select:focus,
 .lbite-input:focus {
 	outline: none;
-	border-color: #0073aa;
+	border-color: var(--lbite-color-primary, #0073aa);
 }
 
 .lbite-button {
@@ -572,7 +577,7 @@ a.lbite-location-address.lbite-maps-link:hover {
 }
 
 .lbite-button-primary {
-	background: #0073aa;
+	background: var(--lbite-color-primary, #0073aa);
 	color: #fff;
 }
 
@@ -603,7 +608,7 @@ a.lbite-location-address.lbite-maps-link:hover {
 	width: 50px;
 	height: 50px;
 	border: 4px solid #e0e0e0;
-	border-top: 4px solid #0073aa;
+	border-top: 4px solid var(--lbite-color-primary, #0073aa);
 	border-radius: 50%;
 	animation: spin 0.8s linear infinite;
 }
