@@ -6206,3 +6206,6 @@ msgstr "Diesen Link oder QR-Code für den Standort verwenden."
 
 #~ msgid "Location management"
 #~ msgstr "Standortverwaltung"
+
+msgid "Feature not enabled"
+msgstr "Funktion nicht aktiviert"
