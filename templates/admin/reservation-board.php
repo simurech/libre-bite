@@ -51,7 +51,7 @@ $lbite_saved_location = get_user_meta( get_current_user_id(), 'lbite_reservation
 	</div>
 
 	<!-- Platzhalter wenn kein Standort gewählt -->
-	<div id="lbite-res-no-location-message" class="lbite-no-location-selected" style="<?php echo $lbite_saved_location ? 'display: none;' : ''; ?>">
+	<div id="lbite-res-no-location-message" class="lbite-no-location-selected" style="<?php echo esc_attr( $lbite_saved_location ? 'display: none;' : '' ); ?>">
 		<div style="background: #fff; padding: 40px; margin: 40px 0; border: 2px dashed #ccc; border-radius: 8px; text-align: center;">
 			<span class="dashicons dashicons-calendar-alt" style="font-size: 48px; color: #999; margin-bottom: 20px;"></span>
 			<h2 style="color: #666; margin: 10px 0;"><?php esc_html_e( 'Please select a location', 'libre-bite' ); ?></h2>
@@ -59,7 +59,7 @@ $lbite_saved_location = get_user_meta( get_current_user_id(), 'lbite_reservation
 		</div>
 	</div>
 
-	<div id="lbite-reservation-board-wrap" style="<?php echo $lbite_saved_location ? '' : 'display: none;'; ?>">
+	<div id="lbite-reservation-board-wrap" style="<?php echo esc_attr( $lbite_saved_location ? '' : 'display: none;' ); ?>">
 		<div id="lbite-res-loading" class="lbite-res-loading" style="display:none;">
 			<span class="spinner is-active"></span>
 			<?php esc_html_e( 'Loading…', 'libre-bite' ); ?>

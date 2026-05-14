@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						'return'       => 'ids',
 					)
 				);
-				echo count( $lbite_today_orders );
+				echo (int) count( $lbite_today_orders );
 				?>
 			</p>
 		</div>
@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						'post_status'    => 'publish',
 					)
 				);
-				echo count( $lbite_locations );
+				echo (int) count( $lbite_locations );
 				?>
 			</p>
 			<p><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_location' ) ); ?>"><?php esc_html_e( 'Manage', 'libre-bite' ); ?></a></p>

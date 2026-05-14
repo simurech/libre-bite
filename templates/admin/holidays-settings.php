@@ -90,7 +90,7 @@ $lbite_day_labels = array(
 							<option value="custom" <?php selected( $lbite_h_type, 'custom' ); ?>><?php esc_html_e( 'Custom hours', 'libre-bite' ); ?></option>
 						</select>
 					</td>
-					<td class="lbite-holiday-hours" style="<?php echo 'custom' !== $lbite_h_type ? 'display:none;' : ''; ?>">
+					<td class="lbite-holiday-hours" style="<?php echo esc_attr( 'custom' !== $lbite_h_type ? 'display:none;' : '' ); ?>">
 						<?php esc_html_e( 'From', 'libre-bite' ); ?>
 						<input type="time" name="lbite_holidays[<?php echo esc_attr( $lbite_h_idx ); ?>][open]" value="<?php echo esc_attr( $lbite_h['open'] ?? '' ); ?>">
 						<?php esc_html_e( 'To', 'libre-bite' ); ?>

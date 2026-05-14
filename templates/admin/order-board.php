@@ -70,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<!-- Platzhalter wenn kein Standort gewählt -->
-	<div class="lbite-no-location-selected" id="lbite-no-location-message" style="<?php echo $lbite_saved_location ? 'display: none;' : ''; ?>">
+	<div class="lbite-no-location-selected" id="lbite-no-location-message" style="<?php echo esc_attr( $lbite_saved_location ? 'display: none;' : '' ); ?>">
 		<div style="background: #fff; padding: 40px; margin: 40px 0; border: 2px dashed #ccc; border-radius: 8px; text-align: center;">
 			<span class="dashicons dashicons-location" style="font-size: 48px; color: #999; margin-bottom: 20px;"></span>
 			<h2 style="color: #666; margin: 10px 0;"><?php esc_html_e( 'Please select a location', 'libre-bite' ); ?></h2>
@@ -78,7 +78,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div class="lbite-kanban-board" id="lbite-kanban-board" style="<?php echo $lbite_saved_location ? '' : 'display: none;'; ?>">
+	<div class="lbite-kanban-board" id="lbite-kanban-board" style="<?php echo esc_attr( $lbite_saved_location ? '' : 'display: none;' ); ?>">
 		<div class="lbite-kanban-column" data-status="incoming">
 			<h2><?php esc_html_e( 'Incoming', 'libre-bite' ); ?></h2>
 			<div class="lbite-kanban-cards" id="lbite-column-incoming"></div>

@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
-		<div id="lbite-pos-table-selector-container" style="<?php echo ! $lbite_selected_location ? 'display: none;' : ''; ?>">
+		<div id="lbite-pos-table-selector-container" style="<?php echo esc_attr( ! $lbite_selected_location ? 'display: none;' : '' ); ?>">
 			<label for="lbite-pos-table">
 				<strong><?php esc_html_e( 'Table (optional):', 'libre-bite' ); ?></strong>
 			</label>

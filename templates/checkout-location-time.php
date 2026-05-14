@@ -94,7 +94,7 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 	<?php endif; ?>
 
 	<!-- Bearbeitungsformular (zunächst versteckt) -->
-	<div class="lbite-edit-form" style="<?php echo $lbite_location ? 'display: none;' : ''; ?>">
+	<div class="lbite-edit-form" style="<?php echo esc_attr( $lbite_location ? 'display: none;' : '' ); ?>">
 		<div class="lbite-form-group">
 			<label>
 				<?php esc_html_e( 'Location', 'libre-bite' ); ?> <span class="required">*</span>
