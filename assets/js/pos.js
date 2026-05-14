@@ -164,7 +164,7 @@
 
 			// Warenkorb leeren
 			$('#lbite-pos-clear').on('click', () => {
-				if (confirm('Warenkorb wirklich leeren?')) {
+				if (confirm(lbitePos.strings.cartClearConfirm)) {
 					this.clearCart();
 				}
 			});
@@ -250,7 +250,7 @@
 
 			const $loading = $('<div class="lbite-pos-loading-container"></div>');
 			$loading.append('<div class="lbite-pos-inline-spinner"></div>');
-			$loading.append($('<p></p>').text('Produkte werden geladen...'));
+			$loading.append($('<p></p>').text(lbitePos.strings.loadingProducts));
 			$('#lbite-product-grid').html($loading);
 
 			$.ajax({
@@ -369,7 +369,7 @@
 			$('#lbite-modal-product-name').text('Laden...');
 			const $loading = $('<div class="lbite-pos-modal-loading"></div>');
 			$loading.append('<div class="lbite-pos-modal-spinner"></div>');
-			$loading.append($('<p></p>').text('Produktdetails werden geladen...'));
+			$loading.append($('<p></p>').text(lbitePos.strings.loadingProductDetails));
 			$('#lbite-modal-body').html($loading);
 
 			// Produkt-Details via AJAX laden (Fallback)
@@ -388,12 +388,12 @@
 						this.currentProduct = response.data;
 						this.renderProductModal(response.data);
 					} else {
-						window.lbiteNotify && window.lbiteNotify.error('Fehler beim Laden der Produktdetails');
+						window.lbiteNotify && window.lbiteNotify.error(lbitePos.strings.errorLoadingDetails);
 						this.closeProductModal();
 					}
 				},
 				error: () => {
-					window.lbiteNotify && window.lbiteNotify.error('Fehler beim Laden der Produktdetails');
+					window.lbiteNotify && window.lbiteNotify.error(lbitePos.strings.errorLoadingDetails);
 					this.closeProductModal();
 				}
 			});
@@ -413,7 +413,9 @@
 		// Varianten rendern
 		if (productData.variations && productData.variations.length > 0) {
 			const $group = $('<div class="lbite-option-group"></div>');
-			$group.append($('<div class="lbite-option-group-label"></div>').html('Variante wählen: <span style="color: red;">*</span>'));
+			const $variantLabel = $('<div class="lbite-option-group-label"></div>').text(lbitePos.strings.selectVariant + ' ');
+			$variantLabel.append($('<span style="color: red;" aria-hidden="true">*</span>'));
+			$group.append($variantLabel);
 			
 			productData.variations.forEach((variation, index) => {
 				const inputId = 'modal_choice_' + (choiceCounter++);

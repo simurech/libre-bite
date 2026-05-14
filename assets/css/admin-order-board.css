@@ -271,7 +271,7 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 }
 
 .lbite-cancel-button:hover {
-	background: #e74c3c !important;
+	background: #c0392b !important;
 	color: white !important;
 	transform: translateY(-1px);
 }
@@ -383,11 +383,12 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 .lbite-cancel-button {
 	padding: 8px 12px;
 	border: 1px solid #e74c3c;
-	background: white;
-	color: #e74c3c;
+	background: #e74c3c;
+	color: white;
 	border-radius: 4px;
 	cursor: pointer;
 	font-size: 20px;
+	font-weight: bold;
 }
 
 /* Lade-Overlay */

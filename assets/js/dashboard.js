@@ -458,24 +458,25 @@
 			if (!order.is_future) {
 				// Status-Button
 				const statusButtons = {
-					'incoming': { next: 'preparing', label: 'Zubereitung starten', icon: '🔪', color: '#f39c12' },
-					'preparing': { next: 'ready', label: 'Abholbereit', icon: '✅', color: '#27ae60' },
-					'ready': { next: 'completed', label: 'Abgeschlossen', icon: '🎉', color: '#3498db' },
+					'incoming': { next: 'preparing', label: lbiteDashboard.strings.startPreparation, color: '#f39c12' },
+					'preparing': { next: 'ready', label: lbiteDashboard.strings.readyForPickup, icon: '✅', color: '#27ae60' },
+					'ready': { next: 'completed', label: lbiteDashboard.strings.completed, icon: '🎉', color: '#3498db' },
 					'completed': null
 				};
 
 				const statusButton = statusButtons[currentStatus];
 				if (statusButton) {
+					const btnLabel = statusButton.icon ? `${statusButton.icon} ${statusButton.label}` : statusButton.label;
 					const $sBtn = $('<button class="lbite-status-button"></button>')
 						.addClass(`lbite-status-button-${currentStatus}`)
-						.text(`${statusButton.icon} ${statusButton.label}`)
+						.text(btnLabel)
 						.on('click', () => this.moveToNextStatus(order.id, statusButton.next));
 					$actions.append($sBtn);
 				}
 
 				// Stornieren-Button
 				if (currentStatus !== 'completed') {
-					const $cBtn = $('<button class="lbite-cancel-button" title="Bestellung stornieren">🗑️</button>')
+					const $cBtn = $('<button class="lbite-cancel-button"></button>').attr('title', lbiteDashboard.strings.cancelOrder).text('✕')
 						.on('click', () => this.cancelOrder(order.id));
 					$actions.append($cBtn);
 				}
@@ -728,11 +729,11 @@
 
 			if (document.fullscreenElement) {
 				$icon.removeClass('dashicons-editor-expand').addClass('dashicons-editor-contract');
-				$btn.attr('title', 'Vollbild beenden');
+				$btn.attr('title', lbiteDashboard.strings.exitFullscreen);
 				$('body').addClass('lbite-board-fullscreen-active');
 			} else {
 				$icon.removeClass('dashicons-editor-contract').addClass('dashicons-editor-expand');
-				$btn.attr('title', 'Vollbild');
+				$btn.attr('title', lbiteDashboard.strings.fullscreen);
 				$('body').removeClass('lbite-board-fullscreen-active');
 			}
 		}

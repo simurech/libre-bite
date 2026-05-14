@@ -521,9 +521,15 @@ class LBite_Admin {
 						'cancellingOrder' => __( 'Cancelling order...', 'libre-bite' ),
 						'orderCancelled'  => __( 'Order cancelled and payment refunded', 'libre-bite' ),
 						'cancelError'     => __( 'Error cancelling', 'libre-bite' ),
-						'cancelOrderError' => __( 'Error cancelling order', 'libre-bite' ),
-						'unknownError'    => __( 'Unknown error', 'libre-bite' ),
-						'moreOrders'      => __( 'more order(s)', 'libre-bite' ),
+						'cancelOrderError'   => __( 'Error cancelling order', 'libre-bite' ),
+						'unknownError'       => __( 'Unknown error', 'libre-bite' ),
+						'moreOrders'         => __( 'more order(s)', 'libre-bite' ),
+						'startPreparation'   => __( 'Start preparation', 'libre-bite' ),
+						'readyForPickup'     => __( 'Ready for pickup', 'libre-bite' ),
+						'completed'          => __( 'Completed', 'libre-bite' ),
+						'cancelOrder'        => __( 'Cancel order', 'libre-bite' ),
+						'fullscreen'         => __( 'Fullscreen', 'libre-bite' ),
+						'exitFullscreen'     => __( 'Exit fullscreen', 'libre-bite' ),
 					),
 				)
 			);

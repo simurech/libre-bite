@@ -144,9 +144,14 @@ class LBite_POS {
 					'selectLocationFirst' => __( 'Please select a location first', 'libre-bite' ),
 					'loadProductsError'   => __( 'Error loading products', 'libre-bite' ),
 					'tryAgain'            => __( 'Try again', 'libre-bite' ),
-					'creatingOrder'       => __( 'Creating order...', 'libre-bite' ),
-					'orderCreatedPrefix'  => __( 'Order #', 'libre-bite' ),
-					'orderCreatedSuffix'  => __( ' created', 'libre-bite' ),
+					'creatingOrder'         => __( 'Creating order...', 'libre-bite' ),
+					'orderCreatedPrefix'    => __( 'Order #', 'libre-bite' ),
+					'orderCreatedSuffix'    => __( ' created', 'libre-bite' ),
+					'cartClearConfirm'      => __( 'Really empty the cart?', 'libre-bite' ),
+					'loadingProducts'       => __( 'Loading products...', 'libre-bite' ),
+					'loadingProductDetails' => __( 'Loading product details...', 'libre-bite' ),
+					'errorLoadingDetails'   => __( 'Error loading product details', 'libre-bite' ),
+					'selectVariant'         => __( 'Select variant', 'libre-bite' ),
 				),
 			)
 		);

@@ -6208,3 +6208,33 @@ msgstr "Diesen Link oder QR-Code für den Standort verwenden."
 
 msgid "Feature not enabled"
 msgstr "Funktion nicht aktiviert"
+
+msgid "Really empty the cart?"
+msgstr "Warenkorb wirklich leeren?"
+
+msgid "Loading products..."
+msgstr "Produkte werden geladen..."
+
+msgid "Loading product details..."
+msgstr "Produktdetails werden geladen..."
+
+msgid "Error loading product details"
+msgstr "Fehler beim Laden der Produktdetails"
+
+msgid "Select variant"
+msgstr "Variante wählen"
+
+msgid "Start preparation"
+msgstr "Zubereitung starten"
+
+msgid "Ready for pickup"
+msgstr "Abholbereit"
+
+msgid "Cancel order"
+msgstr "Bestellung stornieren"
+
+msgid "Fullscreen"
+msgstr "Vollbild"
+
+msgid "Exit fullscreen"
+msgstr "Vollbild beenden"
