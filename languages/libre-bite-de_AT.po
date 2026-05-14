@@ -6239,3 +6239,9 @@ msgstr "Vollbild"
 
 msgid "Exit fullscreen"
 msgstr "Vollbild beenden"
+
+msgid "Your Email"
+msgstr "Ihre E-Mail-Adresse"
+
+msgid "Email address"
+msgstr "E-Mail-Adresse"

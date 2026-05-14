@@ -97,6 +97,14 @@ if ( $lbite_table_id ) {
 			</p>
 		</div>
 
+		<div class="lbite-checkout-step" id="lbite-step-email" style="display:none">
+			<h3><?php esc_html_e( 'Your Email', 'libre-bite' ); ?></h3>
+			<p class="form-row form-row-wide">
+				<label for="billing_email"><?php esc_html_e( 'Email address', 'libre-bite' ); ?> <span class="required">*</span></label>
+				<input type="email" class="input-text" name="billing_email" id="billing_email" value="<?php echo esc_attr( WC()->checkout->get_value( 'billing_email' ) ); ?>">
+			</p>
+		</div>
+
 		<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
 		do_action( 'woocommerce_checkout_after_customer_details' ); ?>
 
@@ -121,3 +129,23 @@ if ( $lbite_table_id ) {
 
 	</form>
 </div>
+
+<script>
+(function($) {
+	var noEmailGateways = ['cod', 'bacs', 'cheque'];
+
+	function updateEmailStep() {
+		var selected = $('input[name="payment_method"]:checked').val();
+		var isExternal = selected && noEmailGateways.indexOf(selected) === -1;
+		$('#lbite-step-email').toggle(isExternal);
+		$('#billing_email').prop('required', isExternal);
+	}
+
+	$(function() {
+		$('body')
+			.on('change', 'input[name="payment_method"]', updateEmailStep)
+			.on('updated_checkout', updateEmailStep);
+		updateEmailStep();
+	});
+}(jQuery));
+</script>

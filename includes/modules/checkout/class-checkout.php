@@ -1365,14 +1365,16 @@ class LBite_Checkout {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification.
-		$receipt_option = isset( $_POST['lbite_receipt_option'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_receipt_option'] ) ) : 'none';
+		$payment_method    = isset( $_POST['payment_method'] ) ? sanitize_text_field( wp_unslash( $_POST['payment_method'] ) ) : '';
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification.
-		$billing_email = isset( $_POST['billing_email'] ) ? sanitize_email( wp_unslash( $_POST['billing_email'] ) ) : '';
+		$billing_email     = isset( $_POST['billing_email'] ) ? sanitize_email( wp_unslash( $_POST['billing_email'] ) ) : '';
+		$no_email_gateways = array( 'cod', 'bacs', 'cheque' );
+		$is_no_email_gateway = in_array( $payment_method, $no_email_gateways, true );
 
-		// Wenn kein Beleg gewünscht oder keine E-Mail angegeben, Platzhalter setzen.
-		if ( 'none' === $receipt_option || empty( $billing_email ) || strpos( $billing_email, '@nomail.local' ) !== false ) {
-			$placeholder_email = 'guest-' . time() . '-' . wp_rand( 1000, 9999 ) . '@nomail.local';
-			$_POST['billing_email'] = $placeholder_email;
+		// Platzhalter-E-Mail nur für Offline-Gateways setzen. Externe Zahlungsanbieter
+		// (TWINT, Stripe etc.) benötigen eine echte E-Mail-Adresse.
+		if ( $is_no_email_gateway && ( empty( $billing_email ) || strpos( $billing_email, '@nomail.local' ) !== false ) ) {
+			$_POST['billing_email'] = 'guest-' . time() . '-' . wp_rand( 1000, 9999 ) . '@nomail.local';
 		}
 	}
 
