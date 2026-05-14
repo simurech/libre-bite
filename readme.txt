@@ -1,11 +1,11 @@
-=== Libre Bite ===
+=== Libre Bite – Restaurant POS, Kitchen Display (KDS) & QR Ordering for WooCommerce ===
 Contributors: simon61
 Donate link: https://github.com/simurech/libre-bite
 Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,22 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.3.2 =
+* Fix: CSS box-sizing and height overrides for date/time input fields (theme compatibility).
+* Fix: Branding color variables now fully applied across all CSS files; new --lbite-color-primary-bg variable.
+* Fix: Reservation AJAX handlers now check if the reservations feature is enabled.
+* Fix: POS order creation now clears the order badge transient immediately.
+* Fix: Hardcoded German strings in pos.js and dashboard.js replaced with localizable variables.
+* Fix: Name input field contrast in optimized checkout (white on white background).
+* Fix: WooCommerce login toggle now appears in optimized checkout for guests.
+* Fix: External payment providers (TWINT, Stripe etc.) no longer receive a placeholder email; an email field appears when needed.
+* Fix: Receipt email button now shown for all guest orders on the thank-you page, regardless of payment method.
+* Fix: Admin receipt metabox shows an email input for POS/guest orders and allows resending.
+* Fix: Kanban receipt button added to every order card; supports orders without a stored email address.
+* Fix: Kanban future order filtering (lbite_show_future_orders) now works correctly; is_future calculated independently of feature flag; dimming controlled by futureDimmingEnabled.
+* Fix: Cancel button in Kanban board is now solid red with a white ✕; removed 🔪 emoji from "Start preparation" button.
+* Improvement: All features are now enabled by default on fresh installations.
 
 = 1.3.1 =
 * Fix: Three premium asset files (checkout-tip.js, checkout-optimized-receipt.js, thankyou-optimized.css) were incorrectly included in the free version; added to @fs_premium_only.
