@@ -894,6 +894,9 @@ class LBite_Admin {
 			// Status setzen.
 			$order->update_status( 'processing', __( 'Order created via POS system.', 'libre-bite' ) );
 
+			// Transient-Cache löschen, damit der Kanban-Badge-Counter sofort aktualisiert wird.
+			delete_transient( 'lbite_incoming_orders_count' );
+
 			// Währungssymbol dekodieren (z.B. &#67;&#72;&#70; -> CHF).
 			$currency = html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' );
 
