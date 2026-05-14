@@ -571,6 +571,26 @@ class LBite_Locations {
 	}
 
 	/**
+	 * Prüft ob ein Produkt an einem Standort verfügbar ist.
+	 *
+	 * Leeres Locations-Array = keine Einschränkung = überall verfügbar.
+	 *
+	 * @param int $product_id  Produkt-ID
+	 * @param int $location_id Standort-ID
+	 * @return bool
+	 */
+	public static function is_product_available_at_location( $product_id, $location_id ) {
+		if ( ! $location_id ) {
+			return true;
+		}
+		$assigned = get_post_meta( $product_id, '_lbite_locations', true );
+		if ( empty( $assigned ) || ! is_array( $assigned ) ) {
+			return true;
+		}
+		return in_array( (int) $location_id, array_map( 'intval', $assigned ), true );
+	}
+
+	/**
 	 * Farbe eines Standorts abrufen
 	 *
 	 * @param int $location_id Standort-ID

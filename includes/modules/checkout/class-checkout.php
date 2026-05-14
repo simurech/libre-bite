@@ -73,6 +73,9 @@ class LBite_Checkout {
 			$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_opening_days', $this, 'ajax_get_opening_days' );
 			$this->loader->add_action( 'wp_ajax_lbite_get_location_status', $this, 'ajax_get_location_status' );
 			$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_location_status', $this, 'ajax_get_location_status' );
+
+			// Produkt-Standortverfügbarkeit beim Hinzufügen zum Warenkorb prüfen.
+			$this->loader->add_filter( 'woocommerce_add_to_cart_validation', $this, 'validate_product_location_availability', 10, 3 );
 		}
 
 		// Trinkgeld & optimierter Checkout: nur in Premium-Version (dieser Block wird in Gratis-Version entfernt).
@@ -657,6 +660,54 @@ class LBite_Checkout {
 				wc_add_notice( __( 'The selected location is currently closed. Please select a pre-order time.', 'libre-bite' ), 'error' );
 			}
 		}
+
+		// Warenkorb-Produkte auf Standortverfügbarkeit prüfen.
+		if ( $location_id && WC()->cart ) {
+			foreach ( WC()->cart->get_cart() as $cart_item ) {
+				if ( ! LBite_Locations::is_product_available_at_location( $cart_item['product_id'], $location_id ) ) {
+					$product = wc_get_product( $cart_item['product_id'] );
+					wc_add_notice(
+						sprintf(
+							/* translators: %s: product name */
+							__( '"%s" is not available at the selected location.', 'libre-bite' ),
+							$product ? $product->get_name() : $cart_item['product_id']
+						),
+						'error'
+					);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Produkt-Standortverfügbarkeit beim Hinzufügen zum Warenkorb prüfen.
+	 *
+	 * @param bool $passed     Bisheriges Ergebnis
+	 * @param int  $product_id Produkt-ID
+	 * @param int  $quantity   Menge
+	 * @return bool
+	 */
+	public function validate_product_location_availability( $passed, $product_id, $quantity ) {
+		if ( ! $passed ) {
+			return $passed;
+		}
+		$location_id = WC()->session ? (int) WC()->session->get( 'lbite_location_id' ) : 0;
+		if ( ! $location_id ) {
+			return $passed;
+		}
+		if ( ! LBite_Locations::is_product_available_at_location( $product_id, $location_id ) ) {
+			$product = wc_get_product( $product_id );
+			wc_add_notice(
+				sprintf(
+					/* translators: %s: product name */
+					__( '"%s" is not available at the selected location.', 'libre-bite' ),
+					$product ? $product->get_name() : $product_id
+				),
+				'error'
+			);
+			return false;
+		}
+		return $passed;
 	}
 
 	/**

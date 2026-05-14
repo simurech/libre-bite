@@ -6025,6 +6025,10 @@ msgstr "Zur Bestellübersicht"
 msgid "Go to POS System"
 msgstr "Zum Kassensystem"
 
+#: includes/modules/checkout/class-checkout.php
+msgid "\"%s\" is not available at the selected location."
+msgstr "\"%s\" ist am gewählten Standort nicht verfügbar."
+
 #~ msgid "Einstellung"
 #~ msgstr "Einstellung"
 

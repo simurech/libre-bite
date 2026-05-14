@@ -5565,6 +5565,10 @@ msgstr "— Standort wählen —"
 msgid "— Select Table —"
 msgstr "— Tisch wählen —"
 
+#: includes/modules/checkout/class-checkout.php
+msgid "\"%s\" is not available at the selected location."
+msgstr "\"%s\" ist am gewählten Standort nicht verfügbar."
+
 #~ msgid "Setup"
 #~ msgstr "Einrichtung"
 

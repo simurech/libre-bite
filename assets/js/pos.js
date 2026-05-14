@@ -26,6 +26,7 @@
 		productDetailsCache: {},
 		isLoadingProducts: false,
 		allProducts: [],
+		filteredProducts: [],
 		allCategories: [],
 		dataLoaded: false,
 
@@ -99,24 +100,45 @@
 				this.productDetailsCache = data.details;
 			}
 
-			// Produkte-Cache pro Kategorie aufbauen
-			this.buildCategoryCache();
-
-			// Produkte sofort anzeigen
-			this.renderProducts(this.productsCache['all'] || []);
+			// Initiale Standort-Filterung und Darstellung
+			const initialLocation = $('#lbite-pos-location').val();
+			this.filterByLocation(initialLocation);
 		},
 
 		/**
-		 * Kategorie-Cache aus den geladenen Daten aufbauen
+		 * Produkte nach gewähltem Standort filtern und Ansicht aktualisieren.
+		 *
+		 * Produkte ohne Standort-Zuweisung (leeres location_ids-Array) sind überall verfügbar.
+		 */
+		filterByLocation: function(locationId) {
+			locationId = locationId ? parseInt(locationId, 10) : 0;
+
+			if (!locationId) {
+				this.filteredProducts = this.allProducts;
+			} else {
+				this.filteredProducts = this.allProducts.filter(function(product) {
+					if (!product.location_ids || product.location_ids.length === 0) {
+						return true;
+					}
+					return product.location_ids.indexOf(locationId) !== -1;
+				});
+			}
+
+			this.buildCategoryCache();
+			this.renderProducts(this.productsCache[this.currentCategory] || []);
+		},
+
+		/**
+		 * Kategorie-Cache aus den gefilterten Daten aufbauen
 		 */
 		buildCategoryCache: function() {
-			if (!this.allProducts.length) return;
+			const products = this.filteredProducts;
 
-			// Alle Produkte (category: all)
-			this.productsCache['all'] = this.allProducts;
+			this.productsCache = {};
+			this.productsCache['all'] = products;
 
 			// Pro Kategorie gruppieren
-			this.allProducts.forEach(product => {
+			products.forEach(product => {
 				if (product.categories && product.categories.length > 0) {
 					product.categories.forEach(catId => {
 						if (!this.productsCache[catId]) {
@@ -237,7 +259,8 @@
 				data: {
 					action: 'lbite_pos_get_products',
 					nonce: lbitePos.nonce,
-					category_id: this.currentCategory === 'all' ? 0 : this.currentCategory
+					category_id: this.currentCategory === 'all' ? 0 : this.currentCategory,
+					location_id: $('#lbite-pos-location').val() || 0
 				},
 				success: (response) => {
 					if (response.success && response.data.products) {

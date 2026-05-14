@@ -227,6 +227,12 @@ class LBite_POS {
 				$product_cats = array();
 			}
 
+			// Standort-Zuweisung (für Client-seitige Filterung).
+			$product_location_ids = get_post_meta( $product_id, '_lbite_locations', true );
+			if ( ! is_array( $product_location_ids ) ) {
+				$product_location_ids = array();
+			}
+
 			// Basis-Produktdaten.
 			$products_data[] = array(
 				'id'             => $product_id,
@@ -237,6 +243,7 @@ class LBite_POS {
 				'has_options'    => $has_options,
 				'type'           => $product->get_type(),
 				'categories'     => $product_cats,
+				'location_ids'   => array_map( 'intval', $product_location_ids ),
 			);
 
 			// Details nur für Produkte mit Konfiguration.
@@ -326,6 +333,7 @@ class LBite_POS {
 		}
 
 		$category_id = isset( $_POST['category_id'] ) ? intval( wp_unslash( $_POST['category_id'] ) ) : 0;
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
 		$args = array(
 			'post_type'      => 'product',
@@ -349,6 +357,16 @@ class LBite_POS {
 
 		$products = get_posts( $args );
 
+		// Nach Standort filtern (Produkte ohne Zuweisung sind überall verfügbar).
+		if ( $location_id ) {
+			$products = array_filter(
+				$products,
+				function( $product_post ) use ( $location_id ) {
+					return LBite_Locations::is_product_available_at_location( $product_post->ID, $location_id );
+				}
+			);
+		}
+
 		$formatted_products = array();
 
 		foreach ( $products as $product_post ) {
@@ -358,11 +376,14 @@ class LBite_POS {
 				continue;
 			}
 
+			$product_location_ids = get_post_meta( $product->get_id(), '_lbite_locations', true );
+
 			$formatted_products[] = array(
-				'id'    => $product->get_id(),
-				'name'  => $product->get_name(),
-				'price' => $product->get_price(),
-				'image' => get_the_post_thumbnail_url( $product->get_id(), 'thumbnail' ),
+				'id'           => $product->get_id(),
+				'name'         => $product->get_name(),
+				'price'        => $product->get_price(),
+				'image'        => get_the_post_thumbnail_url( $product->get_id(), 'thumbnail' ),
+				'location_ids' => array_map( 'intval', is_array( $product_location_ids ) ? $product_location_ids : array() ),
 			);
 		}
 

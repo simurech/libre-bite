@@ -62,6 +62,11 @@ jQuery(document).ready(function($) {
 						$('.lbite-pos-products').removeClass('lbite-pos-no-location');
 					}
 
+					// Produkte nach neuem Standort filtern
+					if (typeof POS !== 'undefined' && POS.filterByLocation) {
+						POS.filterByLocation(locationId);
+					}
+
 					// Standort-Farb-Highlighting aktualisieren
 					var $locationSelect = $('#lbite-pos-location');
 					var colors = (typeof lbitePos !== 'undefined' && lbitePos.locationColors) ? lbitePos.locationColors : {};
