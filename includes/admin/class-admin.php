@@ -203,14 +203,16 @@ class LBite_Admin {
 				'lbite-floor-plan',
 				array( $this, 'render_floor_plan_page' )
 			);
-			add_submenu_page(
-				'libre-bite',
-				__( 'Reservations Overview', 'libre-bite' ),
-				__( 'Reservations', 'libre-bite' ),
-				'lbite_manage_options',
-				'lbite-reservation-board',
-				array( $this, 'render_reservation_board_page' )
-			); // CPT-Liste via Link im Template erreichbar
+			if ( lbite_feature_enabled( 'enable_reservations' ) ) {
+				add_submenu_page(
+					'libre-bite',
+					__( 'Reservations Overview', 'libre-bite' ),
+					__( 'Reservations', 'libre-bite' ),
+					'lbite_manage_options',
+					'lbite-reservation-board',
+					array( $this, 'render_reservation_board_page' )
+				); // CPT-Liste via Link im Template erreichbar
+			}
 		}
 
 		// Produkt-Optionen (CPT) – unter WooCommerce/Produkte
