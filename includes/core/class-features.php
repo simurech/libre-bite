@@ -68,14 +68,14 @@ class LBite_Features {
 		),
 		'enable_table_ordering'     => array(
 			'group'       => 'order_system',
-			'default'     => false,
+			'default'     => true,
 			'premium'     => true,
 			'label'       => 'Table Management & Table Ordering',
 			'description' => 'Create tables, define seats, generate QR codes and allow orders directly at the table',
 		),
 		'enable_reservations'       => array(
 			'group'       => 'order_system',
-			'default'     => false,
+			'default'     => true,
 			'premium'     => true,
 			'label'       => 'Table Reservations',
 			'description' => 'Customers can reserve tables online – frontend form via shortcode [lbite_reservation_form]',
@@ -84,14 +84,14 @@ class LBite_Features {
 		// Checkout
 		'enable_optimized_checkout' => array(
 			'group'       => 'checkout',
-			'default'     => false,
+			'default'     => true,
 			'premium'     => true,
 			'label'       => 'Optimized Checkout',
 			'description' => 'Simplified checkout flow',
 		),
 		'enable_tips'               => array(
 			'group'       => 'checkout',
-			'default'     => false,
+			'default'     => true,
 			'premium'     => true,
 			'label'       => 'Tip System',
 			'description' => 'Show tip options at checkout',
@@ -128,7 +128,7 @@ class LBite_Features {
 		// Locations
 		'enable_multi_location'     => array(
 			'group'       => 'locations',
-			'default'     => false,
+			'default'     => true,
 			'premium'     => true,
 			'label'       => 'Multi-Location',
 			'description' => 'Manage multiple locations',
@@ -151,14 +151,14 @@ class LBite_Features {
 		// Notifications
 		'enable_pickup_reminders'   => array(
 			'group'       => 'notifications',
-			'default'     => false,
+			'default'     => true,
 			'premium'     => true,
 			'label'       => 'Pickup Reminders',
 			'description' => 'Send email reminder before pickup time',
 		),
 		'enable_sound_notifications' => array(
 			'group'       => 'notifications',
-			'default'     => false,
+			'default'     => true,
 			'premium'     => true,
 			'label'       => 'Sound Notifications',
 			'description' => 'Play a sound for new orders',
@@ -181,14 +181,14 @@ class LBite_Features {
 		),
 		'enable_nutritional_info'   => array(
 			'group'       => 'products',
-			'default'     => false,
+			'default'     => true,
 			'premium'     => true,
 			'label'       => 'Nutritional Information',
 			'description' => 'Show nutritional information for products',
 		),
 		'enable_allergens'          => array(
 			'group'       => 'products',
-			'default'     => false,
+			'default'     => true,
 			'premium'     => true,
 			'label'       => 'Allergens',
 			'description' => 'Show allergen warnings for products',
@@ -218,7 +218,7 @@ class LBite_Features {
 		),
 		'enable_future_orders_dimmed' => array(
 			'group'       => 'dashboard',
-			'default'     => false,
+			'default'     => true,
 			'premium'     => true,
 			'label'       => 'Dim Future Pre-orders',
 			'description' => 'Grey out pre-orders with pickup time beyond preparation time in the Kanban board',
