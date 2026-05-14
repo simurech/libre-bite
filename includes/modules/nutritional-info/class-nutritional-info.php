@@ -39,9 +39,10 @@ class LBite_Nutritional_Info {
 		$this->loader->add_action( 'add_meta_boxes', $this, 'add_meta_boxes' );
 		$this->loader->add_action( 'woocommerce_process_product_meta', $this, 'save_product_meta' );
 
-		// Frontend-Anzeige
-		$this->loader->add_action( 'woocommerce_product_meta_end', $this, 'display_nutritional_info' );
-		$this->loader->add_action( 'woocommerce_product_meta_end', $this, 'display_allergens' );
+		// Frontend-Anzeige: woocommerce_single_product_summary (Prio 45) statt woocommerce_product_meta_end,
+		// damit die Ausgabe unabhängig davon ist, ob das Theme den Meta-Bereich anzeigt.
+		$this->loader->add_action( 'woocommerce_single_product_summary', $this, 'display_nutritional_info', 45 );
+		$this->loader->add_action( 'woocommerce_single_product_summary', $this, 'display_allergens', 46 );
 	}
 
 	/**
