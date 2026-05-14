@@ -79,6 +79,11 @@ if ( $lbite_table_id ) {
 		</div>
 	<?php endif; ?>
 
+	<?php
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook.
+	do_action( 'woocommerce_before_checkout_form', WC()->checkout() );
+	?>
+
 	<form name="checkout" method="post" class="checkout woocommerce-checkout lbite-checkout-form" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data">
 
 		<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
