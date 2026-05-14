@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,16 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.3.1 =
+* Fix: Three premium asset files (checkout-tip.js, checkout-optimized-receipt.js, thankyou-optimized.css) were incorrectly included in the free version; added to @fs_premium_only.
+* Fix: Table Ordering settings section now shows a Pro badge and is disabled for free users.
+* Fix: Inline style attributes in templates now correctly use esc_attr() as per WordPress coding standards.
+* Fix: Corrected wrong help reference "Settings → Dashboard" to "Settings → Order Overview".
+* Improvement: Timeslot calculation results are now cached (5 min transient) for future dates, improving checkout performance.
+* Improvement: Help section updated with documentation for two-window opening hours (F2), slot buffers (F5), dimmed future pre-orders (F7), and receipt email (F8/F9).
+* Improvement: [lbite_reservation_form] shortcode documented on the Documentation page (Pro).
+* Improvement: Completed German translations (de_CH/de_DE/de_AT) for all v1.3.0 feature strings.
 
 = 1.3.0 =
 * Feature: Opening hours now support two time windows per day (e.g. lunch + dinner service).
