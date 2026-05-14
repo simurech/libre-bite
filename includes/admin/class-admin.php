@@ -1299,15 +1299,17 @@ class LBite_Admin {
 		$billing_email = $order->get_billing_email();
 		$is_dummy      = empty( $billing_email ) || strpos( $billing_email, '@nomail.local' ) !== false;
 		$nonce         = wp_create_nonce( 'lbite_admin_nonce' );
-
-		if ( $is_dummy ) {
-			echo '<p>' . esc_html__( 'No email address on file for this order.', 'libre-bite' ) . '</p>';
-			return;
-		}
 		?>
+		<?php if ( $is_dummy ) : ?>
+		<p>
+			<input type="email" id="lbite-receipt-email-input" class="widefat"
+				placeholder="customer@example.com">
+		</p>
+		<?php else : ?>
 		<p style="margin-bottom: 6px;">
 			<strong><?php esc_html_e( 'To:', 'libre-bite' ); ?></strong> <?php echo esc_html( $billing_email ); ?>
 		</p>
+		<?php endif; ?>
 		<?php if ( $sent_at ) : ?>
 			<p style="margin-bottom: 10px; color: #46b450;">
 				<?php
@@ -1320,7 +1322,7 @@ class LBite_Admin {
 			style="width: 100%;"
 			data-order-id="<?php echo esc_attr( $order_id ); ?>"
 			data-nonce="<?php echo esc_attr( $nonce ); ?>"
-			<?php echo $sent_at ? 'disabled' : ''; ?>>
+			data-has-email="<?php echo $is_dummy ? '0' : '1'; ?>">
 			<?php esc_html_e( 'Send Receipt by Email', 'libre-bite' ); ?>
 		</button>
 		<p id="lbite-receipt-msg" style="margin-top: 6px; display: none;"></p>
@@ -1328,16 +1330,38 @@ class LBite_Admin {
 		jQuery(document).ready(function($) {
 			$('#lbite-admin-send-receipt-btn').on('click', function() {
 				var $btn = $(this);
+				var hasEmail = $btn.data('has-email') === 1 || $btn.data('has-email') === '1';
+				var email = '';
+
+				if (!hasEmail) {
+					email = $('#lbite-receipt-email-input').val().trim();
+					if (!email) {
+						alert('<?php echo esc_js( __( 'Please enter a valid email address.', 'libre-bite' ) ); ?>');
+						return;
+					}
+				}
+
 				$btn.prop('disabled', true);
-				$.post(ajaxurl, {
+				var postData = {
 					action: 'lbite_admin_send_receipt',
 					order_id: $btn.data('order-id'),
 					nonce: $btn.data('nonce')
-				}, function(response) {
+				};
+				if (email) {
+					postData.email = email;
+				}
+				$.post(ajaxurl, postData, function(response) {
 					var $msg = $('#lbite-receipt-msg');
 					$msg.show();
 					if (response.success) {
+						$btn.prop('disabled', false);
 						$msg.css('color', '#46b450').text(response.data);
+						if (email) {
+							// Gespeicherte E-Mail anzeigen, Eingabefeld ausblenden
+							var $input = $('#lbite-receipt-email-input');
+							$input.closest('p').replaceWith('<p style="margin-bottom: 6px;"><strong><?php echo esc_js( __( 'To:', 'libre-bite' ) ); ?></strong> ' + $('<span>').text(email).html() + '</p>');
+							$btn.data('has-email', '1');
+						}
 					} else {
 						$btn.prop('disabled', false);
 						$msg.css('color', '#dc3232').text(response.data || '<?php echo esc_js( __( 'Error', 'libre-bite' ) ); ?>');
@@ -1372,8 +1396,16 @@ class LBite_Admin {
 		}
 
 		$billing_email = $order->get_billing_email();
-		if ( empty( $billing_email ) || strpos( $billing_email, '@nomail.local' ) !== false ) {
-			wp_send_json_error( __( 'No valid email address on file.', 'libre-bite' ) );
+		$is_dummy      = empty( $billing_email ) || strpos( $billing_email, '@nomail.local' ) !== false;
+
+		if ( $is_dummy ) {
+			$override_email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+			if ( ! is_email( $override_email ) ) {
+				wp_send_json_error( __( 'Please enter a valid email address.', 'libre-bite' ) );
+			}
+			// E-Mail dauerhaft speichern – für spätere Belege verfügbar.
+			$order->set_billing_email( $override_email );
+			$order->save();
 		}
 
 		$emails = WC()->mailer()->get_emails();
