@@ -98,10 +98,32 @@ class LBite_Locations {
 				'lbite-admin-location-image',
 				'lbiteLocationImage',
 				array(
-					'title'      => __( 'Choose Location Image', 'libre-bite' ),
-					'buttonText' => __( 'Use Image', 'libre-bite' ),
+					'title'       => __( 'Choose Location Image', 'libre-bite' ),
+					'buttonText'  => __( 'Use Image', 'libre-bite' ),
 					'noImageText' => __( 'No image selected', 'libre-bite' ),
-					'errorText'  => __( 'Error: Media library not loaded', 'libre-bite' ),
+					'errorText'   => __( 'Error: Media library not loaded', 'libre-bite' ),
+				)
+			);
+
+			// QR-Code Druck-Script (identisch mit Tischverwaltung).
+			wp_enqueue_style(
+				'lbite-admin-tables',
+				LBITE_PLUGIN_URL . 'assets/css/admin-tables.css',
+				array(),
+				LBITE_VERSION
+			);
+			wp_enqueue_script(
+				'lbite-admin-tables',
+				LBITE_PLUGIN_URL . 'assets/js/admin-tables.js',
+				array(),
+				LBITE_VERSION,
+				true
+			);
+			wp_localize_script(
+				'lbite-admin-tables',
+				'lbiteTableData',
+				array(
+					'scanText' => __( 'Scan here to order', 'libre-bite' ),
 				)
 			);
 		}
@@ -193,6 +215,15 @@ class LBite_Locations {
 			self::POST_TYPE,
 			'normal',
 			'high'
+		);
+
+		add_meta_box(
+			'lbite_location_qr',
+			__( 'QR Code', 'libre-bite' ),
+			array( $this, 'render_qr_meta_box' ),
+			self::POST_TYPE,
+			'side',
+			'default'
 		);
 	}
 
@@ -437,6 +468,47 @@ class LBite_Locations {
 
 		// Farben-Cache invalidieren (Standort-Farbe kann sich geändert haben).
 		delete_transient( 'lbite_location_colors' );
+	}
+
+	/**
+	 * QR-Code Meta-Box rendern
+	 *
+	 * @param WP_Post $post Post-Objekt
+	 */
+	public function render_qr_meta_box( $post ) {
+		// Nur für gespeicherte Standorte sinnvoll.
+		if ( ! $post->ID || 'auto-draft' === $post->post_status ) {
+			echo '<p class="description">' . esc_html__( 'Save the location first to generate the QR code.', 'libre-bite' ) . '</p>';
+			return;
+		}
+
+		// Ziel-URL bestimmen: konfigurierte Standort-Seite → Shop → Startseite.
+		$lbite_target_page_id = (int) get_option( 'lbite_location_page_id', 0 );
+		if ( $lbite_target_page_id ) {
+			$lbite_base_url = get_permalink( $lbite_target_page_id );
+		} elseif ( function_exists( 'wc_get_page_permalink' ) ) {
+			$lbite_base_url = wc_get_page_permalink( 'shop' );
+		} else {
+			$lbite_base_url = home_url();
+		}
+
+		$url    = add_query_arg( 'lbite_location', $post->ID, $lbite_base_url );
+		$qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . rawurlencode( $url );
+		?>
+		<div class="lbite-qr-meta-url">
+			<input type="text" value="<?php echo esc_url( $url ); ?>" class="large-text" readonly onclick="this.select();">
+		</div>
+		<div class="lbite-qr-display">
+			<img src="<?php echo esc_url( $qr_url ); ?>" alt="QR Code">
+		</div>
+		<p class="description">
+			<?php esc_html_e( 'You can use this link or QR code for the location.', 'libre-bite' ); ?><br>
+			<a href="<?php echo esc_url( $qr_url ); ?>&amp;format=png" target="_blank" download="qr-location-<?php echo esc_attr( $post->ID ); ?>.png" class="button"><?php esc_html_e( 'Download QR Code', 'libre-bite' ); ?></a>
+			<button type="button" class="button lbite-print-qr-btn" data-title="<?php echo esc_attr( $post->post_title ); ?>" data-qr="<?php echo esc_url( $qr_url ); ?>">
+				<?php esc_html_e( 'Print QR Code', 'libre-bite' ); ?>
+			</button>
+		</p>
+		<?php
 	}
 
 	/**

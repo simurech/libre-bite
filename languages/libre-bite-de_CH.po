@@ -6029,6 +6029,15 @@ msgstr "Zum Kassensystem"
 msgid "\"%s\" is not available at the selected location."
 msgstr "\"%s\" ist am gewählten Standort nicht verfügbar."
 
+#: includes/modules/locations/class-locations.php
+msgid "Save the location first to generate the QR code."
+msgstr "Standort zuerst speichern, um den QR-Code zu generieren."
+
+#: includes/modules/locations/class-locations.php
+msgid "You can use this link or QR code for the location."
+msgstr "Diesen Link oder QR-Code für den Standort verwenden."
+
+
 #~ msgid "Einstellung"
 #~ msgstr "Einstellung"
 
