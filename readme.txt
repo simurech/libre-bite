@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,10 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.3.4 =
+* Feature: Shortcode [lbite_location_selector] unterstützt neuen Parameter align="left|center|right" für die horizontale Ausrichtung.
+* Feature: Shortcode [lbite_location_selector] unterstützt neues Layout style="banner" – breite 2-Spalten-Box mit Bild links, Infos rechts, abgerundeten Ecken (24px) und halbdurchsichtigem Hintergrund.
 
 = 1.3.3 =
 * Fix: Deep-Link-Parameter ?lbite_location=ID wird nun korrekt verarbeitet und setzt die Session unabhängig vom Table-Ordering-Feature.

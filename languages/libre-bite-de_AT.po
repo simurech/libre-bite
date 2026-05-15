@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libre Bite 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-15 10:42+0200\n"
+"POT-Creation-Date: 2026-05-15 10:53+0200\n"
 "PO-Revision-Date: 2026-04-14\n"
 "Last-Translator: Simon Urech\n"
 "Language-Team: German (Austria)\n"
@@ -370,7 +370,7 @@ msgid "Send Receipt by Email"
 msgstr "Beleg per E-Mail senden"
 
 #: includes/admin/class-admin.php:1342 includes/admin/class-admin.php:1407
-#: includes/modules/checkout/class-checkout.php:1449
+#: includes/modules/checkout/class-checkout.php:1451
 #: includes/modules/reservations/class-reservations.php:588
 #: templates/thankyou-optimized.php:312
 msgid "Please enter a valid email address."
@@ -385,12 +385,12 @@ msgid "Insufficient permissions."
 msgstr "Keine ausreichenden Berechtigungen."
 
 #: includes/admin/class-admin.php:1393
-#: includes/modules/checkout/class-checkout.php:1427
+#: includes/modules/checkout/class-checkout.php:1429
 msgid "Invalid order."
 msgstr "Ungültige Bestellung."
 
 #: includes/admin/class-admin.php:1398
-#: includes/modules/checkout/class-checkout.php:1434
+#: includes/modules/checkout/class-checkout.php:1436
 msgid "Order not found."
 msgstr "Bestellung nicht gefunden."
 
@@ -413,61 +413,61 @@ msgstr "Bitte Standort wählen"
 msgid "Please select a pickup time"
 msgstr "Bitte wählen Sie eine Abholzeit"
 
-#: includes/modules/checkout/class-checkout.php:585
+#: includes/modules/checkout/class-checkout.php:586
 msgid "No locations available."
 msgstr "Keine Standorte verfügbar."
 
-#: includes/modules/checkout/class-checkout.php:653
+#: includes/modules/checkout/class-checkout.php:655
 #: templates/checkout-location-time.php:231
 msgid "Please select a location."
 msgstr "Bitte wählen Sie einen Standort."
 
-#: includes/modules/checkout/class-checkout.php:657
+#: includes/modules/checkout/class-checkout.php:659
 #: templates/checkout-location-time.php:236
 msgid "Please select an order type."
 msgstr "Bitte wählen Sie eine Bestellart."
 
-#: includes/modules/checkout/class-checkout.php:664
+#: includes/modules/checkout/class-checkout.php:666
 #: templates/checkout-location-time.php:241
 msgid "Please select a pickup time."
 msgstr "Bitte wählen Sie eine Abholzeit."
 
-#: includes/modules/checkout/class-checkout.php:673
+#: includes/modules/checkout/class-checkout.php:675
 msgid "The selected location is currently closed. Please select a pre-order time."
 msgstr "Der gewählte Standort ist aktuell geschlossen. Bitte wählen Sie eine Vorbestellungszeit."
 
-#: includes/modules/checkout/class-checkout.php:685
-#: includes/modules/checkout/class-checkout.php:716
+#: includes/modules/checkout/class-checkout.php:687
+#: includes/modules/checkout/class-checkout.php:718
 #, php-format
 msgid "\"%s\" is not available at the selected location."
 msgstr "\"%s\" ist am gewählten Standort nicht verfügbar."
 
-#: includes/modules/checkout/class-checkout.php:882
-#: includes/modules/checkout/class-checkout.php:905
+#: includes/modules/checkout/class-checkout.php:884
+#: includes/modules/checkout/class-checkout.php:907
 #: templates/admin/settings-tabbed.php:34
 msgid "Tip"
 msgstr "Trinkgeld"
 
-#: includes/modules/checkout/class-checkout.php:923
-#: includes/modules/checkout/class-checkout.php:939
+#: includes/modules/checkout/class-checkout.php:925
+#: includes/modules/checkout/class-checkout.php:941
 msgid "Rounding"
 msgstr "Rundung"
 
-#: includes/modules/checkout/class-checkout.php:987
-#: includes/modules/checkout/class-checkout.php:992
-#: includes/modules/checkout/class-checkout.php:1050
+#: includes/modules/checkout/class-checkout.php:989
+#: includes/modules/checkout/class-checkout.php:994
+#: includes/modules/checkout/class-checkout.php:1052
 msgid "Invalid location"
 msgstr "Ungültiger Standort"
 
-#: includes/modules/checkout/class-checkout.php:1017
+#: includes/modules/checkout/class-checkout.php:1019
 msgid "Location set"
 msgstr "Standort gesetzt"
 
-#: includes/modules/checkout/class-checkout.php:1439
+#: includes/modules/checkout/class-checkout.php:1441
 msgid "Receipt already sent."
 msgstr "Beleg wurde bereits gesendet."
 
-#: includes/modules/checkout/class-checkout.php:1463
+#: includes/modules/checkout/class-checkout.php:1465
 msgid "Receipt sent."
 msgstr "Beleg gesendet."
 
@@ -1232,8 +1232,9 @@ msgstr "Status"
 #: includes/modules/reservations/class-reservations.php:289
 #: templates/admin/holidays-settings.php:44
 #: templates/frontend/reservation-form.php:43
+#: templates/location-selector-banner.php:149
 #: templates/location-selector-inline.php:54
-#: templates/location-selector-tiles.php:143
+#: templates/location-selector-tiles.php:144
 msgid "Date"
 msgstr "Datum"
 
@@ -1241,8 +1242,9 @@ msgstr "Datum"
 #: includes/modules/reservations/class-reservations.php:290
 #: includes/modules/tables/class-tables.php:182
 #: templates/frontend/reservation-form.php:55
+#: templates/location-selector-banner.php:166
 #: templates/location-selector-inline.php:60
-#: templates/location-selector-tiles.php:158
+#: templates/location-selector-tiles.php:159
 msgid "Time"
 msgstr "Uhrzeit"
 
@@ -4430,7 +4432,8 @@ msgstr "Gesamtbetrag:"
 msgid "Payment Method:"
 msgstr "Zahlungsart:"
 
-#: templates/admin/pos.php:193 templates/location-selector-tiles.php:91
+#: templates/admin/pos.php:193 templates/location-selector-banner.php:97
+#: templates/location-selector-tiles.php:92
 msgid "Back"
 msgstr "Zurück"
 
@@ -5182,7 +5185,8 @@ msgid "Pre-order for Later"
 msgstr "Für später vorbestellen"
 
 #: templates/checkout-location-time.php:134
-#: templates/location-selector-tiles.php:114
+#: templates/location-selector-banner.php:120
+#: templates/location-selector-tiles.php:115
 msgid "Immediate order not available –"
 msgstr "Sofort-Bestellung nicht möglich –"
 
@@ -5313,13 +5317,15 @@ msgstr "Ihre Reservierungsanfrage wurde erfolgreich übermittelt. Wir werden uns
 msgid "Please select your desired location:"
 msgstr "Bitte wählen Sie Ihren gewünschten Standort:"
 
-#: templates/location-modal.php:39 templates/location-selector-inline.php:38
-#: templates/location-selector-tiles.php:110
+#: templates/location-modal.php:39 templates/location-selector-banner.php:116
+#: templates/location-selector-inline.php:38
+#: templates/location-selector-tiles.php:111
 msgid "When would you like to order?"
 msgstr "Wann möchten Sie bestellen?"
 
-#: templates/location-modal.php:46 templates/location-selector-inline.php:46
-#: templates/location-selector-tiles.php:133
+#: templates/location-modal.php:46 templates/location-selector-banner.php:139
+#: templates/location-selector-inline.php:46
+#: templates/location-selector-tiles.php:134
 msgid "Pre-order for later"
 msgstr "Für später vorbestellen"
 
@@ -5327,22 +5333,55 @@ msgstr "Für später vorbestellen"
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: templates/location-selector-inline.php:26
-#: templates/location-selector-inline.php:145
-#: templates/location-selector-tiles.php:330
-msgid "Please choose..."
-msgstr "Bitte wählen..."
+#: templates/location-selector-banner.php:81
+msgid "Order here"
+msgstr "Hier bestellen"
 
+#: templates/location-selector-banner.php:112
+#: templates/location-selector-tiles.php:107
+msgid "Einen Moment bitte..."
+msgstr "Einen Moment bitte..."
+
+#: templates/location-selector-banner.php:129
 #: templates/location-selector-inline.php:42
 #: templates/location-selector-inline.php:87
-#: templates/location-selector-tiles.php:123
+#: templates/location-selector-tiles.php:124
 msgid "Immediately"
 msgstr "Sofort"
 
+#: templates/location-selector-banner.php:130
+#: templates/location-selector-tiles.php:125
+msgid "Pickup as soon as possible"
+msgstr "Abholung so bald wie möglich"
+
+#: templates/location-selector-banner.php:140
+#: templates/location-selector-tiles.php:135
+msgid "Choose your preferred time"
+msgstr "Bevorzugte Uhrzeit wählen"
+
+#: templates/location-selector-banner.php:158
+#: templates/location-selector-tiles.php:151
+msgid "The location is closed on this day."
+msgstr "Der Standort ist an diesem Tag geschlossen."
+
+#: templates/location-selector-banner.php:170
 #: templates/location-selector-inline.php:64
-#: templates/location-selector-tiles.php:162
+#: templates/location-selector-tiles.php:163
 msgid "Please select a date"
 msgstr "Bitte wählen Sie ein Datum"
+
+#: templates/location-selector-banner.php:175
+#: templates/location-selector-banner.php:180
+#: templates/location-selector-tiles.php:168
+#: templates/location-selector-tiles.php:174
+msgid "Continue to Menu"
+msgstr "Weiter zum Menü"
+
+#: templates/location-selector-inline.php:26
+#: templates/location-selector-inline.php:145
+#: templates/location-selector-tiles.php:331
+msgid "Please choose..."
+msgstr "Bitte wählen..."
 
 #: templates/location-selector-inline.php:72
 msgid "Confirm Selection"
@@ -5353,49 +5392,28 @@ msgid "Current Selection:"
 msgstr "Aktuelle Auswahl:"
 
 #: templates/location-selector-inline.php:151
-#: templates/location-selector-tiles.php:336
+#: templates/location-selector-tiles.php:337
 msgid "No time slots available"
 msgstr "Keine Zeitslots verfügbar"
 
 #: templates/location-selector-inline.php:155
-#: templates/location-selector-tiles.php:341
+#: templates/location-selector-tiles.php:342
 msgid "Error loading"
 msgstr "Fehler beim Laden"
 
-#: templates/location-selector-tiles.php:21
+#: templates/location-selector-tiles.php:22
 msgid "Select Your Location"
 msgstr "Ihren Standort wählen"
 
-#: templates/location-selector-tiles.php:106
-msgid "Einen Moment bitte..."
-msgstr "Einen Moment bitte..."
-
-#: templates/location-selector-tiles.php:124
-msgid "Pickup as soon as possible"
-msgstr "Abholung so bald wie möglich"
-
-#: templates/location-selector-tiles.php:134
-msgid "Choose your preferred time"
-msgstr "Bevorzugte Uhrzeit wählen"
-
-#: templates/location-selector-tiles.php:150
-msgid "The location is closed on this day."
-msgstr "Der Standort ist an diesem Tag geschlossen."
-
-#: templates/location-selector-tiles.php:167
-#: templates/location-selector-tiles.php:173
-msgid "Continue to Menu"
-msgstr "Weiter zum Menü"
-
-#: templates/location-selector-tiles.php:230
+#: templates/location-selector-tiles.php:231
 msgid "Currently closed"
 msgstr "Aktuell geschlossen"
 
-#: templates/location-selector-tiles.php:314
+#: templates/location-selector-tiles.php:315
 msgid "Loading..."
 msgstr "Laden..."
 
-#: templates/location-selector-tiles.php:448
+#: templates/location-selector-tiles.php:449
 msgid "Next opening:"
 msgstr "Nächste Öffnung:"
 

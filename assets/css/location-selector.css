@@ -759,3 +759,113 @@ a.lbite-location-address.lbite-maps-link:hover {
 	background-color: #fffbf0 !important;
 }
 
+/* ===================================================
+   Ausrichtung (align="left" | "right" | "center")
+   =================================================== */
+.lbite-location-selector-tiles.lbite-align-left,
+.lbite-location-selector-banner.lbite-align-left,
+.lbite-location-selector-inline.lbite-align-left {
+	margin-left: 0;
+	margin-right: auto;
+}
+
+.lbite-location-selector-tiles.lbite-align-right,
+.lbite-location-selector-banner.lbite-align-right,
+.lbite-location-selector-inline.lbite-align-right {
+	margin-left: auto;
+	margin-right: 0;
+}
+
+.lbite-align-left .lbite-step-title {
+	text-align: left;
+}
+
+.lbite-align-right .lbite-step-title {
+	text-align: right;
+}
+
+/* ===================================================
+   Banner-Layout (style="banner")
+   =================================================== */
+.lbite-location-selector-banner {
+	max-width: 1200px;
+	margin: 40px auto;
+	padding: 0 20px;
+}
+
+.lbite-banner-card {
+	display: grid;
+	grid-template-columns: 2fr 3fr;
+	border-radius: 24px;
+	overflow: hidden;
+	background: rgba(255, 255, 255, 0.10);
+	cursor: pointer;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	margin-bottom: 24px;
+	min-height: 260px;
+	border: none;
+	box-shadow: none;
+}
+
+.lbite-banner-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+	border-color: transparent;
+}
+
+.lbite-banner-image {
+	background-size: cover;
+	background-position: center;
+	background-color: rgba(255, 255, 255, 0.05);
+	position: relative;
+	min-height: 200px;
+}
+
+.lbite-banner-image.lbite-location-placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.lbite-banner-content {
+	padding: 32px 40px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 12px;
+}
+
+.lbite-banner-content .lbite-location-name {
+	font-size: 26px;
+	margin: 0;
+}
+
+.lbite-banner-content .lbite-location-address {
+	font-size: 15px;
+	margin: 0;
+}
+
+.lbite-banner-select-btn {
+	margin-top: 8px;
+}
+
+.lbite-banner-select-btn .lbite-button {
+	display: inline-flex;
+	align-items: center;
+}
+
+@media (max-width: 768px) {
+	.lbite-banner-card {
+		grid-template-columns: 1fr;
+	}
+
+	.lbite-banner-image {
+		min-height: 200px;
+	}
+
+	.lbite-banner-content {
+		padding: 24px;
+	}
+}
+

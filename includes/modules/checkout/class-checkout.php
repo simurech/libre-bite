@@ -573,7 +573,8 @@ class LBite_Checkout {
 		$atts = shortcode_atts(
 			array(
 				'show_time' => 'yes',
-				'style'     => 'tiles', // 'tiles' oder 'inline'
+				'style'     => 'tiles', // 'tiles', 'inline' oder 'banner'
+				'align'     => 'center', // 'left', 'center', 'right'
 			),
 			$atts,
 			'lbite_location_selector'
@@ -591,9 +592,10 @@ class LBite_Checkout {
 
 		ob_start();
 
-		// Neues Kachel-Layout verwenden (Standard)
 		if ( 'inline' === $atts['style'] ) {
 			include LBITE_PLUGIN_DIR . 'templates/location-selector-inline.php';
+		} elseif ( 'banner' === $atts['style'] ) {
+			include LBITE_PLUGIN_DIR . 'templates/location-selector-banner.php';
 		} else {
 			include LBITE_PLUGIN_DIR . 'templates/location-selector-tiles.php';
 		}

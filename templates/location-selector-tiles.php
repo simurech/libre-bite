@@ -11,7 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Check if single location mode.
 $lbite_is_single_location = ( count( $lbite_locations ) === 1 );
-$lbite_location_class     = $lbite_is_single_location ? 'lbite-location-selector-tiles lbite-single-location' : 'lbite-location-selector-tiles';
+$lbite_align_class        = ( 'center' !== $atts['align'] ) ? ' lbite-align-' . $atts['align'] : '';
+$lbite_location_class     = ( $lbite_is_single_location ? 'lbite-location-selector-tiles lbite-single-location' : 'lbite-location-selector-tiles' ) . $lbite_align_class;
 ?>
 
 <div class="<?php echo esc_attr( $lbite_location_class ); ?>">

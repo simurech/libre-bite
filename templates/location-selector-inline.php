@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template-Datei, wird innerhalb einer Klassen-Methode via include geladen; Variablen befinden sich im Methoden-Scope, nicht im globalen Namespace.
 ?>
 
-<div class="lbite-location-selector-inline">
+<div class="lbite-location-selector-inline<?php echo ( 'center' !== $atts['align'] ) ? ' lbite-align-' . esc_attr( $atts['align'] ) : ''; ?>">
 	<form method="post" class="lbite-location-form">
 		<?php wp_nonce_field( 'lbite_location_selector', 'lbite_location_nonce' ); ?>
 
