@@ -90,7 +90,7 @@ $lbite_align_class = ( 'center' !== $atts['align'] ) ? ' lbite-align-' . $atts['
 		<?php endforeach; ?>
 	</div>
 
-	<!-- Schritt 2: Zeit-Auswahl -->
+	<!-- Schritt 2: Zeit-Auswahl (identische Struktur wie tiles) -->
 	<div class="lbite-step lbite-step-time" id="lbite-step-time">
 		<button type="button" class="lbite-back-button">
 			<span class="dashicons dashicons-arrow-left-alt2"></span>
@@ -183,3 +183,250 @@ $lbite_align_class = ( 'center' !== $atts['align'] ) ? ' lbite-align-' . $atts['
 	</div>
 
 </div>
+
+<?php ob_start(); ?>
+jQuery(document).ready(function($) {
+	let selectedLocationId = null;
+	let selectedLocationData = {};
+	let selectedTimeType = null;
+
+	// Standort-Karte auswählen
+	$('.lbite-banner-card.lbite-location-card').on('click', function(e) {
+		if ($(e.target).is('a') || $(e.target).closest('a').length) {
+			return;
+		}
+		selectedLocationId = $(this).data('location-id');
+		const mapsUrl    = $(this).data('maps-url');
+		const statusText = $(this).data('status-text');
+		const statusType = $(this).data('status-type');
+
+		selectedLocationData = {
+			id: selectedLocationId,
+			name: $(this).find('.lbite-location-name').text(),
+			address: $(this).find('.lbite-location-address').text(),
+			image: $(this).find('.lbite-banner-image').css('background-image')
+		};
+
+		showStep('time');
+
+		$('.lbite-selected-location-name').text(selectedLocationData.name);
+		$('.lbite-selected-location-image').css('background-image', selectedLocationData.image);
+
+		const $addr = $('.lbite-selected-location-address');
+		if (mapsUrl) {
+			$addr.html($('<a>').attr({href: mapsUrl, target: '_blank', rel: 'noopener noreferrer'}).text(selectedLocationData.address));
+		} else {
+			$addr.text(selectedLocationData.address);
+		}
+
+		const $status = $('.lbite-selected-location-status');
+		$status.attr('class', 'lbite-selected-location-status');
+		if (statusText) {
+			$status.addClass('lbite-status-' + statusType).text(statusText);
+		} else {
+			$status.text('');
+		}
+
+		const $nowOption = $('.lbite-time-option[data-time-type="now"]');
+		const $closedNotice = $('#lbite-closed-now-notice');
+		if (statusType === 'closed') {
+			$nowOption.addClass('lbite-time-option-disabled');
+			$('#lbite-closed-notice-text').text(statusText || '<?php echo esc_js( __( 'Currently closed', 'libre-bite' ) ); ?>');
+			$closedNotice.show();
+		} else {
+			$nowOption.removeClass('lbite-time-option-disabled');
+			$closedNotice.hide();
+		}
+
+		updateDisabledDates();
+	});
+
+	// Zurück-Button
+	$('.lbite-back-button').on('click', function() {
+		showStep('location');
+		resetTimeSelection();
+	});
+
+	// Zeit-Option auswählen
+	$('.lbite-time-option').on('click', function() {
+		if ($(this).hasClass('lbite-time-option-disabled')) {
+			return;
+		}
+
+		const $option = $(this);
+		$('.lbite-time-option').removeClass('selected');
+		$option.addClass('selected');
+
+		selectedTimeType = $option.data('time-type');
+
+		if (selectedTimeType === 'later') {
+			$('.lbite-timeslot-selection').slideDown();
+			if ($('#lbite-pickup-date').val()) {
+				loadTimeslots();
+			}
+		} else {
+			$option.addClass('loading');
+			$('.lbite-timeslot-selection').slideUp();
+			confirmSelection('now', null);
+		}
+	});
+
+	// Datum-Änderung
+	$('#lbite-pickup-date').on('change', function() {
+		validateSelectedDate();
+		loadTimeslots();
+	});
+
+	// Zeit bestätigen (später)
+	$('.lbite-confirm-time').on('click', function() {
+		const $btn = $(this);
+		const pickupTime = $('#lbite-pickup-time').val();
+		if (!pickupTime) {
+			alert(lbiteData.strings.selectTime);
+			return;
+		}
+		$btn.addClass('loading');
+		confirmSelection('later', pickupTime);
+	});
+
+	// Ohne Zeit-Auswahl fortfahren
+	$('.lbite-confirm-no-time').on('click', function() {
+		$(this).addClass('loading');
+		confirmSelection('now', null);
+	});
+
+	function loadTimeslots() {
+		const date = $('#lbite-pickup-date').val();
+		if (!selectedLocationId || !date) return;
+
+		const $select = $('#lbite-pickup-time');
+		$select.html('<option value=""><?php echo esc_js( __( 'Loading...', 'libre-bite' ) ); ?></option>').prop('disabled', true).css('opacity', '0.6');
+
+		$.ajax({
+			url: lbiteData.ajaxUrl,
+			type: 'POST',
+			data: { action: 'lbite_get_timeslots', nonce: lbiteData.nonce, location_id: selectedLocationId, date: date },
+			success: function(response) {
+				if (response.success && response.data.timeslots) {
+					let options = '<option value=""><?php echo esc_js( __( 'Please choose...', 'libre-bite' ) ); ?></option>';
+					response.data.timeslots.forEach(function(slot) {
+						options += '<option value="' + slot.value + '">' + slot.label + '</option>';
+					});
+					$select.html(options).prop('disabled', false);
+				} else {
+					$select.html('<option value=""><?php echo esc_js( __( 'No time slots available', 'libre-bite' ) ); ?></option>');
+				}
+				$select.css('opacity', '1');
+			},
+			error: function() {
+				$select.html('<option value=""><?php echo esc_js( __( 'Error loading', 'libre-bite' ) ); ?></option>').css('opacity', '1');
+			}
+		});
+	}
+
+	function confirmSelection(orderType, pickupTime) {
+		$('.lbite-loading-overlay').fadeIn(200);
+		$.ajax({
+			url: lbiteData.ajaxUrl,
+			type: 'POST',
+			data: { action: 'lbite_set_location', nonce: lbiteData.nonce, location_id: selectedLocationId, order_type: orderType, pickup_time: pickupTime },
+			success: function(response) {
+				if (response.success) {
+					setTimeout(function() {
+						window.location.href = '<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>';
+					}, 300);
+				} else {
+					$('.lbite-loading-overlay').fadeOut(200);
+					alert(response.data.message || 'Fehler beim Speichern');
+					$('.lbite-button, .lbite-time-option').removeClass('loading');
+				}
+			},
+			error: function() {
+				$('.lbite-loading-overlay').fadeOut(200);
+				alert('Ein Fehler ist aufgetreten');
+				$('.lbite-button, .lbite-time-option').removeClass('loading');
+			}
+		});
+	}
+
+	function showStep(step) {
+		$('.lbite-step').removeClass('active');
+		$('#lbite-step-' + step).addClass('active');
+	}
+
+	function resetTimeSelection() {
+		$('.lbite-time-option').removeClass('selected');
+		$('.lbite-timeslot-selection').hide();
+		selectedTimeType = null;
+	}
+
+	let closedDaysCache = [];
+	var closedDatesCache = [];
+
+	function updateDisabledDates() {
+		if (!selectedLocationId) return;
+		$.ajax({
+			url: lbiteData.ajaxUrl,
+			type: 'POST',
+			data: { action: 'lbite_get_opening_days', nonce: lbiteData.nonce, location_id: selectedLocationId },
+			success: function(response) {
+				if (response.success) {
+					closedDaysCache  = response.data.closed_days  || [];
+					closedDatesCache = response.data.closed_dates || [];
+					validateSelectedDate();
+				}
+			}
+		});
+	}
+
+	function isDateDisabled(isoDate) {
+		if (closedDatesCache.indexOf(isoDate) !== -1) return true;
+		const date    = new Date(isoDate + 'T00:00:00');
+		const dayName = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'][date.getDay()];
+		return closedDaysCache.indexOf(dayName) !== -1;
+	}
+
+	function validateSelectedDate() {
+		const selectedDate = $('#lbite-pickup-date').val();
+		if (!selectedDate) { $('#lbite-date-error').slideUp(200); return; }
+
+		if (isDateDisabled(selectedDate)) {
+			const nextOpenDate = findNextOpenDate(selectedDate);
+			if (nextOpenDate) {
+				$('#lbite-next-opening').html('<br><?php echo esc_js( __( 'Next opening:', 'libre-bite' ) ); ?> <strong>' + formatDate(nextOpenDate) + '</strong>');
+			} else {
+				$('#lbite-next-opening').html('');
+			}
+			$('#lbite-date-error').slideDown(300);
+			$('#lbite-pickup-date').addClass('lbite-error-input');
+		} else {
+			$('#lbite-date-error').slideUp(200);
+			$('#lbite-pickup-date').removeClass('lbite-error-input');
+			$('#lbite-next-opening').html('');
+		}
+	}
+
+	function findNextOpenDate(fromDate) {
+		let currentDate = new Date(fromDate + 'T00:00:00');
+		for (let i = 1; i <= 14; i++) {
+			currentDate.setDate(currentDate.getDate() + 1);
+			const year    = currentDate.getFullYear();
+			const month   = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+			const day     = ('0' + currentDate.getDate()).slice(-2);
+			if (!isDateDisabled(year + '-' + month + '-' + day)) return currentDate;
+		}
+		return null;
+	}
+
+	function formatDate(date) {
+		return ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear();
+	}
+
+	// Deep-Link: ?lbite_location=ID
+	const urlParams = new URLSearchParams(window.location.search);
+	const locationParam = urlParams.get('lbite_location') || urlParams.get('location');
+	if (locationParam) {
+		$('.lbite-banner-card.lbite-location-card[data-location-id="' + locationParam + '"]').trigger('click');
+	}
+});
+<?php wp_add_inline_script( 'lbite-frontend', ob_get_clean() ); ?>

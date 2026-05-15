@@ -507,6 +507,7 @@ class LBite_Admin {
 					'ajaxUrl'               => admin_url( 'admin-ajax.php' ),
 					'orderEditUrl'          => admin_url( 'post.php' ),
 					'nonce'                 => wp_create_nonce( 'lbite_dashboard_nonce' ),
+					'receiptNonce'          => wp_create_nonce( 'lbite_admin_nonce' ),
 					'soundUrl'              => get_option( 'lbite_notification_sound', LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' ),
 					'refreshInterval'       => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
 					'locationColors'        => $lbite_dashboard_colors,

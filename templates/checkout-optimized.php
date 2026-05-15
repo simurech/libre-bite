@@ -128,6 +128,11 @@ if ( $lbite_table_id ) {
 		<?php wp_nonce_field( 'woocommerce-process_checkout', 'woocommerce-process-checkout-nonce' ); ?>
 
 	</form>
+
+	<?php
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
+	do_action( 'woocommerce_after_checkout_form', WC()->checkout() );
+	?>
 </div>
 
 <script>

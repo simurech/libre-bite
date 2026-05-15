@@ -606,7 +606,7 @@
 			}
 			var postData = {
 				action: 'lbite_admin_send_receipt',
-				nonce: lbiteDashboard.nonce,
+				nonce: lbiteDashboard.receiptNonce || lbiteDashboard.nonce,
 				order_id: orderId
 			};
 			if (email) {

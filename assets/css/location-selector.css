@@ -853,6 +853,7 @@ a.lbite-location-address.lbite-maps-link:hover {
 .lbite-banner-select-btn .lbite-button {
 	display: inline-flex;
 	align-items: center;
+	width: auto;
 }
 
 @media (max-width: 768px) {

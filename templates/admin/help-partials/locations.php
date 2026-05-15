@@ -112,9 +112,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<tbody>
 				<tr>
 					<td><code>style</code></td>
-					<td><code>tiles</code>, <code>inline</code></td>
+					<td><code>tiles</code>, <code>inline</code>, <code>banner</code></td>
 					<td><code>tiles</code></td>
-					<td><?php esc_html_e( 'Display: Tiles (side by side) or inline (compact)', 'libre-bite' ); ?></td>
+					<td><?php esc_html_e( 'Layout: Tiles (grid cards), inline (compact form), or banner (wide 2-column with image)', 'libre-bite' ); ?></td>
+				</tr>
+				<tr>
+					<td><code>align</code></td>
+					<td><code>left</code>, <code>center</code>, <code>right</code></td>
+					<td><code>center</code></td>
+					<td><?php esc_html_e( 'Horizontal alignment of the selector within the page', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
 					<td><code>show_time</code></td>
@@ -143,8 +149,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<td><?php esc_html_e( 'Compact inline view with time selection', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
+					<td><code>[lbite_location_selector style="banner"]</code></td>
+					<td><?php esc_html_e( 'Wide 2-column layout: image left, location info right', 'libre-bite' ); ?></td>
+				</tr>
+				<tr>
 					<td><code>[lbite_location_selector show_time="no"]</code></td>
 					<td><?php esc_html_e( 'Location selection only, without time selection', 'libre-bite' ); ?></td>
+				</tr>
+				<tr>
+					<td><code>[lbite_location_selector style="banner" align="left"]</code></td>
+					<td><?php esc_html_e( 'Banner layout, left-aligned', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
 					<td><code>[lbite_location_selector style="inline" show_time="no"]</code></td>
