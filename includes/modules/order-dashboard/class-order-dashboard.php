@@ -429,23 +429,27 @@ class LBite_Order_Dashboard {
 			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
 		}
 
-		// Bestellung stornieren
-		$order->update_status( 'cancelled', __( 'Cancelled via Dashboard', 'libre-bite' ) );
-
-		// Rückerstattung erstellen wenn Bestellung bezahlt wurde
+		// Rückerstattung VOR der Stornierung – nach update_status('cancelled') gibt is_paid() false zurück.
+		$refund_triggered = false;
 		if ( $order->get_total() > 0 && $order->is_paid() ) {
 			$refund = wc_create_refund(
 				array(
-					'order_id' => $order_id,
-					'amount'   => $order->get_total(),
-					'reason'   => __( 'Order cancelled', 'libre-bite' ),
+					'order_id'       => $order_id,
+					'amount'         => $order->get_total(),
+					'reason'         => __( 'Order cancelled', 'libre-bite' ),
+					'refund_payment' => true,
 				)
 			);
 
 			if ( is_wp_error( $refund ) ) {
 				wp_send_json_error( array( 'message' => __( 'Order cancelled but refund failed: ', 'libre-bite' ) . $refund->get_error_message() ) );
 			}
+
+			$refund_triggered = true;
 		}
+
+		// Bestellung stornieren
+		$order->update_status( 'cancelled', __( 'Cancelled via Dashboard', 'libre-bite' ) );
 
 		// Dashboard-Status entfernen
 		$order->update_meta_data( '_lbite_order_status', 'cancelled' );
@@ -453,7 +457,8 @@ class LBite_Order_Dashboard {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Order successfully cancelled', 'libre-bite' ),
+				'message'  => __( 'Order successfully cancelled', 'libre-bite' ),
+				'refunded' => $refund_triggered,
 			)
 		);
 	}

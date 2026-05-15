@@ -575,7 +575,10 @@
 				},
 				success: (response) => {
 					if (response.success) {
-						window.lbiteNotify && window.lbiteNotify.success(lbiteDashboard.strings.orderCancelled || 'Order cancelled and payment refunded');
+						const msg = (response.data && response.data.refunded)
+							? (lbiteDashboard.strings.orderCancelled || 'Order cancelled and payment refunded')
+							: (lbiteDashboard.strings.orderCancelledNoRefund || 'Order cancelled');
+						window.lbiteNotify && window.lbiteNotify.success(msg);
 						this.loadOrders();
 					} else {
 						window.lbiteNotify && window.lbiteNotify.error((lbiteDashboard.strings.cancelError || 'Error cancelling') + ': ' + escapeHtml(response.data && response.data.message ? response.data.message : (lbiteDashboard.strings.unknownError || 'Unknown error')));
