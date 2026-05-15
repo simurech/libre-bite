@@ -794,10 +794,15 @@ class LBite_Checkout {
 			return;
 		}
 
-		$lbite_percentage_1 = get_option( 'lbite_tip_percentage_1', 5 );
-		$lbite_percentage_2 = get_option( 'lbite_tip_percentage_2', 10 );
-		$lbite_percentage_3 = get_option( 'lbite_tip_percentage_3', 15 );
+		$lbite_percentage_1      = get_option( 'lbite_tip_percentage_1', 5 );
+		$lbite_percentage_2      = get_option( 'lbite_tip_percentage_2', 10 );
+		$lbite_percentage_3      = get_option( 'lbite_tip_percentage_3', 15 );
 		$lbite_default_selection = get_option( 'lbite_tip_default_selection', 'none' );
+		$lbite_tip_mode          = get_option( 'lbite_tip_mode', 'percentage' );
+		$lbite_tip_title         = get_option( 'lbite_tip_title', '' );
+		$lbite_tip_label_1       = get_option( 'lbite_tip_label_1', '' );
+		$lbite_tip_label_2       = get_option( 'lbite_tip_label_2', '' );
+		$lbite_tip_label_3       = get_option( 'lbite_tip_label_3', '' );
 
 		include LBITE_PLUGIN_DIR . 'templates/checkout-tip.php';
 	}
@@ -845,17 +850,18 @@ class LBite_Checkout {
 
 		$tip_type   = sanitize_text_field( $form_data['lbite_tip_type'] );
 		$tip_amount = 0;
+		$tip_mode   = get_option( 'lbite_tip_mode', 'percentage' );
 
-		// Brutto-Zwischensumme (inkl. MwSt.) für Trinkgeldberechnung.
+		// Brutto-Zwischensumme (inkl. MwSt.) für prozentuale Trinkgeldberechnung.
 		$cart       = WC()->cart;
 		$cart_total = $cart->get_subtotal() + $cart->get_subtotal_tax();
 
 		if ( 'percentage' === $tip_type && isset( $form_data['lbite_tip_percentage'] ) ) {
-			$percentage = floatval( $form_data['lbite_tip_percentage'] );
-			$tip_amount = ( $cart_total * $percentage ) / 100;
+			$value      = floatval( $form_data['lbite_tip_percentage'] );
+			$tip_amount = 'fixed' === $tip_mode ? $value : ( $cart_total * $value ) / 100;
 		} elseif ( 'custom' === $tip_type && isset( $form_data['lbite_tip_custom'] ) ) {
-			$percentage = floatval( $form_data['lbite_tip_custom'] );
-			$tip_amount = ( $cart_total * $percentage ) / 100;
+			$value      = floatval( $form_data['lbite_tip_custom'] );
+			$tip_amount = 'fixed' === $tip_mode ? $value : ( $cart_total * $value ) / 100;
 		}
 
 		if ( $tip_amount > 0 ) {

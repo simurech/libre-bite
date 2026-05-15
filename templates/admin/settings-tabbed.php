@@ -68,6 +68,11 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_tip_percentage_2', isset( $_POST['lbite_tip_percentage_2'] ) ? floatval( wp_unslash( $_POST['lbite_tip_percentage_2'] ) ) : 10 );
 			update_option( 'lbite_tip_percentage_3', isset( $_POST['lbite_tip_percentage_3'] ) ? floatval( wp_unslash( $_POST['lbite_tip_percentage_3'] ) ) : 15 );
 			update_option( 'lbite_tip_default_selection', isset( $_POST['lbite_tip_default_selection'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_default_selection'] ) ) : 'none' );
+			update_option( 'lbite_tip_mode', ( isset( $_POST['lbite_tip_mode'] ) && 'fixed' === $_POST['lbite_tip_mode'] ) ? 'fixed' : 'percentage' );
+			update_option( 'lbite_tip_title', isset( $_POST['lbite_tip_title'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_title'] ) ) : '' );
+			update_option( 'lbite_tip_label_1', isset( $_POST['lbite_tip_label_1'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_1'] ) ) : '' );
+			update_option( 'lbite_tip_label_2', isset( $_POST['lbite_tip_label_2'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_2'] ) ) : '' );
+			update_option( 'lbite_tip_label_3', isset( $_POST['lbite_tip_label_3'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_3'] ) ) : '' );
 			$lbite_did_save = true;
 			break;
 
@@ -215,6 +220,12 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				$lbite_tip_pct_2  = get_option( 'lbite_tip_percentage_2', 10 );
 				$lbite_tip_pct_3  = get_option( 'lbite_tip_percentage_3', 15 );
 				$lbite_tip_select = get_option( 'lbite_tip_default_selection', 'none' );
+				$lbite_tip_mode   = get_option( 'lbite_tip_mode', 'percentage' );
+				$lbite_tip_title  = get_option( 'lbite_tip_title', '' );
+				$lbite_tip_lbl_1  = get_option( 'lbite_tip_label_1', '' );
+				$lbite_tip_lbl_2  = get_option( 'lbite_tip_label_2', '' );
+				$lbite_tip_lbl_3  = get_option( 'lbite_tip_label_3', '' );
+				$lbite_tip_is_fixed = 'fixed' === $lbite_tip_mode;
 				?>
 				<form method="post">
 					<?php wp_nonce_field( 'lbite_settings' ); ?>
@@ -223,25 +234,61 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					<h2><?php esc_html_e( 'Tip Settings', 'libre-bite' ); ?></h2>
 					<table class="form-table">
 						<tr>
-							<th><?php esc_html_e( 'Percentage 1', 'libre-bite' ); ?></th>
-							<td><input type="number" step="0.1" min="0" name="lbite_tip_percentage_1" value="<?php echo esc_attr( $lbite_tip_pct_1 ); ?>" class="small-text"> %</td>
+							<th><?php esc_html_e( 'Tip Title', 'libre-bite' ); ?></th>
+							<td>
+								<input type="text" name="lbite_tip_title" value="<?php echo esc_attr( $lbite_tip_title ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Add a tip?', 'libre-bite' ); ?>">
+								<p class="description"><?php esc_html_e( 'Heading shown above the tip options. Leave empty to use the default.', 'libre-bite' ); ?></p>
+							</td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Percentage 2', 'libre-bite' ); ?></th>
-							<td><input type="number" step="0.1" min="0" name="lbite_tip_percentage_2" value="<?php echo esc_attr( $lbite_tip_pct_2 ); ?>" class="small-text"> %</td>
+							<th><?php esc_html_e( 'Tip Mode', 'libre-bite' ); ?></th>
+							<td>
+								<label style="margin-right: 16px;">
+									<input type="radio" name="lbite_tip_mode" value="percentage" id="lbite-tip-mode-pct" <?php checked( $lbite_tip_mode, 'percentage' ); ?>>
+									<?php esc_html_e( 'Percentage of order total', 'libre-bite' ); ?>
+								</label>
+								<label>
+									<input type="radio" name="lbite_tip_mode" value="fixed" id="lbite-tip-mode-fixed" <?php checked( $lbite_tip_mode, 'fixed' ); ?>>
+									<?php esc_html_e( 'Fixed amount', 'libre-bite' ); ?>
+								</label>
+								<p class="description"><?php esc_html_e( 'Percentage: values are percentages (e.g. 10 = 10%). Fixed: values are absolute amounts in your shop currency.', 'libre-bite' ); ?></p>
+							</td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Percentage 3', 'libre-bite' ); ?></th>
-							<td><input type="number" step="0.1" min="0" name="lbite_tip_percentage_3" value="<?php echo esc_attr( $lbite_tip_pct_3 ); ?>" class="small-text"> %</td>
+							<th><?php esc_html_e( 'Option 1', 'libre-bite' ); ?></th>
+							<td>
+								<input type="number" step="0.01" min="0" name="lbite_tip_percentage_1" value="<?php echo esc_attr( $lbite_tip_pct_1 ); ?>" class="small-text">
+								<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( get_woocommerce_currency_symbol() ) : '%'; ?></span>
+								&nbsp;&nbsp;
+								<input type="text" name="lbite_tip_label_1" value="<?php echo esc_attr( $lbite_tip_lbl_1 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
+							</td>
+						</tr>
+						<tr>
+							<th><?php esc_html_e( 'Option 2', 'libre-bite' ); ?></th>
+							<td>
+								<input type="number" step="0.01" min="0" name="lbite_tip_percentage_2" value="<?php echo esc_attr( $lbite_tip_pct_2 ); ?>" class="small-text">
+								<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( get_woocommerce_currency_symbol() ) : '%'; ?></span>
+								&nbsp;&nbsp;
+								<input type="text" name="lbite_tip_label_2" value="<?php echo esc_attr( $lbite_tip_lbl_2 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
+							</td>
+						</tr>
+						<tr>
+							<th><?php esc_html_e( 'Option 3', 'libre-bite' ); ?></th>
+							<td>
+								<input type="number" step="0.01" min="0" name="lbite_tip_percentage_3" value="<?php echo esc_attr( $lbite_tip_pct_3 ); ?>" class="small-text">
+								<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( get_woocommerce_currency_symbol() ) : '%'; ?></span>
+								&nbsp;&nbsp;
+								<input type="text" name="lbite_tip_label_3" value="<?php echo esc_attr( $lbite_tip_lbl_3 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
+							</td>
 						</tr>
 						<tr>
 							<th><?php esc_html_e( 'Default Selection', 'libre-bite' ); ?></th>
 							<td>
 								<select name="lbite_tip_default_selection">
 									<option value="none" <?php selected( $lbite_tip_select, 'none' ); ?>><?php esc_html_e( 'No Tip (Default)', 'libre-bite' ); ?></option>
-									<option value="percentage_1" <?php selected( $lbite_tip_select, 'percentage_1' ); ?>><?php echo esc_html( $lbite_tip_pct_1 ); ?>%</option>
-									<option value="percentage_2" <?php selected( $lbite_tip_select, 'percentage_2' ); ?>><?php echo esc_html( $lbite_tip_pct_2 ); ?>%</option>
-									<option value="percentage_3" <?php selected( $lbite_tip_select, 'percentage_3' ); ?>><?php echo esc_html( $lbite_tip_pct_3 ); ?>%</option>
+									<option value="percentage_1" <?php selected( $lbite_tip_select, 'percentage_1' ); ?>><?php esc_html_e( 'Option 1', 'libre-bite' ); ?></option>
+									<option value="percentage_2" <?php selected( $lbite_tip_select, 'percentage_2' ); ?>><?php esc_html_e( 'Option 2', 'libre-bite' ); ?></option>
+									<option value="percentage_3" <?php selected( $lbite_tip_select, 'percentage_3' ); ?>><?php esc_html_e( 'Option 3', 'libre-bite' ); ?></option>
 								</select>
 								<p class="description"><?php esc_html_e( 'Which option should be pre-selected by default in checkout?', 'libre-bite' ); ?></p>
 							</td>
@@ -249,6 +296,19 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					</table>
 					<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 				</form>
+				<script>
+				(function() {
+					var radios = document.querySelectorAll('input[name="lbite_tip_mode"]');
+					var units  = document.querySelectorAll('.lbite-tip-unit');
+					var currency = <?php echo wp_json_encode( get_woocommerce_currency_symbol() ); ?>;
+					radios.forEach(function(r) {
+						r.addEventListener('change', function() {
+							var isFixed = this.value === 'fixed';
+							units.forEach(function(u) { u.textContent = isFixed ? currency : '%'; });
+						});
+					});
+				})();
+				</script>
 				<?php
 				break;
 
