@@ -502,25 +502,28 @@ class LBite_Checkout {
 			return;
 		}
 
-		// Standort via URL-Parameter setzen (?location=123).
-		// Oeffentlicher Deep-Link, keine Nonce moeglich (z.B. QR-Code, Flyer).
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link (QR-Code/Flyer); Wert wird nur in Session geschrieben, kein DB-Write.
-		if ( isset( $_GET['location'] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link (QR-Code/Flyer); Wert wird nur in Session geschrieben, kein DB-Write.
-			$location_id = intval( $_GET['location'] );
-			$location = get_post( $location_id );
+		// Session initialisieren falls nötig (z.B. erster Besuch via Deep-Link).
+		if ( ! WC()->session->has_session() ) {
+			WC()->session->set_customer_session_cookie( true );
+		}
 
-			if ( $location && $location->post_type === 'lbite_location' && $location->post_status === 'publish' ) {
-				WC()->session->set( 'lbite_location_id', $location_id );
+		// Standort via URL-Parameter setzen (?lbite_location=123, Legacy: ?location=123).
+		// Oeffentlicher Deep-Link, keine Nonce moeglich (z.B. QR-Code, Flyer, Marketing-Link).
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; nur Session-Schreibzugriff, kein DB-Write.
+		$raw_location_id = isset( $_GET['lbite_location'] ) ? intval( $_GET['lbite_location'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; nur Session-Schreibzugriff, kein DB-Write.
+			: ( isset( $_GET['location'] ) ? intval( $_GET['location'] ) : 0 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link (Legacy); nur Session-Schreibzugriff, kein DB-Write.
+		if ( $raw_location_id ) {
+			$location = get_post( $raw_location_id );
+			if ( $location && 'lbite_location' === $location->post_type && 'publish' === $location->post_status ) {
+				WC()->session->set( 'lbite_location_id', $raw_location_id );
 			}
 		}
 
 		// Bestelltyp via URL-Parameter setzen (?order_type=now oder ?order_type=later).
 		// Oeffentlicher Deep-Link, keine Nonce moeglich.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; Wert wird nur in Session geschrieben, kein DB-Write.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; nur Session-Schreibzugriff, kein DB-Write.
 		if ( isset( $_GET['order_type'] ) && in_array( sanitize_text_field( wp_unslash( $_GET['order_type'] ) ), array( 'now', 'later' ), true ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; Wert wird nur in Session geschrieben, kein DB-Write.
-			WC()->session->set( 'lbite_order_type', sanitize_text_field( wp_unslash( $_GET['order_type'] ) ) );
+			WC()->session->set( 'lbite_order_type', sanitize_text_field( wp_unslash( $_GET['order_type'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; nur Session-Schreibzugriff, kein DB-Write.
 		}
 	}
 

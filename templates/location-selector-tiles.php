@@ -486,9 +486,9 @@ jQuery(document).ready(function($) {
 		return day + '.' + month + '.' + year;
 	}
 
-	// URL-Parameter verarbeiten (für Direktlinks)
+	// URL-Parameter verarbeiten (für Direktlinks; ?lbite_location=ID oder Legacy ?location=ID)
 	const urlParams = new URLSearchParams(window.location.search);
-	const locationParam = urlParams.get('location');
+	const locationParam = urlParams.get('lbite_location') || urlParams.get('location');
 
 	if (locationParam) {
 		$('.lbite-location-card[data-location-id="' + locationParam + '"]').trigger('click');

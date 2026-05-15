@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.3.3 =
+* Fix: Deep-Link-Parameter ?lbite_location=ID wird nun korrekt verarbeitet und setzt die Session unabhängig vom Table-Ordering-Feature.
+* Fix: Standort-Auswahl-Shortcode erkennt jetzt den Parameter ?lbite_location=ID (zusätzlich zum bisherigen ?location=ID).
+* Feature: QR-Code-Metabox bei Standorten erlaubt neu die Vorauswahl des Bestelltyps (Sofort / Vorbestellen).
+* Docs: Hilfedokumentation zu URL-Parametern aktualisiert; korrekter Parameter ?lbite_location=ID.
 
 = 1.3.2 =
 * Fix: CSS box-sizing and height overrides for date/time input fields (theme compatibility).

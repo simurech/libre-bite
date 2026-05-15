@@ -166,7 +166,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</thead>
 			<tbody>
 				<tr>
-					<td><code>?location=ID</code></td>
+					<td><code>?lbite_location=ID</code></td>
 					<td><?php esc_html_e( 'Location ID (number)', 'libre-bite' ); ?></td>
 					<td><?php esc_html_e( 'Automatically pre-selects the location. You can find the ID in the URL when editing the location.', 'libre-bite' ); ?></td>
 				</tr>
@@ -185,8 +185,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<p style="margin-top: 8px;"><?php esc_html_e( 'Example URL:', 'libre-bite' ); ?></p>
 		<div style="background: #f6f7f7; border: 1px solid #ccd0d4; border-radius: 3px; padding: 10px 14px; font-family: monospace; font-size: 13px; word-break: break-all;">
-			<?php echo esc_html( home_url( '/bestellen/?location=5&order_type=now' ) ); ?>
+			<?php echo esc_html( home_url( '/?lbite_location=5&order_type=now' ) ); ?>
 		</div>
+		<p class="description" style="margin-top: 6px;"><?php esc_html_e( 'Note: The legacy parameter ?location=ID (without prefix) is still supported for backward compatibility.', 'libre-bite' ); ?></p>
 
 		<div class="lbite-help-tip">
 			<span class="dashicons dashicons-lightbulb"></span>

@@ -482,7 +482,7 @@ class LBite_Locations {
 			return;
 		}
 
-		// Ziel-URL bestimmen: konfigurierte Standort-Seite → Shop → Startseite.
+		// Ziel-URL bestimmen: konfigurierte Shop-Seite → WooCommerce-Shop → Startseite.
 		$lbite_target_page_id = (int) get_option( 'lbite_location_page_id', 0 );
 		if ( $lbite_target_page_id ) {
 			$lbite_base_url = get_permalink( $lbite_target_page_id );
@@ -492,22 +492,66 @@ class LBite_Locations {
 			$lbite_base_url = home_url();
 		}
 
-		$url    = add_query_arg( 'lbite_location', $post->ID, $lbite_base_url );
-		$qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . rawurlencode( $url );
+		$lbite_base_url = trailingslashit( $lbite_base_url );
+		$url            = add_query_arg( 'lbite_location', $post->ID, $lbite_base_url );
+		$qr_url         = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . rawurlencode( $url );
+		$location_id    = (int) $post->ID;
 		?>
+		<div class="lbite-qr-order-type" style="margin-bottom: 10px;">
+			<label style="font-weight: 600; display: block; margin-bottom: 6px;"><?php esc_html_e( 'Order type for QR code', 'libre-bite' ); ?></label>
+			<label style="margin-right: 12px;">
+				<input type="radio" name="lbite_qr_order_type" value="" checked>
+				<?php esc_html_e( 'No pre-selection', 'libre-bite' ); ?>
+			</label>
+			<label style="margin-right: 12px;">
+				<input type="radio" name="lbite_qr_order_type" value="now">
+				<?php esc_html_e( 'Now (fastest pickup)', 'libre-bite' ); ?>
+			</label>
+			<label>
+				<input type="radio" name="lbite_qr_order_type" value="later">
+				<?php esc_html_e( 'Pre-order (customer chooses time)', 'libre-bite' ); ?>
+			</label>
+		</div>
 		<div class="lbite-qr-meta-url">
-			<input type="text" value="<?php echo esc_url( $url ); ?>" class="large-text" readonly onclick="this.select();">
+			<input type="text" id="lbite-qr-url-input-<?php echo esc_attr( $location_id ); ?>" value="<?php echo esc_url( $url ); ?>" class="large-text" readonly onclick="this.select();">
 		</div>
 		<div class="lbite-qr-display">
-			<img src="<?php echo esc_url( $qr_url ); ?>" alt="QR Code">
+			<img id="lbite-qr-img-<?php echo esc_attr( $location_id ); ?>" src="<?php echo esc_url( $qr_url ); ?>" alt="QR Code">
 		</div>
 		<p class="description">
 			<?php esc_html_e( 'You can use this link or QR code for the location.', 'libre-bite' ); ?><br>
-			<a href="<?php echo esc_url( $qr_url ); ?>&amp;format=png" target="_blank" download="qr-location-<?php echo esc_attr( $post->ID ); ?>.png" class="button"><?php esc_html_e( 'Download QR Code', 'libre-bite' ); ?></a>
+			<a id="lbite-qr-download-btn-<?php echo esc_attr( $location_id ); ?>" href="<?php echo esc_url( $qr_url ); ?>&amp;format=png" target="_blank" download="qr-location-<?php echo esc_attr( $post->ID ); ?>.png" class="button"><?php esc_html_e( 'Download QR Code', 'libre-bite' ); ?></a>
 			<button type="button" class="button lbite-print-qr-btn" data-title="<?php echo esc_attr( $post->post_title ); ?>" data-qr="<?php echo esc_url( $qr_url ); ?>">
 				<?php esc_html_e( 'Print QR Code', 'libre-bite' ); ?>
 			</button>
 		</p>
+		<script>
+		(function() {
+			var baseUrl  = <?php echo wp_json_encode( $lbite_base_url ); ?>;
+			var locId    = <?php echo (int) $location_id; ?>;
+			var suffix   = '-' + locId;
+			var urlInput = document.getElementById( 'lbite-qr-url-input' + suffix );
+			var qrImg    = document.getElementById( 'lbite-qr-img' + suffix );
+			var dlBtn    = document.getElementById( 'lbite-qr-download-btn' + suffix );
+			var printBtn = qrImg ? qrImg.closest( 'p' ) && qrImg.closest( '.inside' ).querySelector( '.lbite-print-qr-btn' ) : null;
+
+			document.querySelectorAll( 'input[name="lbite_qr_order_type"]' ).forEach( function( radio ) {
+				radio.addEventListener( 'change', function() {
+					var params = { lbite_location: locId };
+					if ( this.value !== '' ) {
+						params.order_type = this.value;
+					}
+					var qs  = Object.keys( params ).map( function( k ) { return encodeURIComponent( k ) + '=' + encodeURIComponent( params[ k ] ); } ).join( '&' );
+					var url = baseUrl + '?' + qs;
+					var qrSrc = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent( url );
+					if ( urlInput ) urlInput.value = url;
+					if ( qrImg )   qrImg.src = qrSrc;
+					if ( dlBtn )   dlBtn.href = qrSrc + '&format=png';
+					if ( printBtn ) printBtn.dataset.qr = qrSrc;
+				} );
+			} );
+		})();
+		</script>
 		<?php
 	}
 
