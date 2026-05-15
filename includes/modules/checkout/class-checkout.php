@@ -94,6 +94,7 @@ class LBite_Checkout {
 				$this->loader->add_action( 'wp', $this, 'maybe_remove_thankyou_actions__premium_only' );
 				$this->loader->add_filter( 'woocommerce_checkout_fields', $this, 'maybe_make_email_optional__premium_only', 999 );
 				$this->loader->add_action( 'woocommerce_checkout_process', $this, 'maybe_set_placeholder_email__premium_only', 5 );
+				$this->loader->add_filter( 'woocommerce_payment_successful_result', $this, 'wrap_plain_text_payment_messages__premium_only', 10, 2 );
 				$this->loader->add_action( 'wp_ajax_lbite_send_receipt_email', $this, 'ajax_send_receipt_email__premium_only' );
 				$this->loader->add_action( 'wp_ajax_nopriv_lbite_send_receipt_email', $this, 'ajax_send_receipt_email__premium_only' );
 			}
@@ -1331,6 +1332,29 @@ class LBite_Checkout {
 
 		// Optimiertes Template laden.
 		include LBITE_PLUGIN_DIR . 'templates/thankyou-optimized.php';
+	}
+
+	/**
+	 * Plain-Text-Nachrichten in Payment-Response in HTML-Tags einwickeln (nur Premium)
+	 *
+	 * Einige Gateways (z.B. TWINT im Inline-Modus) geben «messages» als reinen Text zurück.
+	 * jQuery's $() erwartet jedoch HTML oder CSS-Selector – plain Text führt zu einem
+	 * «Syntax error, unrecognized expression»-Fehler und das Popup öffnet sich nicht.
+	 *
+	 * @param array $result   Payment-Ergebnis-Array.
+	 * @param int   $order_id Bestellungs-ID.
+	 * @return array
+	 */
+	public function wrap_plain_text_payment_messages__premium_only( $result, $order_id ) {
+		if (
+			isset( $result['messages'] ) &&
+			is_string( $result['messages'] ) &&
+			'' !== $result['messages'] &&
+			$result['messages'] === strip_tags( $result['messages'] )
+		) {
+			$result['messages'] = '<p>' . esc_html( $result['messages'] ) . '</p>';
+		}
+		return $result;
 	}
 
 	/**
