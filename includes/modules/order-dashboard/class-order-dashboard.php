@@ -46,7 +46,7 @@ class LBite_Order_Dashboard {
 
 		$order_ids = wc_get_orders( array(
 			'limit'  => 500,
-			'status' => array( 'processing', 'pending', 'on-hold' ),
+			'status' => array( 'processing', 'on-hold' ),
 			'return' => 'ids',
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Eingehende Bestellungen für Menü-Badge; Abfrage auf 500 begrenzt und gecacht.
 			'meta_query' => array(
@@ -141,7 +141,7 @@ class LBite_Order_Dashboard {
 		// Query for non-completed orders (no date restriction).
 		$args_active = array(
 			'limit'      => 200,
-			'status'     => array( 'processing', 'pending', 'on-hold' ),
+			'status'     => array( 'processing', 'on-hold' ),
 			'orderby'    => 'ID',
 			'order'      => 'ASC',
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- WooCommerce-Bestellfilterung nach Plugin-Metadaten; Abfragen auf max. 200 Einträge begrenzt.
@@ -531,7 +531,7 @@ class LBite_Order_Dashboard {
 		$orders = wc_get_orders(
 			array(
 				'limit'      => 100,
-				'status'     => array( 'processing', 'pending' ),
+				'status'     => array( 'processing', 'on-hold' ),
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- WooCommerce-Bestellfilterung nach Plugin-Metadaten; Abfragen auf max. 200 Einträge begrenzt.
 				'meta_query' => array(
 					array(

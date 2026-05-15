@@ -100,6 +100,11 @@ class LBite_Checkout {
 			}
 		}
 
+		// Zahlungsbestätigungs-Polling (Workaround für Gateways wie TWINT, deren Frontend-Polling fehlschlägt).
+		$this->loader->add_action( 'wp_ajax_nopriv_lbite_check_order_status', $this, 'ajax_check_order_status' );
+		$this->loader->add_action( 'wp_ajax_lbite_check_order_status', $this, 'ajax_check_order_status' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_order_poll_script' );
+
 		// Shortcode
 		$this->loader->add_action( 'init', $this, 'register_shortcodes' );
 
@@ -973,6 +978,85 @@ class LBite_Checkout {
 
 			$order->save();
 		}
+	}
+
+	/**
+	 * AJAX: Bestellstatus prüfen (Polling-Fallback für Zahlungs-Gateways wie TWINT).
+	 * Öffentlich (nopriv), gesichert über WooCommerce Order Key.
+	 */
+	public function ajax_check_order_status() {
+		$order_id  = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
+		$order_key = isset( $_POST['order_key'] ) ? sanitize_text_field( wp_unslash( $_POST['order_key'] ) ) : '';
+
+		if ( ! $order_id || ! $order_key ) {
+			wp_send_json_error( 'invalid' );
+		}
+
+		$order = wc_get_order( $order_id );
+		if ( ! $order || $order->get_order_key() !== $order_key ) {
+			wp_send_json_error( 'not_found' );
+		}
+
+		$status = $order->get_status();
+		$paid   = in_array( $status, wc_get_is_paid_statuses(), true );
+
+		wp_send_json_success(
+			array(
+				'status'   => $status,
+				'paid'     => $paid,
+				'redirect' => $paid ? $order->get_checkout_order_received_url() : '',
+			)
+		);
+	}
+
+	/**
+	 * Polling-Script für Zahlungsbestätigung auf der Checkout-Seite enqueuen.
+	 */
+	public function enqueue_order_poll_script() {
+		if ( ! is_checkout() ) {
+			return;
+		}
+
+		$ajax_url = esc_js( admin_url( 'admin-ajax.php' ) );
+
+		$script = "(function($){
+			var _lbitePoller = null;
+			var _lbiteCount  = 0;
+
+			function _lbiteParseOrder(url) {
+				var m = url.match(/order-received\\/([0-9]+)\\/\\?key=(wc_order_[^&]+)/);
+				if (m) return {id: m[1], key: m[2], redirect: url};
+				m = url.match(/[?&]order=([0-9]+)&key=(wc_order_[^&]+)/);
+				return m ? {id: m[1], key: m[2], redirect: url} : null;
+			}
+
+			function _lbiteStartPoll(order) {
+				if (_lbitePoller) clearInterval(_lbitePoller);
+				_lbiteCount = 0;
+				_lbitePoller = setInterval(function() {
+					_lbiteCount++;
+					if (_lbiteCount > 120) { clearInterval(_lbitePoller); return; }
+					\$.post('{$ajax_url}', {
+						action: 'lbite_check_order_status',
+						order_id: order.id,
+						order_key: order.key
+					}, function(res) {
+						if (res.success && res.data.paid) {
+							clearInterval(_lbitePoller);
+							window.location.href = res.data.redirect;
+						}
+					});
+				}, 5000);
+			}
+
+			\$(document.body).on('checkout_place_order_success', function(e, response) {
+				if (!response || !response.redirect) return;
+				var order = _lbiteParseOrder(response.redirect);
+				if (order) _lbiteStartPoll(order);
+			});
+		}(jQuery));";
+
+		wp_add_inline_script( 'wc-checkout', $script );
 	}
 
 	/**
