@@ -5035,6 +5035,8 @@ msgid ""
 "Layout: Tiles (grid cards), inline (compact form), or banner (wide 2-column "
 "with image)"
 msgstr ""
+"Layout: Kacheln (Gitterkarten), inline (kompaktes Formular) oder Banner "
+"(breite 2-Spalten-Box mit Bild)"
 
 #: templates/admin/help-partials/locations.php:123
 msgid "Horizontal alignment of the selector within the page"

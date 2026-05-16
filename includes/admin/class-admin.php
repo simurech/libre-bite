@@ -84,11 +84,13 @@ class LBite_Admin {
 		// Support-Box im Admin-Footer
 		$this->loader->add_action( 'admin_footer', $this, 'render_support_footer' );
 
-		// Beleg-Metabox in WooCommerce-Bestellansicht (nur Premium).
+		// Beleg-Versand (Premium): AJAX immer registrieren – wird von Kanban-Board und
+		// Bestellansicht benötigt, unabhängig vom aktiven Checkout-Modus.
 		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) {
+			$this->loader->add_action( 'wp_ajax_lbite_admin_send_receipt', $this, 'ajax_admin_send_receipt__premium_only' );
+			// Beleg-Metabox nur wenn Optimierter Checkout aktiv.
 			if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
 				$this->loader->add_action( 'add_meta_boxes', $this, 'add_receipt_metabox__premium_only' );
-				$this->loader->add_action( 'wp_ajax_lbite_admin_send_receipt', $this, 'ajax_admin_send_receipt__premium_only' );
 			}
 		}
 	}

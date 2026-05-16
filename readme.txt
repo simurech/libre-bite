@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.6
+Stable tag: 1.3.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.3.7 =
+* Fix: Beleg-Versand aus dem Kanban-Board und der WooCommerce-Bestellansicht funktioniert nun korrekt, unabhängig davon ob der optimierte Checkout aktiv ist (AJAX-Endpoint wurde zu weit eingeschränkt registriert).
+* Fix: Bestellung stornieren erstattet die Zahlung nun korrekt zurück – Gateway-API wird zuverlässig aufgerufen (refund_payment-Flag ergänzt, Rückerstattung erfolgt vor Statusänderung).
+* Übersetzungen: fehlenden String im Standort-Hilfetext in allen Sprachen ergänzt.
 
 = 1.3.6 =
 * Fix: Kanban-Board zeigt keine Bestellungen mehr mit Status «Bezahlung ausstehend» (pending) an – nur noch bezahlte Bestellungen (processing, on-hold) erscheinen.
