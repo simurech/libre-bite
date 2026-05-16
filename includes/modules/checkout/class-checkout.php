@@ -656,6 +656,14 @@ class LBite_Checkout {
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
 		$order_type  = isset( $_POST['lbite_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_type'] ) ) : '';
 
+		// Fallback auf Session – konsistent mit save_location_time_meta().
+		if ( ! $location_id && WC()->session ) {
+			$location_id = (int) WC()->session->get( 'lbite_location_id' );
+		}
+		if ( ! $order_type && WC()->session ) {
+			$order_type = WC()->session->get( 'lbite_order_type', 'now' );
+		}
+
 		if ( ! $location_id ) {
 			wc_add_notice( __( 'Please select a location.', 'libre-bite' ), 'error' );
 		}
