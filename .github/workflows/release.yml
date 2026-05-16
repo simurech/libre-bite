@@ -37,3 +37,4 @@ jobs:
         with:
           files: libre-bite.zip
           generate_release_notes: true
+          make_latest: true
