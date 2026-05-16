@@ -92,9 +92,9 @@
 
 .lbite-change-btn {
 	padding: 8px 20px;
-	background: var(--lbite-color-primary, #0073aa);
-	color: #fff;
-	border: none;
+	background: var(--lbite-color-primary, #0073aa) !important;
+	color: #fff !important;
+	border: none !important;
 	border-radius: 6px;
 	cursor: pointer;
 	font-size: 14px;
@@ -104,7 +104,7 @@
 }
 
 .lbite-change-btn:hover {
-	background: var(--lbite-color-primary-hover, #005a87);
+	background: var(--lbite-color-primary-hover, #005a87) !important;
 }
 
 /* Keine Auswahl */
