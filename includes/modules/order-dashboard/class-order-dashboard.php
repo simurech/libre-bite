@@ -216,7 +216,7 @@ class LBite_Order_Dashboard {
 		}
 
 		// Vorbestellungen ausblenden wenn Option deaktiviert (Pro).
-		$show_future = (bool) get_option( 'lbite_show_future_orders', true );
+		$show_future = '0' !== (string) get_option( 'lbite_show_future_orders', 1 );
 		if ( ! $show_future ) {
 			foreach ( $orders_by_status as &$status_orders ) {
 				$status_orders = array_values(

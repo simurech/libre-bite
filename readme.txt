@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.8
+Stable tag: 1.3.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,14 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.3.9 =
+* Fix: Vorbestellungen im Kanban-Board sind nun jederzeit stornierbar und manuell bearbeitbar, unabhängig von der Ausgrauen-Einstellung.
+* Feature: Neue Einstellung «Vorbestellungen ausgrauen» (getrennt von «Vorbestellungen anzeigen») – beide Optionen sind separat konfigurierbar.
+* Fix: Einstellungen «Vorbestellungen anzeigen/ausgrauen» werden nach dem Speichern nun korrekt persistiert (Checkbox-Status blieb zuvor immer auf «aktiviert»).
+* Fix: Fehlendes JS-String loadMoreError nun korrekt aus Übersetzungen geladen.
+* Fix: Falsche Übersetzung «Vorbestellungen prüfen» für «Zukünftige Vorbestellungen anzeigen» in de_CH_informal und de_DE_formal korrigiert.
+* Übersetzungen: Neue Strings für Vorbestellungs-Einstellungen in allen Sprachen ergänzt (de_CH, de_CH_informal, de_DE, de_DE_formal, de_AT).
 
 = 1.3.8 =
 * Feature: «Kein Trinkgeld»-Button im Checkout ist neu im Backend konfigurierbar (Einstellungen → Trinkgeld).

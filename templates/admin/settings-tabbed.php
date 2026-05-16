@@ -116,7 +116,8 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_dashboard_refresh_interval', isset( $_POST['lbite_dashboard_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_dashboard_refresh_interval'] ) ) : 30 );
 			update_option( 'lbite_reservation_refresh_interval', isset( $_POST['lbite_reservation_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_reservation_refresh_interval'] ) ) : 60 );
 			update_option( 'lbite_notification_sound', isset( $_POST['lbite_notification_sound'] ) ? esc_url_raw( wp_unslash( $_POST['lbite_notification_sound'] ) ) : '' );
-			update_option( 'lbite_show_future_orders', isset( $_POST['lbite_show_future_orders'] ) );
+			update_option( 'lbite_show_future_orders', isset( $_POST['lbite_show_future_orders'] ) ? 1 : 0 );
+			update_option( 'lbite_dim_future_orders', isset( $_POST['lbite_dim_future_orders'] ) ? 1 : 0 );
 			$lbite_did_save = true;
 			break;
 
@@ -441,11 +442,26 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 								<?php endif; ?>
 								<label>
 									<input type="checkbox" name="lbite_show_future_orders" value="1"
-										<?php checked( get_option( 'lbite_show_future_orders', true ) ); ?>
+										<?php checked( get_option( 'lbite_show_future_orders', 1 ), 1 ); ?>
 										<?php echo $lbite_is_premium_f7 ? '' : 'disabled'; ?>>
-									<?php esc_html_e( 'Show pre-orders with a pickup time further in the future than the preparation time in the Kanban board (dimmed).', 'libre-bite' ); ?>
+									<?php esc_html_e( 'Show pre-orders with a pickup time further in the future than the preparation time in the Kanban board.', 'libre-bite' ); ?>
 								</label>
 								<p class="description"><?php esc_html_e( 'When disabled, future pre-orders are completely hidden from the Kanban board until they are within the preparation window.', 'libre-bite' ); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<th><?php esc_html_e( 'Dim Future Pre-orders', 'libre-bite' ); ?></th>
+							<td>
+								<?php if ( ! $lbite_is_premium_f7 ) : ?>
+									<span class="lbite-pro-badge"><?php esc_html_e( 'Pro', 'libre-bite' ); ?></span>
+								<?php endif; ?>
+								<label>
+									<input type="checkbox" name="lbite_dim_future_orders" value="1"
+										<?php checked( get_option( 'lbite_dim_future_orders', 1 ), 1 ); ?>
+										<?php echo $lbite_is_premium_f7 ? '' : 'disabled'; ?>>
+									<?php esc_html_e( 'Display future pre-orders dimmed (greyed out) in the Kanban board.', 'libre-bite' ); ?>
+								</label>
+								<p class="description"><?php esc_html_e( 'Pre-orders can always be cancelled or manually processed regardless of this setting.', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
 						<?php endif; ?>

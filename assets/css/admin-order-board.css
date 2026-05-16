@@ -483,5 +483,9 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 	opacity: 0.45;
 	filter: grayscale(50%);
 	border-left-color: #bbb;
-	cursor: default;
+}
+
+.lbite-kanban-card--future button {
+	opacity: 1;
+	filter: none;
 }

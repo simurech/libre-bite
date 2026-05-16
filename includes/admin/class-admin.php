@@ -513,7 +513,7 @@ class LBite_Admin {
 					'soundUrl'              => get_option( 'lbite_notification_sound', LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' ),
 					'refreshInterval'       => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
 					'locationColors'        => $lbite_dashboard_colors,
-					'futureDimmingEnabled'  => lbite_feature_enabled( 'enable_future_orders_dimmed' ),
+					'futureDimmingEnabled'  => lbite_feature_enabled( 'enable_future_orders_dimmed' ) && '0' !== get_option( 'lbite_dim_future_orders', 1 ),
 					'strings'               => array(
 						'orderUpdated'    => __( 'Status updated', 'libre-bite' ),
 						'updateError'     => __( 'Error updating', 'libre-bite' ),
@@ -521,6 +521,7 @@ class LBite_Admin {
 						'soundInactive'   => __( 'Sound off', 'libre-bite' ),
 						'loadingOrders'   => __( 'Loading orders...', 'libre-bite' ),
 						'loadOrdersError' => __( 'Error loading orders', 'libre-bite' ),
+						'loadMoreError'   => __( 'Error loading more orders', 'libre-bite' ),
 						'confirmCancel'   => __( "Do you really want to cancel this order?\n\nThe payment will be automatically refunded.", 'libre-bite' ),
 						'cancellingOrder' => __( 'Cancelling order...', 'libre-bite' ),
 						'orderCancelled'        => __( 'Order cancelled and payment refunded', 'libre-bite' ),

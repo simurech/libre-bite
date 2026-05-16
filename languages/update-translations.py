@@ -23,11 +23,13 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
-    # Dashboard-Strings (neu aus dieser Session)
+    # Dashboard-Strings
     "Loading orders...":
         "Bestellungen werden geladen...",
     "Error loading orders":
         "Fehler beim Laden der Bestellungen",
+    "Error loading more orders":
+        "Fehler beim Laden weiterer Bestellungen",
     "Do you really want to cancel this order?\n\nThe payment will be automatically refunded.":
         "Möchten Sie diese Bestellung wirklich stornieren?\n\nDie Zahlung wird automatisch zurückerstattet.",
     "Cancelling order...":
@@ -42,6 +44,17 @@ NEW_STRINGS_FORMAL_SS = {
         "Unbekannter Fehler",
     "more order(s)":
         "weitere Bestellung(en)",
+    # Vorbestellungen-Einstellungen
+    "Show Future Pre-orders":
+        "Zukünftige Vorbestellungen anzeigen",
+    "Show pre-orders with a pickup time further in the future than the preparation time in the Kanban board.":
+        "Vorbestellungen mit einer Abholzeit, die weiter in der Zukunft liegt als die Zubereitungszeit, im Kanban-Board anzeigen.",
+    "Dim Future Pre-orders":
+        "Zukünftige Vorbestellungen ausgrauen",
+    "Display future pre-orders dimmed (greyed out) in the Kanban board.":
+        "Zukünftige Vorbestellungen ausgegraut im Kanban-Board anzeigen.",
+    "Pre-orders can always be cancelled or manually processed regardless of this setting.":
+        "Vorbestellungen können unabhängig von dieser Einstellung jederzeit storniert oder manuell bearbeitet werden.",
     # POS-Strings (neu aus dieser Session)
     "Error loading products":
         "Fehler beim Laden der Produkte",

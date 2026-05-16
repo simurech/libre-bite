@@ -594,6 +594,10 @@ msgid "Error loading orders"
 msgstr ""
 
 #: includes/admin/class-admin.php:522
+msgid "Error loading more orders"
+msgstr ""
+
+#: includes/admin/class-admin.php:523
 msgid ""
 "Do you really want to cancel this order?\n"
 "\n"
@@ -2245,19 +2249,33 @@ msgstr ""
 msgid "Pro"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:437
+#: templates/admin/settings-tabbed.php:447
 msgid ""
 "Show pre-orders with a pickup time further in the future than the "
-"preparation time in the Kanban board (dimmed)."
+"preparation time in the Kanban board."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:439
+#: templates/admin/settings-tabbed.php:449
 msgid ""
 "When disabled, future pre-orders are completely hidden from the Kanban board "
 "until they are within the preparation window."
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:453
+msgid "Dim Future Pre-orders"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:462
+msgid "Display future pre-orders dimmed (greyed out) in the Kanban board."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:464
+msgid ""
+"Pre-orders can always be cancelled or manually processed regardless of this "
+"setting."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:475
 msgid "Select Sound File"
 msgstr ""
 
