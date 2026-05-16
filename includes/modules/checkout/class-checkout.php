@@ -511,6 +511,9 @@ class LBite_Checkout {
 			WC()->session->set_customer_session_cookie( true );
 		}
 
+		$location_set  = false;
+		$order_type_set = false;
+
 		// Standort via URL-Parameter setzen (?lbite_location=123, Legacy: ?location=123).
 		// Oeffentlicher Deep-Link, keine Nonce moeglich (z.B. QR-Code, Flyer, Marketing-Link).
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; nur Session-Schreibzugriff, kein DB-Write.
@@ -520,14 +523,22 @@ class LBite_Checkout {
 			$location = get_post( $raw_location_id );
 			if ( $location && 'lbite_location' === $location->post_type && 'publish' === $location->post_status ) {
 				WC()->session->set( 'lbite_location_id', $raw_location_id );
+				$location_set = true;
 			}
 		}
 
 		// Bestelltyp via URL-Parameter setzen (?order_type=now oder ?order_type=later).
 		// Oeffentlicher Deep-Link, keine Nonce moeglich.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; nur Session-Schreibzugriff, kein DB-Write.
-		if ( isset( $_GET['order_type'] ) && in_array( sanitize_text_field( wp_unslash( $_GET['order_type'] ) ), array( 'now', 'later' ), true ) ) {
+		if ( isset( $_GET['order_type'] ) && in_array( sanitize_text_field( wp_unslash( $_GET['order_type'] ) ) , array( 'now', 'later' ), true ) ) {
 			WC()->session->set( 'lbite_order_type', sanitize_text_field( wp_unslash( $_GET['order_type'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; nur Session-Schreibzugriff, kein DB-Write.
+			$order_type_set = true;
+		}
+
+		// Beide Parameter gesetzt → direkt zum Shop weiterleiten (Standort-Auswahl-Seite überspringen).
+		if ( $location_set && $order_type_set && ! is_shop() && ! is_checkout() ) {
+			wp_safe_redirect( wc_get_page_permalink( 'shop' ) );
+			exit;
 		}
 	}
 
