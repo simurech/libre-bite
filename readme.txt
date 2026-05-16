@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.7
+Stable tag: 1.3.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.3.8 =
+* Feature: «Kein Trinkgeld»-Button im Checkout ist neu im Backend konfigurierbar (Einstellungen → Trinkgeld).
+* Fix: Übersetzungen für de_CH_informal und de_DE_formal vervollständigt (Feiertage, Vollbild, Beleg, Zeitslot-Blocker u.a. waren noch auf Englisch).
+* Fix: fuzzy-Flags aus allen Sprachdateien entfernt – betroffene Strings (z.B. Trinkgeld-Optionen) erscheinen neu korrekt übersetzt.
 
 = 1.3.7 =
 * Fix: Beleg-Versand aus dem Kanban-Board und der WooCommerce-Bestellansicht funktioniert nun korrekt, unabhängig davon ob der optimierte Checkout aktiv ist (AJAX-Endpoint wurde zu weit eingeschränkt registriert).
