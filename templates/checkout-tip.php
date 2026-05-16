@@ -31,7 +31,7 @@ $lbite_label_3 = $lbite_tip_label_3 ?: ( $lbite_is_fixed
 	<div class="lbite-tip-options">
 		<label class="lbite-tip-option">
 			<input type="radio" name="lbite_tip_type" value="none" <?php checked( $lbite_default_selection, 'none' ); ?>>
-			<span><?php esc_html_e( 'No tip', 'libre-bite' ); ?></span>
+			<span><?php echo esc_html( $lbite_tip_label_none ?: __( 'No tip', 'libre-bite' ) ); ?></span>
 		</label>
 
 		<label class="lbite-tip-option">

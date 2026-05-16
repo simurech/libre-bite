@@ -2090,6 +2090,14 @@ msgstr "Überschrift über den Trinkgeld-Optionen. Leer lassen für den Standard
 "Überschrift über den Trinkgeld-Optionen. Leer lassen für den Standard-Text."
 
 #: templates/admin/settings-tabbed.php:244
+msgid "\"No Tip\" Label"
+msgstr "\"Kein Trinkgeld\"-Beschriftung"
+
+#: templates/admin/settings-tabbed.php:245
+msgid "Label for the \"no tip\" option. Leave empty to use the default."
+msgstr "Beschriftung für die Option \"Kein Trinkgeld\". Leer lassen für den Standardtext."
+
+#: templates/admin/settings-tabbed.php:251
 msgid "Tip Mode"
 msgstr "Trinkgeld-Modus"
 

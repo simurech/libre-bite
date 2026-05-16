@@ -807,6 +807,7 @@ class LBite_Checkout {
 		$lbite_default_selection = get_option( 'lbite_tip_default_selection', 'none' );
 		$lbite_tip_mode          = get_option( 'lbite_tip_mode', 'percentage' );
 		$lbite_tip_title         = get_option( 'lbite_tip_title', '' );
+		$lbite_tip_label_none    = get_option( 'lbite_tip_label_none', '' );
 		$lbite_tip_label_1       = get_option( 'lbite_tip_label_1', '' );
 		$lbite_tip_label_2       = get_option( 'lbite_tip_label_2', '' );
 		$lbite_tip_label_3       = get_option( 'lbite_tip_label_3', '' );
