@@ -184,10 +184,6 @@ input[type="date"].lbite-input {
 
 .lbite-current-selection {
 	margin-top: 20px;
-	padding: 15px;
-	background: #e7f7ff;
-	border-left: 4px solid var(--lbite-color-primary, #0073aa);
-	border-radius: 4px;
 }
 
 @media (max-width: 600px) {

@@ -44,6 +44,13 @@ NEW_STRINGS_FORMAL_SS = {
         "Unbekannter Fehler",
     "more order(s)":
         "weitere Bestellung(en)",
+    # Produkt-Add-ons (bisher «Options»/«Optionen»)
+    "Product Options":
+        "Produkt-Add-ons",
+    "Product Option":
+        "Produkt-Add-on",
+    "Options":
+        "Add-ons",
     # Vorbestellungen-Einstellungen
     "Show Future Pre-orders":
         "Zukünftige Vorbestellungen anzeigen",
@@ -143,6 +150,7 @@ NEW_STRINGS_FORMAL_SS = {
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT
 CUSTOMER_FORMAL = {
+    "Your Email":                                   "Ihre E-Mail-Adresse",
     "What's your name?":                            "Wie heissen Sie?",
     "Your Name":                                    "Ihr Name",
     "Your Order":                                   "Ihre Bestellung",
@@ -156,6 +164,7 @@ CUSTOMER_FORMAL = {
 
 # Informelle Kunden-Anrede (du) – für de_CH_informal und de_DE
 CUSTOMER_INFORMAL_SS = {
+    "Your Email":                                   "Deine E-Mail-Adresse",
     "What's your name?":                            "Wie heisst du?",
     "Your Name":                                    "Dein Name",
     "Your Order":                                   "Deine Bestellung",

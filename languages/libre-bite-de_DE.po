@@ -429,7 +429,7 @@ msgstr "Dein Name"
 
 #: templates/checkout-optimized.php:101
 msgid "Your Email"
-msgstr "Ihre E-Mail-Adresse"
+msgstr "Deine E-Mail-Adresse"
 
 #: templates/checkout-optimized.php:103
 msgid "Email address"
@@ -502,7 +502,7 @@ msgstr "Reservierungen"
 #: templates/admin/super-admin-settings.php:137
 #: templates/admin/help-superadmin.php:290 templates/admin/debug-info.php:87
 msgid "Product Options"
-msgstr "Produkt-Optionen"
+msgstr "Produkt-Add-ons"
 
 #: includes/admin/class-admin.php:232 includes/admin/class-admin.php:233
 #: templates/admin/settings-tabbed.php:174 templates/admin/dashboard.php:60
@@ -1837,7 +1837,7 @@ msgstr "Zum Dashboard"
 
 #: includes/modules/product-options/class-product-options.php:74
 msgid "Product Option"
-msgstr "Produkt-Option"
+msgstr "Produkt-Add-on"
 
 #: includes/modules/product-options/class-product-options.php:76
 #: includes/modules/product-options/class-product-options.php:79
@@ -1890,7 +1890,7 @@ msgstr "Jetzt erstellen"
 #: includes/modules/product-options/class-product-options.php:348
 #: includes/modules/product-options/class-product-options.php:400
 msgid "Options"
-msgstr "Optionen"
+msgstr "Add-ons"
 
 #: includes/modules/notifications/class-email-pickup-reminder.php:22
 msgid "Libre Bite - Pickup Reminder"

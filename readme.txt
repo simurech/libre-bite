@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.9
+Stable tag: 1.3.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.3.10 =
+* Fix: Stornierung via Bestellübersicht erstellt keinen falschen WC-Rückerstattungs-Eintrag mehr für Offline-Gateways (BACS, COD); Online-Gateways (Stripe, TWINT) erhalten weiterhin eine automatische Rückerstattung.
+* Fix: Blauer Rand links an der ausgewählten Standort-Box im Checkout entfernt.
+* Fix: Übersetzung «Your Email» / «Support E-Mail» auf «Ihre/Deine E-Mail-Adresse» korrigiert (de_CH_informal, de_DE_formal hatten falsche Übersetzung aus früherem Fill-Script).
+* Feature: Produkt-Optionen heissen nun in allen deutschen Übersetzungen «Add-ons» statt «Optionen».
 
 = 1.3.9 =
 * Fix: Vorbestellungen im Kanban-Board sind nun jederzeit stornierbar und manuell bearbeitbar, unabhängig von der Ausgrauen-Einstellung.
