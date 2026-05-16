@@ -631,7 +631,7 @@ msgstr "weitere Bestellung(en)"
 
 #: includes/admin/class-admin.php:529
 msgid "Start preparation"
-msgstr "Reservierungen suchen"
+msgstr "Zubereitung starten"
 
 #: includes/admin/class-admin.php:530
 msgid "Ready for pickup"

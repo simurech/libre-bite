@@ -430,6 +430,8 @@ class LBite_Order_Dashboard {
 		}
 
 		// Rückerstattung VOR der Stornierung – nach update_status('cancelled') gibt is_paid() false zurück.
+		// refund_payment: false = Erstattung nur im WC-System erfassen, nicht automatisch über Gateway ausführen.
+		// Offline-Gateways (BACS, COD) unterstützen keine automatischen Rückerstattungen.
 		$refund_triggered = false;
 		if ( $order->get_total() > 0 && $order->is_paid() ) {
 			$refund = wc_create_refund(
@@ -437,15 +439,10 @@ class LBite_Order_Dashboard {
 					'order_id'       => $order_id,
 					'amount'         => $order->get_total(),
 					'reason'         => __( 'Order cancelled', 'libre-bite' ),
-					'refund_payment' => true,
+					'refund_payment' => false,
 				)
 			);
-
-			if ( is_wp_error( $refund ) ) {
-				wp_send_json_error( array( 'message' => __( 'Order cancelled but refund failed: ', 'libre-bite' ) . $refund->get_error_message() ) );
-			}
-
-			$refund_triggered = true;
+			$refund_triggered = ! is_wp_error( $refund );
 		}
 
 		// Bestellung stornieren

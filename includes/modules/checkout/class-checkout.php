@@ -100,7 +100,6 @@ class LBite_Checkout {
 			}
 		}
 
-		// Zahlungsbestätigungs-Polling (Workaround für Gateways wie TWINT, deren Frontend-Polling fehlschlägt).
 		$this->loader->add_action( 'wp_ajax_nopriv_lbite_check_order_status', $this, 'ajax_check_order_status' );
 		$this->loader->add_action( 'wp_ajax_lbite_check_order_status', $this, 'ajax_check_order_status' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_order_poll_script' );
@@ -1020,6 +1019,11 @@ class LBite_Checkout {
 
 	/**
 	 * Polling-Script für Zahlungsbestätigung auf der Checkout-Seite enqueuen.
+	 *
+	 * Für Online-Gateways (TWINT etc.) die asynchron bestätigen: pollt lbite_check_order_status
+	 * bis paid:true, dann Weiterleitung zur Bestellbestätigungsseite.
+	 * Für Offline-Gateways (BACS, COD, Cheque): erzwingt Weiterleitung nach 500 ms, falls
+	 * WooCommerce-Redirect durch ein Gateway-Plugin blockiert wurde.
 	 */
 	public function enqueue_order_poll_script() {
 		if ( ! is_checkout() ) {
@@ -1028,9 +1032,10 @@ class LBite_Checkout {
 
 		$ajax_url = esc_js( admin_url( 'admin-ajax.php' ) );
 
-		$script = "(function($){
-			var _lbitePoller = null;
-			var _lbiteCount  = 0;
+		// Verwendet ajaxComplete statt checkout_place_order_success, weil WooCommerce
+		// triggerHandler() nutzt (kein Bubbling) – document.body-Listener würden nie feuern.
+		$script = "(function(\$){
+			var _lbitePoller = null, _lbiteCount = 0;
 
 			function _lbiteParseOrder(url) {
 				var m = url.match(/order-received\\/([0-9]+)\\/\\?key=(wc_order_[^&]+)/);
@@ -1058,10 +1063,21 @@ class LBite_Checkout {
 				}, 5000);
 			}
 
-			\$(document.body).on('checkout_place_order_success', function(e, response) {
-				if (!response || !response.redirect) return;
+			\$(document).ajaxComplete(function(e, xhr, settings) {
+				if (!settings || !settings.url || settings.url.indexOf('wc-ajax=checkout') === -1) return;
+				var response;
+				try { response = JSON.parse(xhr.responseText); } catch(ex) { return; }
+				if (!response || response.result !== 'success' || !response.redirect) return;
 				var order = _lbiteParseOrder(response.redirect);
-				if (order) _lbiteStartPoll(order);
+				if (!order) return;
+				var pm = \$('input[name=\"payment_method\"]:checked').val() || '';
+				if (['bacs', 'cod', 'cheque'].indexOf(pm) !== -1) {
+					// Offline-Gateway: Fallback-Weiterleitung. Falls WC bereits navigiert hat,
+					// wird dieses Script durch den Seitenwechsel zerstört bevor der Timer feuert.
+					setTimeout(function() { window.location.href = response.redirect; }, 500);
+				} else {
+					_lbiteStartPoll(order);
+				}
 			});
 		}(jQuery));";
 
