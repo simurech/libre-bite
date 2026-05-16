@@ -2080,14 +2080,12 @@ msgid "Tip Settings"
 msgstr "Trinkgeld-Einstellungen"
 
 #: templates/admin/settings-tabbed.php:237
-#, fuzzy
 msgid "Tip Title"
-msgstr "Trinkgeld-System"
+msgstr "Trinkgeld-Titel"
 
 #: templates/admin/settings-tabbed.php:240
 msgid "Heading shown above the tip options. Leave empty to use the default."
-msgstr "Titel über den Trinkgeld-Optionen. Leer lassen für den Standardtitel."
-"Überschrift über den Trinkgeld-Optionen. Leer lassen für den Standard-Text."
+msgstr "Überschrift über den Trinkgeld-Optionen. Leer lassen für den Standard-Text."
 
 #: templates/admin/settings-tabbed.php:244
 msgid "\"No Tip\" Label"
@@ -2119,9 +2117,8 @@ msgstr ""
 
 #: templates/admin/settings-tabbed.php:258
 #: templates/admin/settings-tabbed.php:289
-#, fuzzy
 msgid "Option 1"
-msgstr "Option"
+msgstr "Option 1"
 
 #: templates/admin/settings-tabbed.php:263
 #: templates/admin/settings-tabbed.php:272
@@ -2133,15 +2130,13 @@ msgstr "Eigene Bezeichnung (optional)"
 
 #: templates/admin/settings-tabbed.php:267
 #: templates/admin/settings-tabbed.php:290
-#, fuzzy
 msgid "Option 2"
-msgstr "Option"
+msgstr "Option 2"
 
 #: templates/admin/settings-tabbed.php:276
 #: templates/admin/settings-tabbed.php:291
-#, fuzzy
 msgid "Option 3"
-msgstr "Option"
+msgstr "Option 3"
 
 #: templates/admin/settings-tabbed.php:285
 msgid "Default Selection"

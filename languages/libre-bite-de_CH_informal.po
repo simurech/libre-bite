@@ -301,7 +301,7 @@ msgstr "deine@email.ch"
 
 #: templates/thankyou-optimized.php:107 includes/admin/class-admin.php:1330
 msgid "Send Receipt by Email"
-msgstr ""
+msgstr "Beleg per E-Mail senden"
 
 #: templates/thankyou-optimized.php:144
 #: templates/admin/help-partials/orders.php:25
@@ -354,12 +354,10 @@ msgid "Please enter a valid email address."
 msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 
 #: templates/thankyou-optimized.php:328
-#, fuzzy
 msgid "Receipt Sent"
 msgstr "Kein Beleg"
 
 #: templates/thankyou-optimized.php:332
-#, fuzzy
 msgid "Error sending receipt."
 msgstr "Fehler beim Senden. Bitte versuchen Sie es erneut."
 
@@ -432,12 +430,10 @@ msgid "Your Name"
 msgstr "Dein Name"
 
 #: templates/checkout-optimized.php:101
-#, fuzzy
 msgid "Your Email"
 msgstr "Support E-Mail"
 
 #: templates/checkout-optimized.php:103
-#, fuzzy
 msgid "Email address"
 msgstr "E-Mail-Adresse"
 
@@ -634,12 +630,10 @@ msgid "more order(s)"
 msgstr "weitere Bestellung(en)"
 
 #: includes/admin/class-admin.php:529
-#, fuzzy
 msgid "Start preparation"
 msgstr "Reservierungen suchen"
 
 #: includes/admin/class-admin.php:530
-#, fuzzy
 msgid "Ready for pickup"
 msgstr "Abholbereit"
 
@@ -651,26 +645,24 @@ msgid "Completed"
 msgstr "Abgeschlossen"
 
 #: includes/admin/class-admin.php:532
-#, fuzzy
 msgid "Cancel order"
 msgstr "Bestellung wird storniert..."
 
 #: includes/admin/class-admin.php:533
 msgid "Fullscreen"
-msgstr ""
+msgstr "Vollbild"
 
 #: includes/admin/class-admin.php:534
 msgid "Exit fullscreen"
-msgstr ""
+msgstr "Vollbild beenden"
 
 #: includes/admin/class-admin.php:535
-#, fuzzy
 msgid "Send receipt"
 msgstr "Beleg erhalten?"
 
 #: includes/admin/class-admin.php:536
 msgid "Enter customer email address:"
-msgstr ""
+msgstr "Kunden-E-Mail-Adresse eingeben:"
 
 #: includes/admin/class-admin.php:567
 #: includes/modules/reservations/class-reservations.php:126
@@ -776,44 +768,40 @@ msgid "Didn't find what you're looking for?"
 msgstr "Nicht fündig geworden?"
 
 #: includes/admin/class-admin.php:1281
-#, fuzzy
 msgid "Receipt"
 msgstr "Kein Beleg"
 
 #: includes/admin/class-admin.php:1314 includes/admin/class-admin.php:1366
-#, fuzzy
 msgid "To:"
 msgstr "Bis"
 
 #: includes/admin/class-admin.php:1321
-#, fuzzy, php-format
+#, php-format
 msgid "Last sent: %s"
 msgstr "Datum: %s"
 
 #: includes/admin/class-admin.php:1371
 msgid "Error"
-msgstr ""
+msgstr "Fehler"
 
 #: includes/admin/class-admin.php:1389
 msgid "Insufficient permissions."
-msgstr ""
+msgstr "Keine ausreichenden Berechtigungen."
 
 #: includes/admin/class-admin.php:1394
 #: includes/modules/checkout/class-checkout.php:1429
-#, fuzzy
 msgid "Invalid order."
 msgstr "Ungültiges Datum"
 
 #: includes/admin/class-admin.php:1399
 #: includes/modules/checkout/class-checkout.php:1436
-#, fuzzy
 msgid "Order not found."
 msgstr "Bestellung nicht gefunden"
 
 #: includes/admin/class-admin.php:1425
 #, php-format
 msgid "Receipt sent (%s)"
-msgstr ""
+msgstr "Beleg gesendet (%s)"
 
 #: includes/admin/class-admin-settings.php:203
 msgid "Settings saved successfully."
@@ -1416,7 +1404,6 @@ msgstr "Reservierung bearbeiten: %s"
 #: includes/modules/reservations/class-reservation-dashboard.php:159
 #: includes/modules/reservations/class-reservation-dashboard.php:193
 #: includes/modules/reservations/class-reservation-dashboard.php:235
-#, fuzzy
 msgid "Feature not enabled"
 msgstr "Feature-Toggles"
 
@@ -1490,10 +1477,9 @@ msgstr "Standort gesetzt"
 
 #: includes/modules/checkout/class-checkout.php:1441
 msgid "Receipt already sent."
-msgstr ""
+msgstr "Beleg wurde bereits gesendet."
 
 #: includes/modules/checkout/class-checkout.php:1465
-#, fuzzy
 msgid "Receipt sent."
 msgstr "Kein Beleg"
 
@@ -1539,27 +1525,22 @@ msgid " created"
 msgstr " erstellt"
 
 #: includes/modules/pos/class-pos.php:150
-#, fuzzy
 msgid "Really empty the cart?"
 msgstr "Wirklich löschen?"
 
 #: includes/modules/pos/class-pos.php:151
-#, fuzzy
 msgid "Loading products..."
 msgstr "Bestellungen werden geladen..."
 
 #: includes/modules/pos/class-pos.php:152
-#, fuzzy
 msgid "Loading product details..."
 msgstr "Bestellungen werden geladen..."
 
 #: includes/modules/pos/class-pos.php:153
-#, fuzzy
 msgid "Error loading product details"
 msgstr "Fehler beim Laden der Produkte"
 
 #: includes/modules/pos/class-pos.php:154
-#, fuzzy
 msgid "Select variant"
 msgstr "Standort wählen"
 
@@ -1732,7 +1713,6 @@ msgid "Closed"
 msgstr "Geschlossen"
 
 #: includes/modules/locations/class-locations.php:378
-#, fuzzy
 msgid "2nd window (optional):"
 msgstr "Notizen (optional)"
 
@@ -2036,7 +2016,7 @@ msgstr "Allgemein"
 #: templates/admin/holidays-settings.php:37
 #: templates/admin/help-partials/settings.php:79
 msgid "Holidays"
-msgstr ""
+msgstr "Feiertage"
 
 #: templates/admin/settings-tabbed.php:38
 #: templates/admin/super-admin-settings.php:43
@@ -2099,14 +2079,12 @@ msgid "Tip Settings"
 msgstr "Trinkgeld-Einstellungen"
 
 #: templates/admin/settings-tabbed.php:237
-#, fuzzy
 msgid "Tip Title"
-msgstr "Trinkgeld-System"
+msgstr "Trinkgeld-Titel"
 
 #: templates/admin/settings-tabbed.php:240
 msgid "Heading shown above the tip options. Leave empty to use the default."
-msgstr "Titel über den Trinkgeld-Optionen. Leer lassen für den Standardtitel."
-"Überschrift über den Trinkgeld-Optionen. Leer lassen für den Standard-Text."
+msgstr "Überschrift über den Trinkgeld-Optionen. Leer lassen für den Standard-Text."
 
 #: templates/admin/settings-tabbed.php:244
 msgid "\"No Tip\" Label"
@@ -2138,9 +2116,8 @@ msgstr ""
 
 #: templates/admin/settings-tabbed.php:258
 #: templates/admin/settings-tabbed.php:289
-#, fuzzy
 msgid "Option 1"
-msgstr "Option"
+msgstr "Option 1"
 
 #: templates/admin/settings-tabbed.php:263
 #: templates/admin/settings-tabbed.php:272
@@ -2152,15 +2129,13 @@ msgstr "Eigene Bezeichnung (optional)"
 
 #: templates/admin/settings-tabbed.php:267
 #: templates/admin/settings-tabbed.php:290
-#, fuzzy
 msgid "Option 2"
-msgstr "Option"
+msgstr "Option 2"
 
 #: templates/admin/settings-tabbed.php:276
 #: templates/admin/settings-tabbed.php:291
-#, fuzzy
 msgid "Option 3"
-msgstr "Option"
+msgstr "Option 3"
 
 #: templates/admin/settings-tabbed.php:285
 msgid "Default Selection"
@@ -2237,11 +2212,13 @@ msgid ""
 "The optimized checkout only works with the classic WooCommerce shortcode. "
 "Your checkout page must contain the shortcode"
 msgstr ""
+"Der optimierte Checkout funktioniert nur mit dem klassischen WooCommerce-"
+"Shortcode. Deine Checkout-Seite muss den Shortcode"
 
 #: templates/admin/settings-tabbed.php:350
 #: templates/admin/help-partials/settings.php:141
 msgid ", not the WooCommerce Checkout Block."
-msgstr ""
+msgstr ", nicht den WooCommerce Checkout-Block, enthalten."
 
 #: templates/admin/settings-tabbed.php:365
 msgid "Fields in Standard Checkout"
@@ -2304,7 +2281,6 @@ msgstr "Wählen Sie einen Sound aus Ihrer Mediathek."
 
 #: templates/admin/settings-tabbed.php:428
 #: templates/admin/help-partials/settings.php:174
-#, fuzzy
 msgid "Show Future Pre-orders"
 msgstr "Vorbestellungen prüfen"
 
@@ -2317,12 +2293,17 @@ msgid ""
 "Show pre-orders with a pickup time further in the future than the "
 "preparation time in the Kanban board (dimmed)."
 msgstr ""
+"Vorbestellungen mit einer Abholzeit, die weiter in der Zukunft liegt als die "
+"Zubereitungszeit, im Kanban-Board gedimmt anzeigen."
 
 #: templates/admin/settings-tabbed.php:439
 msgid ""
 "When disabled, future pre-orders are completely hidden from the Kanban board "
 "until they are within the preparation window."
 msgstr ""
+"Wenn deaktiviert, werden zukünftige Vorbestellungen im Kanban-Board "
+"vollständig ausgeblendet, bis sie sich innerhalb des Zubereitungsfensters "
+"befinden."
 
 #: templates/admin/settings-tabbed.php:453
 msgid "Select Sound File"
@@ -2462,24 +2443,28 @@ msgstr "Abstand zwischen den Zeitslots für Vorbestellungen."
 #: templates/admin/settings.php:153
 #: templates/admin/help-partials/settings.php:58
 msgid "Slot Buffer Start"
-msgstr ""
+msgstr "Puffer Anfang"
 
 #: templates/admin/settings.php:160
 msgid ""
 "Cut off the first N minutes from each time window. Example: with 30 minutes, "
 "a window from 11:00 only shows slots from 11:30 onwards."
 msgstr ""
+"Schneidet die ersten N Minuten von jedem Zeitfenster ab. Beispiel: Bei 30 "
+"Minuten zeigt ein Fenster ab 11:00 nur Slots ab 11:30."
 
 #: templates/admin/settings.php:165
 #: templates/admin/help-partials/settings.php:62
 msgid "Slot Buffer End"
-msgstr ""
+msgstr "Puffer Ende"
 
 #: templates/admin/settings.php:172
 msgid ""
 "Cut off the last N minutes from each time window. Example: with 30 minutes, "
 "a window until 22:00 only shows slots up to 21:30."
 msgstr ""
+"Schneidet die letzten N Minuten von jedem Zeitfenster ab. Beispiel: Bei 30 "
+"Minuten zeigt ein Fenster bis 22:00 nur Slots bis 21:30."
 
 #: templates/admin/settings.php:178
 msgid "Table Ordering"
@@ -2680,21 +2665,25 @@ msgid ""
 "Embeds a reservation request form on any page. Guests can submit a "
 "reservation inquiry which is managed in the reservation board."
 msgstr ""
+"Bettet ein Reservierungsanfrage-Formular auf einer beliebigen Seite ein. "
+"Gäste können eine Reservierungsanfrage einreichen, die im Reservierungs-"
+"Board verwaltet wird."
 
 #: templates/admin/documentation.php:79
 msgid ""
 "Pre-select a specific location (use the location ID). Leave empty to let the "
 "customer choose."
 msgstr ""
+"Einen bestimmten Standort vorauswählen (Standort-ID verwenden). Leer lassen, "
+"damit der Kunde selbst wählen kann."
 
 #: templates/admin/documentation.php:84
-#, fuzzy
 msgid "Form with location selector (all locations)"
 msgstr "Standort-Auswahl im Frontend anzeigen"
 
 #: templates/admin/documentation.php:87
 msgid "Form pre-set to a specific location"
-msgstr ""
+msgstr "Formular auf einen bestimmten Standort voreingestellt"
 
 #: templates/admin/documentation.php:90
 msgid ""
@@ -2702,6 +2691,9 @@ msgid ""
 "sent automatically: one to the guest (confirmation) and one to the admin "
 "(notification)."
 msgstr ""
+"Reservierungen werden unter Libre Bite → Reservierungen verwaltet. Zwei E-"
+"Mails werden automatisch versendet: eine an den Gast (Bestätigung) und eine "
+"an den Admin (Benachrichtigung)."
 
 #: templates/admin/documentation.php:98
 msgid "URL Parameters"
@@ -3187,36 +3179,30 @@ msgid "Fehler beim Speichern"
 msgstr "Fehler beim Speichern"
 
 #: templates/admin/holidays-settings.php:24
-#, fuzzy
 msgid "Mon"
 msgstr "Montag"
 
 #: templates/admin/holidays-settings.php:25
-#, fuzzy
 msgid "Tue"
 msgstr "Dienstag"
 
 #: templates/admin/holidays-settings.php:26
-#, fuzzy
 msgid "Wed"
 msgstr "Rot"
 
 #: templates/admin/holidays-settings.php:27
 msgid "Thu"
-msgstr ""
+msgstr "Do"
 
 #: templates/admin/holidays-settings.php:28
-#, fuzzy
 msgid "Fri"
 msgstr "Freitag"
 
 #: templates/admin/holidays-settings.php:29
-#, fuzzy
 msgid "Sat"
 msgstr "Salz"
 
 #: templates/admin/holidays-settings.php:30
-#, fuzzy
 msgid "Sun"
 msgstr "Sonntag"
 
@@ -3225,19 +3211,21 @@ msgid ""
 "Define holidays on which a location is closed or has different opening "
 "hours. Holidays override the regular weekly schedule."
 msgstr ""
+"Definiere Feiertage, an denen ein Standort geschlossen ist oder andere "
+"Öffnungszeiten hat. Feiertage überschreiben den regulären Wochenplan."
 
 #: templates/admin/holidays-settings.php:46
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: templates/admin/holidays-settings.php:47
 msgid "Hours"
-msgstr ""
+msgstr "Öffnungszeiten"
 
 #: templates/admin/holidays-settings.php:54
 #: templates/admin/holidays-settings.php:197
 msgid "No holidays defined yet."
-msgstr ""
+msgstr "Noch keine Feiertage definiert."
 
 #: templates/admin/holidays-settings.php:74
 #: templates/admin/holidays-settings.php:83
@@ -3248,27 +3236,26 @@ msgstr "Alle"
 
 #: templates/admin/holidays-settings.php:90
 #: templates/admin/holidays-settings.php:149
-#, fuzzy
 msgid "Custom hours"
 msgstr "Kunde: %s"
 
 #: templates/admin/holidays-settings.php:99
 #: templates/admin/holidays-settings.php:158
 msgid "2nd window:"
-msgstr ""
+msgstr "2. Fenster:"
 
 #: templates/admin/holidays-settings.php:105
 #: templates/admin/holidays-settings.php:164
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #: templates/admin/holidays-settings.php:114
 msgid "Add holiday"
-msgstr ""
+msgstr "Feiertag hinzufügen"
 
 #: templates/admin/holidays-settings.php:124
 msgid "e.g. Christmas"
-msgstr ""
+msgstr "z.B. Weihnachten"
 
 #: templates/admin/checkout-fields.php:57
 msgid "Settings saved."
@@ -4697,12 +4684,16 @@ msgid ""
 "Hides the first N minutes of each opening window. Example: 30 minutes with "
 "an opening at 11:00 → first available slot is 11:30."
 msgstr ""
+"Blendet die ersten N Minuten jedes Öffnungsfensters aus. Beispiel: 30 "
+"Minuten bei Öffnung um 11:00 → erster verfügbarer Slot ist 11:30."
 
 #: templates/admin/help-partials/settings.php:63
 msgid ""
 "Hides the last N minutes of each opening window. Example: 30 minutes with "
 "closing at 22:00 → last available slot is 21:30."
 msgstr ""
+"Blendet die letzten N Minuten jedes Öffnungsfensters aus. Beispiel: 30 "
+"Minuten bei Schliessung um 22:00 → letzter verfügbarer Slot ist 21:30."
 
 #: templates/admin/help-partials/settings.php:67
 msgid ""
@@ -4722,9 +4713,11 @@ msgid ""
 "hours. Holiday settings override the regular weekly schedule for a specific "
 "date."
 msgstr ""
+"Definiere Feiertage, an denen ein Standort geschlossen ist oder andere "
+"Öffnungszeiten hat. Feiertagseinstellungen überschreiben den regulären "
+"Wochenplan für ein bestimmtes Datum."
 
 #: templates/admin/help-partials/settings.php:86
-#, fuzzy
 msgid "Type: Closed"
 msgstr "Geschlossen"
 
@@ -4733,23 +4726,28 @@ msgid ""
 "The location is completely closed on this date. The date is blocked in the "
 "customer's date picker."
 msgstr ""
+"Der Standort ist an diesem Datum vollständig geschlossen. Das Datum wird im "
+"Datepicker des Kunden gesperrt."
 
 #: templates/admin/help-partials/settings.php:90
 msgid "Type: Custom hours"
-msgstr ""
+msgstr "Typ: Sonderöffnungszeiten"
 
 #: templates/admin/help-partials/settings.php:91
 msgid ""
 "The location is open, but with different hours than usual. Enter one or two "
 "time windows (e.g. a shorter service on a public holiday)."
 msgstr ""
+"Der Standort ist geöffnet, aber mit anderen Zeiten als üblich. Gib ein oder "
+"zwei Zeitfenster ein (z.B. einen kürzeren Service an einem Feiertag)."
 
 #: templates/admin/help-partials/settings.php:95
 msgid "You can apply a holiday to all locations or only to specific ones."
 msgstr ""
+"Ein Feiertag kann auf alle Standorte oder nur auf bestimmte angewendet "
+"werden."
 
 #: templates/admin/help-partials/settings.php:99
-#, fuzzy
 msgid "Open Holidays"
 msgstr "Öffnet heute %s"
 
@@ -4837,6 +4835,9 @@ msgid ""
 "until they enter the preparation window. When enabled, they appear dimmed "
 "and cannot be moved."
 msgstr ""
+"Wenn deaktiviert, werden Vorbestellungen weit in der Zukunft im Kanban-Board "
+"ausgeblendet, bis sie in das Vorbereitungsfenster eintreten. Wenn aktiviert, "
+"erscheinen sie gedimmt und können nicht verschoben werden."
 
 #: templates/admin/help-partials/settings.php:180
 msgid "Open Order Overview Settings"
@@ -4906,7 +4907,6 @@ msgid "Opens at"
 msgstr "Öffnet um"
 
 #: templates/admin/help-partials/locations.php:47
-#, fuzzy
 msgid "Time from which orders are possible (1st window)"
 msgstr "Uhrzeit, ab der Bestellungen möglich sind"
 
@@ -4915,36 +4915,38 @@ msgid "Closes at"
 msgstr "Schliesst um"
 
 #: templates/admin/help-partials/locations.php:52
-#, fuzzy
 msgid "Time until which orders are possible (1st window)"
 msgstr "Uhrzeit, bis zu der Bestellungen möglich sind"
 
 #: templates/admin/help-partials/locations.php:56
 msgid "2nd window: Opens at"
-msgstr ""
+msgstr "2. Fenster: Öffnet um"
 
 #: templates/admin/help-partials/locations.php:57
 msgid "Start of an optional second opening window (e.g. for lunch break)"
 msgstr ""
+"Beginn eines optionalen zweiten Öffnungsfensters (z.B. für Mittagspause)"
 
 #: templates/admin/help-partials/locations.php:61
-#, fuzzy
 msgid "2nd window: Closes at"
 msgstr "Schliesst um"
 
 #: templates/admin/help-partials/locations.php:62
 msgid "End of the second opening window. Leave empty if not needed."
-msgstr ""
+msgstr "Ende des zweiten Öffnungsfensters. Leer lassen, wenn nicht benötigt."
 
 #: templates/admin/help-partials/locations.php:67
 msgid "Mark day as closed – no time slots are offered"
-msgstr ""
+msgstr "Tag als geschlossen markieren – es werden keine Zeitslots angeboten"
 
 #: templates/admin/help-partials/locations.php:75
 msgid ""
 "Two windows per day: Use both windows for locations with a midday break "
 "(e.g. 11:00–14:00 and 17:00–22:00). Leave the 2nd window empty if not needed."
 msgstr ""
+"Zwei Fenster pro Tag: Beide Fenster für Standorte mit Mittagspause verwenden "
+"(z.B. 11:00–14:00 und 17:00–22:00). Das 2. Fenster leer lassen, wenn nicht "
+"benötigt."
 
 #: templates/admin/help-partials/locations.php:80
 msgid "Location in Checkout"
@@ -5962,7 +5964,6 @@ msgid "Click the status button directly on the order card."
 msgstr "Klicken Sie direkt auf den Statusbutton auf der Bestellkarte."
 
 #: templates/admin/help-partials/orders.php:74
-#, fuzzy
 msgid ""
 "Tip: The dashboard updates automatically. You do not need to manually reload "
 "the page to see new orders. The interval can be adjusted under Settings → "
@@ -6039,7 +6040,7 @@ msgstr ""
 
 #: templates/admin/help-partials/orders.php:104
 msgid "Future Pre-orders (Dimmed)"
-msgstr ""
+msgstr "Zukünftige Vorbestellungen (gedimmt)"
 
 #: templates/admin/help-partials/orders.php:109
 msgid ""
@@ -6047,33 +6048,45 @@ msgid ""
 "greyed out in the Kanban board. They cannot be dragged or processed until "
 "they are within the preparation window."
 msgstr ""
+"Wenn aktiviert, werden Vorbestellungen mit einer Abholzeit weit in der "
+"Zukunft im Kanban-Board ausgegraut angezeigt. Sie können erst verschoben "
+"oder bearbeitet werden, wenn sie sich im Vorbereitungsfenster befinden."
 
 #: templates/admin/help-partials/orders.php:111
 msgid ""
 "Future pre-orders are displayed with reduced opacity in the \"Incoming\" "
 "column."
 msgstr ""
+"Zukünftige Vorbestellungen werden in der Spalte «Eingang» mit reduzierter "
+"Deckkraft angezeigt."
 
 #: templates/admin/help-partials/orders.php:112
 msgid ""
 "Drag & drop and status buttons are disabled until the order enters the "
 "preparation window."
 msgstr ""
+"Drag & Drop und Statusknöpfe sind deaktiviert, bis die Bestellung in das "
+"Vorbereitungsfenster eintritt."
 
 #: templates/admin/help-partials/orders.php:113
 msgid ""
 "You can optionally hide future pre-orders completely until they are relevant."
 msgstr ""
+"Zukünftige Vorbestellungen können optional vollständig ausgeblendet werden, "
+"bis sie relevant sind."
 
 #: templates/admin/help-partials/orders.php:117
 msgid ""
 "Activate this feature under Settings → Features → \"Dim Future Pre-orders\". "
 "Configure visibility under Settings → Order Overview."
 msgstr ""
+"Dieses Feature unter Einstellungen → Features → «Zukünftige Vorbestellungen "
+"dimmen» aktivieren. Sichtbarkeit unter Einstellungen → Bestellübersicht "
+"konfigurieren."
 
 #: templates/admin/help-partials/orders.php:126
 msgid "Receipt by Email"
-msgstr ""
+msgstr "Beleg per E-Mail"
 
 #: templates/admin/help-partials/orders.php:129
 msgid ""
@@ -6081,9 +6094,11 @@ msgid ""
 "directly on the order confirmation page. Admins can also resend receipts "
 "from the order detail view."
 msgstr ""
+"Mit dem optimierten Checkout können Kunden auf der Bestellbestätigungsseite "
+"direkt einen Beleg per E-Mail anfordern. Admins können Belege auch aus der "
+"Bestelldetailansicht erneut versenden."
 
 #: templates/admin/help-partials/orders.php:131
-#, fuzzy
 msgid "Customer:"
 msgstr "Individuell:"
 
@@ -6092,22 +6107,28 @@ msgid ""
 "After ordering, an \"Email Receipt\" button appears on the confirmation page "
 "(only if a valid email was entered)."
 msgstr ""
+"Nach der Bestellung erscheint auf der Bestätigungsseite ein Knopf «Beleg per "
+"E-Mail» (nur wenn eine gültige E-Mail-Adresse angegeben wurde)."
 
 #: templates/admin/help-partials/orders.php:132
 msgid "Admin:"
-msgstr ""
+msgstr "Admin:"
 
 #: templates/admin/help-partials/orders.php:132
 msgid ""
 "A \"Send Receipt\" button is available in the WooCommerce order detail view "
 "under the \"Libre Bite\" metabox."
 msgstr ""
+"In der WooCommerce-Bestelldetailansicht ist unter der «Libre Bite»-Metabox "
+"ein Knopf «Beleg senden» verfügbar."
 
 #: templates/admin/help-partials/orders.php:136
 msgid ""
 "The receipt email uses the standard WooCommerce invoice email. It can only "
 "be sent once per order to prevent duplicates."
 msgstr ""
+"Die Beleg-E-Mail verwendet die Standard-WooCommerce-Rechnungs-E-Mail. Sie "
+"kann pro Bestellung nur einmal versendet werden, um Duplikate zu vermeiden."
 
 #: templates/admin/help-partials/orders.php:143
 msgid "POS System for On-Site Orders"
