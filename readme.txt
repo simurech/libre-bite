@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,13 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.4.1 =
+* Fix: POS Gutschein-Rabatt wird nun korrekt in der Kassen-Ansicht angezeigt.
+* Fix: 5-Rappen-Rundung greift nun auch im POS-Warenkorb.
+* Fix: Lagerbestand-Toggle speichert Änderungen korrekt, auch bei variablen Produkten.
+* Fix: Staff-Benutzer können Bestellungen nun stornieren (lbite_manage_orders-Berechtigung).
+* Fix: Fehlende Übersetzung «Discount:» in allen Sprachpaketen ergänzt.
 
 = 1.4.0 =
 * Feature: POS-Bestellungen sind immer sofort (nie Vorbestellung).
