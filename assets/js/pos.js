@@ -31,7 +31,6 @@
 		allCategories: [],
 		dataLoaded: false,
 		wakeLock: null,
-		pressTimer: null,
 
 		/**
 		 * Initialisierung
@@ -327,18 +326,27 @@
 
 			products.forEach(product => {
 				const hasConfig = product.has_variations || product.has_options;
+				const isOos = product.stock_status === 'outofstock';
+
 				const $item = $('<div class="lbite-pos-product-item"></div>')
-					.attr('data-product-id', product.id)
-					.attr('data-has-config', hasConfig);
+					.attr('data-product-id', product.id);
 
-				if (hasConfig) {
-					$item.addClass('lbite-product-has-config');
-				}
-
-				if (product.stock_status === 'outofstock') {
+				if (isOos) {
 					$item.addClass('lbite-out-of-stock');
-					$item.attr('data-oos-label', lbitePos.strings.outOfStock || 'Out of stock');
 				}
+
+				// Lagerbestand-Toggle (oben rechts)
+				const $toggleLabel = $('<label class="lbite-stock-toggle"></label>')
+					.on('click', (e) => e.stopPropagation());
+				const $toggleInput = $('<input type="checkbox" class="lbite-stock-toggle-input">')
+					.prop('checked', !isOos)
+					.on('change', (e) => {
+						e.stopPropagation();
+						this.toggleProductStock(product.id, $item, $toggleInput);
+					});
+				$toggleLabel.append($toggleInput);
+				$toggleLabel.append($('<span class="lbite-stock-toggle-slider"></span>'));
+				$item.append($toggleLabel);
 
 				if (product.image) {
 					$item.append($('<img>')
@@ -347,31 +355,16 @@
 				}
 
 				$item.append($('<div class="lbite-pos-product-name"></div>').text(product.name));
-				$item.append($('<div class="lbite-pos-product-price"></div>').text(this.formatPrice(product.price)));
 
-				// Langer Druck (600ms) → Lagerbestand umschalten
-				let longPressed = false;
-				$item.on('mousedown touchstart', () => {
-					longPressed = false;
-					this.pressTimer = setTimeout(() => {
-						this.pressTimer = null;
-						longPressed = true;
-						this.toggleProductStock(product.id, $item);
-					}, 600);
-				});
-				$item.on('mouseup mouseleave touchend touchcancel', () => {
-					if (this.pressTimer) {
-						clearTimeout(this.pressTimer);
-						this.pressTimer = null;
-					}
-				});
+				// Preisspanne bei variablen Produkten
+				const minPrice = parseFloat(product.price) || 0;
+				const maxPrice = parseFloat(product.max_price || product.price) || 0;
+				const priceText = (maxPrice > minPrice)
+					? this.formatPrice(minPrice) + ' – ' + this.formatPrice(maxPrice)
+					: this.formatPrice(minPrice);
+				$item.append($('<div class="lbite-pos-product-price"></div>').text(priceText));
 
 				$item.on('click', () => {
-					if (longPressed) {
-						longPressed = false;
-						return;
-					}
-					if ($item.hasClass('lbite-out-of-stock')) return;
 					if (hasConfig) {
 						this.openProductModal(product.id);
 					} else {
@@ -1008,17 +1001,8 @@
 		/**
 		 * Lagerbestand eines Produkts umschalten
 		 */
-		toggleProductStock: function(productId, $item) {
-			const isOos = $item.hasClass('lbite-out-of-stock');
-			const newStatus = isOos ? 'instock' : 'outofstock';
-			const confirmLabel = isOos
-				? (lbitePos.strings.markInStock || 'Mark as in stock')
-				: (lbitePos.strings.markOutOfStock || 'Mark as out of stock');
-			const productName = $item.find('.lbite-pos-product-name').text();
-
-			if (!confirm(confirmLabel + ':\n' + productName)) {
-				return;
-			}
+		toggleProductStock: function(productId, $item, $input) {
+			const newStatus = $input.is(':checked') ? 'instock' : 'outofstock';
 
 			$.ajax({
 				url: lbitePos.ajaxUrl,
@@ -1031,17 +1015,17 @@
 				},
 				success: (response) => {
 					if (response.success) {
-						if (newStatus === 'outofstock') {
-							$item.addClass('lbite-out-of-stock');
-							$item.attr('data-oos-label', lbitePos.strings.outOfStock || 'Out of stock');
-						} else {
-							$item.removeClass('lbite-out-of-stock');
-						}
+						$item.toggleClass('lbite-out-of-stock', newStatus === 'outofstock');
 						const cached = this.allProducts.find(p => p.id === productId);
 						if (cached) {
 							cached.stock_status = newStatus;
 						}
+					} else {
+						$input.prop('checked', !$input.is(':checked'));
 					}
+				},
+				error: () => {
+					$input.prop('checked', !$input.is(':checked'));
 				}
 			});
 		},

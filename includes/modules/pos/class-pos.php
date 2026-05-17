@@ -248,11 +248,21 @@ class LBite_POS {
 				$product_location_ids = array();
 			}
 
+			// Preisspanne für variable Produkte.
+			$price_max = $product->get_price();
+			if ( $product->is_type( 'variable' ) ) {
+				$var_prices = $product->get_variation_prices();
+				if ( ! empty( $var_prices['price'] ) ) {
+					$price_max = max( array_values( $var_prices['price'] ) );
+				}
+			}
+
 			// Basis-Produktdaten.
 			$products_data[] = array(
 				'id'             => $product_id,
 				'name'           => $product->get_name(),
 				'price'          => $product->get_price(),
+				'max_price'      => $price_max,
 				'image'          => wp_get_attachment_image_url( $product->get_image_id(), 'thumbnail' ),
 				'has_variations' => $has_variations,
 				'has_options'    => $has_options,

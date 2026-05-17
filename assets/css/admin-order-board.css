@@ -462,19 +462,31 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 }
 
 .lbite-receipt-button {
-	padding: 8px 12px;
+	padding: 8px 10px;
 	border: 1px solid #ddd;
 	background: #f8f9fa;
-	color: #666;
 	border-radius: 4px;
 	cursor: pointer;
-	font-size: 16px;
-	transition: background-color 0.2s, color 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.2s, border-color 0.2s;
+}
+
+.lbite-receipt-button .dashicons {
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+	color: #666;
+	transition: color 0.2s;
 }
 
 .lbite-receipt-button:hover {
 	background: #0073aa;
 	border-color: #0073aa;
+}
+
+.lbite-receipt-button:hover .dashicons {
 	color: white;
 }
 

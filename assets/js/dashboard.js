@@ -481,8 +481,8 @@
 			// Beleg-Button
 			const $rBtn = $('<button class="lbite-receipt-button"></button>')
 				.attr('title', lbiteDashboard.strings.sendReceipt || 'Send receipt')
-				.text('✉')
 				.on('click', () => this.sendReceipt(order.id, order.has_email));
+			$rBtn.append($('<span class="dashicons dashicons-email-alt"></span>'));
 			$btnGroup.append($rBtn);
 
 			$footer.append($btnGroup);

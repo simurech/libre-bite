@@ -85,6 +85,7 @@
 }
 
 .lbite-pos-product-item {
+	position: relative;
 	padding: 15px;
 	border: 2px solid #ddd;
 	border-radius: 4px;
@@ -427,16 +428,52 @@
 	}
 }
 
-.lbite-product-has-config {
-	position: relative;
+/* Lagerbestand-Toggle */
+.lbite-stock-toggle {
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	cursor: pointer;
+	z-index: 2;
+	line-height: 0;
 }
 
-.lbite-product-has-config::after {
-	content: '⚙️';
+.lbite-stock-toggle-input {
+	opacity: 0;
+	width: 0;
+	height: 0;
 	position: absolute;
-	top: 5px;
-	right: 5px;
-	font-size: 20px;
+}
+
+.lbite-stock-toggle-slider {
+	display: inline-block;
+	width: 30px;
+	height: 17px;
+	background: #bbb;
+	border-radius: 9px;
+	position: relative;
+	transition: background 0.2s;
+}
+
+.lbite-stock-toggle-slider::after {
+	content: '';
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 13px;
+	height: 13px;
+	background: #fff;
+	border-radius: 50%;
+	transition: left 0.2s;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.lbite-stock-toggle-input:checked + .lbite-stock-toggle-slider {
+	background: #27ae60;
+}
+
+.lbite-stock-toggle-input:checked + .lbite-stock-toggle-slider::after {
+	left: 15px;
 }
 
 /* Header mit Vollbild-Button */
@@ -801,26 +838,11 @@ body.lbite-fullscreen-active #lbite-pos-cart-items {
 	height: 16px;
 }
 
-/* Nicht-vorrätig: Produkt-Overlay */
+/* Nicht vorrätig: leicht ausgegraut, kein Overlay */
 .lbite-pos-product-item.lbite-out-of-stock {
-	opacity: 0.55;
-	position: relative;
-	cursor: not-allowed;
-}
-
-.lbite-pos-product-item.lbite-out-of-stock::after {
-	content: attr(data-oos-label);
-	position: absolute;
-	inset: 0;
-	background: rgba(0,0,0,0.45);
-	color: #fff;
-	font-size: 12px;
-	font-weight: 600;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 4px;
-	pointer-events: none;
+	opacity: 0.5;
+	border-color: #ddd !important;
+	box-shadow: none !important;
 }
 
 /* Gutschein-Bereich im Warenkorb */
