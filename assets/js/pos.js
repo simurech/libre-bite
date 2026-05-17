@@ -918,13 +918,13 @@
 				},
 				success: (response) => {
 					$list.empty();
-					if (!response.success || !response.data || !response.data.length) {
+					if (!response.success || !response.data || !response.data.coupons || !response.data.coupons.length) {
 						$list.append($('<p style="color:#999; text-align:center; padding:20px;"></p>').text(
 							lbitePos.strings.noCoupons || 'No active coupons available'
 						));
 						return;
 					}
-					response.data.forEach(coupon => {
+					response.data.coupons.forEach(coupon => {
 						const alreadyAdded = this.coupons.indexOf(coupon.code) !== -1;
 						const $row = $('<div class="lbite-coupon-row"></div>');
 						const $info = $('<div class="lbite-coupon-info"></div>');

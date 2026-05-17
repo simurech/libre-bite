@@ -231,6 +231,23 @@ class LBite_Roles {
 			update_option( 'lbite_disabled_roles', $lbite_disabled );
 		}
 
+		// lbite_staff: Capabilities sicherstellen (falls Rolle aus älterer Version stammt)
+		$staff_role = get_role( 'lbite_staff' );
+		if ( $staff_role ) {
+			$staff_caps = array(
+				'read'                 => true,
+				'lbite_view_dashboard' => true,
+				'lbite_view_orders'    => true,
+				'lbite_manage_orders'  => true,
+				'lbite_use_pos'        => true,
+			);
+			foreach ( $staff_caps as $cap => $grant ) {
+				if ( ! $staff_role->has_cap( $cap ) ) {
+					$staff_role->add_cap( $cap, $grant );
+				}
+			}
+		}
+
 		// Administrator: alle Capabilities sicherstellen
 		$admin_role = get_role( 'administrator' );
 		if ( $admin_role ) {
@@ -262,7 +279,7 @@ class LBite_Roles {
 			}
 		}
 
-		update_option( 'lbite_roles_version', '1.1.2' );
+		update_option( 'lbite_roles_version', '1.1.3' );
 	}
 
 	/**
@@ -272,6 +289,6 @@ class LBite_Roles {
 	 */
 	public static function needs_migration() {
 		$current_version = get_option( 'lbite_roles_version', '0' );
-		return version_compare( $current_version, '1.1.2', '<' );
+		return version_compare( $current_version, '1.1.3', '<' );
 	}
 }

@@ -1025,6 +1025,12 @@ class LBite_Admin {
 		// Produkt-Cache invalidieren damit POS den neuen Status anzeigt.
 		do_action( 'woocommerce_update_product', $product_id, $product );
 
+		// POS-Transient-Cache für alle Standorte leeren.
+		global $wpdb;
+		$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			"DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_lbite_pos_products_%' OR option_name LIKE '_transient_timeout_lbite_pos_products_%'"
+		);
+
 		wp_send_json_success( array( 'stock_status' => $stock_status ) );
 	}
 
