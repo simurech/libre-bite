@@ -63,6 +63,10 @@ class LBite_Admin {
 		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_admin_assets' );
 		$this->loader->add_action( 'admin_init', $this, 'maybe_upgrade' );
 
+		// WooCommerce leitet Benutzer ohne edit_posts/manage_woocommerce aus dem Backend um.
+		// lbite_staff hat keine dieser Capabilities, braucht aber Zugriff auf POS und Kanban.
+		$this->loader->add_filter( 'woocommerce_prevent_admin_access', $this, 'allow_staff_admin_access' );
+
 		// Menü-Highlighting für CPT-Seiten
 		$this->loader->add_filter( 'parent_file', $this, 'fix_menu_parent_file' );
 		$this->loader->add_filter( 'submenu_file', $this, 'fix_menu_submenu_file' );
@@ -72,6 +76,8 @@ class LBite_Admin {
 		$this->loader->add_action( 'wp_ajax_lbite_pos_get_products', $this, 'ajax_pos_get_products' );
 		$this->loader->add_action( 'wp_ajax_lbite_pos_get_product_details', $this, 'ajax_pos_get_product_details' );
 		$this->loader->add_action( 'wp_ajax_lbite_pos_create_order', $this, 'ajax_pos_create_order' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_get_coupons', $this, 'ajax_pos_get_coupons' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_toggle_stock', $this, 'ajax_pos_toggle_stock' );
 		$this->loader->add_action( 'wp_ajax_lbite_get_theme_colors', $this, 'ajax_get_theme_colors' );
 		$this->loader->add_action( 'wp_ajax_lbite_save_features', $this, 'ajax_save_features' );
 		$this->loader->add_action( 'wp_ajax_lbite_save_support_settings', $this, 'ajax_save_support_settings' );
@@ -93,6 +99,20 @@ class LBite_Admin {
 				$this->loader->add_action( 'add_meta_boxes', $this, 'add_receipt_metabox__premium_only' );
 			}
 		}
+	}
+
+	/**
+	 * WooCommerce-Redirect aus wp-admin für Libre-Bite-Staff aufheben.
+	 * WooCommerce sperrt Benutzer ohne edit_posts/manage_woocommerce aus dem Backend.
+	 *
+	 * @param bool $prevent
+	 * @return bool
+	 */
+	public function allow_staff_admin_access( $prevent ) {
+		if ( current_user_can( 'lbite_view_dashboard' ) || current_user_can( 'lbite_use_pos' ) ) {
+			return false;
+		}
+		return $prevent;
 	}
 
 	/**
@@ -530,9 +550,8 @@ class LBite_Admin {
 						'cancelOrderError'   => __( 'Error cancelling order', 'libre-bite' ),
 						'unknownError'       => __( 'Unknown error', 'libre-bite' ),
 						'moreOrders'         => __( 'more order(s)', 'libre-bite' ),
-						'startPreparation'   => __( 'Start preparation', 'libre-bite' ),
-						'readyForPickup'     => __( 'Ready for pickup', 'libre-bite' ),
-						'completed'          => __( 'Completed', 'libre-bite' ),
+						'startPreparation'   => __( 'Prepare Now →', 'libre-bite' ),
+						'completed'          => __( '✓ Complete', 'libre-bite' ),
 						'cancelOrder'        => __( 'Cancel order', 'libre-bite' ),
 						'fullscreen'         => __( 'Fullscreen', 'libre-bite' ),
 						'exitFullscreen'     => __( 'Exit fullscreen', 'libre-bite' ),
@@ -817,10 +836,16 @@ class LBite_Admin {
 
 		$location_id    = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 		$table_id       = isset( $_POST['table_id'] ) ? intval( wp_unslash( $_POST['table_id'] ) ) : 0;
-		$order_type     = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
-		$pickup_time    = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
+		$order_type     = 'now'; // POS-Bestellungen sind immer sofort.
 		$customer_name  = isset( $_POST['customer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_name'] ) ) : '';
 		$payment_method = isset( $_POST['payment_method'] ) ? sanitize_key( wp_unslash( $_POST['payment_method'] ) ) : 'cash';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce bereits geprüft (lbite_pos_nonce).
+		$raw_coupons    = isset( $_POST['coupon_codes'] ) ? wp_unslash( $_POST['coupon_codes'] ) : '[]';
+		$coupon_codes   = json_decode( $raw_coupons, true );
+		if ( ! is_array( $coupon_codes ) ) {
+			$coupon_codes = array();
+		}
+		$coupon_codes = array_map( 'sanitize_text_field', $coupon_codes );
 
 		// Erlaubte Zahlungsarten aus Einstellungen lesen (Fallback: alle vier Standardarten).
 		$configured_methods      = get_option( 'lbite_pos_payment_methods', array() );
@@ -889,10 +914,8 @@ class LBite_Admin {
 				$order->update_meta_data( '_lbite_location_name', $location->post_title );
 			}
 
-			$order->update_meta_data( '_lbite_order_type', $order_type );
-			if ( $pickup_time ) {
-				$order->update_meta_data( '_lbite_pickup_time', $pickup_time );
-			}
+			$order->update_meta_data( '_lbite_order_type', 'now' );
+			$order->update_meta_data( '_lbite_order_status', 'preparing' );
 			$order->update_meta_data( '_lbite_order_source', 'pos' );
 			$order->update_meta_data( '_lbite_payment_method', $payment_method );
 
@@ -900,6 +923,13 @@ class LBite_Admin {
 			if ( ! empty( $customer_name ) ) {
 				$order->set_billing_first_name( $customer_name );
 				$order->update_meta_data( '_lbite_customer_name', $customer_name );
+			}
+
+			// Gutscheine anwenden (vor calculate_totals).
+			foreach ( $coupon_codes as $coupon_code ) {
+				if ( ! empty( $coupon_code ) ) {
+					$order->apply_coupon( $coupon_code );
+				}
 			}
 
 			// Berechnen.
@@ -924,6 +954,78 @@ class LBite_Admin {
 		} catch ( Exception $e ) {
 			wp_send_json_error( array( 'message' => $e->getMessage() ) );
 		}
+	}
+
+	/**
+	 * AJAX: Aktive WooCommerce-Gutscheine für POS-Auswahl liefern
+	 */
+	public function ajax_pos_get_coupons() {
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
+		}
+
+		$today = current_time( 'Y-m-d' );
+
+		$coupon_posts = get_posts(
+			array(
+				'post_type'      => 'shop_coupon',
+				'post_status'    => 'publish',
+				'posts_per_page' => 100,
+				'orderby'        => 'title',
+				'order'          => 'ASC',
+			)
+		);
+
+		$coupons = array();
+		foreach ( $coupon_posts as $coupon_post ) {
+			$coupon      = new WC_Coupon( $coupon_post->post_title );
+			$expiry_date = $coupon->get_date_expires();
+			if ( $expiry_date && $expiry_date->date( 'Y-m-d' ) < $today ) {
+				continue; // Abgelaufene Gutscheine überspringen.
+			}
+
+			$coupons[] = array(
+				'code'          => $coupon->get_code(),
+				'description'   => $coupon_post->post_excerpt,
+				'discount_type' => $coupon->get_discount_type(),
+				'amount'        => (float) $coupon->get_amount(),
+			);
+		}
+
+		wp_send_json_success( array( 'coupons' => $coupons ) );
+	}
+
+	/**
+	 * AJAX: Lagerbestand eines Produkts umschalten (vorr��tig / nicht vorrätig)
+	 */
+	public function ajax_pos_toggle_stock() {
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
+		}
+
+		$product_id   = isset( $_POST['product_id'] ) ? absint( wp_unslash( $_POST['product_id'] ) ) : 0;
+		$stock_status = isset( $_POST['stock_status'] ) ? sanitize_text_field( wp_unslash( $_POST['stock_status'] ) ) : '';
+
+		if ( ! $product_id || ! in_array( $stock_status, array( 'instock', 'outofstock' ), true ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'libre-bite' ) ) );
+		}
+
+		$product = wc_get_product( $product_id );
+		if ( ! $product ) {
+			wp_send_json_error( array( 'message' => __( 'Product not found', 'libre-bite' ) ) );
+		}
+
+		$product->set_stock_status( $stock_status );
+		$product->save();
+
+		// Produkt-Cache invalidieren damit POS den neuen Status anzeigt.
+		do_action( 'woocommerce_update_product', $product_id, $product );
+
+		wp_send_json_success( array( 'stock_status' => $stock_status ) );
 	}
 
 	/**

@@ -29,7 +29,6 @@ class LBite_Order_Dashboard {
 	const STATUSES = array(
 		'incoming'  => 'incoming',
 		'preparing' => 'preparing',
-		'ready'     => 'ready',
 		'completed' => 'completed',
 	);
 
@@ -71,9 +70,8 @@ class LBite_Order_Dashboard {
 	 */
 	public static function get_status_labels() {
 		return array(
-			'incoming'  => __( 'Incoming', 'libre-bite' ),
-			'preparing' => __( 'Preparing', 'libre-bite' ),
-			'ready'     => __( 'Ready for Pickup', 'libre-bite' ),
+			'incoming'  => __( 'Pre-orders', 'libre-bite' ),
+			'preparing' => __( 'Prepare Now', 'libre-bite' ),
 			'completed' => __( 'Completed', 'libre-bite' ),
 		);
 	}
@@ -128,7 +126,6 @@ class LBite_Order_Dashboard {
 					'orders' => array(
 						'incoming'  => array(),
 						'preparing' => array(),
-						'ready'     => array(),
 						'completed' => array(),
 					),
 				)
@@ -175,7 +172,6 @@ class LBite_Order_Dashboard {
 		$orders_by_status = array(
 			'incoming'  => array(),
 			'preparing' => array(),
-			'ready'     => array(),
 			'completed' => array(),
 		);
 
@@ -199,8 +195,26 @@ class LBite_Order_Dashboard {
 		// Process active orders.
 		foreach ( $orders_active as $order ) {
 			$lbite_status = $order->get_meta( '_lbite_order_status', true );
+
+			// Rückwärtskompatibilität: «ready» existiert nicht mehr → Spalte B.
+			if ( 'ready' === $lbite_status ) {
+				$lbite_status = 'preparing';
+			}
+
+			// Ungültige oder fehlende Status: Routing nach Bestelltyp.
+			// «now»-Bestellungen → Spalte B (Jetzt zubereiten).
+			// «later»-Bestellungen → Spalte A (Vorbestellungen).
 			if ( ! $lbite_status || ! isset( $orders_by_status[ $lbite_status ] ) ) {
-				$lbite_status = 'incoming';
+				$order_type   = $order->get_meta( '_lbite_order_type', true );
+				$lbite_status = ( 'later' === $order_type ) ? 'incoming' : 'preparing';
+			}
+
+			// «incoming»-Bestellungen mit Typ «now» gehören in Spalte B.
+			if ( 'incoming' === $lbite_status ) {
+				$order_type = $order->get_meta( '_lbite_order_type', true );
+				if ( 'now' === $order_type || '' === $order_type ) {
+					$lbite_status = 'preparing';
+				}
 			}
 
 			$orders_by_status[ $lbite_status ][] = $this->format_order_for_dashboard( $order );
@@ -361,6 +375,11 @@ class LBite_Order_Dashboard {
 		$order_id   = isset( $_POST['order_id'] ) ? intval( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$new_status = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : '';
 
+		// Rückwärtskompatibilität: «ready» auf «preparing» mappen.
+		if ( 'ready' === $new_status ) {
+			$new_status = 'preparing';
+		}
+
 		if ( ! $order_id || ! isset( self::STATUSES[ $new_status ] ) ) {
 			wp_send_json_error();
 		}
@@ -376,11 +395,6 @@ class LBite_Order_Dashboard {
 
 		// Menü-Badge-Cache invalidieren.
 		delete_transient( 'lbite_incoming_orders_count' );
-
-		// Bei "Abholbereit" - Kunde benachrichtigen (optional)
-		if ( 'ready' === $new_status ) {
-			do_action( 'lbite_order_ready', $order_id );
-		}
 
 		// Bei "Abgeschlossen" - WooCommerce Status ändern
 		if ( 'completed' === $new_status ) {

@@ -785,3 +785,133 @@ body.lbite-fullscreen-active #lbite-pos-cart-items {
 	}
 }
 
+/* Wake-Lock Toggle im POS-Header */
+.lbite-wake-lock-toggle {
+	display: flex !important;
+	align-items: center;
+	gap: 8px;
+	white-space: nowrap;
+	font-size: 14px;
+	color: #50575e;
+}
+
+.lbite-wake-lock-toggle input[type="checkbox"] {
+	margin: 0;
+	width: 16px;
+	height: 16px;
+}
+
+/* Nicht-vorrätig: Produkt-Overlay */
+.lbite-pos-product-item.lbite-out-of-stock {
+	opacity: 0.55;
+	position: relative;
+	cursor: not-allowed;
+}
+
+.lbite-pos-product-item.lbite-out-of-stock::after {
+	content: attr(data-oos-label);
+	position: absolute;
+	inset: 0;
+	background: rgba(0,0,0,0.45);
+	color: #fff;
+	font-size: 12px;
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	pointer-events: none;
+}
+
+/* Gutschein-Bereich im Warenkorb */
+.lbite-pos-coupons {
+	margin: 12px 0;
+}
+
+#lbite-pos-applied-coupons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-bottom: 8px;
+}
+
+.lbite-coupon-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: #e3f2fd;
+	border: 1px solid #90caf9;
+	color: #1565c0;
+	padding: 4px 10px;
+	border-radius: 12px;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.lbite-coupon-remove {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #1565c0;
+	font-size: 16px;
+	padding: 0 0 0 4px;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+}
+
+.lbite-coupon-remove:hover {
+	color: #c62828;
+}
+
+#lbite-pos-coupon-btn {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 40px;
+}
+
+#lbite-pos-coupon-btn .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* Gutschein-Popup */
+.lbite-coupon-popup-content {
+	max-width: 440px;
+}
+
+.lbite-coupon-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 4px;
+	border-bottom: 1px solid #f0f0f0;
+	gap: 12px;
+}
+
+.lbite-coupon-row:last-child {
+	border-bottom: none;
+}
+
+.lbite-coupon-info {
+	flex: 1;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.lbite-coupon-info strong {
+	font-size: 15px;
+}
+
+/* Gutschein-Zeile im Zahlungs-Modal */
+.lbite-payment-modal-coupon-row {
+	background: #f0fff4;
+}
+
+.lbite-payment-modal-coupon-row .lbite-payment-modal-item-name {
+	color: #276749;
+	font-style: italic;
+}
+

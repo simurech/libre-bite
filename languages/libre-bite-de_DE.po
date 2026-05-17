@@ -6152,6 +6152,58 @@ msgstr "Zur Bestellübersicht"
 msgid "Go to POS System"
 msgstr "Zum Kassensystem"
 
+#: templates/admin/order-board.php includes/modules/order-dashboard/class-order-dashboard.php
+msgid "Prepare Now"
+msgstr "Jetzt zubereiten"
+
+#: assets/js/dashboard.js
+msgid "Prepare Now \342\206\222"
+msgstr "Jetzt zubereiten \342\206\222"
+
+#: assets/js/dashboard.js
+msgid "\342\234\223 Complete"
+msgstr "\342\234\223 Abgeschlossen"
+
+#: templates/admin/pos.php assets/js/pos.js
+msgid "Add Coupon"
+msgstr "Gutschein hinzufügen"
+
+#: assets/js/pos.js
+msgid "Out of stock"
+msgstr "Nicht vorrätig"
+
+#: assets/js/pos.js
+msgid "Mark as out of stock"
+msgstr "Als nicht vorrätig markieren"
+
+#: assets/js/pos.js
+msgid "Mark as in stock"
+msgstr "Als vorrätig markieren"
+
+#: assets/js/pos.js
+msgid "Coupon"
+msgstr "Gutschein"
+
+#: assets/js/pos.js
+msgid "Coupon added"
+msgstr "Gutschein hinzugefügt"
+
+#: assets/js/pos.js
+msgid "Coupon removed"
+msgstr "Gutschein entfernt"
+
+#: assets/js/pos.js
+msgid "Loading coupons..."
+msgstr "Gutscheine werden geladen..."
+
+#: assets/js/pos.js
+msgid "No active coupons available"
+msgstr "Keine aktiven Gutscheine vorhanden"
+
+#: assets/js/pos.js
+msgid "Wake Lock is not supported by this browser."
+msgstr "Wake Lock wird von diesem Browser nicht unterstützt."
+
 #~ msgid "\"No Tip\" Label"
 #~ msgstr "\"Kein Trinkgeld\"-Beschriftung"
 

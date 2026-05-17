@@ -5803,3 +5803,55 @@ msgstr ""
 #: templates/admin/help-partials/orders.php:166
 msgid "Go to POS System"
 msgstr ""
+
+#: templates/admin/order-board.php includes/modules/order-dashboard/class-order-dashboard.php
+msgid "Prepare Now"
+msgstr ""
+
+#: assets/js/dashboard.js
+msgid "Prepare Now \342\206\222"
+msgstr ""
+
+#: assets/js/dashboard.js
+msgid "\342\234\223 Complete"
+msgstr ""
+
+#: templates/admin/pos.php assets/js/pos.js
+msgid "Add Coupon"
+msgstr ""
+
+#: assets/js/pos.js
+msgid "Out of stock"
+msgstr ""
+
+#: assets/js/pos.js
+msgid "Mark as out of stock"
+msgstr ""
+
+#: assets/js/pos.js
+msgid "Mark as in stock"
+msgstr ""
+
+#: assets/js/pos.js
+msgid "Coupon"
+msgstr ""
+
+#: assets/js/pos.js
+msgid "Coupon added"
+msgstr ""
+
+#: assets/js/pos.js
+msgid "Coupon removed"
+msgstr ""
+
+#: assets/js/pos.js
+msgid "Loading coupons..."
+msgstr ""
+
+#: assets/js/pos.js
+msgid "No active coupons available"
+msgstr ""
+
+#: assets/js/pos.js
+msgid "Wake Lock is not supported by this browser."
+msgstr ""

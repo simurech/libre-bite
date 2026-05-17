@@ -80,18 +80,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="lbite-kanban-board" id="lbite-kanban-board" style="<?php echo esc_attr( $lbite_saved_location ? '' : 'display: none;' ); ?>">
 		<div class="lbite-kanban-column" data-status="incoming">
-			<h2><?php esc_html_e( 'Incoming', 'libre-bite' ); ?></h2>
+			<h2><?php esc_html_e( 'Pre-orders', 'libre-bite' ); ?></h2>
 			<div class="lbite-kanban-cards" id="lbite-column-incoming"></div>
 		</div>
 
 		<div class="lbite-kanban-column" data-status="preparing">
-			<h2><?php esc_html_e( 'Preparing', 'libre-bite' ); ?></h2>
+			<h2><?php esc_html_e( 'Prepare Now', 'libre-bite' ); ?></h2>
 			<div class="lbite-kanban-cards" id="lbite-column-preparing"></div>
-		</div>
-
-		<div class="lbite-kanban-column" data-status="ready">
-			<h2><?php esc_html_e( 'Ready for Pickup', 'libre-bite' ); ?></h2>
-			<div class="lbite-kanban-cards" id="lbite-column-ready"></div>
 		</div>
 
 		<div class="lbite-kanban-column" data-status="completed">

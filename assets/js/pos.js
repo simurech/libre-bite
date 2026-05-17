@@ -19,6 +19,7 @@
 
 	const POS = {
 		cart: [],
+		coupons: [],
 		currentCategory: 'all',
 		currentProduct: null,
 		isProcessingOrder: false,
@@ -29,6 +30,8 @@
 		filteredProducts: [],
 		allCategories: [],
 		dataLoaded: false,
+		wakeLock: null,
+		pressTimer: null,
 
 		/**
 		 * Initialisierung
@@ -38,6 +41,19 @@
 			this.bindModalEvents();
 			this.loadSavedCart();
 			this.bindFullscreenEvents();
+
+			// Wake-Lock initialisieren
+			const $wakeLock = $('#lbite-pos-wake-lock');
+			$wakeLock.on('change', () => {
+				if ($wakeLock.is(':checked')) {
+					this.requestWakeLock();
+				} else {
+					this.releaseWakeLock();
+				}
+			});
+			if ($wakeLock.is(':checked')) {
+				this.requestWakeLock();
+			}
 
 			// Initiale Standort-Farbe und Overlay-Status setzen
 			const initialLocation = $('#lbite-pos-location').val();
@@ -196,6 +212,14 @@
 				POS.closePaymentModal();
 			});
 
+			// Gutschein-Popup öffnen/schliessen
+			$(document).on('click', '#lbite-pos-coupon-btn', () => {
+				this.openCouponPopup();
+			});
+			$(document).on('click', '#lbite-pos-coupon-popup-close, #lbite-pos-coupon-popup-overlay', () => {
+				this.closeCouponPopup();
+			});
+
 			// Zahlung bestätigen und Bestellung anlegen
 			$(document).on('click', '#lbite-payment-modal-confirm', function() {
 				const paymentMethod = $('input[name="lbite-payment-method"]:checked').val() || 'cash';
@@ -311,6 +335,11 @@
 					$item.addClass('lbite-product-has-config');
 				}
 
+				if (product.stock_status === 'outofstock') {
+					$item.addClass('lbite-out-of-stock');
+					$item.attr('data-oos-label', lbitePos.strings.outOfStock || 'Out of stock');
+				}
+
 				if (product.image) {
 					$item.append($('<img>')
 						.attr('src', product.image)
@@ -320,7 +349,29 @@
 				$item.append($('<div class="lbite-pos-product-name"></div>').text(product.name));
 				$item.append($('<div class="lbite-pos-product-price"></div>').text(this.formatPrice(product.price)));
 
+				// Langer Druck (600ms) → Lagerbestand umschalten
+				let longPressed = false;
+				$item.on('mousedown touchstart', () => {
+					longPressed = false;
+					this.pressTimer = setTimeout(() => {
+						this.pressTimer = null;
+						longPressed = true;
+						this.toggleProductStock(product.id, $item);
+					}, 600);
+				});
+				$item.on('mouseup mouseleave touchend touchcancel', () => {
+					if (this.pressTimer) {
+						clearTimeout(this.pressTimer);
+						this.pressTimer = null;
+					}
+				});
+
 				$item.on('click', () => {
+					if (longPressed) {
+						longPressed = false;
+						return;
+					}
+					if ($item.hasClass('lbite-out-of-stock')) return;
 					if (hasConfig) {
 						this.openProductModal(product.id);
 					} else {
@@ -635,7 +686,9 @@
 		 */
 		clearCart: function() {
 			this.cart = [];
+			this.coupons = [];
 			this.updateCartDisplay();
+			this.renderAppliedCoupons();
 			this.saveCart();
 			// Namensfeld auch leeren für nächste Bestellung
 			$('#lbite-pos-customer-name').val('');
@@ -690,6 +743,17 @@
 				$items.append($row);
 			});
 
+			// Gutscheine anzeigen
+			if (this.coupons.length > 0) {
+				const $couponRow = $('<div class="lbite-payment-modal-item lbite-payment-modal-coupon-row"></div>');
+				$couponRow.append($('<span class="lbite-payment-modal-item-name"></span>').text(
+					(lbitePos.strings.coupon || 'Coupon') + ': ' + this.coupons.join(', ')
+				));
+				$couponRow.append($('<span></span>'));
+				$couponRow.append($('<span class="lbite-payment-modal-item-price" style="color: #27ae60;"></span>').text('✓'));
+				$items.append($couponRow);
+			}
+
 			$('#lbite-payment-modal-total').text(this.formatPrice(total));
 
 			// Zahlungsart zurücksetzen (ersten verfügbaren aktivieren)
@@ -724,6 +788,7 @@
 					action: 'lbite_pos_create_order',
 					nonce: lbitePos.nonce,
 					cart_items: JSON.stringify(this.cart),
+					coupon_codes: JSON.stringify(this.coupons),
 					location_id: locationId,
 					table_id: tableId,
 					order_type: orderType,
@@ -810,6 +875,175 @@
 					document.exitFullscreen();
 				}
 			}
+		},
+
+		/**
+		 * Wake Lock anfordern
+		 */
+		requestWakeLock: function() {
+			if (!('wakeLock' in navigator)) {
+				return;
+			}
+			navigator.wakeLock.request('screen').then((lock) => {
+				this.wakeLock = lock;
+				this.wakeLock.addEventListener('release', () => {
+					this.wakeLock = null;
+					if ($('#lbite-pos-wake-lock').is(':checked')) {
+						this.requestWakeLock();
+					}
+				});
+			}).catch(() => {});
+		},
+
+		/**
+		 * Wake Lock freigeben
+		 */
+		releaseWakeLock: function() {
+			if (this.wakeLock) {
+				this.wakeLock.release().then(() => {
+					this.wakeLock = null;
+				});
+			}
+		},
+
+		/**
+		 * Gutschein-Popup öffnen und Gutscheine laden
+		 */
+		openCouponPopup: function() {
+			$('#lbite-pos-coupon-popup').fadeIn(200);
+			const $list = $('#lbite-pos-coupon-list');
+			$list.html($('<p style="color:#999; text-align:center; padding:20px;"></p>').text(
+				lbitePos.strings.loadingCoupons || 'Loading coupons...'
+			));
+
+			$.ajax({
+				url: lbitePos.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'lbite_pos_get_coupons',
+					nonce: lbitePos.nonce
+				},
+				success: (response) => {
+					$list.empty();
+					if (!response.success || !response.data || !response.data.length) {
+						$list.append($('<p style="color:#999; text-align:center; padding:20px;"></p>').text(
+							lbitePos.strings.noCoupons || 'No active coupons available'
+						));
+						return;
+					}
+					response.data.forEach(coupon => {
+						const alreadyAdded = this.coupons.indexOf(coupon.code) !== -1;
+						const $row = $('<div class="lbite-coupon-row"></div>');
+						const $info = $('<div class="lbite-coupon-info"></div>');
+						$info.append($('<strong></strong>').text(coupon.code));
+						if (coupon.description) {
+							$info.append($('<span style="color:#777;"></span>').text(' – ' + coupon.description));
+						}
+						const discountText = coupon.discount_type === 'percent'
+							? coupon.amount + '%'
+							: this.formatPrice(parseFloat(coupon.amount));
+						$info.append($('<em style="color:#0073aa;margin-left:6px;"></em>').text('(' + discountText + ')'));
+						$row.append($info);
+						const $btn = $('<button type="button" class="button"></button>')
+							.text(alreadyAdded ? '✓' : '+')
+							.prop('disabled', alreadyAdded);
+						if (!alreadyAdded) {
+							$btn.on('click', () => {
+								this.addCoupon(coupon.code);
+								this.closeCouponPopup();
+							});
+						}
+						$row.append($btn);
+						$list.append($row);
+					});
+				}
+			});
+		},
+
+		/**
+		 * Gutschein-Popup schliessen
+		 */
+		closeCouponPopup: function() {
+			$('#lbite-pos-coupon-popup').fadeOut(200);
+		},
+
+		/**
+		 * Gutschein hinzufügen
+		 */
+		addCoupon: function(code) {
+			if (this.coupons.indexOf(code) === -1) {
+				this.coupons.push(code);
+				this.renderAppliedCoupons();
+				window.lbiteNotify && window.lbiteNotify.success(
+					(lbitePos.strings.couponAdded || 'Coupon added') + ': ' + code
+				);
+			}
+		},
+
+		/**
+		 * Gutschein entfernen
+		 */
+		removeCoupon: function(code) {
+			this.coupons = this.coupons.filter(c => c !== code);
+			this.renderAppliedCoupons();
+		},
+
+		/**
+		 * Gutschein-Tags rendern
+		 */
+		renderAppliedCoupons: function() {
+			const $container = $('#lbite-pos-applied-coupons');
+			$container.empty();
+			this.coupons.forEach(code => {
+				const $tag = $('<span class="lbite-coupon-tag"></span>');
+				$tag.append($('<span></span>').text(code));
+				$tag.append(
+					$('<button type="button" class="lbite-coupon-remove" aria-label="Remove">&times;</button>')
+						.on('click', () => this.removeCoupon(code))
+				);
+				$container.append($tag);
+			});
+		},
+
+		/**
+		 * Lagerbestand eines Produkts umschalten
+		 */
+		toggleProductStock: function(productId, $item) {
+			const isOos = $item.hasClass('lbite-out-of-stock');
+			const newStatus = isOos ? 'instock' : 'outofstock';
+			const confirmLabel = isOos
+				? (lbitePos.strings.markInStock || 'Mark as in stock')
+				: (lbitePos.strings.markOutOfStock || 'Mark as out of stock');
+			const productName = $item.find('.lbite-pos-product-name').text();
+
+			if (!confirm(confirmLabel + ':\n' + productName)) {
+				return;
+			}
+
+			$.ajax({
+				url: lbitePos.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'lbite_pos_toggle_stock',
+					nonce: lbitePos.nonce,
+					product_id: productId,
+					stock_status: newStatus
+				},
+				success: (response) => {
+					if (response.success) {
+						if (newStatus === 'outofstock') {
+							$item.addClass('lbite-out-of-stock');
+							$item.attr('data-oos-label', lbitePos.strings.outOfStock || 'Out of stock');
+						} else {
+							$item.removeClass('lbite-out-of-stock');
+						}
+						const cached = this.allProducts.find(p => p.id === productId);
+						if (cached) {
+							cached.stock_status = newStatus;
+						}
+					}
+				}
+			});
 		},
 
 		/**

@@ -152,6 +152,16 @@ class LBite_POS {
 					'loadingProductDetails' => __( 'Loading product details...', 'libre-bite' ),
 					'errorLoadingDetails'   => __( 'Error loading product details', 'libre-bite' ),
 					'selectVariant'         => __( 'Select variant', 'libre-bite' ),
+					'outOfStock'            => __( 'Out of stock', 'libre-bite' ),
+					'markOutOfStock'        => __( 'Mark as out of stock', 'libre-bite' ),
+					'markInStock'           => __( 'Mark as in stock', 'libre-bite' ),
+					'coupon'                => __( 'Coupon', 'libre-bite' ),
+					'addCoupon'             => __( 'Add Coupon', 'libre-bite' ),
+					'couponAdded'           => __( 'Coupon added', 'libre-bite' ),
+					'couponRemoved'         => __( 'Coupon removed', 'libre-bite' ),
+					'loadingCoupons'        => __( 'Loading coupons...', 'libre-bite' ),
+					'noCoupons'             => __( 'No active coupons available', 'libre-bite' ),
+					'wakeLockNotSupported'  => __( 'Wake Lock is not supported by this browser.', 'libre-bite' ),
 				),
 			)
 		);
@@ -249,6 +259,7 @@ class LBite_POS {
 				'type'           => $product->get_type(),
 				'categories'     => $product_cats,
 				'location_ids'   => array_map( 'intval', $product_location_ids ),
+				'stock_status'   => $product->get_stock_status(),
 			);
 
 			// Details nur für Produkte mit Konfiguration.

@@ -13,6 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wrap lbite-pos">
 	<div class="lbite-pos-header">
 		<h1><?php esc_html_e( 'POS System', 'libre-bite' ); ?></h1>
+		<label class="lbite-wake-lock-toggle">
+			<input type="checkbox" id="lbite-pos-wake-lock" checked>
+			<?php esc_html_e( 'Prevent Standby', 'libre-bite' ); ?>
+		</label>
 		<button type="button" id="lbite-pos-fullscreen" class="button button-large" title="Vollbild">
 			<span class="dashicons dashicons-editor-expand"></span>
 		</button>
@@ -114,6 +118,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 
 
+		<div class="lbite-pos-coupons">
+			<div id="lbite-pos-applied-coupons"></div>
+			<button type="button" id="lbite-pos-coupon-btn" class="button">
+				<span class="dashicons dashicons-tag"></span>
+				<?php esc_html_e( 'Add Coupon', 'libre-bite' ); ?>
+			</button>
+		</div>
+
 		<div class="lbite-pos-customer-name" style="margin: 15px 0;">
 			<label for="lbite-pos-customer-name" style="display: block; margin-bottom: 5px; font-weight: 600;">
 				<?php esc_html_e( 'First Name (optional):', 'libre-bite' ); ?>
@@ -195,6 +207,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<button type="button" class="button button-primary button-hero" id="lbite-payment-modal-confirm">
 					<?php esc_html_e( 'Payment Confirmed – Create Order', 'libre-bite' ); ?>
 				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Gutschein-Popup -->
+	<div id="lbite-pos-coupon-popup" class="lbite-modal" style="display: none;">
+		<div id="lbite-pos-coupon-popup-overlay" class="lbite-modal-overlay"></div>
+		<div class="lbite-modal-content lbite-coupon-popup-content">
+			<div class="lbite-modal-header">
+				<h2><?php esc_html_e( 'Add Coupon', 'libre-bite' ); ?></h2>
+				<button type="button" class="lbite-modal-close" id="lbite-pos-coupon-popup-close">&times;</button>
+			</div>
+			<div class="lbite-modal-body" id="lbite-pos-coupon-list">
+				<!-- Wird dynamisch befüllt -->
 			</div>
 		</div>
 	</div>

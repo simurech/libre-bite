@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.10
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,16 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.4.0 =
+* Feature: POS-Bestellungen sind immer sofort (nie Vorbestellung).
+* Feature: POS Standby-Verhinderung (Wake Lock) wie im Kanban-Board.
+* Feature: POS Gutschein-Feld – Gutscheine aus WooCommerce auswählbar und auf Bestellung anwenden.
+* Feature: POS Lagerbestand-Toggle – Produkt gedrückt halten zum Umschalten zwischen vorrätig/nicht vorrätig.
+* Feature: Bestellübersicht auf 3 Spalten reduziert (Vorbestellungen, Jetzt zubereiten, Abgeschlossen).
+* Feature: Kompaktes Kanban-Karten-Layout – Artikel prominent, mehr Karten gleichzeitig sichtbar.
+* Fix: Staff-Benutzer werden nicht mehr von WooCommerce aus dem WordPress-Backend umgeleitet.
+* Fix: QR-Code-Links mit Standort-Parametern leiten direkt zum Shop weiter.
 
 = 1.3.10 =
 * Fix: Stornierung via Bestellübersicht erstellt keinen falschen WC-Rückerstattungs-Eintrag mehr für Offline-Gateways (BACS, COD); Online-Gateways (Stripe, TWINT) erhalten weiterhin eine automatische Rückerstattung.

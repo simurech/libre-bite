@@ -409,85 +409,84 @@
 	},
 
 		/**
-		 * Bestellungs-Karte erstellen
+		 * Bestellungs-Karte erstellen (kompaktes Layout: Artikel prominent, Fusszeile sekundär)
 		 */
 		createOrderCard: function(order, currentStatus) {
 			const $card = $('<div class="lbite-kanban-card"></div>').attr('data-order-id', order.id);
 			if (order.is_future && lbiteDashboard.futureDimmingEnabled) {
 				$card.addClass('lbite-kanban-card--future');
 			}
-			
-			// Header (Nummer & Name)
-			const customerNameRaw = order.customer && order.customer.trim() ? order.customer.trim() : '';
-			const $h3 = $('<h3></h3>').text(`#${order.number}${customerNameRaw ? ' - ' + customerNameRaw : ''}`);
-			$card.append($h3);
-			
-			// Meta-Info
-			const $meta = $('<div class="lbite-kanban-card-meta"></div>');
+
+			// Badge-Zeile: Bestelltyp + Zeit
+			const $badge = $('<div class="lbite-kanban-card-badge"></div>');
 			if (order.type === 'later') {
-				$meta.append($('<span class="lbite-order-type-later"></span>').text(`⏰ ${order.pickup_time || ''}`));
+				$badge.append($('<span class="lbite-order-type-later lbite-badge-chip"></span>').text(`⏰ ${order.pickup_time || ''}`));
 			} else {
-				$meta.append($('<span class="lbite-order-type-now"></span>').text('🔥 Sofort'));
+				$badge.append($('<span class="lbite-order-type-now lbite-badge-chip"></span>').text('🔥 Sofort'));
 			}
-			$meta.append('<br>🕐 ').append(document.createTextNode(order.date || ''));
-			if (order.location) {
-				$meta.append('<br>📍 ').append(document.createTextNode(order.location));
+			if (order.table_id) {
+				$badge.append($('<span class="lbite-badge-chip lbite-badge-table"></span>').text(`🪑 Tisch`));
 			}
-			$card.append($meta);
-			
-			// Items
+			$card.append($badge);
+
+			// Artikel-Liste (Hauptinhalt)
 			const $items = $('<div class="lbite-kanban-card-items"></div>');
 			order.items.forEach(item => {
 				const $itemDiv = $('<div class="lbite-kanban-card-item"></div>');
-				$itemDiv.append($('<strong></strong>').text(`${item.quantity}x ${item.name}`));
+				$itemDiv.append($('<span class="lbite-item-qty"></span>').text(`${item.quantity}×`));
+				$itemDiv.append($('<span class="lbite-item-name"></span>').text(` ${item.name}`));
 				if (item.meta) {
-					$itemDiv.append($('<div class="lbite-item-meta"></div>').text(item.meta));
+					$itemDiv.append($('<div class="lbite-item-meta"></div>').html(item.meta));
 				}
 				$items.append($itemDiv);
 			});
 			$card.append($items);
-			
-			// Notizen
+
+			// Notizen (kompakt, nur wenn vorhanden)
 			if (order.notes) {
 				$card.append($('<div class="lbite-kanban-card-notes"></div>').text(`📝 ${order.notes}`));
 			}
-			
-			// Actions
-			const $actions = $('<div class="lbite-kanban-card-actions"></div>');
+
+			// Fusszeile: Nr + Name + Buttons
+			const $footer = $('<div class="lbite-kanban-card-footer"></div>');
+			const customerNameRaw = order.customer && order.customer.trim() ? order.customer.trim() : '';
+			const footerText = `#${order.number}${customerNameRaw ? ' · ' + customerNameRaw : ''}`;
+			$footer.append($('<span class="lbite-card-footer-info"></span>').text(footerText));
 
 			// Status-Button
 			const statusButtons = {
-				'incoming': { next: 'preparing', label: lbiteDashboard.strings.startPreparation, color: '#f39c12' },
-				'preparing': { next: 'ready', label: lbiteDashboard.strings.readyForPickup, icon: '✅', color: '#27ae60' },
-				'ready': { next: 'completed', label: lbiteDashboard.strings.completed, icon: '🎉', color: '#3498db' },
+				'incoming':  { next: 'preparing', label: lbiteDashboard.strings.startPreparation },
+				'preparing': { next: 'completed',  label: lbiteDashboard.strings.completed },
 				'completed': null
 			};
-
 			const statusButton = statusButtons[currentStatus];
+			const $btnGroup = $('<span class="lbite-card-footer-btns"></span>');
 			if (statusButton) {
-				const btnLabel = statusButton.icon ? `${statusButton.icon} ${statusButton.label}` : statusButton.label;
 				const $sBtn = $('<button class="lbite-status-button"></button>')
 					.addClass(`lbite-status-button-${currentStatus}`)
-					.text(btnLabel)
+					.text(statusButton.label)
 					.on('click', () => this.moveToNextStatus(order.id, statusButton.next));
-				$actions.append($sBtn);
+				$btnGroup.append($sBtn);
 			}
 
 			// Stornieren-Button
 			if (currentStatus !== 'completed') {
-				const $cBtn = $('<button class="lbite-cancel-button"></button>').attr('title', lbiteDashboard.strings.cancelOrder).text('✕')
+				const $cBtn = $('<button class="lbite-cancel-button"></button>')
+					.attr('title', lbiteDashboard.strings.cancelOrder)
+					.text('✕')
 					.on('click', () => this.cancelOrder(order.id));
-				$actions.append($cBtn);
+				$btnGroup.append($cBtn);
 			}
 
-			// Beleg-Button (für alle Bestellungen)
+			// Beleg-Button
 			const $rBtn = $('<button class="lbite-receipt-button"></button>')
 				.attr('title', lbiteDashboard.strings.sendReceipt || 'Send receipt')
 				.text('✉')
 				.on('click', () => this.sendReceipt(order.id, order.has_email));
-			$actions.append($rBtn);
+			$btnGroup.append($rBtn);
 
-			$card.append($actions);
+			$footer.append($btnGroup);
+			$card.append($footer);
 			return $card;
 		},
 
