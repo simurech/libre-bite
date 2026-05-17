@@ -200,12 +200,14 @@ class LBite_Admin {
 		);
 
 		// Bestellübersicht (Kanban) – nur wenn Feature aktiv
+		// Sichtbarkeit via lbite_view_dashboard (= alle Staff-Rollen); AJAX-Sicherheit
+		// über spezifische Capabilities (lbite_manage_orders) in den Handlern.
 		if ( lbite_feature_enabled( 'enable_kanban_board' ) ) {
 			add_submenu_page(
 				'libre-bite',
 				__( 'Order Overview', 'libre-bite' ),
 				__( 'Order Overview', 'libre-bite' ),
-				'lbite_view_orders',
+				'lbite_view_dashboard',
 				'lbite-order-board',
 				array( $this, 'render_order_board_page' )
 			);
@@ -217,7 +219,7 @@ class LBite_Admin {
 				'libre-bite',
 				__( 'POS System', 'libre-bite' ),
 				__( 'POS System', 'libre-bite' ),
-				'lbite_use_pos',
+				'lbite_view_dashboard',
 				'lbite-pos',
 				array( $this, 'render_pos_page' )
 			);
