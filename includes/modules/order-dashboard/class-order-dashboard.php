@@ -432,7 +432,7 @@ class LBite_Order_Dashboard {
 	public function ajax_cancel_order() {
 		check_ajax_referer( 'lbite_dashboard_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+		if ( ! current_user_can( 'lbite_manage_orders' ) && ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 

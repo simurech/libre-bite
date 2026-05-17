@@ -4061,11 +4061,15 @@ msgstr "Tisch (optional):"
 msgid "Cart"
 msgstr "Warenkorb"
 
-#: templates/admin/pos.php:107
+#: templates/admin/pos.php:111
 msgid "Subtotal:"
 msgstr "Zwischensumme:"
 
-#: templates/admin/pos.php:111
+#: templates/admin/pos.php:115
+msgid "Discount:"
+msgstr "Rabatt:"
+
+#: templates/admin/pos.php:119
 msgid "Total:"
 msgstr "Total:"
 

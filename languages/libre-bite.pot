@@ -3949,11 +3949,15 @@ msgstr ""
 msgid "Cart"
 msgstr ""
 
-#: templates/admin/pos.php:107
+#: templates/admin/pos.php:111
 msgid "Subtotal:"
 msgstr ""
 
-#: templates/admin/pos.php:111
+#: templates/admin/pos.php:115
+msgid "Discount:"
+msgstr ""
+
+#: templates/admin/pos.php:119
 msgid "Total:"
 msgstr ""
 
