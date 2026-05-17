@@ -671,7 +671,19 @@
 
 			// Gesamt berechnen
 			const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-			$('#lbite-pos-subtotal, #lbite-pos-total').text(this.formatPrice(subtotal));
+			const discount = this.calculateDiscount(subtotal);
+			const total    = this.applyRounding(subtotal - discount);
+
+			$('#lbite-pos-subtotal').text(this.formatPrice(subtotal));
+
+			if (discount > 0) {
+				$('#lbite-pos-discount').text('− ' + this.formatPrice(discount));
+				$('#lbite-pos-discount-line').show();
+			} else {
+				$('#lbite-pos-discount-line').hide();
+			}
+
+			$('#lbite-pos-total').text(this.formatPrice(total));
 		},
 
 		/**
@@ -717,8 +729,9 @@
 		 * Zahlungs-Modal öffnen und befüllen
 		 */
 		openPaymentModal: function() {
-			// Gesamtbetrag berechnen
-			const total = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+			const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+			const discount = this.calculateDiscount(subtotal);
+			const total    = this.applyRounding(subtotal - discount);
 
 			// Bestellpositionen rendern
 			const $items = $('#lbite-payment-modal-items');
@@ -736,14 +749,16 @@
 				$items.append($row);
 			});
 
-			// Gutscheine anzeigen
+			// Gutscheine mit Rabattbetrag anzeigen
 			if (this.coupons.length > 0) {
 				const $couponRow = $('<div class="lbite-payment-modal-item lbite-payment-modal-coupon-row"></div>');
 				$couponRow.append($('<span class="lbite-payment-modal-item-name"></span>').text(
-					(lbitePos.strings.coupon || 'Coupon') + ': ' + this.coupons.join(', ')
+					(lbitePos.strings.coupon || 'Coupon') + ': ' + this.coupons.map(c => c.code).join(', ')
 				));
 				$couponRow.append($('<span></span>'));
-				$couponRow.append($('<span class="lbite-payment-modal-item-price" style="color: #27ae60;"></span>').text('✓'));
+				$couponRow.append($('<span class="lbite-payment-modal-item-price" style="color:#27ae60;"></span>').text(
+					discount > 0 ? '− ' + this.formatPrice(discount) : '✓'
+				));
 				$items.append($couponRow);
 			}
 
@@ -781,7 +796,7 @@
 					action: 'lbite_pos_create_order',
 					nonce: lbitePos.nonce,
 					cart_items: JSON.stringify(this.cart),
-					coupon_codes: JSON.stringify(this.coupons),
+					coupon_codes: JSON.stringify(this.coupons.map(c => c.code)),
 					location_id: locationId,
 					table_id: tableId,
 					order_type: orderType,
@@ -925,7 +940,7 @@
 						return;
 					}
 					response.data.coupons.forEach(coupon => {
-						const alreadyAdded = this.coupons.indexOf(coupon.code) !== -1;
+						const alreadyAdded = this.coupons.findIndex(c => c.code === coupon.code) !== -1;
 						const $row = $('<div class="lbite-coupon-row"></div>');
 						const $info = $('<div class="lbite-coupon-info"></div>');
 						$info.append($('<strong></strong>').text(coupon.code));
@@ -942,7 +957,7 @@
 							.prop('disabled', alreadyAdded);
 						if (!alreadyAdded) {
 							$btn.on('click', () => {
-								this.addCoupon(coupon.code);
+								this.addCoupon(coupon.code, coupon.discount_type, coupon.amount);
 								this.closeCouponPopup();
 							});
 						}
@@ -963,10 +978,11 @@
 		/**
 		 * Gutschein hinzufügen
 		 */
-		addCoupon: function(code) {
-			if (this.coupons.indexOf(code) === -1) {
-				this.coupons.push(code);
+		addCoupon: function(code, discountType, amount) {
+			if (this.coupons.findIndex(c => c.code === code) === -1) {
+				this.coupons.push({code, discount_type: discountType || 'fixed_cart', amount: amount || 0});
 				this.renderAppliedCoupons();
+				this.updateCartDisplay();
 				window.lbiteNotify && window.lbiteNotify.success(
 					(lbitePos.strings.couponAdded || 'Coupon added') + ': ' + code
 				);
@@ -977,8 +993,9 @@
 		 * Gutschein entfernen
 		 */
 		removeCoupon: function(code) {
-			this.coupons = this.coupons.filter(c => c !== code);
+			this.coupons = this.coupons.filter(c => c.code !== code);
 			this.renderAppliedCoupons();
+			this.updateCartDisplay();
 		},
 
 		/**
@@ -987,15 +1004,41 @@
 		renderAppliedCoupons: function() {
 			const $container = $('#lbite-pos-applied-coupons');
 			$container.empty();
-			this.coupons.forEach(code => {
+			this.coupons.forEach(coupon => {
 				const $tag = $('<span class="lbite-coupon-tag"></span>');
-				$tag.append($('<span></span>').text(code));
+				$tag.append($('<span></span>').text(coupon.code));
 				$tag.append(
 					$('<button type="button" class="lbite-coupon-remove" aria-label="Remove">&times;</button>')
-						.on('click', () => this.removeCoupon(code))
+						.on('click', () => this.removeCoupon(coupon.code))
 				);
 				$container.append($tag);
 			});
+		},
+
+		/**
+		 * Rabatt aller aktiven Gutscheine berechnen
+		 */
+		calculateDiscount: function(subtotal) {
+			let discount = 0;
+			this.coupons.forEach(coupon => {
+				const amount = parseFloat(coupon.amount) || 0;
+				if (coupon.discount_type === 'percent') {
+					discount += subtotal * (amount / 100);
+				} else {
+					discount += amount;
+				}
+			});
+			return Math.min(discount, subtotal);
+		},
+
+		/**
+		 * Betrag auf 5-Rappen runden (nur wenn in Plugin-Einstellungen aktiviert)
+		 */
+		applyRounding: function(amount) {
+			if (!lbitePos.enableRounding) {
+				return amount;
+			}
+			return Math.round(amount * 20) / 20;
 		},
 
 		/**

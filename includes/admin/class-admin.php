@@ -67,6 +67,10 @@ class LBite_Admin {
 		// lbite_staff hat keine dieser Capabilities, braucht aber Zugriff auf POS und Kanban.
 		$this->loader->add_filter( 'woocommerce_prevent_admin_access', $this, 'allow_staff_admin_access' );
 
+		// Capabilities der lbite_staff-Rolle dynamisch sicherstellen (funktioniert auch bei
+		// veralteten Rollen-Einträgen in der Datenbank, ohne auf die Migration angewiesen zu sein).
+		$this->loader->add_filter( 'user_has_cap', $this, 'ensure_staff_capabilities', 10, 4 );
+
 		// Menü-Highlighting für CPT-Seiten
 		$this->loader->add_filter( 'parent_file', $this, 'fix_menu_parent_file' );
 		$this->loader->add_filter( 'submenu_file', $this, 'fix_menu_submenu_file' );
@@ -113,6 +117,30 @@ class LBite_Admin {
 			return false;
 		}
 		return $prevent;
+	}
+
+	/**
+	 * lbite_staff-Rolle: alle nötigen Capabilities dynamisch sicherstellen.
+	 *
+	 * WordPress cached User-Capabilities zu Beginn des Requests. Falls die Rollen-Definition
+	 * in der DB veraltet ist (fehlende Caps), stellt dieser Filter sicher, dass lbite_staff-
+	 * Benutzer trotzdem korrekt berechtigt werden – ohne auf einen Migrations-Run angewiesen zu sein.
+	 *
+	 * @param bool[]  $allcaps Array aller dem Benutzer gewährten Capabilities.
+	 * @param string[] $caps    Angeforderte Capabilities.
+	 * @param array   $args    Weitere Argumente.
+	 * @param WP_User $user    Benutzer-Objekt.
+	 * @return bool[]
+	 */
+	public function ensure_staff_capabilities( $allcaps, $caps, $args, $user ) {
+		if ( ! $user instanceof WP_User || ! in_array( 'lbite_staff', (array) $user->roles, true ) ) {
+			return $allcaps;
+		}
+		$allcaps['lbite_view_dashboard'] = true;
+		$allcaps['lbite_view_orders']    = true;
+		$allcaps['lbite_manage_orders']  = true;
+		$allcaps['lbite_use_pos']        = true;
+		return $allcaps;
 	}
 
 	/**
@@ -1022,8 +1050,18 @@ class LBite_Admin {
 		$product->set_stock_status( $stock_status );
 		$product->save();
 
-		// Produkt-Cache invalidieren damit POS den neuen Status anzeigt.
-		do_action( 'woocommerce_update_product', $product_id, $product );
+		// Bei variablen Produkten: Lagerbestand-Status aller Varianten setzen,
+		// damit WooCommerces Sync-Mechanismus den Parent-Status nicht überschreibt.
+		if ( $product->is_type( 'variable' ) ) {
+			foreach ( $product->get_children() as $child_id ) {
+				$variation = wc_get_product( $child_id );
+				if ( $variation ) {
+					$variation->set_stock_status( $stock_status );
+					$variation->save();
+				}
+			}
+			WC_Product_Variable::sync( $product_id );
+		}
 
 		// POS-Transient-Cache für alle Standorte leeren.
 		global $wpdb;

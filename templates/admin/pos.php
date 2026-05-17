@@ -111,6 +111,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span><?php esc_html_e( 'Subtotal:', 'libre-bite' ); ?></span>
 					<span id="lbite-pos-subtotal">0,00 <?php echo esc_html( get_woocommerce_currency_symbol() ); ?></span>
 				</div>
+				<div class="lbite-total-line lbite-discount-line" id="lbite-pos-discount-line" style="display:none;">
+					<span><?php esc_html_e( 'Discount:', 'libre-bite' ); ?></span>
+					<span id="lbite-pos-discount" style="color:#27ae60;"></span>
+				</div>
 				<div class="lbite-total-line lbite-total-grand">
 					<span><?php esc_html_e( 'Total:', 'libre-bite' ); ?></span>
 					<span id="lbite-pos-total">0,00 <?php echo esc_html( get_woocommerce_currency_symbol() ); ?></span>

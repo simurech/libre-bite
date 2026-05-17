@@ -130,6 +130,7 @@ class LBite_POS {
 			array(
 				'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
 				'nonce'          => wp_create_nonce( 'lbite_pos_nonce' ),
+				'enableRounding' => (bool) get_option( 'lbite_enable_rounding', false ),
 				'userId'         => get_current_user_id(),
 				'currency'       => get_woocommerce_currency_symbol(),
 				'preloadData'    => $product_data,
