@@ -65,7 +65,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<h4 style="margin-top: 16px;"><?php esc_html_e( 'Moving Status', 'libre-bite' ); ?></h4>
 		<ul>
-			<li><strong><?php esc_html_e( 'Drag & Drop:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Drag an order card to the next column – ideal on touchscreens and tablets.', 'libre-bite' ); ?></li>
 			<li><strong><?php esc_html_e( 'Button:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'Click the status button directly on the order card.', 'libre-bite' ); ?></li>
 		</ul>
 
@@ -106,10 +105,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<span class="lbite-pro-badge">Pro</span>
 			<?php endif; ?>
 		</h3>
-		<p><?php esc_html_e( 'When enabled, pre-orders with a pickup time far in the future are shown greyed out in the Kanban board. They cannot be dragged or processed until they are within the preparation window.', 'libre-bite' ); ?></p>
+		<p><?php esc_html_e( 'When enabled, pre-orders with a pickup time far in the future are shown greyed out in the Kanban board. They cannot be processed until they are within the preparation window.', 'libre-bite' ); ?></p>
 		<ul>
 			<li><?php esc_html_e( 'Future pre-orders are displayed with reduced opacity in the "Incoming" column.', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'Drag & drop and status buttons are disabled until the order enters the preparation window.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Status buttons are disabled until the order enters the preparation window.', 'libre-bite' ); ?></li>
 			<li><?php esc_html_e( 'You can optionally hide future pre-orders completely until they are relevant.', 'libre-bite' ); ?></li>
 		</ul>
 		<div class="lbite-help-tip">
