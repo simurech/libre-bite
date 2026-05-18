@@ -187,14 +187,14 @@ Libre Bite übernimmt die komplette Einrichtung: Installation, Konfiguration, Ho
 
 | Feature | Status |
 |---|---|
-| Öffnungszeiten: 2 Zeitfenster pro Tag (Mittagspause) | Geplant |
-| Öffnungszeiten: Feiertage (zentral, pro Standort wählbar) | Geplant |
+| Öffnungszeiten: 2 Zeitfenster pro Tag (Mittagspause) | Umgesetzt (v1.3.0) |
+| Öffnungszeiten: Feiertage (zentral, pro Standort wählbar) | Umgesetzt (v1.3.0) |
+| Zeitslots: Blocker (erste/letzte Bestellung n Minuten nach/vor Öffnung) | Umgesetzt (v1.3.0, Pro) |
+| Vorbestellungen: ausgegraut + gesperrt + Sichtbarkeits-Checkbox | Umgesetzt (v1.3.0, Pro) |
+| Optimierter Checkout: Beleg-Frage entfernen, Buttons auf Bestätigungsseite | Umgesetzt (v1.3.0, Pro) |
+| Beleg nachträglich per E-Mail senden (aus Bestellansicht) | Umgesetzt (v1.3.0, Pro) |
+| Rechteverwaltung pro Standort (POS + Kanban) | Umgesetzt (v1.4.0, Pro) |
 | Öffnungszeiten: Google Maps API-Integration | Geplant (Pro) |
-| Zeitslots: Blocker (erste/letzte Bestellung n Minuten nach/vor Öffnung) | Geplant (Pro) |
-| Rechteverwaltung pro Standort (POS + Kanban) | Geplant (Pro) |
-| Vorbestellungen: ausgegraut + gesperrt + Sichtbarkeits-Checkbox | Geplant (Pro) |
-| Optimierter Checkout: Beleg-Frage entfernen, Buttons auf Bestätigungsseite | Geplant (Pro) |
-| Beleg nachträglich per E-Mail senden (aus Bestellansicht) | Geplant (Pro) |
 | Trinkgeld: Fixbeträge + konfigurierbare Texte/Titel | Geplant (Pro) |
 | Reservierungen: Tischübersicht, Auto-Freigabe, Zeitfenster, Auto-Zuweisung | Geplant (Pro) |
 | Branding-Ausbau (Farbpresets, Live-Vorschau) | Geplant (v2.0) |
