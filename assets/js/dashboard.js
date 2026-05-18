@@ -35,7 +35,6 @@
 		 */
 		init: function() {
 			this.initAudio();
-			this.initDragDrop();
 			this.initControls();
 			this.bindFullscreenEvents();
 
@@ -91,31 +90,6 @@
 					$('#lbite-sound-toggle').hide();
 				});
 			}
-		},
-
-		/**
-		 * Drag & Drop initialisieren
-		 */
-		initDragDrop: function() {
-			const columns = document.querySelectorAll('.lbite-kanban-cards');
-
-			columns.forEach(column => {
-				new Sortable(column, {
-					group: 'kanban',
-					animation: 150,
-					ghostClass: 'lbite-ghost',
-					dragClass: 'lbite-dragging',
-					filter: '.lbite-kanban-card--future',
-					onEnd: (evt) => {
-						const orderId = evt.item.dataset.orderId;
-						const newStatus = evt.to.closest('.lbite-kanban-column').dataset.status;
-
-						if (orderId && newStatus) {
-							this.updateOrderStatus(orderId, newStatus);
-						}
-					}
-				});
-			});
 		},
 
 		/**
@@ -465,7 +439,7 @@
 				const $sBtn = $('<button class="lbite-status-button"></button>')
 					.addClass(`lbite-status-button-${currentStatus}`)
 					.text(statusButton.label)
-					.on('click', () => this.moveToNextStatus(order.id, statusButton.next));
+					.on('click', (e) => { e.stopPropagation(); this.moveToNextStatus(order.id, statusButton.next); });
 				$btnGroup.append($sBtn);
 			}
 
@@ -474,14 +448,14 @@
 				const $cBtn = $('<button class="lbite-cancel-button"></button>')
 					.attr('title', lbiteDashboard.strings.cancelOrder)
 					.text('✕')
-					.on('click', () => this.cancelOrder(order.id));
+					.on('click', (e) => { e.stopPropagation(); this.cancelOrder(order.id); });
 				$btnGroup.append($cBtn);
 			}
 
 			// Beleg-Button
 			const $rBtn = $('<button class="lbite-receipt-button"></button>')
 				.attr('title', lbiteDashboard.strings.sendReceipt || 'Send receipt')
-				.on('click', () => this.sendReceipt(order.id, order.has_email));
+				.on('click', (e) => { e.stopPropagation(); this.sendReceipt(order.id, order.has_email); });
 			$rBtn.append($('<span class="dashicons dashicons-email-alt"></span>'));
 			$btnGroup.append($rBtn);
 

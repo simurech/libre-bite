@@ -78,16 +78,11 @@
 	margin-bottom: 10px;
 	border-radius: 4px;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-	cursor: move;
 	transition: all 0.3s;
 }
 
 .lbite-kanban-card:hover {
 	box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-}
-
-.lbite-kanban-card.dragging {
-	opacity: 0.5;
 }
 
 @media (max-width: 900px) {
@@ -352,7 +347,7 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 	transform: translateY(0);
 }
 
-/* Touch-Optimierung für Buttons */
+/* Touch-Optimierung für Buttons und Spalten-Scroll */
 @media (hover: none) and (pointer: coarse) {
 	.lbite-card-footer-btns button,
 	.lbite-kanban-card-actions button {
@@ -367,6 +362,12 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 
 	.lbite-cancel-button {
 		font-size: 20px !important;
+	}
+
+	.lbite-kanban-cards {
+		max-height: 65vh;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 }
 
