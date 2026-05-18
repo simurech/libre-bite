@@ -107,6 +107,8 @@ NEW_STRINGS_FORMAL_SS = {
         "Verwalten Sie eingehende Bestellungen mit dem Kanban-Board oder dem Kassensystem.",
     "Completed orders for today. Older orders are stored separately.":
         "Abgeschlossene Bestellungen von heute. Ältere Bestellungen werden separat gespeichert.",
+    "Completed orders for today. Older orders are loaded on demand.":
+        "Abgeschlossene Bestellungen von heute. Ältere Bestellungen werden auf Anfrage geladen.",
     "The sound only plays when the browser tab with the dashboard is open.":
         "Der Sound wird nur abgespielt, wenn der Browser-Tab mit dem Dashboard geöffnet ist.",
     "You can customize or disable the sound under Settings \u2192 Dashboard.":
@@ -146,6 +148,380 @@ NEW_STRINGS_FORMAL_SS = {
     # Checkout-Felder (formell)
     "your@email.com":
         "ihre@email.ch",
+
+    # ── Neu hinzugefügte Strings (174 fehlende Übersetzungen) ──────────────────
+
+    # Allgemeine UI / Status
+    "✓ Complete":
+        "✓ Abgeschlossen",
+    "Invalid parameters":
+        "Ungültige Parameter",
+    "Order completed":
+        "Bestellung abgeschlossen",
+    "Prepare Now →":
+        "Jetzt vorbereiten →",
+    '"%s" is not available at the selected location.':
+        '«%s» ist am gewählten Standort nicht verfügbar.',
+
+    # Checkout / Trinkgeld
+    '"Complete Order" → choose payment method (cash, card, Twint, etc.)':
+        '«Bestellung abschliessen» → Zahlungsmethode wählen (Bar, Karte, Twint, etc.)',
+    '"No Tip" Label':
+        'Bezeichnung für «Kein Trinkgeld»',
+    'Label for the "no tip" option. Leave empty to use the default.':
+        'Bezeichnung für die Option «Kein Trinkgeld». Leer lassen für die Standardbezeichnung.',
+    'Offer your customers a tip option at checkout. You can define three percentages and set a default selection.':
+        'Bieten Sie Ihren Kunden eine Trinkgeld-Option im Checkout an. Sie können drei Prozentsätze definieren und eine Standardauswahl festlegen.',
+    'Percentage: values are percentages (e.g. 10 = 10%). Fixed: values are absolute amounts in your shop currency.':
+        'Prozent: Werte sind Prozentsätze (z. B. 10 = 10 %). Fix: Werte sind Fixbeträge in Ihrer Shop-Währung.',
+    'Prevents rounding errors when combining vouchers and tips. Recommended for Swiss businesses.':
+        'Verhindert Rundungsfehler bei der Kombination von Gutscheinen und Trinkgeld. Empfohlen für Schweizer Betriebe.',
+    'Rounds the amount to 5 centimes (0.05 CHF). Recommended for Swiss businesses to avoid rounding errors at the cash register.':
+        'Rundet den Betrag auf 5 Rappen (0.05 CHF). Empfohlen für Schweizer Betriebe, um Rundungsfehler an der Kasse zu vermeiden.',
+
+    # Checkout – Felder & Optionen
+    '"Standard" shows the normal WooCommerce checkout. "Optimized" (Pro) reduces it to the essentials: only name and receipt option – ideal for take-away without delivery.':
+        '«Standard» zeigt den normalen WooCommerce-Checkout. «Optimiert» (Pro) reduziert ihn auf das Wesentliche: nur Name und Belegwunsch – ideal für Take-away ohne Lieferung.',
+    'Checked = field is shown in checkout. Unchecked = field is hidden. The label can optionally be overridden.':
+        'Aktiviert = Feld wird im Checkout angezeigt. Deaktiviert = Feld wird ausgeblendet. Die Bezeichnung kann optional überschrieben werden.',
+    'Choose which fields the customer must fill in when ordering (e.g. first name, email, phone). For take-away, often only the first name is needed.':
+        'Wählen Sie, welche Felder der Kunde beim Bestellen ausfüllen muss (z. B. Vorname, E-Mail, Telefon). Für Take-away wird oft nur der Vorname benötigt.',
+    'Here you can specify which fields should be displayed in checkout and customize field labels.':
+        'Hier können Sie festlegen, welche Felder im Checkout angezeigt werden, und die Feldbezeichnungen anpassen.',
+    'If disabled, the checkbox and shipping address fields will not be shown in checkout.':
+        'Wenn deaktiviert, werden das Kontrollkästchen und die Lieferadressfelder im Checkout nicht angezeigt.',
+    'If enabled, shipping information will be displayed in cart and checkout (shipping costs, shipping methods, etc.).':
+        'Wenn aktiviert, werden Versandinformationen in Warenkorb und Checkout angezeigt (Versandkosten, Versandmethoden, etc.).',
+    'In optimized mode, only the name is requested and whether a receipt by email is desired.':
+        'Im optimierten Modus wird nur der Name abgefragt und ob ein Beleg per E-Mail gewünscht wird.',
+    'Show "Order Notes" field':
+        'Feld «Bestellhinweise» anzeigen',
+    'Show "Ship to a different address" option':
+        'Option «An andere Adresse liefern» anzeigen',
+    'The Checkout tab contains two sections: field configuration and additional checkout options.':
+        'Der Tab «Checkout» enthält zwei Bereiche: Feldkonfiguration und zusätzliche Checkout-Optionen.',
+    'The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode':
+        'Der optimierte Checkout funktioniert nur mit dem klassischen WooCommerce-Shortcode. Ihre Checkout-Seite muss den Shortcode enthalten',
+
+    # Quittung / Beleg
+    'A "Send Receipt" button is available in the WooCommerce order detail view under the "Libre Bite" metabox.':
+        'In der WooCommerce-Bestelldetailansicht unter der «Libre Bite»-Metabox steht ein Button «Beleg senden» zur Verfügung.',
+    'After ordering, an "Email Receipt" button appears on the confirmation page (only if a valid email was entered).':
+        'Nach der Bestellung erscheint auf der Bestätigungsseite ein Button «Beleg per E-Mail» (nur wenn eine gültige E-Mail-Adresse eingegeben wurde).',
+    'The receipt email uses the standard WooCommerce invoice email. It can only be sent once per order to prevent duplicates.':
+        'Die Beleg-E-Mail verwendet die Standard-WooCommerce-Rechnung. Sie kann pro Bestellung nur einmal versendet werden, um Duplikate zu verhindern.',
+    'With the optimized checkout, customers can request a receipt by email directly on the order confirmation page. Admins can also resend receipts from the order detail view.':
+        'Mit dem optimierten Checkout können Kunden auf der Bestellbestätigungsseite direkt einen Beleg per E-Mail anfordern. Admins können Belege auch aus der Bestelldetailansicht erneut versenden.',
+
+    # Standorte / Locations
+    'Activate or deactivate individual feature modules of Libre Bite. Disabled features are hidden from the menu – including the corresponding settings tabs.':
+        'Aktivieren oder deaktivieren Sie einzelne Funktionsmodule von Libre Bite. Deaktivierte Funktionen werden im Menü ausgeblendet – einschliesslich der entsprechenden Einstellungs-Tabs.',
+    'Automatically pre-selects the location. You can find the ID in the URL when editing the location.':
+        'Wählt den Standort automatisch vor. Die ID finden Sie in der URL beim Bearbeiten des Standorts.',
+    'Create locations under "Libre Bite → Locations"':
+        'Standorte unter «Libre Bite → Standorte» erstellen',
+    'Customers select a location at checkout. Available pickup times are automatically calculated based on opening hours.':
+        'Kunden wählen im Checkout einen Standort. Die verfügbaren Abholzeiten werden automatisch anhand der Öffnungszeiten berechnet.',
+    'Each location can be assigned an accent color. This is displayed as a visual highlight in the following areas:':
+        'Jedem Standort kann eine Akzentfarbe zugewiesen werden. Diese wird als visuelles Highlight in den folgenden Bereichen angezeigt:',
+    'Go to "Libre Bite → Locations"':
+        'Gehen Sie zu «Libre Bite → Standorte»',
+    'Go to "Libre Bite" → "Locations"':
+        'Gehen Sie zu «Libre Bite» → «Standorte»',
+    'Optional: Link to Google Maps for this location. The address will be linked on order confirmation and in emails.':
+        'Optional: Link zu Google Maps für diesen Standort. Die Adresse wird auf der Bestellbestätigung und in E-Mails verlinkt.',
+    'The color is set in the location editing area under "Color" with the WordPress color picker.':
+        'Die Farbe wird im Bearbeitungsbereich des Standorts unter «Farbe» mit dem WordPress-Farbwähler festgelegt.',
+    'The location selection is saved per user and automatically pre-selected on the next visit.':
+        'Die Standortauswahl wird pro Benutzer gespeichert und beim nächsten Besuch automatisch vorausgewählt.',
+    'The page where your locations are embedded with the shortcode [lbite_location_selector]. Used e.g. as a target for internal links.':
+        'Die Seite, auf der Ihre Standorte mit dem Shortcode [lbite_location_selector] eingebettet sind. Wird z. B. als Ziel für interne Links verwendet.',
+    'The tile layout optionally displays location images. These can be uploaded in location settings.':
+        'Das Kachellayout zeigt optional Standortbilder an. Diese können in den Standorteinstellungen hochgeladen werden.',
+    'Unlock multi-location management, tip options, pickup reminders and much more.':
+        'Schalten Sie Multi-Standort-Verwaltung, Trinkgeld-Optionen, Abholbenachrichtigungen und vieles mehr frei.',
+
+    # Standort-Shortcode / Selector
+    'Displays a location and time selection. By default as a tile layout with two-step process (location first, then time) and automatic redirect to the shop page.':
+        'Zeigt eine Standort- und Zeitauswahl an. Standardmässig als Kachellayout mit zweistufigem Prozess (zuerst Standort, dann Zeit) und automatischer Weiterleitung zur Shop-Seite.',
+    'Layout: Tiles (grid cards), inline (compact form), or banner (wide 2-column with image)':
+        'Layout: Kacheln (Raster-Karten), Inline (kompaktes Formular) oder Banner (breite 2-spaltige Ansicht mit Bild)',
+    'Note: The legacy parameter ?location=ID (without prefix) is still supported for backward compatibility.':
+        'Hinweis: Der alte Parameter ?location=ID (ohne Präfix) wird aus Gründen der Rückwärtskompatibilität weiterhin unterstützt.',
+    'Pre-select a specific location (use the location ID). Leave empty to let the customer choose.':
+        'Einen bestimmten Standort vorauswählen (Standort-ID verwenden). Leer lassen, damit der Kunde wählen kann.',
+    'Pre-selects location 123 and "Order Now"':
+        'Wählt Standort 123 vor und «Jetzt bestellen»',
+    'Pre-selects location 123 and "Pre-order for Later"':
+        'Wählt Standort 123 vor und «Vorbestellen»',
+    'Select the page where the shortcode [lbite_location_selector] is included, or create a new page.':
+        'Wählen Sie die Seite aus, auf der der Shortcode [lbite_location_selector] eingebunden ist, oder erstellen Sie eine neue Seite.',
+    'Sets the order type to "Now" (fastest possible pickup time).':
+        'Setzt den Bestelltyp auf «Jetzt» (schnellstmögliche Abholzeit).',
+    'Sets the order type to "Pre-order" (customer chooses pickup time themselves).':
+        'Setzt den Bestelltyp auf «Vorbestellung» (Kunde wählt die Abholzeit selbst).',
+    'Tip: Enable the "Location Selection" feature under Settings → Features for the shortcode to be visible.':
+        'Tipp: Aktivieren Sie die Funktion «Standortauswahl» unter Einstellungen → Funktionen, damit der Shortcode sichtbar ist.',
+    'With the following shortcode, customers can select a location directly on a page or at checkout:':
+        'Mit dem folgenden Shortcode können Kunden direkt auf einer Seite oder im Checkout einen Standort auswählen:',
+    'You can also pre-select location and order type directly via URL – useful for QR codes, flyers or links.':
+        'Sie können Standort und Bestelltyp auch direkt per URL vorauswählen – nützlich für QR-Codes, Flyer oder Links.',
+    'You can insert the shortcode on any page (e.g. the order page or homepage). The selected location is stored in the session and used at checkout.':
+        'Sie können den Shortcode auf jeder beliebigen Seite einfügen (z. B. auf der Bestellseite oder der Startseite). Der gewählte Standort wird in der Session gespeichert und im Checkout verwendet.',
+
+    # Öffnungszeiten / Feiertage
+    'Define holidays on which a location is closed or has different opening hours. Holiday settings override the regular weekly schedule for a specific date.':
+        'Definieren Sie Feiertage, an denen ein Standort geschlossen ist oder abweichende Öffnungszeiten hat. Feiertagseinstellungen überschreiben den regulären Wochenplan für ein bestimmtes Datum.',
+    'Define holidays on which a location is closed or has different opening hours. Holidays override the regular weekly schedule.':
+        'Definieren Sie Feiertage, an denen ein Standort geschlossen ist oder abweichende Öffnungszeiten hat. Feiertage überschreiben den regulären Wochenplan.',
+    'The location is open, but with different hours than usual. Enter one or two time windows (e.g. a shorter service on a public holiday).':
+        'Der Standort ist geöffnet, aber mit abweichenden Zeiten. Geben Sie ein oder zwei Zeitfenster ein (z. B. kürzerer Betrieb an einem Feiertag).',
+    'Two windows per day: Use both windows for locations with a midday break (e.g. 11:00–14:00 and 17:00–22:00). Leave the 2nd window empty if not needed.':
+        'Zwei Fenster pro Tag: Nutzen Sie beide Fenster für Standorte mit Mittagspause (z. B. 11:00–14:00 und 17:00–22:00). Lassen Sie das 2. Fenster leer, wenn es nicht benötigt wird.',
+    'Use the arrow keys ‹ and › to navigate day by day. The date field also accepts direct input. Click «Today» to return to the current day.':
+        'Verwenden Sie die Pfeiltasten ‹ und › zur tagesweisen Navigation. Das Datumsfeld akzeptiert auch direkte Eingaben. Klicken Sie auf «Heute», um zum aktuellen Tag zurückzukehren.',
+
+    # Zeitslots
+    'Cut off the first N minutes from each time window. Example: with 30 minutes, a window from 11:00 only shows slots from 11:30 onwards.':
+        'Sperrt die ersten N Minuten jedes Zeitfensters. Beispiel: Mit 30 Minuten zeigt ein Fenster ab 11:00 nur Slots ab 11:30.',
+    'Cut off the last N minutes from each time window. Example: with 30 minutes, a window until 22:00 only shows slots up to 21:30.':
+        'Sperrt die letzten N Minuten jedes Zeitfensters. Beispiel: Mit 30 Minuten zeigt ein Fenster bis 22:00 nur Slots bis 21:30.',
+    'Distance between selectable pickup times. With 15 minutes, the customer sees e.g. 12:00, 12:15, 12:30, etc.':
+        'Abstand zwischen wählbaren Abholzeiten. Mit 15 Minuten sieht der Kunde z. B. 12:00, 12:15, 12:30 usw.',
+    'Earliest selectable pickup time for customers. A preparation time of 30 minutes means: the earliest time slot is 30 minutes from the order time. Pre-orders are also automatically moved to "Preparing" X minutes before pickup time.':
+        'Frühestmögliche Abholzeit für Kunden. Eine Zubereitungszeit von 30 Minuten bedeutet: Der früheste Zeitslot liegt 30 Minuten nach dem Bestellzeitpunkt. Vorbestellungen werden zudem automatisch X Minuten vor der Abholzeit auf «In Zubereitung» gesetzt.',
+    'Hides the first N minutes of each opening window. Example: 30 minutes with an opening at 11:00 → first available slot is 11:30.':
+        'Blendet die ersten N Minuten jedes Öffnungsfensters aus. Beispiel: 30 Minuten bei Öffnung um 11:00 → erster verfügbarer Slot ist 11:30.',
+    'Hides the last N minutes of each opening window. Example: 30 minutes with closing at 22:00 → last available slot is 21:30.':
+        'Blendet die letzten N Minuten jedes Öffnungsfensters aus. Beispiel: 30 Minuten bei Schliessung um 22:00 → letzter verfügbarer Slot ist 21:30.',
+
+    # Vorbestellungen / Pre-orders
+    'Customers can select a specific pickup time at checkout – e.g. "today at 12:30". Libre Bite manages these pre-orders automatically:':
+        'Kunden können im Checkout eine bestimmte Abholzeit wählen – z. B. «heute um 12:30». Libre Bite verwaltet diese Vorbestellungen automatisch:',
+    'Future pre-orders are displayed with reduced opacity in the "Incoming" column.':
+        'Zukünftige Vorbestellungen werden in der Spalte «Eingehend» mit reduzierter Deckkraft angezeigt.',
+    'Pre-orders are automatically moved from "Incoming" to "Preparing" X minutes before pickup time.':
+        'Vorbestellungen werden automatisch X Minuten vor der Abholzeit von «Eingehend» nach «In Zubereitung» verschoben.',
+    'Pre-orders initially appear in "Incoming" with the pickup time shown.':
+        'Vorbestellungen erscheinen zunächst in «Eingehend» mit der angezeigten Abholzeit.',
+    'Status buttons are disabled until the order enters the preparation window.':
+        'Statusschaltflächen sind deaktiviert, bis die Bestellung in das Vorbereitungsfenster eintritt.',
+    'When disabled, future pre-orders are completely hidden from the Kanban board until they are within the preparation window.':
+        'Wenn deaktiviert, werden zukünftige Vorbestellungen vollständig aus dem Kanban-Board ausgeblendet, bis sie im Vorbereitungsfenster liegen.',
+    'When disabled, pre-orders far in the future are hidden from the Kanban board until they enter the preparation window. When enabled, they appear dimmed and cannot be moved.':
+        'Wenn deaktiviert, werden weit in der Zukunft liegende Vorbestellungen aus dem Kanban-Board ausgeblendet, bis sie in das Vorbereitungsfenster eintreten. Wenn aktiviert, erscheinen sie ausgegraut und können nicht verschoben werden.',
+    'When enabled, pre-orders with a pickup time far in the future are shown greyed out in the Kanban board. They cannot be processed until they are within the preparation window.':
+        'Wenn aktiviert, werden Vorbestellungen mit einer weit in der Zukunft liegenden Abholzeit ausgegraut im Kanban-Board angezeigt. Sie können erst bearbeitet werden, wenn sie im Vorbereitungsfenster liegen.',
+    'X minutes before pickup time (configurable under Settings → General), they are automatically moved to the "Preparing" column.':
+        'X Minuten vor der Abholzeit (konfigurierbar unter Einstellungen → Allgemein) werden sie automatisch in die Spalte «In Zubereitung» verschoben.',
+    'X minutes before the selected pickup time, the customer is automatically sent a reminder email (if enabled).':
+        'X Minuten vor der gewählten Abholzeit wird dem Kunden automatisch eine Erinnerungs-E-Mail gesendet (sofern aktiviert).',
+
+    # Kanban-Board / Bestellübersicht
+    'Activate this feature under Settings → Features → "Dim Future Pre-orders". Configure visibility under Settings → Order Overview.':
+        'Aktivieren Sie diese Funktion unter Einstellungen → Funktionen → «Zukünftige Vorbestellungen ausgrauen». Konfigurieren Sie die Sichtbarkeit unter Einstellungen → Bestellübersicht.',
+    'Change order status via status buttons':
+        'Bestellstatus über Statusschaltflächen ändern',
+    'Click on an order to view all details such as products, customer name, and pickup time.':
+        'Klicken Sie auf eine Bestellung, um alle Details wie Produkte, Kundenname und Abholzeit anzuzeigen.',
+    'How often the order overview checks for new orders in the background (in seconds). Recommendation: 30 seconds.':
+        'Wie oft die Bestellübersicht im Hintergrund auf neue Bestellungen prüft (in Sekunden). Empfehlung: 30 Sekunden.',
+    'In the order overview (Kanban) you can set a filter in the top right to show only table orders or only take-away.':
+        'In der Bestellübersicht (Kanban) können Sie oben rechts einen Filter setzen, um nur Tischbestellungen oder nur Take-away anzuzeigen.',
+    'In the order overview and POS, the table number is displayed directly with the order.':
+        'In der Bestellübersicht und im POS wird die Tischnummer direkt bei der Bestellung angezeigt.',
+    'Mark as "Completed" once the order is ready for pickup.':
+        'Als «Abgeschlossen» markieren, sobald die Bestellung abholbereit ist.',
+    'Mark as "Completed" once the order is ready for pickup. The order moves to the completed column.':
+        'Als «Abgeschlossen» markieren, sobald die Bestellung abholbereit ist. Die Bestellung wechselt in die abgeschlossene Spalte.',
+    'New orders that have not yet been processed. New orders are highlighted here in color.':
+        'Neue Bestellungen, die noch nicht bearbeitet wurden. Neue Bestellungen werden hier farblich hervorgehoben.',
+    'Order is moved to "Preparing". For pre-orders, this happens automatically X minutes before pickup time.':
+        'Bestellung wird in «In Zubereitung» verschoben. Bei Vorbestellungen geschieht dies automatisch X Minuten vor der Abholzeit.',
+    'Orders currently being prepared. Pre-orders are automatically placed here shortly before the pickup time.':
+        'Bestellungen, die derzeit zubereitet werden. Vorbestellungen werden kurz vor der Abholzeit automatisch hierher verschoben.',
+    'The Kanban board is your real-time overview of all active orders. It has three columns: Incoming, Preparing, and Completed.':
+        'Das Kanban-Board ist Ihre Echtzeit-Übersicht aller aktiven Bestellungen. Es hat drei Spalten: Eingehend, In Zubereitung und Abgeschlossen.',
+    'The order immediately appears in the "Incoming" column of the order overview. Optionally a sound plays.':
+        'Die Bestellung erscheint sofort in der Spalte «Eingehend» der Bestellübersicht. Optional wird ein Sound abgespielt.',
+    'The order immediately appears in the Kanban board under "Incoming"':
+        'Die Bestellung erscheint sofort im Kanban-Board unter «Eingehend»',
+    'Tip: The dashboard updates automatically. You do not need to manually reload the page to see new orders. The interval can be adjusted under Settings → Order Overview.':
+        'Tipp: Das Dashboard aktualisiert sich automatisch. Sie müssen die Seite nicht manuell neu laden, um neue Bestellungen zu sehen. Das Intervall kann unter Einstellungen → Bestellübersicht angepasst werden.',
+    'Libre Bite adds a complete order management system for food service businesses to your WooCommerce store. New orders appear automatically in the order overview – no need to manually search WooCommerce orders.':
+        'Libre Bite ergänzt Ihren WooCommerce-Shop um ein vollständiges Bestellmanagementsystem für Gastronomie. Neue Bestellungen erscheinen automatisch in der Bestellübersicht – kein manuelles Suchen in WooCommerce-Bestellungen nötig.',
+
+    # POS
+    '"Complete Order" → choose payment method (cash, card, Twint, etc.)':
+        '«Bestellung abschliessen» → Zahlungsmethode wählen (Bar, Karte, Twint, etc.)',
+    'Categories are shown as filter buttons in the POS (e.g. "Burgers", "Drinks", "Desserts").':
+        'Kategorien werden als Filterschaltflächen im POS angezeigt (z. B. «Burger», «Getränke», «Desserts»).',
+    'Check in the settings whether sound notifications are enabled. Make sure the browser allows sound playback.':
+        'Prüfen Sie in den Einstellungen, ob Sound-Benachrichtigungen aktiviert sind. Stellen Sie sicher, dass der Browser die Soundwiedergabe erlaubt.',
+    'Choose which payment methods are displayed in the POS payment modal and customize the labels.':
+        'Wählen Sie, welche Zahlungsmethoden im POS-Zahlungsmodal angezeigt werden, und passen Sie die Bezeichnungen an.',
+    'Clear cart: "Clear Cart" button':
+        'Warenkorb leeren: Schaltfläche «Warenkorb leeren»',
+    'Click "Complete Order"':
+        '«Bestellung abschliessen» klicken',
+    'Define which payment methods are shown in the POS payment modal (cash, card, Twint, other). You can disable payment methods and customize their labels.':
+        'Definieren Sie, welche Zahlungsmethoden im POS-Zahlungsmodal angezeigt werden (Bar, Karte, Twint, Sonstiges). Sie können Zahlungsmethoden deaktivieren und deren Bezeichnungen anpassen.',
+    'Product images appear in the POS system – ideal for quickly finding the right items.':
+        'Produktbilder erscheinen im POS-System – ideal zum schnellen Auffinden der richtigen Artikel.',
+    'The POS system allows orders to be placed directly at the counter – e.g. for walk-in customers, phone orders, or table orders.':
+        'Das POS-System ermöglicht die direkte Aufnahme von Bestellungen an der Theke – z. B. für Laufkundschaft, Telefonbestellungen oder Tischbestellungen.',
+    'Tip: The POS system is optimized for use on tablets or a second monitor – allowing staff to work independently from the dashboard.':
+        'Tipp: Das POS-System ist für die Nutzung auf Tablets oder einem zweiten Monitor optimiert – so kann das Personal unabhängig vom Dashboard arbeiten.',
+
+    # Produkte / Optionen
+    'All products you manage in WooCommerce are automatically available in Libre Bite – in the online shop, in the POS system, and at checkout.':
+        'Alle Produkte, die Sie in WooCommerce verwalten, sind automatisch in Libre Bite verfügbar – im Onlineshop, im POS-System und im Checkout.',
+    'Create product options under "Libre Bite → Product Options"':
+        'Produkt-Add-ons unter «Libre Bite → Produkt-Add-ons» erstellen',
+    'E.g. "100g" or "1 serving (250g)"':
+        'Z. B. «100g» oder «1 Portion (250g)»',
+    'Enter a name, e.g. "Extra Cheese"':
+        'Name eingeben, z. B. «Extra Käse»',
+    'Go to "Libre Bite" → "Product Options"':
+        'Gehen Sie zu «Libre Bite» → «Produkt-Add-ons»',
+    'Libre Bite builds directly on your WooCommerce products. You do not need to create new products – you simply extend the existing ones with food service-specific features like product options (add-ons).':
+        'Libre Bite baut direkt auf Ihren WooCommerce-Produkten auf. Sie müssen keine neuen Produkte erstellen – Sie erweitern die bestehenden einfach um gastrospezifische Funktionen wie Produkt-Add-ons.',
+    'One product, one price – e.g. "Hamburger CHF 14.50".':
+        'Ein Produkt, ein Preis – z. B. «Hamburger CHF 14.50».',
+    'Optional: Customize checkout fields under "Checkout Fields"':
+        'Optional: Checkout-Felder unter «Checkout-Felder» anpassen',
+    'Optionally enter a surcharge, e.g. "+0.50"':
+        'Optional einen Aufpreis eingeben, z. B. «+0.50»',
+    'Product options are additional choices customers can make when ordering – e.g. "Extra Cheese", "Sauce", "no onions". They appear directly on the product in the shop and are transmitted with the order.':
+        'Produkt-Add-ons sind zusätzliche Auswahlmöglichkeiten, die Kunden beim Bestellen treffen können – z. B. «Extra Käse», «Sauce», «keine Zwiebeln». Sie erscheinen direkt beim Produkt im Shop und werden mit der Bestellung übermittelt.',
+    'Products with variants – e.g. "Pizza" in sizes S, M, L with different prices.':
+        'Produkte mit Varianten – z. B. «Pizza» in den Grössen S, M, L mit unterschiedlichen Preisen.',
+    'Scroll to the section "Libre Bite Product Options"':
+        'Zum Abschnitt «Libre Bite Produkt-Add-ons» scrollen',
+    'Tip: You can assign the same option to multiple products. If you want to offer "Extra Cheese" for all burger products, create the option once and then assign it to each burger.':
+        'Tipp: Sie können dieselbe Option mehreren Produkten zuweisen. Wenn Sie «Extra Käse» für alle Burger-Produkte anbieten möchten, erstellen Sie die Option einmal und weisen Sie sie dann jedem Burger zu.',
+
+    # Tischverwaltung / Tables
+    'As soon as a table is assigned to a location and saved, the QR code is automatically generated.':
+        'Sobald ein Tisch einem Standort zugewiesen und gespeichert wurde, wird der QR-Code automatisch generiert.',
+    'Click "Create Tables"':
+        '«Tische erstellen» klicken',
+    'Click "Download QR Code" – the PNG image can be printed directly or inserted into table stands.':
+        '«QR-Code herunterladen» klicken – das PNG-Bild kann direkt gedruckt oder in Tischaufsteller eingefügt werden.',
+    'Click on "Create"':
+        '«Erstellen» klicken',
+    'Click on "Save Positions"':
+        '«Positionen speichern» klicken',
+    'Create tables under "Libre Bite → Tables".':
+        'Tische unter «Libre Bite → Tische» erstellen.',
+    'Create tables, define seats, generate QR codes and enable orders directly at the table':
+        'Tische erstellen, Plätze definieren, QR-Codes generieren und Bestellungen direkt am Tisch ermöglichen',
+    'Drag tables to the desired position. Click on a table to see the current order.':
+        'Tische an die gewünschte Position ziehen. Auf einen Tisch klicken, um die aktuelle Bestellung zu sehen.',
+    'Enter a name, e.g. "Table 1" or "Terrace A"':
+        'Name eingeben, z. B. «Tisch 1» oder «Terrasse A»',
+    'Go to "Libre Bite" → "Table Plan"':
+        'Gehen Sie zu «Libre Bite» → «Tischplan»',
+    'Go to "Libre Bite" → "Tables"':
+        'Gehen Sie zu «Libre Bite» → «Tische»',
+    'Go to "Libre Bite" → "Tables" → "Create Multiple Tables"':
+        'Gehen Sie zu «Libre Bite» → «Tische» → «Mehrere Tische erstellen»',
+    '"Print QR Code" opens a print-optimized view with the table name.':
+        '«QR-Code drucken» öffnet eine druckoptimierte Ansicht mit dem Tischnamen.',
+    'Prefix for the table name, e.g. "Table" → "Table 1", "Table 2"…':
+        'Präfix für den Tischnamen, z. B. «Tisch» → «Tisch 1», «Tisch 2» …',
+    'QR-code-based table ordering: guests scan and order directly – without address or pickup time fields.':
+        'QR-Code-basierte Tischbestellung: Gäste scannen und bestellen direkt – ohne Adress- oder Abholzeitfelder.',
+    'Select location and prefix (e.g. "Table")':
+        'Standort und Präfix auswählen (z. B. «Tisch»)',
+    'The number after "post=" is the location ID':
+        'Die Zahl nach «post=» ist die Standort-ID',
+    'The table plan shows all tables of a location as freely positionable tiles on a canvas. It serves both for maintaining the floor plan and as a live overview of table occupancy.':
+        'Der Tischplan zeigt alle Tische eines Standorts als frei positionierbare Kacheln auf einem Canvas. Er dient sowohl zur Pflege des Grundrisses als auch als Live-Übersicht der Tischbelegung.',
+    'Tip: The QR link contains the location ID and table ID. When scanned, both are automatically saved in the session and used at checkout.':
+        'Tipp: Der QR-Link enthält die Standort-ID und die Tisch-ID. Beim Scannen werden beide automatisch in der Session gespeichert und im Checkout verwendet.',
+    'With table management you can create tables for your locations and generate QR codes for contactless ordering.':
+        'Mit der Tischverwaltung können Sie Tische für Ihre Standorte erstellen und QR-Codes für kontaktloses Bestellen generieren.',
+    'With table management, guests can order directly at the table – they simply scan the QR code and are taken directly to checkout with the location and table pre-filled. Address and pickup time fields are automatically hidden.':
+        'Mit der Tischverwaltung können Gäste direkt am Tisch bestellen – sie scannen einfach den QR-Code und gelangen direkt zum Checkout mit vorausgefülltem Standort und Tisch. Adress- und Abholzeitfelder werden automatisch ausgeblendet.',
+
+    # Tischplan / Live-Übersicht
+    'As soon as a location is selected, the tables automatically color according to the current order status:':
+        'Sobald ein Standort ausgewählt ist, färben sich die Tische automatisch entsprechend dem aktuellen Bestellstatus.',
+    'Click on an occupied table to see the order number, time, item count and total. Clicking "Show in Order Overview" opens the Kanban board. The status updates automatically every 30 seconds.':
+        'Auf einen belegten Tisch klicken, um Bestellnummer, Uhrzeit, Artikelanzahl und Gesamtbetrag zu sehen. «In Bestellübersicht anzeigen» öffnet das Kanban-Board. Der Status aktualisiert sich automatisch alle 30 Sekunden.',
+
+    # Reservierungen
+    'Click the colored status badge of a reservation to advance its status (Pending → Confirmed → Completed → Cancelled).':
+        'Auf das farbige Statusabzeichen einer Reservierung klicken, um den Status weiterzuschalten (Ausstehend → Bestätigt → Abgeschlossen → Storniert).',
+    'Contains all reservation details and the note that the request still needs to be confirmed.':
+        'Enthält alle Reservierungsdetails und den Hinweis, dass die Anfrage noch bestätigt werden muss.',
+    'Customers can reserve tables online – frontend form via shortcode [lbite_reservation_form]':
+        'Kunden können Tische online reservieren – Frontend-Formular via Shortcode [lbite_reservation_form]',
+    'Embeds a reservation request form on any page. Guests can submit a reservation inquiry which is managed in the reservation board.':
+        'Bettet ein Reservierungsanfrageformular auf einer beliebigen Seite ein. Gäste können eine Reservierungsanfrage einreichen, die im Reservierungsboard verwaltet wird.',
+    'Open a reservation and enter the desired table in the «Table» field. This assignment is only visible internally and is used for planning in the restaurant.':
+        'Eine Reservierung öffnen und den gewünschten Tisch im Feld «Tisch» eingeben. Diese Zuweisung ist nur intern sichtbar und dient der Planung im Restaurant.',
+    'Reservations are managed under Libre Bite → Reservations. Two emails are sent automatically: one to the guest (confirmation) and one to the admin (notification).':
+        'Reservierungen werden unter Libre Bite → Reservierungen verwaltet. Zwei E-Mails werden automatisch versendet: eine an den Gast (Bestätigung) und eine an den Admin (Benachrichtigung).',
+    'Select the desired table from the dropdown on a reservation card. Only tables of the currently selected location are shown.':
+        'Gewünschten Tisch aus dem Dropdown auf einer Reservierungskarte auswählen. Es werden nur Tische des aktuell gewählten Standorts angezeigt.',
+    'The reservation module allows guests to submit a table request via a frontend form. Each request is created as an entry in the backend and confirmed by email to the guest and admin.':
+        'Das Reservierungsmodul ermöglicht es Gästen, eine Tischanfrage über ein Frontend-Formular einzureichen. Jede Anfrage wird als Eintrag im Backend erstellt und per E-Mail an den Gast und den Admin bestätigt.',
+    'You can change the status directly in the detail view of a reservation. Filter the list by location or status to keep a quick overview.':
+        'Den Status direkt in der Detailansicht einer Reservierung ändern. Die Liste nach Standort oder Status filtern, um einen schnellen Überblick zu behalten.',
+    'Your reservation request has been received. We will contact you shortly to confirm the reservation.':
+        'Ihre Reservierungsanfrage ist eingegangen. Wir werden uns in Kürze bei Ihnen melden, um die Reservierung zu bestätigen.',
+    'Your reservation request has been submitted successfully. We will contact you soon.':
+        'Ihre Reservierungsanfrage wurde erfolgreich übermittelt. Wir melden uns in Kürze bei Ihnen.',
+    'Your reservation request has been submitted successfully. We will get back to you shortly to confirm the reservation.':
+        'Ihre Reservierungsanfrage wurde erfolgreich übermittelt. Wir melden uns in Kürze bei Ihnen, um die Reservierung zu bestätigen.',
+
+    # Rollen & Benutzer
+    'As a Super Admin, you have full access to all Libre Bite features and settings.':
+        'Als Super Admin haben Sie vollen Zugriff auf alle Libre Bite-Funktionen und -Einstellungen.',
+    'As an administrator you can manage orders, configure products, set up locations and customize settings.':
+        'Als Administrator können Sie Bestellungen verwalten, Produkte konfigurieren, Standorte einrichten und Einstellungen anpassen.',
+    'Choose the menu items that should be hidden for users with the role "%s".':
+        'Wählen Sie die Menüpunkte aus, die für Benutzer mit der Rolle «%s» ausgeblendet werden sollen.',
+    'Choose which menu items should be hidden for each user role. Administrators always have full access.':
+        'Wählen Sie aus, welche Menüpunkte für jede Benutzerrolle ausgeblendet werden sollen. Administratoren haben immer vollen Zugriff.',
+    'Choose which standard roles are allowed to access the plugin. Enabled roles receive the same access as Libre Bite Personal (Order Overview, POS).':
+        'Wählen Sie, welche Standardrollen auf das Plugin zugreifen dürfen. Aktivierte Rollen erhalten denselben Zugriff wie Libre Bite Personal (Bestellübersicht, POS).',
+    'Customize the displayed names of user roles in the backend or completely disable unused roles.':
+        'Passen Sie die angezeigten Namen der Benutzerrollen im Backend an oder deaktivieren Sie nicht benötigte Rollen vollständig.',
+    'Go to "Users" → "All Users"':
+        'Gehen Sie zu «Benutzer» → «Alle Benutzer»',
+    'Select the desired POS role under "Role"':
+        'Gewünschte POS-Rolle unter «Rolle» auswählen',
+
+    # Einstellungen allgemein
+    'Activate or deactivate individual feature modules of Libre Bite. Disabled features are hidden from the menu – including the corresponding settings tabs.':
+        'Aktivieren oder deaktivieren Sie einzelne Funktionsmodule von Libre Bite. Deaktivierte Funktionen werden im Menü ausgeblendet – einschliesslich der entsprechenden Einstellungs-Tabs.',
+    'Customize the logo, colors and name of the plugin in the backend – so the system matches your business.':
+        'Passen Sie Logo, Farben und Namen des Plugins im Backend an – so passt das System zu Ihrem Betrieb.',
+    'Override the displayed name of the plugin in the backend menu and on pages. Leave empty for the default "Libre Bite".':
+        'Den angezeigten Namen des Plugins im Backend-Menü und auf Seiten überschreiben. Leer lassen für den Standard «Libre Bite».',
+    'The settings are divided into separate tabs – organized by function. Tabs for disabled features are automatically hidden.':
+        'Die Einstellungen sind in separate Tabs unterteilt – nach Funktion geordnet. Tabs für deaktivierte Funktionen werden automatisch ausgeblendet.',
+    'These settings are only visible to administrators and allow advanced customizations.':
+        'Diese Einstellungen sind nur für Administratoren sichtbar und ermöglichen erweiterte Anpassungen.',
+    'This option will permanently delete all locations, product options, settings, and order metadata!':
+        'Diese Option löscht dauerhaft alle Standorte, Produkt-Add-ons, Einstellungen und Bestellmetadaten!',
+    'Warning: To delete all data, the plugin must be deleted via the WordPress interface (not just deactivated).':
+        'Warnung: Um alle Daten zu löschen, muss das Plugin über die WordPress-Oberfläche gelöscht werden (nicht nur deaktiviert).',
+    'With feature toggles, you can enable or disable individual Libre Bite features.':
+        'Mit den Funktions-Toggles können Sie einzelne Libre Bite-Funktionen aktivieren oder deaktivieren.',
+
+    # Sound
+    'As soon as a new order arrives, the dashboard automatically plays an alert sound – so you never miss an order, even if you are not looking at the screen.':
+        'Sobald eine neue Bestellung eingeht, spielt das Dashboard automatisch einen Alarmton ab – damit Sie keine Bestellung verpassen, auch wenn Sie nicht auf den Bildschirm schauen.',
+    'Default sound is available. You can also select your own sound from the media library.':
+        'Standard-Sound ist verfügbar. Sie können auch einen eigenen Sound aus der Mediathek auswählen.',
+    'Some browsers only allow sounds after an interaction (e.g. clicking on the page once).':
+        'Einige Browser erlauben Sounds erst nach einer Interaktion (z. B. einmaligem Klicken auf die Seite).',
+    'The sound played when new orders arrive. You can choose a custom sound from the media library or use the default sound.':
+        'Der Sound, der bei neuen Bestellungen abgespielt wird. Sie können einen eigenen Sound aus der Mediathek wählen oder den Standard-Sound verwenden.',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT

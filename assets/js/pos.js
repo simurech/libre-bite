@@ -54,6 +54,13 @@
 				this.requestWakeLock();
 			}
 
+			// Wake Lock nach Tab-Wechsel / App-Wechsel neu anfordern (Android)
+			document.addEventListener('visibilitychange', () => {
+				if (document.visibilityState === 'visible' && $wakeLock.is(':checked')) {
+					this.requestWakeLock();
+				}
+			});
+
 			// Initiale Standort-Farbe und Overlay-Status setzen
 			const initialLocation = $('#lbite-pos-location').val();
 			this.applyLocationColor(initialLocation);
@@ -896,7 +903,8 @@
 				this.wakeLock = lock;
 				this.wakeLock.addEventListener('release', () => {
 					this.wakeLock = null;
-					if ($('#lbite-pos-wake-lock').is(':checked')) {
+					// Sofort neu anfordern falls Checkbox noch aktiv und Seite sichtbar
+					if ($('#lbite-pos-wake-lock').is(':checked') && document.visibilityState === 'visible') {
 						this.requestWakeLock();
 					}
 				});

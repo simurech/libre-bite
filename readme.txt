@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.4.4
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,14 +224,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 
 == Changelog ==
 
-= 1.4.4 =
-* Fix: Veraltete Drag-&-Drop-Referenzen in der Hilfedokumentation entfernt.
-
-= 1.4.3 =
-* Fix: Wake-Lock-Checkbox im POS-Kassensystem aus dem Header-Bereich in die Standort-Leiste verschoben (konsistent mit der Bestellübersicht).
-
 = 1.4.2 =
 * Fix: Drag & Drop in der Bestellübersicht entfernt – verhindert Scroll-Konflikte und fehlerhafte Aktionen auf Touch-Geräten.
+* Fix: Wake-Lock-Checkbox im POS aus dem Header in die Standort-Leiste verschoben (konsistent mit der Bestellübersicht).
+* Fix: Wake Lock auf Android/Samsung zuverlässiger – wird nach Tab-Wechsel und App-Wechsel automatisch neu angefordert.
+* Fix: Veraltete Drag-&-Drop- und Status-Referenzen in der Hilfedokumentation aktualisiert (3-Spalten-Kanban).
+* Übersetzungen: Fehlende Strings in allen fünf Sprachvarianten ergänzt (de_CH, de_CH_informal, de_DE, de_DE_formal, de_AT).
 
 = 1.4.1 =
 * Fix: POS Gutschein-Rabatt wird nun korrekt in der Kassen-Ansicht angezeigt.

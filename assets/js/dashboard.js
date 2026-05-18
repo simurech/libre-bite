@@ -166,6 +166,13 @@
 				}
 			});
 
+			// Wake Lock nach Tab-Wechsel / App-Wechsel neu anfordern (Android)
+			document.addEventListener('visibilitychange', () => {
+				if (document.visibilityState === 'visible' && $('#lbite-wake-lock').is(':checked')) {
+					this.requestWakeLock();
+				}
+			});
+
 			// Sound Toggle
 			$('#lbite-sound-toggle').on('click', () => {
 				this.soundEnabled = !this.soundEnabled;
@@ -195,10 +202,13 @@
 
 			try {
 				this.wakeLock = await navigator.wakeLock.request('screen');
-				console.log('Wake Lock aktiviert');
 
 				this.wakeLock.addEventListener('release', () => {
-					console.log('Wake Lock deaktiviert');
+					this.wakeLock = null;
+					// Sofort neu anfordern falls Checkbox noch aktiv und Seite sichtbar
+					if ($('#lbite-wake-lock').is(':checked') && document.visibilityState === 'visible') {
+						this.requestWakeLock();
+					}
 				});
 			} catch (err) {
 				console.error('Wake Lock Fehler:', err);

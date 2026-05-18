@@ -21,15 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<li><strong><?php esc_html_e( 'Customer orders online', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'The customer selects products, a location and a pickup time on the website.', 'libre-bite' ); ?></li>
 			<li><strong><?php esc_html_e( 'Order appears in the dashboard', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'The order immediately appears in the "Incoming" column of the order overview. Optionally a sound plays.', 'libre-bite' ); ?></li>
 			<li><strong><?php esc_html_e( 'Staff prepares the order', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Order is moved to "Preparing". For pre-orders, this happens automatically X minutes before pickup time.', 'libre-bite' ); ?></li>
-			<li><strong><?php esc_html_e( 'Order is ready', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Set status to "Ready". Optionally the customer receives an automatic reminder email.', 'libre-bite' ); ?></li>
-			<li><strong><?php esc_html_e( 'Pickup', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'After pickup, the order is set to "Picked Up" and disappears from the active view.', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Order completed', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Mark as "Completed" once the order is ready for pickup. The order moves to the completed column.', 'libre-bite' ); ?></li>
 		</ol>
 	</div>
 
 	<!-- Bestellübersicht (Kanban) -->
 	<div class="lbite-help-article">
 		<h3><?php esc_html_e( 'The Order Overview (Kanban Board)', 'libre-bite' ); ?></h3>
-		<p><?php esc_html_e( 'The Kanban board is your real-time overview of all active orders. At a glance you can see what is incoming, what is being prepared, and what is ready for pickup.', 'libre-bite' ); ?></p>
+		<p><?php esc_html_e( 'The Kanban board is your real-time overview of all active orders. It has three columns: Incoming, Preparing, and Completed.', 'libre-bite' ); ?></p>
 
 		<table class="widefat">
 			<thead>
@@ -48,16 +47,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<tr>
 					<td><strong><?php esc_html_e( 'Preparing', 'libre-bite' ); ?></strong></td>
 					<td><?php esc_html_e( 'Orders currently being prepared. Pre-orders are automatically placed here shortly before the pickup time.', 'libre-bite' ); ?></td>
-					<td><?php esc_html_e( 'Mark as done when the order is ready for pickup.', 'libre-bite' ); ?></td>
+					<td><?php esc_html_e( 'Mark as "Completed" once the order is ready for pickup.', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
-					<td><strong><?php esc_html_e( 'Ready', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Orders waiting for the customer. The customer may be notified by email.', 'libre-bite' ); ?></td>
-					<td><?php esc_html_e( 'Mark as "Picked Up" after collection.', 'libre-bite' ); ?></td>
-				</tr>
-				<tr>
-					<td><strong><?php esc_html_e( 'Picked Up', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'Completed orders for today. Older orders are stored separately.', 'libre-bite' ); ?></td>
+					<td><strong><?php esc_html_e( 'Completed', 'libre-bite' ); ?></strong></td>
+					<td><?php esc_html_e( 'Completed orders for today. Older orders are loaded on demand.', 'libre-bite' ); ?></td>
 					<td><?php esc_html_e( 'Done.', 'libre-bite' ); ?></td>
 				</tr>
 			</tbody>

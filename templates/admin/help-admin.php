@@ -139,7 +139,7 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 						<h2><span class="dashicons dashicons-clipboard"></span> <?php esc_html_e( 'Orders', 'libre-bite' ); ?></h2>
 						<p><?php esc_html_e( 'Manage incoming orders with the Kanban board or POS system.', 'libre-bite' ); ?></p>
 						<ul>
-							<li><?php esc_html_e( 'Change order status via drag & drop', 'libre-bite' ); ?></li>
+							<li><?php esc_html_e( 'Change order status via status buttons', 'libre-bite' ); ?></li>
 							<li><?php esc_html_e( 'Sound notification for new orders', 'libre-bite' ); ?></li>
 							<li><?php esc_html_e( 'View order details and customer information', 'libre-bite' ); ?></li>
 						</ul>
