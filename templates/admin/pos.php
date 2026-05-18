@@ -13,17 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wrap lbite-pos">
 	<div class="lbite-pos-header">
 		<h1><?php esc_html_e( 'POS System', 'libre-bite' ); ?></h1>
-		<label class="lbite-wake-lock-toggle">
-			<input type="checkbox" id="lbite-pos-wake-lock" checked>
-			<?php esc_html_e( 'Prevent Standby', 'libre-bite' ); ?>
-		</label>
 		<button type="button" id="lbite-pos-fullscreen" class="button button-large" title="Vollbild">
 			<span class="dashicons dashicons-editor-expand"></span>
 		</button>
 	</div>
 
 	<!-- Standort-Auswahl -->
-	<div class="lbite-pos-location-selector" style="display: flex; gap: 20px; align-items: flex-end; margin-bottom: 20px;">
+	<div class="lbite-pos-location-selector">
 		<div>
 			<label for="lbite-pos-location">
 				<strong><?php esc_html_e( 'Location:', 'libre-bite' ); ?></strong>
@@ -74,6 +70,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</select>
 		</div>
 		<?php endif; ?>
+
+		<label class="lbite-wake-lock-toggle" style="margin-left: auto;">
+			<input type="checkbox" id="lbite-pos-wake-lock" checked>
+			<?php esc_html_e( 'Prevent Standby', 'libre-bite' ); ?>
+		</label>
 	</div>
 
 	<div class="lbite-pos-container">
