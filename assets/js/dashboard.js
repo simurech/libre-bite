@@ -29,6 +29,7 @@
 		pendingActions: new Set(),
 		currentFilter: 'all',
 		allOrders: {},
+		lastActivity: Date.now(),
 
 		/**
 		 * Initialisierung
@@ -48,6 +49,7 @@
 			this.applyLocationColor(locationId);
 
 			this.startAutoRefresh();
+			this.startAutoReload();
 		},
 
 		/**
@@ -233,6 +235,25 @@
 			this.refreshTimer = setInterval(() => {
 				this.loadOrders(true);
 			}, lbiteDashboard.refreshInterval);
+		},
+
+		/**
+		 * Auto-Reload starten: lädt die Seite nach 15 Minuten Inaktivität neu.
+		 * Schützt vor ungewolltem Reload bei laufenden Aktionen.
+		 */
+		startAutoReload: function() {
+			const INACTIVITY_LIMIT = 15 * 60 * 1000;
+
+			$(document).on('click touchstart keydown', () => {
+				this.lastActivity = Date.now();
+			});
+
+			setInterval(() => {
+				if ( Date.now() - this.lastActivity < INACTIVITY_LIMIT ) return;
+				if ( $('#lbite-loading-overlay').is(':visible') ) return;
+				if ( this.pendingActions.size > 0 ) return;
+				location.reload();
+			}, 60 * 1000);
 		},
 
 		/**
