@@ -1501,7 +1501,17 @@ class LBite_Checkout {
 			return $fields;
 		}
 
-		// E-Mail als nicht erforderlich markieren.
+		// Bei AJAX-Checkout: E-Mail nur für Offline-Gateways als optional markieren.
+		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification.
+		$payment_method    = isset( $_POST['payment_method'] ) ? sanitize_text_field( wp_unslash( $_POST['payment_method'] ) ) : '';
+		$no_email_gateways = array( 'cod', 'bacs', 'cheque' );
+
+		if ( ! empty( $payment_method ) && ! in_array( $payment_method, $no_email_gateways, true ) ) {
+			// Online-Gateway (z.B. TWINT): E-Mail bleibt Pflichtfeld.
+			return $fields;
+		}
+
+		// Offline-Gateway oder initiales Rendering: E-Mail als optional markieren.
 		if ( isset( $fields['billing']['billing_email'] ) ) {
 			$fields['billing']['billing_email']['required'] = false;
 		}

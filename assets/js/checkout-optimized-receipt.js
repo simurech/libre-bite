@@ -1,8 +1,14 @@
 jQuery(document).ready(function($) {
-	// Platzhalter-E-Mail einfügen damit WooCommerce das Pflichtfeld nicht blockiert
+	// Platzhalter-E-Mail nur für Offline-Gateways einfügen (Barzahlung, Überweisung).
+	// Online-Gateways (TWINT etc.) erfordern eine echte E-Mail-Adresse.
 	function lbiteInjectDummyEmail() {
+		var noEmailGateways = ['cod', 'bacs', 'cheque'];
+		var selectedGateway = $('input[name="payment_method"]:checked').val();
+		if ( ! selectedGateway || noEmailGateways.indexOf( selectedGateway ) === -1 ) {
+			return;
+		}
 		var $emailInput = $('#billing_email');
-		if (!$emailInput.val()) {
+		if ( ! $emailInput.val() ) {
 			$emailInput.val('guest-' + Date.now() + '@nomail.local');
 		}
 	}

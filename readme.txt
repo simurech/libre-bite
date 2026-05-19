@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,9 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.4.3 =
+* Fix: E-Mail-Adresse im optimierten Checkout ist für Online-Zahlungen (z.B. TWINT) jetzt ein echtes Pflichtfeld – kein doppelter Submit, keine ungültige Platzhalter-Adresse wird mehr gespeichert.
 
 = 1.4.2 =
 * Fix: Drag & Drop in der Bestellübersicht entfernt – verhindert Scroll-Konflikte und fehlerhafte Aktionen auf Touch-Geräten.
