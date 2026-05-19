@@ -1054,6 +1054,14 @@
 		 */
 		toggleProductStock: function(productId, $item, $input) {
 			const newStatus = $input.is(':checked') ? 'instock' : 'outofstock';
+			const confirmMsg = newStatus === 'outofstock'
+				? lbitePos.strings.confirmOutOfStock
+				: lbitePos.strings.confirmInStock;
+
+			if ( ! window.confirm( confirmMsg ) ) {
+				$input.prop( 'checked', ! $input.is( ':checked' ) );
+				return;
+			}
 
 			$.ajax({
 				url: lbitePos.ajaxUrl,

@@ -80,8 +80,8 @@
 
 .lbite-pos-product-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-	gap: 15px;
+	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+	gap: 12px;
 }
 
 .lbite-pos-product-item {
@@ -108,12 +108,15 @@
 	border-radius: 4px;
 	display: flex;
 	flex-direction: column;
+	position: sticky;
+	top: 32px;
+	max-height: calc(100vh - 52px);
 }
 
 #lbite-pos-cart-items {
 	flex: 1;
 	overflow-y: auto;
-	max-height: 400px;
+	min-height: 0;
 	margin: 20px 0;
 }
 
@@ -598,6 +601,11 @@ body.lbite-fullscreen-active .lbite-pos-container {
 	height: calc(100vh - 200px);
 }
 
+body.lbite-fullscreen-active .lbite-pos-cart {
+	position: static;
+	max-height: none;
+}
+
 body.lbite-fullscreen-active #lbite-pos-cart-items {
 	max-height: calc(100vh - 500px);
 }
@@ -605,7 +613,7 @@ body.lbite-fullscreen-active #lbite-pos-cart-items {
 /* Tablet-Optimierung */
 @media (min-width: 768px) and (max-width: 1024px) {
 	.lbite-pos-product-grid {
-		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
 	}
 
 	.lbite-pos-container {
@@ -723,8 +731,10 @@ body.lbite-fullscreen-active #lbite-pos-cart-items {
 
 /* Mobile-Optimierung */
 .lbite-pos-product-item img {
-	max-width: 100%;
-	height: auto;
+	width: 100%;
+	height: 60px;
+	object-fit: cover;
+	border-radius: 3px;
 	margin-bottom: 5px;
 }
 
