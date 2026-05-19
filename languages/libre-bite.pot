@@ -1533,6 +1533,14 @@ msgstr ""
 msgid "Select variant"
 msgstr ""
 
+#: includes/modules/pos/class-pos.php:159
+msgid "Mark this product as out of stock?"
+msgstr ""
+
+#: includes/modules/pos/class-pos.php:160
+msgid "Mark this product as available again?"
+msgstr ""
+
 #: includes/modules/pos/class-pos.php:489
 msgid "POS Order"
 msgstr ""

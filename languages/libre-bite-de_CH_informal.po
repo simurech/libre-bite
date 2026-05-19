@@ -1540,6 +1540,14 @@ msgstr "Fehler beim Laden der Produkte"
 msgid "Select variant"
 msgstr "Standort wählen"
 
+#: includes/modules/pos/class-pos.php:159
+msgid "Mark this product as out of stock?"
+msgstr "Produkt wirklich als nicht vorrätig markieren?"
+
+#: includes/modules/pos/class-pos.php:160
+msgid "Mark this product as available again?"
+msgstr "Produkt wirklich wieder als vorrätig markieren?"
+
 #: includes/modules/pos/class-pos.php:489
 msgid "POS Order"
 msgstr "POS-Bestellung"
