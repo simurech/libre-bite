@@ -51,8 +51,11 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					<td><?php esc_html_e( 'Distance between selectable pickup times. With 15 minutes, the customer sees e.g. 12:00, 12:15, 12:30, etc.', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
-					<td><strong><?php esc_html_e( 'Reminder Before Pickup', 'libre-bite' ); ?></strong></td>
-					<td><?php esc_html_e( 'X minutes before the selected pickup time, the customer is automatically sent a reminder email (if enabled).', 'libre-bite' ); ?></td>
+					<td><strong><?php esc_html_e( 'Reminder Before Pickup', 'libre-bite' ); ?> <span class="lbite-pro-badge">Pro</span></strong></td>
+					<td>
+						<?php esc_html_e( 'X minutes before the selected pickup time, the customer is automatically sent a reminder email (if enabled).', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Note: WordPress Cron must be active for reminders to be sent.', 'libre-bite' ); ?>
+					</td>
 				</tr>
 				<tr>
 					<td><strong><?php esc_html_e( 'Slot Buffer Start', 'libre-bite' ); ?> <span class="lbite-pro-badge">Pro</span></strong></td>

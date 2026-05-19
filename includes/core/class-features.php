@@ -163,14 +163,6 @@ class LBite_Features {
 			'label'       => 'Sound Notifications',
 			'description' => 'Play a sound for new orders',
 		),
-		'enable_admin_email'        => array(
-			'group'       => 'notifications',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Admin Email',
-			'description' => 'Send email to admin for new orders',
-		),
-
 		// Products
 		'enable_product_options'    => array(
 			'group'       => 'products',

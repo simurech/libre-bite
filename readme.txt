@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,13 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.4.4 =
+* Feature: Öffnungszeiten-Popup auf Standort-Kacheln – «Öffnungszeiten anzeigen»-Link öffnet kompakte Wochentabelle direkt in der Kachel.
+* Fix: «Admin-E-Mail»-Toggle in den Feature-Einstellungen entfernt (war nicht implementiert; WooCommerce-Bestellmails laufen über den WC-Standard).
+* Fix: Pro-Features in den Gruppen Standorte und Produkte werden nun immer zuerst angezeigt.
+* Fix: Pro-Badge bei Klang-Benachrichtigungen und Abholhinweisen in der Hilfe-Dokumentation ergänzt; WP-Cron-Hinweis bei Abholhinweisen hinzugefügt.
+* Übersetzungen: Neue Strings «Öffnungszeiten anzeigen» und WP-Cron-Hinweis in allen fünf Sprachvarianten ergänzt.
 
 = 1.4.3 =
 * Fix: E-Mail-Adresse im optimierten Checkout ist für Online-Zahlungen (z.B. TWINT) jetzt ein echtes Pflichtfeld – kein doppelter Submit, keine ungültige Platzhalter-Adresse wird mehr gespeichert.

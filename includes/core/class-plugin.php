@@ -103,7 +103,7 @@ class LBite_Plugin {
 			$this->load_module( 'pos', 'LBite_POS' );
 		}
 
-		if ( lbite_feature_enabled( 'enable_pickup_reminders' ) || lbite_feature_enabled( 'enable_admin_email' ) ) {
+		if ( lbite_feature_enabled( 'enable_pickup_reminders' ) ) {
 			$this->load_module( 'notifications', 'LBite_Notifications' );
 		}
 

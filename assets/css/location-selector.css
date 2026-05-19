@@ -866,3 +866,62 @@ a.lbite-location-address.lbite-maps-link:hover {
 	}
 }
 
+/* ===================================================
+   Öffnungszeiten-Toggle & Popup
+   =================================================== */
+.lbite-hours-toggle {
+	display: block;
+	background: none;
+	border: none;
+	padding: 6px 0 0 0;
+	margin: 8px 0 0 0;
+	font-size: 13px;
+	color: var(--lbite-color-primary, #0073aa);
+	text-decoration: underline;
+	cursor: pointer;
+	text-align: left;
+}
+
+.lbite-hours-toggle:hover {
+	color: var(--lbite-color-primary-hover, #005a87);
+}
+
+.lbite-hours-popup {
+	display: none;
+	margin-top: 10px;
+	padding: 10px 12px;
+	border-top: 1px solid #e8e8e8;
+	background: #f9f9f9;
+	border-radius: 0 0 10px 10px;
+}
+
+.lbite-hours-popup.lbite-popup-open {
+	display: block;
+}
+
+.lbite-hours-popup strong {
+	display: block;
+	margin-bottom: 8px;
+	font-size: 13px;
+	color: #333;
+}
+
+.lbite-hours-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.lbite-hours-table td {
+	padding: 3px 8px;
+	font-size: 13px;
+	color: #444;
+	vertical-align: top;
+}
+
+.lbite-hours-table td:first-child {
+	font-weight: 500;
+	white-space: nowrap;
+	padding-left: 0;
+	width: 45%;
+}
+

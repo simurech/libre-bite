@@ -79,18 +79,6 @@ $feature_groups = array(
 				'default'     => false,
 				'premium'     => true,
 			),
-			'enable_location_selector' => array(
-				'label'       => __( 'Location Selection', 'libre-bite' ),
-				'description' => __( 'Show location selection in frontend', 'libre-bite' ),
-				'default'     => true,
-				'premium'     => false,
-			),
-			'enable_opening_hours'     => array(
-				'label'       => __( 'Opening Hours', 'libre-bite' ),
-				'description' => __( 'Manage opening hours per location', 'libre-bite' ),
-				'default'     => true,
-				'premium'     => false,
-			),
 			'enable_table_ordering'    => array(
 				'label'       => __( 'Table Management & Table Ordering', 'libre-bite' ),
 				'description' => __( 'Create tables, define seats, generate QR codes and enable orders directly at the table', 'libre-bite' ),
@@ -102,6 +90,18 @@ $feature_groups = array(
 				'description' => __( 'Customers can reserve tables online – frontend form via shortcode [lbite_reservation_form]', 'libre-bite' ),
 				'default'     => false,
 				'premium'     => true,
+			),
+			'enable_location_selector' => array(
+				'label'       => __( 'Location Selection', 'libre-bite' ),
+				'description' => __( 'Show location selection in frontend', 'libre-bite' ),
+				'default'     => true,
+				'premium'     => false,
+			),
+			'enable_opening_hours'     => array(
+				'label'       => __( 'Opening Hours', 'libre-bite' ),
+				'description' => __( 'Manage opening hours per location', 'libre-bite' ),
+				'default'     => true,
+				'premium'     => false,
 			),
 		),
 	),
@@ -121,24 +121,12 @@ $feature_groups = array(
 				'default'     => false,
 				'premium'     => true,
 			),
-			'enable_admin_email'         => array(
-				'label'       => __( 'Admin Email', 'libre-bite' ),
-				'description' => __( 'Email notification for new orders', 'libre-bite' ),
-				'default'     => true,
-				'premium'     => false,
-			),
 		),
 	),
 	'products'     => array(
 		'title'       => __( 'Products', 'libre-bite' ),
 		'description' => __( 'Product extensions', 'libre-bite' ),
 		'features'    => array(
-			'enable_product_options'  => array(
-				'label'       => __( 'Product Options', 'libre-bite' ),
-				'description' => __( 'Additional options for products (add-ons)', 'libre-bite' ),
-				'default'     => true,
-				'premium'     => false,
-			),
 			'enable_nutritional_info' => array(
 				'label'       => __( 'Nutritional Information', 'libre-bite' ),
 				'description' => __( 'Show nutritional information for products', 'libre-bite' ),
@@ -150,6 +138,12 @@ $feature_groups = array(
 				'description' => __( 'Show allergen warnings for products', 'libre-bite' ),
 				'default'     => false,
 				'premium'     => true,
+			),
+			'enable_product_options'  => array(
+				'label'       => __( 'Product Options', 'libre-bite' ),
+				'description' => __( 'Additional options for products (add-ons)', 'libre-bite' ),
+				'default'     => true,
+				'premium'     => false,
 			),
 		),
 	),

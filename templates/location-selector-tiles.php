@@ -80,6 +80,45 @@ $lbite_location_class     = ( $lbite_is_single_location ? 'lbite-location-select
 							<?php endif; ?>
 						<?php endif; ?>
 					</div>
+
+					<?php if ( ! empty( $lbite_opening_hours ) ) : ?>
+						<button class="lbite-hours-toggle" aria-expanded="false" onclick="event.stopPropagation()">
+							<?php esc_html_e( 'Show opening hours', 'libre-bite' ); ?>
+						</button>
+						<div class="lbite-hours-popup" onclick="event.stopPropagation()">
+							<strong><?php esc_html_e( 'Opening Hours', 'libre-bite' ); ?></strong>
+							<table class="lbite-hours-table">
+								<tbody>
+								<?php
+								foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $lbite_day ) :
+									$lbite_day_data  = isset( $lbite_opening_hours[ $lbite_day ] ) ? $lbite_opening_hours[ $lbite_day ] : array();
+									$lbite_is_closed = ! empty( $lbite_day_data['closed'] ) || empty( $lbite_day_data );
+									$lbite_day_name  = date_i18n( 'D', strtotime( 'next ' . $lbite_day ) );
+								?>
+									<tr>
+										<td><?php echo esc_html( $lbite_day_name ); ?></td>
+										<td>
+										<?php if ( $lbite_is_closed ) : ?>
+											<?php esc_html_e( 'Closed', 'libre-bite' ); ?>
+										<?php else : ?>
+											<?php
+											$lbite_windows = array();
+											if ( ! empty( $lbite_day_data['open'] ) && ! empty( $lbite_day_data['close'] ) ) {
+												$lbite_windows[] = esc_html( $lbite_day_data['open'] ) . ' – ' . esc_html( $lbite_day_data['close'] );
+											}
+											if ( ! empty( $lbite_day_data['open2'] ) && ! empty( $lbite_day_data['close2'] ) ) {
+												$lbite_windows[] = esc_html( $lbite_day_data['open2'] ) . ' – ' . esc_html( $lbite_day_data['close2'] );
+											}
+											echo implode( ', ', $lbite_windows );
+											?>
+										<?php endif; ?>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+					<?php endif; ?>
 				</div>
 			<?php endforeach; ?>
 		</div>

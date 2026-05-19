@@ -6166,3 +6166,11 @@ msgstr "Wenn aktiviert, werden Vorbestellungen mit einer weit in der Zukunft lie
 
 #~ msgid "Location management"
 #~ msgstr "Standortverwaltung"
+
+#: templates/location-selector-tiles.php
+msgid "Show opening hours"
+msgstr "Öffnungszeiten anzeigen"
+
+#: templates/admin/help-partials/settings.php
+msgid "Note: WordPress Cron must be active for reminders to be sent."
+msgstr "Hinweis: Damit Erinnerungen versendet werden, muss WordPress Cron aktiv sein."

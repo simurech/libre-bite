@@ -242,7 +242,6 @@ class LBite_Installer {
 			// Benachrichtigungen – Pro-Features deaktiviert
 			'enable_pickup_reminders'   => false, // Pro
 			'enable_sound_notifications' => false, // Pro
-			'enable_admin_email'        => true,
 
 			// Produkte
 			'enable_product_options'    => true,

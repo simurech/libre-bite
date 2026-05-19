@@ -70,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<!-- Sound-Benachrichtigungen -->
 	<div class="lbite-help-article">
-		<h3><?php esc_html_e( 'Sound Notifications for New Orders', 'libre-bite' ); ?></h3>
+		<h3><?php esc_html_e( 'Sound Notifications for New Orders', 'libre-bite' ); ?> <span class="lbite-pro-badge">Pro</span></h3>
 		<p><?php esc_html_e( 'As soon as a new order arrives, the dashboard automatically plays an alert sound – so you never miss an order, even if you are not looking at the screen.', 'libre-bite' ); ?></p>
 		<ul>
 			<li><?php esc_html_e( 'The sound only plays when the browser tab with the dashboard is open.', 'libre-bite' ); ?></li>

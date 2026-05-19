@@ -5867,3 +5867,11 @@ msgstr ""
 #: assets/js/pos.js
 msgid "Wake Lock is not supported by this browser."
 msgstr ""
+
+#: templates/location-selector-tiles.php
+msgid "Show opening hours"
+msgstr ""
+
+#: templates/admin/help-partials/settings.php
+msgid "Note: WordPress Cron must be active for reminders to be sent."
+msgstr ""

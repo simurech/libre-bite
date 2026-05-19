@@ -6140,3 +6140,11 @@ msgstr "Wake Lock wird von diesem Browser nicht unterstützt."
 
 #~ msgid "Location management"
 #~ msgstr "Standortverwaltung"
+
+#: templates/location-selector-tiles.php
+msgid "Show opening hours"
+msgstr "Öffnungszeiten anzeigen"
+
+#: templates/admin/help-partials/settings.php
+msgid "Note: WordPress Cron must be active for reminders to be sent."
+msgstr "Hinweis: Damit Erinnerungen versendet werden, muss WordPress Cron aktiv sein."
