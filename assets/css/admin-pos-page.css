@@ -47,6 +47,7 @@
 	grid-template-columns: 1fr 400px;
 	gap: 20px;
 	margin-top: 20px;
+	align-items: start;
 }
 
 .lbite-pos-products {
@@ -604,7 +605,6 @@ body.lbite-fullscreen-active .lbite-pos-container {
 body.lbite-fullscreen-active .lbite-pos-cart {
 	position: static;
 	max-height: none;
-	height: 100%;
 }
 
 body.lbite-fullscreen-active #lbite-pos-cart-items {
