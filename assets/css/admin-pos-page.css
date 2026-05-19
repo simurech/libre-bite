@@ -604,10 +604,11 @@ body.lbite-fullscreen-active .lbite-pos-container {
 body.lbite-fullscreen-active .lbite-pos-cart {
 	position: static;
 	max-height: none;
+	height: 100%;
 }
 
 body.lbite-fullscreen-active #lbite-pos-cart-items {
-	max-height: calc(100vh - 500px);
+	max-height: none;
 }
 
 /* Tablet-Optimierung */
