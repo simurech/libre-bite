@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,13 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.4.6 =
+* Fix: Opening hours on location tiles and banner now open in a lightbox instead of expanding inline; closes on backdrop click or Escape key.
+* Fix: Banner view location cards now show border and shadow consistent with tile cards.
+* Fix: "Show opening hours" button no longer shows a theme-injected hover background outside the text area.
+* Fix: `align="left"` shortcode parameter now correctly aligns tiles in single-location mode.
+* Improvement: Location tile images now use `srcset` and `object-fit: cover` for sharper display on all screen sizes and orientations.
 
 = 1.4.5 =
 * Fix: Prevent standby and sound notifications in the Order Overview are now saved per browser via localStorage; both settings default to active and persist across page reloads.
