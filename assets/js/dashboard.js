@@ -80,16 +80,19 @@
 		initAudio: function() {
 			if (lbiteDashboard.soundUrl) {
 				this.audio = new Audio(lbiteDashboard.soundUrl);
-				
+
 				// Browser-Restriktionen prüfen: Versuche Audio "stumm" anzuspielen
 				this.audio.play().then(() => {
-					// Autoplay funktioniert oder ist bereits erlaubt
+					// Autoplay erlaubt
 					this.audio.pause();
 					this.audio.currentTime = 0;
+					$('#lbite-activate-audio').hide();
 				}).catch(() => {
-					// Autoplay blockiert -> Button anzeigen
-					$('#lbite-activate-audio').show();
-					$('#lbite-sound-toggle').hide();
+					// Autoplay blockiert – Aktivierungs-Button anzeigen.
+					// Sound-Toggle bleibt sichtbar, damit die Einstellung gespeichert werden kann.
+					if (this.soundEnabled) {
+						$('#lbite-activate-audio').show();
+					}
 				});
 			}
 		},
@@ -104,6 +107,9 @@
 			// Gespeicherte Einstellungen laden (vor dem initialen Wake-Lock-Check)
 			this.loadSavedSettings();
 
+			// Sound-Toggle-Darstellung immer initialisieren (unabhängig von gespeichertem Wert)
+			this.updateSoundToggleUI();
+
 			// Audio Aktivierung (Browser Workaround)
 			$('#lbite-activate-audio').on('click', () => {
 				if (this.audio) {
@@ -111,8 +117,6 @@
 						this.audio.pause();
 						this.audio.currentTime = 0;
 						$('#lbite-activate-audio').hide();
-						$('#lbite-sound-toggle').show();
-						this.updateSoundToggleUI();
 						window.lbiteNotify && window.lbiteNotify.success('Sound-Benachrichtigungen aktiviert');
 					});
 				}
@@ -185,6 +189,9 @@
 				this.soundEnabled = !this.soundEnabled;
 				this.updateSoundToggleUI();
 				localStorage.setItem('lbite_dashboard_sound', this.soundEnabled ? '1' : '0');
+				if (!this.soundEnabled) {
+					$('#lbite-activate-audio').hide();
+				}
 			});
 		},
 

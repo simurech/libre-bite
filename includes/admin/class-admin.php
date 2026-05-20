@@ -195,15 +195,22 @@ class LBite_Admin {
 		// PERSONAL-BEREICH (lbite_staff)
 		// ============================================
 
-		// Dashboard (nur für Admins sichtbar – Staff landet direkt auf der Bestellübersicht)
+		// Dashboard – Capability muss lbite_view_dashboard sein, sonst schlägt der
+		// WordPress-Capability-Check beim Navigieren zu page=libre-bite für Staff fehl.
+		// Die Weiterleitung auf die Bestellübersicht erfolgt in render_dashboard_page().
 		add_submenu_page(
 			'libre-bite',
 			__( 'Dashboard', 'libre-bite' ),
 			__( 'Dashboard', 'libre-bite' ),
-			'lbite_manage_settings',
+			'lbite_view_dashboard',
 			'libre-bite',
 			array( $this, 'render_dashboard_page' )
 		);
+
+		// Dashboard-Eintrag für Staff aus der Menü-Anzeige entfernen
+		if ( ! current_user_can( 'lbite_manage_settings' ) ) {
+			remove_submenu_page( 'libre-bite', 'libre-bite' );
+		}
 
 		// Bestellübersicht (Kanban) – nur wenn Feature aktiv
 		// Sichtbarkeit via lbite_view_dashboard (= alle Staff-Rollen); AJAX-Sicherheit
@@ -326,6 +333,10 @@ class LBite_Admin {
 	 * Dashboard-Seite rendern
 	 */
 	public function render_dashboard_page() {
+		if ( ! current_user_can( 'lbite_manage_settings' ) ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=lbite-order-board' ) );
+			exit;
+		}
 		include LBITE_PLUGIN_DIR . 'templates/admin/dashboard.php';
 	}
 
