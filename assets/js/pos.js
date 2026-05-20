@@ -463,7 +463,7 @@
 
 		// Varianten rendern
 		if (productData.variations && productData.variations.length > 0) {
-			const $group = $('<div class="lbite-option-group"></div>');
+			const $group = $('<div class="lbite-option-group lbite-variants-group"></div>');
 			const $variantLabel = $('<div class="lbite-option-group-label"></div>').text(lbitePos.strings.selectVariant + ' ');
 			$variantLabel.append($('<span style="color: red;" aria-hidden="true">*</span>'));
 			$group.append($variantLabel);
@@ -490,40 +490,33 @@
 			$body.append($group);
 		}
 
-		// Optionen rendern
+		// Optionen rendern (alle als eine «Add-ons»-Gruppe)
 		if (productData.options && productData.options.length > 0) {
+			const $group = $('<div class="lbite-option-group"></div>');
+			$group.append($('<div class="lbite-option-group-label"></div>').text(lbitePos.strings.addons || 'Add-ons'));
+
 			productData.options.forEach(option => {
-				const $group = $('<div class="lbite-option-group"></div>');
-				const $labelDiv = $('<div class="lbite-option-group-label"></div>').text(option.name);
-				if (option.required) {
-					$labelDiv.append(' <span style="color: red;">*</span>');
+				const inputId = 'modal_choice_' + (choiceCounter++);
+				const price   = option.choices && option.choices[0] ? parseFloat(option.choices[0].price) : 0;
+
+				const $label = $('<label class="lbite-option-choice"></label>').attr('for', inputId);
+				const $input = $('<input type="checkbox">')
+					.attr('id', inputId)
+					.attr('name', 'option_' + option.id)
+					.val(option.name)
+					.attr('data-price', price)
+					.attr('data-option-id', option.id);
+
+				$label.append($input);
+				$label.append($('<span class="lbite-option-choice-label"></span>').text(option.name));
+
+				if (price > 0) {
+					$label.append($('<span class="lbite-option-choice-price"></span>').text('+' + this.formatPrice(price)));
 				}
-				$group.append($labelDiv);
 
-				option.choices.forEach((choice, choiceIndex) => {
-					const inputType = option.type === 'checkbox' ? 'checkbox' : 'radio';
-					const inputName = option.type === 'checkbox' ? `option_${option.id}[]` : `option_${option.id}`;
-					const inputId = 'modal_choice_' + (choiceCounter++);
-
-					const $label = $('<label class="lbite-option-choice"></label>').attr('for', inputId);
-					const $input = $(`<input type="${inputType}">`)
-						.attr('id', inputId)
-						.attr('name', inputName)
-						.val(choice.label)
-						.attr('data-price', choice.price)
-						.attr('data-option-id', option.id);
-						
-					$label.append($input);
-					$label.append($('<span class="lbite-option-choice-label"></span>').text(choice.label));
-					
-					if (choice.price > 0) {
-						$label.append($('<span class="lbite-option-choice-price"></span>').text(`+${this.formatPrice(choice.price)}`));
-					}
-					
-					$group.append($label);
-				});
-				$body.append($group);
+				$group.append($label);
 			});
+			$body.append($group);
 		}
 
 		if ($body.is(':empty')) {

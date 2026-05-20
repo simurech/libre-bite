@@ -236,12 +236,12 @@
 
 .lbite-modal-content {
 	position: relative;
-	max-width: 600px;
-	margin: 20px auto;
+	max-width: 760px;
+	margin: 44px auto 20px;
 	background: #fff;
 	border-radius: 8px;
 	box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-	max-height: calc(100vh - 40px);
+	max-height: calc(100vh - 64px);
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -293,6 +293,22 @@
 
 .lbite-option-group {
 	margin-bottom: 20px;
+}
+
+/* Varianten-Gruppe: 2 Spalten nebeneinander */
+.lbite-option-group.lbite-variants-group {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 8px;
+}
+
+.lbite-variants-group .lbite-option-group-label {
+	grid-column: 1 / -1;
+	margin-bottom: 4px;
+}
+
+.lbite-variants-group .lbite-option-choice {
+	margin-bottom: 0;
 }
 
 .lbite-option-group-label {
@@ -406,14 +422,14 @@
 /* Touch-Optimierung */
 @media (hover: none) and (pointer: coarse) {
 	.lbite-option-choice {
-		padding: 14px 16px;
-		min-height: 52px;
+		padding: 10px 14px;
+		min-height: 44px;
 	}
 
 	.lbite-option-choice input[type="radio"],
 	.lbite-option-choice input[type="checkbox"] {
-		width: 28px;
-		height: 28px;
+		width: 24px;
+		height: 24px;
 	}
 
 	.lbite-option-choice input[type="radio"]::after {
@@ -430,7 +446,7 @@
 
 	.lbite-option-choice-label,
 	.lbite-option-choice-price {
-		font-size: 18px;
+		font-size: 16px;
 	}
 }
 

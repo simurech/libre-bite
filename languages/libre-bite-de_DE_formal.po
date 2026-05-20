@@ -1537,10 +1537,13 @@ msgid "Error loading product details"
 msgstr "Fehler beim Laden der Produktdetails"
 
 #: includes/modules/pos/class-pos.php:154
+msgid "Add-ons"
+msgstr "Add-ons"
+
 msgid "Select variant"
 msgstr "Variante wählen"
 
-#: includes/modules/pos/class-pos.php:159
+#: includes/modules/pos/class-pos.php:157
 msgid "Mark this product as out of stock?"
 msgstr "Produkt wirklich als nicht vorrätig markieren?"
 

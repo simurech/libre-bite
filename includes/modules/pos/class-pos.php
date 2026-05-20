@@ -152,6 +152,7 @@ class LBite_POS {
 					'loadingProducts'       => __( 'Loading products...', 'libre-bite' ),
 					'loadingProductDetails' => __( 'Loading product details...', 'libre-bite' ),
 					'errorLoadingDetails'   => __( 'Error loading product details', 'libre-bite' ),
+					'addons'                => __( 'Add-ons', 'libre-bite' ),
 					'selectVariant'         => __( 'Select variant', 'libre-bite' ),
 					'outOfStock'            => __( 'Out of stock', 'libre-bite' ),
 					'markOutOfStock'           => __( 'Mark as out of stock', 'libre-bite' ),
