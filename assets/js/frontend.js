@@ -73,7 +73,7 @@
 	window.lbiteLoading = Loading;
 
 	/**
-	 * Öffnungszeiten-Toggle
+	 * Öffnungszeiten-Lightbox
 	 */
 	const OpeningHours = {
 		init: function() {
@@ -83,24 +83,53 @@
 		bindEvents: function() {
 			$(document).on('click', '.lbite-hours-toggle', function(e) {
 				e.stopPropagation();
-				var $popup = $(this).next('.lbite-hours-popup');
-				var isOpen = $popup.hasClass('lbite-popup-open');
+				var $card   = $(this).closest('.lbite-location-card');
+				var title   = $card.find('.lbite-location-name').text().trim();
+				var content = $(this).next('.lbite-hours-popup').html() || '';
+				OpeningHours.showModal(title, content);
+			});
+		},
 
-				$('.lbite-hours-popup').removeClass('lbite-popup-open');
-				$('.lbite-hours-toggle').attr('aria-expanded', 'false');
+		showModal: function(title, content) {
+			$('#lbite-hours-modal').remove();
 
-				if ( ! isOpen ) {
-					$popup.addClass('lbite-popup-open');
-					$(this).attr('aria-expanded', 'true');
+			var safeTitle = $('<span>').text(title).html();
+			var $modal = $(
+				'<div id="lbite-hours-modal" class="lbite-hours-modal-overlay" role="dialog" aria-modal="true">' +
+					'<div class="lbite-hours-modal-box">' +
+						'<button class="lbite-hours-modal-close" aria-label="Close">' +
+							'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">' +
+								'<line x1="18" y1="6" x2="6" y2="18"></line>' +
+								'<line x1="6" y1="6" x2="18" y2="18"></line>' +
+							'</svg>' +
+						'</button>' +
+						'<h4 class="lbite-hours-modal-title">' + safeTitle + '</h4>' +
+						'<div class="lbite-hours-modal-body">' + content + '</div>' +
+					'</div>' +
+				'</div>'
+			);
+
+			$('body').append($modal);
+			setTimeout(function() { $modal.addClass('lbite-hours-modal-visible'); }, 10);
+
+			$modal.on('click', function(e) {
+				if (!$(e.target).closest('.lbite-hours-modal-box').length) {
+					OpeningHours.closeModal();
 				}
 			});
-
-			$(document).on('click', function(e) {
-				if ( ! $(e.target).closest('.lbite-hours-popup, .lbite-hours-toggle').length ) {
-					$('.lbite-hours-popup').removeClass('lbite-popup-open');
-					$('.lbite-hours-toggle').attr('aria-expanded', 'false');
-				}
+			$modal.find('.lbite-hours-modal-close').on('click', function() {
+				OpeningHours.closeModal();
 			});
+			$(document).on('keydown.lbite-hours', function(e) {
+				if (e.key === 'Escape') { OpeningHours.closeModal(); }
+			});
+		},
+
+		closeModal: function() {
+			var $modal = $('#lbite-hours-modal');
+			$modal.removeClass('lbite-hours-modal-visible');
+			setTimeout(function() { $modal.remove(); }, 200);
+			$(document).off('keydown.lbite-hours');
 		}
 	};
 

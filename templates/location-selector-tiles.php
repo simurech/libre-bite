@@ -25,8 +25,13 @@ $lbite_location_class     = ( $lbite_is_single_location ? 'lbite-location-select
 		<div class="lbite-location-grid<?php echo $lbite_is_single_location ? ' lbite-single' : ''; ?>">
 			<?php foreach ( $lbite_locations as $lbite_location ) : ?>
 				<?php
-				$lbite_image_id = get_post_meta( $lbite_location->ID, '_lbite_location_image', true );
-				$lbite_image_url = $lbite_image_id ? wp_get_attachment_image_url( $lbite_image_id, 'medium' ) : '';
+				$lbite_image_id     = get_post_meta( $lbite_location->ID, '_lbite_location_image', true );
+				$lbite_image_url    = $lbite_image_id ? wp_get_attachment_image_url( $lbite_image_id, 'large' ) : '';
+				$lbite_img_srcset   = $lbite_image_id ? wp_get_attachment_image_srcset( $lbite_image_id, 'large' ) : '';
+				$lbite_img_alt      = $lbite_image_id ? get_post_meta( $lbite_image_id, '_wp_attachment_image_alt', true ) : '';
+				if ( ! $lbite_img_alt ) {
+					$lbite_img_alt = $lbite_location->post_title;
+				}
 				$lbite_address = array();
 				$lbite_street = get_post_meta( $lbite_location->ID, '_lbite_street', true );
 				$lbite_zip = get_post_meta( $lbite_location->ID, '_lbite_zip', true );
@@ -50,7 +55,14 @@ $lbite_location_class     = ( $lbite_is_single_location ? 'lbite-location-select
 					data-status-text="<?php echo $lbite_status_data ? esc_attr( $lbite_status_data['text'] ) : ''; ?>"
 					data-status-type="<?php echo $lbite_status_data ? esc_attr( $lbite_status_data['type'] ) : ''; ?>">
 					<?php if ( $lbite_image_url ) : ?>
-						<div class="lbite-location-image" style="background-image: url('<?php echo esc_url( $lbite_image_url ); ?>');"></div>
+						<div class="lbite-location-image">
+							<img class="lbite-location-img"
+								src="<?php echo esc_url( $lbite_image_url ); ?>"
+								<?php if ( $lbite_img_srcset ) : ?>srcset="<?php echo esc_attr( $lbite_img_srcset ); ?>" sizes="(max-width: 768px) calc(100vw - 40px), 380px"<?php endif; ?>
+								alt="<?php echo esc_attr( $lbite_img_alt ); ?>"
+								loading="lazy"
+								decoding="async">
+						</div>
 					<?php else : ?>
 						<div class="lbite-location-image lbite-location-placeholder">
 							<span class="dashicons dashicons-store"></span>
