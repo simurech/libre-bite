@@ -1,4 +1,4 @@
-# Libre Bite – Swiss German Translation (de_CH)
+# Libre Bite – Austrian German Translation (de_AT)
 # Copyright (C) 2026 Simon Urech
 #
 msgid ""
@@ -8,7 +8,7 @@ msgstr ""
 "POT-Creation-Date: 2026-05-15 11:30+0200\n"
 "PO-Revision-Date: 2026-04-14\n"
 "Last-Translator: Simon Urech\n"
-"Language-Team: German (Austria)\n"
+"Language-Team: Simon Urech\n"
 "Language: de_AT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -266,7 +266,7 @@ msgstr "Fehler beim Speichern."
 
 #: templates/checkout-location-time.php:277
 msgid "Error saving. Please try again."
-msgstr "Fehler beim Speichern. Bitte versuche es erneut."
+msgstr "Fehler beim Speichern. Bitte versuchen Sie es erneut."
 
 #: templates/checkout-location-time.php:394
 msgid "Automatically changed to:"
@@ -295,7 +295,7 @@ msgstr "Beleg drucken / als PDF speichern"
 
 #: templates/thankyou-optimized.php:97
 msgid "your@email.com"
-msgstr "ihre@email.at"
+msgstr "ihre@email.de"
 
 #: templates/thankyou-optimized.php:107 includes/admin/class-admin.php:1330
 msgid "Send Receipt by Email"
@@ -357,7 +357,7 @@ msgstr "Beleg gesendet"
 
 #: templates/thankyou-optimized.php:332
 msgid "Error sending receipt."
-msgstr "Fehler beim Senden des Belegs."
+msgstr "Fehler beim Senden. Bitte versuchen Sie es erneut."
 
 #: templates/location-selector-tiles.php:22
 msgid "Select Your Location"
@@ -758,7 +758,7 @@ msgstr "Schließen"
 #: includes/admin/class-admin.php:1168
 msgid "First check the help area – you'll find guides for all features there."
 msgstr ""
-"Zuerst im Hilfe-Bereich nachschauen – dort findest du Anleitungen zu allen "
+"Zuerst im Hilfe-Bereich nachschauen – dort finden Sie Anleitungen zu allen "
 "Funktionen."
 
 #: includes/admin/class-admin.php:1172
@@ -798,7 +798,7 @@ msgstr "Ungültige Bestellung."
 #: includes/admin/class-admin.php:1399
 #: includes/modules/checkout/class-checkout.php:1436
 msgid "Order not found."
-msgstr "Bestellung nicht gefunden."
+msgstr "Bestellung nicht gefunden"
 
 #: includes/admin/class-admin.php:1425
 #, php-format
@@ -2081,7 +2081,6 @@ msgstr "Trinkgeld-Titel"
 msgid "Heading shown above the tip options. Leave empty to use the default."
 msgstr ""
 "Überschrift über den Trinkgeld-Optionen. Leer lassen für den "
-"Standardtitel.Überschrift über den Trinkgeld-Optionen. Leer lassen für den "
 "Standard-Text."
 
 #: templates/admin/settings-tabbed.php:244
@@ -2135,7 +2134,7 @@ msgstr "Kein Trinkgeld (Standard)"
 
 #: templates/admin/settings-tabbed.php:293
 msgid "Which option should be pre-selected by default in checkout?"
-msgstr "Welche Option soll im Checkout standardmäßig vorausgewählt sein?"
+msgstr "Welche Option soll im Checkout standardmässig vorausgewählt sein?"
 
 #: templates/admin/settings-tabbed.php:297
 #: templates/admin/settings-tabbed.php:356
@@ -2157,7 +2156,7 @@ msgstr "Gesamtbetrag runden"
 
 #: templates/admin/settings-tabbed.php:334
 msgid "Round total to 5 cents (0.05 CHF)"
-msgstr "Gesamtbetrag auf 5 Cent (0.05 EUR) runden"
+msgstr "Gesamtbetrag auf 5 Rappen (0.05 CHF) runden"
 
 #: templates/admin/settings-tabbed.php:336
 msgid ""
@@ -2208,7 +2207,7 @@ msgstr "Felder im Standard-Checkout"
 
 #: templates/admin/settings-tabbed.php:366
 msgid "Choose which fields and options are displayed at checkout."
-msgstr "Wähle, welche Felder und Optionen im Checkout angezeigt werden."
+msgstr "Wählen Sie, welche Felder und Optionen im Checkout angezeigt werden."
 
 #: templates/admin/settings-tabbed.php:383
 msgid "Order Overview Settings"
@@ -2963,11 +2962,11 @@ msgstr "Trinkgeld-Optionen im Checkout anzeigen"
 
 #: templates/admin/super-admin-settings.php:59
 msgid "5-cent rounding"
-msgstr "5-Cent-Rundung"
+msgstr "5-Rappen-Rundung"
 
 #: templates/admin/super-admin-settings.php:60
 msgid "Round amounts to 5 cents (Switzerland)"
-msgstr "Beträge auf 5 Cent runden "
+msgstr "Beträge auf 5 Rappen runden (Schweiz)"
 
 #: templates/admin/super-admin-settings.php:65
 msgid "Guest Checkout"
@@ -4158,7 +4157,7 @@ msgstr "Vorbereitungszeit und Zeitslots einstellen"
 
 #: templates/admin/help-admin.php:227
 msgid "Didn't find what you were looking for? I'm happy to help."
-msgstr "Nicht fündig geworden? Ich helfe dir gerne weiter."
+msgstr "Nicht fündig geworden? Ich helfe Ihnen gerne weiter."
 
 #: templates/admin/reservation-board.php:26
 msgid "All Reservations"
@@ -4240,7 +4239,7 @@ msgstr "Hinweis zur Verrechnung"
 
 #: templates/admin/support-settings.php:97
 msgid "E.g. Support is billed at hourly rate (CHF 120.-/hour)"
-msgstr "z.B. Support wird nach Aufwand verrechnet (EUR 120,–/Stunde)"
+msgstr "z.B. Support wird nach Aufwand verrechnet (CHF 120.-/Stunde)"
 
 #: templates/admin/support-settings.php:98
 msgid "Information about support billing (appears on help pages)"
@@ -5816,7 +5815,7 @@ msgstr "Mit dem optimierten Checkout können Kunden auf der Bestellbestätigungs
 
 #: templates/admin/help-partials/orders.php:131
 msgid "Customer:"
-msgstr "Kunde:"
+msgstr "Individuell:"
 
 #: templates/admin/help-partials/orders.php:131
 msgid ""
@@ -5966,23 +5965,11 @@ msgstr "Wake Lock wird von diesem Browser nicht unterstützt."
 #~ msgid "Would you like to leave a tip?"
 #~ msgstr "Möchten Sie ein Trinkgeld hinterlassen?"
 
-#~ msgid "No email address on file for this order."
-#~ msgstr "Für diese Bestellung ist keine E-Mail-Adresse hinterlegt."
-
-#~ msgid "No valid email address on file."
-#~ msgstr "Keine gültige E-Mail-Adresse hinterlegt."
+#~ msgid "By Email"
+#~ msgstr "Per E-Mail"
 
 #~ msgid "Einstellung"
 #~ msgstr "Einstellung"
-
-#~ msgid "Was es bewirkt"
-#~ msgstr "Was es bewirkt"
-
-#~ msgid "Time from which orders are possible"
-#~ msgstr "Uhrzeit, ab der Bestellungen möglich sind"
-
-#~ msgid "Time until which orders are possible"
-#~ msgstr "Uhrzeit, bis zu der Bestellungen möglich sind"
 
 #~ msgid "Mark day as closed"
 #~ msgstr "Tag als Ruhetag markieren"
@@ -5994,26 +5981,8 @@ msgstr "Wake Lock wird von diesem Browser nicht unterstützt."
 #~ "Tipp: Lassen Sie die Öffnungszeiten eines Tages leer, wenn der Standort "
 #~ "an diesem Tag geschlossen ist."
 
-#~ msgid ""
-#~ "Tip: The dashboard updates automatically. You do not need to manually "
-#~ "reload the page to see new orders. The interval can be adjusted under "
-#~ "Settings → Dashboard."
-#~ msgstr ""
-#~ "Tipp: Das Dashboard aktualisiert sich automatisch. Sie müssen die Seite "
-#~ "nicht manuell neu laden, um neue Bestellungen zu sehen. Das Intervall "
-#~ "kann unter Einstellungen → Dashboard angepasst werden."
-
-#~ msgid "By Email"
-#~ msgstr "Per E-Mail"
-
-#~ msgid "Email Address"
-#~ msgstr "E-Mail-Adresse"
-
-#~ msgid "Get Receipt?"
-#~ msgstr "Beleg erhalten?"
-
-#~ msgid "No Receipt"
-#~ msgstr "Kein Beleg"
+#~ msgid "Was es bewirkt"
+#~ msgstr "Was es bewirkt"
 
 #~ msgid "Setup"
 #~ msgstr "Einrichtung"
@@ -6055,10 +6024,10 @@ msgstr "Wake Lock wird von diesem Browser nicht unterstützt."
 #~ msgstr "Kunden können beim Checkout ein Trinkgeld auswählen."
 
 #~ msgid "5-Centime Rounding"
-#~ msgstr "5-Cent-Rundung"
+#~ msgstr "5-Rappen-Rundung"
 
 #~ msgid "Round amounts to the nearest 5 centimes (CH)."
-#~ msgstr "Beträge auf 5 Cent runden ."
+#~ msgstr "Beträge auf 5 Rappen runden (Schweiz)."
 
 #~ msgid "Allow orders without a customer account."
 #~ msgstr "Bestellungen ohne Kundenkonto ermöglichen."
@@ -6098,7 +6067,7 @@ msgstr "Wake Lock wird von diesem Browser nicht unterstützt."
 
 #~ msgid ""
 #~ "Allergen labelling in accordance with EU food information regulation."
-#~ msgstr "Allergenkennzeichnung gemäß EU-Lebensmittelinformationsverordnung."
+#~ msgstr "Allergenkennzeichnung gemäss EU-Lebensmittelinformationsverordnung."
 
 #~ msgid "ON"
 #~ msgstr "AN"
@@ -6131,7 +6100,7 @@ msgstr "Wake Lock wird von diesem Browser nicht unterstützt."
 #~ msgstr "Hier sehen Sie alle eingehenden Bestellungen."
 
 #~ msgid "Complete Setup"
-#~ msgstr "Einrichtung abschließen"
+#~ msgstr "Einrichtung abschliessen"
 
 #~ msgid "You can adjust all features at any time under Settings → Features."
 #~ msgstr ""

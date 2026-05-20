@@ -266,7 +266,7 @@ msgstr "Fehler beim Speichern."
 
 #: templates/checkout-location-time.php:277
 msgid "Error saving. Please try again."
-msgstr "Fehler beim Speichern. Bitte versuche es erneut."
+msgstr "Fehler beim Speichern. Bitte versuchen Sie es erneut."
 
 #: templates/checkout-location-time.php:394
 msgid "Automatically changed to:"
@@ -353,7 +353,7 @@ msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 
 #: templates/thankyou-optimized.php:328
 msgid "Receipt Sent"
-msgstr "Kein Beleg"
+msgstr "Beleg gesendet"
 
 #: templates/thankyou-optimized.php:332
 msgid "Error sending receipt."
@@ -648,7 +648,7 @@ msgstr "Abgeschlossen"
 
 #: includes/admin/class-admin.php:532
 msgid "Cancel order"
-msgstr "Bestellung wird storniert..."
+msgstr "Bestellung stornieren"
 
 #: includes/admin/class-admin.php:533
 msgid "Fullscreen"
@@ -660,7 +660,7 @@ msgstr "Vollbild beenden"
 
 #: includes/admin/class-admin.php:535
 msgid "Send receipt"
-msgstr "Beleg erhalten?"
+msgstr "Beleg senden"
 
 #: includes/admin/class-admin.php:536
 msgid "Enter customer email address:"
@@ -758,7 +758,7 @@ msgstr "Schließen"
 #: includes/admin/class-admin.php:1168
 msgid "First check the help area – you'll find guides for all features there."
 msgstr ""
-"Zuerst im Hilfe-Bereich nachschauen – dort findest du Anleitungen zu allen "
+"Zuerst im Hilfe-Bereich nachschauen – dort finden Sie Anleitungen zu allen "
 "Funktionen."
 
 #: includes/admin/class-admin.php:1172
@@ -771,16 +771,16 @@ msgstr "Nicht fündig geworden?"
 
 #: includes/admin/class-admin.php:1281
 msgid "Receipt"
-msgstr "Kein Beleg"
+msgstr "Beleg"
 
 #: includes/admin/class-admin.php:1314 includes/admin/class-admin.php:1366
 msgid "To:"
-msgstr "Bis"
+msgstr "An:"
 
 #: includes/admin/class-admin.php:1321
 #, php-format
 msgid "Last sent: %s"
-msgstr "Datum: %s"
+msgstr "Zuletzt gesendet: %s"
 
 #: includes/admin/class-admin.php:1371
 msgid "Error"
@@ -793,7 +793,7 @@ msgstr "Keine ausreichenden Berechtigungen."
 #: includes/admin/class-admin.php:1394
 #: includes/modules/checkout/class-checkout.php:1429
 msgid "Invalid order."
-msgstr "Ungültiges Datum"
+msgstr "Ungültige Bestellung."
 
 #: includes/admin/class-admin.php:1399
 #: includes/modules/checkout/class-checkout.php:1436
@@ -1401,7 +1401,7 @@ msgstr "Reservierung bearbeiten: %s"
 #: includes/modules/reservations/class-reservation-dashboard.php:193
 #: includes/modules/reservations/class-reservation-dashboard.php:235
 msgid "Feature not enabled"
-msgstr "Feature-Toggles"
+msgstr "Funktion nicht aktiviert"
 
 #: includes/modules/reservations/class-reservation-dashboard.php:64
 msgid "Location and date required"
@@ -1477,7 +1477,7 @@ msgstr "Beleg wurde bereits gesendet."
 
 #: includes/modules/checkout/class-checkout.php:1465
 msgid "Receipt sent."
-msgstr "Kein Beleg"
+msgstr "Beleg gesendet."
 
 #: includes/modules/pos/class-pos.php:138
 msgid "Add to Cart"
@@ -1522,23 +1522,23 @@ msgstr " erstellt"
 
 #: includes/modules/pos/class-pos.php:150
 msgid "Really empty the cart?"
-msgstr "Wirklich löschen?"
+msgstr "Warenkorb wirklich leeren?"
 
 #: includes/modules/pos/class-pos.php:151
 msgid "Loading products..."
-msgstr "Bestellungen werden geladen..."
+msgstr "Produkte werden geladen..."
 
 #: includes/modules/pos/class-pos.php:152
 msgid "Loading product details..."
-msgstr "Bestellungen werden geladen..."
+msgstr "Produktdetails werden geladen..."
 
 #: includes/modules/pos/class-pos.php:153
 msgid "Error loading product details"
-msgstr "Fehler beim Laden der Produkte"
+msgstr "Fehler beim Laden der Produktdetails"
 
 #: includes/modules/pos/class-pos.php:154
 msgid "Select variant"
-msgstr "Standort wählen"
+msgstr "Variante wählen"
 
 #: includes/modules/pos/class-pos.php:159
 msgid "Mark this product as out of stock?"
@@ -1716,7 +1716,7 @@ msgstr "Geschlossen"
 
 #: includes/modules/locations/class-locations.php:378
 msgid "2nd window (optional):"
-msgstr "Notizen (optional)"
+msgstr "2. Fenster (optional):"
 
 #: includes/modules/locations/class-locations.php:481
 msgid "Save the location first to generate the QR code."
@@ -2081,7 +2081,6 @@ msgstr "Trinkgeld-Titel"
 msgid "Heading shown above the tip options. Leave empty to use the default."
 msgstr ""
 "Überschrift über den Trinkgeld-Optionen. Leer lassen für den "
-"Standardtitel.Überschrift über den Trinkgeld-Optionen. Leer lassen für den "
 "Standard-Text."
 
 #: templates/admin/settings-tabbed.php:244
@@ -2208,7 +2207,7 @@ msgstr "Felder im Standard-Checkout"
 
 #: templates/admin/settings-tabbed.php:366
 msgid "Choose which fields and options are displayed at checkout."
-msgstr "Wähle, welche Felder und Optionen im Checkout angezeigt werden."
+msgstr "Wählen Sie, welche Felder und Optionen im Checkout angezeigt werden."
 
 #: templates/admin/settings-tabbed.php:383
 msgid "Order Overview Settings"
@@ -2644,7 +2643,7 @@ msgstr "Einen bestimmten Standort vorauswählen (Standort-ID verwenden). Leer la
 
 #: templates/admin/documentation.php:84
 msgid "Form with location selector (all locations)"
-msgstr "Standort-Auswahl im Frontend anzeigen"
+msgstr "Formular mit Standortauswahl (alle Standorte)"
 
 #: templates/admin/documentation.php:87
 msgid "Form pre-set to a specific location"
@@ -3121,15 +3120,15 @@ msgstr "Fehler beim Speichern"
 
 #: templates/admin/holidays-settings.php:24
 msgid "Mon"
-msgstr "Montag"
+msgstr "Mo"
 
 #: templates/admin/holidays-settings.php:25
 msgid "Tue"
-msgstr "Dienstag"
+msgstr "Di"
 
 #: templates/admin/holidays-settings.php:26
 msgid "Wed"
-msgstr "Rot"
+msgstr "Mi"
 
 #: templates/admin/holidays-settings.php:27
 msgid "Thu"
@@ -3137,15 +3136,15 @@ msgstr "Do"
 
 #: templates/admin/holidays-settings.php:28
 msgid "Fri"
-msgstr "Freitag"
+msgstr "Fr"
 
 #: templates/admin/holidays-settings.php:29
 msgid "Sat"
-msgstr "Salz"
+msgstr "Sa"
 
 #: templates/admin/holidays-settings.php:30
 msgid "Sun"
-msgstr "Sonntag"
+msgstr "So"
 
 #: templates/admin/holidays-settings.php:38
 msgid ""
@@ -3176,7 +3175,7 @@ msgstr "Alle"
 #: templates/admin/holidays-settings.php:90
 #: templates/admin/holidays-settings.php:149
 msgid "Custom hours"
-msgstr "Kunde: %s"
+msgstr "Sonderzeiten"
 
 #: templates/admin/holidays-settings.php:99
 #: templates/admin/holidays-settings.php:158
@@ -4158,7 +4157,7 @@ msgstr "Vorbereitungszeit und Zeitslots einstellen"
 
 #: templates/admin/help-admin.php:227
 msgid "Didn't find what you were looking for? I'm happy to help."
-msgstr "Nicht fündig geworden? Ich helfe dir gerne weiter."
+msgstr "Nicht fündig geworden? Ich helfe Ihnen gerne weiter."
 
 #: templates/admin/reservation-board.php:26
 msgid "All Reservations"
@@ -4586,7 +4585,7 @@ msgstr "Definieren Sie Feiertage, an denen ein Standort geschlossen ist oder abw
 
 #: templates/admin/help-partials/settings.php:86
 msgid "Type: Closed"
-msgstr "Geschlossen"
+msgstr "Typ: Geschlossen"
 
 #: templates/admin/help-partials/settings.php:87
 msgid ""
@@ -4614,7 +4613,7 @@ msgstr ""
 
 #: templates/admin/help-partials/settings.php:99
 msgid "Open Holidays"
-msgstr "Öffnet heute %s"
+msgstr "Feiertage öffnen"
 
 #: templates/admin/help-partials/settings.php:108
 msgid "Tips"
@@ -4752,7 +4751,7 @@ msgstr "Öffnet um"
 
 #: templates/admin/help-partials/locations.php:47
 msgid "Time from which orders are possible (1st window)"
-msgstr "Uhrzeit, ab der Bestellungen möglich sind"
+msgstr "Uhrzeit, ab der Bestellungen möglich sind (1. Fenster)"
 
 #: templates/admin/help-partials/locations.php:51
 msgid "Closes at"
@@ -4760,7 +4759,7 @@ msgstr "Schliesst um"
 
 #: templates/admin/help-partials/locations.php:52
 msgid "Time until which orders are possible (1st window)"
-msgstr "Uhrzeit, bis zu der Bestellungen möglich sind"
+msgstr "Uhrzeit, bis zu der Bestellungen möglich sind (1. Fenster)"
 
 #: templates/admin/help-partials/locations.php:56
 msgid "2nd window: Opens at"
@@ -4773,7 +4772,7 @@ msgstr ""
 
 #: templates/admin/help-partials/locations.php:61
 msgid "2nd window: Closes at"
-msgstr "Schliesst um"
+msgstr "2. Fenster: Schließt um"
 
 #: templates/admin/help-partials/locations.php:62
 msgid "End of the second opening window. Leave empty if not needed."

@@ -1,4 +1,4 @@
-# Libre Bite – Swiss German Translation (de_CH)
+# Libre Bite – Swiss German Translation (de_CH, formal)
 # Copyright (C) 2026 Simon Urech
 #
 msgid ""
@@ -266,7 +266,7 @@ msgstr "Fehler beim Speichern."
 
 #: templates/checkout-location-time.php:277
 msgid "Error saving. Please try again."
-msgstr "Fehler beim Speichern. Bitte versuche es erneut."
+msgstr "Fehler beim Speichern. Bitte versuchen Sie es erneut."
 
 #: templates/checkout-location-time.php:394
 msgid "Automatically changed to:"
@@ -295,7 +295,7 @@ msgstr "Beleg drucken / als PDF speichern"
 
 #: templates/thankyou-optimized.php:97
 msgid "your@email.com"
-msgstr "ihre@email.ch"
+msgstr "ihre@email.de"
 
 #: templates/thankyou-optimized.php:107 includes/admin/class-admin.php:1330
 msgid "Send Receipt by Email"
@@ -357,7 +357,7 @@ msgstr "Beleg gesendet"
 
 #: templates/thankyou-optimized.php:332
 msgid "Error sending receipt."
-msgstr "Fehler beim Senden des Belegs."
+msgstr "Fehler beim Senden. Bitte versuchen Sie es erneut."
 
 #: templates/location-selector-tiles.php:22
 msgid "Select Your Location"
@@ -664,7 +664,7 @@ msgstr "Beleg senden"
 
 #: includes/admin/class-admin.php:536
 msgid "Enter customer email address:"
-msgstr "Kunden-E-Mail-Adresse eingeben:"
+msgstr "E-Mail-Adresse des Kunden eingeben:"
 
 #: includes/admin/class-admin.php:567
 #: includes/modules/reservations/class-reservations.php:126
@@ -758,7 +758,7 @@ msgstr "Schliessen"
 #: includes/admin/class-admin.php:1168
 msgid "First check the help area – you'll find guides for all features there."
 msgstr ""
-"Zuerst im Hilfe-Bereich nachschauen – dort findest du Anleitungen zu allen "
+"Zuerst im Hilfe-Bereich nachschauen – dort finden Sie Anleitungen zu allen "
 "Funktionen."
 
 #: includes/admin/class-admin.php:1172
@@ -798,7 +798,7 @@ msgstr "Ungültige Bestellung."
 #: includes/admin/class-admin.php:1399
 #: includes/modules/checkout/class-checkout.php:1436
 msgid "Order not found."
-msgstr "Bestellung nicht gefunden."
+msgstr "Bestellung nicht gefunden"
 
 #: includes/admin/class-admin.php:1425
 #, php-format
@@ -2079,17 +2079,11 @@ msgstr "Trinkgeld-Titel"
 
 #: templates/admin/settings-tabbed.php:240
 msgid "Heading shown above the tip options. Leave empty to use the default."
-msgstr "Überschrift über den Trinkgeld-Optionen. Leer lassen für den Standard-Text."
+msgstr ""
+"Überschrift über den Trinkgeld-Optionen. Leer lassen für den "
+"Standard-Text."
 
 #: templates/admin/settings-tabbed.php:244
-msgid "\"No Tip\" Label"
-msgstr "Bezeichnung für «Kein Trinkgeld»"
-
-#: templates/admin/settings-tabbed.php:245
-msgid "Label for the \"no tip\" option. Leave empty to use the default."
-msgstr "Bezeichnung für die Option «Kein Trinkgeld». Leer lassen für die Standardbezeichnung."
-
-#: templates/admin/settings-tabbed.php:251
 msgid "Tip Mode"
 msgstr "Trinkgeld-Modus"
 
@@ -2099,7 +2093,7 @@ msgstr "Prozentsatz des Bestellwerts"
 
 #: templates/admin/settings-tabbed.php:252
 msgid "Fixed amount"
-msgstr "Fixbetrag"
+msgstr "Festbetrag"
 
 #: templates/admin/settings-tabbed.php:254
 msgid ""
@@ -2213,7 +2207,7 @@ msgstr "Felder im Standard-Checkout"
 
 #: templates/admin/settings-tabbed.php:366
 msgid "Choose which fields and options are displayed at checkout."
-msgstr "Wähle, welche Felder und Optionen im Checkout angezeigt werden."
+msgstr "Wählen Sie, welche Felder und Optionen im Checkout angezeigt werden."
 
 #: templates/admin/settings-tabbed.php:383
 msgid "Order Overview Settings"
@@ -4163,7 +4157,7 @@ msgstr "Vorbereitungszeit und Zeitslots einstellen"
 
 #: templates/admin/help-admin.php:227
 msgid "Didn't find what you were looking for? I'm happy to help."
-msgstr "Nicht fündig geworden? Ich helfe dir gerne weiter."
+msgstr "Nicht fündig geworden? Ich helfe Ihnen gerne weiter."
 
 #: templates/admin/reservation-board.php:26
 msgid "All Reservations"
@@ -5821,7 +5815,7 @@ msgstr "Mit dem optimierten Checkout können Kunden auf der Bestellbestätigungs
 
 #: templates/admin/help-partials/orders.php:131
 msgid "Customer:"
-msgstr "Kunde:"
+msgstr "Individuell:"
 
 #: templates/admin/help-partials/orders.php:131
 msgid ""
@@ -5948,34 +5942,13 @@ msgstr "Keine aktiven Gutscheine vorhanden"
 msgid "Wake Lock is not supported by this browser."
 msgstr "Wake Lock wird von diesem Browser nicht unterstützt."
 
+#~ msgid "\"No Tip\" Label"
+#~ msgstr "\"Kein Trinkgeld\"-Beschriftung"
 
-msgid "Change order status via status buttons"
-msgstr "Bestellstatus über Statusschaltflächen ändern"
-
-msgid "Completed orders for today. Older orders are loaded on demand."
-msgstr "Abgeschlossene Bestellungen von heute. Ältere Bestellungen werden auf Anfrage geladen."
-
-msgid "Invalid parameters"
-msgstr "Ungültige Parameter"
-
-msgid "Mark as \"Completed\" once the order is ready for pickup."
-msgstr "Als «Abgeschlossen» markieren, sobald die Bestellung abholbereit ist."
-
-msgid "Mark as \"Completed\" once the order is ready for pickup. The order moves to the completed column."
-msgstr "Als «Abgeschlossen» markieren, sobald die Bestellung abholbereit ist. Die Bestellung wechselt in die abgeschlossene Spalte."
-
-msgid "Order completed"
-msgstr "Bestellung abgeschlossen"
-
-msgid "Status buttons are disabled until the order enters the preparation window."
-msgstr "Statusschaltflächen sind deaktiviert, bis die Bestellung in das Vorbereitungsfenster eintritt."
-
-msgid "The Kanban board is your real-time overview of all active orders. It has three columns: Incoming, Preparing, and Completed."
-msgstr "Das Kanban-Board ist Ihre Echtzeit-Übersicht aller aktiven Bestellungen. Es hat drei Spalten: Eingehend, In Zubereitung und Abgeschlossen."
-
-msgid "When enabled, pre-orders with a pickup time far in the future are shown greyed out in the Kanban board. They cannot be processed until they are within the preparation window."
-msgstr "Wenn aktiviert, werden Vorbestellungen mit einer weit in der Zukunft liegenden Abholzeit ausgegraut im Kanban-Board angezeigt. Sie können erst bearbeitet werden, wenn sie im Vorbereitungsfenster liegen."
-
+#~ msgid "Label for the \"no tip\" option. Leave empty to use the default."
+#~ msgstr ""
+#~ "Beschriftung für die Option \"Kein Trinkgeld\". Leer lassen für den "
+#~ "Standardtext."
 
 #~ msgid "Display: Tiles (side by side) or inline (compact)"
 #~ msgstr "Darstellung: Kacheln (nebeneinander) oder Inline (kompakt)"
@@ -5992,23 +5965,11 @@ msgstr "Wenn aktiviert, werden Vorbestellungen mit einer weit in der Zukunft lie
 #~ msgid "Would you like to leave a tip?"
 #~ msgstr "Möchten Sie ein Trinkgeld hinterlassen?"
 
-#~ msgid "No email address on file for this order."
-#~ msgstr "Für diese Bestellung ist keine E-Mail-Adresse hinterlegt."
-
-#~ msgid "No valid email address on file."
-#~ msgstr "Keine gültige E-Mail-Adresse hinterlegt."
+#~ msgid "By Email"
+#~ msgstr "Per E-Mail"
 
 #~ msgid "Einstellung"
 #~ msgstr "Einstellung"
-
-#~ msgid "Was es bewirkt"
-#~ msgstr "Was es bewirkt"
-
-#~ msgid "Time from which orders are possible"
-#~ msgstr "Uhrzeit, ab der Bestellungen möglich sind"
-
-#~ msgid "Time until which orders are possible"
-#~ msgstr "Uhrzeit, bis zu der Bestellungen möglich sind"
 
 #~ msgid "Mark day as closed"
 #~ msgstr "Tag als Ruhetag markieren"
@@ -6020,26 +5981,8 @@ msgstr "Wenn aktiviert, werden Vorbestellungen mit einer weit in der Zukunft lie
 #~ "Tipp: Lassen Sie die Öffnungszeiten eines Tages leer, wenn der Standort "
 #~ "an diesem Tag geschlossen ist."
 
-#~ msgid ""
-#~ "Tip: The dashboard updates automatically. You do not need to manually "
-#~ "reload the page to see new orders. The interval can be adjusted under "
-#~ "Settings → Dashboard."
-#~ msgstr ""
-#~ "Tipp: Das Dashboard aktualisiert sich automatisch. Sie müssen die Seite "
-#~ "nicht manuell neu laden, um neue Bestellungen zu sehen. Das Intervall "
-#~ "kann unter Einstellungen → Dashboard angepasst werden."
-
-#~ msgid "By Email"
-#~ msgstr "Per E-Mail"
-
-#~ msgid "Email Address"
-#~ msgstr "E-Mail-Adresse"
-
-#~ msgid "Get Receipt?"
-#~ msgstr "Beleg erhalten?"
-
-#~ msgid "No Receipt"
-#~ msgstr "Kein Beleg"
+#~ msgid "Was es bewirkt"
+#~ msgstr "Was es bewirkt"
 
 #~ msgid "Setup"
 #~ msgstr "Einrichtung"
