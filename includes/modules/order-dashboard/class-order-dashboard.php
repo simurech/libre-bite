@@ -418,6 +418,12 @@ class LBite_Order_Dashboard {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
+		// Standort-Fixierung: Benutzer mit zugewiesenem Standort können ihn nicht ändern
+		$assigned = (int) get_user_meta( get_current_user_id(), 'lbite_assigned_location', true );
+		if ( $assigned > 0 && ! current_user_can( 'lbite_manage_locations' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Location is fixed for your account', 'libre-bite' ) ) );
+		}
+
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
 		// Standort für aktuellen Benutzer speichern

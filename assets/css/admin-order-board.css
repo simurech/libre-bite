@@ -572,3 +572,15 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 	opacity: 1;
 	filter: none;
 }
+
+/* Gesperrter Standort (Staff mit fixiertem Standort) */
+.lbite-location-locked {
+	display: inline-block;
+	padding: 4px 10px;
+	background: #f0f6fc;
+	border: 1px solid #b3d4e8;
+	border-radius: 4px;
+	color: #1d7096;
+	font-weight: 600;
+	font-size: 13px;
+}

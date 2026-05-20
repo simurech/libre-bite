@@ -101,6 +101,9 @@
 			// Initial-Check: Board nur anzeigen wenn Standort gewählt
 			this.toggleBoardVisibility();
 
+			// Gespeicherte Einstellungen laden (vor dem initialen Wake-Lock-Check)
+			this.loadSavedSettings();
+
 			// Audio Aktivierung (Browser Workaround)
 			$('#lbite-activate-audio').on('click', () => {
 				if (this.audio) {
@@ -109,6 +112,7 @@
 						this.audio.currentTime = 0;
 						$('#lbite-activate-audio').hide();
 						$('#lbite-sound-toggle').show();
+						this.updateSoundToggleUI();
 						window.lbiteNotify && window.lbiteNotify.success('Sound-Benachrichtigungen aktiviert');
 					});
 				}
@@ -166,6 +170,7 @@
 				} else {
 					this.releaseWakeLock();
 				}
+				localStorage.setItem('lbite_dashboard_wake_lock', e.target.checked ? '1' : '0');
 			});
 
 			// Wake Lock nach Tab-Wechsel / App-Wechsel neu anfordern (Android)
@@ -178,17 +183,8 @@
 			// Sound Toggle
 			$('#lbite-sound-toggle').on('click', () => {
 				this.soundEnabled = !this.soundEnabled;
-
-				const $btn = $('#lbite-sound-toggle');
-				const $icon = $btn.find('.dashicons');
-
-				if (this.soundEnabled) {
-					$icon.removeClass('dashicons-controls-volumeoff').addClass('dashicons-controls-volumeon');
-					$btn.find('span:not(.dashicons)').text(lbiteDashboard.strings.soundActive || 'Sound aktiv');
-				} else {
-					$icon.removeClass('dashicons-controls-volumeon').addClass('dashicons-controls-volumeoff');
-					$btn.find('span:not(.dashicons)').text(lbiteDashboard.strings.soundInactive || 'Sound aus');
-				}
+				this.updateSoundToggleUI();
+				localStorage.setItem('lbite_dashboard_sound', this.soundEnabled ? '1' : '0');
 			});
 		},
 
@@ -225,6 +221,36 @@
 			if (this.wakeLock) {
 				this.wakeLock.release();
 				this.wakeLock = null;
+			}
+		},
+
+		/**
+		 * Einstellungen aus localStorage laden und anwenden
+		 */
+		loadSavedSettings: function() {
+			const wakeLockSaved = localStorage.getItem('lbite_dashboard_wake_lock');
+			if (wakeLockSaved !== null) {
+				$('#lbite-wake-lock').prop('checked', wakeLockSaved === '1');
+			}
+			const soundSaved = localStorage.getItem('lbite_dashboard_sound');
+			if (soundSaved !== null) {
+				this.soundEnabled = soundSaved === '1';
+				this.updateSoundToggleUI();
+			}
+		},
+
+		/**
+		 * Sound-Toggle-Button-Darstellung aktualisieren
+		 */
+		updateSoundToggleUI: function() {
+			const $btn = $('#lbite-sound-toggle');
+			const $icon = $btn.find('.dashicons');
+			if (this.soundEnabled) {
+				$icon.removeClass('dashicons-controls-volumeoff').addClass('dashicons-controls-volumeon');
+				$btn.find('span:not(.dashicons)').text(lbiteDashboard.strings.soundActive || 'Sound aktiv');
+			} else {
+				$icon.removeClass('dashicons-controls-volumeon').addClass('dashicons-controls-volumeoff');
+				$btn.find('span:not(.dashicons)').text(lbiteDashboard.strings.soundInactive || 'Sound aus');
 			}
 		},
 

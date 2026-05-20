@@ -18,28 +18,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</button>
 	</div>
 
+	<?php
+	$lbite_assigned_location  = (int) get_user_meta( get_current_user_id(), 'lbite_assigned_location', true );
+	$lbite_is_location_locked = $lbite_assigned_location > 0 && ! current_user_can( 'lbite_manage_locations' );
+	if ( $lbite_is_location_locked ) {
+		$lbite_saved_location = $lbite_assigned_location;
+	} else {
+		$lbite_saved_location = get_user_meta( get_current_user_id(), 'lbite_board_location', true );
+	}
+	?>
 	<div class="lbite-board-controls">
 		<label>
 			<?php esc_html_e( 'Location:', 'libre-bite' ); ?>
-			<select id="lbite-board-location">
-				<option value=""><?php esc_html_e( 'Please select a location', 'libre-bite' ); ?></option>
-				<?php
-				$lbite_locations = get_posts(
-					array(
-						'post_type'      => 'lbite_location',
-						'posts_per_page' => 100, // Begrenzt für Performance.
-						'post_status'    => 'publish',
-					)
-				);
-				$lbite_saved_location = get_user_meta( get_current_user_id(), 'lbite_board_location', true );
-
-				foreach ( $lbite_locations as $lbite_location ) :
-					?>
-					<option value="<?php echo esc_attr( $lbite_location->ID ); ?>" <?php selected( $lbite_saved_location, $lbite_location->ID ); ?>>
-						<?php echo esc_html( $lbite_location->post_title ); ?>
-					</option>
-				<?php endforeach; ?>
-			</select>
+			<?php if ( $lbite_is_location_locked ) : ?>
+				<?php $lbite_locked_post = get_post( $lbite_assigned_location ); ?>
+				<span class="lbite-location-locked"><?php echo esc_html( $lbite_locked_post ? $lbite_locked_post->post_title : '' ); ?></span>
+				<input type="hidden" id="lbite-board-location" value="<?php echo esc_attr( $lbite_assigned_location ); ?>">
+			<?php else : ?>
+				<select id="lbite-board-location">
+					<option value=""><?php esc_html_e( 'Please select a location', 'libre-bite' ); ?></option>
+					<?php
+					$lbite_locations = get_posts(
+						array(
+							'post_type'      => 'lbite_location',
+							'posts_per_page' => 100,
+							'post_status'    => 'publish',
+						)
+					);
+					foreach ( $lbite_locations as $lbite_location ) :
+						?>
+						<option value="<?php echo esc_attr( $lbite_location->ID ); ?>" <?php selected( $lbite_saved_location, $lbite_location->ID ); ?>>
+							<?php echo esc_html( $lbite_location->post_title ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+			<?php endif; ?>
 		</label>
 
 		<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>

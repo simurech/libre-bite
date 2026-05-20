@@ -91,6 +91,12 @@ class LBite_Admin {
 		// Bestellungs-Counter im Menü-Badge (nach Menü-Aufbau)
 		$this->loader->add_action( 'admin_menu', $this, 'inject_order_count_badge', 999 );
 
+		// Standort-Zuweisung pro Benutzer (Benutzerprofil)
+		$this->loader->add_action( 'show_user_profile', $this, 'render_user_location_field' );
+		$this->loader->add_action( 'edit_user_profile', $this, 'render_user_location_field' );
+		$this->loader->add_action( 'personal_options_update', $this, 'save_user_location_field' );
+		$this->loader->add_action( 'edit_user_profile_update', $this, 'save_user_location_field' );
+
 		// Support-Box im Admin-Footer
 		$this->loader->add_action( 'admin_footer', $this, 'render_support_footer' );
 
@@ -189,12 +195,12 @@ class LBite_Admin {
 		// PERSONAL-BEREICH (lbite_staff)
 		// ============================================
 
-		// Dashboard
+		// Dashboard (nur für Admins sichtbar – Staff landet direkt auf der Bestellübersicht)
 		add_submenu_page(
 			'libre-bite',
 			__( 'Dashboard', 'libre-bite' ),
 			__( 'Dashboard', 'libre-bite' ),
-			'lbite_view_dashboard',
+			'lbite_manage_settings',
 			'libre-bite',
 			array( $this, 'render_dashboard_page' )
 		);
@@ -628,6 +634,12 @@ class LBite_Admin {
 
 		if ( ! current_user_can( 'lbite_use_pos' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
+		}
+
+		// Standort-Fixierung: Benutzer mit zugewiesenem Standort können ihn nicht ändern
+		$assigned = (int) get_user_meta( get_current_user_id(), 'lbite_assigned_location', true );
+		if ( $assigned > 0 && ! current_user_can( 'lbite_manage_locations' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Location is fixed for your account', 'libre-bite' ) ) );
 		}
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( $_POST['location_id'] ) : 0;
@@ -1566,5 +1578,63 @@ class LBite_Admin {
 
 		/* translators: %s: date/time */
 		wp_send_json_success( sprintf( __( 'Receipt sent (%s)', 'libre-bite' ), $sent_at ) );
+	}
+
+	/**
+	 * Standort-Zuweisung im Benutzerprofil anzeigen
+	 *
+	 * @param WP_User $user Benutzer-Objekt
+	 */
+	public function render_user_location_field( $user ) {
+		if ( ! current_user_can( 'lbite_manage_roles' ) ) {
+			return;
+		}
+
+		$assigned  = (int) get_user_meta( $user->ID, 'lbite_assigned_location', true );
+		$locations = LBite_Locations::get_all_locations();
+
+		if ( empty( $locations ) ) {
+			return;
+		}
+
+		wp_nonce_field( 'lbite_save_user_location_' . $user->ID, 'lbite_user_location_nonce' );
+		?>
+		<h2><?php esc_html_e( 'Libre Bite', 'libre-bite' ); ?></h2>
+		<table class="form-table">
+			<tr>
+				<th><label for="lbite_assigned_location"><?php esc_html_e( 'Assigned Location', 'libre-bite' ); ?></label></th>
+				<td>
+					<select name="lbite_assigned_location" id="lbite_assigned_location">
+						<option value="0"><?php esc_html_e( 'No fixed location (user can select freely)', 'libre-bite' ); ?></option>
+						<?php foreach ( $locations as $location ) : ?>
+							<option value="<?php echo esc_attr( $location->ID ); ?>" <?php selected( $assigned, $location->ID ); ?>>
+								<?php echo esc_html( $location->post_title ); ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+					<p class="description"><?php esc_html_e( 'When set, this location is pre-selected in POS and Order Overview and cannot be changed by the user.', 'libre-bite' ); ?></p>
+				</td>
+			</tr>
+		</table>
+		<?php
+	}
+
+	/**
+	 * Standort-Zuweisung aus dem Benutzerprofil speichern
+	 *
+	 * @param int $user_id Benutzer-ID
+	 */
+	public function save_user_location_field( $user_id ) {
+		if ( ! current_user_can( 'lbite_manage_roles' ) || ! current_user_can( 'edit_user', $user_id ) ) {
+			return;
+		}
+
+		if ( ! isset( $_POST['lbite_user_location_nonce'] ) ||
+			! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['lbite_user_location_nonce'] ) ), 'lbite_save_user_location_' . $user_id ) ) {
+			return;
+		}
+
+		$location_id = isset( $_POST['lbite_assigned_location'] ) ? intval( wp_unslash( $_POST['lbite_assigned_location'] ) ) : 0;
+		update_user_meta( $user_id, 'lbite_assigned_location', $location_id );
 	}
 }

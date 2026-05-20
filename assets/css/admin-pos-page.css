@@ -237,13 +237,14 @@
 .lbite-modal-content {
 	position: relative;
 	max-width: 600px;
-	margin: 50px auto;
+	margin: 20px auto;
 	background: #fff;
 	border-radius: 8px;
 	box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-	max-height: calc(100vh - 100px);
+	max-height: calc(100vh - 40px);
 	display: flex;
 	flex-direction: column;
+	overflow: hidden;
 }
 
 .lbite-modal-header {
@@ -287,6 +288,7 @@
 	display: flex;
 	gap: 10px;
 	justify-content: flex-end;
+	flex-shrink: 0;
 }
 
 .lbite-option-group {
@@ -303,13 +305,13 @@
 .lbite-option-choice {
 	display: flex;
 	align-items: center;
-	padding: 16px;
+	padding: 10px 14px;
 	border: 2px solid #ddd;
 	border-radius: 4px;
-	margin-bottom: 10px;
+	margin-bottom: 8px;
 	cursor: pointer;
 	transition: all 0.2s;
-	min-height: 60px;
+	min-height: 44px;
 	touch-action: manipulation;
 	background: #fff;
 }
@@ -404,8 +406,8 @@
 /* Touch-Optimierung */
 @media (hover: none) and (pointer: coarse) {
 	.lbite-option-choice {
-		padding: 20px;
-		min-height: 70px;
+		padding: 14px 16px;
+		min-height: 52px;
 	}
 
 	.lbite-option-choice input[type="radio"],
@@ -430,6 +432,18 @@
 	.lbite-option-choice-price {
 		font-size: 18px;
 	}
+}
+
+/* Gesperrter Standort (Staff mit fixiertem Standort) */
+.lbite-location-locked {
+	display: inline-block;
+	padding: 4px 10px;
+	background: #f0f6fc;
+	border: 1px solid #b3d4e8;
+	border-radius: 4px;
+	color: #1d7096;
+	font-weight: 600;
+	font-size: 13px;
 }
 
 /* Lagerbestand-Toggle */
