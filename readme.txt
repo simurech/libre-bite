@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.4.6
+Stable tag: 1.4.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.4.7 =
+* Fix: POS modal now clears the admin toolbar on tablets — top margin adjusted to prevent the "Add to Cart" button from being hidden behind the WordPress admin bar.
+* Fix: Product add-ons in the POS modal are now grouped under a single "Add-ons" heading instead of showing each option name as both a group title and a choice label.
+* Improvement: POS variant options now display in a two-column grid on wider screens for a more compact layout.
 
 = 1.4.6 =
 * Fix: Opening hours on location tiles and banner now open in a lightbox instead of expanding inline; closes on backdrop click or Escape key.
