@@ -71,15 +71,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php esc_html_e( 'Prevent Standby', 'libre-bite' ); ?>
 		</label>
 
-		<button type="button" id="lbite-sound-toggle" class="button">
-			<span class="dashicons dashicons-controls-volumeon"></span>
-			<?php esc_html_e( 'Sound active', 'libre-bite' ); ?>
-		</button>
-
-		<button type="button" id="lbite-activate-audio" class="button button-primary" style="display: none;">
-			<span class="dashicons dashicons-megaphone"></span>
-			<?php esc_html_e( 'Enable Sound Notifications', 'libre-bite' ); ?>
-		</button>
+		<label class="lbite-wake-lock-toggle">
+			<input type="checkbox" id="lbite-sound-enabled" checked>
+			<?php esc_html_e( 'Sound Notifications', 'libre-bite' ); ?>
+		</label>
 	</div>
 
 	<!-- Platzhalter wenn kein Standort gewählt -->

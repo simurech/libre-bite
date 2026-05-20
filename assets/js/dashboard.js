@@ -80,20 +80,6 @@
 		initAudio: function() {
 			if (lbiteDashboard.soundUrl) {
 				this.audio = new Audio(lbiteDashboard.soundUrl);
-
-				// Browser-Restriktionen prüfen: Versuche Audio "stumm" anzuspielen
-				this.audio.play().then(() => {
-					// Autoplay erlaubt
-					this.audio.pause();
-					this.audio.currentTime = 0;
-					$('#lbite-activate-audio').hide();
-				}).catch(() => {
-					// Autoplay blockiert – Aktivierungs-Button anzeigen.
-					// Sound-Toggle bleibt sichtbar, damit die Einstellung gespeichert werden kann.
-					if (this.soundEnabled) {
-						$('#lbite-activate-audio').show();
-					}
-				});
 			}
 		},
 
@@ -106,21 +92,6 @@
 
 			// Gespeicherte Einstellungen laden (vor dem initialen Wake-Lock-Check)
 			this.loadSavedSettings();
-
-			// Sound-Toggle-Darstellung immer initialisieren (unabhängig von gespeichertem Wert)
-			this.updateSoundToggleUI();
-
-			// Audio Aktivierung (Browser Workaround)
-			$('#lbite-activate-audio').on('click', () => {
-				if (this.audio) {
-					this.audio.play().then(() => {
-						this.audio.pause();
-						this.audio.currentTime = 0;
-						$('#lbite-activate-audio').hide();
-						window.lbiteNotify && window.lbiteNotify.success('Sound-Benachrichtigungen aktiviert');
-					});
-				}
-			});
 
 			// Wake Lock initial aktivieren wenn Checkbox angehakt
 			if ($('#lbite-wake-lock').is(':checked')) {
@@ -184,14 +155,10 @@
 				}
 			});
 
-			// Sound Toggle
-			$('#lbite-sound-toggle').on('click', () => {
-				this.soundEnabled = !this.soundEnabled;
-				this.updateSoundToggleUI();
+			// Sound
+			$('#lbite-sound-enabled').on('change', (e) => {
+				this.soundEnabled = e.target.checked;
 				localStorage.setItem('lbite_dashboard_sound', this.soundEnabled ? '1' : '0');
-				if (!this.soundEnabled) {
-					$('#lbite-activate-audio').hide();
-				}
 			});
 		},
 
@@ -242,22 +209,7 @@
 			const soundSaved = localStorage.getItem('lbite_dashboard_sound');
 			if (soundSaved !== null) {
 				this.soundEnabled = soundSaved === '1';
-				this.updateSoundToggleUI();
-			}
-		},
-
-		/**
-		 * Sound-Toggle-Button-Darstellung aktualisieren
-		 */
-		updateSoundToggleUI: function() {
-			const $btn = $('#lbite-sound-toggle');
-			const $icon = $btn.find('.dashicons');
-			if (this.soundEnabled) {
-				$icon.removeClass('dashicons-controls-volumeoff').addClass('dashicons-controls-volumeon');
-				$btn.find('span:not(.dashicons)').text(lbiteDashboard.strings.soundActive || 'Sound aktiv');
-			} else {
-				$icon.removeClass('dashicons-controls-volumeon').addClass('dashicons-controls-volumeoff');
-				$btn.find('span:not(.dashicons)').text(lbiteDashboard.strings.soundInactive || 'Sound aus');
+				$('#lbite-sound-enabled').prop('checked', this.soundEnabled);
 			}
 		},
 
