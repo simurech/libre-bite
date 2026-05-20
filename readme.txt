@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.4.7
+Stable tag: 1.4.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.4.8 =
+* Fix: POS modal now uses CSS Small Viewport Height (svh) so the footer button stays fully visible on iPad Safari when the tab bar is shown.
+* Improvement: POS add-on options now display in a two-column grid, matching the layout of variant options.
+* Improvement: POS product order now follows the WooCommerce menu order (same as the frontend shop) with A–Z as a tiebreaker.
+* Improvement: POS page automatically reloads after 8 hours when the tab regains focus, preventing stale data and expired nonces.
 
 = 1.4.7 =
 * Fix: POS modal now clears the admin toolbar on tablets — top margin adjusted to prevent the "Add to Cart" button from being hidden behind the WordPress admin bar.

@@ -54,10 +54,19 @@
 				this.requestWakeLock();
 			}
 
-			// Wake Lock nach Tab-Wechsel / App-Wechsel neu anfordern (Android)
+			// Seitenlade-Zeitstempel für Stabilitätsprüfung
+			const pageLoadTime = Date.now();
+
+			// Tab-Aktivierung: Wake Lock neu anfordern + Seite nach 8h neu laden
 			document.addEventListener('visibilitychange', () => {
-				if (document.visibilityState === 'visible' && $wakeLock.is(':checked')) {
-					this.requestWakeLock();
+				if (document.visibilityState === 'visible') {
+					if ($wakeLock.is(':checked')) {
+						this.requestWakeLock();
+					}
+					// Nach 8 Stunden Seite neu laden (Nonce-Ablauf, veraltete Daten)
+					if (Date.now() - pageLoadTime > 8 * 60 * 60 * 1000) {
+						location.reload();
+					}
 				}
 			});
 
@@ -492,7 +501,7 @@
 
 		// Optionen rendern (alle als eine «Add-ons»-Gruppe)
 		if (productData.options && productData.options.length > 0) {
-			const $group = $('<div class="lbite-option-group"></div>');
+			const $group = $('<div class="lbite-option-group lbite-addons-group"></div>');
 			$group.append($('<div class="lbite-option-group-label"></div>').text(lbitePos.strings.addons || 'Add-ons'));
 
 			productData.options.forEach(option => {

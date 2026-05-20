@@ -112,6 +112,7 @@
 	position: sticky;
 	top: 32px;
 	max-height: calc(100vh - 52px);
+	max-height: calc(100svh - 52px);
 }
 
 #lbite-pos-cart-items {
@@ -242,6 +243,7 @@
 	border-radius: 8px;
 	box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 	max-height: calc(100vh - 64px);
+	max-height: calc(100svh - 64px);
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -295,19 +297,22 @@
 	margin-bottom: 20px;
 }
 
-/* Varianten-Gruppe: 2 Spalten nebeneinander */
-.lbite-option-group.lbite-variants-group {
+/* Varianten- und Add-ons-Gruppe: 2 Spalten nebeneinander */
+.lbite-option-group.lbite-variants-group,
+.lbite-option-group.lbite-addons-group {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	gap: 8px;
 }
 
-.lbite-variants-group .lbite-option-group-label {
+.lbite-variants-group .lbite-option-group-label,
+.lbite-addons-group .lbite-option-group-label {
 	grid-column: 1 / -1;
 	margin-bottom: 4px;
 }
 
-.lbite-variants-group .lbite-option-choice {
+.lbite-variants-group .lbite-option-choice,
+.lbite-addons-group .lbite-option-choice {
 	margin-bottom: 0;
 }
 

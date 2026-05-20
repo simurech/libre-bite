@@ -201,8 +201,10 @@ class LBite_POS {
 				'post_type'      => 'product',
 				'posts_per_page' => 500, // Begrenzt auf 500 für Performance.
 				'post_status'    => 'publish',
-				'orderby'        => 'title',
-				'order'          => 'ASC',
+				'orderby'        => array(
+					'menu_order' => 'ASC',
+					'title'      => 'ASC',
+				),
 			)
 		);
 
@@ -369,8 +371,10 @@ class LBite_POS {
 			'post_type'      => 'product',
 			'posts_per_page' => 500, // Begrenzt für Performance.
 			'post_status'    => 'publish',
-			'orderby'        => 'title',
-			'order'          => 'ASC',
+			'orderby'        => array(
+				'menu_order' => 'ASC',
+				'title'      => 'ASC',
+			),
 		);
 
 		// Nach Kategorie filtern
