@@ -28,7 +28,7 @@ msgstr "benötigt WooCommerce. Bitte WooCommerce installieren und aktivieren."
 
 #: libre-bite.php:186
 msgid "requires at least WooCommerce version 8.0. Please update WooCommerce."
-msgstr "erfordert mindestens WooCommerce Version 8.0. Bitte WooCommerce aktualisieren."
+msgstr "erfordert mindestens WooCommerce Version 8.0. Bitte aktualisieren Sie WooCommerce."
 
 #: templates/location-selector-banner.php:81
 msgid "Order here"
@@ -967,7 +967,7 @@ msgstr "QR-Code drucken"
 
 #: includes/modules/tables/class-tables.php:631
 msgid "Please select a location first and save to generate the link."
-msgstr "Bitte zuerst einen Standort wählen und speichern, um den Link zu generieren."
+msgstr "Bitte wählen Sie zuerst einen Standort und speichern Sie, um den Link zu generieren."
 
 #: includes/modules/tables/class-tables.php:729
 #: includes/modules/reservations/class-reservations.php:367
@@ -1278,7 +1278,7 @@ msgstr "Wird gesendet …"
 msgid ""
 "Your reservation request has been submitted successfully. We will contact "
 "you soon."
-msgstr "Deine Reservierungsanfrage wurde erfolgreich übermittelt. Wir melden uns in Kürze bei dir."
+msgstr "Ihre Reservierungsanfrage wurde erfolgreich übermittelt. Wir melden uns in Kürze bei Ihnen."
 
 #: includes/modules/reservations/class-reservations.php:465
 msgid "Error sending. Please try again."
@@ -1329,7 +1329,7 @@ msgstr "Hallo %s,"
 msgid ""
 "Your reservation request has been received. We will contact you shortly to "
 "confirm the reservation."
-msgstr "Deine Reservierungsanfrage ist eingegangen. Wir werden uns in Kürze bei dir melden, um die Reservierung zu bestätigen."
+msgstr "Ihre Reservierungsanfrage ist eingegangen. Wir werden uns in Kürze bei Ihnen melden, um die Reservierung zu bestätigen."
 
 #: includes/modules/reservations/class-reservations.php:679
 #: includes/modules/reservations/class-reservations.php:727
@@ -1981,7 +1981,7 @@ msgstr "Anfrage erfolgreich gesendet!"
 msgid ""
 "Your reservation request has been submitted successfully. We will get back "
 "to you shortly to confirm the reservation."
-msgstr "Deine Reservierungsanfrage wurde erfolgreich übermittelt. Wir melden uns in Kürze bei dir, um die Reservierung zu bestätigen."
+msgstr "Ihre Reservierungsanfrage wurde erfolgreich übermittelt. Wir melden uns in Kürze bei Ihnen, um die Reservierung zu bestätigen."
 
 #: templates/emails/pickup-reminder.php:25
 #: templates/emails/plain/pickup-reminder.php:27
@@ -2251,7 +2251,7 @@ msgstr "Sound wählen"
 msgid ""
 "Default sound is available. You can also select your own sound from the "
 "media library."
-msgstr "Standard-Sound ist verfügbar. Du kannst auch einen eigenen Sound aus der Mediathek auswählen."
+msgstr "Standard-Sound ist verfügbar. Sie können auch einen eigenen Sound aus der Mediathek auswählen."
 
 #: templates/admin/settings-tabbed.php:418
 msgid "Select a sound from your media library."
@@ -2308,7 +2308,7 @@ msgstr "Zahlungsarten"
 msgid ""
 "Choose which payment methods are displayed in the POS payment modal and "
 "customize the labels."
-msgstr "Wähle, welche Zahlungsmethoden im POS-Zahlungsmodal angezeigt werden, und passe die Bezeichnungen an."
+msgstr "Wählen Sie, welche Zahlungsmethoden im POS-Zahlungsmodal angezeigt werden, und passen Sie die Bezeichnungen an."
 
 #: templates/admin/settings-tabbed.php:512
 msgid "Active"
@@ -2370,7 +2370,7 @@ msgstr "+ Neue Seite erstellen"
 msgid ""
 "Select the page where the shortcode [lbite_location_selector] is included, "
 "or create a new page."
-msgstr "Wähle die Seite aus, auf der der Shortcode [lbite_location_selector] eingebunden ist, oder erstelle eine neue Seite."
+msgstr "Wählen Sie die Seite aus, auf der der Shortcode [lbite_location_selector] eingebunden ist, oder erstellen Sie eine neue Seite."
 
 #: templates/admin/settings.php:119
 msgid "Edit Page"
@@ -2714,7 +2714,7 @@ msgstr "So findest du die ID eines Standorts:"
 
 #: templates/admin/documentation.php:137
 msgid "Go to \"Libre Bite → Locations\""
-msgstr "Gehe zu «Libre Bite → Standorte»"
+msgstr "Gehen Sie zu «Libre Bite → Standorte»"
 
 #: templates/admin/documentation.php:138
 msgid "Hover over a location name"
@@ -2810,7 +2810,7 @@ msgstr "Tischverwaltung & QR-Bestellung"
 msgid ""
 "With table management you can create tables for your locations and generate "
 "QR codes for contactless ordering."
-msgstr "Mit der Tischverwaltung kannst du Tische für deine Standorte erstellen und QR-Codes für kontaktloses Bestellen generieren."
+msgstr "Mit der Tischverwaltung können Sie Tische für Ihre Standorte erstellen und QR-Codes für kontaktloses Bestellen generieren."
 
 #: templates/admin/documentation.php:214
 msgid "How to proceed:"
@@ -2826,7 +2826,7 @@ msgstr "Jedem Tisch einen Standort zuweisen."
 
 #: templates/admin/documentation.php:218
 msgid "Print the QR code or copy the link for your table stands."
-msgstr "QR-Code ausdrucken oder Link für die Tischaufsteller kopieren."
+msgstr "Drucken Sie den QR-Code aus oder kopieren Sie den Link für Ihre Tischaufsteller."
 
 #: templates/admin/documentation.php:221
 msgid "How it works:"
@@ -2870,7 +2870,7 @@ msgstr "In der Bestellübersicht und im POS wird die Tischnummer direkt bei der 
 msgid ""
 "In the order overview (Kanban) you can set a filter in the top right to show "
 "only table orders or only take-away."
-msgstr "In der Bestellübersicht (Kanban) kannst du oben rechts einen Filter setzen, um nur Tischbestellungen oder nur Take-away anzuzeigen."
+msgstr "In der Bestellübersicht (Kanban) können Sie oben rechts einen Filter setzen, um nur Tischbestellungen oder nur Take-away anzuzeigen."
 
 #: templates/admin/documentation.php:236
 msgid "More Information"
@@ -3098,7 +3098,7 @@ msgstr "Libre Bite Pro holen!"
 msgid ""
 "Unlock multi-location management, tip options, pickup reminders and much "
 "more."
-msgstr "Schalte Multi-Standort-Verwaltung, Trinkgeld-Optionen, Abholbenachrichtigungen und vieles mehr frei."
+msgstr "Schalten Sie Multi-Standort-Verwaltung, Trinkgeld-Optionen, Abholbenachrichtigungen und vieles mehr frei."
 
 #: templates/admin/super-admin-settings.php:174
 msgid "Upgrade Now"
@@ -3149,7 +3149,7 @@ msgstr "So"
 msgid ""
 "Define holidays on which a location is closed or has different opening "
 "hours. Holidays override the regular weekly schedule."
-msgstr "Definiere Feiertage, an denen ein Standort geschlossen ist oder abweichende Öffnungszeiten hat. Feiertage überschreiben den regulären Wochenplan."
+msgstr "Definieren Sie Feiertage, an denen ein Standort geschlossen ist oder abweichende Öffnungszeiten hat. Feiertage überschreiben den regulären Wochenplan."
 
 #: templates/admin/holidays-settings.php:46
 msgid "Type"
@@ -3241,7 +3241,7 @@ msgstr "Checkout-Felder verwalten"
 msgid ""
 "Here you can specify which fields should be displayed in checkout and "
 "customize field labels."
-msgstr "Hier kannst du festlegen, welche Felder im Checkout angezeigt werden, und die Feldbezeichnungen anpassen."
+msgstr "Hier können Sie festlegen, welche Felder im Checkout angezeigt werden, und die Feldbezeichnungen anpassen."
 
 #: templates/admin/checkout-fields.php:107
 msgid "General Settings"
@@ -3355,7 +3355,7 @@ msgstr "Fehlerbehebung"
 msgid ""
 "With feature toggles, you can enable or disable individual Libre Bite "
 "features."
-msgstr "Mit den Funktions-Toggles kannst du einzelne Libre Bite-Funktionen aktivieren oder deaktivieren."
+msgstr "Mit den Funktions-Toggles können Sie einzelne Libre Bite-Funktionen aktivieren oder deaktivieren."
 
 #: templates/admin/help-superadmin.php:61
 msgid "Current Configuration"
@@ -3479,7 +3479,7 @@ msgstr "Benutzer einer Rolle zuweisen"
 
 #: templates/admin/help-superadmin.php:205
 msgid "Go to \"Users\" → \"All Users\""
-msgstr "Gehe zu «Benutzer» → «Alle Benutzer»"
+msgstr "Gehen Sie zu «Benutzer» → «Alle Benutzer»"
 
 #: templates/admin/help-superadmin.php:206
 msgid "Edit the desired user"
@@ -3611,7 +3611,7 @@ msgstr "Lösung:"
 
 #: templates/admin/help-superadmin.php:342
 msgid "Disable and re-enable the plugin to recreate roles."
-msgstr "Plugin deaktivieren und reaktivieren, um die Rollen neu zu erstellen."
+msgstr "Deaktivieren und reaktivieren Sie das Plugin, um die Rollen neu zu erstellen."
 
 #: templates/admin/help-superadmin.php:346
 msgid "AJAX Error in Dashboard"
@@ -3655,7 +3655,7 @@ msgstr "Debug-Modus"
 
 #: templates/admin/help-superadmin.php:366
 msgid "Enable WP_DEBUG in wp-config.php for detailed error messages:"
-msgstr "WP_DEBUG in der wp-config.php aktivieren für detaillierte Fehlermeldungen:"
+msgstr "Aktivieren Sie WP_DEBUG in der wp-config.php für detaillierte Fehlermeldungen:"
 
 #: templates/admin/help-superadmin.php:372
 msgid "Errors are stored in /wp-content/debug.log."
@@ -3703,7 +3703,7 @@ msgstr "Super-Admin Übersicht"
 msgid ""
 "As a Super Admin, you have full access to all Libre Bite features and "
 "settings."
-msgstr "Als Super Admin hast du vollen Zugriff auf alle Libre Bite-Funktionen und -Einstellungen."
+msgstr "Als Super Admin haben Sie vollen Zugriff auf alle Libre Bite-Funktionen und -Einstellungen."
 
 #: templates/admin/help-superadmin.php:417
 #: templates/admin/admin-settings.php:45
@@ -3778,7 +3778,7 @@ msgstr "Zugriff für andere Benutzerrollen"
 msgid ""
 "Choose which standard roles are allowed to access the plugin. Enabled roles "
 "receive the same access as Libre Bite Personal (Order Overview, POS)."
-msgstr "Wähle, welche Standardrollen auf das Plugin zugreifen dürfen. Aktivierte Rollen erhalten denselben Zugriff wie Libre Bite Personal (Bestellübersicht, POS)."
+msgstr "Wählen Sie, welche Standardrollen auf das Plugin zugreifen dürfen. Aktivierte Rollen erhalten denselben Zugriff wie Libre Bite Personal (Bestellübersicht, POS)."
 
 #: templates/admin/admin-settings.php:104
 msgid "Can use plugin"
@@ -3792,7 +3792,7 @@ msgstr "Benutzerrollen verwalten"
 msgid ""
 "Customize the displayed names of user roles in the backend or completely "
 "disable unused roles."
-msgstr "Passe die angezeigten Namen der Benutzerrollen im Backend an oder deaktiviere nicht benötigte Rollen vollständig."
+msgstr "Passen Sie die angezeigten Namen der Benutzerrollen im Backend an oder deaktivieren Sie nicht benötigte Rollen vollständig."
 
 #: templates/admin/admin-settings.php:125
 msgid "Displayed Name"
@@ -3822,7 +3822,7 @@ msgstr "Menü-Sichtbarkeit nach Benutzerrolle"
 msgid ""
 "Choose which menu items should be hidden for each user role. Administrators "
 "always have full access."
-msgstr "Wähle aus, welche Menüpunkte für jede Benutzerrolle ausgeblendet werden sollen. Administratoren haben immer vollen Zugriff."
+msgstr "Wählen Sie aus, welche Menüpunkte für jede Benutzerrolle ausgeblendet werden sollen. Administratoren haben immer vollen Zugriff."
 
 #: templates/admin/admin-settings.php:197
 msgid "No additional user roles found (other than Administrator)."
@@ -3832,7 +3832,7 @@ msgstr "Keine weiteren Benutzerrollen gefunden (ausser Administrator)."
 #, php-format
 msgid ""
 "Choose the menu items that should be hidden for users with the role \"%s\"."
-msgstr "Wähle die Menüpunkte aus, die für Benutzer mit der Rolle «%s» ausgeblendet werden sollen."
+msgstr "Wählen Sie die Menüpunkte aus, die für Benutzer mit der Rolle «%s» ausgeblendet werden sollen."
 
 #: templates/admin/admin-settings.php:233
 msgid "Select All / Deselect All"
@@ -3848,7 +3848,7 @@ msgstr "Schnellstart"
 
 #: templates/admin/help-staff.php:32
 msgid "As staff, you have access to the order overview and the POS system."
-msgstr "Als Personal hast du Zugriff auf die Bestellübersicht und das Kassensystem."
+msgstr "Als Personal haben Sie Zugriff auf die Bestellübersicht und das Kassensystem."
 
 #: templates/admin/help-staff.php:37
 msgid "Open Order Overview"
@@ -3872,7 +3872,7 @@ msgstr "Bestellübersicht öffnen"
 
 #: templates/admin/help-staff.php:53
 msgid "Drag an order to the next column or click the status button"
-msgstr "Bestellung in die nächste Spalte ziehen oder den Statusbutton klicken"
+msgstr "Ziehen Sie eine Bestellung in die nächste Spalte oder klicken Sie den Statusbutton"
 
 #: templates/admin/help-staff.php:54
 msgid "Status flow: Incoming → In Progress → Ready → Picked Up"
@@ -3886,7 +3886,7 @@ msgstr "Bestelldetails ansehen"
 msgid ""
 "Click on an order to view all details such as products, customer name, and "
 "pickup time."
-msgstr "Auf eine Bestellung klicken, um alle Details wie Produkte, Kundenname und Abholzeit anzuzeigen."
+msgstr "Klicken Sie auf eine Bestellung, um alle Details wie Produkte, Kundenname und Abholzeit anzuzeigen."
 
 #: templates/admin/help-staff.php:62
 msgid ""
@@ -4044,11 +4044,11 @@ msgstr "Administrator-Übersicht"
 msgid ""
 "As an administrator you can manage orders, configure products, set up "
 "locations and customize settings."
-msgstr "Als Administrator kannst du Bestellungen verwalten, Produkte konfigurieren, Standorte einrichten und Einstellungen anpassen."
+msgstr "Als Administrator können Sie Bestellungen verwalten, Produkte konfigurieren, Standorte einrichten und Einstellungen anpassen."
 
 #: templates/admin/help-admin.php:140
 msgid "Manage incoming orders with the Kanban board or POS system."
-msgstr "Eingehende Bestellungen mit dem Kanban-Board oder dem Kassensystem verwalten."
+msgstr "Verwalten Sie eingehende Bestellungen mit dem Kanban-Board oder dem Kassensystem."
 
 #: templates/admin/help-admin.php:142
 msgid "Change order status via drag & drop"
@@ -4441,7 +4441,7 @@ msgstr "Bevor du uns kontaktierst"
 
 #: templates/admin/help-partials/support.php:73
 msgid "To help you quickly, please prepare the following information:"
-msgstr "Um dir schnell helfen zu können, bereite bitte folgende Informationen vor:"
+msgstr "Um Ihnen schnell helfen zu können, bereiten Sie bitte folgende Informationen vor:"
 
 #: templates/admin/help-partials/support.php:76
 msgid "Description of the issue"
@@ -4467,7 +4467,7 @@ msgstr "Keine Bestellbenachrichtigungen?"
 msgid ""
 "Check in the settings whether sound notifications are enabled. Make sure the "
 "browser allows sound playback."
-msgstr "Prüfe in den Einstellungen, ob Sound-Benachrichtigungen aktiviert sind. Stelle sicher, dass der Browser die Soundwiedergabe erlaubt."
+msgstr "Prüfen Sie in den Einstellungen, ob Sound-Benachrichtigungen aktiviert sind. Stellen Sie sicher, dass der Browser die Soundwiedergabe erlaubt."
 
 #: templates/admin/help-partials/support.php:92
 msgid "Location not showing?"
@@ -4475,7 +4475,7 @@ msgstr "Standort wird nicht angezeigt?"
 
 #: templates/admin/help-partials/support.php:93
 msgid "Make sure the location is published and opening hours are configured."
-msgstr "Stelle sicher, dass der Standort veröffentlicht und die Öffnungszeiten konfiguriert sind."
+msgstr "Stellen Sie sicher, dass der Standort veröffentlicht und die Öffnungszeiten konfiguriert sind."
 
 #: templates/admin/help-partials/support.php:97
 msgid "Product options not appearing?"
@@ -4483,7 +4483,7 @@ msgstr "Produkt-Optionen erscheinen nicht?"
 
 #: templates/admin/help-partials/support.php:98
 msgid "Check whether the option is published and assigned to the product."
-msgstr "Prüfe, ob die Option veröffentlicht und dem Produkt zugewiesen ist."
+msgstr "Prüfen Sie, ob die Option veröffentlicht und dem Produkt zugewiesen ist."
 
 #: templates/admin/help-partials/settings.php:16
 msgid ""
@@ -4496,7 +4496,7 @@ msgid ""
 "Activate or deactivate individual feature modules of Libre Bite. Disabled "
 "features are hidden from the menu – including the corresponding settings "
 "tabs."
-msgstr "Aktiviere oder deaktiviere einzelne Funktionsmodule von Libre Bite. Deaktivierte Funktionen werden im Menü ausgeblendet – einschliesslich der entsprechenden Einstellungs-Tabs."
+msgstr "Aktivieren oder deaktivieren Sie einzelne Funktionsmodule von Libre Bite. Deaktivierte Funktionen werden im Menü ausgeblendet – einschliesslich der entsprechenden Einstellungs-Tabs."
 
 #: templates/admin/help-partials/settings.php:26
 msgid ""
@@ -4569,7 +4569,7 @@ msgstr "Blendet die letzten N Minuten jedes Öffnungsfensters aus. Beispiel: 30 
 msgid ""
 "Customize the logo, colors and name of the plugin in the backend – so the "
 "system matches your business."
-msgstr "Passe Logo, Farben und Namen des Plugins im Backend an – so passt das System zu deinem Betrieb."
+msgstr "Passen Sie Logo, Farben und Namen des Plugins im Backend an – so passt das System zu Ihrem Betrieb."
 
 #: templates/admin/help-partials/settings.php:71
 msgid "Open General Settings"
@@ -4580,7 +4580,7 @@ msgid ""
 "Define holidays on which a location is closed or has different opening "
 "hours. Holiday settings override the regular weekly schedule for a specific "
 "date."
-msgstr "Definiere Feiertage, an denen ein Standort geschlossen ist oder abweichende Öffnungszeiten hat. Feiertagseinstellungen überschreiben den regulären Wochenplan für ein bestimmtes Datum."
+msgstr "Definieren Sie Feiertage, an denen ein Standort geschlossen ist oder abweichende Öffnungszeiten hat. Feiertagseinstellungen überschreiben den regulären Wochenplan für ein bestimmtes Datum."
 
 #: templates/admin/help-partials/settings.php:86
 msgid "Type: Closed"
@@ -4602,7 +4602,7 @@ msgstr "Typ: Sonderöffnungszeiten"
 msgid ""
 "The location is open, but with different hours than usual. Enter one or two "
 "time windows (e.g. a shorter service on a public holiday)."
-msgstr "Der Standort ist geöffnet, aber mit abweichenden Zeiten. Gib ein oder zwei Zeitfenster ein (z. B. kürzerer Betrieb an einem Feiertag)."
+msgstr "Der Standort ist geöffnet, aber mit abweichenden Zeiten. Geben Sie ein oder zwei Zeitfenster ein (z. B. kürzerer Betrieb an einem Feiertag)."
 
 #: templates/admin/help-partials/settings.php:95
 msgid "You can apply a holiday to all locations or only to specific ones."
@@ -4622,7 +4622,7 @@ msgstr "Trinkgeld"
 msgid ""
 "Offer your customers a tip option at checkout. You can define three "
 "percentages and set a default selection."
-msgstr "Biete deinen Kunden eine Trinkgeld-Option im Checkout an. Du kannst drei Prozentsätze definieren und eine Standardauswahl festlegen."
+msgstr "Bieten Sie Ihren Kunden eine Trinkgeld-Option im Checkout an. Sie können drei Prozentsätze definieren und eine Standardauswahl festlegen."
 
 #: templates/admin/help-partials/settings.php:111
 msgid "Open Tip Settings"
@@ -4642,7 +4642,7 @@ msgstr "Checkout-Felder"
 msgid ""
 "Choose which fields the customer must fill in when ordering (e.g. first "
 "name, email, phone). For take-away, often only the first name is needed."
-msgstr "Wähle, welche Felder der Kunde beim Bestellen ausfüllen muss (z. B. Vorname, E-Mail, Telefon). Für Take-away wird oft nur der Vorname benötigt."
+msgstr "Wählen Sie, welche Felder der Kunde beim Bestellen ausfüllen muss (z. B. Vorname, E-Mail, Telefon). Für Take-away wird oft nur der Vorname benötigt."
 
 #: templates/admin/help-partials/settings.php:132
 msgid ""
@@ -4675,7 +4675,7 @@ msgstr "Wie oft die Bestellübersicht im Hintergrund auf neue Bestellungen prüf
 msgid ""
 "The sound played when new orders arrive. You can choose a custom sound from "
 "the media library or use the default sound."
-msgstr "Der Sound, der bei neuen Bestellungen abgespielt wird. Du kannst einen eigenen Sound aus der Mediathek wählen oder den Standard-Sound verwenden."
+msgstr "Der Sound, der bei neuen Bestellungen abgespielt wird. Sie können einen eigenen Sound aus der Mediathek wählen oder den Standard-Sound verwenden."
 
 #: templates/admin/help-partials/settings.php:175
 msgid ""
@@ -4692,7 +4692,7 @@ msgstr "Bestellübersicht-Einstellungen öffnen"
 msgid ""
 "Define which payment methods are shown in the POS payment modal (cash, card, "
 "Twint, other). You can disable payment methods and customize their labels."
-msgstr "Definiere, welche Zahlungsmethoden im POS-Zahlungsmodal angezeigt werden (Bar, Karte, Twint, Sonstiges). Du kannst Zahlungsmethoden deaktivieren und deren Bezeichnungen anpassen."
+msgstr "Definieren Sie, welche Zahlungsmethoden im POS-Zahlungsmodal angezeigt werden (Bar, Karte, Twint, Sonstiges). Sie können Zahlungsmethoden deaktivieren und deren Bezeichnungen anpassen."
 
 #: templates/admin/help-partials/settings.php:192
 msgid "Open POS Settings"
@@ -4704,7 +4704,7 @@ msgstr "Standort erstellen"
 
 #: templates/admin/help-partials/locations.php:18
 msgid "Go to \"Libre Bite\" → \"Locations\""
-msgstr "Gehe zu «Libre Bite» → «Standorte»"
+msgstr "Gehen Sie zu «Libre Bite» → «Standorte»"
 
 #: templates/admin/help-partials/locations.php:19
 #: templates/admin/help-partials/tables.php:24
@@ -4785,7 +4785,7 @@ msgstr "Tag als geschlossen markieren – es werden keine Zeitslots angeboten"
 msgid ""
 "Two windows per day: Use both windows for locations with a midday break "
 "(e.g. 11:00–14:00 and 17:00–22:00). Leave the 2nd window empty if not needed."
-msgstr "Zwei Fenster pro Tag: Nutze beide Fenster für Standorte mit Mittagspause (z. B. 11:00–14:00 und 17:00–22:00). Lass das 2. Fenster leer, wenn es nicht benötigt wird."
+msgstr "Zwei Fenster pro Tag: Nutzen Sie beide Fenster für Standorte mit Mittagspause (z. B. 11:00–14:00 und 17:00–22:00). Lassen Sie das 2. Fenster leer, wenn es nicht benötigt wird."
 
 #: templates/admin/help-partials/locations.php:80
 msgid "Location in Checkout"
@@ -4839,7 +4839,7 @@ msgstr "Mit dem folgenden Shortcode können Kunden direkt auf einer Seite oder i
 msgid ""
 "You can insert the shortcode on any page (e.g. the order page or homepage). "
 "The selected location is stored in the session and used at checkout."
-msgstr "Du kannst den Shortcode auf jeder beliebigen Seite einfügen (z. B. auf der Bestellseite oder der Startseite). Der gewählte Standort wird in der Session gespeichert und im Checkout verwendet."
+msgstr "Sie können den Shortcode auf jeder beliebigen Seite einfügen (z. B. auf der Bestellseite oder der Startseite). Der gewählte Standort wird in der Session gespeichert und im Checkout verwendet."
 
 #: templates/admin/help-partials/locations.php:97
 msgid "Simple Usage"
@@ -4920,7 +4920,7 @@ msgstr "URL-Parameter (Deep-Links)"
 msgid ""
 "You can also pre-select location and order type directly via URL – useful "
 "for QR codes, flyers or links."
-msgstr "Du kannst Standort und Bestelltyp auch direkt per URL vorauswählen – nützlich für QR-Codes, Flyer oder Links."
+msgstr "Sie können Standort und Bestelltyp auch direkt per URL vorauswählen – nützlich für QR-Codes, Flyer oder Links."
 
 #: templates/admin/help-partials/locations.php:176
 msgid "URL Parameter"
@@ -4934,7 +4934,7 @@ msgstr "Standort-ID (Zahl)"
 msgid ""
 "Automatically pre-selects the location. You can find the ID in the URL when "
 "editing the location."
-msgstr "Wählt den Standort automatisch vor. Die ID findest du in der URL beim Bearbeiten des Standorts."
+msgstr "Wählt den Standort automatisch vor. Die ID finden Sie in der URL beim Bearbeiten des Standorts."
 
 #: templates/admin/help-partials/locations.php:190
 msgid "Sets the order type to \"Now\" (fastest possible pickup time)."
@@ -4956,7 +4956,7 @@ msgstr "Hinweis: Der alte Parameter ?location=ID (ohne Präfix) wird aus Gründe
 msgid ""
 "Tip: Enable the \"Location Selection\" feature under Settings → Features for "
 "the shortcode to be visible."
-msgstr "Tipp: Aktiviere die Funktion «Standortauswahl» unter Einstellungen → Funktionen, damit der Shortcode sichtbar ist."
+msgstr "Tipp: Aktivieren Sie die Funktion «Standortauswahl» unter Einstellungen → Funktionen, damit der Shortcode sichtbar ist."
 
 #: templates/admin/help-partials/locations.php:213
 msgid "Location Color"
@@ -5009,7 +5009,7 @@ msgstr "Mit der Tischverwaltung können Gäste direkt am Tisch bestellen – sie
 
 #: templates/admin/help-partials/tables.php:23
 msgid "Go to \"Libre Bite\" → \"Tables\""
-msgstr "Gehe zu «Libre Bite» → «Tische»"
+msgstr "Gehen Sie zu «Libre Bite» → «Tische»"
 
 #: templates/admin/help-partials/tables.php:25
 msgid "Enter a name, e.g. \"Table 1\" or \"Terrace A\""
@@ -5033,11 +5033,11 @@ msgstr "Mehrere Tische auf einmal erstellen"
 
 #: templates/admin/help-partials/tables.php:35
 msgid "For larger setups, you can create multiple tables in one step:"
-msgstr "Für größere Setups kannst du mehrere Tische in einem Schritt erstellen:"
+msgstr "Für größere Setups können Sie mehrere Tische in einem Schritt erstellen:"
 
 #: templates/admin/help-partials/tables.php:37
 msgid "Go to \"Libre Bite\" → \"Tables\" → \"Create Multiple Tables\""
-msgstr "Gehe zu «Libre Bite» → «Tische» → «Mehrere Tische erstellen»"
+msgstr "Gehen Sie zu «Libre Bite» → «Tische» → «Mehrere Tische erstellen»"
 
 #: templates/admin/help-partials/tables.php:38
 msgid "Select location and prefix (e.g. \"Table\")"
@@ -5123,7 +5123,7 @@ msgstr "Tischplan einrichten"
 
 #: templates/admin/help-partials/tables.php:89
 msgid "Go to \"Libre Bite\" → \"Table Plan\""
-msgstr "Gehe zu «Libre Bite» → «Tischplan»"
+msgstr "Gehen Sie zu «Libre Bite» → «Tischplan»"
 
 #: templates/admin/help-partials/tables.php:90
 msgid "Select a location"
@@ -5198,7 +5198,7 @@ msgid ""
 "Libre Bite builds directly on your WooCommerce products. You do not need to "
 "create new products – you simply extend the existing ones with food service-"
 "specific features like product options (add-ons)."
-msgstr "Libre Bite baut direkt auf deinen WooCommerce-Produkten auf. Du musst keine neuen Produkte erstellen – du erweiterst die bestehenden einfach um gastrospezifische Funktionen wie Produkt-Add-ons."
+msgstr "Libre Bite baut direkt auf Ihren WooCommerce-Produkten auf. Sie müssen keine neuen Produkte erstellen – Sie erweitern die bestehenden einfach um gastrospezifische Funktionen wie Produkt-Add-ons."
 
 #: templates/admin/help-partials/products.php:18
 msgid "WooCommerce Products as the Foundation"
@@ -5208,7 +5208,7 @@ msgstr "WooCommerce-Produkte als Grundlage"
 msgid ""
 "All products you manage in WooCommerce are automatically available in Libre "
 "Bite – in the online shop, in the POS system, and at checkout."
-msgstr "Alle Produkte, die du in WooCommerce verwaltest, sind automatisch in Libre Bite verfügbar – im Onlineshop, im POS-System und im Checkout."
+msgstr "Alle Produkte, die Sie in WooCommerce verwalten, sind automatisch in Libre Bite verfügbar – im Onlineshop, im POS-System und im Checkout."
 
 #: templates/admin/help-partials/products.php:21
 msgid "Simple Products:"
@@ -5269,7 +5269,7 @@ msgstr "Schritt 1: Produkt-Option erstellen"
 
 #: templates/admin/help-partials/products.php:39
 msgid "Go to \"Libre Bite\" → \"Product Options\""
-msgstr "Gehe zu «Libre Bite» → «Produkt-Add-ons»"
+msgstr "Gehen Sie zu «Libre Bite» → «Produkt-Add-ons»"
 
 #: templates/admin/help-partials/products.php:41
 msgid "Enter a name, e.g. \"Extra Cheese\""
@@ -5308,7 +5308,7 @@ msgid ""
 "Tip: You can assign the same option to multiple products. If you want to "
 "offer \"Extra Cheese\" for all burger products, create the option once and "
 "then assign it to each burger."
-msgstr "Tipp: Du kannst dieselbe Option mehreren Produkten zuweisen. Wenn du «Extra Käse» für alle Burger-Produkte anbieten möchtest, erstelle die Option einmal und weise sie dann jedem Burger zu."
+msgstr "Tipp: Sie können dieselbe Option mehreren Produkten zuweisen. Wenn Sie «Extra Käse» für alle Burger-Produkte anbieten möchten, erstellen Sie die Option einmal und weisen Sie sie dann jedem Burger zu."
 
 #: templates/admin/help-partials/products.php:60
 msgid "Go to Product Options"
@@ -5515,7 +5515,7 @@ msgstr "Datum navigieren"
 msgid ""
 "Use the arrow keys ‹ and › to navigate day by day. The date field also "
 "accepts direct input. Click «Today» to return to the current day."
-msgstr "Verwende die Pfeiltasten ‹ und › zur tagesweisen Navigation. Das Datumsfeld akzeptiert auch direkte Eingaben. Klicke auf «Heute», um zum aktuellen Tag zurückzukehren."
+msgstr "Verwenden Sie die Pfeiltasten ‹ und › zur tagesweisen Navigation. Das Datumsfeld akzeptiert auch direkte Eingaben. Klicken Sie auf «Heute», um zum aktuellen Tag zurückzukehren."
 
 #: templates/admin/help-partials/reservations.php:113
 msgid "Change Status"
@@ -5707,7 +5707,7 @@ msgid ""
 "Tip: The dashboard updates automatically. You do not need to manually reload "
 "the page to see new orders. The interval can be adjusted under Settings → "
 "Order Overview."
-msgstr "Tipp: Das Dashboard aktualisiert sich automatisch. Du musst die Seite nicht manuell neu laden, um neue Bestellungen zu sehen. Das Intervall kann unter Einstellungen → Bestellübersicht angepasst werden."
+msgstr "Tipp: Das Dashboard aktualisiert sich automatisch. Sie müssen die Seite nicht manuell neu laden, um neue Bestellungen zu sehen. Das Intervall kann unter Einstellungen → Bestellübersicht angepasst werden."
 
 #: templates/admin/help-partials/orders.php:80
 msgid "Sound Notifications for New Orders"
@@ -5718,7 +5718,7 @@ msgid ""
 "As soon as a new order arrives, the dashboard automatically plays an alert "
 "sound – so you never miss an order, even if you are not looking at the "
 "screen."
-msgstr "Sobald eine neue Bestellung eingeht, spielt das Dashboard automatisch einen Alarmton ab – damit du keine Bestellung verpasst, auch wenn du nicht auf den Bildschirm schaust."
+msgstr "Sobald eine neue Bestellung eingeht, spielt das Dashboard automatisch einen Alarmton ab – damit Sie keine Bestellung verpassen, auch wenn Sie nicht auf den Bildschirm schauen."
 
 #: templates/admin/help-partials/orders.php:83
 msgid "The sound only plays when the browser tab with the dashboard is open."
@@ -5732,7 +5732,7 @@ msgstr "Einige Browser erlauben Sounds erst nach einer Interaktion (z. B. einmal
 
 #: templates/admin/help-partials/orders.php:85
 msgid "You can customize or disable the sound under Settings → Dashboard."
-msgstr "Du kannst den Sound unter Einstellungen → Dashboard anpassen oder deaktivieren."
+msgstr "Sie können den Sound unter Einstellungen → Dashboard anpassen oder deaktivieren."
 
 #: templates/admin/help-partials/orders.php:91
 msgid "Pre-Orders (Scheduled Pickup Times)"
@@ -5756,7 +5756,7 @@ msgstr "X Minuten vor der Abholzeit (konfigurierbar unter Einstellungen → Allg
 
 #: templates/admin/help-partials/orders.php:96
 msgid "This way you always know exactly when to start preparing."
-msgstr "So weißt du immer genau, wann du mit der Zubereitung beginnen kannst."
+msgstr "So wissen Sie immer genau, wann Sie mit der Zubereitung beginnen können."
 
 #: templates/admin/help-partials/orders.php:104
 msgid "Future Pre-orders (Dimmed)"
@@ -5797,7 +5797,7 @@ msgstr ""
 msgid ""
 "Activate this feature under Settings → Features → \"Dim Future Pre-orders\". "
 "Configure visibility under Settings → Order Overview."
-msgstr "Aktiviere diese Funktion unter Einstellungen → Funktionen → «Zukünftige Vorbestellungen ausgrauen». Konfiguriere die Sichtbarkeit unter Einstellungen → Bestellübersicht."
+msgstr "Aktivieren Sie diese Funktion unter Einstellungen → Funktionen → «Zukünftige Vorbestellungen ausgrauen». Konfigurieren Sie die Sichtbarkeit unter Einstellungen → Bestellübersicht."
 
 #: templates/admin/help-partials/orders.php:126
 msgid "Receipt by Email"

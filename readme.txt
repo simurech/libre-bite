@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.4.5 =
+* Fix: Prevent standby and sound notifications in the Order Overview are now saved per browser via localStorage; both settings default to active and persist across page reloads.
+* Fix: POS variant and add-on popup is now more compact; the "Add to Cart" button is always visible without scrolling, including on tablets.
+* Feature: Assigned location per staff user — admins can lock a staff account to a specific location via the user profile; the location is pre-selected and cannot be changed in POS and Order Overview.
+* Feature: Staff menu simplified — the Dashboard overview page is now hidden for staff accounts; staff land directly on the Order Overview.
 
 = 1.4.4 =
 * Feature: Opening hours popup on location tiles – "Show opening hours" link opens a compact weekly table directly within the tile.

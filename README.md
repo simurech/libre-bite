@@ -6,7 +6,7 @@
 
 **Die WooCommerce-Erweiterung für Restaurants, Take-Aways, Cafés und Bars.**
 
-[![Stable Tag](https://img.shields.io/badge/stable-1.4.4-blue.svg)](https://github.com/simurech/libre-bite/releases)
+[![Stable Tag](https://img.shields.io/badge/stable-1.4.5-blue.svg)](https://github.com/simurech/libre-bite/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.0%2B-96588a.svg)](https://woocommerce.com/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-8892be.svg)](https://php.net/)
@@ -70,19 +70,16 @@ libre-bite/
 
 ## Roadmap
 
-| Feature | Status |
-|---|---|
-| Öffnungszeiten: 2 Zeitfenster pro Tag (Mittagspause) | Umgesetzt (v1.3.0) |
-| Öffnungszeiten: Feiertage (zentral, pro Standort wählbar) | Umgesetzt (v1.3.0) |
-| Zeitslots: Blocker (erste/letzte Bestellung n Minuten nach/vor Öffnung) | Umgesetzt (v1.3.0, Pro) |
-| Vorbestellungen: ausgegraut + gesperrt + Sichtbarkeits-Checkbox | Umgesetzt (v1.3.0, Pro) |
-| Optimierter Checkout: Beleg-Frage entfernen, Buttons auf Bestätigungsseite | Umgesetzt (v1.3.0, Pro) |
-| Beleg nachträglich per E-Mail senden (aus Bestellansicht) | Umgesetzt (v1.3.0, Pro) |
-| Rechteverwaltung pro Standort (POS + Kanban) | Umgesetzt (v1.4.0, Pro) |
-| Öffnungszeiten-Popup auf Standort-Kacheln | Umgesetzt (v1.4.4) |
-| Öffnungszeiten: Google Maps API-Integration | Geplant (Pro) |
-| Reservierungen: Tischübersicht, Auto-Freigabe, Zeitfenster, Auto-Zuweisung | Geplant (Pro) |
-| Branding-Ausbau (Farbpresets, Live-Vorschau) | Geplant (v2.0) |
+| Feature | Version | Pro? |
+|---|---|---|
+| Manager-Rolle (zwischen Staff und Admin, mehrere Standorte zuweisbar) | v1.5.0 | ja |
+| Standort-Filter in WooCommerce-Bestellliste | v1.5.0 | nein |
+| Statistik-Seite: Umsatz und Bestellungen pro Standort und Zeitraum | v1.5.0 | nein |
+| Branding-Ausbau: Farbpresets, Live-Vorschau | v1.5.0 | nein |
+| Standort-spezifische Einstellungen (Zubereitungszeit, Zeitslot-Puffer pro Standort) | v1.6.0 | nein |
+| Multi-Location Architektur: vollständige Standort-Isolation, Franchise-Unterstützung | v1.6.0 | ja |
+| Reservierungen Phase 1: Tischübersicht, Auto-Freigabe, Zeitfenster | v1.7.0 | ja |
+| Reservierungen Phase 2: Auto-Zuweisung, Frontend-Verfügbarkeitsanzeige | v1.7.0 | ja |
 
 ---
 

@@ -513,6 +513,16 @@ NEW_STRINGS_FORMAL_SS = {
     'With feature toggles, you can enable or disable individual Libre Bite features.':
         'Mit den Funktions-Toggles können Sie einzelne Libre Bite-Funktionen aktivieren oder deaktivieren.',
 
+    # Staff-Standort-Fixierung
+    'Location is fixed for your account':
+        'Der Standort ist für Ihr Konto gesperrt.',
+    'Assigned Location':
+        'Zugewiesener Standort',
+    'No fixed location (user can select freely)':
+        'Kein fixer Standort (Benutzer kann frei wählen)',
+    'When set, this location is pre-selected in POS and Order Overview and cannot be changed by the user.':
+        'Wenn gesetzt, wird dieser Standort in POS und Bestellübersicht vorausgewählt und kann vom Benutzer nicht geändert werden.',
+
     # Sound
     'As soon as a new order arrives, the dashboard automatically plays an alert sound – so you never miss an order, even if you are not looking at the screen.':
         'Sobald eine neue Bestellung eingeht, spielt das Dashboard automatisch einen Alarmton ab – damit Sie keine Bestellung verpassen, auch wenn Sie nicht auf den Bildschirm schauen.',

@@ -295,7 +295,7 @@ msgstr "Beleg drucken / als PDF speichern"
 
 #: templates/thankyou-optimized.php:97
 msgid "your@email.com"
-msgstr "ihre@email.de"
+msgstr "ihre@email.at"
 
 #: templates/thankyou-optimized.php:107 includes/admin/class-admin.php:1330
 msgid "Send Receipt by Email"
