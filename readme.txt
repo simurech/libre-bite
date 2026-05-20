@@ -225,85 +225,85 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 == Changelog ==
 
 = 1.4.4 =
-* Feature: Öffnungszeiten-Popup auf Standort-Kacheln – «Öffnungszeiten anzeigen»-Link öffnet kompakte Wochentabelle direkt in der Kachel.
-* Fix: «Admin-E-Mail»-Toggle in den Feature-Einstellungen entfernt (war nicht implementiert; WooCommerce-Bestellmails laufen über den WC-Standard).
-* Fix: Pro-Features in den Gruppen Standorte und Produkte werden nun immer zuerst angezeigt.
-* Fix: Pro-Badge bei Klang-Benachrichtigungen und Abholhinweisen in der Hilfe-Dokumentation ergänzt; WP-Cron-Hinweis bei Abholhinweisen hinzugefügt.
-* Übersetzungen: Neue Strings «Öffnungszeiten anzeigen» und WP-Cron-Hinweis in allen fünf Sprachvarianten ergänzt.
+* Feature: Opening hours popup on location tiles – "Show opening hours" link opens a compact weekly table directly within the tile.
+* Fix: Removed non-functional "Admin Email" toggle from feature settings – WooCommerce handles order notification emails natively.
+* Fix: Pro features in the Locations and Products groups are now always listed first.
+* Fix: Added Pro badge to Sound Notifications and Pickup Reminders in help documentation; added WP-Cron note for reminders.
+* Translations: New strings for opening hours popup and WP-Cron note added to all five language variants.
 
 = 1.4.3 =
-* Fix: E-Mail-Adresse im optimierten Checkout ist für Online-Zahlungen (z.B. TWINT) jetzt ein echtes Pflichtfeld – kein doppelter Submit, keine ungültige Platzhalter-Adresse wird mehr gespeichert.
+* Fix: Email address in the optimized checkout is now a real required field for online payments (e.g. Twint) – prevents double submission and eliminates invalid placeholder addresses.
 
 = 1.4.2 =
-* Fix: Drag & Drop in der Bestellübersicht entfernt – verhindert Scroll-Konflikte und fehlerhafte Aktionen auf Touch-Geräten.
-* Fix: Wake-Lock-Checkbox im POS aus dem Header in die Standort-Leiste verschoben (konsistent mit der Bestellübersicht).
-* Fix: Wake Lock auf Android/Samsung zuverlässiger – wird nach Tab-Wechsel und App-Wechsel automatisch neu angefordert.
-* Fix: Veraltete Drag-&-Drop- und Status-Referenzen in der Hilfedokumentation aktualisiert (3-Spalten-Kanban).
-* Übersetzungen: Fehlende Strings in allen fünf Sprachvarianten ergänzt (de_CH, de_CH_informal, de_DE, de_DE_formal, de_AT).
+* Fix: Removed drag & drop from the order board – prevents scroll conflicts and accidental actions on touch devices.
+* Fix: Wake lock checkbox in POS moved from header to location bar (consistent with order board).
+* Fix: Wake lock on Android/Samsung is now more reliable – automatically re-requested after tab and app switches.
+* Fix: Updated outdated drag-and-drop and status references in the help documentation (3-column Kanban).
+* Translations: Missing strings added to all five language variants (de_CH, de_CH_informal, de_DE, de_DE_formal, de_AT).
 
 = 1.4.1 =
-* Fix: POS Gutschein-Rabatt wird nun korrekt in der Kassen-Ansicht angezeigt.
-* Fix: 5-Rappen-Rundung greift nun auch im POS-Warenkorb.
-* Fix: Lagerbestand-Toggle speichert Änderungen korrekt, auch bei variablen Produkten.
-* Fix: Staff-Benutzer können Bestellungen nun stornieren (lbite_manage_orders-Berechtigung).
-* Fix: Fehlende Übersetzung «Discount:» in allen Sprachpaketen ergänzt.
+* Fix: POS coupon discount now correctly displayed in the checkout view.
+* Fix: 5-cent rounding now also applied in the POS cart.
+* Fix: Stock toggle now saves changes correctly, including for variable products.
+* Fix: Staff users can now cancel orders (lbite_manage_orders capability).
+* Fix: Missing "Discount:" translation added to all language packages.
 
 = 1.4.0 =
-* Feature: POS-Bestellungen sind immer sofort (nie Vorbestellung).
-* Feature: POS Standby-Verhinderung (Wake Lock) wie im Kanban-Board.
-* Feature: POS Gutschein-Feld – Gutscheine aus WooCommerce auswählbar und auf Bestellung anwenden.
-* Feature: POS Lagerbestand-Toggle – Produkt gedrückt halten zum Umschalten zwischen vorrätig/nicht vorrätig.
-* Feature: Bestellübersicht auf 3 Spalten reduziert (Vorbestellungen, Jetzt zubereiten, Abgeschlossen).
-* Feature: Kompaktes Kanban-Karten-Layout – Artikel prominent, mehr Karten gleichzeitig sichtbar.
-* Fix: Staff-Benutzer werden nicht mehr von WooCommerce aus dem WordPress-Backend umgeleitet.
-* Fix: QR-Code-Links mit Standort-Parametern leiten direkt zum Shop weiter.
+* Feature: POS orders are always immediate (never scheduled pre-orders).
+* Feature: POS screen wake lock to prevent standby (same as Kanban board).
+* Feature: POS coupon field – apply WooCommerce coupons directly to orders.
+* Feature: POS stock toggle – long-press a product to switch between in stock / out of stock.
+* Feature: Order board reduced to 3 columns (Pre-orders, Preparing now, Completed).
+* Feature: Compact Kanban card layout – items more prominent, more cards visible simultaneously.
+* Fix: Staff users are no longer redirected away from the WordPress backend by WooCommerce.
+* Fix: QR code links with location parameters now redirect correctly to the shop.
 
 = 1.3.10 =
-* Fix: Stornierung via Bestellübersicht erstellt keinen falschen WC-Rückerstattungs-Eintrag mehr für Offline-Gateways (BACS, COD); Online-Gateways (Stripe, TWINT) erhalten weiterhin eine automatische Rückerstattung.
-* Fix: Blauer Rand links an der ausgewählten Standort-Box im Checkout entfernt.
-* Fix: Übersetzung «Your Email» / «Support E-Mail» auf «Ihre/Deine E-Mail-Adresse» korrigiert (de_CH_informal, de_DE_formal hatten falsche Übersetzung aus früherem Fill-Script).
-* Feature: Produkt-Optionen heissen nun in allen deutschen Übersetzungen «Add-ons» statt «Optionen».
+* Fix: Order cancellation via the order board no longer creates a false WooCommerce refund entry for offline gateways (BACS, COD); online gateways (Stripe, Twint) still receive an automatic refund.
+* Fix: Removed blue left border on selected location box in checkout.
+* Fix: Corrected "Your Email" / "Support Email" translation in de_CH_informal and de_DE_formal.
+* Improvement: Product options are now labelled "Add-ons" in all German translations.
 
 = 1.3.9 =
-* Fix: Vorbestellungen im Kanban-Board sind nun jederzeit stornierbar und manuell bearbeitbar, unabhängig von der Ausgrauen-Einstellung.
-* Feature: Neue Einstellung «Vorbestellungen ausgrauen» (getrennt von «Vorbestellungen anzeigen») – beide Optionen sind separat konfigurierbar.
-* Fix: Einstellungen «Vorbestellungen anzeigen/ausgrauen» werden nach dem Speichern nun korrekt persistiert (Checkbox-Status blieb zuvor immer auf «aktiviert»).
-* Fix: Fehlendes JS-String loadMoreError nun korrekt aus Übersetzungen geladen.
-* Fix: Falsche Übersetzung «Vorbestellungen prüfen» für «Zukünftige Vorbestellungen anzeigen» in de_CH_informal und de_DE_formal korrigiert.
-* Übersetzungen: Neue Strings für Vorbestellungs-Einstellungen in allen Sprachen ergänzt (de_CH, de_CH_informal, de_DE, de_DE_formal, de_AT).
+* Fix: Pre-orders in the Kanban board can now always be cancelled and manually edited, regardless of the dim setting.
+* Feature: New "Dim pre-orders" setting (separate from "Show pre-orders") – both options independently configurable.
+* Fix: "Show/dim pre-orders" settings are now correctly persisted after saving (checkbox state was always reset to enabled).
+* Fix: Missing JS string loadMoreError now correctly loaded from translations.
+* Fix: Incorrect translation for "Show future pre-orders" corrected in de_CH_informal and de_DE_formal.
+* Translations: New strings for pre-order settings added to all languages.
 
 = 1.3.8 =
-* Feature: «Kein Trinkgeld»-Button im Checkout ist neu im Backend konfigurierbar (Einstellungen → Trinkgeld).
-* Fix: Übersetzungen für de_CH_informal und de_DE_formal vervollständigt (Feiertage, Vollbild, Beleg, Zeitslot-Blocker u.a. waren noch auf Englisch).
-* Fix: fuzzy-Flags aus allen Sprachdateien entfernt – betroffene Strings (z.B. Trinkgeld-Optionen) erscheinen neu korrekt übersetzt.
+* Feature: "No tip" button in checkout is now configurable in the backend (Settings → Tipping).
+* Fix: Translations for de_CH_informal and de_DE_formal completed (holidays, fullscreen, receipt, slot buffer etc. were still in English).
+* Fix: Removed fuzzy flags from all language files – affected strings (e.g. tip options) now display correctly translated.
 
 = 1.3.7 =
-* Fix: Beleg-Versand aus dem Kanban-Board und der WooCommerce-Bestellansicht funktioniert nun korrekt, unabhängig davon ob der optimierte Checkout aktiv ist (AJAX-Endpoint wurde zu weit eingeschränkt registriert).
-* Fix: Bestellung stornieren erstattet die Zahlung nun korrekt zurück – Gateway-API wird zuverlässig aufgerufen (refund_payment-Flag ergänzt, Rückerstattung erfolgt vor Statusänderung).
-* Übersetzungen: fehlenden String im Standort-Hilfetext in allen Sprachen ergänzt.
+* Fix: Receipt sending from the Kanban board and WooCommerce order view now works correctly, regardless of whether the optimized checkout is active (AJAX endpoint was registered too narrowly).
+* Fix: Order cancellation now correctly triggers a gateway refund – the refund API is called reliably before the status change.
+* Translations: Missing string in location help text added to all languages.
 
 = 1.3.6 =
-* Fix: Kanban-Board zeigt keine Bestellungen mehr mit Status «Bezahlung ausstehend» (pending) an – nur noch bezahlte Bestellungen (processing, on-hold) erscheinen.
-* Fix: Geplante Bestellungen werden nur noch automatisch in «In Bearbeitung» verschoben, wenn sie bezahlt sind.
-* Feature: Zahlungsbestätigungs-Polling als Fallback für TWINT und ähnliche Gateways – der Browser leitet automatisch zur Bestellbestätigungsseite weiter, sobald die Zahlung serverseitig bestätigt ist, unabhängig vom Gateway-eigenen Frontend-Polling.
+* Fix: Kanban board no longer shows orders with "pending payment" status – only paid orders (processing, on-hold) are displayed.
+* Fix: Scheduled orders are only automatically moved to "Preparing" when they are paid.
+* Feature: Payment confirmation polling as a fallback for Twint and similar gateways – the browser automatically redirects to the order confirmation page once payment is server-side confirmed.
 
 = 1.3.5 =
-* Fix: Banner-Layout des Standort-Selektors reagiert nun korrekt auf Klicks (fehlende JavaScript-Initialisierung ergänzt).
-* Fix: Schaltfläche «Hier bestellen» im Banner-Layout ist nicht mehr unnötig breit.
-* Fix: Mail-Symbol im Kanban-Board (Beleg senden) funktioniert nun korrekt (Nonce-Fehler behoben).
-* Fix: Optimierter Checkout ruft woocommerce_after_checkout_form auf – TWINT-Popup öffnet sich wieder korrekt.
-* Feature: Dokumentation des Standort-Selektors um Banner-Layout und align-Parameter erweitert.
-* Übersetzungen: neue Strings für Standort-Dokumentation und Trinkgeld-Titel in allen Sprachen ergänzt.
+* Fix: Banner layout of the location selector now responds correctly to clicks (missing JavaScript initialization added).
+* Fix: "Order here" button in banner layout is no longer unnecessarily wide.
+* Fix: Receipt email button in the Kanban board now works correctly (nonce error resolved).
+* Fix: Optimized checkout now calls woocommerce_after_checkout_form – Twint popup opens correctly again.
+* Improvement: Location selector documentation extended with banner layout and align parameter.
+* Translations: New strings for location documentation and tip title added to all languages.
 
 = 1.3.4 =
-* Feature: Shortcode [lbite_location_selector] unterstützt neuen Parameter align="left|center|right" für die horizontale Ausrichtung.
-* Feature: Shortcode [lbite_location_selector] unterstützt neues Layout style="banner" – breite 2-Spalten-Box mit Bild links, Infos rechts, abgerundeten Ecken (24px) und halbdurchsichtigem Hintergrund.
+* Feature: [lbite_location_selector] shortcode now supports the align="left|center|right" parameter for horizontal alignment.
+* Feature: [lbite_location_selector] shortcode now supports style="banner" layout – wide 2-column card with image left, details right, 24px rounded corners, and a semi-transparent background.
 
 = 1.3.3 =
-* Fix: Deep-Link-Parameter ?lbite_location=ID wird nun korrekt verarbeitet und setzt die Session unabhängig vom Table-Ordering-Feature.
-* Fix: Standort-Auswahl-Shortcode erkennt jetzt den Parameter ?lbite_location=ID (zusätzlich zum bisherigen ?location=ID).
-* Feature: QR-Code-Metabox bei Standorten erlaubt neu die Vorauswahl des Bestelltyps (Sofort / Vorbestellen).
-* Docs: Hilfedokumentation zu URL-Parametern aktualisiert; korrekter Parameter ?lbite_location=ID.
+* Fix: Deep-link parameter ?lbite_location=ID is now correctly processed and sets the session independently of the table ordering feature.
+* Fix: Location selector shortcode now recognizes the ?lbite_location=ID parameter (in addition to the previous ?location=ID).
+* Feature: QR code metabox on locations now allows pre-selecting the order type (Immediate / Pre-order).
+* Docs: Help documentation for URL parameters updated; correct parameter is ?lbite_location=ID.
 
 = 1.3.2 =
 * Fix: CSS box-sizing and height overrides for date/time input fields (theme compatibility).
@@ -313,12 +313,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 * Fix: Hardcoded German strings in pos.js and dashboard.js replaced with localizable variables.
 * Fix: Name input field contrast in optimized checkout (white on white background).
 * Fix: WooCommerce login toggle now appears in optimized checkout for guests.
-* Fix: External payment providers (TWINT, Stripe etc.) no longer receive a placeholder email; an email field appears when needed.
+* Fix: External payment providers (Twint, Stripe etc.) no longer receive a placeholder email; an email field appears when needed.
 * Fix: Receipt email button now shown for all guest orders on the thank-you page, regardless of payment method.
 * Fix: Admin receipt metabox shows an email input for POS/guest orders and allows resending.
 * Fix: Kanban receipt button added to every order card; supports orders without a stored email address.
 * Fix: Kanban future order filtering (lbite_show_future_orders) now works correctly; is_future calculated independently of feature flag; dimming controlled by futureDimmingEnabled.
-* Fix: Cancel button in Kanban board is now solid red with a white ✕; removed 🔪 emoji from "Start preparation" button.
+* Fix: Cancel button in Kanban board is now solid red with a white ✕; removed emoji from "Start preparation" button.
 * Improvement: All features are now enabled by default on fresh installations.
 
 = 1.3.1 =
@@ -327,7 +327,7 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 * Fix: Inline style attributes in templates now correctly use esc_attr() as per WordPress coding standards.
 * Fix: Corrected wrong help reference "Settings → Dashboard" to "Settings → Order Overview".
 * Improvement: Timeslot calculation results are now cached (5 min transient) for future dates, improving checkout performance.
-* Improvement: Help section updated with documentation for two-window opening hours (F2), slot buffers (F5), dimmed future pre-orders (F7), and receipt email (F8/F9).
+* Improvement: Help section updated with documentation for two-window opening hours, slot buffers, dimmed future pre-orders, and receipt email.
 * Improvement: [lbite_reservation_form] shortcode documented on the Documentation page (Pro).
 * Improvement: Completed German translations (de_CH/de_DE/de_AT) for all v1.3.0 feature strings.
 
@@ -356,100 +356,97 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 * New: Added de_CH_informal (informal Swiss German) and de_DE_formal (formal German) translation variants.
 
 = 1.2.6 =
-* Improvement: Alle Plugin-Strings auf Englisch umgestellt (WordPress i18n-Standard).
-* New: Schweizerdeutsche Übersetzung (de_CH) wird direkt mit dem Plugin ausgeliefert.
+* Improvement: All plugin strings switched to English (WordPress i18n standard).
+* New: Swiss German translation (de_CH) now bundled with the plugin.
 
 = 1.2.5 =
-* Fix: Zeitzonenfehler in Kanban-Sortierung und Auto-Statuswechsel behoben — strtotime() durch lbite_local_time_to_timestamp() ersetzt (class-order-dashboard.php, Zeilen 192–193 und 531).
-* Fix: Anzeigefehler «Zuletzt geändert» in Order-Meta-Box korrigiert — strtotime() auf current_time('mysql')-Strings durch lbite_local_time_to_timestamp() ersetzt.
-* Fix: Heutige Bestellungen im Dashboard-Widget zählten bei abweichender Server/WordPress-Timezone falsch — strtotime('today') durch timezone-bewusstes Mitternacht-Timestamp ersetzt.
-* Fix: DateTime::createFromFormat() in checkout-location-time.php ohne Timezone-Parameter — auf DateTimeImmutable::createFromFormat() mit wp_timezone() umgestellt.
-* Improvement: Produkt-Optionen im Warenkorb werden nun als ein gruppierter Eintrag «Optionen» angezeigt statt als separate «Option»-Zeilen pro Auswahl.
+* Fix: Timezone error in Kanban sorting and auto status change resolved – strtotime() replaced by lbite_local_time_to_timestamp().
+* Fix: Display error "Last modified" in order meta box corrected.
+* Fix: Today's order count in the dashboard widget was incorrect when server and WordPress timezones differed.
+* Fix: DateTime::createFromFormat() in checkout-location-time.php now uses DateTimeImmutable with wp_timezone().
+* Improvement: Product options in the cart are now displayed as a single grouped "Options" entry instead of separate lines per selection.
 
 = 1.2.4 =
-* Fix: Zeitzonenfehler bei Checkout-Bestätigung, Kanban-Board und E-Mails behoben — lokale Zeit-Strings werden nun korrekt mit lbite_local_time_to_timestamp() in Unix-Timestamps umgewandelt statt mit strtotime() (Doppelkonvertierung).
-* Fix: Zeitzonenfehler bei POS-Bestellungen behoben (gleiche Ursache wie oben).
-* Fix: Uhrzeit-Auswahlfelder im Checkout: Text wurde auf iOS/Safari unten abgeschnitten — line-height und height: auto ergänzt.
+* Fix: Timezone error in checkout confirmation, Kanban board and emails resolved – local time strings now correctly converted to Unix timestamps using lbite_local_time_to_timestamp().
+* Fix: Timezone error in POS orders resolved (same root cause as above).
+* Fix: Time selection fields in checkout: text was cut off on iOS/Safari – line-height and height: auto added.
 
 = 1.2.3 =
-* Improvement: Capability-Dokumentation in class-roles.php erweitert — alle lbite_-Capabilities mit Inline-Kommentaren zur Funktion versehen.
-* Improvement: phpcs:ignore-Kommentare um explizite Begründungen ergänzt (class-tables.php, class-reservations.php, class-checkout.php, class-onboarding.php, settings-tabbed.php).
+* Improvement: Capability documentation in class-roles.php extended – all lbite_ capabilities annotated with inline comments.
+* Improvement: phpcs:ignore comments supplemented with explicit justifications.
 
 = 1.2.2 =
-* Fix: @fs_premium_only-Header um Tischmodul und zugehörige Assets erweitert — /includes/modules/tables/, /templates/admin/table-plan.php, admin-tables.js, admin-table-plan.js, reservation-board.js, admin-tables.css, admin-table-plan.css, admin-reservation-board.css werden nun korrekt aus der von Freemius generierten Free Version entfernt.
+* Fix: @fs_premium_only header extended to cover the tables module and all related assets – correctly excluded from the Freemius-generated free version.
 
 = 1.2.1 =
-* Fix: Freemius-Deployment-Strategie korrigiert — Premium-Code korrekt mit @fs_premium_only-Header und is__premium_only()-Guards markiert, sodass die von Freemius generierte Free Version keinerlei Premium-Code enthält.
-* Fix: Inline <style>- und <script>-Tags in class-admin.php in bestehende enqueued Stylesheet- und Script-Dateien ausgelagert.
-* Fix: sanitize_admin_settings() implementiert — alle Felder werden nun mit den passenden WordPress-Sanitize-Funktionen bereinigt.
-* Fix: add_tip_fee() prüft nun explizit den WooCommerce-Nonce (woocommerce-process_checkout bzw. update-order-review) und extrahiert nur die benötigten $_POST-Felder statt den ganzen Array zu kopieren.
+* Fix: Freemius deployment strategy corrected – premium code properly marked with @fs_premium_only header and is__premium_only() guards.
+* Fix: Inline style and script tags in class-admin.php extracted to enqueued files.
+* Fix: sanitize_admin_settings() implemented – all fields sanitized with appropriate WordPress functions.
+* Fix: add_tip_fee() now explicitly verifies the WooCommerce nonce and extracts only required $_POST fields.
 
 = 1.2.0 =
-* Feature: Reservierungs-Dashboard — neue Tagesansicht (Libre Bite → Reservierungsübersicht) mit Standort-Dropdown, Datums-Navigation, Status-Badge und Tisch-Zuweisung direkt auf der Karte.
-* Improvement: Aktualisierungsintervall für Reservierungsübersicht in den Einstellungen konfigurierbar (Standard: 60 Sekunden).
-* Improvement: Benachrichtigungs-Badge im Backend-Menü zeigt jetzt auf die neue Reservierungsübersicht.
-* Improvement: Gerätkompatibilität und Betriebsmodelle in der Plugin-Beschreibung dokumentiert.
+* Feature: Reservation dashboard – new day view with location dropdown, date navigation, status badges, and direct table assignment.
+* Improvement: Reservation board refresh interval configurable in settings (default: 60 seconds).
+* Improvement: Notification badge in the backend menu now links to the reservation board.
+* Improvement: Device compatibility and operation models documented in plugin description.
 
 = 1.1.9 =
-* Improvement: Plugin-Beschreibung auf Nutzen statt Features ausgerichtet (Kurzbeschreibung, Description, Why Libre Bite).
-* Improvement: SEO-Keywords für Schweizer Gastronomie eingebaut (Twint, QR-Code-Bestellung, 5-Rappen-Rundung, provisionsfrei).
-* Improvement: Tags auf WP.org optimiert.
+* Improvement: Plugin description rewritten to focus on benefits rather than feature lists.
+* Improvement: SEO keywords for Swiss gastronomy added (Twint, QR code ordering, 5-cent rounding, commission-free).
+* Improvement: Tags on WP.org optimised.
 
 = 1.1.8 =
-* Feature: Benachrichtigungs-Badge für ausstehende Reservierungen im Backend-Menü ergänzt.
+* Feature: Notification badge for pending reservations added to the backend menu.
 
 = 1.1.7 =
-* Feature: Benachrichtigungs-Counter im Backend-Menü zeigt Anzahl eingehender Bestellungen an.
-* Feature: Drucken-Schaltfläche auf der Bestellbestätigung zum Ausdrucken oder als PDF speichern.
-* Verbesserung: «Bestellübersicht aktivieren» in die Karte «Bestellsystem» verschoben.
-* Verbesserung: «Hilfe & Support» im Dashboard-Schnellzugriff ergänzt.
+* Feature: Notification counter in backend menu shows the number of incoming orders.
+* Feature: Print button on the order confirmation page for printing or saving as PDF.
+* Improvement: "Activate order board" moved into the "Order System" card.
+* Improvement: "Help & Support" added to dashboard quick access.
 
 = 1.1.6 =
-* Fix: PHP-Warning "Undefined property: WC_Order_Item_Fee::$total_tax" auf der Bestellbestätigungsseite behoben.
-* Fix: Zahlungsart wird auf der Bestellbestätigungsseite nun als eigene Box angezeigt (nicht mehr als unformatierter Text).
-* Fix: Vorbestellungen zeigen im Kanban-Board jetzt Datum und Uhrzeit an (nicht mehr nur die Uhrzeit).
-* Fix: Bestellungen im Kanban-Board werden nach Dringlichkeit sortiert (Sofort: Erstellungszeit, Vorbestellung: Abholzeit).
-* Fix: «Reservierungen» erscheint im Backend-Menü neu unter «Tischplan» statt ganz oben.
-* Fix: Reservierungsformular zeigt keine Tischauswahl mehr – Tischzuweisung erfolgt durch das Personal im Backend.
-* Fix: Sofort-Bestellungen werden blockiert, wenn der gewählte Standort aktuell geschlossen ist.
-* Fix: Status-Badge auf der Standort-Übersicht zeigt nun den korrekten Öffnungsstatus (robuster Zeitvergleich).
-* Fix: Nährwerttabelle auf der Produktdetailseite hat nun horizontales Innenabstand.
-* Improvement: «Produkt-Optionen» ist neu unter WooCommerce → Produkte eingetragen.
-* Improvement: Hilfe-Bereich um Tab und Inhalt für «Reservierungen» erweitert.
+* Fix: PHP warning "Undefined property: WC_Order_Item_Fee::$total_tax" on the order confirmation page resolved.
+* Fix: Payment method now displayed as its own box on the order confirmation page.
+* Fix: Pre-orders now show date and time in the Kanban board (not just the time).
+* Fix: Orders in the Kanban board are sorted by urgency (immediate: creation time, pre-order: pickup time).
+* Fix: "Reservations" now appears in the backend menu under "Table Plan" instead of at the top.
+* Fix: Reservation form no longer shows table selection – table assignment is handled by staff in the backend.
+* Fix: Immediate orders are now blocked when the selected location is currently closed.
+* Fix: Status badge on the location overview now shows the correct opening status (more robust time comparison).
+* Fix: Nutritional info table on the product detail page now has correct horizontal padding.
+* Improvement: "Product Options" is now listed under WooCommerce → Products.
+* Improvement: Help section extended with a tab and content for "Reservations".
 
 = 1.1.5 =
 * Performance: POS product data cached for 1 hour via transient, invalidated on product and location save.
-* Performance: Location colors cached via transient (lbite_location_colors), invalidated on location save.
-* Performance: Admin settings JS now loaded only on the settings page (not on all Libre Bite admin pages).
+* Performance: Location colors cached via transient, invalidated on location save.
+* Performance: Admin settings JS now loaded only on the settings page.
 * Improvement: Default dashboard refresh interval increased from 30s to 45s for new installations.
 
 = 1.1.4 =
-* Feature: Visual floor plan — drag-and-drop canvas per location with shape/size controls and live table status (free, occupied, preparing, ready).
+* Feature: Visual floor plan — drag-and-drop canvas per location with shape/size controls and live table status.
 * Feature: Table reservations — frontend form via shortcode [lbite_reservation_form], email notifications, and admin management view.
 * Feature: POS table selector shows live occupancy status (free/occupied) for each table.
 * Improvement: Floor plan link moved under Tables in admin menu.
-* Improvement: Order board popup links to Order Board instead of individual orders.
 * Improvement: Help section updated with floor plan documentation.
 * Fix: Tables without saved order meta are now correctly shown in the floor plan.
 
 = 1.1.3 =
 * Feature: Location colors — color-coded highlight for location dropdowns in POS and Order Board.
 * Feature: POS blocks product area when no location is selected.
-* Feature: Seats per table — configurable seat count per table (preparation for reservations).
+* Feature: Seats per table — configurable seat count per table.
 * Feature: Bulk table creation — create multiple tables at once with prefix and numbering.
 * Feature: Location filter in table list.
-* Improvement: Help section updated with full table management documentation and location color info.
 
 = 1.1.2 =
 * Improvement: Consolidated settings tabs – Checkout and Checkout Fields merged, Dashboard renamed to Order Board, Features tab shown first.
-* Improvement: Simplified user roles to two-tier system (administrator + staff), removed legacy role cleanup on migration.
+* Improvement: Simplified user roles to two-tier system (administrator + staff).
 * Improvement: Rewrote help documentation to be feature-focused for new users.
 * Fix: Optimized checkout CSS layout overrides for theme compatibility (Astra and others).
-* Fix: Outdated legacy roles (OOS) removed from Roles & Menus screen.
+* Fix: Outdated legacy roles removed from Roles & Menus screen.
 
 = 1.1.1 =
 * Improvement: Prefix all variables in template files with lbite_ for WordPress.org compliance.
-* Improvement: Consistently use lbite_ prefix for passed-in and internal template variables.
 
 = 1.1.0 =
 * Feature: Table Management module – create tables, assign to locations, generate QR codes for ordering.
@@ -459,40 +456,31 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 * Security: XSS hardening in dashboard.js and pos.js (template strings replaced with jQuery DOM APIs).
 * Security: wp_unslash() added to all superglobal access in tables module and admin AJAX.
 * Security: current_user_can() check added to table meta save callback.
-* Security: Capability for table AJAX endpoint changed from edit_posts to lbite_use_pos.
-* Improvement: Template variables prefixed with lbite_ in all frontend templates (XSS namespace protection).
 * Improvement: Performance limits added to all unlimited post queries.
-* Improvement: Inline styles and scripts in tables module extracted to external CSS/JS files.
 * Improvement: readme.txt fully translated to English, external services disclosed.
-* Improvement: Order board and POS styles extracted to dedicated CSS files.
 
 = 1.0.9 =
-* Feature: Onboarding page after initial installation – select features, no redirect to older instances.
-* Feature: POS Payment Confirmation – Overlay with order summary and payment method (Cash/Card/Twint/Other) before order creation.
-* Fix: HPOS incompatibility resolved – Order meta now uses WooCommerce HPOS API instead of get_post_meta/update_post_meta.
-* Fix: XSS in support settings resolved (.html() → .text() for preview field).
-* Fix: XSS in dashboard loading overlay resolved (message parameter escaped).
+* Feature: Onboarding page after initial installation.
+* Feature: POS Payment Confirmation – overlay with order summary and payment method before order creation.
+* Fix: HPOS incompatibility resolved – order meta now uses WooCommerce HPOS API.
+* Fix: XSS in support settings and dashboard loading overlay resolved.
 
 = 1.0.8 =
 * Security: POS order now uses server-side product price instead of client price (prevents manipulation).
-* Performance: Replaced wc_get_orders() unlimited limit (limit => -1) with sensible caps (Dashboard 50, Kanban 200, Cron 100).
-* Performance: Pagination in ajax_load_more_completed() switched to true DB pagination (instead of loading all orders and slicing).
-* Code: Removed redundant cron job registration from module constructors (cron setup only in activation hook).
+* Performance: Replaced unlimited wc_get_orders() calls with sensible caps (Dashboard 50, Kanban 200, Cron 100).
+* Performance: Pagination in ajax_load_more_completed() switched to true DB pagination.
 
 = 1.0.7 =
-* Security: Added XSS escaping in dashboard.js (item.meta, error message when cancelling).
-* Security: Added XSS escaping in pos.js (variationName in product modal).
-* Fix: Corrected wrong capability name in class-product-options.php (manage_lbite_options → lbite_manage_options). Product options are now saved correctly.
-* Fix: Fixed typo in feature key in class-checkout.php (enable_tip → enable_tips). Tip JS is now loaded correctly for Pro users.
-* Fix: Status labels in class-order-dashboard.php made translatable via WordPress i18n (WordPress.org compliance).
+* Security: Added XSS escaping in dashboard.js and pos.js.
+* Fix: Corrected wrong capability name in class-product-options.php.
+* Fix: Fixed typo in feature key in class-checkout.php (enable_tip → enable_tips).
+* Fix: Status labels in class-order-dashboard.php made translatable via WordPress i18n.
 
 = 1.0.6 =
 * Fix: Premium override only available in Pro version (WordPress.org compliance).
 * Fix: Nutritional info, allergens, and sound notifications correctly marked as Pro features.
-* Fix: Feature list in readme.txt adapted to Free/Pro assignment.
 * Fix: Plugin description translated to English (WordPress.org guideline).
 * Fix: Output escaping added to admin notices.
-* Bump: Version to 1.0.6.
 
 = 1.0.5 =
 * Fix: Replaced Heredoc/Nowdoc syntax with external JS files (WPCS compliance).
@@ -501,34 +489,21 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 * Fix: Changed function prefix from lb_ to lbite_ (WordPress.org naming convention).
 * Fix: Moved inline CSS/JS from templates to separate enqueue files.
 * Fix: Added nonce checks in checkout and product options.
-* Fix: Added Freemius parameter is_org_compliant.
 * Fix: Updated SortableJS to version 1.15.7.
-* Fix: Corrected contributors field in readme.txt.
 
 = 1.0.3 =
 * Fix: Resolved all WordPress.org Plugin Check errors and warnings.
-* Fix: Corrected direct file access protection in main plugin file.
-* Fix: Fixed output escaping in wp_die() calls.
-* Fix: Replaced strip_tags() with wp_strip_all_tags().
-* Fix: Added PHPCS ignore comments for legitimate uses.
-* Fix: Reduced tags in readme.txt to maximum 5.
+* Fix: Corrected direct file access protection, output escaping, and strip_tags() usage.
 
 = 1.0.2 =
 * Fix: Resolved WordPress.org Plugin Check errors (Tested up to tag, text domain loading).
-* Fix: Removed Domain Path header.
 
 = 1.0.1 =
 * Improved: Freemius integration for better WordPress.org compliance.
-* Fixed: Uninstallation process adapted for feedback tracking.
 * Security: Improved security checks and escaping.
 
 = 1.0.0-beta =
-* First beta version.
-* Added: Location management module.
-* Added: Point of Sale (POS).
-* Added: Kanban order board.
-* Added: Tipping system and scheduled order time slots.
-* Added: Freemius integration for Pro features.
+* First beta version with Location Management, POS, Kanban order board, tipping, time slots, and Freemius integration.
 
 == Upgrade Notice ==
 
