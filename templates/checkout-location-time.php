@@ -463,7 +463,7 @@ jQuery(document).ready(function($) {
 				var $nowLabel = $('#lbite-now-radio-option');
 				var $notice  = $('#lbite-now-closed-notice');
 
-				if (status && status.type === 'closed') {
+				if (status && (status.type === 'closed' || status.type === 'opening-soon')) {
 					$nowRadio.prop('disabled', true);
 					$nowLabel.addClass('lbite-radio-option-disabled');
 					$('#lbite-checkout-closed-text').text(status.text || '');

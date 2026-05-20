@@ -131,7 +131,7 @@ wp_enqueue_script( 'wp-color-picker' );
 			<th><?php esc_html_e( 'Preparation Time', 'libre-bite' ); ?></th>
 			<td>
 				<input type="number" min="0" name="lbite_preparation_time" value="<?php echo esc_attr( $lbite_preparation_time ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
-				<p class="description"><?php esc_html_e( 'Pre-orders are automatically moved from "Incoming" to "Preparing" X minutes before pickup time.', 'libre-bite' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Pre-orders are automatically moved from "Pre-orders" to "Prepare Now" X minutes before pickup time.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>

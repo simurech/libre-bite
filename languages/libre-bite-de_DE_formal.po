@@ -2397,9 +2397,9 @@ msgstr "Minuten"
 
 #: templates/admin/settings.php:134
 msgid ""
-"Pre-orders are automatically moved from \"Incoming\" to \"Preparing\" X "
+"Pre-orders are automatically moved from \"Pre-orders\" to \"Prepare Now\" X "
 "minutes before pickup time."
-msgstr "Vorbestellungen werden automatisch X Minuten vor der Abholzeit von «Eingehend» nach «In Zubereitung» verschoben."
+msgstr "Vorbestellungen werden automatisch X Minuten vor der Abholzeit von «Vorbestellungen» nach «Jetzt zubereiten» verschoben."
 
 #: templates/admin/settings.php:138
 #: templates/admin/help-partials/settings.php:54
@@ -5584,9 +5584,9 @@ msgstr "Bestellung erscheint im Dashboard"
 
 #: templates/admin/help-partials/orders.php:22
 msgid ""
-"The order immediately appears in the \"Incoming\" column of the order "
+"The order immediately appears in the \"Pre-orders\" column of the order "
 "overview. Optionally a sound plays."
-msgstr "Die Bestellung erscheint sofort in der Spalte «Eingehend» der Bestellübersicht. Optional wird ein Sound abgespielt."
+msgstr "Die Bestellung erscheint sofort in der Spalte «Vorbestellungen» der Bestellübersicht. Optional wird ein Sound abgespielt."
 
 #: templates/admin/help-partials/orders.php:23
 msgid "Staff prepares the order"
@@ -5594,9 +5594,9 @@ msgstr "Personal bereitet die Bestellung vor"
 
 #: templates/admin/help-partials/orders.php:23
 msgid ""
-"Order is moved to \"Preparing\". For pre-orders, this happens automatically "
-"X minutes before pickup time."
-msgstr "Bestellung wird in «In Zubereitung» verschoben. Bei Vorbestellungen geschieht dies automatisch X Minuten vor der Abholzeit."
+"Order is moved to \"Prepare Now\". For pre-orders, this happens "
+"automatically X minutes before pickup time."
+msgstr "Bestellung wird in «Jetzt zubereiten» verschoben. Bei Vorbestellungen geschieht dies automatisch X Minuten vor der Abholzeit."
 
 #: templates/admin/help-partials/orders.php:24
 msgid "Order is ready"
@@ -5622,15 +5622,13 @@ msgstr ""
 msgid "The Order Overview (Kanban Board)"
 msgstr "Die Bestellübersicht (Kanban-Board)"
 
-#: templates/admin/help-partials/orders.php:32
+#: templates/admin/help-partials/orders.php:31
 msgid ""
-"The Kanban board is your real-time overview of all active orders. At a "
-"glance you can see what is incoming, what is being prepared, and what is "
-"ready for pickup."
+"The Kanban board is your real-time overview of all active orders. It has "
+"three columns: Pre-orders, Prepare Now, and Completed."
 msgstr ""
-"Das Kanban-Board ist Ihre Echtzeit-Übersicht aller aktiven Bestellungen. Auf "
-"einen Blick sehen Sie, was eingeht, was in Zubereitung ist und was zur "
-"Abholung bereit steht."
+"Das Kanban-Board ist Ihre Echtzeit-Übersicht aller aktiven Bestellungen. Es "
+"hat drei Spalten: Vorbestellungen, Jetzt zubereiten und Abgeschlossen."
 
 #: templates/admin/help-partials/orders.php:37
 msgid "Column"
@@ -5747,15 +5745,15 @@ msgid ""
 "12:30\". Libre Bite manages these pre-orders automatically:"
 msgstr "Kunden können im Checkout eine bestimmte Abholzeit wählen – z. B. «heute um 12:30». Libre Bite verwaltet diese Vorbestellungen automatisch:"
 
-#: templates/admin/help-partials/orders.php:94
-msgid "Pre-orders initially appear in \"Incoming\" with the pickup time shown."
-msgstr "Vorbestellungen erscheinen zunächst in «Eingehend» mit der angezeigten Abholzeit."
+#: templates/admin/help-partials/orders.php:87
+msgid "Pre-orders initially appear in \"Pre-orders\" with the pickup time shown."
+msgstr "Vorbestellungen erscheinen zunächst in «Vorbestellungen» mit der angezeigten Abholzeit."
 
-#: templates/admin/help-partials/orders.php:95
+#: templates/admin/help-partials/orders.php:88
 msgid ""
 "X minutes before pickup time (configurable under Settings → General), they "
-"are automatically moved to the \"Preparing\" column."
-msgstr "X Minuten vor der Abholzeit (konfigurierbar unter Einstellungen → Allgemein) werden sie automatisch in die Spalte «In Zubereitung» verschoben."
+"are automatically moved to the \"Prepare Now\" column."
+msgstr "X Minuten vor der Abholzeit (konfigurierbar unter Einstellungen → Allgemein) werden sie automatisch in die Spalte «Jetzt zubereiten» verschoben."
 
 #: templates/admin/help-partials/orders.php:96
 msgid "This way you always know exactly when to start preparing."

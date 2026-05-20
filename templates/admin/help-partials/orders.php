@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<p><?php esc_html_e( 'The typical flow of an online order:', 'libre-bite' ); ?></p>
 		<ol>
 			<li><strong><?php esc_html_e( 'Customer orders online', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'The customer selects products, a location and a pickup time on the website.', 'libre-bite' ); ?></li>
-			<li><strong><?php esc_html_e( 'Order appears in the dashboard', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'The order immediately appears in the "Incoming" column of the order overview. Optionally a sound plays.', 'libre-bite' ); ?></li>
-			<li><strong><?php esc_html_e( 'Staff prepares the order', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Order is moved to "Preparing". For pre-orders, this happens automatically X minutes before pickup time.', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Order appears in the dashboard', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'The order immediately appears in the "Pre-orders" column of the order overview. Optionally a sound plays.', 'libre-bite' ); ?></li>
+			<li><strong><?php esc_html_e( 'Staff prepares the order', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Order is moved to "Prepare Now". For pre-orders, this happens automatically X minutes before pickup time.', 'libre-bite' ); ?></li>
 			<li><strong><?php esc_html_e( 'Order completed', 'libre-bite' ); ?></strong> – <?php esc_html_e( 'Mark as "Completed" once the order is ready for pickup. The order moves to the completed column.', 'libre-bite' ); ?></li>
 		</ol>
 	</div>
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<!-- Bestellübersicht (Kanban) -->
 	<div class="lbite-help-article">
 		<h3><?php esc_html_e( 'The Order Overview (Kanban Board)', 'libre-bite' ); ?></h3>
-		<p><?php esc_html_e( 'The Kanban board is your real-time overview of all active orders. It has three columns: Incoming, Preparing, and Completed.', 'libre-bite' ); ?></p>
+		<p><?php esc_html_e( 'The Kanban board is your real-time overview of all active orders. It has three columns: Pre-orders, Prepare Now, and Completed.', 'libre-bite' ); ?></p>
 
 		<table class="widefat">
 			<thead>
@@ -40,12 +40,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</thead>
 			<tbody>
 				<tr>
-					<td><strong><?php esc_html_e( 'Incoming', 'libre-bite' ); ?></strong></td>
+					<td><strong><?php esc_html_e( 'Pre-orders', 'libre-bite' ); ?></strong></td>
 					<td><?php esc_html_e( 'New orders that have not yet been processed. New orders are highlighted here in color.', 'libre-bite' ); ?></td>
 					<td><?php esc_html_e( 'View the order and start preparing.', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
-					<td><strong><?php esc_html_e( 'Preparing', 'libre-bite' ); ?></strong></td>
+					<td><strong><?php esc_html_e( 'Prepare Now', 'libre-bite' ); ?></strong></td>
 					<td><?php esc_html_e( 'Orders currently being prepared. Pre-orders are automatically placed here shortly before the pickup time.', 'libre-bite' ); ?></td>
 					<td><?php esc_html_e( 'Mark as "Completed" once the order is ready for pickup.', 'libre-bite' ); ?></td>
 				</tr>
@@ -84,8 +84,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h3><?php esc_html_e( 'Pre-Orders (Scheduled Pickup Times)', 'libre-bite' ); ?></h3>
 		<p><?php esc_html_e( 'Customers can select a specific pickup time at checkout – e.g. "today at 12:30". Libre Bite manages these pre-orders automatically:', 'libre-bite' ); ?></p>
 		<ul>
-			<li><?php esc_html_e( 'Pre-orders initially appear in "Incoming" with the pickup time shown.', 'libre-bite' ); ?></li>
-			<li><?php esc_html_e( 'X minutes before pickup time (configurable under Settings → General), they are automatically moved to the "Preparing" column.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Pre-orders initially appear in "Pre-orders" with the pickup time shown.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'X minutes before pickup time (configurable under Settings → General), they are automatically moved to the "Prepare Now" column.', 'libre-bite' ); ?></li>
 			<li><?php esc_html_e( 'This way you always know exactly when to start preparing.', 'libre-bite' ); ?></li>
 		</ul>
 	</div>
