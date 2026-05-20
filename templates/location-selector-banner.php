@@ -76,6 +76,45 @@ $lbite_align_class = ( 'center' !== $atts['align'] ) ? ' lbite-align-' . $atts['
 					<?php endif; ?>
 				<?php endif; ?>
 
+				<?php if ( ! empty( $lbite_opening_hours ) ) : ?>
+					<button class="lbite-hours-toggle" aria-expanded="false">
+						<?php esc_html_e( 'Show opening hours', 'libre-bite' ); ?>
+						<svg class="lbite-hours-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"></polyline></svg>
+					</button>
+					<div class="lbite-hours-popup">
+						<strong><?php esc_html_e( 'Opening Hours', 'libre-bite' ); ?></strong>
+						<table class="lbite-hours-table">
+							<tbody>
+							<?php foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $lbite_day ) :
+								$lbite_day_data  = isset( $lbite_opening_hours[ $lbite_day ] ) ? $lbite_opening_hours[ $lbite_day ] : array();
+								$lbite_is_closed = ! empty( $lbite_day_data['closed'] ) || empty( $lbite_day_data );
+								$lbite_day_name  = date_i18n( 'D', strtotime( 'next ' . $lbite_day ) );
+							?>
+								<tr>
+									<td><?php echo esc_html( $lbite_day_name ); ?></td>
+									<td>
+									<?php if ( $lbite_is_closed ) : ?>
+										<?php esc_html_e( 'Closed', 'libre-bite' ); ?>
+									<?php else : ?>
+										<?php
+										$lbite_windows = array();
+										if ( ! empty( $lbite_day_data['open'] ) && ! empty( $lbite_day_data['close'] ) ) {
+											$lbite_windows[] = esc_html( $lbite_day_data['open'] ) . ' – ' . esc_html( $lbite_day_data['close'] );
+										}
+										if ( ! empty( $lbite_day_data['open2'] ) && ! empty( $lbite_day_data['close2'] ) ) {
+											$lbite_windows[] = esc_html( $lbite_day_data['open2'] ) . ' – ' . esc_html( $lbite_day_data['close2'] );
+										}
+										echo implode( ', ', $lbite_windows );
+										?>
+									<?php endif; ?>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+				<?php endif; ?>
+
 				<div class="lbite-banner-select-btn">
 					<span class="lbite-button lbite-button-primary">
 						<?php esc_html_e( 'Order here', 'libre-bite' ); ?>
@@ -192,9 +231,8 @@ jQuery(document).ready(function($) {
 
 	// Standort-Karte auswählen
 	$('.lbite-banner-card.lbite-location-card').on('click', function(e) {
-		if ($(e.target).is('a') || $(e.target).closest('a').length) {
-			return;
-		}
+		if ($(e.target).is('a') || $(e.target).closest('a').length) return;
+		if ($(e.target).closest('.lbite-hours-toggle, .lbite-hours-popup').length) return;
 		selectedLocationId = $(this).data('location-id');
 		const mapsUrl    = $(this).data('maps-url');
 		const statusText = $(this).data('status-text');

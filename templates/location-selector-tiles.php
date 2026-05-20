@@ -82,10 +82,11 @@ $lbite_location_class     = ( $lbite_is_single_location ? 'lbite-location-select
 					</div>
 
 					<?php if ( ! empty( $lbite_opening_hours ) ) : ?>
-						<button class="lbite-hours-toggle" aria-expanded="false" onclick="event.stopPropagation()">
+						<button class="lbite-hours-toggle" aria-expanded="false">
 							<?php esc_html_e( 'Show opening hours', 'libre-bite' ); ?>
+							<svg class="lbite-hours-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"></polyline></svg>
 						</button>
-						<div class="lbite-hours-popup" onclick="event.stopPropagation()">
+						<div class="lbite-hours-popup">
 							<strong><?php esc_html_e( 'Opening Hours', 'libre-bite' ); ?></strong>
 							<table class="lbite-hours-table">
 								<tbody>
@@ -224,7 +225,8 @@ jQuery(document).ready(function($) {
 	let selectedTimeType = null;
 
 	// Standort-Karte auswählen
-	$('.lbite-location-card').on('click', function() {
+	$('.lbite-location-card').on('click', function(e) {
+		if ($(e.target).closest('.lbite-hours-toggle, .lbite-hours-popup').length) return;
 		selectedLocationId = $(this).data('location-id');
 		const mapsUrl    = $(this).data('maps-url');
 		const statusText = $(this).data('status-text');
