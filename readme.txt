@@ -512,9 +512,3 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 * First beta version with Location Management, POS, Kanban order board, tipping, time slots, and Freemius integration.
 
 == Upgrade Notice ==
-
-= 1.0.7 =
-Security and bugfix release: XSS fixes in JS, correct capability checking for product options, fix for tip feature key. Update recommended.
-
-= 1.0.6 =
-Maintenance release with WordPress.org compliance fixes. No breaking changes.
