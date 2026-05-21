@@ -783,6 +783,146 @@ NEW_STRINGS_FORMAL_SS = {
         'Kalorienanzahl und Nährwerte auf Produktseiten anzeigen.',
     'Show Allergen Warnings':
         'Allergen-Warnungen anzeigen',
+    'Shop Manager':
+        'Shop-Manager',
+    'Manage pickup locations, opening hours, and timeslots.':
+        'Abholstandorte, Öffnungszeiten und Zeitfenster verwalten.',
+    'Manage tables and generate QR codes for table ordering.':
+        'Tische verwalten und QR-Codes für Tischbestellungen generieren.',
+    'View and manage table reservations.':
+        'Tischreservierungen anzeigen und verwalten.',
+    'Account':
+        'Konto',
+    'Open Account Dashboard':
+        'Konto-Dashboard öffnen',
+    'Reservation Form':
+        'Reservierungsformular',
+    'Reservation Overview':
+        'Reservierungsübersicht',
+    'Table Order Page':
+        'Tischbestellseite',
+    '— Select page —':
+        '— Seite auswählen —',
+
+    # ── v1.5.0: Dashboard-Kacheln + Standort-CPT-Meta-Box ───────────────────────
+    'View and manage incoming orders in the Kanban board.':
+        'Eingehende Bestellungen im Kanban-Board anzeigen und verwalten.',
+    'Display incoming orders as a kanban board for quick status management.':
+        'Eingehende Bestellungen als Kanban-Board anzeigen für schnelle Statusverwaltung.',
+    'Process in-person orders with the Point of Sale interface.':
+        'Direkte Bestellungen über die Kassensystem-Oberfläche erfassen.',
+    'Revenue and order statistics per location and time period.':
+        'Umsatz- und Bestellstatistiken pro Standort und Zeitraum.',
+    'Documentation, guides, and support contact.':
+        'Dokumentation, Anleitungen und Support-Kontakt.',
+    'Configure features, locations, checkout, branding, and more.':
+        'Funktionen, Standorte, Checkout, Branding und mehr konfigurieren.',
+    "First check the help area – you'll find guides for all features there.":
+        'Schauen Sie zuerst in den Hilfe-Bereich – dort finden Sie Anleitungen zu allen Funktionen.',
+    'Manage incoming orders with the Kanban board or POS system.':
+        'Eingehende Bestellungen mit dem Kanban-Board oder Kassensystem verwalten.',
+    'Manage the three user levels: Staff, Manager, and Administrator.':
+        'Die drei Benutzerebenen verwalten: Personal, Manager und Administrator.',
+    'Configure the support contact information displayed on the help pages.':
+        'Support-Kontaktdaten konfigurieren, die auf den Hilfe-Seiten angezeigt werden.',
+    'Let customers reserve tables online via a frontend form.':
+        'Kunden können Tische online über ein Frontend-Formular reservieren.',
+
+    # Zeiteinstellungen pro Standort (Meta-Box)
+    'Time Settings (Override)':
+        'Zeiteinstellungen (Standort)',
+    'These settings override the global defaults for this location only. Leave blank to use the global value.':
+        'Diese Einstellungen überschreiben die globalen Standardwerte nur für diesen Standort. Leer lassen, um den globalen Wert zu verwenden.',
+    'Minimum lead time before a pickup slot becomes available. Global default: %d min.':
+        'Minimale Vorlaufzeit, bevor ein Abholzeitfenster verfügbar wird. Globaler Standardwert: %d Min.',
+    'Hides the first X minutes of each opening window from the slot picker (e.g. setup time after opening). Global default: %d min.':
+        'Blendet die ersten X Minuten jedes Öffnungsfensters aus dem Zeitfenster-Picker aus (z. B. Einrichtungszeit nach Öffnung). Globaler Standardwert: %d Min.',
+    'Hides the last X minutes of each opening window from the slot picker (e.g. to stop accepting orders before closing). Global default: %d min.':
+        'Blendet die letzten X Minuten jedes Öffnungsfensters aus dem Zeitfenster-Picker aus (z. B. um Bestellungen vor dem Schliessen nicht mehr anzunehmen). Globaler Standardwert: %d Min.',
+
+    # Allgemeine fehlende Strings
+    'Add the reservation form to any page using the shortcode:':
+        'Reservierungsformular auf beliebigen Seiten via Shortcode einbinden:',
+    'After selection, the user is automatically redirected to the shop page.':
+        'Nach der Auswahl wird der Benutzer automatisch zur Shop-Seite weitergeleitet.',
+    'After submitting the form, two emails are automatically sent:':
+        'Nach dem Absenden des Formulars werden automatisch zwei E-Mails versendet:',
+    'As staff, you have access to the order overview and the POS system.':
+        'Als Personal haben Sie Zugriff auf die Bestellübersicht und das Kassensystem.',
+    'Check whether the option is published and assigned to the product.':
+        'Prüfen Sie, ob die Option veröffentlicht und dem Produkt zugewiesen ist.',
+    'Click a preset to apply the colors. Save to keep the changes.':
+        'Preset anklicken, um die Farben zu übernehmen. Speichern, um die Änderungen zu behalten.',
+    'Completed orders for today. Older orders are loaded on demand.':
+        'Abgeschlossene Bestellungen für heute. Ältere Bestellungen werden bei Bedarf geladen.',
+    'Custom title for the "Billing Details" section in checkout (optional)':
+        'Benutzerdefinierter Titel für den Bereich «Rechnungsdetails» im Checkout (optional)',
+    'Disable and re-enable the plugin to recreate roles.':
+        'Plugin deaktivieren und erneut aktivieren, um Rollen neu anzulegen.',
+    'Drag an order to the next column or click the status button':
+        'Bestellung in die nächste Spalte ziehen oder Statusschaltfläche klicken',
+    'Enable WP_DEBUG in wp-config.php for detailed error messages:':
+        'WP_DEBUG in wp-config.php aktivieren für detaillierte Fehlermeldungen:',
+    'For larger setups, you can create multiple tables in one step:':
+        'Für grössere Konfigurationen können Sie mehrere Tische in einem Schritt erstellen:',
+    'Heading shown above the tip options. Leave empty to use the default.':
+        'Überschrift über den Trinkgeldoptionen. Leer lassen für den Standardtext.',
+    'How often the reservations overview is updated. Default: 60 seconds.':
+        'Wie oft die Reservierungsübersicht aktualisiert wird. Standard: 60 Sekunden.',
+    'Icon':
+        'Icon',
+    'If disabled, the tip selection will not be shown in checkout.':
+        'Wenn deaktiviert, wird die Trinkgeldauswahl nicht im Checkout angezeigt.',
+    'Is taken directly to the order page – location and table are pre-filled':
+        'Wird direkt zur Bestellseite geleitet – Standort und Tisch sind vorausgefüllt',
+    'Location not published – the Free plan is limited to 1 location.':
+        'Standort nicht veröffentlicht – der Free-Plan ist auf 1 Standort begrenzt.',
+    'Locations must be created before orders can be accepted':
+        'Standorte müssen erstellt werden, bevor Bestellungen angenommen werden können',
+    "Look at the browser status bar (bottom left) – you'll see the URL there":
+        'Schauen Sie in die Browser-Statusleiste (unten links) – dort sehen Sie die URL',
+    'Make sure the location is published and opening hours are configured.':
+        'Stellen Sie sicher, dass der Standort veröffentlicht und die Öffnungszeiten konfiguriert sind.',
+    'Note: WordPress Cron must be active for reminders to be sent.':
+        'Hinweis: WordPress Cron muss aktiv sein, damit Erinnerungen versendet werden.',
+    'Opening hours are automatically considered when selecting time slots':
+        'Öffnungszeiten werden bei der Auswahl von Zeitfenstern automatisch berücksichtigt',
+    'Play a sound when a new order arrives in the order overview.':
+        'Einen Sound abspielen, wenn eine neue Bestellung in der Bestellübersicht eintrifft.',
+    'Please select a location first and save to generate the link.':
+        'Bitte zuerst einen Standort auswählen und speichern, um den Link zu generieren.',
+    'Print the QR code or copy the link for your table stands.':
+        'QR-Code drucken oder Link für Tischaufsteller kopieren.',
+    'Send an automatic email reminder before the scheduled pickup time.':
+        'Automatische E-Mail-Erinnerung vor der geplanten Abholzeit versenden.',
+    'Start of an optional second opening window (e.g. for lunch break)':
+        'Beginn eines optionalen zweiten Öffnungsfensters (z. B. für eine Mittagspause)',
+    'The sound only plays when the browser tab with the dashboard is open.':
+        'Der Sound wird nur abgespielt, wenn der Browser-Tab mit dem Dashboard geöffnet ist.',
+    'The view updates automatically. The interval can be adjusted under %s.':
+        'Die Ansicht aktualisiert sich automatisch. Das Intervall kann unter %s angepasst werden.',
+    'This price is added to the product price when the option is selected.':
+        'Dieser Preis wird zum Produktpreis addiert, wenn die Option ausgewählt wird.',
+    'This way you always know exactly when to start preparing.':
+        'So wissen Sie immer genau, wann Sie mit der Zubereitung beginnen müssen.',
+    'To help you quickly, please prepare the following information:':
+        'Um Ihnen schnell helfen zu können, bereiten Sie bitte folgende Informationen vor:',
+    'Top products (%d)':
+        'Top-Produkte (%d)',
+    'When this shortcode is used, the automatic popup is disabled.':
+        'Wenn dieser Shortcode verwendet wird, ist das automatische Popup deaktiviert.',
+    'You can apply a holiday to all locations or only to specific ones.':
+        'Feiertage können für alle Standorte oder nur für bestimmte Standorte gelten.',
+    'You can customize or disable the sound under Settings → Dashboard.':
+        'Den Sound können Sie unter Einstellungen → Dashboard anpassen oder deaktivieren.',
+    '"Complete Order" → choose payment method (cash, card, Twint, etc.)':
+        '«Bestellung abschliessen» → Zahlungsmethode wählen (Bar, Karte, Twint, etc.)',
+    '"Print QR Code" opens a print-optimized view with the table name.':
+        '«QR-Code drucken» öffnet eine druckoptimierte Ansicht mit dem Tischnamen.',
+    'requires at least WooCommerce version 8.0. Please update WooCommerce.':
+        'benötigt mindestens WooCommerce 8.0. Bitte aktualisieren Sie WooCommerce.',
+    'Freemius Account':
+        'Freemius-Konto',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT
@@ -934,9 +1074,10 @@ def set_msgstr(entry: str, new_msgstr: str) -> str:
         entry,
         flags=re.DOTALL | re.MULTILINE
     )
-    # fuzzy-Flag entfernen
-    entry = re.sub(r'^#, fuzzy\n?', '', entry, flags=re.MULTILINE)
-    entry = re.sub(r', fuzzy', '', entry)
+    # fuzzy-Flag entfernen (alle Formen: alleine, am Anfang, am Ende kombinierter Flags)
+    entry = re.sub(r'^#, fuzzy\n', '', entry, flags=re.MULTILINE)        # standalone: "#, fuzzy\n"
+    entry = re.sub(r'(^#,\s+)fuzzy,\s+', r'\1', entry, flags=re.MULTILINE)  # prefix: "#, fuzzy, php-format"
+    entry = re.sub(r',\s+fuzzy(?=\n|$)', '', entry, flags=re.MULTILINE)  # suffix: "#, php-format, fuzzy"
     return entry
 
 

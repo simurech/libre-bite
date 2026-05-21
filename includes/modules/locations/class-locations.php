@@ -523,21 +523,37 @@ class LBite_Locations {
 
 		$is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
 		?>
-		<p class="description" style="margin-bottom:10px;font-size:11px;">
-			<?php esc_html_e( 'Leave blank to use the global default (Settings → Locations).', 'libre-bite' ); ?>
+		<p class="description" style="margin-bottom:12px;">
+			<?php
+			/* translators: %d = global default value in minutes */
+			printf(
+				esc_html__( 'These settings override the global defaults for this location only. Leave blank to use the global value.', 'libre-bite' )
+			);
+			?>
 		</p>
+
 		<p>
-			<label style="display:block;margin-bottom:4px;font-weight:600;">
+			<label style="display:block;margin-bottom:2px;font-weight:600;">
 				<?php esc_html_e( 'Preparation Time', 'libre-bite' ); ?>
 			</label>
 			<input type="number" min="0" name="lbite_location_prep_time"
 				value="<?php echo esc_attr( is_numeric( $prep_time ) ? $prep_time : '' ); ?>"
 				placeholder="<?php echo esc_attr( $global_prep ); ?>"
 				class="small-text">
-			<?php esc_html_e( 'min', 'libre-bite' ); ?>
+			<?php esc_html_e( 'minutes', 'libre-bite' ); ?>
+			<p class="description" style="margin-top:4px;">
+				<?php
+				/* translators: %d = global default in minutes */
+				printf(
+					esc_html__( 'Minimum lead time before a pickup slot becomes available. Global default: %d min.', 'libre-bite' ),
+					$global_prep
+				);
+				?>
+			</p>
 		</p>
-		<p>
-			<label style="display:block;margin-bottom:4px;font-weight:600;">
+
+		<p style="margin-top:10px;">
+			<label style="display:block;margin-bottom:2px;font-weight:600;">
 				<?php esc_html_e( 'Slot Buffer Start', 'libre-bite' ); ?>
 				<?php if ( ! $is_premium ) : ?><span class="lbite-pro-badge">Pro</span><?php endif; ?>
 			</label>
@@ -546,10 +562,20 @@ class LBite_Locations {
 				placeholder="<?php echo esc_attr( $global_start ); ?>"
 				class="small-text"
 				<?php disabled( ! $is_premium ); ?>>
-			<?php esc_html_e( 'min', 'libre-bite' ); ?>
+			<?php esc_html_e( 'minutes', 'libre-bite' ); ?>
+			<p class="description" style="margin-top:4px;">
+				<?php
+				/* translators: %d = global default in minutes */
+				printf(
+					esc_html__( 'Hides the first X minutes of each opening window from the slot picker (e.g. setup time after opening). Global default: %d min.', 'libre-bite' ),
+					$global_start
+				);
+				?>
+			</p>
 		</p>
-		<p>
-			<label style="display:block;margin-bottom:4px;font-weight:600;">
+
+		<p style="margin-top:10px;">
+			<label style="display:block;margin-bottom:2px;font-weight:600;">
 				<?php esc_html_e( 'Slot Buffer End', 'libre-bite' ); ?>
 				<?php if ( ! $is_premium ) : ?><span class="lbite-pro-badge">Pro</span><?php endif; ?>
 			</label>
@@ -558,7 +584,16 @@ class LBite_Locations {
 				placeholder="<?php echo esc_attr( $global_end ); ?>"
 				class="small-text"
 				<?php disabled( ! $is_premium ); ?>>
-			<?php esc_html_e( 'min', 'libre-bite' ); ?>
+			<?php esc_html_e( 'minutes', 'libre-bite' ); ?>
+			<p class="description" style="margin-top:4px;">
+				<?php
+				/* translators: %d = global default in minutes */
+				printf(
+					esc_html__( 'Hides the last X minutes of each opening window from the slot picker (e.g. to stop accepting orders before closing). Global default: %d min.', 'libre-bite' ),
+					$global_end
+				);
+				?>
+			</p>
 		</p>
 		<?php
 	}
