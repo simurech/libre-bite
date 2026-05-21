@@ -3,9 +3,9 @@ Contributors: simon61
 Donate link: https://github.com/simurech/libre-bite
 Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.8
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,19 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.5.0 =
+* Feature: Feature toggles moved from a central "Features" tab into each thematic settings tab — every functional area now starts with its own master toggle.
+* Feature: Manager role (Pro) — new `lbite_manager` role between Staff and Admin; assign managers to specific locations via Settings → Roles & Menus.
+* Feature: Location column and filter dropdown added to the WooCommerce order list for quick filtering by location.
+* Feature: Statistics page — revenue, order count, and average order value per location, filterable by period (today, 7 days, 30 days, year).
+* Feature: Branding tab expanded with color presets (6 themes) and a live color preview.
+* Improvement: Dead toggles removed (8 unused feature flags that had no effect on plugin behaviour).
+* Improvement: Pro feature values are now force-blocked on the server on all save paths — Pro options cannot be enabled without a valid license.
+* Improvement: All settings tab templates refactored; branding, statistics, roles, and notifications each have a dedicated tab.
+* Improvement: Help documentation updated throughout to reflect the new tab structure and new features.
+* Improvement: All five translation files (de_CH, de_CH_informal, de_DE, de_DE_formal, de_AT) updated with 1.5.0 strings.
+* Tested with WordPress 7.0.
 
 = 1.4.8 =
 * Fix: POS modal now uses CSS Small Viewport Height (svh) so the footer button stays fully visible on iPad Safari when the tab bar is shown.

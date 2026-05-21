@@ -532,6 +532,231 @@ NEW_STRINGS_FORMAL_SS = {
         'Einige Browser erlauben Sounds erst nach einer Interaktion (z. B. einmaligem Klicken auf die Seite).',
     'The sound played when new orders arrive. You can choose a custom sound from the media library or use the default sound.':
         'Der Sound, der bei neuen Bestellungen abgespielt wird. Sie können einen eigenen Sound aus der Mediathek wählen oder den Standard-Sound verwenden.',
+
+    # ── v1.5.0: Manager-Rolle (F13) ───────────────────────────────────────────
+    'Manager Assignments':
+        'Manager-Zuweisungen',
+    '+ Location Settings (assigned locations only), Statistics':
+        '+ Standort-Einstellungen (nur zugewiesene Standorte), Statistik',
+    '+ All Settings, Roles, Support, Debug':
+        '+ Alle Einstellungen, Rollen, Support, Debug',
+    'View Statistics':
+        'Statistik ansehen',
+    'Location Manager':
+        'Standort-Manager',
+    'Administrator':
+        'Administrator',
+    'No managers found.':
+        'Keine Manager gefunden.',
+    'Hold Ctrl/Cmd to select multiple locations.':
+        'Strg/Cmd gedrückt halten, um mehrere Standorte auszuwählen.',
+    'Save Assignments':
+        'Zuweisungen speichern',
+
+    # ── v1.5.0: WC-Bestellliste Standort-Spalte + Filter (F14) ───────────────
+    'Location Column in WooCommerce Order List':
+        'Standort-Spalte in der WooCommerce-Bestellliste',
+    'Libre Bite adds a "Location" column to the WooCommerce order list and a filter dropdown so you can quickly find orders for a specific location.':
+        'Libre Bite fügt der WooCommerce-Bestellliste eine Spalte «Standort» und ein Filter-Dropdown hinzu, damit Sie Bestellungen für einen bestimmten Standort schnell finden.',
+    'The column shows the location name for every order placed via Libre Bite.':
+        'Die Spalte zeigt den Standortnamen für jede über Libre Bite aufgegebene Bestellung.',
+    'Use the location filter at the top of the order list to narrow results to one location.':
+        'Verwenden Sie den Standort-Filter oben in der Bestellliste, um die Ergebnisse auf einen Standort einzuschränken.',
+    'Open WooCommerce Orders':
+        'WooCommerce-Bestellungen öffnen',
+
+    # ── v1.5.0: Statistik-Seite (F15) ────────────────────────────────────────
+    'Statistics':
+        'Statistik',
+    'Open Statistics':
+        'Statistik öffnen',
+    'The Statistics page shows revenue, order count, and average order value – filterable by period (today, 7 days, 30 days, year) and broken down per location.':
+        'Die Statistikseite zeigt Umsatz, Bestellanzahl und Ø-Bestellwert – filterbar nach Zeitraum (heute, 7 Tage, 30 Tage, Jahr) und aufgeschlüsselt nach Standort.',
+    'Last 30 Days':
+        'Letzte 30 Tage',
+    'This Year':
+        'Dieses Jahr',
+    'Revenue':
+        'Umsatz',
+    'Avg. Order Value':
+        'Ø Bestellwert',
+    'No orders found for this period.':
+        'Keine Bestellungen für diesen Zeitraum gefunden.',
+
+    # ── v1.5.0: Branding-Ausbau (F16) ────────────────────────────────────────
+    'Classic':
+        'Klassisch',
+    'Modern':
+        'Modern',
+    'Dark':
+        'Dunkel',
+    'Summer':
+        'Sommer',
+    'Ocean':
+        'Ozean',
+    'Forest':
+        'Wald',
+    'Click a preset to apply the colors. Save to keep the changes.':
+        'Klicken Sie auf ein Preset, um die Farben zu übernehmen. Speichern, um die Änderungen zu behalten.',
+    'Secondary text and links':
+        'Sekundärtext und Links',
+    'Live Preview':
+        'Live-Vorschau',
+    'Choose Logo':
+        'Logo wählen',
+    'Use Logo':
+        'Logo verwenden',
+    'Color Presets':
+        'Farbpresets',
+    'Primary Color':
+        'Primärfarbe',
+    'Main color for buttons and important elements.':
+        'Hauptfarbe für Schaltflächen und wichtige Elemente.',
+    'Secondary Color':
+        'Sekundärfarbe',
+    'For texts and secondary elements.':
+        'Für Texte und sekundäre Elemente.',
+    'Accent Color':
+        'Akzentfarbe',
+    'For success and confirmation elements.':
+        'Für Erfolgs- und Bestätigungselemente.',
+    'Inherit from Theme':
+        'Vom Theme übernehmen',
+    'Inherit Colors from Theme':
+        'Farben vom Theme übernehmen',
+    'Attempts to inherit colors from your active theme.':
+        'Versucht, Farben vom aktiven Theme zu übernehmen.',
+    'Order Now':
+        'Jetzt bestellen',
+    'Confirm':
+        'Bestätigen',
+    'Colors inherited!':
+        'Farben übernommen!',
+    'Could not find colors from theme.':
+        'Keine Farben vom Theme gefunden.',
+    'Error retrieving theme colors.':
+        'Fehler beim Abrufen der Theme-Farben.',
+
+    # ── v1.5.0: Tab-Router / POS-Master-Toggle ────────────────────────────────
+    'Enable the Point of Sale interface for in-person orders.':
+        'Kassensystem für Vor-Ort-Bestellungen aktivieren.',
+    'Open Settings':
+        'Einstellungen öffnen',
+
+    # ── v1.5.0: Hilfe-Inhalte ────────────────────────────────────────────────
+    'The settings are divided into tabs – one per functional area. Each tab starts with a toggle to enable or disable the feature. Pro features are marked and require an active license.':
+        'Die Einstellungen sind in Tabs unterteilt – einen pro Funktionsbereich. Jeder Tab beginnt mit einem Schalter zum Aktivieren oder Deaktivieren der Funktion. Pro-Funktionen sind gekennzeichnet und erfordern eine aktive Lizenz.',
+    'Tip: Enable the "Location Selection" feature under Settings → Locations for the shortcode to be visible.':
+        'Tipp: Aktivieren Sie die Funktion «Standortauswahl» unter Einstellungen → Standorte, damit der Shortcode sichtbar ist.',
+    'Tip: The dashboard updates automatically. You do not need to manually reload the page to see new orders. The interval can be adjusted under Settings → Orders.':
+        'Tipp: Das Dashboard aktualisiert sich automatisch. Sie müssen die Seite nicht manuell neu laden, um neue Bestellungen zu sehen. Das Intervall kann unter Einstellungen → Bestellungen angepasst werden.',
+    'Activate this feature under Settings → Orders → "Dim Future Pre-orders". Configure visibility under Settings → Orders.':
+        'Aktivieren Sie diese Funktion unter Einstellungen → Bestellungen → «Zukünftige Vorbestellungen ausgrauen». Sichtbarkeit konfigurieren unter Einstellungen → Bestellungen.',
+    'Features are now enabled or disabled directly within each thematic settings tab. There is no longer a separate "Features" tab – each functional area (Orders, POS, Checkout, etc.) begins with its own master toggle.':
+        'Funktionen werden jetzt direkt in jedem thematischen Einstellungs-Tab aktiviert oder deaktiviert. Es gibt keinen separaten «Funktionen»-Tab mehr – jeder Funktionsbereich (Bestellungen, Kassensystem, Checkout etc.) beginnt mit seinem eigenen Master-Schalter.',
+    'Manage the three user levels: Staff, Manager, and Administrator.':
+        'Die drei Benutzerebenen verwalten: Personal, Manager und Administrator.',
+
+    # ── v1.5.0: Freemius Trial-Badge ─────────────────────────────────────────
+    '7-day free trial · No credit card required':
+        '7-Tage-Gratis-Testphase · Keine Kreditkarte erforderlich',
+
+    # ── v1.5.0: Standort-Fix (de_DE hatte "Location is fixed for your account") ─
+    'Location is fixed for your account':
+        'Standort ist für Ihr Konto festgelegt',
+
+    # ── v1.5.0: Manager-Zuweisung Beschreibungstexte ──────────────────────────
+    'Assign managers to specific locations. Managers can view and manage orders '
+    'only for their assigned locations.':
+        'Manager bestimmten Standorten zuweisen. Manager können Bestellungen '
+        'nur für ihre zugewiesenen Standorte einsehen und verwalten.',
+    'Assign one or more locations to each manager. Managers can only see and '
+    'manage orders for their assigned locations.':
+        'Jedem Manager einen oder mehrere Standorte zuweisen. Manager können '
+        'Bestellungen nur für ihre zugewiesenen Standorte einsehen und verwalten.',
+    'No manager users found. Create a user and assign the "Libre Bite Manager" '
+    'role to get started.':
+        'Keine Manager-Benutzer gefunden. Erstellen Sie einen Benutzer und '
+        'weisen Sie die Rolle «Libre Bite Manager» zu, um zu beginnen.',
+
+    # ── v1.5.0: Tab-Beschreibungen (Master-Toggle-Partials) ───────────────────
+    'Replace WooCommerce fields with a minimal checkout: name and receipt option '
+    'only.':
+        'WooCommerce-Felder durch einen minimalen Checkout ersetzen: '
+        'nur Name und Belegwunsch.',
+    'This feature is available in Libre Bite Pro. Start your free 7-day trial to '
+    'unlock it – no credit card required.':
+        'Diese Funktion ist in Libre Bite Pro verfügbar. Starten Sie Ihre '
+        'kostenlose 7-Tage-Testphase, um sie freizuschalten – '
+        'keine Kreditkarte erforderlich.',
+    'Show a location selector in the frontend so customers can choose their '
+    'pickup location.':
+        'Einen Standortwahlbereich im Frontend anzeigen, damit Kunden '
+        'ihren Abholstandort wählen können.',
+    'Locations are managed as individual entries. Each location has its own '
+    'opening hours, timeslots, and holidays.':
+        'Standorte werden als einzelne Einträge verwaltet. Jeder Standort '
+        'hat eigene Öffnungszeiten, Zeitslots und Feiertage.',
+    'Allow customers to customize products with add-ons, variants, or extras.':
+        'Kunden erlauben, Produkte mit Add-ons, Varianten oder Extras anzupassen.',
+
+    # ── v1.5.0: Fuzzy-Fixes (falsche Auto-Matches von msgmerge) ──────────────
+    'Add New User':
+        'Neuen Benutzer hinzufügen',
+    'No locations found.':
+        'Keine Standorte gefunden.',
+    'Edit Assigned Location Settings':
+        'Zugewiesene Standort-Einstellungen bearbeiten',
+    'Configure each area of the plugin using the tabs below. Core features are '
+    'active by default – you can adjust them at any time.':
+        'Konfigurieren Sie jeden Bereich des Plugins mit den Tabs unten. '
+        'Kernfunktionen sind standardmässig aktiv – Sie können dies jederzeit anpassen.',
+    'Create tables, generate QR codes, and allow guests to order directly at '
+    'the table. Available with Libre Bite Pro.':
+        'Tische erstellen, QR-Codes generieren und Gästen direkt am Tisch '
+        'bestellen ermöglichen. Verfügbar mit Libre Bite Pro.',
+    'Let customers reserve tables online via a frontend form. Available with '
+    'Libre Bite Pro.':
+        'Kunden ermöglichen, Tische über ein Frontend-Formular online zu reservieren. '
+        'Verfügbar mit Libre Bite Pro.',
+    'Price Rounding':
+        'Preisrundung',
+    'Round total to 5 cents (0.05 CHF). Prevents rounding errors when combining '
+    'vouchers and tips. Recommended for Swiss businesses.':
+        'Gesamtbetrag auf 5 Rappen (0.05 CHF) runden. Verhindert Rundungsfehler '
+        'bei der Kombination von Gutscheinen und Trinkgeld. Empfohlen für Schweizer Betriebe.',
+    'Display incoming orders as a kanban board for quick status management.':
+        'Eingehende Bestellungen als Kanban-Board anzeigen für schnelle Statusverwaltung.',
+    'Pro Feature':
+        'Pro-Funktion',
+    'Play a sound when a new order arrives in the order overview.':
+        'Einen Sound abspielen, wenn eine neue Bestellung in der Bestellübersicht eintrifft.',
+    'Manage Product Options':
+        'Produkt-Add-ons verwalten',
+    'Show Nutritional Information':
+        'Nährwertangaben anzeigen',
+    'Display allergen information on product pages.':
+        'Allergen-Informationen auf Produktseiten anzeigen.',
+    'Last 7 Days':
+        'Letzte 7 Tage',
+    'No location':
+        'Kein Standort',
+    'No orders found for the selected period.':
+        'Keine Bestellungen im gewählten Zeitraum gefunden.',
+
+    # ── Fuzzy-Bestätigungen (gute Übersetzungen, nur Wortlaut leicht geändert) ─
+    'Table Management & Ordering':
+        'Tischverwaltung & Tischbestellung',
+    'Allow customers to add a tip at checkout.':
+        'Kunden erlauben, beim Checkout ein Trinkgeld hinzuzufügen.',
+    'Order Overview (Kanban)':
+        'Bestellübersicht (Kanban)',
+    'Send an automatic email reminder before the scheduled pickup time.':
+        'Eine automatische E-Mail-Erinnerung vor der geplanten Abholzeit senden.',
+    'Display calorie counts and nutritional values on product pages.':
+        'Kalorienanzahl und Nährwerte auf Produktseiten anzeigen.',
+    'Show Allergen Warnings':
+        'Allergen-Warnungen anzeigen',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT

@@ -55,7 +55,7 @@ $lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'over
 				?>
 				<div class="lbite-help-section">
 					<h2><?php esc_html_e( 'Feature Toggles', 'libre-bite' ); ?></h2>
-					<p><?php esc_html_e( 'With feature toggles, you can enable or disable individual Libre Bite features.', 'libre-bite' ); ?></p>
+					<p><?php esc_html_e( 'Features are now enabled or disabled directly within each thematic settings tab. There is no longer a separate "Features" tab – each functional area (Orders, POS, Checkout, etc.) begins with its own master toggle.', 'libre-bite' ); ?></p>
 
 					<div class="lbite-help-article">
 						<h3><?php esc_html_e( 'Current Configuration', 'libre-bite' ); ?></h3>
@@ -83,8 +83,8 @@ $lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'over
 						</table>
 
 						<p>
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-features' ) ); ?>" class="button button-primary">
-								<?php esc_html_e( 'Edit Feature Toggles', 'libre-bite' ); ?>
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings' ) ); ?>" class="button button-primary">
+								<?php esc_html_e( 'Open Settings', 'libre-bite' ); ?>
 							</a>
 						</p>
 					</div>
@@ -93,12 +93,8 @@ $lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'over
 						<h3><?php esc_html_e( 'Feature Checks in Code', 'libre-bite' ); ?></h3>
 						<p><?php esc_html_e( 'Features can be checked in code as follows:', 'libre-bite' ); ?></p>
 
-						<pre><code>// Feature-Manager laden
-$features = get_option( 'lbite_features', array() );
-
-// Feature prüfen
-if ( ! empty( $features['enable_tips'] ) ) {
-    // Trinkgeld-Funktion aktiviert
+						<pre><code>if ( lbite_feature_enabled( 'enable_tips' ) ) {
+    // Tip feature is enabled
 }</code></pre>
 					</div>
 				</div>
@@ -127,14 +123,14 @@ if ( ! empty( $features['enable_tips'] ) ) {
 									<td><?php esc_html_e( 'Dashboard, Order Overview, POS', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
-									<td><strong>lbite_admin</strong></td>
-									<td><?php esc_html_e( 'Branch Manager', 'libre-bite' ); ?></td>
-									<td><?php esc_html_e( '+ Locations, Product Options, Settings', 'libre-bite' ); ?></td>
+									<td><strong>lbite_manager</strong> <span class="lbite-pro-badge">Pro</span></td>
+									<td><?php esc_html_e( 'Location Manager', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( '+ Location Settings (assigned locations only), Statistics', 'libre-bite' ); ?></td>
 								</tr>
 								<tr>
 									<td><strong>administrator</strong></td>
-									<td><?php esc_html_e( 'Super Admin', 'libre-bite' ); ?></td>
-									<td><?php esc_html_e( '+ Feature Toggles, Admin Settings, Debug', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( 'Administrator', 'libre-bite' ); ?></td>
+									<td><?php esc_html_e( '+ All Settings, Roles, Support, Debug', 'libre-bite' ); ?></td>
 								</tr>
 							</tbody>
 						</table>
@@ -148,8 +144,8 @@ if ( ! empty( $features['enable_tips'] ) ) {
 									<th><?php esc_html_e( 'Capability', 'libre-bite' ); ?></th>
 									<th><?php esc_html_e( 'Description', 'libre-bite' ); ?></th>
 									<th>Staff</th>
+									<th>Manager</th>
 									<th>Admin</th>
-									<th>Super</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -171,6 +167,20 @@ if ( ! empty( $features['enable_tips'] ) ) {
 									<td><code>lbite_use_pos</code></td>
 									<td><?php esc_html_e( 'Use POS', 'libre-bite' ); ?></td>
 									<td>&#10003;</td>
+									<td>&#10003;</td>
+									<td>&#10003;</td>
+								</tr>
+								<tr>
+									<td><code>lbite_manage_location_settings</code></td>
+									<td><?php esc_html_e( 'Edit Assigned Location Settings', 'libre-bite' ); ?></td>
+									<td>-</td>
+									<td>&#10003;</td>
+									<td>&#10003;</td>
+								</tr>
+								<tr>
+									<td><code>lbite_view_statistics</code></td>
+									<td><?php esc_html_e( 'View Statistics', 'libre-bite' ); ?></td>
+									<td>-</td>
 									<td>&#10003;</td>
 									<td>&#10003;</td>
 								</tr>
@@ -408,7 +418,7 @@ define( 'WP_DEBUG_DISPLAY', false );</code></pre>
 						<p><?php esc_html_e( 'As a Super Admin, you have full access to all Libre Bite features and settings.', 'libre-bite' ); ?></p>
 
 						<div class="lbite-quick-links">
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-features' ) ); ?>" class="button button-primary">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings' ) ); ?>" class="button button-primary">
 								<span class="dashicons dashicons-admin-plugins"></span>
 								<?php esc_html_e( 'Feature Toggles', 'libre-bite' ); ?>
 							</a>
@@ -436,7 +446,7 @@ define( 'WP_DEBUG_DISPLAY', false );</code></pre>
 
 					<div class="lbite-help-card">
 						<h2><span class="dashicons dashicons-groups"></span> <?php esc_html_e( 'Roles & Permissions', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'Manage the three user levels: Staff, Admin, Super Admin.', 'libre-bite' ); ?></p>
+						<p><?php esc_html_e( 'Manage the three user levels: Staff, Manager, and Administrator.', 'libre-bite' ); ?></p>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=roles' ) ); ?>" class="button">
 							<?php esc_html_e( 'Details', 'libre-bite' ); ?>
 						</a>

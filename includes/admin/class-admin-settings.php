@@ -40,6 +40,7 @@ class LBite_Admin_Settings {
 		// Einstellungen speichern
 		$this->loader->add_action( 'admin_init', $this, 'register_settings' );
 		$this->loader->add_action( 'admin_init', $this, 'save_admin_settings' );
+		$this->loader->add_action( 'admin_init', $this, 'save_manager_assignments__premium_only' );
 
 		// Plugin-Name überschreiben
 		$this->loader->add_filter( 'lbite_plugin_display_name', $this, 'get_custom_plugin_name' );
@@ -203,6 +204,48 @@ class LBite_Admin_Settings {
 			__( 'Settings saved successfully.', 'libre-bite' ),
 			'success'
 		);
+	}
+
+	/**
+	 * Manager-Standort-Zuweisungen speichern (nur Pro).
+	 */
+	public function save_manager_assignments__premium_only() {
+		if ( ! isset( $_POST['lbite_save_manager_assignments'] ) ) {
+			return;
+		}
+
+		if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'lbite_save_manager_assignments' ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$managers = get_users( array( 'role' => 'lbite_manager' ) );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
+		$submitted = isset( $_POST['lbite_manager_locations'] ) && is_array( $_POST['lbite_manager_locations'] )
+			? wp_unslash( $_POST['lbite_manager_locations'] )
+			: array();
+
+		foreach ( $managers as $manager ) {
+			$location_ids = isset( $submitted[ $manager->ID ] ) && is_array( $submitted[ $manager->ID ] )
+				? array_map( 'intval', $submitted[ $manager->ID ] )
+				: array();
+			update_user_meta( $manager->ID, 'lbite_assigned_locations', $location_ids );
+		}
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'    => 'lbite-settings',
+					'tab'     => 'roles',
+					'updated' => '1',
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		exit;
 	}
 
 	/**

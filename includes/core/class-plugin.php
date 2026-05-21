@@ -76,6 +76,7 @@ class LBite_Plugin {
 		// Admin-Bereich
 		if ( is_admin() ) {
 			$this->init_admin();
+			$this->load_module( 'order-list', 'LBite_Order_List' );
 		}
 
 		// Basis-Module (immer laden)

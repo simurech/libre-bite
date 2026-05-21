@@ -13,20 +13,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 ?>
 <div class="lbite-help-section">
 	<h2><?php esc_html_e( 'Settings', 'libre-bite' ); ?></h2>
-	<p><?php esc_html_e( 'The settings are divided into separate tabs – organized by function. Tabs for disabled features are automatically hidden.', 'libre-bite' ); ?></p>
-
-	<!-- Tab: Features -->
-	<?php if ( current_user_can( 'manage_options' ) ) : ?>
-	<div class="lbite-help-article">
-		<h3>
-			<span class="dashicons dashicons-admin-plugins" style="vertical-align: middle;"></span>
-			<?php esc_html_e( 'Features', 'libre-bite' ); ?>
-		</h3>
-		<p><?php esc_html_e( 'Activate or deactivate individual feature modules of Libre Bite. Disabled features are hidden from the menu – including the corresponding settings tabs.', 'libre-bite' ); ?></p>
-		<p><?php esc_html_e( 'Pro features are marked with a notice and require an active license or trial.', 'libre-bite' ); ?></p>
-		<p><a href="<?php echo esc_url( add_query_arg( 'tab', 'features', $lbite_settings_url ) ); ?>" class="button"><?php esc_html_e( 'Open Features', 'libre-bite' ); ?></a></p>
-	</div>
-	<?php endif; ?>
+	<p><?php esc_html_e( 'The settings are divided into tabs – one per functional area. Each tab starts with a toggle to enable or disable the feature. Pro features are marked and require an active license.', 'libre-bite' ); ?></p>
 
 	<!-- Tab: Allgemein -->
 	<div class="lbite-help-article">
@@ -75,7 +62,6 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 	</div>
 
 	<!-- Tab: Feiertage -->
-	<?php if ( lbite_feature_enabled( 'enable_opening_hours' ) ) : ?>
 	<div class="lbite-help-article">
 		<h3>
 			<span class="dashicons dashicons-calendar-alt" style="vertical-align: middle;"></span>
@@ -101,7 +87,6 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 		</table>
 		<p style="margin-top: 8px;"><a href="<?php echo esc_url( add_query_arg( 'tab', 'holidays', $lbite_settings_url ) ); ?>" class="button"><?php esc_html_e( 'Open Holidays', 'libre-bite' ); ?></a></p>
 	</div>
-	<?php endif; ?>
 
 	<!-- Tab: Trinkgeld -->
 	<?php if ( lbite_feature_enabled( 'enable_tips' ) ) : ?>
@@ -111,7 +96,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 			<?php esc_html_e( 'Tips', 'libre-bite' ); ?>
 		</h3>
 		<p><?php esc_html_e( 'Offer your customers a tip option at checkout. You can define three percentages and set a default selection.', 'libre-bite' ); ?></p>
-		<p><a href="<?php echo esc_url( add_query_arg( 'tab', 'tips', $lbite_settings_url ) ); ?>" class="button"><?php esc_html_e( 'Open Tip Settings', 'libre-bite' ); ?></a></p>
+		<p><a href="<?php echo esc_url( add_query_arg( 'tab', 'checkout', $lbite_settings_url ) ); ?>" class="button"><?php esc_html_e( 'Open Tip Settings', 'libre-bite' ); ?></a></p>
 	</div>
 	<?php endif; ?>
 

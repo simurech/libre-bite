@@ -217,45 +217,10 @@ class LBite_Installer {
 	 * Standard Feature-Toggles setzen
 	 */
 	private static function set_default_features() {
-		$default_features = array(
-			// Bestellsystem – Basis aktiv
-			'enable_pos'                => true,
-			'enable_scheduled_orders'   => true,
-			'enable_order_notes'        => true,
-			'enable_order_cancellation' => true,
-			'enable_table_ordering'     => false, // Pro
-			'enable_reservations'       => false, // Pro
-
-			// Checkout – Pro-Features deaktiviert
-			'enable_optimized_checkout' => false, // Pro
-			'enable_tips'               => false, // Pro
-			'enable_rounding'           => true,
-			'enable_guest_checkout'     => true,
-			'enable_email_field'        => true,
-			'enable_phone_field'        => true,
-
-			// Standorte – Basis aktiv
-			'enable_multi_location'     => false, // Pro
-			'enable_location_selector'  => true,
-			'enable_opening_hours'      => true,
-
-			// Benachrichtigungen – Pro-Features deaktiviert
-			'enable_pickup_reminders'   => false, // Pro
-			'enable_sound_notifications' => false, // Pro
-
-			// Produkte
-			'enable_product_options'    => true,
-			'enable_nutritional_info'   => false, // Pro
-			'enable_allergens'          => false, // Pro
-
-			// Dashboard – Basis aktiv
-			'enable_kanban_board'       => true,
-			'enable_auto_status_change' => true,
-			'enable_fullscreen_mode'    => true,
-		);
+		require_once LBITE_PLUGIN_DIR . 'includes/core/class-features.php';
 
 		if ( false === get_option( 'lbite_features' ) ) {
-			add_option( 'lbite_features', $default_features );
+			add_option( 'lbite_features', LBite_Features::get_default_values() );
 		}
 	}
 
@@ -288,9 +253,14 @@ class LBite_Installer {
 			LBite_Roles::migrate_existing_users();
 		}
 
-		// Feature-Toggles hinzufügen falls nicht vorhanden
+		// Feature-Toggles initialisieren falls nicht vorhanden
 		if ( false === get_option( 'lbite_features' ) ) {
 			self::set_default_features();
+		}
+
+		// Migration auf 1.5.0: veraltete Toggle-Keys entfernen
+		if ( version_compare( $current_version, '1.5.0', '<' ) ) {
+			self::migrate_features_to_1_5();
 		}
 
 		// Support-Einstellungen hinzufügen falls nicht vorhanden
@@ -301,6 +271,37 @@ class LBite_Installer {
 		// Version aktualisieren
 		if ( version_compare( $current_version, LBITE_VERSION, '<' ) ) {
 			update_option( 'lbite_version', LBITE_VERSION );
+		}
+	}
+
+	/**
+	 * Feature-Toggle-Keys entfernen, die in v1.5.0 aufgegeben wurden
+	 */
+	private static function migrate_features_to_1_5() {
+		$removed_keys = array(
+			'enable_guest_checkout',
+			'enable_email_field',
+			'enable_phone_field',
+			'enable_multi_location',
+			'enable_order_notes',
+			'enable_order_cancellation',
+			'enable_fullscreen_mode',
+			'enable_auto_status_change',
+			'enable_opening_hours',
+		);
+
+		$features = get_option( 'lbite_features', array() );
+		$changed  = false;
+
+		foreach ( $removed_keys as $key ) {
+			if ( array_key_exists( $key, $features ) ) {
+				unset( $features[ $key ] );
+				$changed = true;
+			}
+		}
+
+		if ( $changed ) {
+			update_option( 'lbite_features', $features );
 		}
 	}
 }

@@ -2,8 +2,9 @@
 /**
  * Rollenverwaltung für Libre Bite
  *
- * Definiert zwei Benutzerebenen:
+ * Definiert drei Benutzerebenen:
  * - lbite_staff: Personal (Bestellübersicht, POS)
+ * - lbite_manager: Manager (mehrere Standorte, Standort-Einstellungen) – Pro
  * - administrator: Admin (alle weiteren Funktionen)
  *
  * @package LibreBite
@@ -25,16 +26,20 @@ class LBite_Roles {
 	 * von diesem Plugin registriert, geprüft und beim Deinstallieren wieder entfernt.
 	 * Es werden keine WordPress-Kern-Capabilities überschrieben oder erweitert.
 	 *
-	 * Rollen: lbite_staff (Personal), administrator, shop_manager
+	 * Rollen: lbite_staff (Personal), lbite_manager (Manager, Pro), administrator, shop_manager
 	 *
 	 * @var array
 	 */
 	private static $capabilities = array(
-		// Personal-Capabilities: lbite_staff + administrator + shop_manager
-		'lbite_view_dashboard'   => array( 'lbite_staff', 'administrator' ), // Bestellübersicht (Kanban-Board) einsehen
-		'lbite_view_orders'      => array( 'lbite_staff', 'administrator' ), // Einzelne Bestellungen einsehen
-		'lbite_manage_orders'    => array( 'lbite_staff', 'administrator' ), // Bestellstatus ändern und Bestellungen verwalten
-		'lbite_use_pos'          => array( 'lbite_staff', 'administrator' ), // POS-Terminal (Point of Sale) verwenden
+		// Personal-Capabilities: lbite_staff + lbite_manager + administrator + shop_manager
+		'lbite_view_dashboard'   => array( 'lbite_staff', 'lbite_manager', 'administrator' ), // Bestellübersicht (Kanban-Board) einsehen
+		'lbite_view_orders'      => array( 'lbite_staff', 'lbite_manager', 'administrator' ), // Einzelne Bestellungen einsehen
+		'lbite_manage_orders'    => array( 'lbite_staff', 'lbite_manager', 'administrator' ), // Bestellstatus ändern und Bestellungen verwalten
+		'lbite_use_pos'          => array( 'lbite_staff', 'lbite_manager', 'administrator' ), // POS-Terminal (Point of Sale) verwenden
+
+		// Manager-Capabilities: lbite_manager + administrator (Pro)
+		'lbite_manage_location_settings' => array( 'lbite_manager', 'administrator' ), // Einstellungen der zugewiesenen Standorte bearbeiten
+		'lbite_view_statistics'          => array( 'lbite_manager', 'administrator' ), // Statistik-Seite einsehen
 
 		// Admin-Capabilities: nur administrator + shop_manager
 		'lbite_manage_locations' => array( 'administrator' ), // Standorte (CPT lbite_location) erstellen und bearbeiten
@@ -89,7 +94,33 @@ class LBite_Roles {
 			$shop_manager->add_cap( 'lbite_manage_options' );
 			$shop_manager->add_cap( 'lbite_manage_checkout' );
 			$shop_manager->add_cap( 'lbite_manage_settings' );
+			$shop_manager->add_cap( 'lbite_view_statistics' );
 		}
+	}
+
+	/**
+	 * Manager-Rolle erstellen (nur Pro).
+	 *
+	 * Wird bei Plugin-Aktivierung und im Pro-Build aufgerufen.
+	 * Ohne Premium-Lizenz wird diese Methode nicht ausgeführt.
+	 */
+	public static function create_manager_role__premium_only() {
+		if ( get_role( 'lbite_manager' ) ) {
+			return;
+		}
+		add_role(
+			'lbite_manager',
+			'Libre Bite Manager',
+			array(
+				'read'                           => true,
+				'lbite_view_dashboard'           => true,
+				'lbite_view_orders'              => true,
+				'lbite_manage_orders'            => true,
+				'lbite_use_pos'                  => true,
+				'lbite_manage_location_settings' => true,
+				'lbite_view_statistics'          => true,
+			)
+		);
 	}
 
 	/**
@@ -98,6 +129,7 @@ class LBite_Roles {
 	public static function remove_roles() {
 		// Custom Roles entfernen (inkl. aller bekannten alten Benennungen)
 		remove_role( 'lbite_staff' );
+		remove_role( 'lbite_manager' );
 		remove_role( 'lbite_admin' );
 		remove_role( 'lb_admin' );
 		remove_role( 'lb_staff' );
@@ -122,6 +154,15 @@ class LBite_Roles {
 	 */
 	public static function is_staff() {
 		return current_user_can( 'lbite_view_dashboard' );
+	}
+
+	/**
+	 * Prüfen ob aktueller Benutzer Manager ist (Pro)
+	 *
+	 * @return bool
+	 */
+	public static function is_manager() {
+		return current_user_can( 'lbite_manage_location_settings' ) && ! current_user_can( 'manage_options' );
 	}
 
 	/**
@@ -175,6 +216,10 @@ class LBite_Roles {
 			return 'admin';
 		}
 
+		if ( user_can( $user_id, 'lbite_manage_location_settings' ) ) {
+			return 'manager';
+		}
+
 		if ( user_can( $user_id, 'lbite_view_dashboard' ) ) {
 			return 'staff';
 		}
@@ -197,7 +242,7 @@ class LBite_Roles {
 
 		// Alle Rollen prüfen: nicht-erlaubte Rollen mit lbite_-Caps entfernen (z.B. OOS-Altlasten)
 		global $wp_roles;
-		$lbite_allowed_roles = array( 'lbite_staff', 'administrator', 'editor', 'author', 'contributor', 'subscriber', 'shop_manager', 'customer' );
+		$lbite_allowed_roles = array( 'lbite_staff', 'lbite_manager', 'administrator', 'editor', 'author', 'contributor', 'subscriber', 'shop_manager', 'customer' );
 		foreach ( array_keys( $wp_roles->roles ) as $lbite_role_slug ) {
 			if ( in_array( $lbite_role_slug, $lbite_allowed_roles, true ) ) {
 				continue;
@@ -229,6 +274,25 @@ class LBite_Roles {
 		if ( is_array( $lbite_disabled ) ) {
 			$lbite_disabled = array_values( array_filter( $lbite_disabled, fn( $lbite_slug ) => null !== get_role( $lbite_slug ) ) );
 			update_option( 'lbite_disabled_roles', $lbite_disabled );
+		}
+
+		// lbite_manager: Capabilities sicherstellen (Pro; Rolle nur wenn Premium aktiv)
+		$manager_role = get_role( 'lbite_manager' );
+		if ( $manager_role ) {
+			$manager_caps = array(
+				'read'                           => true,
+				'lbite_view_dashboard'           => true,
+				'lbite_view_orders'              => true,
+				'lbite_manage_orders'            => true,
+				'lbite_use_pos'                  => true,
+				'lbite_manage_location_settings' => true,
+				'lbite_view_statistics'          => true,
+			);
+			foreach ( $manager_caps as $cap => $grant ) {
+				if ( ! $manager_role->has_cap( $cap ) ) {
+					$manager_role->add_cap( $cap, $grant );
+				}
+			}
 		}
 
 		// lbite_staff: Capabilities sicherstellen (falls Rolle aus älterer Version stammt)
@@ -279,7 +343,7 @@ class LBite_Roles {
 			}
 		}
 
-		update_option( 'lbite_roles_version', '1.1.3' );
+		update_option( 'lbite_roles_version', '1.5.0' );
 	}
 
 	/**
@@ -289,6 +353,6 @@ class LBite_Roles {
 	 */
 	public static function needs_migration() {
 		$current_version = get_option( 'lbite_roles_version', '0' );
-		return version_compare( $current_version, '1.1.3', '<' );
+		return version_compare( $current_version, '1.5.0', '<' );
 	}
 }

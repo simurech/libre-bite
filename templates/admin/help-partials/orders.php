@@ -64,7 +64,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="lbite-help-tip">
 			<span class="dashicons dashicons-lightbulb"></span>
-			<p><?php esc_html_e( 'Tip: The dashboard updates automatically. You do not need to manually reload the page to see new orders. The interval can be adjusted under Settings → Order Overview.', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'Tip: The dashboard updates automatically. You do not need to manually reload the page to see new orders. The interval can be adjusted under Settings → Orders.', 'libre-bite' ); ?></p>
 		</div>
 	</div>
 
@@ -107,7 +107,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</ul>
 		<div class="lbite-help-tip">
 			<span class="dashicons dashicons-lightbulb"></span>
-			<p><?php esc_html_e( 'Activate this feature under Settings → Features → "Dim Future Pre-orders". Configure visibility under Settings → Order Overview.', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'Activate this feature under Settings → Orders → "Dim Future Pre-orders". Configure visibility under Settings → Orders.', 'libre-bite' ); ?></p>
 		</div>
 	</div>
 	<?php endif; ?>
@@ -149,6 +149,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span class="dashicons dashicons-lightbulb"></span>
 			<p><?php esc_html_e( 'Tip: The POS system is optimized for use on tablets or a second monitor – allowing staff to work independently from the dashboard.', 'libre-bite' ); ?></p>
 		</div>
+	</div>
+
+	<!-- WC-Bestellliste Standort-Spalte + Filter (F14) -->
+	<div class="lbite-help-article">
+		<h3>
+			<span class="dashicons dashicons-filter" style="vertical-align: middle;"></span>
+			<?php esc_html_e( 'Location Column in WooCommerce Order List', 'libre-bite' ); ?>
+		</h3>
+		<p><?php esc_html_e( 'Libre Bite adds a "Location" column to the WooCommerce order list and a filter dropdown so you can quickly find orders for a specific location.', 'libre-bite' ); ?></p>
+		<ul>
+			<li><?php esc_html_e( 'The column shows the location name for every order placed via Libre Bite.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Use the location filter at the top of the order list to narrow results to one location.', 'libre-bite' ); ?></li>
+		</ul>
+		<p style="margin-top: 8px;"><a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-orders' ) ); ?>" class="button"><?php esc_html_e( 'Open WooCommerce Orders', 'libre-bite' ); ?></a></p>
+	</div>
+
+	<!-- Statistik (F15) -->
+	<div class="lbite-help-article">
+		<h3>
+			<span class="dashicons dashicons-chart-bar" style="vertical-align: middle;"></span>
+			<?php esc_html_e( 'Statistics', 'libre-bite' ); ?>
+		</h3>
+		<p><?php esc_html_e( 'The Statistics page shows revenue, order count, and average order value – filterable by period (today, 7 days, 30 days, year) and broken down per location.', 'libre-bite' ); ?></p>
+		<p style="margin-top: 8px;"><a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings&tab=statistics' ) ); ?>" class="button"><?php esc_html_e( 'Open Statistics', 'libre-bite' ); ?></a></p>
 	</div>
 
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-order-board' ) ); ?>" class="button button-primary">

@@ -1198,29 +1198,20 @@ class LBite_Admin {
 			wp_send_json_error( array( 'message' => __( 'Invalid data', 'libre-bite' ) ) );
 		}
 
-		// Pro-Features in der Gratis-Version schützen
-		$is_premium    = function_exists( 'lbite_freemius' ) && lbite_freemius()->is_premium();
-		$premium_keys  = array(
-			'enable_optimized_checkout',
-			'enable_tips',
-			'enable_multi_location',
-			'enable_table_ordering',
-			'enable_reservations',
-			'enable_pickup_reminders',
-			'enable_sound_notifications',
-			'enable_nutritional_info',
-			'enable_allergens',
-		);
+		// Pro-Features serverseitig schützen – Quelle der Wahrheit: LBite_Features
+		$premium_allowed = function_exists( 'lbite_freemius' )
+			&& lbite_freemius()->can_use_premium_code__premium_only();
+		$premium_keys    = LBite_Features::get_premium_features();
+		$known_keys      = array_keys( LBite_Features::get_definitions() );
 
-		// Bestehende Werte laden um Pro-Features nicht zu überschreiben
-		$existing_features = get_option( 'lbite_features', array() );
-
-		// Alle Feature-Werte als boolean konvertieren
+		// Alle Feature-Werte als boolean sanitieren; nur bekannte Keys übernehmen
 		$sanitized_features = array();
 		foreach ( $features as $key => $value ) {
 			$clean_key = sanitize_key( $key );
-			// Pro-Feature in Gratis-Version: bestehenden Wert beibehalten (immer false)
-			if ( ! $is_premium && in_array( $clean_key, $premium_keys, true ) ) {
+			if ( ! in_array( $clean_key, $known_keys, true ) ) {
+				continue;
+			}
+			if ( ! $premium_allowed && in_array( $clean_key, $premium_keys, true ) ) {
 				$sanitized_features[ $clean_key ] = false;
 			} else {
 				$sanitized_features[ $clean_key ] = (bool) $value;

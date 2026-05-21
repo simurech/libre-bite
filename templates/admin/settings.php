@@ -3,7 +3,7 @@
  * Template: Einstellungen – Allgemein
  *
  * Wird als Tab-Inhalt in settings-tabbed.php geladen.
- * Enthält: Standort-Seite, Zeiteinstellungen, Branding.
+ * Enthält: Standort-Seite, Zeiteinstellungen. Branding → settings/branding.php
  *
  * @package LibreBite
  */
@@ -38,22 +38,22 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			}
 		}
 
-		// Zeiteinstellungen
-		update_option( 'lbite_preparation_time', isset( $_POST['lbite_preparation_time'] ) ? intval( wp_unslash( $_POST['lbite_preparation_time'] ) ) : 30 );
-		update_option( 'lbite_pickup_reminder_time', isset( $_POST['lbite_pickup_reminder_time'] ) ? intval( wp_unslash( $_POST['lbite_pickup_reminder_time'] ) ) : 15 );
+		// Zeiteinstellungen + Pro-Options durch den Helper schicken
+		$lbite_time_values = lbite_enforce_pro_options( array(
+			'lbite_preparation_time'    => isset( $_POST['lbite_preparation_time'] ) ? intval( wp_unslash( $_POST['lbite_preparation_time'] ) ) : 30,
+			'lbite_pickup_reminder_time' => isset( $_POST['lbite_pickup_reminder_time'] ) ? intval( wp_unslash( $_POST['lbite_pickup_reminder_time'] ) ) : 15,
+			'lbite_slot_buffer_start'   => isset( $_POST['lbite_slot_buffer_start'] ) ? intval( wp_unslash( $_POST['lbite_slot_buffer_start'] ) ) : 0,
+			'lbite_slot_buffer_end'     => isset( $_POST['lbite_slot_buffer_end'] ) ? intval( wp_unslash( $_POST['lbite_slot_buffer_end'] ) ) : 0,
+			'lbite_table_order_page_id' => isset( $_POST['lbite_table_order_page_id'] ) ? intval( wp_unslash( $_POST['lbite_table_order_page_id'] ) ) : 0,
+		) );
+		update_option( 'lbite_preparation_time', $lbite_time_values['lbite_preparation_time'] );
+		update_option( 'lbite_pickup_reminder_time', $lbite_time_values['lbite_pickup_reminder_time'] );
 		update_option( 'lbite_timeslot_interval', isset( $_POST['lbite_timeslot_interval'] ) ? intval( wp_unslash( $_POST['lbite_timeslot_interval'] ) ) : 15 );
-		update_option( 'lbite_slot_buffer_start', isset( $_POST['lbite_slot_buffer_start'] ) ? intval( wp_unslash( $_POST['lbite_slot_buffer_start'] ) ) : 0 );
-		update_option( 'lbite_slot_buffer_end', isset( $_POST['lbite_slot_buffer_end'] ) ? intval( wp_unslash( $_POST['lbite_slot_buffer_end'] ) ) : 0 );
+		update_option( 'lbite_slot_buffer_start', $lbite_time_values['lbite_slot_buffer_start'] );
+		update_option( 'lbite_slot_buffer_end', $lbite_time_values['lbite_slot_buffer_end'] );
 
 		// Tischbestellung
-		update_option( 'lbite_table_order_page_id', isset( $_POST['lbite_table_order_page_id'] ) ? intval( wp_unslash( $_POST['lbite_table_order_page_id'] ) ) : 0 );
-
-		// Branding
-		update_option( 'lbite_brand_name', isset( $_POST['lbite_brand_name'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_brand_name'] ) ) : '' );
-		update_option( 'lbite_brand_logo', isset( $_POST['lbite_brand_logo'] ) ? intval( wp_unslash( $_POST['lbite_brand_logo'] ) ) : 0 );
-		update_option( 'lbite_color_primary', isset( $_POST['lbite_color_primary'] ) ? sanitize_hex_color( wp_unslash( $_POST['lbite_color_primary'] ) ) : '#0073aa' );
-		update_option( 'lbite_color_secondary', isset( $_POST['lbite_color_secondary'] ) ? sanitize_hex_color( wp_unslash( $_POST['lbite_color_secondary'] ) ) : '#23282d' );
-		update_option( 'lbite_color_accent', isset( $_POST['lbite_color_accent'] ) ? sanitize_hex_color( wp_unslash( $_POST['lbite_color_accent'] ) ) : '#00a32a' );
+		update_option( 'lbite_table_order_page_id', $lbite_time_values['lbite_table_order_page_id'] );
 
 		wp_safe_redirect(
 			add_query_arg(
@@ -76,18 +76,9 @@ $lbite_pickup_reminder  = get_option( 'lbite_pickup_reminder_time', 15 );
 $lbite_timeslot_int        = get_option( 'lbite_timeslot_interval', 15 );
 $lbite_slot_buffer_start   = get_option( 'lbite_slot_buffer_start', 0 );
 $lbite_slot_buffer_end     = get_option( 'lbite_slot_buffer_end', 0 );
-$lbite_is_premium_for_f5   = function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only();
-$lbite_brand_name       = get_option( 'lbite_brand_name', '' );
-$lbite_brand_logo       = get_option( 'lbite_brand_logo', 0 );
-$lbite_color_primary    = get_option( 'lbite_color_primary', '#0073aa' );
-$lbite_color_secondary  = get_option( 'lbite_color_secondary', '#23282d' );
-$lbite_color_accent     = get_option( 'lbite_color_accent', '#00a32a' );
-$lbite_all_pages        = get_pages( array( 'post_status' => 'publish' ) );
+$lbite_is_premium_for_f5   = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+$lbite_all_pages           = get_pages( array( 'post_status' => 'publish' ) );
 $lbite_table_order_page = get_option( 'lbite_table_order_page_id', 0 );
-
-wp_enqueue_media();
-wp_enqueue_style( 'wp-color-picker' );
-wp_enqueue_script( 'wp-color-picker' );
 ?>
 
 <?php if ( empty( $lbite_is_tab ) ) : ?>
@@ -197,64 +188,6 @@ wp_enqueue_script( 'wp-color-picker' );
 		</tr>
 	</table>
 
-		<h2><?php esc_html_e( 'Branding', 'libre-bite' ); ?></h2>
-	<table class="form-table">
-		<tr>
-			<th><?php esc_html_e( 'Brand Name', 'libre-bite' ); ?></th>
-			<td>
-				<input type="text" name="lbite_brand_name" value="<?php echo esc_attr( $lbite_brand_name ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'E.g. My Restaurant', 'libre-bite' ); ?>">
-				<p class="description"><?php esc_html_e( 'Displayed on the confirmation page and in emails.', 'libre-bite' ); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><?php esc_html_e( 'Logo', 'libre-bite' ); ?></th>
-			<td>
-				<div class="lbite-logo-upload">
-					<?php $lbite_logo_url = $lbite_brand_logo ? wp_get_attachment_image_url( $lbite_brand_logo, 'medium' ) : ''; ?>
-					<div class="lbite-logo-preview" style="margin-bottom: 10px;">
-						<?php if ( $lbite_logo_url ) : ?>
-							<img src="<?php echo esc_url( $lbite_logo_url ); ?>" style="max-width: 200px; height: auto;">
-						<?php endif; ?>
-					</div>
-					<input type="hidden" id="lbite_brand_logo" name="lbite_brand_logo" value="<?php echo esc_attr( $lbite_brand_logo ); ?>">
-					<button type="button" class="button" id="lbite_upload_logo_button"><?php esc_html_e( 'Choose Logo', 'libre-bite' ); ?></button>
-					<button type="button" class="button" id="lbite_remove_logo_button" <?php echo ! $lbite_brand_logo ? 'style="display:none;"' : ''; ?>><?php esc_html_e( 'Remove', 'libre-bite' ); ?></button>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<th><?php esc_html_e( 'Primary Color', 'libre-bite' ); ?></th>
-			<td>
-				<input type="text" name="lbite_color_primary" value="<?php echo esc_attr( $lbite_color_primary ); ?>" class="lbite-color-picker" data-default-color="#0073aa">
-				<p class="description"><?php esc_html_e( 'Main color for buttons and important elements.', 'libre-bite' ); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><?php esc_html_e( 'Secondary Color', 'libre-bite' ); ?></th>
-			<td>
-				<input type="text" name="lbite_color_secondary" value="<?php echo esc_attr( $lbite_color_secondary ); ?>" class="lbite-color-picker" data-default-color="#23282d">
-				<p class="description"><?php esc_html_e( 'For texts and secondary elements.', 'libre-bite' ); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><?php esc_html_e( 'Accent Color', 'libre-bite' ); ?></th>
-			<td>
-				<input type="text" name="lbite_color_accent" value="<?php echo esc_attr( $lbite_color_accent ); ?>" class="lbite-color-picker" data-default-color="#00a32a">
-				<p class="description"><?php esc_html_e( 'For success and confirmation elements.', 'libre-bite' ); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><?php esc_html_e( 'Inherit from Theme', 'libre-bite' ); ?></th>
-			<td>
-				<button type="button" class="button" id="lbite_inherit_theme_colors">
-					<?php esc_html_e( 'Inherit Colors from Theme', 'libre-bite' ); ?>
-				</button>
-				<span class="spinner" id="lbite_theme_colors_spinner" style="float: none; margin-top: 0;"></span>
-				<p class="description"><?php esc_html_e( 'Attempts to inherit colors from your active theme.', 'libre-bite' ); ?></p>
-			</td>
-		</tr>
-	</table>
-
 	<?php submit_button( __( 'Save Settings', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 </form>
 
@@ -262,62 +195,3 @@ wp_enqueue_script( 'wp-color-picker' );
 </div>
 <?php endif; ?>
 
-<?php ob_start(); ?>
-jQuery(document).ready(function($) {
-	var lbiteLogoFrame;
-
-	$('.lbite-color-picker').wpColorPicker();
-
-	$('#lbite_upload_logo_button').on('click', function(e) {
-		e.preventDefault();
-		if (lbiteLogoFrame) { lbiteLogoFrame.open(); return; }
-		lbiteLogoFrame = wp.media({
-			title: '<?php esc_html_e( 'Choose Logo', 'libre-bite' ); ?>',
-			button: { text: '<?php esc_html_e( 'Use Logo', 'libre-bite' ); ?>' },
-			library: { type: ['image'] },
-			multiple: false
-		});
-		lbiteLogoFrame.on('select', function() {
-			var attachment = lbiteLogoFrame.state().get('selection').first().toJSON();
-			$('#lbite_brand_logo').val(attachment.id);
-			$('.lbite-logo-preview').html('<img src="' + attachment.url + '" style="max-width: 200px; height: auto;">');
-			$('#lbite_remove_logo_button').show();
-		});
-		lbiteLogoFrame.open();
-	});
-
-	$('#lbite_remove_logo_button').on('click', function(e) {
-		e.preventDefault();
-		$('#lbite_brand_logo').val('');
-		$('.lbite-logo-preview').empty();
-		$(this).hide();
-	});
-
-	$('#lbite_inherit_theme_colors').on('click', function(e) {
-		e.preventDefault();
-		var $btn = $(this);
-		var $spinner = $('#lbite_theme_colors_spinner');
-		$btn.prop('disabled', true);
-		$spinner.addClass('is-active');
-		$.ajax({
-			url: ajaxurl, type: 'POST',
-			data: { action: 'lbite_get_theme_colors', nonce: '<?php echo esc_js( wp_create_nonce( 'lbite_admin_nonce' ) ); ?>' },
-			success: function(response) {
-				$btn.prop('disabled', false);
-				$spinner.removeClass('is-active');
-				if (response.success && response.data) {
-					if (response.data.primary) $('input[name="lbite_color_primary"]').wpColorPicker('color', response.data.primary);
-					if (response.data.secondary) $('input[name="lbite_color_secondary"]').wpColorPicker('color', response.data.secondary);
-					if (response.data.accent) $('input[name="lbite_color_accent"]').wpColorPicker('color', response.data.accent);
-					alert('<?php esc_html_e( 'Colors inherited!', 'libre-bite' ); ?>');
-				} else { alert('<?php esc_html_e( 'Could not find colors from theme.', 'libre-bite' ); ?>'); }
-			},
-			error: function() {
-				$btn.prop('disabled', false);
-				$spinner.removeClass('is-active');
-				alert('<?php esc_html_e( 'Error retrieving theme colors.', 'libre-bite' ); ?>');
-			}
-		});
-	});
-});
-<?php wp_add_inline_script( 'lbite-admin', ob_get_clean() ); ?>

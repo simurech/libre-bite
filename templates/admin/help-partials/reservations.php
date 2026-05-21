@@ -123,7 +123,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			printf(
 				/* translators: %s: link to settings */
 				esc_html__( 'The view updates automatically. The interval can be adjusted under %s.', 'libre-bite' ),
-				'<a href="' . esc_url( admin_url( 'admin.php?page=lbite-settings&tab=orders_settings' ) ) . '">' . esc_html__( 'Settings → Order Overview', 'libre-bite' ) . '</a>'
+				'<a href="' . esc_url( admin_url( 'admin.php?page=lbite-settings&tab=orders' ) ) . '">' . esc_html__( 'Settings → Order Overview', 'libre-bite' ) . '</a>'
 			);
 			?>
 		</li>

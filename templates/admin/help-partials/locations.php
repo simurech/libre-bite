@@ -205,7 +205,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="lbite-help-tip">
 			<span class="dashicons dashicons-lightbulb"></span>
-			<p><?php esc_html_e( 'Tip: Enable the "Location Selection" feature under Settings → Features for the shortcode to be visible.', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'Tip: Enable the "Location Selection" feature under Settings → Locations for the shortcode to be visible.', 'libre-bite' ); ?></p>
 		</div>
 	</div>
 

@@ -52,30 +52,16 @@ class LBite_Features {
 			'label'       => 'Pre-orders',
 			'description' => 'Customers can place orders for a later time',
 		),
-		'enable_order_notes'        => array(
-			'group'       => 'order_system',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Customer Notes',
-			'description' => 'Customers can add notes to their order',
-		),
-		'enable_order_cancellation' => array(
-			'group'       => 'order_system',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Cancellation',
-			'description' => 'Customers can cancel their own orders',
-		),
 		'enable_table_ordering'     => array(
 			'group'       => 'order_system',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Table Management & Table Ordering',
 			'description' => 'Create tables, define seats, generate QR codes and allow orders directly at the table',
 		),
 		'enable_reservations'       => array(
 			'group'       => 'order_system',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Table Reservations',
 			'description' => 'Customers can reserve tables online – frontend form via shortcode [lbite_reservation_form]',
@@ -84,14 +70,14 @@ class LBite_Features {
 		// Checkout
 		'enable_optimized_checkout' => array(
 			'group'       => 'checkout',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Optimized Checkout',
 			'description' => 'Simplified checkout flow',
 		),
 		'enable_tips'               => array(
 			'group'       => 'checkout',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Tip System',
 			'description' => 'Show tip options at checkout',
@@ -103,36 +89,8 @@ class LBite_Features {
 			'label'       => '5-Cent Rounding',
 			'description' => 'Round amounts to 5 cents (Switzerland)',
 		),
-		'enable_guest_checkout'     => array(
-			'group'       => 'checkout',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Guest Checkout',
-			'description' => 'Allow checkout without a customer account',
-		),
-		'enable_email_field'        => array(
-			'group'       => 'checkout',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Email Field',
-			'description' => 'Show email address field at checkout',
-		),
-		'enable_phone_field'        => array(
-			'group'       => 'checkout',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Phone Field',
-			'description' => 'Show phone number field at checkout',
-		),
 
 		// Locations
-		'enable_multi_location'     => array(
-			'group'       => 'locations',
-			'default'     => true,
-			'premium'     => true,
-			'label'       => 'Multi-Location',
-			'description' => 'Manage multiple locations',
-		),
 		'enable_location_selector'  => array(
 			'group'       => 'locations',
 			'default'     => true,
@@ -140,29 +98,23 @@ class LBite_Features {
 			'label'       => 'Location Selection',
 			'description' => 'Show location selector in the frontend',
 		),
-		'enable_opening_hours'      => array(
-			'group'       => 'locations',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Opening Hours',
-			'description' => 'Manage opening hours per location',
-		),
 
 		// Notifications
 		'enable_pickup_reminders'   => array(
 			'group'       => 'notifications',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Pickup Reminders',
 			'description' => 'Send email reminder before pickup time',
 		),
 		'enable_sound_notifications' => array(
 			'group'       => 'notifications',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Sound Notifications',
 			'description' => 'Play a sound for new orders',
 		),
+
 		// Products
 		'enable_product_options'    => array(
 			'group'       => 'products',
@@ -173,14 +125,14 @@ class LBite_Features {
 		),
 		'enable_nutritional_info'   => array(
 			'group'       => 'products',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Nutritional Information',
 			'description' => 'Show nutritional information for products',
 		),
 		'enable_allergens'          => array(
 			'group'       => 'products',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Allergens',
 			'description' => 'Show allergen warnings for products',
@@ -194,23 +146,9 @@ class LBite_Features {
 			'label'       => 'Kanban Board',
 			'description' => 'Display orders as a kanban board',
 		),
-		'enable_auto_status_change' => array(
-			'group'       => 'dashboard',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Automatic Status Change',
-			'description' => 'Automatic status change on timeout',
-		),
-		'enable_fullscreen_mode'      => array(
-			'group'       => 'dashboard',
-			'default'     => true,
-			'premium'     => false,
-			'label'       => 'Fullscreen Mode',
-			'description' => 'Enable fullscreen view for tablets',
-		),
 		'enable_future_orders_dimmed' => array(
 			'group'       => 'dashboard',
-			'default'     => true,
+			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Dim Future Pre-orders',
 			'description' => 'Grey out pre-orders with pickup time beyond preparation time in the Kanban board',
@@ -240,13 +178,21 @@ class LBite_Features {
 	 * Features aus Datenbank laden
 	 */
 	private function load_features() {
-		$saved_features = get_option( 'lbite_features', array() );
+		$saved_features  = get_option( 'lbite_features', array() );
+		$premium_allowed = function_exists( 'lbite_freemius' )
+			&& lbite_freemius()->can_use_premium_code__premium_only();
 
-		// Defaults mit gespeicherten Werten mergen
 		foreach ( self::$feature_definitions as $key => $definition ) {
-			$this->features[ $key ] = isset( $saved_features[ $key ] )
+			$value = isset( $saved_features[ $key ] )
 				? (bool) $saved_features[ $key ]
 				: $definition['default'];
+
+			// Pro-Features ohne gültige Lizenz immer erzwingen – verhindert Phantom-Defaults.
+			if ( $definition['premium'] && ! $premium_allowed ) {
+				$value = false;
+			}
+
+			$this->features[ $key ] = $value;
 		}
 	}
 
@@ -344,6 +290,45 @@ class LBite_Features {
 	}
 
 	/**
+	 * Standard-Werte aller Features aus den Definitionen ableiten
+	 *
+	 * @return array
+	 */
+	public static function get_default_values() {
+		$defaults = array();
+		foreach ( self::$feature_definitions as $key => $definition ) {
+			$defaults[ $key ] = $definition['default'];
+		}
+		return $defaults;
+	}
+
+	/**
+	 * WP-Options-Keys, die Premium-Funktionen steuern (nicht Feature-Toggles)
+	 *
+	 * Wird vom Pro-Schutz-Helper verwendet, um Premium-Settings auf Free-Installationen
+	 * beim Speichern auf ihre Default-Werte zurückzusetzen.
+	 *
+	 * @return array Associative: option_key => default_value
+	 */
+	public static function get_premium_only_options() {
+		return array(
+			'lbite_slot_buffer_start'     => 0,
+			'lbite_slot_buffer_end'       => 0,
+			'lbite_table_order_page_id'   => 0,
+			'lbite_checkout_mode'         => 'standard',
+			'lbite_show_future_orders'    => 1,
+			'lbite_dim_future_orders'     => 1,
+			'lbite_pickup_reminder_time'  => 15,
+			'lbite_tip_percentage_1'      => 5,
+			'lbite_tip_percentage_2'      => 10,
+			'lbite_tip_percentage_3'      => 15,
+			'lbite_tip_mode'              => 'percentage',
+			'lbite_tip_title'             => '',
+			'lbite_tip_default_selection' => 'none',
+		);
+	}
+
+	/**
 	 * Feature-Wert setzen (temporär, wird nicht gespeichert)
 	 *
 	 * @param string $feature Feature-Key
@@ -401,4 +386,33 @@ class LBite_Features {
  */
 function lbite_feature_enabled( $feature ) {
 	return LBite_Features::instance()->is_enabled( $feature );
+}
+
+/**
+ * Premium-Options in einem Settings-Array auf Default zwingen (für Free-Installationen)
+ *
+ * Alle Keys aus LBite_Features::get_premium_only_options() werden auf ihren Default-Wert
+ * gesetzt, wenn keine gültige Premium-Lizenz vorhanden ist. Muss vor jedem update_option()-
+ * Aufruf auf den Input-Array angewendet werden.
+ *
+ * @param array $values Zu prüfendes Wertearray (option_key => value)
+ * @return array Bereinigtes Wertearray
+ */
+function lbite_enforce_pro_options( array $values ) {
+	$premium_allowed = function_exists( 'lbite_freemius' )
+		&& lbite_freemius()->can_use_premium_code__premium_only();
+
+	if ( $premium_allowed ) {
+		return $values;
+	}
+
+	$pro_defaults = LBite_Features::get_premium_only_options();
+
+	foreach ( $pro_defaults as $key => $default ) {
+		if ( array_key_exists( $key, $values ) ) {
+			$values[ $key ] = $default;
+		}
+	}
+
+	return $values;
 }
