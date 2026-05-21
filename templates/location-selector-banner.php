@@ -287,7 +287,7 @@ jQuery(document).ready(function($) {
 
 	// Zeit-Option auswählen
 	$('.lbite-time-option').on('click', function() {
-		if ($(this).hasClass('lbite-time-option-disabled')) {
+		if (!selectedLocationId || $(this).hasClass('lbite-time-option-disabled')) {
 			return;
 		}
 
@@ -329,6 +329,9 @@ jQuery(document).ready(function($) {
 
 	// Ohne Zeit-Auswahl fortfahren
 	$('.lbite-confirm-no-time').on('click', function() {
+		if (!selectedLocationId) {
+			return;
+		}
 		$(this).addClass('loading');
 		confirmSelection('now', null);
 	});

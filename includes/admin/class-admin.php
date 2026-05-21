@@ -251,7 +251,7 @@ class LBite_Admin {
 			'edit.php?post_type=lbite_location'
 		);
 
-		// Tische (CPT) + Tischplan + Reservierungen – nur wenn Tischbestellung aktiv
+		// Tische (CPT) + Tischplan – nur wenn Tischbestellung aktiv
 		if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
 			add_submenu_page(
 				'libre-bite',
@@ -268,16 +268,18 @@ class LBite_Admin {
 				'lbite-floor-plan',
 				array( $this, 'render_floor_plan_page' )
 			);
-			if ( lbite_feature_enabled( 'enable_reservations' ) ) {
-				add_submenu_page(
-					'libre-bite',
-					__( 'Reservations Overview', 'libre-bite' ),
-					__( 'Reservations', 'libre-bite' ),
-					'lbite_manage_options',
-					'lbite-reservation-board',
-					array( $this, 'render_reservation_board_page' )
-				); // CPT-Liste via Link im Template erreichbar
-			}
+		}
+
+		// Reservierungen – unabhängig von Tischbestellung
+		if ( lbite_feature_enabled( 'enable_reservations' ) ) {
+			add_submenu_page(
+				'libre-bite',
+				__( 'Reservations Overview', 'libre-bite' ),
+				__( 'Reservations', 'libre-bite' ),
+				'lbite_manage_options',
+				'lbite-reservation-board',
+				array( $this, 'render_reservation_board_page' )
+			);
 		}
 
 		// Produkt-Optionen (CPT) – unter WooCommerce/Produkte

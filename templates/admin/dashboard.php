@@ -59,16 +59,16 @@ if ( $lbite_can_locations ) {
 			'url'   => admin_url( 'edit.php?post_type=lbite_table' ),
 			'color' => '#c3522e',
 		);
+	}
 
-		if ( lbite_feature_enabled( 'enable_reservations' ) ) {
-			$lbite_tiles[] = array(
-				'icon'  => 'dashicons-calendar-alt',
-				'title' => __( 'Reservations', 'libre-bite' ),
-				'desc'  => __( 'View and manage table reservations.', 'libre-bite' ),
-				'url'   => admin_url( 'admin.php?page=lbite-reservation-board' ),
-				'color' => '#c3522e',
-			);
-		}
+	if ( lbite_feature_enabled( 'enable_reservations' ) ) {
+		$lbite_tiles[] = array(
+			'icon'  => 'dashicons-calendar-alt',
+			'title' => __( 'Reservations', 'libre-bite' ),
+			'desc'  => __( 'View and manage table reservations.', 'libre-bite' ),
+			'url'   => admin_url( 'admin.php?page=lbite-reservation-board' ),
+			'color' => '#c3522e',
+		);
 	}
 }
 

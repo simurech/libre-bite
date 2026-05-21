@@ -53,6 +53,8 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 		   class="nav-tab <?php echo 'tables' === $active_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Tables', 'libre-bite' ); ?>
 		</a>
+		<?php endif; ?>
+		<?php if ( lbite_feature_enabled( 'enable_reservations' ) ) : ?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help&tab=reservations' ) ); ?>"
 		   class="nav-tab <?php echo 'reservations' === $active_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Reservations', 'libre-bite' ); ?>
@@ -92,7 +94,7 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 				}
 				break;
 			case 'reservations':
-				if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
+				if ( lbite_feature_enabled( 'enable_reservations' ) ) {
 					include __DIR__ . '/help-partials/reservations.php';
 				}
 				break;
@@ -168,9 +170,10 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 							<?php esc_html_e( 'Learn More', 'libre-bite' ); ?>
 						</a>
 					</div>
-					
+					<?php endif; ?>
 
 					<!-- Reservierungen -->
+					<?php if ( lbite_feature_enabled( 'enable_reservations' ) ) : ?>
 					<div class="lbite-help-card">
 						<h2><span class="dashicons dashicons-calendar-alt"></span> <?php esc_html_e( 'Reservations', 'libre-bite' ); ?></h2>
 						<p><?php esc_html_e( 'Receive table inquiries via a frontend form, manage and confirm via email.', 'libre-bite' ); ?></p>
