@@ -13,7 +13,8 @@ wp_enqueue_media();
 wp_enqueue_style( 'wp-color-picker' );
 wp_enqueue_script( 'wp-color-picker' );
 
-$lbite_brand_name      = get_option( 'lbite_brand_name', '' );
+$lbite_custom_plugin_name = get_option( 'lbite_custom_plugin_name', '' );
+$lbite_brand_name         = get_option( 'lbite_brand_name', '' );
 $lbite_brand_logo      = get_option( 'lbite_brand_logo', 0 );
 $lbite_color_primary   = get_option( 'lbite_color_primary', '#0073aa' );
 $lbite_color_secondary = get_option( 'lbite_color_secondary', '#23282d' );
@@ -31,6 +32,17 @@ $lbite_color_presets = array(
 <form method="post">
 	<?php wp_nonce_field( 'lbite_settings' ); ?>
 	<input type="hidden" name="lbite_save_tab" value="branding">
+
+	<h2><?php esc_html_e( 'Plugin Identity', 'libre-bite' ); ?></h2>
+	<table class="form-table">
+		<tr>
+			<th><?php esc_html_e( 'Plugin Name', 'libre-bite' ); ?></th>
+			<td>
+				<input type="text" name="lbite_custom_plugin_name" value="<?php echo esc_attr( $lbite_custom_plugin_name ); ?>" class="regular-text" placeholder="Libre Bite">
+				<p class="description"><?php esc_html_e( 'Replaces "Libre Bite" throughout the admin menu and pages. Leave empty to use the default name.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+	</table>
 
 	<h2><?php esc_html_e( 'Branding', 'libre-bite' ); ?></h2>
 	<table class="form-table">
@@ -111,16 +123,19 @@ $lbite_color_presets = array(
 	<?php submit_button( __( 'Save Settings', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 </form>
 
-<div id="lbite-branding-preview" style="margin-top: 24px; border: 1px solid #dcdcde; border-radius: 6px; padding: 24px; max-width: 480px; background: #fff;">
-	<p style="margin: 0 0 8px; font-weight: 600; color: #1d2327;"><?php esc_html_e( 'Live Preview', 'libre-bite' ); ?></p>
-	<div style="height: 40px; background: var(--lbite-preview-primary, <?php echo esc_attr( $lbite_color_primary ); ?>); border-radius: 4px; margin-bottom: 8px; display: flex; align-items: center; padding: 0 16px;">
-		<span id="lbite-preview-brand-name" style="color: #fff; font-weight: 600;"><?php echo esc_html( $lbite_brand_name ?: __( 'Brand Name', 'libre-bite' ) ); ?></span>
+<div id="lbite-branding-preview" style="margin-top: 24px; border: 1px solid #dcdcde; border-radius: 6px; overflow: hidden; max-width: 480px; background: #fff;">
+	<p style="margin: 0; padding: 8px 16px; font-weight: 600; color: #1d2327; background: #f6f7f7; border-bottom: 1px solid #dcdcde;"><?php esc_html_e( 'Live Preview', 'libre-bite' ); ?></p>
+	<div id="lbite-preview-header" style="background: <?php echo esc_attr( $lbite_color_primary ); ?>; display: flex; align-items: center; padding: 0 16px; height: 48px;">
+		<span id="lbite-preview-brand-name" style="color: #fff; font-weight: 700; font-size: 16px;"><?php echo esc_html( $lbite_brand_name ?: __( 'Brand Name', 'libre-bite' ) ); ?></span>
 	</div>
-	<div style="display: flex; gap: 8px; margin-bottom: 8px;">
-		<button type="button" style="flex: 1; padding: 10px; background: var(--lbite-preview-primary, <?php echo esc_attr( $lbite_color_primary ); ?>); color: #fff; border: none; border-radius: 4px; cursor: default;" id="lbite-preview-btn-primary"><?php esc_html_e( 'Order Now', 'libre-bite' ); ?></button>
-		<button type="button" style="flex: 1; padding: 10px; background: var(--lbite-preview-accent, <?php echo esc_attr( $lbite_color_accent ); ?>); color: #fff; border: none; border-radius: 4px; cursor: default;" id="lbite-preview-btn-accent"><?php esc_html_e( 'Confirm', 'libre-bite' ); ?></button>
+	<div id="lbite-preview-secondary-bar" style="background: <?php echo esc_attr( $lbite_color_secondary ); ?>; height: 6px;"></div>
+	<div style="padding: 16px;">
+		<div style="display: flex; gap: 8px; margin-bottom: 12px;">
+			<button type="button" id="lbite-preview-btn-main" style="flex: 1; padding: 10px; background: <?php echo esc_attr( $lbite_color_accent ); ?>; color: #fff; border: none; border-radius: 4px; cursor: default; font-weight: 600;"><?php esc_html_e( 'Order Now', 'libre-bite' ); ?></button>
+			<button type="button" id="lbite-preview-btn-secondary" style="flex: 1; padding: 10px; background: <?php echo esc_attr( $lbite_color_secondary ); ?>; color: #fff; border: none; border-radius: 4px; cursor: default;"><?php esc_html_e( 'Back', 'libre-bite' ); ?></button>
+		</div>
+		<p id="lbite-preview-secondary-text" style="color: <?php echo esc_attr( $lbite_color_secondary ); ?>; margin: 0; font-size: 13px;"><?php esc_html_e( 'Secondary text and links', 'libre-bite' ); ?></p>
 	</div>
-	<p style="color: var(--lbite-preview-secondary, <?php echo esc_attr( $lbite_color_secondary ); ?>); margin: 0; font-size: 13px;" id="lbite-preview-secondary-text"><?php esc_html_e( 'Secondary text and links', 'libre-bite' ); ?></p>
 </div>
 
 <?php
@@ -130,10 +145,11 @@ jQuery(document).ready(function($) {
 	var lbiteLogoFrame;
 
 	function lbiteUpdatePreview(primary, secondary, accent) {
-		$('#lbite-preview-btn-primary').css('background', primary);
-		$('#lbite-preview-btn-accent').css('background', accent);
+		$('#lbite-preview-header').css('background', primary);
+		$('#lbite-preview-secondary-bar').css('background', secondary);
+		$('#lbite-preview-btn-main').css('background', accent);
+		$('#lbite-preview-btn-secondary').css('background', secondary);
 		$('#lbite-preview-secondary-text').css('color', secondary);
-		$('#lbite-branding-preview .lbite-preview-header').css('background', primary);
 	}
 
 	$('.lbite-color-picker').wpColorPicker({

@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,26 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.5.1 =
+* Fix: Master toggles on all settings tabs now save correctly via POST form — AJAX-based toggle handler removed.
+* Fix: Reservation refresh interval moved from Orders tab to the Reservations tab where it belongs.
+* Fix: Branding live preview now updates the header bar color correctly; color mapping corrected (accent → main button, secondary → secondary button/text).
+* Fix: Statistics prices now render correctly — `wc_price()` output is displayed as HTML instead of escaped plain text.
+* Fix: Tables and Reservations tabs now load their full Pro settings form when a valid license is active (`__premium_only` partials were missing).
+* Improvement: Statistics table extended with average order value column and expandable top-5 products per location.
+* Improvement: POS payment method icons are now editable in the settings.
+* Improvement: Plugin name field moved from Roles tab to Branding tab under new "Plugin Identity" section.
+* Improvement: General tab removed — Location Page, Preparation Time, Time Slot Interval, and Slot Buffer settings moved to the Locations tab.
+* Improvement: Dashboard replaced with a dynamic tile grid that adapts to active features and user role.
+* Improvement: Settings menu entry moved to the end of the admin submenu list.
+* Improvement: Freemius Account link available as a new "Account" tab in settings.
+* Improvement: Shop Manager shown in access table with "Full access" info row (no editable checkboxes).
+* Improvement: Role management table restricted to Libre Bite own roles (Staff and Manager) only.
+* Improvement: Shop Manager excluded from Menu Visibility section.
+* Improvement: Staff menu visibility replaced with read-only info showing fixed access (Order Overview, POS, Help).
+* Improvement: Info hint added in Manager Assignments noting that Staff location assignment is done via user profile.
+* Improvement: All five translation files updated with 1.5.1 strings.
 
 = 1.5.0 =
 * Feature: Feature toggles moved from a central "Features" tab into each thematic settings tab — every functional area now starts with its own master toggle.

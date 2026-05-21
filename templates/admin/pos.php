@@ -183,15 +183,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<!-- Zahlungsart wählen -->
 				<?php
-				$lbite_icons = array( 'cash' => '💵', 'card' => '💳', 'twint' => '📱', 'other' => '💱' );
+				$lbite_default_icons = array( 'cash' => '💵', 'card' => '💳', 'twint' => '📱', 'other' => '💱' );
 				$lbite_saved_pm = get_option( 'lbite_pos_payment_methods', array() );
 				// Fallback: alle vier aktiv wenn Option leer
 				if ( empty( $lbite_saved_pm ) ) {
 					$lbite_saved_pm = array(
-						array( 'key' => 'cash',  'label' => 'Bar',    'enabled' => true ),
-						array( 'key' => 'card',  'label' => 'Karte',  'enabled' => true ),
-						array( 'key' => 'twint', 'label' => 'Twint',  'enabled' => true ),
-						array( 'key' => 'other', 'label' => 'Andere', 'enabled' => true ),
+						array( 'key' => 'cash',  'label' => 'Bar',    'icon' => '💵', 'enabled' => true ),
+						array( 'key' => 'card',  'label' => 'Karte',  'icon' => '💳', 'enabled' => true ),
+						array( 'key' => 'twint', 'label' => 'Twint',  'icon' => '📱', 'enabled' => true ),
+						array( 'key' => 'other', 'label' => 'Andere', 'icon' => '💱', 'enabled' => true ),
 					);
 				}
 				$lbite_active_pm = array_filter( $lbite_saved_pm, fn( $m ) => ! empty( $m['enabled'] ) );
@@ -210,7 +210,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								value="<?php echo esc_attr( $lbite_pm['key'] ); ?>"
 								<?php echo $lbite_first ? 'checked' : ''; ?>
 							>
-							<span class="lbite-payment-method-icon"><?php echo esc_html( $lbite_icons[ $lbite_pm['key'] ] ?? '💱' ); ?></span>
+							<span class="lbite-payment-method-icon"><?php echo esc_html( ! empty( $lbite_pm['icon'] ) ? $lbite_pm['icon'] : ( $lbite_default_icons[ $lbite_pm['key'] ] ?? '💱' ) ); ?></span>
 							<span><?php echo esc_html( $lbite_pm['label'] ); ?></span>
 						</label>
 						<?php $lbite_first = false; ?>

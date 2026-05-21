@@ -54,135 +54,104 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 	<form method="post" action="">
 		<?php wp_nonce_field( 'lbite_save_admin_settings', 'lbite_admin_settings_nonce' ); ?>
 
-		<!-- Plugin-Name anpassen -->
-		<h2><?php esc_html_e( 'Customize Plugin Name', 'libre-bite' ); ?></h2>
+		<!-- Zugriff für andere Rollen -->
+		<h2><?php esc_html_e( 'Access for User Roles', 'libre-bite' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'Overview of access levels. Standard roles can be granted Order Overview and POS access.', 'libre-bite' ); ?>
+		</p>
 		<table class="form-table">
+			<tbody>
+			<!-- shop_manager: always has full access (J) -->
 			<tr>
 				<th scope="row">
-					<label for="lbite_custom_plugin_name">
-						<?php esc_html_e( 'Displayed Plugin Name', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Shop Manager', 'libre-bite' ); ?>
+					<span style="color: #646970; font-weight: normal; font-size: 12px;">(shop_manager)</span>
+				</th>
+				<td>
+					<span style="color: #00a32a; font-weight: 600;">&#x2713; <?php esc_html_e( 'Full access (same as Administrator)', 'libre-bite' ); ?></span>
+				</td>
+			</tr>
+			<?php if ( ! empty( $lbite_standard_roles ) ) :
+				$lbite_allowed_standard_roles = get_option( 'lbite_allowed_standard_roles', array() );
+				foreach ( $lbite_standard_roles as $lbite_std_role_key => $lbite_std_role_name ) :
+					if ( 'shop_manager' === $lbite_std_role_key ) continue; // already shown above
+			?>
+			<tr>
+				<th scope="row"><?php echo esc_html( $lbite_std_role_name ); ?> <span style="color: #646970; font-weight: normal; font-size: 12px;">(<?php echo esc_html( $lbite_std_role_key ); ?>)</span></th>
+				<td>
+					<label>
+						<input
+							type="checkbox"
+							name="lbite_allowed_standard_roles[]"
+							value="<?php echo esc_attr( $lbite_std_role_key ); ?>"
+							<?php checked( in_array( $lbite_std_role_key, $lbite_allowed_standard_roles, true ) ); ?>
+						>
+						<?php esc_html_e( 'Grant access (Order Overview + POS)', 'libre-bite' ); ?>
+					</label>
+				</td>
+			</tr>
+			<?php endforeach; endif; ?>
+			</tbody>
+		</table>
+
+		<!-- Rollennamen anpassen (nur lbite_staff + lbite_manager) -->
+		<h2><?php esc_html_e( 'Manage User Roles', 'libre-bite' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'Customize the displayed names of Libre Bite roles or disable unused ones.', 'libre-bite' ); ?>
+		</p>
+		<table class="form-table">
+			<thead>
+				<tr>
+					<th style="padding-left: 0; font-weight: 600;"><?php esc_html_e( 'Role', 'libre-bite' ); ?></th>
+					<th style="font-weight: 600;"><?php esc_html_e( 'Displayed Name', 'libre-bite' ); ?></th>
+					<th style="font-weight: 600;"><?php esc_html_e( 'Disable Role', 'libre-bite' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php
+			$lbite_own_roles         = array( 'lbite_staff', 'lbite_manager' );
+			$lbite_custom_role_names = get_option( 'lbite_custom_role_names', array() );
+			$lbite_disabled_roles    = get_option( 'lbite_disabled_roles', array() );
+			$lbite_all_wp_roles      = wp_roles()->roles;
+
+			foreach ( $lbite_own_roles as $lbite_role_key ) :
+				if ( ! isset( $lbite_all_wp_roles[ $lbite_role_key ] ) ) continue;
+				$lbite_role_name   = $lbite_all_wp_roles[ $lbite_role_key ]['name'];
+				$lbite_custom_name = isset( $lbite_custom_role_names[ $lbite_role_key ] ) ? $lbite_custom_role_names[ $lbite_role_key ] : '';
+				$lbite_is_disabled = in_array( $lbite_role_key, $lbite_disabled_roles, true );
+			?>
+			<tr>
+				<th scope="row">
+					<label for="lbite_role_name_<?php echo esc_attr( $lbite_role_key ); ?>">
+						<?php echo esc_html( $lbite_role_name ); ?>
+						<span style="color: #646970; font-weight: normal; font-size: 12px;">(<?php echo esc_html( $lbite_role_key ); ?>)</span>
 					</label>
 				</th>
 				<td>
 					<input
 						type="text"
-						id="lbite_custom_plugin_name"
-						name="lbite_custom_plugin_name"
-						value="<?php echo esc_attr( $lbite_custom_plugin_name ); ?>"
+						id="lbite_role_name_<?php echo esc_attr( $lbite_role_key ); ?>"
+						name="lbite_custom_role_names[<?php echo esc_attr( $lbite_role_key ); ?>]"
+						value="<?php echo esc_attr( $lbite_custom_name ); ?>"
 						class="regular-text"
-						placeholder="Libre Bite"
+						placeholder="<?php echo esc_attr( $lbite_role_name ); ?>"
+						<?php disabled( $lbite_is_disabled ); ?>
 					>
-					<p class="description">
-						<?php esc_html_e( 'Override the displayed name of the plugin in the backend menu and on pages. Leave empty for the default "Libre Bite".', 'libre-bite' ); ?>
-					</p>
+				</td>
+				<td>
+					<label>
+						<input
+							type="checkbox"
+							name="lbite_disabled_roles[]"
+							value="<?php echo esc_attr( $lbite_role_key ); ?>"
+							<?php checked( $lbite_is_disabled ); ?>
+							class="lbite-disable-role-checkbox"
+							data-role="<?php echo esc_attr( $lbite_role_key ); ?>"
+						>
+						<?php esc_html_e( 'Disable', 'libre-bite' ); ?>
+					</label>
 				</td>
 			</tr>
-		</table>
-
-		<!-- Zugriff für andere Rollen -->
-		<?php if ( ! empty( $lbite_standard_roles ) ) : ?>
-		<h2><?php esc_html_e( 'Access for Other User Roles', 'libre-bite' ); ?></h2>
-		<p class="description">
-			<?php esc_html_e( 'Choose which standard roles are allowed to access the plugin. Enabled roles receive the same access as Libre Bite Personal (Order Overview, POS).', 'libre-bite' ); ?>
-		</p>
-		<?php
-		$lbite_allowed_standard_roles = get_option( 'lbite_allowed_standard_roles', array() );
-		?>
-		<table class="form-table">
-			<tbody>
-			<?php foreach ( $lbite_standard_roles as $lbite_std_role_key => $lbite_std_role_name ) : ?>
-				<tr>
-					<th scope="row"><?php echo esc_html( $lbite_std_role_name ); ?> <span style="color: #646970; font-weight: normal; font-size: 12px;">(<?php echo esc_html( $lbite_std_role_key ); ?>)</span></th>
-					<td>
-						<label>
-							<input
-								type="checkbox"
-								name="lbite_allowed_standard_roles[]"
-								value="<?php echo esc_attr( $lbite_std_role_key ); ?>"
-								<?php checked( in_array( $lbite_std_role_key, $lbite_allowed_standard_roles, true ) ); ?>
-							>
-							<?php esc_html_e( 'Can use plugin', 'libre-bite' ); ?>
-						</label>
-					</td>
-				</tr>
-			<?php endforeach; ?>
-			</tbody>
-		</table>
-		<?php endif; ?>
-
-		<!-- Rollennamen anpassen -->
-		<h2><?php esc_html_e( 'Manage User Roles', 'libre-bite' ); ?></h2>
-		<p class="description">
-			<?php esc_html_e( 'Customize the displayed names of user roles in the backend or completely disable unused roles.', 'libre-bite' ); ?>
-		</p>
-		<table class="form-table">
-			<thead>
-				<tr>
-					<th style="padding-left: 0; font-weight: 600;">
-						<?php esc_html_e( 'Role', 'libre-bite' ); ?>
-					</th>
-					<th style="font-weight: 600;">
-						<?php esc_html_e( 'Displayed Name', 'libre-bite' ); ?>
-					</th>
-					<th style="font-weight: 600;">
-						<?php esc_html_e( 'Disable Role', 'libre-bite' ); ?>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-			<?php
-			$lbite_all_roles_with_admin = LBite_Admin_Settings::get_all_roles( true );
-			$lbite_custom_role_names = get_option( 'lbite_custom_role_names', array() );
-			$lbite_disabled_roles = get_option( 'lbite_disabled_roles', array() );
-
-			foreach ( $lbite_all_roles_with_admin as $lbite_role_key => $lbite_role_name ) :
-				$lbite_custom_name = isset( $lbite_custom_role_names[ $lbite_role_key ] ) ? $lbite_custom_role_names[ $lbite_role_key ] : '';
-				$lbite_is_disabled = in_array( $lbite_role_key, $lbite_disabled_roles, true );
-				$lbite_is_admin = $lbite_role_key === 'administrator';
-				?>
-				<tr>
-					<th scope="row">
-						<label for="lbite_role_name_<?php echo esc_attr( $lbite_role_key ); ?>">
-							<?php echo esc_html( $lbite_role_name ); ?>
-							<span style="color: #646970; font-weight: normal; font-size: 12px;">
-								(<?php echo esc_html( $lbite_role_key ); ?>)
-							</span>
-						</label>
-					</th>
-					<td>
-						<input
-							type="text"
-							id="lbite_role_name_<?php echo esc_attr( $lbite_role_key ); ?>"
-							name="lbite_custom_role_names[<?php echo esc_attr( $lbite_role_key ); ?>]"
-							value="<?php echo esc_attr( $lbite_custom_name ); ?>"
-							class="regular-text"
-							placeholder="<?php echo esc_attr( $lbite_role_name ); ?>"
-							<?php disabled( $lbite_is_disabled && ! $lbite_is_admin ); ?>
-						>
-					</td>
-					<td>
-						<?php if ( $lbite_is_admin ) : ?>
-							<span style="color: #646970; font-style: italic;">
-								<?php esc_html_e( 'Cannot be disabled', 'libre-bite' ); ?>
-							</span>
-						<?php else : ?>
-							<label>
-								<input
-									type="checkbox"
-									name="lbite_disabled_roles[]"
-									value="<?php echo esc_attr( $lbite_role_key ); ?>"
-									<?php checked( $lbite_is_disabled ); ?>
-									class="lbite-disable-role-checkbox"
-									data-role="<?php echo esc_attr( $lbite_role_key ); ?>"
-								>
-								<?php esc_html_e( 'Disable', 'libre-bite' ); ?>
-							</label>
-							<p class="description" style="margin-top: 5px;">
-								<?php esc_html_e( 'The role will no longer be available in the backend.', 'libre-bite' ); ?>
-							</p>
-						<?php endif; ?>
-					</td>
-				</tr>
 			<?php endforeach; ?>
 			</tbody>
 		</table>
@@ -200,6 +169,7 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 				<?php
 				$lbite_custom_role_names_display = get_option( 'lbite_custom_role_names', array() );
 				foreach ( $lbite_all_roles as $lbite_role_key => $lbite_role_name ) :
+					if ( 'shop_manager' === $lbite_role_key ) continue;
 					// Angepassten Rollennamen verwenden, falls vorhanden
 					$lbite_display_name = isset( $lbite_custom_role_names_display[ $lbite_role_key ] ) && ! empty( $lbite_custom_role_names_display[ $lbite_role_key ] )
 						? $lbite_custom_role_names_display[ $lbite_role_key ]
@@ -213,89 +183,95 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 							</span>
 						</h3>
 
-						<p class="description" style="margin-bottom: 15px;">
-							<?php
-							printf(
-								/* translators: %s: Role name */
-								esc_html__( 'Choose the menu items that should be hidden for users with the role "%s".', 'libre-bite' ),
-								esc_html( $lbite_display_name )
-							);
-							?>
-						</p>
-
-						<p style="margin-bottom: 15px;">
-							<label style="font-weight: 600; cursor: pointer;">
-								<input
-									type="checkbox"
-									class="lbite-toggle-all-menus"
-									data-role="<?php echo esc_attr( $lbite_role_key ); ?>"
-								>
-								<?php esc_html_e( 'Select All / Deselect All', 'libre-bite' ); ?>
-							</label>
-						</p>
-
-						<?php
-						// Menüs nach Parent gruppieren - besser strukturiert
-						$lbite_main_menus = array();
-						$lbite_submenus = array();
-
-						// Erst alle Menüs sortieren
-						foreach ( $lbite_all_menu_items as $lbite_menu_slug => $lbite_menu_data ) {
-							if ( empty( $lbite_menu_data['parent'] ) ) {
-								$lbite_main_menus[ $lbite_menu_slug ] = $lbite_menu_data;
-							} else {
-								if ( ! isset( $lbite_submenus[ $lbite_menu_data['parent'] ] ) ) {
-									$lbite_submenus[ $lbite_menu_data['parent'] ] = array();
-								}
-								$lbite_submenus[ $lbite_menu_data['parent'] ][ $lbite_menu_slug ] = $lbite_menu_data;
-							}
-						}
-						?>
-
-						<div class="lbite-menu-items">
-							<?php foreach ( $lbite_main_menus as $lbite_parent_slug => $lbite_parent_data ) : ?>
+						<?php if ( 'lbite_staff' === $lbite_role_key ) : ?>
+							<p class="description">
+								<?php esc_html_e( 'Staff users always have access to: Order Overview, POS System, Help & Support. Menu visibility cannot be customized for this role.', 'libre-bite' ); ?>
+							</p>
+							<ul style="margin: 10px 0 0 10px; color: #2271b1;">
+								<li>&#x2713; <?php esc_html_e( 'Order Overview', 'libre-bite' ); ?></li>
+								<li>&#x2713; <?php esc_html_e( 'POS System', 'libre-bite' ); ?></li>
+								<li>&#x2713; <?php esc_html_e( 'Help & Support', 'libre-bite' ); ?></li>
+							</ul>
+						<?php else : ?>
+							<p class="description" style="margin-bottom: 15px;">
 								<?php
-								$lbite_has_submenus = isset( $lbite_submenus[ $lbite_parent_slug ] ) && ! empty( $lbite_submenus[ $lbite_parent_slug ] );
-								$lbite_is_parent_checked = isset( $lbite_menu_visibility[ $lbite_role_key ] ) && in_array( $lbite_parent_slug, $lbite_menu_visibility[ $lbite_role_key ], true );
+								printf(
+									/* translators: %s: Role name */
+									esc_html__( 'Choose the menu items that should be hidden for users with the role "%s".', 'libre-bite' ),
+									esc_html( $lbite_display_name )
+								);
 								?>
+							</p>
 
-								<div class="lbite-menu-group">
-									<!-- Hauptmenü -->
-									<div class="lbite-main-menu-item">
-										<label>
-											<input
-												type="checkbox"
-												name="lbite_menu_visibility[<?php echo esc_attr( $lbite_role_key ); ?>][]"
-												value="<?php echo esc_attr( $lbite_parent_slug ); ?>"
-												<?php checked( $lbite_is_parent_checked ); ?>
-											/>
-											<strong><?php echo esc_html( $lbite_parent_data['title'] ); ?></strong>
-											<span class="lbite-menu-badge"><?php esc_html_e( 'Main Menu', 'libre-bite' ); ?></span>
-										</label>
-									</div>
+							<p style="margin-bottom: 15px;">
+								<label style="font-weight: 600; cursor: pointer;">
+									<input
+										type="checkbox"
+										class="lbite-toggle-all-menus"
+										data-role="<?php echo esc_attr( $lbite_role_key ); ?>"
+									>
+									<?php esc_html_e( 'Select All / Deselect All', 'libre-bite' ); ?>
+								</label>
+							</p>
 
-									<!-- Untermenüs -->
-									<?php if ( $lbite_has_submenus ) : ?>
-										<div class="lbite-submenu-items">
-											<?php foreach ( $lbite_submenus[ $lbite_parent_slug ] as $lbite_submenu_slug => $lbite_submenu_data ) : ?>
-												<?php
-												$lbite_is_submenu_checked = isset( $lbite_menu_visibility[ $lbite_role_key ] ) && in_array( $lbite_submenu_slug, $lbite_menu_visibility[ $lbite_role_key ], true );
-												?>
-												<label>
-													<input
-														type="checkbox"
-														name="lbite_menu_visibility[<?php echo esc_attr( $lbite_role_key ); ?>][]"
-														value="<?php echo esc_attr( $lbite_submenu_slug ); ?>"
-														<?php checked( $lbite_is_submenu_checked ); ?>
-													/>
-													<?php echo esc_html( $lbite_submenu_data['title'] ); ?>
-												</label>
-											<?php endforeach; ?>
+							<?php
+							$lbite_main_menus = array();
+							$lbite_submenus   = array();
+							foreach ( $lbite_all_menu_items as $lbite_menu_slug => $lbite_menu_data ) {
+								if ( empty( $lbite_menu_data['parent'] ) ) {
+									$lbite_main_menus[ $lbite_menu_slug ] = $lbite_menu_data;
+								} else {
+									if ( ! isset( $lbite_submenus[ $lbite_menu_data['parent'] ] ) ) {
+										$lbite_submenus[ $lbite_menu_data['parent'] ] = array();
+									}
+									$lbite_submenus[ $lbite_menu_data['parent'] ][ $lbite_menu_slug ] = $lbite_menu_data;
+								}
+							}
+							?>
+
+							<div class="lbite-menu-items">
+								<?php foreach ( $lbite_main_menus as $lbite_parent_slug => $lbite_parent_data ) : ?>
+									<?php
+									$lbite_has_submenus     = isset( $lbite_submenus[ $lbite_parent_slug ] ) && ! empty( $lbite_submenus[ $lbite_parent_slug ] );
+									$lbite_is_parent_checked = isset( $lbite_menu_visibility[ $lbite_role_key ] ) && in_array( $lbite_parent_slug, $lbite_menu_visibility[ $lbite_role_key ], true );
+									?>
+
+									<div class="lbite-menu-group">
+										<div class="lbite-main-menu-item">
+											<label>
+												<input
+													type="checkbox"
+													name="lbite_menu_visibility[<?php echo esc_attr( $lbite_role_key ); ?>][]"
+													value="<?php echo esc_attr( $lbite_parent_slug ); ?>"
+													<?php checked( $lbite_is_parent_checked ); ?>
+												/>
+												<strong><?php echo esc_html( $lbite_parent_data['title'] ); ?></strong>
+												<span class="lbite-menu-badge"><?php esc_html_e( 'Main Menu', 'libre-bite' ); ?></span>
+											</label>
 										</div>
-									<?php endif; ?>
-								</div>
-							<?php endforeach; ?>
-						</div>
+
+										<?php if ( $lbite_has_submenus ) : ?>
+											<div class="lbite-submenu-items">
+												<?php foreach ( $lbite_submenus[ $lbite_parent_slug ] as $lbite_submenu_slug => $lbite_submenu_data ) : ?>
+													<?php
+													$lbite_is_submenu_checked = isset( $lbite_menu_visibility[ $lbite_role_key ] ) && in_array( $lbite_submenu_slug, $lbite_menu_visibility[ $lbite_role_key ], true );
+													?>
+													<label>
+														<input
+															type="checkbox"
+															name="lbite_menu_visibility[<?php echo esc_attr( $lbite_role_key ); ?>][]"
+															value="<?php echo esc_attr( $lbite_submenu_slug ); ?>"
+															<?php checked( $lbite_is_submenu_checked ); ?>
+														/>
+														<?php echo esc_html( $lbite_submenu_data['title'] ); ?>
+													</label>
+												<?php endforeach; ?>
+											</div>
+										<?php endif; ?>
+									</div>
+								<?php endforeach; ?>
+							</div>
+						<?php endif; ?>
 					</div>
 				<?php endforeach; ?>
 			</div>
@@ -329,8 +305,12 @@ else :
 
 	$lbite_managers = get_users( array( 'role' => 'lbite_manager' ) );
 	?>
-	<p class="description" style="margin-bottom: 16px;">
+	<p class="description" style="margin-bottom: 8px;">
 		<?php esc_html_e( 'Assign one or more locations to each manager. Managers can only see and manage orders for their assigned locations.', 'libre-bite' ); ?>
+	</p>
+	<p class="description" style="margin-bottom: 16px;">
+		<?php esc_html_e( 'For Staff users, location assignment is done via the individual user profile page.', 'libre-bite' ); ?>
+		<a href="<?php echo esc_url( admin_url( 'users.php?role=lbite_staff' ) ); ?>"><?php esc_html_e( 'Manage Staff users', 'libre-bite' ); ?></a>
 	</p>
 	<?php if ( empty( $lbite_managers ) ) : ?>
 		<p class="description">

@@ -744,6 +744,32 @@ NEW_STRINGS_FORMAL_SS = {
     'No orders found for the selected period.':
         'Keine Bestellungen im gewählten Zeitraum gefunden.',
 
+    # ── v1.5.1: Rollen-Tab + Branding + Locations ───────────────────────────────
+    'Access for User Roles':
+        'Zugriff nach Benutzerrollen',
+    'Overview of access levels. Standard roles can be granted Order Overview and POS access.':
+        'Übersicht der Zugriffsebenen. Standardrollen können Zugriff auf Bestellübersicht und Kassensystem erhalten.',
+    'Full access (same as Administrator)':
+        'Voller Zugriff (wie Administrator)',
+    'Grant access (Order Overview + POS)':
+        'Zugriff erteilen (Bestellübersicht + Kassensystem)',
+    'Customize the displayed names of Libre Bite roles or disable unused ones.':
+        'Angezeigte Namen der Libre Bite-Rollen anpassen oder nicht benötigte Rollen deaktivieren.',
+    'Staff users always have access to: Order Overview, POS System, Help & Support. Menu visibility cannot be customized for this role.':
+        'Personal hat immer Zugriff auf: Bestellübersicht, Kassensystem, Hilfe & Support. Die Menüsichtbarkeit kann für diese Rolle nicht angepasst werden.',
+    'For Staff users, location assignment is done via the individual user profile page.':
+        'Für Personal-Benutzer erfolgt die Standortzuweisung über die individuelle Benutzerprofilseite.',
+    'Manage Staff users':
+        'Personal-Benutzer verwalten',
+    'Plugin Identity':
+        'Plugin-Identität',
+    'Plugin Name':
+        'Plugin-Name',
+    'Replaces "Libre Bite" throughout the admin menu and pages. Leave empty to use the default name.':
+        'Ersetzt «Libre Bite» im Backend-Menü und auf Seiten. Leer lassen, um den Standardnamen zu verwenden.',
+    'These are global defaults. Individual locations can override preparation time and slot buffers via their location settings.':
+        'Dies sind globale Standardwerte. Einzelne Standorte können Zubereitungszeit und Slot-Buffer in ihren Standort-Einstellungen überschreiben.',
+
     # ── Fuzzy-Bestätigungen (gute Übersetzungen, nur Wortlaut leicht geändert) ─
     'Table Management & Ordering':
         'Tischverwaltung & Tischbestellung',

@@ -291,16 +291,6 @@ class LBite_Admin {
 			);
 		}
 
-		// Einstellungen (konsolidiert mit Tabs)
-		add_submenu_page(
-			'libre-bite',
-			__( 'Settings', 'libre-bite' ),
-			__( 'Settings', 'libre-bite' ),
-			'lbite_manage_settings',
-			'lbite-settings',
-			array( $this, 'render_settings_page' )
-		);
-
 		// ============================================
 		// DOKUMENTATION (rollenbasiert)
 		// ============================================
@@ -327,16 +317,22 @@ class LBite_Admin {
 			);
 		}
 
+		// Einstellungen ans Ende (Improvement R)
+		add_submenu_page(
+			'libre-bite',
+			__( 'Settings', 'libre-bite' ),
+			__( 'Settings', 'libre-bite' ),
+			'lbite_manage_settings',
+			'lbite-settings',
+			array( $this, 'render_settings_page' )
+		);
+
 	}
 
 	/**
 	 * Dashboard-Seite rendern
 	 */
 	public function render_dashboard_page() {
-		if ( ! current_user_can( 'lbite_manage_settings' ) ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=lbite-order-board' ) );
-			exit;
-		}
 		include LBITE_PLUGIN_DIR . 'templates/admin/dashboard.php';
 	}
 

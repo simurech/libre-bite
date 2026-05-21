@@ -50,8 +50,8 @@ $lbite_upgrade_url = function_exists( 'lbite_freemius' ) ? lbite_freemius()->get
 	<label class="lbite-toggle <?php echo $lbite_toggle_locked ? 'lbite-locked' : ''; ?>">
 		<input
 			type="checkbox"
-			class="lbite-feature-toggle"
-			data-feature="<?php echo esc_attr( $lbite_toggle_key ); ?>"
+			name="lbite_feature_toggle[<?php echo esc_attr( $lbite_toggle_key ); ?>]"
+			value="1"
 			<?php checked( $lbite_toggle_enabled ); ?>
 			<?php disabled( $lbite_toggle_locked ); ?>
 		>
