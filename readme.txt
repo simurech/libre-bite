@@ -228,13 +228,23 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 * Feature: Feature toggles moved from a central "Features" tab into each thematic settings tab — every functional area now starts with its own master toggle.
 * Feature: Manager role (Pro) — new `lbite_manager` role between Staff and Admin; assign managers to specific locations via Settings → Roles & Menus.
 * Feature: Location column and filter dropdown added to the WooCommerce order list for quick filtering by location.
-* Feature: Statistics page — revenue, order count, and average order value per location, filterable by period (today, 7 days, 30 days, year).
+* Feature: Statistics page — revenue, order count, and average order value per location and time period (average order value, top 5 products).
 * Feature: Branding tab expanded with color presets (6 themes) and a live color preview.
+* Feature: Per-location time overrides — preparation time, slot buffer start/end can now be set individually per location.
+* Feature: Admin dashboard replaced with a dynamic tile grid that adapts to active features and user role.
 * Improvement: Dead toggles removed (8 unused feature flags that had no effect on plugin behaviour).
 * Improvement: Pro feature values are now force-blocked on the server on all save paths — Pro options cannot be enabled without a valid license.
 * Improvement: All settings tab templates refactored; branding, statistics, roles, and notifications each have a dedicated tab.
+* Improvement: Reservations feature is now independent of Table Ordering — each can be enabled separately.
 * Improvement: Help documentation updated throughout to reflect the new tab structure and new features.
-* Improvement: All five translation files (de_CH, de_CH_informal, de_DE, de_DE_formal, de_AT) updated with 1.5.0 strings.
+* Improvement: Master-toggle checkboxes now show an "Enable" label.
+* Improvement: POS payment method icons configurable in Settings.
+* Fix: Master-toggles in all settings tabs now save correctly via POST form (previously relied on a missing AJAX handler).
+* Fix: Tables and Reservations Pro templates (tables__premium_only.php, reservations__premium_only.php) created.
+* Fix: Branding live preview header and colour mapping corrected.
+* Fix: Statistics prices rendered as HTML (wc_price output was being escaped).
+* Fix: Location selector no longer shows "Invalid location" when multiple shortcode instances are on the same page.
+* All five translation files (de_CH, de_CH_informal, de_DE, de_DE_formal, de_AT) updated.
 * Tested with WordPress 7.0.
 
 = 1.4.8 =
