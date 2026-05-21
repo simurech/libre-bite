@@ -28,7 +28,6 @@ $lbite_tabs = array(
 	'tables'        => __( 'Tables', 'libre-bite' ),
 	'reservations'  => __( 'Reservations', 'libre-bite' ),
 	'notifications' => __( 'Notifications', 'libre-bite' ),
-	'statistics'    => __( 'Statistics', 'libre-bite' ),
 	'branding'      => __( 'Branding', 'libre-bite' ),
 	'holidays'      => __( 'Holidays', 'libre-bite' ),
 );
@@ -367,10 +366,6 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					$lbite_locked_description = __( 'Let customers reserve tables online via a frontend form. Available with Libre Bite Pro.', 'libre-bite' );
 					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_pro-locked.php';
 				}
-				break;
-
-			case 'statistics':
-				include LBITE_PLUGIN_DIR . 'templates/admin/settings/statistics.php';
 				break;
 
 			case 'branding':

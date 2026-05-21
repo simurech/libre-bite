@@ -307,6 +307,16 @@ class LBite_Admin {
 			array( $this, 'render_help_page' )
 		);
 
+		// Statistik – nur für Admin und Manager (lbite_view_statistics)
+		add_submenu_page(
+			'libre-bite',
+			__( 'Statistics', 'libre-bite' ),
+			__( 'Statistics', 'libre-bite' ),
+			'lbite_view_statistics',
+			'lbite-statistics',
+			array( $this, 'render_statistics_page' )
+		);
+
 		// Pricing / Upgrade (Nur wenn nicht Premium)
 		if ( function_exists( 'lbite_freemius' ) && ! lbite_freemius()->is_premium() ) {
 			add_submenu_page(
@@ -378,6 +388,16 @@ class LBite_Admin {
 		} else {
 			include LBITE_PLUGIN_DIR . 'templates/admin/help-staff.php';
 		}
+	}
+
+	/**
+	 * Statistik-Seite rendern
+	 */
+	public function render_statistics_page() {
+		if ( ! current_user_can( 'lbite_view_statistics' ) ) {
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
+		}
+		include LBITE_PLUGIN_DIR . 'templates/admin/statistics.php';
 	}
 
 	/**
@@ -521,7 +541,7 @@ class LBite_Admin {
 		);
 
 		// Einstellungen-Seite JS (nur auf Settings- und Haupt-Plugin-Seite laden).
-		if ( strpos( $hook, 'lbite-settings' ) !== false || 'toplevel_page_libre-bite' === $hook ) {
+		if ( strpos( $hook, 'lbite-settings' ) !== false || strpos( $hook, 'lbite-statistics' ) !== false || 'toplevel_page_libre-bite' === $hook ) {
 			wp_enqueue_script(
 				'lbite-admin-settings',
 				LBITE_PLUGIN_URL . 'assets/js/admin-settings-page.js',
