@@ -288,8 +288,9 @@ class LBite_Order_Dashboard {
 		// Das Dimming im JS wird nur angewendet wenn futureDimmingEnabled aktiv ist.
 		$is_future = false;
 		if ( 'later' === $order_type && $pickup_time ) {
-			$prep_time = (int) get_option( 'lbite_preparation_time', 30 );
-			$is_future = lbite_local_time_to_timestamp( $pickup_time ) > ( current_time( 'timestamp' ) + $prep_time * 60 );
+			$location_id_for_prep = (int) $order->get_meta( '_lbite_location_id', true );
+			$prep_time            = LBite_Locations::get_time_setting( $location_id_for_prep, 'preparation_time', 30 );
+			$is_future            = lbite_local_time_to_timestamp( $pickup_time ) > ( current_time( 'timestamp' ) + $prep_time * 60 );
 		}
 
 		$billing_email = $order->get_billing_email();
@@ -549,8 +550,6 @@ class LBite_Order_Dashboard {
 	 * Geplante Bestellungen prüfen und automatisch verschieben
 	 */
 	public function check_scheduled_orders() {
-		$prep_time = get_option( 'lbite_preparation_time', 30 );
-
 		// Bestellungen mit Pickup-Zeit in der Zukunft
 		$orders = wc_get_orders(
 			array(
@@ -580,6 +579,8 @@ class LBite_Order_Dashboard {
 				continue;
 			}
 
+			$location_id      = (int) $order->get_meta( '_lbite_location_id', true );
+			$prep_time        = LBite_Locations::get_time_setting( $location_id, 'preparation_time', 30 );
 			$pickup_timestamp = lbite_local_time_to_timestamp( $pickup_time );
 			$prep_start_time  = $pickup_timestamp - ( $prep_time * 60 );
 

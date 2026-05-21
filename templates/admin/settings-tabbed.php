@@ -18,7 +18,7 @@ $lbite_premium_allowed   = function_exists( 'lbite_freemius' ) && lbite_freemius
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Anzeigesteuerung.
 $lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'locations';
 
-// Tabs definieren – neue Struktur v1.5.1 (General-Tab entfernt, Inhalte → Locations)
+// Tabs definieren – neue Struktur v1.5.0 (General-Tab entfernt, Inhalte → Locations)
 $lbite_tabs = array(
 	'locations'     => __( 'Locations', 'libre-bite' ),
 	'orders'        => __( 'Orders', 'libre-bite' ),
@@ -37,9 +37,6 @@ if ( $lbite_is_admin ) {
 	$lbite_tabs['roles']   = __( 'Roles & Menus', 'libre-bite' );
 	$lbite_tabs['support'] = __( 'Support', 'libre-bite' );
 	$lbite_tabs['data']    = __( 'Data', 'libre-bite' );
-	if ( function_exists( 'lbite_freemius' ) ) {
-		$lbite_tabs['account'] = __( 'Account', 'libre-bite' );
-	}
 }
 
 // Aktiven Tab validieren
@@ -670,21 +667,6 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				if ( $lbite_is_admin ) {
 					include LBITE_PLUGIN_DIR . 'templates/admin/support-settings.php';
 				}
-				break;
-
-			case 'account':
-				if ( $lbite_is_admin && function_exists( 'lbite_freemius' ) ) :
-					$lbite_account_url = lbite_freemius()->get_account_url();
-					?>
-					<h2><?php esc_html_e( 'Freemius Account', 'libre-bite' ); ?></h2>
-					<p class="description" style="margin-bottom: 16px;">
-						<?php esc_html_e( 'Manage your license, subscription, and billing in the Freemius dashboard.', 'libre-bite' ); ?>
-					</p>
-					<a href="<?php echo esc_url( $lbite_account_url ); ?>" class="button button-primary" target="_blank">
-						<?php esc_html_e( 'Open Account Dashboard', 'libre-bite' ); ?> ↗
-					</a>
-					<?php
-				endif;
 				break;
 
 			case 'data':

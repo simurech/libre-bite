@@ -218,6 +218,15 @@ class LBite_Locations {
 		);
 
 		add_meta_box(
+			'lbite_location_time_settings',
+			__( 'Time Settings (Override)', 'libre-bite' ),
+			array( $this, 'render_time_settings_meta_box' ),
+			self::POST_TYPE,
+			'side',
+			'default'
+		);
+
+		add_meta_box(
 			'lbite_location_qr',
 			__( 'QR Code', 'libre-bite' ),
 			array( $this, 'render_qr_meta_box' ),
@@ -466,8 +475,92 @@ class LBite_Locations {
 			update_post_meta( $post_id, '_lbite_opening_hours', $hours );
 		}
 
+		// Zeiteinstellungen pro Standort (Override, leeres Feld = globaler Fallback).
+		if ( isset( $_POST['lbite_location_prep_time'] ) ) {
+			$prep = wp_unslash( $_POST['lbite_location_prep_time'] );
+			if ( '' === $prep || ! is_numeric( $prep ) ) {
+				delete_post_meta( $post_id, '_lbite_preparation_time' );
+			} else {
+				update_post_meta( $post_id, '_lbite_preparation_time', max( 0, intval( $prep ) ) );
+			}
+		}
+		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() ) {
+			if ( isset( $_POST['lbite_location_slot_buffer_start'] ) ) {
+				$buf = wp_unslash( $_POST['lbite_location_slot_buffer_start'] );
+				if ( '' === $buf || ! is_numeric( $buf ) ) {
+					delete_post_meta( $post_id, '_lbite_slot_buffer_start' );
+				} else {
+					update_post_meta( $post_id, '_lbite_slot_buffer_start', max( 0, intval( $buf ) ) );
+				}
+			}
+			if ( isset( $_POST['lbite_location_slot_buffer_end'] ) ) {
+				$buf = wp_unslash( $_POST['lbite_location_slot_buffer_end'] );
+				if ( '' === $buf || ! is_numeric( $buf ) ) {
+					delete_post_meta( $post_id, '_lbite_slot_buffer_end' );
+				} else {
+					update_post_meta( $post_id, '_lbite_slot_buffer_end', max( 0, intval( $buf ) ) );
+				}
+			}
+		}
+
 		// Farben-Cache invalidieren (Standort-Farbe kann sich geändert haben).
 		delete_transient( 'lbite_location_colors' );
+	}
+
+	/**
+	 * Zeiteinstellungen Meta-Box rendern
+	 *
+	 * @param WP_Post $post Post-Objekt
+	 */
+	public function render_time_settings_meta_box( $post ) {
+		$prep_time    = get_post_meta( $post->ID, '_lbite_preparation_time', true );
+		$buffer_start = get_post_meta( $post->ID, '_lbite_slot_buffer_start', true );
+		$buffer_end   = get_post_meta( $post->ID, '_lbite_slot_buffer_end', true );
+
+		$global_prep  = (int) get_option( 'lbite_preparation_time', 30 );
+		$global_start = (int) get_option( 'lbite_slot_buffer_start', 0 );
+		$global_end   = (int) get_option( 'lbite_slot_buffer_end', 0 );
+
+		$is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+		?>
+		<p class="description" style="margin-bottom:10px;font-size:11px;">
+			<?php esc_html_e( 'Leave blank to use the global default (Settings → Locations).', 'libre-bite' ); ?>
+		</p>
+		<p>
+			<label style="display:block;margin-bottom:4px;font-weight:600;">
+				<?php esc_html_e( 'Preparation Time', 'libre-bite' ); ?>
+			</label>
+			<input type="number" min="0" name="lbite_location_prep_time"
+				value="<?php echo esc_attr( is_numeric( $prep_time ) ? $prep_time : '' ); ?>"
+				placeholder="<?php echo esc_attr( $global_prep ); ?>"
+				class="small-text">
+			<?php esc_html_e( 'min', 'libre-bite' ); ?>
+		</p>
+		<p>
+			<label style="display:block;margin-bottom:4px;font-weight:600;">
+				<?php esc_html_e( 'Slot Buffer Start', 'libre-bite' ); ?>
+				<?php if ( ! $is_premium ) : ?><span class="lbite-pro-badge">Pro</span><?php endif; ?>
+			</label>
+			<input type="number" min="0" name="lbite_location_slot_buffer_start"
+				value="<?php echo esc_attr( is_numeric( $buffer_start ) ? $buffer_start : '' ); ?>"
+				placeholder="<?php echo esc_attr( $global_start ); ?>"
+				class="small-text"
+				<?php disabled( ! $is_premium ); ?>>
+			<?php esc_html_e( 'min', 'libre-bite' ); ?>
+		</p>
+		<p>
+			<label style="display:block;margin-bottom:4px;font-weight:600;">
+				<?php esc_html_e( 'Slot Buffer End', 'libre-bite' ); ?>
+				<?php if ( ! $is_premium ) : ?><span class="lbite-pro-badge">Pro</span><?php endif; ?>
+			</label>
+			<input type="number" min="0" name="lbite_location_slot_buffer_end"
+				value="<?php echo esc_attr( is_numeric( $buffer_end ) ? $buffer_end : '' ); ?>"
+				placeholder="<?php echo esc_attr( $global_end ); ?>"
+				class="small-text"
+				<?php disabled( ! $is_premium ); ?>>
+			<?php esc_html_e( 'min', 'libre-bite' ); ?>
+		</p>
+		<?php
 	}
 
 	/**
@@ -674,6 +767,24 @@ class LBite_Locations {
 	 *
 	 * @return array
 	 */
+	/**
+	 * Zeiteinstellung für einen Standort lesen (Meta-Override → globale Option)
+	 *
+	 * @param int    $location_id CPT-ID des Standorts (0 = nur globale Option).
+	 * @param string $key         Settings-Key ohne Prefix (z.B. 'preparation_time').
+	 * @param int    $default     Fallback-Wert.
+	 * @return int
+	 */
+	public static function get_time_setting( $location_id, $key, $default = 0 ) {
+		if ( $location_id ) {
+			$meta = get_post_meta( (int) $location_id, '_lbite_' . $key, true );
+			if ( is_numeric( $meta ) ) {
+				return (int) $meta;
+			}
+		}
+		return (int) get_option( 'lbite_' . $key, $default );
+	}
+
 	public static function get_all_locations() {
 		return get_posts(
 			array(

@@ -1237,7 +1237,7 @@ class LBite_Checkout {
 		}
 
 		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
-		$interval      = (int) get_option( 'lbite_timeslot_interval', 15 );
+		$interval      = LBite_Locations::get_time_setting( $location_id, 'timeslot_interval', 15 );
 
 		if ( ! $opening_hours || ! is_array( $opening_hours ) ) {
 			return array();
@@ -1274,7 +1274,7 @@ class LBite_Checkout {
 		}
 
 		// Aktueller Zeitpunkt und frühstmöglicher Slot (Vorbereitungszeit).
-		$prep_time     = (int) get_option( 'lbite_preparation_time', 30 );
+		$prep_time     = LBite_Locations::get_time_setting( $location_id, 'preparation_time', 30 );
 		$now_dt        = new DateTime( 'now', $tz );
 		$now_ts        = $now_dt->getTimestamp();
 		$earliest_slot = $now_ts + ( $prep_time * 60 );
@@ -1298,8 +1298,8 @@ class LBite_Checkout {
 		$buffer_start = 0;
 		$buffer_end   = 0;
 		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) {
-			$buffer_start = (int) get_option( 'lbite_slot_buffer_start', 0 );
-			$buffer_end   = (int) get_option( 'lbite_slot_buffer_end', 0 );
+			$buffer_start = LBite_Locations::get_time_setting( $location_id, 'slot_buffer_start', 0 );
+			$buffer_end   = LBite_Locations::get_time_setting( $location_id, 'slot_buffer_end', 0 );
 		}
 
 		$timeslots = array();

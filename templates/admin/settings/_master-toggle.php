@@ -2,8 +2,8 @@
 /**
  * Partial: Master-Toggle für einen Feature-Bereich
  *
- * Zeigt einen Toggle am Anfang eines Tab mit optionalem Pro-Badge und Lock-State.
- * Speichern erfolgt via AJAX (lbite_save_features), nicht per POST.
+ * Zeigt eine Checkbox am Anfang eines Tabs mit optionalem Pro-Badge und Lock-State.
+ * Speichern erfolgt via POST-Formular des jeweiligen Tabs.
  *
  * Erwartet:
  *   $lbite_toggle_key         string  Feature-Key (z.B. 'enable_pos')
@@ -47,7 +47,7 @@ $lbite_upgrade_url = function_exists( 'lbite_freemius' ) ? lbite_freemius()->get
 			</p>
 		<?php endif; ?>
 	</div>
-	<label class="lbite-toggle <?php echo $lbite_toggle_locked ? 'lbite-locked' : ''; ?>">
+	<label <?php echo $lbite_toggle_locked ? 'class="lbite-locked"' : ''; ?>>
 		<input
 			type="checkbox"
 			name="lbite_feature_toggle[<?php echo esc_attr( $lbite_toggle_key ); ?>]"
@@ -55,6 +55,5 @@ $lbite_upgrade_url = function_exists( 'lbite_freemius' ) ? lbite_freemius()->get
 			<?php checked( $lbite_toggle_enabled ); ?>
 			<?php disabled( $lbite_toggle_locked ); ?>
 		>
-		<span class="lbite-toggle-slider"></span>
 	</label>
 </div>
