@@ -112,28 +112,6 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
 				// Übersicht
 				?>
 				<div class="lbite-help-grid">
-					<!-- Schnellstart -->
-					<div class="lbite-help-card lbite-help-quickstart">
-						<h2><span class="dashicons dashicons-flag"></span> <?php esc_html_e( 'Administrator Overview', 'libre-bite' ); ?></h2>
-						<p><?php esc_html_e( 'As an administrator you can manage orders, configure products, set up locations and customize settings.', 'libre-bite' ); ?></p>
-
-						<div class="lbite-quick-links">
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-order-board' ) ); ?>" class="button button-primary">
-								<span class="dashicons dashicons-clipboard"></span>
-								<?php esc_html_e( 'Order Overview', 'libre-bite' ); ?>
-							</a>
-							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_location' ) ); ?>" class="button">
-								<span class="dashicons dashicons-location"></span>
-								<?php esc_html_e( 'Locations', 'libre-bite' ); ?>
-							</a>
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings' ) ); ?>" class="button">
-								<span class="dashicons dashicons-admin-settings"></span>
-								<?php esc_html_e( 'Settings', 'libre-bite' ); ?>
-							</a>
-						</div>
-
-					</div>
-
 					<!-- Bestellungen -->
 					<div class="lbite-help-card">
 						<h2><span class="dashicons dashicons-clipboard"></span> <?php esc_html_e( 'Orders', 'libre-bite' ); ?></h2>

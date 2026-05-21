@@ -923,6 +923,12 @@ NEW_STRINGS_FORMAL_SS = {
         'benötigt mindestens WooCommerce 8.0. Bitte aktualisieren Sie WooCommerce.',
     'Freemius Account':
         'Freemius-Konto',
+    # Dashboard-Kacheln
+    'Go to page':
+        'Aufrufen',
+    # Master-Toggle Checkbox-Hinweis
+    'Enable':
+        'Aktivieren',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT

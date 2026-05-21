@@ -329,7 +329,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 		<?php endforeach; ?>
 	</nav>
 
-	<div class="lbite-settings-tab-content">
+	<div class="lbite-settings-tab-content" style="margin-top: 16px;">
 		<?php
 		// $lbite_is_tab = true verhindert doppelte <div class="wrap"> und <h1> in Sub-Templates
 		$lbite_is_tab = true;

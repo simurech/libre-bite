@@ -47,7 +47,7 @@ $lbite_upgrade_url = function_exists( 'lbite_freemius' ) ? lbite_freemius()->get
 			</p>
 		<?php endif; ?>
 	</div>
-	<label <?php echo $lbite_toggle_locked ? 'class="lbite-locked"' : ''; ?>>
+	<label <?php echo $lbite_toggle_locked ? 'class="lbite-locked"' : ''; ?> style="display: flex; align-items: center; gap: 6px; white-space: nowrap;">
 		<input
 			type="checkbox"
 			name="lbite_feature_toggle[<?php echo esc_attr( $lbite_toggle_key ); ?>]"
@@ -55,5 +55,6 @@ $lbite_upgrade_url = function_exists( 'lbite_freemius' ) ? lbite_freemius()->get
 			<?php checked( $lbite_toggle_enabled ); ?>
 			<?php disabled( $lbite_toggle_locked ); ?>
 		>
+		<span style="font-size: 13px; color: #50575e;"><?php esc_html_e( 'Enable', 'libre-bite' ); ?></span>
 	</label>
 </div>

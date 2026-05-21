@@ -105,13 +105,16 @@ if ( $lbite_can_manage ) {
 <div class="wrap lbite-admin-dashboard">
 	<h1><?php echo esc_html( $lbite_plugin_name ); ?></h1>
 
-	<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 20px;">
+	<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 20px; align-items: stretch;">
 		<?php foreach ( $lbite_tiles as $lbite_tile ) : ?>
-		<a href="<?php echo esc_url( $lbite_tile['url'] ); ?>" style="text-decoration: none; color: inherit;">
-			<div style="background: #fff; border: 1px solid #dcdcde; border-radius: 8px; padding: 24px 20px; transition: box-shadow 0.15s; border-top: 4px solid <?php echo esc_attr( $lbite_tile['color'] ); ?>;" onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='none'">
+		<a href="<?php echo esc_url( $lbite_tile['url'] ); ?>" style="text-decoration: none; color: inherit; display: flex;">
+			<div style="background: #fff; border: 1px solid #dcdcde; border-radius: 8px; padding: 24px 20px; transition: box-shadow 0.15s; border-top: 4px solid <?php echo esc_attr( $lbite_tile['color'] ); ?>; display: flex; flex-direction: column; width: 100%;" onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='none'">
 				<span class="dashicons <?php echo esc_attr( $lbite_tile['icon'] ); ?>" style="font-size: 28px; width: 28px; height: 28px; color: <?php echo esc_attr( $lbite_tile['color'] ); ?>; margin-bottom: 10px; display: block;"></span>
 				<strong style="font-size: 15px; display: block; margin-bottom: 6px; color: #1d2327;"><?php echo esc_html( $lbite_tile['title'] ); ?></strong>
-				<span style="font-size: 13px; color: #50575e; line-height: 1.5;"><?php echo esc_html( $lbite_tile['desc'] ); ?></span>
+				<span style="font-size: 13px; color: #50575e; line-height: 1.5; flex: 1;"><?php echo esc_html( $lbite_tile['desc'] ); ?></span>
+				<span style="display: block; margin-top: 16px; font-size: 13px; color: <?php echo esc_attr( $lbite_tile['color'] ); ?>;">
+					<?php esc_html_e( 'Go to page', 'libre-bite' ); ?> <span class="dashicons dashicons-arrow-right-alt" style="font-size: 16px; width: 16px; height: 16px; vertical-align: middle;"></span>
+				</span>
 			</div>
 		</a>
 		<?php endforeach; ?>
