@@ -18,23 +18,27 @@ jobs:
 
       - name: Build Clean ZIP
         run: |
-          mkdir build
-          mkdir build/libre-bite
-          
-          rsync -av ./ build/libre-bite \
-            --exclude='.git*' \
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          mkdir -p build/libre-bite
+
+          rsync -a ./ build/libre-bite/ \
+            --exclude='.git' \
             --exclude='.github' \
+            --exclude='.gitignore' \
+            --exclude='.gitkeep' \
             --exclude='.DS_Store' \
             --exclude='build' \
             --exclude='*.zip' \
-            --exclude='node_modules'
+            --exclude='node_modules' \
+            --exclude='assets/wp-org'
 
           cd build
-          zip -r ../libre-bite.zip libre-bite
+          zip -r "../libre-bite-${VERSION}.zip" libre-bite/
+          echo "ASSET_NAME=libre-bite-${VERSION}.zip" >> "$GITHUB_ENV"
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: libre-bite.zip
+          files: ${{ env.ASSET_NAME }}
           generate_release_notes: true
           make_latest: true
