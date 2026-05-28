@@ -484,6 +484,15 @@ class LBite_Locations {
 				update_post_meta( $post_id, '_lbite_preparation_time', max( 0, intval( $prep ) ) );
 			}
 		}
+		if ( isset( $_POST['lbite_location_timeslot_interval'] ) ) {
+			$interval = wp_unslash( $_POST['lbite_location_timeslot_interval'] );
+			if ( '' === $interval || ! is_numeric( $interval ) ) {
+				delete_post_meta( $post_id, '_lbite_timeslot_interval' );
+			} else {
+				update_post_meta( $post_id, '_lbite_timeslot_interval', max( 1, intval( $interval ) ) );
+			}
+		}
+
 		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() ) {
 			if ( isset( $_POST['lbite_location_slot_buffer_start'] ) ) {
 				$buf = wp_unslash( $_POST['lbite_location_slot_buffer_start'] );
@@ -513,13 +522,15 @@ class LBite_Locations {
 	 * @param WP_Post $post Post-Objekt
 	 */
 	public function render_time_settings_meta_box( $post ) {
-		$prep_time    = get_post_meta( $post->ID, '_lbite_preparation_time', true );
-		$buffer_start = get_post_meta( $post->ID, '_lbite_slot_buffer_start', true );
-		$buffer_end   = get_post_meta( $post->ID, '_lbite_slot_buffer_end', true );
+		$prep_time         = get_post_meta( $post->ID, '_lbite_preparation_time', true );
+		$timeslot_interval = get_post_meta( $post->ID, '_lbite_timeslot_interval', true );
+		$buffer_start      = get_post_meta( $post->ID, '_lbite_slot_buffer_start', true );
+		$buffer_end        = get_post_meta( $post->ID, '_lbite_slot_buffer_end', true );
 
-		$global_prep  = (int) get_option( 'lbite_preparation_time', 30 );
-		$global_start = (int) get_option( 'lbite_slot_buffer_start', 0 );
-		$global_end   = (int) get_option( 'lbite_slot_buffer_end', 0 );
+		$global_prep     = (int) get_option( 'lbite_preparation_time', 30 );
+		$global_interval = (int) get_option( 'lbite_timeslot_interval', 15 );
+		$global_start    = (int) get_option( 'lbite_slot_buffer_start', 0 );
+		$global_end      = (int) get_option( 'lbite_slot_buffer_end', 0 );
 
 		$is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
 		?>
@@ -547,6 +558,26 @@ class LBite_Locations {
 				printf(
 					esc_html__( 'Minimum lead time before a pickup slot becomes available. Global default: %d min.', 'libre-bite' ),
 					$global_prep
+				);
+				?>
+			</p>
+		</p>
+
+		<p style="margin-top:10px;">
+			<label style="display:block;margin-bottom:2px;font-weight:600;">
+				<?php esc_html_e( 'Timeslot Interval', 'libre-bite' ); ?>
+			</label>
+			<input type="number" min="1" name="lbite_location_timeslot_interval"
+				value="<?php echo esc_attr( is_numeric( $timeslot_interval ) ? $timeslot_interval : '' ); ?>"
+				placeholder="<?php echo esc_attr( $global_interval ); ?>"
+				class="small-text">
+			<?php esc_html_e( 'minutes', 'libre-bite' ); ?>
+			<p class="description" style="margin-top:4px;">
+				<?php
+				printf(
+					/* translators: %d = global default in minutes */
+					esc_html__( 'Interval between pickup slots. Global default: %d min.', 'libre-bite' ),
+					$global_interval
 				);
 				?>
 			</p>
