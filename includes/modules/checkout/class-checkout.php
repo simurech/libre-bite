@@ -23,6 +23,13 @@ class LBite_Checkout {
 	private $loader;
 
 	/**
+	 * POS-Bestellart-Kontext für MWST-Filter (null = kein POS-Kontext)
+	 *
+	 * @var string|null
+	 */
+	private static $pos_vat_context = null;
+
+	/**
 	 * Konstruktor
 	 *
 	 * @param LBite_Loader $loader Loader-Instanz
@@ -113,6 +120,17 @@ class LBite_Checkout {
 		// Zeitslot-Cache invalidieren wenn Standort oder Feiertage geändert werden.
 		$this->loader->add_action( 'save_post_lbite_location', $this, 'invalidate_timeslot_cache' );
 		$this->loader->add_action( 'update_option_lbite_holidays', $this, 'invalidate_timeslot_cache' );
+
+		// Notizen pro Bestellposition (Online-Checkout)
+		if ( lbite_feature_enabled( 'enable_item_notes_checkout' ) ) {
+			$this->loader->add_action( 'woocommerce_after_cart_item_name', $this, 'render_item_note_field', 10, 2 );
+			$this->loader->add_action( 'woocommerce_checkout_create_order_line_item', $this, 'save_item_note_to_order', 10, 3 );
+		}
+
+		// Schweizer MWST-Umschaltung (Premium)
+		if ( lbite_freemius()->is__premium_only() && lbite_feature_enabled( 'enable_swiss_vat' ) ) {
+			$this->loader->add_filter( 'woocommerce_product_get_tax_class', $this, 'filter_swiss_vat_tax_class__premium_only', 10, 2 );
+		}
 	}
 
 	/**
@@ -1593,5 +1611,78 @@ class LBite_Checkout {
 		$order->save();
 
 		wp_send_json_success( __( 'Receipt sent.', 'libre-bite' ) );
+	}
+
+	/**
+	 * Notiz-Eingabefeld pro Warenkorb-Position rendern
+	 *
+	 * @param array  $cart_item     Warenkorb-Position
+	 * @param string $cart_item_key Warenkorb-Schlüssel
+	 */
+	public function render_item_note_field( $cart_item, $cart_item_key ) {
+		$saved_note = WC()->session ? WC()->session->get( 'lbite_item_note_' . $cart_item_key, '' ) : '';
+		echo '<div class="lbite-item-note-wrap">';
+		echo '<input type="text" name="lbite_item_notes[' . esc_attr( $cart_item_key ) . ']"'
+			. ' class="lbite-checkout-item-note"'
+			. ' value="' . esc_attr( $saved_note ) . '"'
+			. ' placeholder="' . esc_attr__( 'Note', 'libre-bite' ) . '">';
+		echo '</div>';
+	}
+
+	/**
+	 * Notiz aus dem POST-Daten als Positions-Meta speichern
+	 *
+	 * @param \WC_Order_Item_Product $item          Bestellposition
+	 * @param string                 $cart_item_key Warenkorb-Schlüssel
+	 * @param array                  $values        Warenkorb-Positionsdaten
+	 */
+	public function save_item_note_to_order( $item, $cart_item_key, $values ) {
+		// phpcs:ignore WordPress.Security.NonceVerification -- Nonce wird von WooCommerce geprüft.
+		if ( empty( $_POST['lbite_item_notes'][ $cart_item_key ] ) ) {
+			return;
+		}
+		$note = sanitize_text_field( wp_unslash( $_POST['lbite_item_notes'][ $cart_item_key ] ) );
+		if ( '' !== $note ) {
+			$item->add_meta_data( __( 'Note', 'libre-bite' ), $note, true );
+		}
+	}
+
+	/**
+	 * Schweizer MWST-Steuerklasse je nach Bestellart filtern (Premium)
+	 *
+	 * @param string     $tax_class Aktuelle Steuerklasse
+	 * @param \WC_Product $product   Produkt
+	 * @return string Gefilterte Steuerklasse
+	 */
+	public function filter_swiss_vat_tax_class__premium_only( $tax_class, $product ) {
+		// POS-Kontext (statisch gesetzt vor Item-Erstellung in ajax_pos_create_order)
+		if ( null !== self::$pos_vat_context ) {
+			$new = get_option( 'lbite_tax_class_' . self::$pos_vat_context, '' );
+			return '' !== $new ? $new : $tax_class;
+		}
+		// Frontend-Checkout-Kontext
+		if ( WC()->session ) {
+			$table_id = WC()->session->get( 'lbite_table_id' );
+			$key      = $table_id ? 'lbite_tax_class_dine_in' : 'lbite_tax_class_takeaway';
+			$new      = get_option( $key, '' );
+			return '' !== $new ? $new : $tax_class;
+		}
+		return $tax_class;
+	}
+
+	/**
+	 * POS-Bestellart-Kontext für MWST-Filter setzen
+	 *
+	 * @param string $type 'takeaway' oder 'dine_in'
+	 */
+	public static function set_pos_vat_context( $type ) {
+		self::$pos_vat_context = $type;
+	}
+
+	/**
+	 * POS-Bestellart-Kontext zurücksetzen
+	 */
+	public static function clear_pos_vat_context() {
+		self::$pos_vat_context = null;
 	}
 }

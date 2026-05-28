@@ -157,10 +157,22 @@
 .lbite-pos-cart-item {
 	display: grid;
 	grid-template-columns: 1fr auto auto auto;
-	gap: 10px;
+	gap: 6px 10px;
 	align-items: center;
 	padding: 10px;
 	border-bottom: 1px solid #eee;
+}
+
+.lbite-pos-item-note {
+	grid-column: 1 / -1;
+	font-size: 12px;
+	padding: 3px 6px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	width: 100%;
+	box-sizing: border-box;
+	background: #fafafa;
+	color: #555;
 }
 
 .lbite-pos-cart-item-name {

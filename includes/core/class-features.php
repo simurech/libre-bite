@@ -89,6 +89,13 @@ class LBite_Features {
 			'label'       => '5-Cent Rounding',
 			'description' => 'Round amounts to 5 cents (Switzerland)',
 		),
+		'enable_swiss_vat'          => array(
+			'group'       => 'checkout',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Swiss VAT Switching',
+			'description' => 'Apply different VAT rates for dine-in (8.1%) vs. takeaway (2.6%)',
+		),
 
 		// Locations
 		'enable_location_selector'  => array(
@@ -122,6 +129,20 @@ class LBite_Features {
 			'premium'     => false,
 			'label'       => 'Product Options',
 			'description' => 'Additional options for products (add-ons)',
+		),
+		'enable_item_notes_pos'     => array(
+			'group'       => 'products',
+			'default'     => false,
+			'premium'     => false,
+			'label'       => 'Item Notes (POS)',
+			'description' => 'Allow staff to add notes to individual cart items in POS',
+		),
+		'enable_item_notes_checkout' => array(
+			'group'       => 'products',
+			'default'     => false,
+			'premium'     => false,
+			'label'       => 'Item Notes (Checkout)',
+			'description' => 'Allow customers to add notes to individual cart items',
 		),
 		'enable_nutritional_info'   => array(
 			'group'       => 'products',

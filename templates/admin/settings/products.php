@@ -32,6 +32,23 @@ $lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()
 	<?php endif; ?>
 
 	<hr style="margin: 24px 0;">
+	<h3><?php esc_html_e( 'Item Notes', 'libre-bite' ); ?></h3>
+
+	<?php
+	$lbite_toggle_key         = 'enable_item_notes_pos';
+	$lbite_toggle_label       = __( 'Item Notes in POS', 'libre-bite' );
+	$lbite_toggle_description = __( 'Allow staff to add a short note to individual cart items in the POS system.', 'libre-bite' );
+	$lbite_toggle_is_pro      = false;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
+	$lbite_toggle_key         = 'enable_item_notes_checkout';
+	$lbite_toggle_label       = __( 'Item Notes in Online Checkout', 'libre-bite' );
+	$lbite_toggle_description = __( 'Allow customers to add a note to individual cart items at checkout.', 'libre-bite' );
+	$lbite_toggle_is_pro      = false;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+	?>
+
+	<hr style="margin: 24px 0;">
 	<h3>
 		<?php esc_html_e( 'Nutritional Information', 'libre-bite' ); ?>
 		<span class="lbite-pro-badge">Pro</span>

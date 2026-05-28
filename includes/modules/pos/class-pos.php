@@ -130,7 +130,8 @@ class LBite_POS {
 			array(
 				'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
 				'nonce'          => wp_create_nonce( 'lbite_pos_nonce' ),
-				'enableRounding' => (bool) get_option( 'lbite_enable_rounding', false ),
+				'enableRounding'   => (bool) get_option( 'lbite_enable_rounding', false ),
+				'enableItemNotes'  => lbite_feature_enabled( 'enable_item_notes_pos' ),
 				'userId'         => get_current_user_id(),
 				'currency'       => get_woocommerce_currency_symbol(),
 				'preloadData'    => $product_data,
@@ -159,6 +160,9 @@ class LBite_POS {
 					'markInStock'              => __( 'Mark as in stock', 'libre-bite' ),
 					'confirmOutOfStock'        => __( 'Mark this product as out of stock?', 'libre-bite' ),
 					'confirmInStock'           => __( 'Mark this product as available again?', 'libre-bite' ),
+					'enterFullscreen'          => __( 'Enter fullscreen', 'libre-bite' ),
+					'exitFullscreen'           => __( 'Exit fullscreen', 'libre-bite' ),
+					'itemNotePlaceholder'      => __( 'Note...', 'libre-bite' ),
 					'coupon'                => __( 'Coupon', 'libre-bite' ),
 					'addCoupon'             => __( 'Add Coupon', 'libre-bite' ),
 					'couponAdded'           => __( 'Coupon added', 'libre-bite' ),
@@ -188,6 +192,9 @@ class LBite_POS {
 				'details'    => array(),
 			);
 		}
+
+		// Abgelaufene "nur heute"-Sperren vorab zurücksetzen, damit Cache aktuell bleibt.
+		$this->reset_expired_unavailable_products();
 
 		// Cache prüfen (Key enthält Standort-ID für spätere standortspezifische Filterung).
 		$transient_key = 'lbite_pos_products_' . (int) $location_id;
@@ -264,18 +271,20 @@ class LBite_POS {
 			}
 
 			// Basis-Produktdaten.
-			$products_data[] = array(
-				'id'             => $product_id,
-				'name'           => $product->get_name(),
-				'price'          => $product->get_price(),
-				'max_price'      => $price_max,
-				'image'          => wp_get_attachment_image_url( $product->get_image_id(), 'thumbnail' ),
-				'has_variations' => $has_variations,
-				'has_options'    => $has_options,
-				'type'           => $product->get_type(),
-				'categories'     => $product_cats,
-				'location_ids'   => array_map( 'intval', $product_location_ids ),
-				'stock_status'   => $product->get_stock_status(),
+			$unavailable_until = get_post_meta( $product_id, '_lbite_unavailable_until', true );
+			$products_data[]   = array(
+				'id'                => $product_id,
+				'name'              => $product->get_name(),
+				'price'             => $product->get_price(),
+				'max_price'         => $price_max,
+				'image'             => wp_get_attachment_image_url( $product->get_image_id(), 'thumbnail' ),
+				'has_variations'    => $has_variations,
+				'has_options'       => $has_options,
+				'type'              => $product->get_type(),
+				'categories'        => $product_cats,
+				'location_ids'      => array_map( 'intval', $product_location_ids ),
+				'stock_status'      => $product->get_stock_status(),
+				'unavailable_until' => $unavailable_until ? $unavailable_until : '',
 			);
 
 			// Details nur für Produkte mit Konfiguration.
@@ -352,6 +361,47 @@ class LBite_POS {
 		set_transient( $transient_key, $result, HOUR_IN_SECONDS );
 
 		return $result;
+	}
+
+	/**
+	 * Abgelaufene "nur heute"-Produktsperren zurücksetzen
+	 *
+	 * Stellt Produkte wieder auf instock, deren _lbite_unavailable_until in der Vergangenheit liegt.
+	 * Löscht den POS-Cache wenn Änderungen vorgenommen wurden.
+	 */
+	private function reset_expired_unavailable_products() {
+		global $wpdb;
+
+		// Alle Produkte mit abgelaufenem Sperr-Datum suchen.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$product_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT DISTINCT post_id FROM {$wpdb->postmeta}
+				WHERE meta_key = '_lbite_unavailable_until'
+				AND meta_value != ''
+				AND CAST(meta_value AS DATETIME) < %s",
+				current_time( 'mysql' )
+			)
+		);
+
+		if ( empty( $product_ids ) ) {
+			return;
+		}
+
+		foreach ( $product_ids as $product_id ) {
+			$product = wc_get_product( (int) $product_id );
+			if ( $product ) {
+				$product->set_stock_status( 'instock' );
+				$product->save();
+			}
+			delete_post_meta( (int) $product_id, '_lbite_unavailable_until' );
+		}
+
+		// POS-Cache leeren damit neue Daten geladen werden.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query(
+			"DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_lbite_pos_products_%' OR option_name LIKE '_transient_timeout_lbite_pos_products_%'"
+		);
 	}
 
 	/**
