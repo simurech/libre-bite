@@ -882,6 +882,7 @@ class LBite_Admin {
 			$product_id = isset( $raw_item['id'] ) ? absint( $raw_item['id'] ) : 0;
 			$quantity   = isset( $raw_item['quantity'] ) ? (int) $raw_item['quantity'] : 0;
 			$meta       = isset( $raw_item['meta'] ) ? sanitize_text_field( $raw_item['meta'] ) : '';
+			$note       = isset( $raw_item['note'] ) ? sanitize_text_field( $raw_item['note'] ) : '';
 
 			if ( ! $product_id || $quantity <= 0 ) {
 				continue;
@@ -891,6 +892,7 @@ class LBite_Admin {
 				'id'       => $product_id,
 				'quantity' => $quantity,
 				'meta'     => $meta,
+				'note'     => $note,
 			);
 		}
 
@@ -924,6 +926,19 @@ class LBite_Admin {
 			wp_send_json_error( array( 'message' => __( 'No location selected', 'libre-bite' ) ) );
 		}
 
+		// Schweizer MWST: Kontext setzen damit der Tax-Filter die richtige Steuerklasse anwendet.
+		// Expliziter vat_order_type aus POS-Selektor hat Vorrang, sonst Fallback via Tisch-ID.
+		if ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) ) {
+			$vat_order_type = isset( $_POST['vat_order_type'] ) ? sanitize_key( wp_unslash( $_POST['vat_order_type'] ) ) : '';
+			if ( 'dine_in' === $vat_order_type ) {
+				LBite_Checkout::set_pos_vat_context( 'dine_in' );
+			} elseif ( 'takeaway' === $vat_order_type ) {
+				LBite_Checkout::set_pos_vat_context( 'takeaway' );
+			} else {
+				LBite_Checkout::set_pos_vat_context( $table_id ? 'dine_in' : 'takeaway' );
+			}
+		}
+
 		try {
 			// WooCommerce-Bestellung erstellen.
 			$order = wc_create_order();
@@ -951,10 +966,15 @@ class LBite_Admin {
 				);
 
 				// Meta-Daten (Varianten & Optionen) hinzufügen.
-				if ( ! empty( $item['meta'] ) && $order_item_id ) {
+				if ( $order_item_id ) {
 					$order_item = $order->get_item( $order_item_id );
 					if ( $order_item ) {
-						$order_item->add_meta_data( 'Konfiguration', $item['meta'], true );
+						if ( ! empty( $item['meta'] ) ) {
+							$order_item->add_meta_data( 'Konfiguration', $item['meta'], true );
+						}
+						if ( ! empty( $item['note'] ) && lbite_feature_enabled( 'enable_item_notes_pos' ) ) {
+							$order_item->add_meta_data( __( 'Note', 'libre-bite' ), sanitize_text_field( $item['note'] ), true );
+						}
 						$order_item->save();
 					}
 				}
@@ -999,6 +1019,11 @@ class LBite_Admin {
 			// Berechnen.
 			$order->calculate_totals();
 
+			// Schweizer MWST: Kontext zurücksetzen.
+			if ( class_exists( 'LBite_Checkout' ) ) {
+				LBite_Checkout::clear_pos_vat_context();
+			}
+
 			// Status setzen.
 			$order->update_status( 'processing', __( 'Order created via POS system.', 'libre-bite' ) );
 
@@ -1016,6 +1041,9 @@ class LBite_Admin {
 				)
 			);
 		} catch ( Exception $e ) {
+			if ( class_exists( 'LBite_Checkout' ) ) {
+				LBite_Checkout::clear_pos_vat_context();
+			}
 			wp_send_json_error( array( 'message' => $e->getMessage() ) );
 		}
 	}
@@ -1071,8 +1099,9 @@ class LBite_Admin {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
-		$product_id   = isset( $_POST['product_id'] ) ? absint( wp_unslash( $_POST['product_id'] ) ) : 0;
-		$stock_status = isset( $_POST['stock_status'] ) ? sanitize_text_field( wp_unslash( $_POST['stock_status'] ) ) : '';
+		$product_id        = isset( $_POST['product_id'] ) ? absint( wp_unslash( $_POST['product_id'] ) ) : 0;
+		$stock_status      = isset( $_POST['stock_status'] ) ? sanitize_text_field( wp_unslash( $_POST['stock_status'] ) ) : '';
+		$unavailable_until = isset( $_POST['unavailable_until'] ) ? sanitize_text_field( wp_unslash( $_POST['unavailable_until'] ) ) : '';
 
 		if ( ! $product_id || ! in_array( $stock_status, array( 'instock', 'outofstock' ), true ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'libre-bite' ) ) );
@@ -1085,6 +1114,12 @@ class LBite_Admin {
 
 		$product->set_stock_status( $stock_status );
 		$product->save();
+
+		if ( 'outofstock' === $stock_status && '' !== $unavailable_until ) {
+			update_post_meta( $product_id, '_lbite_unavailable_until', $unavailable_until );
+		} else {
+			delete_post_meta( $product_id, '_lbite_unavailable_until' );
+		}
 
 		// Bei variablen Produkten: Lagerbestand-Status aller Varianten setzen,
 		// damit WooCommerces Sync-Mechanismus den Parent-Status nicht überschreibt.

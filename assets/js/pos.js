@@ -31,6 +31,7 @@
 		allCategories: [],
 		dataLoaded: false,
 		wakeLock: null,
+		fullscreenDesired: false,
 
 		/**
 		 * Initialisierung
@@ -241,8 +242,9 @@
 				const locationId = $('#lbite-pos-location').val();
 				const tableId = $('#lbite-pos-table').val() || 0;
 				const customerName = $('#lbite-pos-customer-name').val().trim();
+				const vatType = $('input[name="lbite_pos_vat_type"]:checked').val() || '';
 				POS.closePaymentModal();
-				POS.createOrder(locationId, 'now', '', customerName, paymentMethod, tableId);
+				POS.createOrder(locationId, 'now', '', customerName, paymentMethod, tableId, vatType);
 			});
 		},
 
@@ -409,6 +411,38 @@
 			// Produkt hinzufügen
 			$('#lbite-modal-add').on('click', () => {
 				this.addConfiguredProductToCart();
+			});
+
+			// Nicht-verfügbar-Dialog: "Nur heute"
+			$('#lbite-unavailable-today').on('click', () => {
+				const $dialog = $('#lbite-unavailable-dialog');
+				const productId = $dialog.data('product-id');
+				const $item = $dialog.data('$item');
+				const $input = $dialog.data('$input');
+				$dialog.fadeOut(150);
+				const endOfDay = new Date();
+				endOfDay.setHours(23, 59, 59, 999);
+				this.setProductStock(productId, $item, $input, 'outofstock', endOfDay.toISOString());
+			});
+
+			// Nicht-verfügbar-Dialog: "Bis auf Weiteres"
+			$('#lbite-unavailable-indefinite').on('click', () => {
+				const $dialog = $('#lbite-unavailable-dialog');
+				const productId = $dialog.data('product-id');
+				const $item = $dialog.data('$item');
+				const $input = $dialog.data('$input');
+				$dialog.fadeOut(150);
+				this.setProductStock(productId, $item, $input, 'outofstock', '');
+			});
+
+			// Nicht-verfügbar-Dialog: Abbrechen
+			$('#lbite-unavailable-cancel').on('click', () => {
+				const $dialog = $('#lbite-unavailable-dialog');
+				const $input = $dialog.data('$input');
+				if ($input) {
+					$input.prop('checked', true);
+				}
+				$dialog.fadeOut(150);
 			});
 		},
 
@@ -587,7 +621,8 @@
 					name: productName,
 					price: productPrice,
 					quantity: 1,
-					meta: metaString
+					meta: metaString,
+					note: ''
 				});
 			}
 
@@ -609,7 +644,8 @@
 					id: product.id,
 					name: product.name,
 					price: parseFloat(product.price),
-					quantity: 1
+					quantity: 1,
+					note: ''
 				});
 			}
 
@@ -659,19 +695,34 @@
 			this.cart.forEach((item, index) => {
 				const itemTotal = item.price * item.quantity;
 				const $item = $('<div class="lbite-pos-cart-item"></div>');
-				
+
 				const $nameDiv = $('<div class="lbite-pos-cart-item-name"></div>').text(item.name);
 				if (item.meta) {
 					$nameDiv.append($('<div class="lbite-pos-cart-meta"></div>').text(item.meta));
 				}
 				$item.append($nameDiv);
-				
+
+				if (lbitePos.enableItemNotes) {
+					const $noteInput = $('<input type="text" class="lbite-pos-item-note">')
+						.attr('placeholder', lbitePos.strings.itemNotePlaceholder || 'Note...')
+						.val(item.note || '')
+						.attr('data-cart-index', index);
+					$noteInput.on('input', (e) => {
+						const idx = $(e.target).data('cart-index');
+						if (this.cart[idx] !== undefined) {
+							this.cart[idx].note = $(e.target).val();
+							this.saveCart();
+						}
+					});
+					$item.append($noteInput);
+				}
+
 				const $qtyDiv = $('<div class="lbite-pos-cart-item-qty"></div>');
 				$qtyDiv.append($('<button class="lbite-cart-qty-minus">−</button>').attr('data-cart-index', index));
 				$qtyDiv.append($('<span></span>').text(item.quantity));
 				$qtyDiv.append($('<button class="lbite-cart-qty-plus">+</button>').attr('data-cart-index', index));
 				$item.append($qtyDiv);
-				
+
 				$item.append($('<div class="lbite-pos-cart-item-price"></div>').text(this.formatPrice(itemTotal)));
 				$item.append($('<span class="lbite-cart-item-remove dashicons dashicons-trash"></span>').attr('data-cart-index', index));
 
@@ -790,7 +841,7 @@
 		/**
 		 * Bestellung erstellen
 		 */
-		createOrder: function(locationId, orderType, pickupTime, customerName, paymentMethod, tableId = 0) {
+		createOrder: function(locationId, orderType, pickupTime, customerName, paymentMethod, tableId = 0, vatType = '') {
 			// Doppelklick-Schutz.
 			this.isProcessingOrder = true;
 
@@ -811,7 +862,8 @@
 					order_type: orderType,
 					pickup_time: pickupTime,
 					customer_name: customerName,
-					payment_method: paymentMethod || 'cash'
+					payment_method: paymentMethod || 'cash',
+					vat_order_type: vatType
 				},
 				success: (response) => {
 					if (response.success) {
@@ -873,9 +925,16 @@
 				this.toggleFullscreen();
 			});
 
-			// Vollbild-Status überwachen
-			document.addEventListener('fullscreenchange', () => {
-				this.updateFullscreenButton();
+			// Vendor-präfixierte Events für alle Browser
+			['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+				document.addEventListener(evt, () => this.updateFullscreenButton());
+			});
+
+			// Android: Vollbild nach Systemunterbrechung (Notification, App-Wechsel) wiederherstellen
+			document.addEventListener('visibilitychange', () => {
+				if (document.visibilityState === 'visible' && this.fullscreenDesired && !this.isFullscreenActive()) {
+					this.requestRealFullscreen();
+				}
 			});
 		},
 
@@ -883,15 +942,82 @@
 		 * Vollbild umschalten
 		 */
 		toggleFullscreen: function() {
-			if (!document.fullscreenElement) {
-				document.documentElement.requestFullscreen().catch(err => {
-					console.error('Vollbild-Fehler:', err);
-				});
+			if (this.isFullscreenActive()) {
+				this.fullscreenDesired = false;
+				this.exitRealFullscreen();
 			} else {
-				if (document.exitFullscreen) {
-					document.exitFullscreen();
-				}
+				this.fullscreenDesired = true;
+				this.requestRealFullscreen();
 			}
+		},
+
+		/**
+		 * Prüft ob echtes oder Pseudo-Vollbild aktiv ist
+		 */
+		isFullscreenActive: function() {
+			return !!(
+				document.fullscreenElement ||
+				document.webkitFullscreenElement ||
+				document.mozFullScreenElement ||
+				document.msFullscreenElement
+			);
+		},
+
+		/**
+		 * Echtes Vollbild anfordern (alle Vendor-Varianten, Fallback auf Pseudo-Vollbild)
+		 */
+		requestRealFullscreen: function() {
+			const el = document.documentElement;
+			if (el.requestFullscreen) {
+				el.requestFullscreen().catch(() => this.activatePseudoFullscreen());
+			} else if (el.webkitRequestFullscreen) {
+				// Safari/iPad: Promise wird nicht unterstützt – Timeout-Fallback
+				el.webkitRequestFullscreen();
+				setTimeout(() => {
+					if (!this.isFullscreenActive()) {
+						this.activatePseudoFullscreen();
+					}
+				}, 300);
+			} else if (el.mozRequestFullScreen) {
+				el.mozRequestFullScreen();
+			} else if (el.msRequestFullscreen) {
+				el.msRequestFullscreen();
+			} else {
+				// Kein API-Support (iPad Safari) → CSS-Vollbild
+				this.activatePseudoFullscreen();
+			}
+		},
+
+		/**
+		 * Vollbild beenden (alle Vendor-Varianten)
+		 */
+		exitRealFullscreen: function() {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			} else if (document.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document.msExitFullscreen) {
+				document.msExitFullscreen();
+			}
+			this.deactivatePseudoFullscreen();
+		},
+
+		/**
+		 * CSS-Vollbild aktivieren (ohne Fullscreen API)
+		 */
+		activatePseudoFullscreen: function() {
+			$('body').addClass('lbite-fullscreen-active');
+			this.updateFullscreenButton();
+		},
+
+		/**
+		 * CSS-Vollbild deaktivieren
+		 */
+		deactivatePseudoFullscreen: function() {
+			$('body').removeClass('lbite-fullscreen-active');
+			this.updateFullscreenButton();
 		},
 
 		/**
@@ -1056,15 +1182,33 @@
 		 */
 		toggleProductStock: function(productId, $item, $input) {
 			const newStatus = $input.is(':checked') ? 'instock' : 'outofstock';
-			const confirmMsg = newStatus === 'outofstock'
-				? lbitePos.strings.confirmOutOfStock
-				: lbitePos.strings.confirmInStock;
 
-			if ( ! window.confirm( confirmMsg ) ) {
-				$input.prop( 'checked', ! $input.is( ':checked' ) );
-				return;
+			if (newStatus === 'instock') {
+				if (!window.confirm(lbitePos.strings.confirmInStock)) {
+					$input.prop('checked', false);
+					return;
+				}
+				this.setProductStock(productId, $item, $input, 'instock', '');
+			} else {
+				// Toggle optisch zurücksetzen bis Wahl getroffen
+				$input.prop('checked', true);
+				this.showUnavailableDialog(productId, $item, $input);
 			}
+		},
 
+		/**
+		 * Dialog "Nicht verfügbar" anzeigen
+		 */
+		showUnavailableDialog: function(productId, $item, $input) {
+			const $dialog = $('#lbite-unavailable-dialog');
+			$dialog.data('product-id', productId).data('$item', $item).data('$input', $input);
+			$dialog.fadeIn(150);
+		},
+
+		/**
+		 * Lagerbestand per AJAX setzen
+		 */
+		setProductStock: function(productId, $item, $input, newStatus, unavailableUntil) {
 			$.ajax({
 				url: lbitePos.ajaxUrl,
 				type: 'POST',
@@ -1072,7 +1216,8 @@
 					action: 'lbite_pos_toggle_stock',
 					nonce: lbitePos.nonce,
 					product_id: productId,
-					stock_status: newStatus
+					stock_status: newStatus,
+					unavailable_until: unavailableUntil || ''
 				},
 				success: (response) => {
 					if (response.success) {
@@ -1080,13 +1225,19 @@
 						const cached = this.allProducts.find(p => p.id === productId);
 						if (cached) {
 							cached.stock_status = newStatus;
+							cached.unavailable_until = unavailableUntil || '';
+						}
+						if (newStatus === 'outofstock') {
+							$input.prop('checked', false);
+						} else {
+							$input.prop('checked', true);
 						}
 					} else {
-						$input.prop('checked', !$input.is(':checked'));
+						$input.prop('checked', newStatus === 'instock' ? false : true);
 					}
 				},
 				error: () => {
-					$input.prop('checked', !$input.is(':checked'));
+					$input.prop('checked', newStatus === 'instock' ? false : true);
 				}
 			});
 		},
@@ -1097,14 +1248,15 @@
 		updateFullscreenButton: function() {
 			const $btn = $('#lbite-pos-fullscreen');
 			const $icon = $btn.find('.dashicons');
+			const isActive = this.isFullscreenActive() || $('body').hasClass('lbite-fullscreen-active');
 
-			if (document.fullscreenElement) {
+			if (isActive) {
 				$icon.removeClass('dashicons-editor-expand').addClass('dashicons-editor-contract');
-				$btn.attr('title', 'Vollbild beenden');
+				$btn.attr('title', lbitePos.strings.exitFullscreen || 'Vollbild beenden');
 				$('body').addClass('lbite-fullscreen-active');
 			} else {
 				$icon.removeClass('dashicons-editor-contract').addClass('dashicons-editor-expand');
-				$btn.attr('title', 'Vollbild');
+				$btn.attr('title', lbitePos.strings.enterFullscreen || 'Vollbild');
 				$('body').removeClass('lbite-fullscreen-active');
 			}
 		}
