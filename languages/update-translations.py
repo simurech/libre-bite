@@ -929,6 +929,67 @@ NEW_STRINGS_FORMAL_SS = {
     # Master-Toggle Checkbox-Hinweis
     'Enable':
         'Aktivieren',
+
+    # ── v1.6.0: BUG-1 Fullscreen-Fix ─────────────────────────────────────────
+    'Enter fullscreen':
+        'Vollbild aktivieren',
+    'Exit fullscreen':
+        'Vollbild beenden',
+
+    # ── v1.6.0: F_AVAIL+ – Nicht-verfügbar-Dialog ────────────────────────────
+    'Mark as Unavailable':
+        'Als nicht verfügbar markieren',
+    'How long should this product be unavailable?':
+        'Wie lange soll dieses Produkt nicht verfügbar sein?',
+    'Today only':
+        'Nur heute',
+    'Until further notice':
+        'Bis auf Weiteres',
+
+    # ── v1.6.0: F17r – Zeitslot-Intervall pro Standort ───────────────────────
+    'Timeslot Interval':
+        'Zeitslot-Intervall',
+    'Interval between pickup slots. Global default: %d min.':
+        'Abstand zwischen Abholzeitfenstern. Globaler Standardwert: %d Min.',
+
+    # ── v1.6.0: F_NOTES – Positions-Notizen ──────────────────────────────────
+    'Item Notes':
+        'Positions-Notizen',
+    'Item Notes in POS':
+        'Positions-Notizen im Kassensystem',
+    'Item Notes in Online Checkout':
+        'Positions-Notizen im Online-Checkout',
+    'Allow staff to add a short note to individual cart items in the POS system.':
+        'Ermöglicht dem Personal, einzelnen Warenkorb-Artikeln im Kassensystem eine kurze Notiz hinzuzufügen.',
+    'Allow customers to add a note to individual cart items at checkout.':
+        'Ermöglicht Kunden, einzelnen Warenkorb-Artikeln im Checkout eine Notiz hinzuzufügen.',
+    'Note...':
+        'Notiz...',
+    'Note':
+        'Notiz',
+
+    # ── v1.6.0: F_TAX – Schweizer MWST ───────────────────────────────────────
+    # "Standard" = Standard-Steuerklasse in WooCommerce
+    'Standard':
+        'Standard',
+    'Swiss VAT Switching':
+        'Schweizer MWST-Umschaltung',
+    'Automatically apply different VAT rates: takeaway orders use the reduced rate, dine-in (table) orders use the standard rate.':
+        'Automatisch unterschiedliche MWST-Sätze anwenden: Take-away-Bestellungen erhalten den reduzierten Satz, Tischbestellungen den Normalsatz.',
+    'Takeaway Tax Class':
+        'Take-away-Steuerklasse',
+    'Dine-in Tax Class':
+        'Tisch-Steuerklasse',
+    'Tax class for pickup/takeaway orders (typically 2.6% in Switzerland).':
+        'Steuerklasse für Abholbestellungen/Take-away (typischerweise 2.6 % in der Schweiz).',
+    'Tax class for table/dine-in orders (typically 8.1% in Switzerland).':
+        'Steuerklasse für Tischbestellungen (typischerweise 8.1 % in der Schweiz).',
+    'Order type:':
+        'Bestellart:',
+    'Takeaway':
+        'Take-away',
+    'Dine-in':
+        'Tischbestellung',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT
