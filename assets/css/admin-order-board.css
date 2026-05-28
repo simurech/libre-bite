@@ -181,8 +181,21 @@
 .lbite-item-meta {
 	margin-left: 18px;
 	font-size: 12px;
-	color: #777;
 	font-weight: 400;
+}
+
+.lbite-item-config {
+	color: #888;
+}
+
+.lbite-item-note-badge {
+	color: #c47000;
+	background: #fff8ec;
+	border: 1px solid #f5d89a;
+	border-radius: 3px;
+	padding: 1px 5px;
+	margin-top: 2px;
+	display: inline-block;
 }
 
 /* Notizen */
@@ -419,7 +432,6 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 .lbite-item-meta {
 	margin-left: 20px;
 	font-size: 0.9em;
-	color: #666;
 }
 
 .lbite-kanban-card-notes {

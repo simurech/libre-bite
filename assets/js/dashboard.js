@@ -426,7 +426,10 @@
 				$itemDiv.append($('<span class="lbite-item-qty"></span>').text(`${item.quantity}×`));
 				$itemDiv.append($('<span class="lbite-item-name"></span>').text(` ${item.name}`));
 				if (item.meta) {
-					$itemDiv.append($('<div class="lbite-item-meta"></div>').html(item.meta));
+					$itemDiv.append($('<div class="lbite-item-meta lbite-item-config"></div>').html(item.meta));
+				}
+				if (item.note) {
+					$itemDiv.append($('<div class="lbite-item-meta lbite-item-note-badge"></div>').text(`✎ ${item.note}`));
 				}
 				$items.append($itemDiv);
 			});

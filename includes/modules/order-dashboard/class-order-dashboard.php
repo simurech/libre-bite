@@ -276,11 +276,13 @@ class LBite_Order_Dashboard {
 
 		$items = array();
 		foreach ( $order->get_items() as $item ) {
-			$product = $item->get_product();
-			$items[] = array(
+			$product   = $item->get_product();
+			$meta_data = $this->get_item_meta_split( $item );
+			$items[]   = array(
 				'name'     => $item->get_name(),
 				'quantity' => $item->get_quantity(),
-				'meta'     => $this->get_item_meta_display( $item ),
+				'meta'     => $meta_data['config'],
+				'note'     => $meta_data['note'],
 			);
 		}
 
@@ -338,29 +340,40 @@ class LBite_Order_Dashboard {
 	 * @param WC_Order_Item_Product $item Order-Item
 	 * @return string
 	 */
-	private function get_item_meta_display( $item ) {
+	/**
+	 * Positions-Meta in Konfiguration und Notiz aufteilen
+	 *
+	 * @param \WC_Order_Item $item Bestellposition
+	 * @return array{config: string, note: string}
+	 */
+	private function get_item_meta_split( $item ) {
 		$meta_data = $item->get_formatted_meta_data();
 		if ( empty( $meta_data ) ) {
-			return '';
+			return array( 'config' => '', 'note' => '' );
 		}
 
-		$meta_strings = array();
+		$wc_internal = array( '_reduced_stock', '_line_subtotal', '_line_total', '_line_tax', '_line_subtotal_tax' );
+		$config      = array();
+		$note        = '';
+
 		foreach ( $meta_data as $meta ) {
-			// Interne WooCommerce-Meta überspringen
-			if ( in_array( $meta->key, array( '_reduced_stock', '_line_subtotal', '_line_total', '_line_tax', '_line_subtotal_tax' ) ) ) {
+			if ( in_array( $meta->key, $wc_internal, true ) ) {
 				continue;
 			}
 
-			$label = $meta->display_key;
-			$value = wp_strip_all_tags( $meta->display_value );
+			$value = html_entity_decode( wp_strip_all_tags( $meta->display_value ), ENT_QUOTES, 'UTF-8' );
 
-			// HTML Entities dekodieren
-			$value = html_entity_decode( $value, ENT_QUOTES, 'UTF-8' );
-
-			$meta_strings[] = $label . ': ' . $value;
+			if ( 'Note' === $meta->key ) {
+				$note = $value;
+			} else {
+				$config[] = esc_html( $meta->display_key ) . ': ' . esc_html( $value );
+			}
 		}
 
-		return implode( '<br>', $meta_strings );
+		return array(
+			'config' => implode( '<br>', $config ),
+			'note'   => $note,
+		);
 	}
 
 	/**
