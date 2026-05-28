@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.5.0
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,14 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.6.0 =
+* Fix: Fullscreen mode in POS now works on iPad Safari (pseudo-fullscreen via CSS fallback when the Fullscreen API is unavailable) and auto-restores after Android system interruptions.
+* Feature: "Mark as unavailable" dialog in POS — when toggling a product to out-of-stock, staff can now choose between "Today only" (auto-resets after midnight) and "Until further notice".
+* Feature: Per-location timeslot interval — the pickup slot interval can now be set individually per location (overrides the global default; leave blank to inherit).
+* Feature: Item notes in POS (Settings → Products) — staff can add a short note to individual cart items; notes appear in the order detail view.
+* Feature: Item notes in online checkout (Settings → Products) — customers can add a note to individual cart items; notes appear in order details.
+* Feature (Pro): Swiss VAT switching (Settings → Checkout) — automatically applies a configurable tax class for takeaway vs. dine-in (table) orders on both the frontend checkout and POS.
 
 = 1.5.0 =
 * Feature: Feature toggles moved from a central "Features" tab into each thematic settings tab — every functional area now starts with its own master toggle.
