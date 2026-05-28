@@ -85,6 +85,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 		<?php endif; ?>
 
+		<?php if ( lbite_feature_enabled( 'enable_swiss_vat' ) && function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() ) : ?>
+		<div id="lbite-pos-vat-selector" style="<?php echo esc_attr( ! $lbite_selected_location ? 'display: none;' : '' ); ?>">
+			<label style="margin-right:6px;font-weight:600;"><?php esc_html_e( 'Order type:', 'libre-bite' ); ?></label>
+			<label class="lbite-pos-vat-option">
+				<input type="radio" name="lbite_pos_vat_type" value="takeaway" checked>
+				<?php esc_html_e( 'Takeaway', 'libre-bite' ); ?>
+			</label>
+			<label class="lbite-pos-vat-option" style="margin-left:10px;">
+				<input type="radio" name="lbite_pos_vat_type" value="dine_in">
+				<?php esc_html_e( 'Dine-in', 'libre-bite' ); ?>
+			</label>
+		</div>
+		<?php endif; ?>
+
 		<label class="lbite-wake-lock-toggle" style="margin-left: auto;">
 			<input type="checkbox" id="lbite-pos-wake-lock" checked>
 			<?php esc_html_e( 'Prevent Standby', 'libre-bite' ); ?>
@@ -240,6 +254,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<div class="lbite-modal-body" id="lbite-pos-coupon-list">
 				<!-- Wird dynamisch befüllt -->
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal: Nicht-verfügbar-Dauer wählen -->
+	<div id="lbite-unavailable-dialog" class="lbite-modal" style="display: none;">
+		<div class="lbite-modal-overlay"></div>
+		<div class="lbite-modal-content" style="max-width:400px;">
+			<div class="lbite-modal-header">
+				<h2><?php esc_html_e( 'Mark as Unavailable', 'libre-bite' ); ?></h2>
+			</div>
+			<div class="lbite-modal-body" style="padding:20px 24px;">
+				<p style="margin:0 0 16px;"><?php esc_html_e( 'How long should this product be unavailable?', 'libre-bite' ); ?></p>
+				<div style="display:flex;gap:10px;flex-wrap:wrap;">
+					<button type="button" class="button button-primary" id="lbite-unavailable-today"><?php esc_html_e( 'Today only', 'libre-bite' ); ?></button>
+					<button type="button" class="button" id="lbite-unavailable-indefinite"><?php esc_html_e( 'Until further notice', 'libre-bite' ); ?></button>
+					<button type="button" class="button" id="lbite-unavailable-cancel"><?php esc_html_e( 'Cancel', 'libre-bite' ); ?></button>
+				</div>
 			</div>
 		</div>
 	</div>
