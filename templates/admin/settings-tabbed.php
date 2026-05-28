@@ -85,6 +85,12 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_tip_label_1', isset( $_POST['lbite_tip_label_1'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_1'] ) ) : '' );
 			update_option( 'lbite_tip_label_2', isset( $_POST['lbite_tip_label_2'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_2'] ) ) : '' );
 			update_option( 'lbite_tip_label_3', isset( $_POST['lbite_tip_label_3'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_3'] ) ) : '' );
+			if ( $lbite_premium_allowed ) {
+				$lbite_features['enable_swiss_vat'] = isset( $_POST['lbite_feature_toggle']['enable_swiss_vat'] );
+				update_option( 'lbite_tax_class_takeaway', isset( $_POST['lbite_tax_class_takeaway'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tax_class_takeaway'] ) ) : '' );
+				update_option( 'lbite_tax_class_dine_in', isset( $_POST['lbite_tax_class_dine_in'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tax_class_dine_in'] ) ) : '' );
+				update_option( 'lbite_features', $lbite_features );
+			}
 			$lbite_did_save = true;
 			break;
 
@@ -224,7 +230,9 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 
 		case 'products':
 			$lbite_features = get_option( 'lbite_features', array() );
-			$lbite_features['enable_product_options'] = isset( $_POST['lbite_feature_toggle']['enable_product_options'] );
+			$lbite_features['enable_product_options']     = isset( $_POST['lbite_feature_toggle']['enable_product_options'] );
+			$lbite_features['enable_item_notes_pos']      = isset( $_POST['lbite_feature_toggle']['enable_item_notes_pos'] );
+			$lbite_features['enable_item_notes_checkout'] = isset( $_POST['lbite_feature_toggle']['enable_item_notes_checkout'] );
 			if ( $lbite_premium_allowed ) {
 				$lbite_features['enable_nutritional_info'] = isset( $_POST['lbite_feature_toggle']['enable_nutritional_info'] );
 				$lbite_features['enable_allergens']        = isset( $_POST['lbite_feature_toggle']['enable_allergens'] );
@@ -514,6 +522,50 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 						});
 					})();
 					</script>
+					<?php endif; ?>
+
+					<?php
+					$lbite_toggle_key             = 'enable_swiss_vat';
+					$lbite_toggle_label           = __( 'Swiss VAT Switching', 'libre-bite' );
+					$lbite_toggle_description     = __( 'Automatically apply different VAT rates: takeaway orders use the reduced rate, dine-in (table) orders use the standard rate.', 'libre-bite' );
+					$lbite_toggle_is_pro          = true;
+					$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+					?>
+
+					<?php if ( $lbite_premium_allowed && lbite_feature_enabled( 'enable_swiss_vat' ) ) :
+						$lbite_tax_class_takeaway = get_option( 'lbite_tax_class_takeaway', '' );
+						$lbite_tax_class_dine_in  = get_option( 'lbite_tax_class_dine_in', '' );
+						$lbite_wc_tax_classes     = array_merge( array( '' => __( 'Standard', 'libre-bite' ) ), WC_Tax::get_tax_classes() );
+					?>
+					<table class="form-table">
+						<tr>
+							<th><?php esc_html_e( 'Takeaway Tax Class', 'libre-bite' ); ?></th>
+							<td>
+								<select name="lbite_tax_class_takeaway">
+									<?php foreach ( $lbite_wc_tax_classes as $lbite_slug => $lbite_name ) : ?>
+										<option value="<?php echo esc_attr( sanitize_title( $lbite_name ) ); ?>" <?php selected( $lbite_tax_class_takeaway, sanitize_title( $lbite_name ) ); ?>>
+											<?php echo esc_html( is_int( $lbite_slug ) ? $lbite_name : __( 'Standard', 'libre-bite' ) ); ?>
+										</option>
+									<?php endforeach; ?>
+								</select>
+								<p class="description"><?php esc_html_e( 'Tax class for pickup/takeaway orders (typically 2.6% in Switzerland).', 'libre-bite' ); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<th><?php esc_html_e( 'Dine-in Tax Class', 'libre-bite' ); ?></th>
+							<td>
+								<select name="lbite_tax_class_dine_in">
+									<?php foreach ( $lbite_wc_tax_classes as $lbite_slug => $lbite_name ) : ?>
+										<option value="<?php echo esc_attr( sanitize_title( $lbite_name ) ); ?>" <?php selected( $lbite_tax_class_dine_in, sanitize_title( $lbite_name ) ); ?>>
+											<?php echo esc_html( is_int( $lbite_slug ) ? $lbite_name : __( 'Standard', 'libre-bite' ) ); ?>
+										</option>
+									<?php endforeach; ?>
+								</select>
+								<p class="description"><?php esc_html_e( 'Tax class for table/dine-in orders (typically 8.1% in Switzerland).', 'libre-bite' ); ?></p>
+							</td>
+						</tr>
+					</table>
 					<?php endif; ?>
 
 					<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
