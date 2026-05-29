@@ -596,16 +596,19 @@
 				productPrice = parseFloat(selectedVariation.data('price'));
 			}
 
-			// Meta-String für Optionen sammeln
+			// Meta-String und Option-IDs sammeln
 			let meta = [];
+			let optionIds = [];
 
 			// Ausgewählte Optionen
 			$('#lbite-modal-body input:checked').each(function() {
 				if ($(this).attr('name') !== 'variation') {
 					const label = $(this).val();
 					const price = parseFloat($(this).data('price') || 0);
+					const optId  = parseInt($(this).data('option-id') || 0, 10);
 					meta.push(label);
 					productPrice += price;
+					if (optId) optionIds.push(optId);
 				}
 			});
 
@@ -622,6 +625,7 @@
 					price: productPrice,
 					quantity: 1,
 					meta: metaString,
+					option_ids: optionIds,
 					note: ''
 				});
 			}
