@@ -960,10 +960,16 @@ class LBite_Admin {
 				// damit calculate_totals() keine Steuer doppelt aufschlägt.
 				$addon_extra = 0.0;
 				if ( ! empty( $item['option_ids'] ) ) {
-					// Nur Option-IDs akzeptieren, die dem Produkt tatsächlich zugewiesen sind.
-					$allowed_options = (array) get_post_meta( $item['id'], '_lbite_product_options', true );
+					// _lbite_product_options hängt am Eltern-Produkt; bei Varianten Parent-ID nutzen.
+					$options_lookup_id = $product->is_type( 'variation' ) ? $product->get_parent_id() : $item['id'];
+					$allowed_options   = get_post_meta( $options_lookup_id, '_lbite_product_options', true );
+					if ( ! is_array( $allowed_options ) ) {
+						$allowed_options = array();
+					}
 					foreach ( $item['option_ids'] as $opt_id ) {
-						if ( ! in_array( $opt_id, $allowed_options, true ) ) {
+						// Lose Prüfung: WP serialisiert Integers; JSON-Decode liefert ebenfalls Integers,
+						// aber beim Mischen von alten/neuen Datenbankwerten können Typen abweichen.
+						if ( ! in_array( $opt_id, $allowed_options ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 							continue;
 						}
 						$opt_price = get_post_meta( $opt_id, '_lbite_price', true );

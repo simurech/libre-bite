@@ -1657,15 +1657,17 @@ class LBite_Checkout {
 	public function filter_swiss_vat_tax_class__premium_only( $tax_class, $product ) {
 		// POS-Kontext (statisch gesetzt vor Item-Erstellung in ajax_pos_create_order)
 		if ( null !== self::$pos_vat_context ) {
-			$new = get_option( 'lbite_tax_class_' . self::$pos_vat_context, '' );
-			return '' !== $new ? $new : $tax_class;
+			// false als Default: Option nicht gesetzt → kein Override.
+			// '' ist gültiger WC-Wert für die Standard-Steuerklasse → muss angewendet werden.
+			$new = get_option( 'lbite_tax_class_' . self::$pos_vat_context, false );
+			return false !== $new ? $new : $tax_class;
 		}
 		// Frontend-Checkout-Kontext
 		if ( WC()->session ) {
 			$table_id = WC()->session->get( 'lbite_table_id' );
 			$key      = $table_id ? 'lbite_tax_class_dine_in' : 'lbite_tax_class_takeaway';
-			$new      = get_option( $key, '' );
-			return '' !== $new ? $new : $tax_class;
+			$new      = get_option( $key, false );
+			return false !== $new ? $new : $tax_class;
 		}
 		return $tax_class;
 	}
