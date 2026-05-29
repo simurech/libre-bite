@@ -5718,6 +5718,7 @@ msgstr "Reservierungsübersicht"
 msgid ""
 "Allow guests to scan a QR code at their table and place orders directly."
 msgstr ""
+"Gäste können einen QR-Code am Tisch scannen und direkt bestellen."
 
 #: templates/admin/settings/tables__premium_only.php:31
 msgid "Table Order Page"
@@ -5741,6 +5742,8 @@ msgid ""
 "Create tables and generate QR codes for each. Guests scan the QR code to "
 "start ordering."
 msgstr ""
+"Tische anlegen und für jeden einen QR-Code generieren. Gäste scannen den "
+"QR-Code und bestellen direkt."
 
 #: templates/admin/statistics.php:32
 msgid "Last 7 Days"
