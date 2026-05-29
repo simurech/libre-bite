@@ -85,8 +85,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 		<?php endif; ?>
 
-		<?php if ( lbite_feature_enabled( 'enable_swiss_vat' ) && function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() ) : ?>
-		<div id="lbite-pos-vat-selector" style="<?php echo esc_attr( ! $lbite_selected_location ? 'display: none;' : '' ); ?>">
+		<?php if ( lbite_feature_enabled( 'enable_swiss_vat' ) ) : ?>
+		<div id="lbite-pos-vat-selector">
 			<label style="margin-right:6px;font-weight:600;"><?php esc_html_e( 'Order type:', 'libre-bite' ); ?></label>
 			<label class="lbite-pos-vat-option">
 				<input type="radio" name="lbite_pos_vat_type" value="takeaway" checked>

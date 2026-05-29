@@ -55,16 +55,6 @@ jQuery(document).ready(function($) {
 						$tableSelect.empty().append($('<option>').val('').text(noTableLabel));
 					}
 
-					// MWST-Selektor einblenden/ausblenden
-					var $vatSelector = $('#lbite-pos-vat-selector');
-					if ($vatSelector.length) {
-						if (locationId) {
-							$vatSelector.show();
-						} else {
-							$vatSelector.hide();
-						}
-					}
-
 					// No-Location-Overlay aktualisieren
 					if (!locationId) {
 						$('.lbite-pos-products').addClass('lbite-pos-no-location');
