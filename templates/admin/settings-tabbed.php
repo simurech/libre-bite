@@ -543,9 +543,11 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 							<th><?php esc_html_e( 'Takeaway Tax Class', 'libre-bite' ); ?></th>
 							<td>
 								<select name="lbite_tax_class_takeaway">
-									<?php foreach ( $lbite_wc_tax_classes as $lbite_slug => $lbite_name ) : ?>
-										<option value="<?php echo esc_attr( sanitize_title( $lbite_name ) ); ?>" <?php selected( $lbite_tax_class_takeaway, sanitize_title( $lbite_name ) ); ?>>
-											<?php echo esc_html( is_int( $lbite_slug ) ? $lbite_name : __( 'Standard', 'libre-bite' ) ); ?>
+									<?php foreach ( $lbite_wc_tax_classes as $lbite_slug => $lbite_name ) :
+										$lbite_value = ( '' === $lbite_slug ) ? '' : sanitize_title( $lbite_name );
+									?>
+										<option value="<?php echo esc_attr( $lbite_value ); ?>" <?php selected( $lbite_tax_class_takeaway, $lbite_value ); ?>>
+											<?php echo esc_html( '' === $lbite_slug ? __( 'Standard', 'libre-bite' ) : $lbite_name ); ?>
 										</option>
 									<?php endforeach; ?>
 								</select>
@@ -556,9 +558,11 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 							<th><?php esc_html_e( 'Dine-in Tax Class', 'libre-bite' ); ?></th>
 							<td>
 								<select name="lbite_tax_class_dine_in">
-									<?php foreach ( $lbite_wc_tax_classes as $lbite_slug => $lbite_name ) : ?>
-										<option value="<?php echo esc_attr( sanitize_title( $lbite_name ) ); ?>" <?php selected( $lbite_tax_class_dine_in, sanitize_title( $lbite_name ) ); ?>>
-											<?php echo esc_html( is_int( $lbite_slug ) ? $lbite_name : __( 'Standard', 'libre-bite' ) ); ?>
+									<?php foreach ( $lbite_wc_tax_classes as $lbite_slug => $lbite_name ) :
+										$lbite_value = ( '' === $lbite_slug ) ? '' : sanitize_title( $lbite_name );
+									?>
+										<option value="<?php echo esc_attr( $lbite_value ); ?>" <?php selected( $lbite_tax_class_dine_in, $lbite_value ); ?>>
+											<?php echo esc_html( '' === $lbite_slug ? __( 'Standard', 'libre-bite' ) : $lbite_name ); ?>
 										</option>
 									<?php endforeach; ?>
 								</select>
