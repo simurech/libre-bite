@@ -5,7 +5,7 @@
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
  * Version:           1.6.0
  * Requires at least: 6.0
- * Requires PHP:      8.0
+ * Requires PHP:      8.1
  * Author:            urech.dev
  * Author URI:        https://urech.dev/
  * License:           GPL-2.0-or-later
