@@ -193,7 +193,7 @@ $lbite_receipt_nonce    = wp_create_nonce( 'lbite_send_receipt_' . $lbite_order_
 							<?php echo esc_html( $item->get_name() ); ?>
 							<?php
 							// Meta-Daten anzeigen.
-							$item_meta = $item->get_meta( 'Konfiguration' );
+							$item_meta = $item->get_meta( 'Add-on' );
 							if ( $item_meta ) :
 								?>
 								<span class="lbite-item-meta"><?php echo esc_html( $item_meta ); ?></span>

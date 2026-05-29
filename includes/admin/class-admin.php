@@ -883,16 +883,21 @@ class LBite_Admin {
 			$quantity   = isset( $raw_item['quantity'] ) ? (int) $raw_item['quantity'] : 0;
 			$meta       = isset( $raw_item['meta'] ) ? sanitize_text_field( $raw_item['meta'] ) : '';
 			$note       = isset( $raw_item['note'] ) ? sanitize_text_field( $raw_item['note'] ) : '';
+			$option_ids = array();
+			if ( isset( $raw_item['option_ids'] ) && is_array( $raw_item['option_ids'] ) ) {
+				$option_ids = array_map( 'absint', $raw_item['option_ids'] );
+			}
 
 			if ( ! $product_id || $quantity <= 0 ) {
 				continue;
 			}
 
 			$cart_items[] = array(
-				'id'       => $product_id,
-				'quantity' => $quantity,
-				'meta'     => $meta,
-				'note'     => $note,
+				'id'         => $product_id,
+				'quantity'   => $quantity,
+				'meta'       => $meta,
+				'option_ids' => $option_ids,
+				'note'       => $note,
 			);
 		}
 
@@ -950,11 +955,25 @@ class LBite_Admin {
 					continue;
 				}
 
-				// Client-Preis ignorieren – echten Produktpreis aus WooCommerce verwenden.
-				// WC erwartet Netto-Preise als subtotal/total; wc_get_price_excluding_tax()
-				// berücksichtigt die globale Einstellung «Preise inkl. Steuern» korrekt,
+				// Basispreis aus WooCommerce; Add-on-Aufpreis serverseitig aus DB addieren.
+				// wc_get_price_excluding_tax() berücksichtigt «Preise inkl. Steuern» korrekt,
 				// damit calculate_totals() keine Steuer doppelt aufschlägt.
-				$price_excl_tax = wc_get_price_excluding_tax( $product, array( 'qty' => $item['quantity'] ) );
+				$addon_extra = 0.0;
+				if ( ! empty( $item['option_ids'] ) ) {
+					// Nur Option-IDs akzeptieren, die dem Produkt tatsächlich zugewiesen sind.
+					$allowed_options = (array) get_post_meta( $item['id'], '_lbite_product_options', true );
+					foreach ( $item['option_ids'] as $opt_id ) {
+						if ( ! in_array( $opt_id, $allowed_options, true ) ) {
+							continue;
+						}
+						$opt_price = get_post_meta( $opt_id, '_lbite_price', true );
+						if ( $opt_price ) {
+							$addon_extra += floatval( $opt_price );
+						}
+					}
+				}
+				$unit_price_excl = wc_get_price_excluding_tax( $product ) + wc_get_price_excluding_tax( $product, array( 'price' => $addon_extra ) );
+				$price_excl_tax  = $unit_price_excl * $item['quantity'];
 
 				$order_item_id = $order->add_product(
 					$product,
@@ -970,10 +989,10 @@ class LBite_Admin {
 					$order_item = $order->get_item( $order_item_id );
 					if ( $order_item ) {
 						if ( ! empty( $item['meta'] ) ) {
-							$order_item->add_meta_data( 'Konfiguration', $item['meta'], true );
+							$order_item->add_meta_data( 'Add-on', $item['meta'], true );
 						}
 						if ( ! empty( $item['note'] ) && lbite_feature_enabled( 'enable_item_notes_pos' ) ) {
-							$order_item->add_meta_data( __( 'Note', 'libre-bite' ), sanitize_text_field( $item['note'] ), true );
+							$order_item->add_meta_data( 'Note', sanitize_text_field( $item['note'] ), true );
 						}
 						$order_item->save();
 					}

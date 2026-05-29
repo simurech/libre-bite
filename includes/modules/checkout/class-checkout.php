@@ -1643,7 +1643,7 @@ class LBite_Checkout {
 		}
 		$note = sanitize_text_field( wp_unslash( $_POST['lbite_item_notes'][ $cart_item_key ] ) );
 		if ( '' !== $note ) {
-			$item->add_meta_data( __( 'Note', 'libre-bite' ), $note, true );
+			$item->add_meta_data( 'Note', $note, true );
 		}
 	}
 
