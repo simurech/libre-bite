@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.6.0
+Stable tag: 1.6.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 1.6.1 =
+* Fix: POS order type selector (Takeaway / Dine-in) for Swiss VAT now appears correctly when the feature is enabled — the redundant premium check in the template has been removed.
+* Fix: Two untranslated strings in the table settings panel (de_CH, de_CH_informal, de_DE, de_DE_formal, de_AT).
+* Update: Minimum PHP version raised to 8.1; tested up to WordPress 7.0.
 
 = 1.6.0 =
 * Fix: Fullscreen mode in POS now works on iPad Safari (pseudo-fullscreen via CSS fallback when the Fullscreen API is unavailable) and auto-restores after Android system interruptions.
