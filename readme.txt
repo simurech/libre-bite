@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.6.2
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,10 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.0 =
+* Fix: POS add-on prices are now correctly included in the order total for both simple and variable products; validation now correctly uses the parent product ID when a variation is selected.
+* Fix: Swiss VAT filter now correctly applies the WooCommerce standard tax class (empty string) when configured as the target class for takeaway or dine-in orders. Re-save Settings → Checkout after updating.
 
 = 1.6.2 =
 * Fix: Swiss VAT tax class selection — standard tax class was incorrectly saved as 'standard' instead of '' (empty string) as required by WooCommerce; both dropdowns corrected. Re-save Settings → Checkout after updating.
