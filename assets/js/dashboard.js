@@ -417,6 +417,12 @@
 			if (order.table_id) {
 				$badge.append($('<span class="lbite-badge-chip lbite-badge-table"></span>').text(`🪑 Tisch`));
 			}
+			if (order.payment_method) {
+				const pmLabel = (lbiteDashboard.paymentMethods && lbiteDashboard.paymentMethods[order.payment_method])
+					? lbiteDashboard.paymentMethods[order.payment_method]
+					: order.payment_method;
+				$badge.append($('<span class="lbite-badge-chip lbite-badge-payment"></span>').text(pmLabel));
+			}
 			$card.append($badge);
 
 			// Artikel-Liste (Hauptinhalt)

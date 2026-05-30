@@ -381,24 +381,65 @@ class LBite_Product_Options {
 	/**
 	 * Optionen zu Bestellung hinzufügen
 	 *
+	 * Jedes Add-on wird als separate WC_Order_Item_Fee erfasst;
+	 * der Produktpreis in der Bestellung wird entsprechend reduziert.
+	 * add_cart_item_price() hat den Add-on-Brutto bereits zum Produktpreis addiert.
+	 *
 	 * @param WC_Order_Item_Product $item          Order-Item
 	 * @param string                $cart_item_key Cart-Item-Key
 	 * @param array                 $values        Werte
 	 * @param WC_Order              $order         Bestellung
 	 */
 	public function add_order_item_meta( $item, $cart_item_key, $values, $order ) {
-		if ( ! empty( $values['lbite_options'] ) ) {
-			$option_names = array();
-			foreach ( $values['lbite_options'] as $option_id ) {
-				$option = get_post( $option_id );
-				if ( $option ) {
-					$option_names[] = $option->post_title;
-				}
+		if ( empty( $values['lbite_options'] ) ) {
+			return;
+		}
+
+		$product     = $item->get_product();
+		$qty         = $item->get_quantity();
+		$addon_names = array();
+		$addon_items = array();
+
+		foreach ( $values['lbite_options'] as $option_id ) {
+			$option    = get_post( $option_id );
+			$opt_price = floatval( get_post_meta( $option_id, '_lbite_price', true ) );
+			if ( ! $option ) {
+				continue;
+			}
+			$addon_names[] = $option->post_title;
+			if ( $opt_price > 0 ) {
+				$addon_items[] = array(
+					'name'  => $option->post_title,
+					'gross' => $opt_price,
+				);
+			}
+		}
+
+		// Add-ons als separate Gebührenpositionen; Produktzwischensumme korrigieren.
+		if ( ! empty( $addon_items ) && $product ) {
+			$total_addon_excl = 0.0;
+			foreach ( $addon_items as $addon ) {
+				$addon_net         = wc_get_price_excluding_tax( $product, array( 'price' => $addon['gross'] ) );
+				$total_addon_excl += $addon_net;
+
+				$fee_item = new WC_Order_Item_Fee();
+				$fee_item->set_name( $addon['name'] );
+				$fee_item->set_amount( $addon_net * $qty );
+				$fee_item->set_total( $addon_net * $qty );
+				$fee_item->set_tax_class( $product->get_tax_class() );
+				$fee_item->set_tax_status( $product->get_tax_status() );
+				$order->add_item( $fee_item );
 			}
 
-			if ( ! empty( $option_names ) ) {
-				$item->add_meta_data( __( 'Options', 'libre-bite' ), implode( ', ', $option_names ), true );
-			}
+			// Produktpreis um Add-on-Anteil reduzieren (Brutto wurde in add_cart_item_price addiert).
+			$addon_excl_total = $total_addon_excl * $qty;
+			$item->set_subtotal( max( 0.0, (float) $item->get_subtotal() - $addon_excl_total ) );
+			$item->set_total( max( 0.0, (float) $item->get_total() - $addon_excl_total ) );
+		}
+
+		// Meta für Admin-Anzeige und E-Mails.
+		if ( ! empty( $addon_names ) ) {
+			$item->add_meta_data( __( 'Options', 'libre-bite' ), implode( ', ', $addon_names ), true );
 		}
 	}
 

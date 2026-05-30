@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.1 =
+* Fix: Add-ons now appear as separate line items in WooCommerce orders (POS and frontend); the product price is no longer inflated by the add-on amount.
+* Fix: POS orders no longer inherit scheduled pickup times from previous frontend test sessions; the pickup time meta is explicitly cleared on every POS order.
+* Fix: Payment method selected in POS is now visible in the Kanban board and in the statistics breakdown.
+* Feature: New "Prices & Taxes" settings tab — price rounding and Swiss VAT switching settings moved from the Checkout tab; added a direct link to WooCommerce Tax Settings.
 
 = 2.0.0 =
 * Fix: POS add-on prices are now correctly included in the order total for both simple and variable products; validation now correctly uses the parent product ID when a variation is selected.

@@ -7105,3 +7105,15 @@ msgstr "Bestellt am:"
 
 #~ msgid "Location management"
 #~ msgstr "Standortverwaltung"
+
+msgid "Prices & Taxes"
+msgstr "Preise & Steuern"
+
+msgid "WooCommerce Tax Settings →"
+msgstr "WooCommerce-Steuereinstellungen →"
+
+msgid "Payment Methods (POS)"
+msgstr "Zahlungsarten (Kasse)"
+
+msgid "Payment Method"
+msgstr "Zahlungsart"

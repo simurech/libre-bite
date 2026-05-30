@@ -156,6 +156,11 @@
 	color: #1a5276;
 }
 
+.lbite-badge-payment {
+	background: #f0f0f0;
+	color: #444;
+}
+
 /* Artikel-Liste: gross und fett */
 .lbite-kanban-card-items {
 	margin-bottom: 6px;
@@ -185,7 +190,8 @@
 }
 
 .lbite-item-config {
-	color: #888;
+	color: #555;
+	font-weight: 500;
 }
 
 .lbite-item-note-badge {

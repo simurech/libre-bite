@@ -60,7 +60,21 @@ $lbite_stat_orders = wc_get_orders( array(
 	'return'     => 'objects',
 ) );
 
-$lbite_totals = array();
+$lbite_totals           = array();
+$lbite_payment_totals   = array();
+$lbite_pm_config        = get_option( 'lbite_pos_payment_methods', array() );
+$lbite_pm_label_map     = array(
+	'cash'  => __( 'Cash', 'libre-bite' ),
+	'card'  => __( 'Card', 'libre-bite' ),
+	'twint' => __( 'Twint', 'libre-bite' ),
+	'other' => __( 'Other', 'libre-bite' ),
+);
+foreach ( $lbite_pm_config as $lbite_pm ) {
+	if ( ! empty( $lbite_pm['key'] ) && ! empty( $lbite_pm['label'] ) ) {
+		$lbite_pm_label_map[ $lbite_pm['key'] ] = $lbite_pm['label'];
+	}
+}
+
 foreach ( $lbite_stat_orders as $lbite_order ) {
 	$lbite_loc_id = (int) $lbite_order->get_meta( '_lbite_location_id' );
 
@@ -82,6 +96,17 @@ foreach ( $lbite_stat_orders as $lbite_order ) {
 			$lbite_totals[ $lbite_loc_name ]['products'][ $lbite_pname ] = 0;
 		}
 		$lbite_totals[ $lbite_loc_name ]['products'][ $lbite_pname ] += $lbite_qty;
+	}
+
+	// Zahlungsart für POS-Statistik erfassen.
+	$lbite_pm_key = $lbite_order->get_meta( '_lbite_payment_method' );
+	if ( $lbite_pm_key ) {
+		$lbite_pm_display = isset( $lbite_pm_label_map[ $lbite_pm_key ] ) ? $lbite_pm_label_map[ $lbite_pm_key ] : $lbite_pm_key;
+		if ( ! isset( $lbite_payment_totals[ $lbite_pm_display ] ) ) {
+			$lbite_payment_totals[ $lbite_pm_display ] = array( 'count' => 0, 'revenue' => 0.0 );
+		}
+		$lbite_payment_totals[ $lbite_pm_display ]['count']++;
+		$lbite_payment_totals[ $lbite_pm_display ]['revenue'] += (float) $lbite_order->get_total();
 	}
 }
 
@@ -116,6 +141,28 @@ $lbite_avg_order     = $lbite_total_orders > 0 ? $lbite_total_revenue / $lbite_t
 			<div style="color:#50575e; font-size:13px; margin-top:4px;"><?php esc_html_e( 'Avg. Order Value', 'libre-bite' ); ?></div>
 		</div>
 	</div>
+
+	<?php if ( ! empty( $lbite_payment_totals ) ) : ?>
+	<h2 style="margin-top: 32px;"><?php esc_html_e( 'Payment Methods (POS)', 'libre-bite' ); ?></h2>
+	<table class="widefat" style="max-width: 500px; margin-bottom: 32px;">
+		<thead>
+			<tr>
+				<th><?php esc_html_e( 'Payment Method', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Orders', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Revenue', 'libre-bite' ); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ( $lbite_payment_totals as $lbite_pm_n => $lbite_pm_d ) : ?>
+			<tr>
+				<td><strong><?php echo esc_html( $lbite_pm_n ); ?></strong></td>
+				<td><?php echo esc_html( $lbite_pm_d['count'] ); ?></td>
+				<td><?php echo wp_kses_post( wc_price( $lbite_pm_d['revenue'] ) ); ?></td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+	<?php endif; ?>
 
 	<?php if ( ! empty( $lbite_totals ) ) : ?>
 	<table class="widefat" style="max-width: 700px;">

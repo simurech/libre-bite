@@ -24,6 +24,7 @@ $lbite_tabs = array(
 	'orders'        => __( 'Orders', 'libre-bite' ),
 	'pos'           => __( 'POS System', 'libre-bite' ),
 	'checkout'      => __( 'Checkout', 'libre-bite' ),
+	'prices_taxes'  => __( 'Prices & Taxes', 'libre-bite' ),
 	'products'      => __( 'Products', 'libre-bite' ),
 	'tables'        => __( 'Tables', 'libre-bite' ),
 	'reservations'  => __( 'Reservations', 'libre-bite' ),
@@ -54,8 +55,6 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 	switch ( $lbite_save_tab ) {
 		case 'checkout':
 			$lbite_features = get_option( 'lbite_features', array() );
-			$lbite_features['enable_rounding'] = isset( $_POST['lbite_feature_toggle']['enable_rounding'] );
-			update_option( 'lbite_enable_rounding', $lbite_features['enable_rounding'] );
 			if ( $lbite_premium_allowed ) {
 				$lbite_features['enable_optimized_checkout'] = isset( $_POST['lbite_feature_toggle']['enable_optimized_checkout'] );
 				$lbite_features['enable_tips']               = isset( $_POST['lbite_feature_toggle']['enable_tips'] );
@@ -85,12 +84,19 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_tip_label_1', isset( $_POST['lbite_tip_label_1'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_1'] ) ) : '' );
 			update_option( 'lbite_tip_label_2', isset( $_POST['lbite_tip_label_2'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_2'] ) ) : '' );
 			update_option( 'lbite_tip_label_3', isset( $_POST['lbite_tip_label_3'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_3'] ) ) : '' );
+			$lbite_did_save = true;
+			break;
+
+		case 'prices_taxes':
+			$lbite_features                    = get_option( 'lbite_features', array() );
+			$lbite_features['enable_rounding'] = isset( $_POST['lbite_feature_toggle']['enable_rounding'] );
+			update_option( 'lbite_enable_rounding', $lbite_features['enable_rounding'] );
 			if ( $lbite_premium_allowed ) {
 				$lbite_features['enable_swiss_vat'] = isset( $_POST['lbite_feature_toggle']['enable_swiss_vat'] );
 				update_option( 'lbite_tax_class_takeaway', isset( $_POST['lbite_tax_class_takeaway'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tax_class_takeaway'] ) ) : '' );
 				update_option( 'lbite_tax_class_dine_in', isset( $_POST['lbite_tax_class_dine_in'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tax_class_dine_in'] ) ) : '' );
-				update_option( 'lbite_features', $lbite_features );
 			}
+			update_option( 'lbite_features', $lbite_features );
 			$lbite_did_save = true;
 			break;
 
@@ -403,12 +409,6 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					<input type="hidden" name="lbite_save_tab" value="checkout">
 
 					<?php
-					$lbite_toggle_key         = 'enable_rounding';
-					$lbite_toggle_label       = __( 'Price Rounding', 'libre-bite' );
-					$lbite_toggle_description = __( 'Round total to 5 cents (0.05 CHF). Prevents rounding errors when combining vouchers and tips. Recommended for Swiss businesses.', 'libre-bite' );
-					$lbite_toggle_is_pro      = false;
-					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
-
 					$lbite_toggle_key             = 'enable_optimized_checkout';
 					$lbite_toggle_label           = __( 'Optimized Checkout', 'libre-bite' );
 					$lbite_toggle_description     = __( 'Replace WooCommerce fields with a minimal checkout: name and receipt option only.', 'libre-bite' );
@@ -524,7 +524,29 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					</script>
 					<?php endif; ?>
 
+					<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
+				</form>
+
+				<hr style="margin: 24px 0;">
+				<h3><?php esc_html_e( 'Fields in Standard Checkout', 'libre-bite' ); ?></h3>
+				<p class="description"><?php esc_html_e( 'Choose which fields and options are displayed at checkout.', 'libre-bite' ); ?></p>
+				<?php
+				include LBITE_PLUGIN_DIR . 'templates/admin/checkout-fields.php';
+				break;
+
+			case 'prices_taxes':
+				?>
+				<form method="post">
+					<?php wp_nonce_field( 'lbite_settings' ); ?>
+					<input type="hidden" name="lbite_save_tab" value="prices_taxes">
+
 					<?php
+					$lbite_toggle_key         = 'enable_rounding';
+					$lbite_toggle_label       = __( 'Price Rounding', 'libre-bite' );
+					$lbite_toggle_description = __( 'Round total to 5 cents (0.05 CHF). Prevents rounding errors when combining vouchers and tips. Recommended for Swiss businesses.', 'libre-bite' );
+					$lbite_toggle_is_pro      = false;
+					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
 					$lbite_toggle_key             = 'enable_swiss_vat';
 					$lbite_toggle_label           = __( 'Swiss VAT Switching', 'libre-bite' );
 					$lbite_toggle_description     = __( 'Automatically apply different VAT rates: takeaway orders use the reduced rate, dine-in (table) orders use the standard rate.', 'libre-bite' );
@@ -576,10 +598,12 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				</form>
 
 				<hr style="margin: 24px 0;">
-				<h3><?php esc_html_e( 'Fields in Standard Checkout', 'libre-bite' ); ?></h3>
-				<p class="description"><?php esc_html_e( 'Choose which fields and options are displayed at checkout.', 'libre-bite' ); ?></p>
+				<p>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-settings&tab=tax' ) ); ?>" class="button">
+						<?php esc_html_e( 'WooCommerce Tax Settings →', 'libre-bite' ); ?>
+					</a>
+				</p>
 				<?php
-				include LBITE_PLUGIN_DIR . 'templates/admin/checkout-fields.php';
 				break;
 
 			case 'orders':

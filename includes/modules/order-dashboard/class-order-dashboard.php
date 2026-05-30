@@ -269,10 +269,11 @@ class LBite_Order_Dashboard {
 	 * @return array
 	 */
 	private function format_order_for_dashboard( $order ) {
-		$order_type  = $order->get_meta( '_lbite_order_type', true );
-		$pickup_time = $order->get_meta( '_lbite_pickup_time', true );
-		$location    = $order->get_meta( '_lbite_location_name', true );
-		$table_id    = $order->get_meta( '_lbite_table_id', true );
+		$order_type     = $order->get_meta( '_lbite_order_type', true );
+		$pickup_time    = $order->get_meta( '_lbite_pickup_time', true );
+		$location       = $order->get_meta( '_lbite_location_name', true );
+		$table_id       = $order->get_meta( '_lbite_table_id', true );
+		$payment_method = $order->get_meta( '_lbite_payment_method', true );
 
 		$items = array();
 		foreach ( $order->get_items() as $item ) {
@@ -298,19 +299,20 @@ class LBite_Order_Dashboard {
 		$billing_email = $order->get_billing_email();
 
 		$data = array(
-			'id'          => $order->get_id(),
-			'number'      => $order->get_order_number(),
-			'date'        => $order->get_date_created()->format( 'H:i' ),
-			'type'        => $order_type,
-			'pickup_time' => $pickup_time ? $this->format_pickup_time_for_display( $pickup_time ) : '',
-			'location'    => $location,
-			'table_id'    => $table_id,
-			'customer'    => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
-			'total'       => $order->get_formatted_order_total(),
-			'items'       => $items,
-			'notes'       => $order->get_customer_note(),
-			'is_future'   => $is_future,
-			'has_email'   => ! empty( $billing_email ) && strpos( $billing_email, '@nomail.local' ) === false,
+			'id'             => $order->get_id(),
+			'number'         => $order->get_order_number(),
+			'date'           => $order->get_date_created()->format( 'H:i' ),
+			'type'           => $order_type,
+			'pickup_time'    => $pickup_time ? $this->format_pickup_time_for_display( $pickup_time ) : '',
+			'location'       => $location,
+			'table_id'       => $table_id,
+			'customer'       => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+			'total'          => $order->get_formatted_order_total(),
+			'items'          => $items,
+			'notes'          => $order->get_customer_note(),
+			'is_future'      => $is_future,
+			'has_email'      => ! empty( $billing_email ) && strpos( $billing_email, '@nomail.local' ) === false,
+			'payment_method' => $payment_method ?: '',
 		);
 
 		return apply_filters( 'lbite_dashboard_order_data', $data, $order );
@@ -629,8 +631,19 @@ class LBite_Order_Dashboard {
 		}
 
 		// Fallback: Location-Meta aus Session setzen falls nicht vorhanden.
+		// Nur bei echtem WC-Frontend-Checkout anwenden – POS-Bestellungen sollen
+		// keine veralteten Session-Werte (z.B. frühere Vorbestellungs-Tests) erben.
 		$location_id = $order->get_meta( '_lbite_location_id', true );
 		if ( ! $location_id && function_exists( 'WC' ) && WC()->session ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nur Lesezugriff zur Unterscheidung von Checkout vs. AJAX.
+			$nonce_value = isset( $_POST['woocommerce-process-checkout-nonce'] )
+				? sanitize_text_field( wp_unslash( $_POST['woocommerce-process-checkout-nonce'] ) )
+				: '';
+			$is_checkout = $nonce_value && wp_verify_nonce( $nonce_value, 'woocommerce-process_checkout' );
+			if ( ! $is_checkout ) {
+				return;
+			}
+
 			$session_location_id = WC()->session->get( 'lbite_location_id' );
 			if ( $session_location_id ) {
 				$order->update_meta_data( '_lbite_location_id', $session_location_id );
@@ -642,7 +655,7 @@ class LBite_Order_Dashboard {
 				}
 			}
 
-			// Order type und pickup time auch speichern.
+			// Order type und pickup time aus Session.
 			$order_type = WC()->session->get( 'lbite_order_type', 'now' );
 			if ( $order_type ) {
 				$order->update_meta_data( '_lbite_order_type', $order_type );

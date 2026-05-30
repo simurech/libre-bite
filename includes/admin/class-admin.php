@@ -578,6 +578,24 @@ class LBite_Admin {
 			// Standort-Farben für Dashboard-Hervorhebung (gecacht via LBite_Locations).
 			$lbite_dashboard_colors = LBite_Locations::get_all_location_colors();
 
+			// Zahlungsarten-Labels für Dashboard-Anzeige aufbereiten (key => label).
+			$lbite_pm_raw    = get_option( 'lbite_pos_payment_methods', array() );
+			$lbite_pm_labels = array();
+			$lbite_pm_defaults = array(
+				'cash'  => __( 'Cash', 'libre-bite' ),
+				'card'  => __( 'Card', 'libre-bite' ),
+				'twint' => __( 'Twint', 'libre-bite' ),
+				'other' => __( 'Other', 'libre-bite' ),
+			);
+			foreach ( $lbite_pm_defaults as $lbite_pm_key => $lbite_pm_label ) {
+				$lbite_pm_labels[ $lbite_pm_key ] = $lbite_pm_label;
+			}
+			foreach ( $lbite_pm_raw as $lbite_pm ) {
+				if ( ! empty( $lbite_pm['key'] ) && ! empty( $lbite_pm['label'] ) ) {
+					$lbite_pm_labels[ $lbite_pm['key'] ] = $lbite_pm['label'];
+				}
+			}
+
 			wp_localize_script(
 				'lbite-dashboard',
 				'lbiteDashboard',
@@ -589,6 +607,7 @@ class LBite_Admin {
 					'soundUrl'              => get_option( 'lbite_notification_sound', LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' ),
 					'refreshInterval'       => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
 					'locationColors'        => $lbite_dashboard_colors,
+					'paymentMethods'        => $lbite_pm_labels,
 					'futureDimmingEnabled'  => lbite_feature_enabled( 'enable_future_orders_dimmed' ) && '0' !== get_option( 'lbite_dim_future_orders', 1 ),
 					'strings'               => array(
 						'orderUpdated'    => __( 'Status updated', 'libre-bite' ),
@@ -955,10 +974,23 @@ class LBite_Admin {
 					continue;
 				}
 
-				// Basispreis aus WooCommerce; Add-on-Aufpreis serverseitig aus DB addieren.
+				// Produkt zum Basispreis ohne Add-on-Aufschlag.
 				// wc_get_price_excluding_tax() berücksichtigt «Preise inkl. Steuern» korrekt,
 				// damit calculate_totals() keine Steuer doppelt aufschlägt.
-				$addon_extra = 0.0;
+				$unit_price_excl = wc_get_price_excluding_tax( $product );
+				$price_excl_tax  = $unit_price_excl * $item['quantity'];
+
+				$order_item_id = $order->add_product(
+					$product,
+					$item['quantity'],
+					array(
+						'subtotal' => $price_excl_tax,
+						'total'    => $price_excl_tax,
+					)
+				);
+
+				// Add-ons als separate Gebührenpositionen erfassen (je Add-on eine eigene Zeile).
+				$addon_names_for_meta = array();
 				if ( ! empty( $item['option_ids'] ) ) {
 					// _lbite_product_options hängt am Eltern-Produkt; bei Varianten Parent-ID nutzen.
 					$options_lookup_id = $product->is_type( 'variation' ) ? $product->get_parent_id() : $item['id'];
@@ -973,28 +1005,31 @@ class LBite_Admin {
 							continue;
 						}
 						$opt_price = get_post_meta( $opt_id, '_lbite_price', true );
+						$opt_name  = get_the_title( $opt_id );
+						if ( ! $opt_name ) {
+							$opt_name = __( 'Add-on', 'libre-bite' );
+						}
+						$addon_names_for_meta[] = $opt_name;
 						if ( $opt_price ) {
-							$addon_extra += floatval( $opt_price );
+							$fee_net  = wc_get_price_excluding_tax( $product, array( 'price' => floatval( $opt_price ) ) ) * $item['quantity'];
+							$fee_item = new WC_Order_Item_Fee();
+							$fee_item->set_name( $opt_name );
+							$fee_item->set_amount( $fee_net );
+							$fee_item->set_total( $fee_net );
+							$fee_item->set_tax_class( $product->get_tax_class() );
+							$fee_item->set_tax_status( $product->get_tax_status() );
+							$order->add_item( $fee_item );
 						}
 					}
 				}
-				$unit_price_excl = wc_get_price_excluding_tax( $product ) + wc_get_price_excluding_tax( $product, array( 'price' => $addon_extra ) );
-				$price_excl_tax  = $unit_price_excl * $item['quantity'];
-
-				$order_item_id = $order->add_product(
-					$product,
-					$item['quantity'],
-					array(
-						'subtotal' => $price_excl_tax,
-						'total'    => $price_excl_tax,
-					)
-				);
 
 				// Meta-Daten (Varianten & Optionen) hinzufügen.
 				if ( $order_item_id ) {
 					$order_item = $order->get_item( $order_item_id );
 					if ( $order_item ) {
-						if ( ! empty( $item['meta'] ) ) {
+						if ( ! empty( $addon_names_for_meta ) ) {
+							$order_item->add_meta_data( 'Add-on', implode( ', ', $addon_names_for_meta ), true );
+						} elseif ( ! empty( $item['meta'] ) ) {
 							$order_item->add_meta_data( 'Add-on', $item['meta'], true );
 						}
 						if ( ! empty( $item['note'] ) && lbite_feature_enabled( 'enable_item_notes_pos' ) ) {
@@ -1024,6 +1059,7 @@ class LBite_Admin {
 			}
 
 			$order->update_meta_data( '_lbite_order_type', 'now' );
+			$order->delete_meta_data( '_lbite_pickup_time' ); // POS-Bestellungen sind immer sofort.
 			$order->update_meta_data( '_lbite_order_status', 'preparing' );
 			$order->update_meta_data( '_lbite_order_source', 'pos' );
 			$order->update_meta_data( '_lbite_payment_method', $payment_method );
