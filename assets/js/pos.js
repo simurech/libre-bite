@@ -78,12 +78,14 @@
 					$('input[name="lbite_pos_vat_type"][value="' + savedVatType + '"]').prop('checked', true);
 				}
 				this.updateVatIndicator();
+				this.updateTableSelectorVisibility();
 				$(document).on('change', 'input[name="lbite_pos_vat_type"]', () => {
 					const type = $('input[name="lbite_pos_vat_type"]:checked').val();
 					if (type) {
 						localStorage.setItem('lbite_pos_vat_type', type);
 					}
 					this.updateVatIndicator();
+					this.updateTableSelectorVisibility();
 				});
 			}
 
@@ -132,6 +134,19 @@
 				$products.addClass('lbite-pos-no-location');
 			} else {
 				$products.removeClass('lbite-pos-no-location');
+			}
+		},
+
+		updateTableSelectorVisibility: function() {
+			const $container = $('#lbite-pos-table-selector-container');
+			if ( ! $container.length ) return;
+			const isDineIn    = $('input[name="lbite_pos_vat_type"]:checked').val() === 'dine_in';
+			const hasLocation = !!$('#lbite-pos-location').val();
+			if ( isDineIn && hasLocation ) {
+				$container.show();
+			} else {
+				$container.hide();
+				$('#lbite-pos-table').val('');
 			}
 		},
 
@@ -793,8 +808,8 @@
 			this.updateCartDisplay();
 			this.renderAppliedCoupons();
 			this.saveCart();
-			// Namensfeld auch leeren für nächste Bestellung
 			$('#lbite-pos-customer-name').val('');
+			$('#lbite-pos-table').val('');
 		},
 
 		/**

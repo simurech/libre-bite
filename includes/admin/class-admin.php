@@ -1318,8 +1318,9 @@ class LBite_Admin {
 		}
 
 		// Pro-Features serverseitig schützen – Quelle der Wahrheit: LBite_Features
-		$premium_allowed = function_exists( 'lbite_freemius' )
-			&& lbite_freemius()->can_use_premium_code__premium_only();
+		// LBITE_PREMIUM_OVERRIDE berücksichtigen (Entwicklerumgebung ohne aktive Lizenz)
+		$premium_allowed = ( defined( 'LBITE_PREMIUM_OVERRIDE' ) && LBITE_PREMIUM_OVERRIDE )
+			|| ( function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() );
 		$premium_keys    = LBite_Features::get_premium_features();
 		$known_keys      = array_keys( LBite_Features::get_definitions() );
 

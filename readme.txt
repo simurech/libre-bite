@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.6
+Stable tag: 2.0.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.7 =
+* Fix: Settings — premium features (e.g. Order Type Selection) can now be saved correctly when using the developer override constant.
+* Fix: POS — Table selector is now hidden for Takeaway orders and only appears when Dine-in is selected; automatically resets to "No table" after each order.
+* Improvement: POS — Order Type selector (Takeaway / Dine-in) now appears whenever Table Management or Swiss VAT Switching is active, not only when Swiss VAT is enabled.
 
 = 2.0.6 =
 * Fix: Statistics — CSV export no longer contains HTML; output buffers are now cleared before headers are sent.

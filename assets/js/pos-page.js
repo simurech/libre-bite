@@ -32,10 +32,8 @@ jQuery(document).ready(function($) {
 			},
 			success: function(response) {
 				if (response.success) {
-					// Tisch-Selector aktualisieren ohne Seitenneulad
 					if (locationId && $tableContainer.length) {
-						$tableContainer.show();
-						// Tische mit Belegungsstatus für diesen Standort laden
+						// Tische mit Belegungsstatus laden; Sichtbarkeit überlässt updateTableSelectorVisibility()
 						$.ajax({
 							url: ajaxurl,
 							type: 'POST',
@@ -47,6 +45,9 @@ jQuery(document).ready(function($) {
 							success: function(tableResponse) {
 								if (tableResponse.success) {
 									renderTableOptions($tableSelect, tableResponse.data.tables, noTableLabel);
+								}
+								if (typeof POS !== 'undefined' && POS.updateTableSelectorVisibility) {
+									POS.updateTableSelectorVisibility();
 								}
 							}
 						});
@@ -99,6 +100,13 @@ jQuery(document).ready(function($) {
 				if (tableResponse.success) {
 					renderTableOptions($initialTableSelect, tableResponse.data.tables, initialNoTableLabel);
 				}
+				// Sichtbarkeit nach Order-Type bestimmen (pos.js init() läuft parallel;
+				// setTimeout(0) stellt sicher, dass localStorage-Restore bereits abgeschlossen ist)
+				setTimeout(function() {
+					if (typeof POS !== 'undefined' && POS.updateTableSelectorVisibility) {
+						POS.updateTableSelectorVisibility();
+					}
+				}, 0);
 			}
 		});
 	}

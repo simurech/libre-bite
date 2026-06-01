@@ -52,8 +52,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php endif; ?>
 		</div>
 
-		<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
-		<div id="lbite-pos-table-selector-container" style="<?php echo esc_attr( ! $lbite_selected_location ? 'display: none;' : '' ); ?>">
+		<?php
+		$lbite_show_order_type = lbite_feature_enabled( 'enable_swiss_vat' ) || lbite_feature_enabled( 'enable_table_ordering' );
+		$lbite_show_table      = lbite_feature_enabled( 'enable_table_ordering' );
+		$lbite_pos_vat_default = get_option( 'lbite_pos_default_vat_type', 'takeaway' );
+		?>
+
+		<?php if ( $lbite_show_order_type ) : ?>
+		<div id="lbite-pos-vat-selector">
+			<label style="margin-right:6px;font-weight:600;"><?php esc_html_e( 'Order type:', 'libre-bite' ); ?></label>
+			<label class="lbite-pos-vat-option">
+				<input type="radio" name="lbite_pos_vat_type" value="takeaway" <?php checked( $lbite_pos_vat_default, 'takeaway' ); ?>>
+				<?php esc_html_e( 'Takeaway', 'libre-bite' ); ?>
+			</label>
+			<label class="lbite-pos-vat-option" style="margin-left:10px;">
+				<input type="radio" name="lbite_pos_vat_type" value="dine_in" <?php checked( $lbite_pos_vat_default, 'dine_in' ); ?>>
+				<?php esc_html_e( 'Dine-in', 'libre-bite' ); ?>
+			</label>
+		</div>
+		<?php endif; ?>
+
+		<?php if ( $lbite_show_table ) : ?>
+		<div id="lbite-pos-table-selector-container" style="display:none;">
 			<label for="lbite-pos-table">
 				<strong><?php esc_html_e( 'Table (optional):', 'libre-bite' ); ?></strong>
 			</label>
@@ -82,21 +102,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 				?>
 			</select>
-		</div>
-		<?php endif; ?>
-
-		<?php if ( lbite_feature_enabled( 'enable_swiss_vat' ) ) : ?>
-		<?php $lbite_pos_vat_default = get_option( 'lbite_pos_default_vat_type', 'takeaway' ); ?>
-		<div id="lbite-pos-vat-selector">
-			<label style="margin-right:6px;font-weight:600;"><?php esc_html_e( 'Order type:', 'libre-bite' ); ?></label>
-			<label class="lbite-pos-vat-option">
-				<input type="radio" name="lbite_pos_vat_type" value="takeaway" <?php checked( $lbite_pos_vat_default, 'takeaway' ); ?>>
-				<?php esc_html_e( 'Takeaway', 'libre-bite' ); ?>
-			</label>
-			<label class="lbite-pos-vat-option" style="margin-left:10px;">
-				<input type="radio" name="lbite_pos_vat_type" value="dine_in" <?php checked( $lbite_pos_vat_default, 'dine_in' ); ?>>
-				<?php esc_html_e( 'Dine-in', 'libre-bite' ); ?>
-			</label>
 		</div>
 		<?php endif; ?>
 
