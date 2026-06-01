@@ -974,10 +974,11 @@ class LBite_Admin {
 					continue;
 				}
 
-				// Produkt zum Basispreis ohne Add-on-Aufschlag.
-				// wc_get_price_excluding_tax() berücksichtigt «Preise inkl. Steuern» korrekt,
-				// damit calculate_totals() keine Steuer doppelt aufschlägt.
-				$unit_price_excl = wc_get_price_excluding_tax( $product );
+				// Nettopreis berechnen: bei aktiver Schweizer MWST-Umschaltung Zielstufe nutzen,
+				// da wc_get_price_excluding_tax() intern get_tax_class('unfiltered') aufruft.
+				$unit_price_excl = ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) )
+					? LBite_Checkout::gross_to_net_at_filtered_class( $product, (float) $product->get_price() )
+					: wc_get_price_excluding_tax( $product );
 				$price_excl_tax  = $unit_price_excl * $item['quantity'];
 
 				$order_item_id = $order->add_product(
@@ -1011,7 +1012,9 @@ class LBite_Admin {
 						}
 						$addon_names_for_meta[] = $opt_name;
 						if ( $opt_price ) {
-							$fee_net  = wc_get_price_excluding_tax( $product, array( 'price' => floatval( $opt_price ) ) ) * $item['quantity'];
+							$fee_net = ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) )
+								? LBite_Checkout::gross_to_net_at_filtered_class( $product, floatval( $opt_price ) ) * $item['quantity']
+								: wc_get_price_excluding_tax( $product, array( 'price' => floatval( $opt_price ) ) ) * $item['quantity'];
 							$fee_item = new WC_Order_Item_Fee();
 							$fee_item->set_name( $opt_name );
 							$fee_item->set_amount( $fee_net );

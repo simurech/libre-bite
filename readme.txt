@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,9 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.2 =
+* Fix: Swiss VAT switching now correctly preserves the gross price for the customer; previously, wc_get_price_excluding_tax() bypassed the tax-class filter and stored the net at the base rate, causing a price discrepancy after calculate_totals() applied the target rate. Affects POS orders, frontend checkout, and add-on fee items.
 
 = 2.0.1 =
 * Fix: Add-ons now appear as separate line items in WooCommerce orders (POS and frontend); the product price is no longer inflated by the add-on amount.

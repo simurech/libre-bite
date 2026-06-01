@@ -417,9 +417,14 @@ class LBite_Product_Options {
 
 		// Add-ons als separate Gebührenpositionen; Produktzwischensumme korrigieren.
 		if ( ! empty( $addon_items ) && $product ) {
+			$use_swiss_vat    = class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' );
 			$total_addon_excl = 0.0;
 			foreach ( $addon_items as $addon ) {
-				$addon_net         = wc_get_price_excluding_tax( $product, array( 'price' => $addon['gross'] ) );
+				// Bei aktiver Schweizer MWST-Umschaltung Nettopreis zur Zielsteuerklasse berechnen,
+				// da wc_get_price_excluding_tax() intern get_tax_class('unfiltered') aufruft.
+				$addon_net = $use_swiss_vat
+					? LBite_Checkout::gross_to_net_at_filtered_class( $product, $addon['gross'] )
+					: wc_get_price_excluding_tax( $product, array( 'price' => $addon['gross'] ) );
 				$total_addon_excl += $addon_net;
 
 				$fee_item = new WC_Order_Item_Fee();

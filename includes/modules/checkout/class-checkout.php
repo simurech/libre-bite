@@ -130,6 +130,8 @@ class LBite_Checkout {
 		// Schweizer MWST-Umschaltung (Premium)
 		if ( lbite_freemius()->is__premium_only() && lbite_feature_enabled( 'enable_swiss_vat' ) ) {
 			$this->loader->add_filter( 'woocommerce_product_get_tax_class', $this, 'filter_swiss_vat_tax_class__premium_only', 10, 2 );
+			// Priorität 5: vor dem Add-on-Hook (Prio 10 in class-product-options.php).
+			$this->loader->add_action( 'woocommerce_checkout_create_order_line_item', $this, 'correct_line_item_subtotal_for_vat__premium_only', 5, 4 );
 		}
 	}
 
@@ -1645,6 +1647,53 @@ class LBite_Checkout {
 		if ( '' !== $note ) {
 			$item->add_meta_data( 'Note', $note, true );
 		}
+	}
+
+	/**
+	 * Bestellposition-Nettobetrag für Schweizer MWST korrigieren (Premium)
+	 *
+	 * WC berechnet item->subtotal mit get_tax_class('unfiltered') und umgeht damit unseren
+	 * MWST-Filter. Diese Methode korrigiert den gespeicherten Nettobetrag auf die Zielstufe,
+	 * bevor der Add-on-Hook (Priorität 10) seine Korrekturen vornimmt.
+	 *
+	 * @param WC_Order_Item_Product $item          Bestellposition.
+	 * @param string                $cart_item_key Cart-Schlüssel.
+	 * @param array                 $values        Cart-Item-Daten.
+	 * @param WC_Order              $order         Bestellung.
+	 */
+	public function correct_line_item_subtotal_for_vat__premium_only( $item, $cart_item_key, $values, $order ) {
+		$product = $item->get_product();
+		if ( ! $product || ! $product->is_taxable() || ! wc_prices_include_tax() ) {
+			return;
+		}
+		$qty               = $item->get_quantity();
+		$gross_per_unit    = (float) $values['data']->get_price(); // Warenkorb-Preis (ggf. inkl. Add-ons)
+		$correct_net_total = self::gross_to_net_at_filtered_class( $product, $gross_per_unit ) * $qty;
+		$item->set_subtotal( $correct_net_total );
+		$item->set_total( $correct_net_total );
+	}
+
+	/**
+	 * Nettopreis aus Bruttopreis anhand der gefilterten Steuerklasse berechnen.
+	 *
+	 * wc_get_price_excluding_tax() ruft intern get_tax_class('unfiltered') auf und umgeht
+	 * damit den Schweizer MWST-Filter. Diese Methode nutzt get_tax_class() (gefiltert),
+	 * damit der Endpreis für den Kunden durch die MWST-Umschaltung unverändert bleibt.
+	 *
+	 * @param WC_Product $product    Produkt-Instanz.
+	 * @param float      $gross      Bruttopreis (inkl. Steuern), pro Einheit.
+	 * @return float Nettopreis (exkl. Steuern) zur gefilterten Steuerklasse.
+	 */
+	public static function gross_to_net_at_filtered_class( $product, $gross ) {
+		if ( ! wc_prices_include_tax() || ! $product->is_taxable() ) {
+			return $gross;
+		}
+		$rates = WC_Tax::get_base_tax_rates( $product->get_tax_class() ); // gefilterte Klasse
+		if ( empty( $rates ) ) {
+			return $gross;
+		}
+		$taxes = WC_Tax::calc_tax( $gross, $rates, true );
+		return max( 0.0, $gross - array_sum( $taxes ) );
 	}
 
 	/**
