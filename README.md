@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/images/librebite-logo.png" alt="Libre Bite Logo" width="200">
+  <img src="assets/wp-org/librebite-logo.png" alt="Libre Bite Logo" width="200">
 </p>
 
 # Libre Bite
