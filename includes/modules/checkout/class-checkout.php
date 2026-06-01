@@ -1766,6 +1766,10 @@ class LBite_Checkout {
 	 * Bestelltyp-Auswahl (Takeaway / Dine-in) im Checkout-Formular ausgeben.
 	 */
 	public function render_order_type_selector__premium_only() {
+		// Im optimierten Checkout wird der Selektor direkt im Template gerendert.
+		if ( ! empty( $GLOBALS['lbite_order_type_rendered'] ) ) {
+			return;
+		}
 		$current      = WC()->session ? WC()->session->get( 'lbite_service_type', '' ) : '';
 		$table_in_session = WC()->session ? WC()->session->get( 'lbite_table_id' ) : '';
 		// QR-Code-Scan → Dine-in vorauswählen.

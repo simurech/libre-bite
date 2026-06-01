@@ -43,6 +43,15 @@ if ( $lbite_table_id ) {
 		$lbite_table_name = $lbite_table_post->post_title;
 	}
 }
+
+// Bestelltyp-Auswahl (Pro).
+$lbite_show_order_type   = lbite_feature_enabled( 'enable_order_type_selection' );
+$lbite_service_type      = WC()->session ? WC()->session->get( 'lbite_service_type', '' ) : '';
+if ( $lbite_show_order_type && ! $lbite_service_type && $lbite_table_id ) {
+	$lbite_service_type = 'dine_in';
+}
+$lbite_show_table_field  = $lbite_show_order_type && lbite_feature_enabled( 'enable_table_ordering' );
+$lbite_checkout_table_nr = WC()->session ? WC()->session->get( 'lbite_checkout_table_number', '' ) : '';
 ?>
 
 <div class="lbite-checkout-optimized">
@@ -76,6 +85,12 @@ if ( $lbite_table_id ) {
 					<?php esc_html_e( 'As soon as ready', 'libre-bite' ); ?>
 				</p>
 			<?php endif; ?>
+			<?php if ( $lbite_show_order_type ) : ?>
+				<p>
+					<strong><?php esc_html_e( 'Order Type:', 'libre-bite' ); ?></strong>
+					<?php echo 'dine_in' === $lbite_service_type ? esc_html__( 'Dine-in', 'libre-bite' ) : esc_html__( 'Takeaway', 'libre-bite' ); ?>
+				</p>
+			<?php endif; ?>
 		</div>
 	<?php endif; ?>
 
@@ -88,6 +103,31 @@ if ( $lbite_table_id ) {
 
 		<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
 		do_action( 'woocommerce_checkout_before_customer_details' ); ?>
+
+		<?php if ( $lbite_show_order_type ) :
+			// Markiere als bereits gerendert, damit der generische Hook nicht nochmals ausgibt.
+			$GLOBALS['lbite_order_type_rendered'] = true;
+		?>
+		<div id="lbite-order-type-selector" class="lbite-order-type-selector">
+			<h3><?php esc_html_e( 'Order Type', 'libre-bite' ); ?></h3>
+			<div class="lbite-order-type-options">
+				<label class="lbite-order-type-option">
+					<input type="radio" name="lbite_service_type" value="takeaway" <?php checked( 'dine_in' !== $lbite_service_type ); ?>>
+					<span><?php esc_html_e( 'Takeaway', 'libre-bite' ); ?></span>
+				</label>
+				<label class="lbite-order-type-option">
+					<input type="radio" name="lbite_service_type" value="dine_in" <?php checked( $lbite_service_type, 'dine_in' ); ?>>
+					<span><?php esc_html_e( 'Dine-in', 'libre-bite' ); ?></span>
+				</label>
+			</div>
+			<?php if ( $lbite_show_table_field ) : ?>
+			<div id="lbite-table-number-wrap" class="lbite-table-number-wrap" style="<?php echo 'dine_in' === $lbite_service_type ? '' : 'display:none;'; ?>">
+				<label for="lbite-table-number"><?php esc_html_e( 'Table Number (optional):', 'libre-bite' ); ?></label>
+				<input type="text" id="lbite-table-number" name="lbite_checkout_table_number" class="input-text" value="<?php echo esc_attr( $lbite_checkout_table_nr ); ?>" placeholder="<?php esc_attr_e( 'e.g. 5', 'libre-bite' ); ?>">
+			</div>
+			<?php endif; ?>
+		</div>
+		<?php endif; ?>
 
 		<div class="lbite-checkout-step" id="lbite-step-name">
 			<h3><?php esc_html_e( 'What\'s your name?', 'libre-bite' ); ?></h3>

@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.6 =
+* Fix: Statistics — CSV export no longer contains HTML; output buffers are now cleared before headers are sent.
+* Fix: Statistics — translation strings for new columns (Top Products, By Quantity, By Revenue, etc.) now correctly loaded in all locales.
+* Fix: Optimized checkout — Order Type selector (Takeaway / Dine-in) is now visible; rendered directly in the checkout form with a summary in the info box.
 
 = 2.0.5 =
 * Feature: Statistics — extended reporting with top products by quantity and revenue, add-on breakdown with product combos, payment method share bars, and CSV export.

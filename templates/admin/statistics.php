@@ -201,11 +201,15 @@ $lbite_top_by_revenue = array_slice( $lbite_top_by_revenue, 0, 10, true );
 // Add-ons sortieren.
 uasort( $lbite_addon_totals, fn( $a, $b ) => $b['qty'] <=> $a['qty'] );
 
-// CSV-Export (muss nach Datenaufbereitung, aber vor HTML-Ausgabe erfolgen).
+// CSV-Export: WordPress hat zu diesem Zeitpunkt bereits HTML ausgegeben (Admin-Header).
+// ob_end_clean() leert alle Puffer, damit nur sauberes CSV gesendet wird.
 if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET['lbite_export'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$lbite_nonce = isset( $_GET['_wpnonce'] ) ? sanitize_key( wp_unslash( $_GET['_wpnonce'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( ! wp_verify_nonce( $lbite_nonce, 'lbite_stat_export' ) ) {
 		wp_die( esc_html__( 'Security check failed.', 'libre-bite' ) );
+	}
+	while ( ob_get_level() > 0 ) {
+		ob_end_clean();
 	}
 	$lbite_filename = 'lbite-statistics-' . $lbite_period . '-' . date( 'Y-m-d' ) . '.csv';
 	header( 'Content-Type: text/csv; charset=utf-8' );
@@ -223,6 +227,9 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 	), ';' );
 	foreach ( $lbite_stat_orders as $lbite_csv_order ) {
 		$lbite_csv_loc_id  = (int) $lbite_csv_order->get_meta( '_lbite_location_id' );
+		if ( null !== $lbite_stat_allowed_ids && ! in_array( $lbite_csv_loc_id, $lbite_stat_allowed_ids, true ) ) {
+			continue;
+		}
 		if ( $lbite_filter_loc && $lbite_csv_loc_id !== $lbite_filter_loc ) {
 			continue;
 		}
