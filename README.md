@@ -74,8 +74,8 @@ libre-bite/
 |---|---|
 | Nexi Terminal-Integration via OPI-Proxy (Zahlungsterminal direkt an POS angebunden) | ja |
 | Offene Bestellungen / Laufender Tab für Tischservice | ja |
-| Multi-Location Isolation Phase 2 / Franchise-Unterstützung | ja |
-| Küchen-Display-System (KDS) inkl. POS-Bestellungen | ja |
+| Multi-Location Phase 2: vollständige Datenisolation pro Standort (Manager sieht nur eigene Bestellungen/Auswertungen), Franchise-Modell mit zentralem Produktkatalog und lokaler Konfiguration | ja |
+| Küchen-Display (KDS): dediziertes Tablet-Display für die Küche – kein Login nötig, Positions-Status (einzelne Gerichte abhaken), Stations-Splitting (z.B. Getränke vs. Speisen) | ja |
 | Treuepunkte / Kundenbindung | ja |
 | Reservierungen: Auto-Zuweisung, Frontend-Verfügbarkeitsanzeige | ja |
 | Übersetzungen Französisch (fr_CH) und Italienisch (it_CH) | nein |
