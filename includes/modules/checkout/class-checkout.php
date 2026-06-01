@@ -1741,19 +1741,23 @@ class LBite_Checkout {
 			$new = get_option( 'lbite_tax_class_' . self::$pos_vat_context, false );
 			return false !== $new ? $new : $tax_class;
 		}
-		// Frontend-Checkout-Kontext
-		if ( WC()->session ) {
-			// Explizite Bestelltyp-Auswahl des Kunden hat Vorrang vor automatischer Tisch-Erkennung.
-			$service_type = WC()->session->get( 'lbite_service_type' );
-			if ( $service_type ) {
-				$key = 'lbite_tax_class_' . $service_type;
-				$new = get_option( $key, false );
-				return false !== $new ? $new : $tax_class;
-			}
-			// Fallback: Tisch-ID aus Session (QR-Code-Scan, bisheriges Verhalten).
-			$table_id = WC()->session->get( 'lbite_table_id' );
-			$key      = $table_id ? 'lbite_tax_class_dine_in' : 'lbite_tax_class_takeaway';
-			$new      = get_option( $key, false );
+		// Frontend: nur im Warenkorb, Checkout oder AJAX anwenden.
+		// Auf Produktseiten darf der Filter nicht greifen, da WooCommerce sonst den
+		// Anzeigepreis mit der gefilterten Steuerklasse umrechnet (z.B. 10.00 → 9.49).
+		if ( ! WC()->session || ( ! is_cart() && ! is_checkout() && ! wp_doing_ajax() ) ) {
+			return $tax_class;
+		}
+		// Explizite Bestelltyp-Auswahl des Kunden hat Vorrang vor automatischer Tisch-Erkennung.
+		$service_type = WC()->session->get( 'lbite_service_type' );
+		if ( $service_type ) {
+			$key = 'lbite_tax_class_' . $service_type;
+			$new = get_option( $key, false );
+			return false !== $new ? $new : $tax_class;
+		}
+		// Fallback: Tisch-ID aus Session (QR-Code-Scan).
+		$table_id = WC()->session->get( 'lbite_table_id' );
+		if ( $table_id ) {
+			$new = get_option( 'lbite_tax_class_dine_in', false );
 			return false !== $new ? $new : $tax_class;
 		}
 		return $tax_class;

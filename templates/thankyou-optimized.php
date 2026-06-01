@@ -25,7 +25,21 @@ $location_id   = $lbite_order->get_meta( '_lbite_location_id' );
 $location_name = $lbite_order->get_meta( '_lbite_location_name' );
 $lbite_order_type    = $lbite_order->get_meta( '_lbite_order_type' );
 $lbite_pickup_time   = $lbite_order->get_meta( '_lbite_pickup_time' );
+$lbite_service_type  = $lbite_order->get_meta( '_lbite_service_type' );
+$lbite_table_id      = $lbite_order->get_meta( '_lbite_table_id' );
+$lbite_table_nr      = $lbite_order->get_meta( '_lbite_checkout_table_number' );
 $lbite_customer_name = $lbite_order->get_billing_first_name();
+
+// Tischname auflösen.
+$lbite_table_name = '';
+if ( $lbite_table_id ) {
+	$lbite_table_post = get_post( (int) $lbite_table_id );
+	$lbite_table_name = $lbite_table_post ? $lbite_table_post->post_title : '';
+}
+if ( ! $lbite_table_name && $lbite_table_nr ) {
+	$lbite_table_name = $lbite_table_nr;
+}
+$lbite_is_dine_in = ( 'dine_in' === $lbite_service_type ) || ! empty( $lbite_table_id );
 
 // Fallback: Standort-Name aus Post laden wenn nicht in Meta.
 if ( empty( $location_name ) && $location_id ) {
@@ -136,6 +150,26 @@ $lbite_receipt_nonce    = wp_create_nonce( 'lbite_send_receipt_' . $lbite_order_
 			</div>
 		<?php endif; ?>
 
+		<?php if ( $lbite_is_dine_in ) : ?>
+		<div class="lbite-thankyou-detail">
+			<svg class="lbite-detail-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+				<path d="M18.5 3H6C4.9 3 4 3.9 4 5v2c0 4.0 2.6 7.4 6.3 8.6V18H8v2h8v-2h-2.3v-2.4C17.4 14.4 20 11 20 7V5c0-1.1-.9-2-1.5-2zM6 5h12v2H6V5z"/>
+			</svg>
+			<div class="lbite-detail-content">
+				<span class="lbite-detail-label"><?php esc_html_e( 'Service', 'libre-bite' ); ?></span>
+				<span class="lbite-detail-value">
+					<?php if ( $lbite_table_name ) : ?>
+						<?php echo esc_html( $lbite_table_name ); ?>
+					<?php else : ?>
+						<?php esc_html_e( 'Dine-in', 'libre-bite' ); ?>
+					<?php endif; ?>
+				</span>
+				<?php if ( $lbite_table_name ) : ?>
+					<span class="lbite-detail-sub"><?php esc_html_e( 'Dine-in', 'libre-bite' ); ?></span>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php else : ?>
 		<div class="lbite-thankyou-detail">
 			<svg class="lbite-detail-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
 				<path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
@@ -155,6 +189,7 @@ $lbite_receipt_nonce    = wp_create_nonce( 'lbite_send_receipt_' . $lbite_order_
 				</span>
 			</div>
 		</div>
+		<?php endif; ?>
 
 		<?php
 		// Zahlungsart anzeigen.

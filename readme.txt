@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.12
+Stable tag: 2.0.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,14 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.13 =
+* Fix: Product pages no longer show a recalculated price when Multiple Tax Rates is active — the tax class filter now only applies in cart/checkout/AJAX contexts.
+* Improvement: Optimized checkout — email field now appears after the payment method selection, not before. Customers only see it when their chosen payment method requires an email.
+* Improvement: Optimized checkout — which payment methods require an email address is now configurable in Settings → Checkout (instead of being hardcoded).
+* Fix: Location selector — location image is now correctly shown after selecting a location (tiles layout).
+* Improvement: Thank-you page — detail boxes are now white with a colored left border instead of gray fill.
+* Improvement: Thank-you page — for dine-in orders the pickup box is replaced by a service/table box showing the table name.
 
 = 2.0.12 =
 * Improvement: Order dashboard — table badge now shows actual table name (e.g. "Tisch 3") instead of generic "Tisch".

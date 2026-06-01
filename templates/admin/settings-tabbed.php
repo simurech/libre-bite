@@ -86,6 +86,8 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_tip_label_1', isset( $_POST['lbite_tip_label_1'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_1'] ) ) : '' );
 			update_option( 'lbite_tip_label_2', isset( $_POST['lbite_tip_label_2'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_2'] ) ) : '' );
 			update_option( 'lbite_tip_label_3', isset( $_POST['lbite_tip_label_3'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_3'] ) ) : '' );
+			$lbite_email_gateways_raw = isset( $_POST['lbite_email_required_gateways'] ) ? (array) $_POST['lbite_email_required_gateways'] : array();
+			update_option( 'lbite_email_required_gateways', array_map( 'sanitize_key', $lbite_email_gateways_raw ) );
 			$lbite_did_save = true;
 			break;
 
@@ -399,8 +401,9 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				break;
 
 			case 'checkout':
-				$lbite_checkout_mode   = get_option( 'lbite_checkout_mode', 'standard' );
-				$lbite_tip_pct_1       = get_option( 'lbite_tip_percentage_1', 5 );
+				$lbite_checkout_mode        = get_option( 'lbite_checkout_mode', 'standard' );
+				$lbite_email_req_gateways   = get_option( 'lbite_email_required_gateways', array() );
+				$lbite_tip_pct_1            = get_option( 'lbite_tip_percentage_1', 5 );
 				$lbite_tip_pct_2       = get_option( 'lbite_tip_percentage_2', 10 );
 				$lbite_tip_pct_3       = get_option( 'lbite_tip_percentage_3', 15 );
 				$lbite_tip_select      = get_option( 'lbite_tip_default_selection', 'none' );
@@ -453,6 +456,27 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 								<div class="notice notice-warning inline" style="margin: 8px 0 0; padding: 8px 12px;">
 									<p><strong><?php esc_html_e( 'Important:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode', 'libre-bite' ); ?> <code>[woocommerce_checkout]</code><?php esc_html_e( ', not the WooCommerce Checkout Block.', 'libre-bite' ); ?></p>
 								</div>
+							</td>
+						</tr>
+						<tr>
+							<th><?php esc_html_e( 'Email Required For', 'libre-bite' ); ?></th>
+							<td>
+								<?php
+								$lbite_all_gateways = WC()->payment_gateways->payment_gateways();
+								if ( $lbite_all_gateways ) :
+									foreach ( $lbite_all_gateways as $lbite_gw_id => $lbite_gw ) :
+								?>
+								<label style="display:block; margin-bottom:5px;">
+									<input type="checkbox" name="lbite_email_required_gateways[]" value="<?php echo esc_attr( $lbite_gw_id ); ?>" <?php checked( in_array( $lbite_gw_id, $lbite_email_req_gateways, true ) ); ?>>
+									<?php echo esc_html( $lbite_gw->get_title() ); ?> <code style="font-size:11px;"><?php echo esc_html( $lbite_gw_id ); ?></code>
+								</label>
+								<?php
+									endforeach;
+								else :
+									echo '<p class="description">' . esc_html__( 'No payment methods found. Please configure WooCommerce payment methods first.', 'libre-bite' ) . '</p>';
+								endif;
+								?>
+								<p class="description" style="margin-top:8px;"><?php esc_html_e( 'The email field is shown in the optimized checkout only for the selected payment methods.', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
 						<?php endif; ?>

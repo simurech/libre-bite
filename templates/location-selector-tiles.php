@@ -249,7 +249,10 @@ jQuery(document).ready(function($) {
 			id: selectedLocationId,
 			name: $(this).find('.lbite-location-name').text(),
 			address: $(this).find('.lbite-location-address').text(),
-			image: $(this).find('.lbite-location-image').css('background-image')
+			image: (function() {
+				var $img = $(this).find('.lbite-location-image img');
+				return $img.length ? 'url(' + $img.attr('src') + ')' : '';
+			}.call(this))
 		};
 
 		// Zur Zeit-Auswahl wechseln

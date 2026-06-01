@@ -49,14 +49,6 @@ $lbite_logo_url   = $lbite_brand_logo ? wp_get_attachment_image_url( $lbite_bran
 			</p>
 		</div>
 
-		<div class="lbite-checkout-step" id="lbite-step-email" style="display:none">
-			<h3><?php esc_html_e( 'Your Email', 'libre-bite' ); ?></h3>
-			<p class="form-row form-row-wide">
-				<label for="billing_email"><?php esc_html_e( 'Email address', 'libre-bite' ); ?> <span class="required">*</span></label>
-				<input type="email" class="input-text" name="billing_email" id="billing_email" value="<?php echo esc_attr( WC()->checkout->get_value( 'billing_email' ) ); ?>">
-			</p>
-		</div>
-
 		<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce-Standard-Hook; darf nicht umbenannt werden.
 		do_action( 'woocommerce_checkout_after_customer_details' ); ?>
 
@@ -77,6 +69,14 @@ $lbite_logo_url   = $lbite_brand_logo ? wp_get_attachment_image_url( $lbite_bran
 			do_action( 'woocommerce_checkout_after_order_review' ); ?>
 		</div>
 
+		<div class="lbite-checkout-step" id="lbite-step-email" style="display:none">
+			<h3><?php esc_html_e( 'Your Email', 'libre-bite' ); ?></h3>
+			<p class="form-row form-row-wide">
+				<label for="billing_email"><?php esc_html_e( 'Email address', 'libre-bite' ); ?> <span class="required">*</span></label>
+				<input type="email" class="input-text" name="billing_email" id="billing_email" value="<?php echo esc_attr( WC()->checkout->get_value( 'billing_email' ) ); ?>">
+			</p>
+		</div>
+
 		<?php wp_nonce_field( 'woocommerce-process_checkout', 'woocommerce-process-checkout-nonce' ); ?>
 
 	</form>
@@ -89,19 +89,30 @@ $lbite_logo_url   = $lbite_brand_logo ? wp_get_attachment_image_url( $lbite_bran
 
 <script>
 (function($) {
-	var noEmailGateways = ['cod', 'bacs', 'cheque'];
+	var emailRequiredGateways = <?php echo wp_json_encode( get_option( 'lbite_email_required_gateways', array() ) ); ?>;
+
+	function repositionEmailStep() {
+		var $placeOrder = $('#payment .place-order');
+		if ($placeOrder.length) {
+			$placeOrder.before($('#lbite-step-email'));
+		}
+	}
 
 	function updateEmailStep() {
 		var selected = $('input[name="payment_method"]:checked').val();
-		var isExternal = selected && noEmailGateways.indexOf(selected) === -1;
-		$('#lbite-step-email').toggle(isExternal);
-		$('#billing_email').prop('required', isExternal);
+		var needsEmail = selected && emailRequiredGateways.indexOf(selected) !== -1;
+		$('#lbite-step-email').toggle(needsEmail);
+		$('#billing_email').prop('required', needsEmail);
 	}
 
 	$(function() {
 		$('body')
 			.on('change', 'input[name="payment_method"]', updateEmailStep)
-			.on('updated_checkout', updateEmailStep);
+			.on('updated_checkout', function() {
+				repositionEmailStep();
+				updateEmailStep();
+			});
+		repositionEmailStep();
 		updateEmailStep();
 	});
 }(jQuery));

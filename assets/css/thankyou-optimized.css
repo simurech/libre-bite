@@ -128,17 +128,20 @@ section.woocommerce-customer-details,
 	align-items: flex-start;
 	gap: 15px;
 	text-align: left;
-	padding: 15px 20px;
-	background: var(--lbite-color-background, #f8f9fa);
+	padding: 14px 18px;
+	background: #fff;
+	border: 1px solid var(--lbite-color-border, #e8e8e8);
+	border-left: 3px solid var(--lbite-color-primary, #0073aa);
 	border-radius: var(--lbite-border-radius, 8px);
 }
 
 .lbite-detail-icon-svg {
-	width: 24px;
-	height: 24px;
+	width: 20px;
+	height: 20px;
 	color: var(--lbite-color-primary, #0073aa);
 	flex-shrink: 0;
-	margin-top: 2px;
+	margin-top: 3px;
+	opacity: 0.8;
 }
 
 .lbite-detail-content {
@@ -147,25 +150,25 @@ section.woocommerce-customer-details,
 
 .lbite-detail-label {
 	display: block;
-	font-size: 11px;
-	color: #888;
+	font-size: 10px;
+	color: #999;
 	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	margin-bottom: 2px;
+	letter-spacing: 0.6px;
+	margin-bottom: 3px;
 }
 
 .lbite-detail-value {
 	display: block;
-	font-size: 16px;
+	font-size: 15px;
 	font-weight: 600;
 	color: var(--lbite-color-secondary, #23282d);
 }
 
 .lbite-detail-sub {
 	display: block;
-	font-size: 14px;
+	font-size: 13px;
 	color: #666;
-	margin-top: 3px;
+	margin-top: 4px;
 }
 
 /* Google Maps Link */
