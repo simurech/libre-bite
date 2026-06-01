@@ -164,9 +164,14 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 			</label>
 			<select id="lbite_location_select" class="lbite-select">
 				<option value=""><?php esc_html_e( 'Select location...', 'libre-bite' ); ?></option>
-				<?php foreach ( $lbite_locations as $loc ) : ?>
+				<?php foreach ( $lbite_locations as $loc ) :
+					$lbite_loc_address = LBite_Locations::get_formatted_address( $loc->ID );
+					$lbite_loc_label   = $lbite_loc_address
+						? $loc->post_title . ' (' . $lbite_loc_address . ')'
+						: $loc->post_title;
+				?>
 					<option value="<?php echo esc_attr( $loc->ID ); ?>" <?php selected( $lbite_location_id, $loc->ID ); ?>>
-						<?php echo esc_html( $loc->post_title ); ?>
+						<?php echo esc_html( $lbite_loc_label ); ?>
 					</option>
 				<?php endforeach; ?>
 			</select>
