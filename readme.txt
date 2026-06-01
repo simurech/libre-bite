@@ -224,6 +224,10 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 
 == Changelog ==
 
+= 2.0.14 =
+* Fix: Cart total now stays the same for the customer regardless of which tax class is applied (takeaway vs. dine-in). WooCommerce's internal 'unfiltered' tax class lookup was bypassing the rate switch and recalculating a different gross price.
+* Fix: Email field in optimized checkout now correctly appears and stays visible after WooCommerce refreshes the payment section.
+
 = 2.0.13 =
 * Fix: Product pages no longer show a recalculated price when Multiple Tax Rates is active — the tax class filter now only applies in cart/checkout/AJAX contexts.
 * Improvement: Optimized checkout — email field now appears after the payment method selection, not before. Customers only see it when their chosen payment method requires an email.

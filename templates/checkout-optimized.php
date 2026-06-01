@@ -90,11 +90,14 @@ $lbite_logo_url   = $lbite_brand_logo ? wp_get_attachment_image_url( $lbite_bran
 <script>
 (function($) {
 	var emailRequiredGateways = <?php echo wp_json_encode( get_option( 'lbite_email_required_gateways', array() ) ); ?>;
+	var $detachedEmail = null;
 
 	function repositionEmailStep() {
+		var $email = $detachedEmail || $('#lbite-step-email');
 		var $placeOrder = $('#payment .place-order');
-		if ($placeOrder.length) {
-			$placeOrder.before($('#lbite-step-email'));
+		if ($placeOrder.length && $email.length) {
+			$placeOrder.before($email);
+			$detachedEmail = null;
 		}
 	}
 
@@ -108,6 +111,14 @@ $lbite_logo_url   = $lbite_brand_logo ? wp_get_attachment_image_url( $lbite_bran
 	$(function() {
 		$('body')
 			.on('change', 'input[name="payment_method"]', updateEmailStep)
+			.on('update_checkout', function() {
+				// Vor dem WC-AJAX-Update retten: #payment wird ersetzt und
+				// alles darin (inkl. unserem Div) wird aus dem DOM entfernt.
+				var $email = $('#lbite-step-email');
+				if ($email.length) {
+					$detachedEmail = $email.detach();
+				}
+			})
 			.on('updated_checkout', function() {
 				repositionEmailStep();
 				updateEmailStep();

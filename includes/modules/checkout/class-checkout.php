@@ -132,6 +132,8 @@ class LBite_Checkout {
 			$this->loader->add_filter( 'woocommerce_product_get_tax_class', $this, 'filter_swiss_vat_tax_class__premium_only', 10, 2 );
 			// Varianten nutzen ggf. einen eigenen Filter-Hook.
 			$this->loader->add_filter( 'woocommerce_product_variation_get_tax_class', $this, 'filter_swiss_vat_tax_class__premium_only', 10, 2 );
+			// Priorität 20: Steuerklasse auf Cart-Items setzen bevor WC die Totale berechnet.
+			$this->loader->add_action( 'woocommerce_before_calculate_totals', $this, 'apply_vat_tax_class_to_cart__premium_only', 20 );
 			// Priorität 5: vor dem Add-on-Hook (Prio 10 in class-product-options.php).
 			$this->loader->add_action( 'woocommerce_checkout_create_order_line_item', $this, 'correct_line_item_subtotal_for_vat__premium_only', 5, 4 );
 		}
@@ -1668,6 +1670,36 @@ class LBite_Checkout {
 		$note = sanitize_text_field( wp_unslash( $_POST['lbite_item_notes'][ $cart_item_key ] ) );
 		if ( '' !== $note ) {
 			$item->add_meta_data( 'Note', $note, true );
+		}
+	}
+
+	/**
+	 * Steuerklasse direkt auf Cart-Item-Produkten setzen, bevor WC die Totale berechnet (Premium)
+	 *
+	 * WooCommerce ruft intern get_tax_class('unfiltered') auf, welcher unseren Filter
+	 * woocommerce_product_get_tax_class umgeht. Dadurch extrahiert WC den Nettopreis mit
+	 * der Original-Steuerklasse und addiert anschliessend den neuen Steuersatz – was zu
+	 * einem abweichenden Bruttopreis führt. Durch direktes Setzen der Steuerklasse via
+	 * set_tax_class() auf dem Produkt-Objekt liefert auch der 'unfiltered'-Aufruf die
+	 * Zielklasse, sodass Extraktion und Addition dieselbe Rate verwenden und der
+	 * Bruttopreis konstant bleibt.
+	 *
+	 * @param WC_Cart $cart Warenkorb.
+	 */
+	public function apply_vat_tax_class_to_cart__premium_only( $cart ) {
+		if ( is_admin() && ! wp_doing_ajax() ) {
+			return;
+		}
+		foreach ( $cart->get_cart() as $cart_item ) {
+			$product = $cart_item['data'];
+			if ( ! $product || ! $product->is_taxable() ) {
+				continue;
+			}
+			$original_class = $product->get_tax_class( 'unfiltered' );
+			$filtered_class = $product->get_tax_class(); // Geht durch unseren Filter.
+			if ( $original_class !== $filtered_class ) {
+				$product->set_tax_class( $filtered_class );
+			}
 		}
 	}
 
