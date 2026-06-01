@@ -77,7 +77,7 @@ if ( $lbite_can_manage ) {
 		'icon'  => 'dashicons-chart-bar',
 		'title' => __( 'Statistics', 'libre-bite' ),
 		'desc'  => __( 'Revenue and order statistics per location and time period.', 'libre-bite' ),
-		'url'   => admin_url( 'admin.php?page=lbite-settings&tab=statistics' ),
+		'url'   => admin_url( 'admin.php?page=lbite-statistics' ),
 		'color' => '#b32d2e',
 	);
 }

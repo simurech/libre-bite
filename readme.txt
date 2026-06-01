@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,14 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.3 =
+* Fix: Swiss VAT — tax class is now explicitly set on the order line item during checkout, ensuring calculate_totals() uses the correct rate (e.g. 2.6%) and the order tax breakdown displays the right rate instead of the original standard rate.
+* Fix: Swiss VAT now also applies to product variations (woocommerce_product_variation_get_tax_class hook added).
+* Fix: Statistics tile on the overview page now links to the correct URL (/wp-admin/admin.php?page=lbite-statistics).
+* Fix: Completed orders loaded via "Load more" now remain visible during automatic dashboard refresh instead of disappearing.
+* Feature: Statistics page — added location selector dropdown; admin can filter by location; default period changed from "Today" to "Last 7 Days".
+* Feature: Order cards in the Kanban board now show a "Takeaway" badge for non-table orders alongside the existing "Sofort/Vorbestellung" and payment method chips.
 
 = 2.0.2 =
 * Fix: Swiss VAT switching now correctly preserves the gross price for the customer; previously, wc_get_price_excluding_tax() bypassed the tax-class filter and stored the net at the base rate, causing a price discrepancy after calculate_totals() applied the target rate. Affects POS orders, frontend checkout, and add-on fee items.

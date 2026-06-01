@@ -26,13 +26,40 @@ if ( ! current_user_can( 'lbite_manage_settings' ) ) {
 	$lbite_stat_allowed_ids = array_map( 'intval', $lbite_stat_allowed_ids );
 }
 
-$lbite_period     = isset( $_GET['lbite_period'] ) ? sanitize_key( wp_unslash( $_GET['lbite_period'] ) ) : 'today'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$lbite_period     = isset( $_GET['lbite_period'] ) ? sanitize_key( wp_unslash( $_GET['lbite_period'] ) ) : '7days'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$lbite_filter_loc = isset( $_GET['lbite_location'] ) ? intval( wp_unslash( $_GET['lbite_location'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $lbite_periods    = array(
 	'today'  => __( 'Today', 'libre-bite' ),
 	'7days'  => __( 'Last 7 Days', 'libre-bite' ),
 	'30days' => __( 'Last 30 Days', 'libre-bite' ),
 	'year'   => __( 'This Year', 'libre-bite' ),
 );
+
+// Standort-Liste für Admin-Dropdown laden.
+$lbite_stat_locations = get_posts(
+	array(
+		'post_type'      => 'lbite_location',
+		'posts_per_page' => 100,
+		'post_status'    => 'publish',
+		'orderby'        => 'title',
+		'order'          => 'ASC',
+	)
+);
+
+// Manager: Auswahl auf zugewiesene Standorte einschränken.
+if ( null !== $lbite_stat_allowed_ids ) {
+	$lbite_stat_locations = array_filter(
+		$lbite_stat_locations,
+		function( $loc ) use ( $lbite_stat_allowed_ids ) {
+			return in_array( $loc->ID, $lbite_stat_allowed_ids, true );
+		}
+	);
+	$lbite_stat_locations = array_values( $lbite_stat_locations );
+	// Für Manager: Standort-Filter auf erlaubte IDs begrenzen.
+	if ( $lbite_filter_loc && ! in_array( $lbite_filter_loc, $lbite_stat_allowed_ids, true ) ) {
+		$lbite_filter_loc = 0;
+	}
+}
 $lbite_valid_periods = array_keys( $lbite_periods );
 if ( ! in_array( $lbite_period, $lbite_valid_periods, true ) ) {
 	$lbite_period = 'today';
@@ -78,8 +105,13 @@ foreach ( $lbite_pm_config as $lbite_pm ) {
 foreach ( $lbite_stat_orders as $lbite_order ) {
 	$lbite_loc_id = (int) $lbite_order->get_meta( '_lbite_location_id' );
 
-	// Manager: nur zugeteilte Standorte auswerten
+	// Manager: nur zugeteilte Standorte auswerten.
 	if ( null !== $lbite_stat_allowed_ids && ! in_array( $lbite_loc_id, $lbite_stat_allowed_ids, true ) ) {
+		continue;
+	}
+
+	// Standort-Filter anwenden (alle Rollen).
+	if ( $lbite_filter_loc && $lbite_loc_id !== $lbite_filter_loc ) {
 		continue;
 	}
 
@@ -121,10 +153,24 @@ $lbite_avg_order     = $lbite_total_orders > 0 ? $lbite_total_revenue / $lbite_t
 	<div style="margin: 16px 0 20px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
 		<?php foreach ( $lbite_periods as $lbite_pk => $lbite_plabel ) : ?>
 			<a
-				href="<?php echo esc_url( add_query_arg( 'lbite_period', $lbite_pk ) ); ?>"
+				href="<?php echo esc_url( add_query_arg( array( 'lbite_period' => $lbite_pk, 'lbite_location' => $lbite_filter_loc ?: '' ) ) ); ?>"
 				class="button <?php echo $lbite_period === $lbite_pk ? 'button-primary' : ''; ?>"
 			><?php echo esc_html( $lbite_plabel ); ?></a>
 		<?php endforeach; ?>
+
+		<?php if ( ! empty( $lbite_stat_locations ) ) : ?>
+		<span style="margin-left: 12px; color: #50575e;"><?php esc_html_e( 'Location:', 'libre-bite' ); ?></span>
+		<select id="lbite-stat-location" onchange="window.location.href=this.value;" style="min-height: 32px; font-size: 13px;">
+			<option value="<?php echo esc_url( add_query_arg( 'lbite_location', '' ) ); ?>" <?php selected( $lbite_filter_loc, 0 ); ?>>
+				<?php esc_html_e( 'All Locations', 'libre-bite' ); ?>
+			</option>
+			<?php foreach ( $lbite_stat_locations as $lbite_stat_loc ) : ?>
+			<option value="<?php echo esc_url( add_query_arg( 'lbite_location', $lbite_stat_loc->ID ) ); ?>" <?php selected( $lbite_filter_loc, $lbite_stat_loc->ID ); ?>>
+				<?php echo esc_html( $lbite_stat_loc->post_title ); ?>
+			</option>
+			<?php endforeach; ?>
+		</select>
+		<?php endif; ?>
 	</div>
 
 	<div style="display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">

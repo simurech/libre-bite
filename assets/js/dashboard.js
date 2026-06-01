@@ -329,8 +329,13 @@
 					if (response.success && response.data.orders) {
 						this.allOrders = response.data.orders;
 						this.completedCount = response.data.completed_count || 0;
-						this.completedOffset = 3; // Zurücksetzen beim Neuladen
+						const prevOffset = this.completedOffset;
+						this.completedOffset = 3;
 						this.renderOrders(response.data.orders, silent);
+						// Bei stillem Refresh: extra geladene abgeschlossene Bestellungen neu abrufen.
+						if (silent && prevOffset > 3) {
+							this.loadMoreCompleted();
+						}
 					}
 				},
 				error: () => {
@@ -416,6 +421,8 @@
 			}
 			if (order.table_id) {
 				$badge.append($('<span class="lbite-badge-chip lbite-badge-table"></span>').text(`🪑 Tisch`));
+			} else {
+				$badge.append($('<span class="lbite-badge-chip lbite-badge-takeaway"></span>').text(lbiteDashboard.strings.takeaway || 'Take-away'));
 			}
 			if (order.payment_method) {
 				const pmLabel = (lbiteDashboard.paymentMethods && lbiteDashboard.paymentMethods[order.payment_method])

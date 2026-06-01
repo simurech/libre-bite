@@ -161,6 +161,11 @@
 	color: #444;
 }
 
+.lbite-badge-takeaway {
+	background: #fff3e0;
+	color: #b45309;
+}
+
 /* Artikel-Liste: gross und fett */
 .lbite-kanban-card-items {
 	margin-bottom: 6px;

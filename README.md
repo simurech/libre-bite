@@ -6,7 +6,7 @@
 
 **Die WooCommerce-Erweiterung für Restaurants, Take-Aways, Cafés und Bars.**
 
-[![Stable Tag](https://img.shields.io/badge/stable-2.0.2-blue.svg)](https://github.com/simurech/libre-bite/releases)
+[![Stable Tag](https://img.shields.io/badge/stable-2.0.3-blue.svg)](https://github.com/simurech/libre-bite/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.0%2B-96588a.svg)](https://woocommerce.com/)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-8892be.svg)](https://php.net/)
@@ -70,16 +70,16 @@ libre-bite/
 
 ## Roadmap
 
-| Feature | Version | Pro? |
-|---|---|---|
-| Manager-Rolle (zwischen Staff und Admin, mehrere Standorte zuweisbar) | v1.5.0 | ja |
-| Standort-Filter in WooCommerce-Bestellliste | v1.5.0 | nein |
-| Statistik-Seite: Umsatz und Bestellungen pro Standort und Zeitraum | v1.5.0 | nein |
-| Branding-Ausbau: Farbpresets, Live-Vorschau | v1.5.0 | nein |
-| Standort-spezifische Einstellungen (Zubereitungszeit, Zeitslot-Puffer pro Standort) | v1.6.0 | nein |
-| Multi-Location Architektur: vollständige Standort-Isolation, Franchise-Unterstützung | v1.6.0 | ja |
-| Reservierungen Phase 1: Tischübersicht, Auto-Freigabe, Zeitfenster | v1.7.0 | ja |
-| Reservierungen Phase 2: Auto-Zuweisung, Frontend-Verfügbarkeitsanzeige | v1.7.0 | ja |
+| Feature | Pro? |
+|---|---|
+| Nexi Terminal-Integration via OPI-Proxy (Zahlungsterminal direkt an POS angebunden) | ja |
+| Offene Bestellungen / Laufender Tab für Tischservice | ja |
+| Multi-Location Isolation Phase 2 / Franchise-Unterstützung | ja |
+| Küchen-Display-System (KDS) inkl. POS-Bestellungen | ja |
+| Erweiterte Analytik (Heatmap, Top-Produkte, CSV-Export) | teilweise |
+| Treuepunkte / Kundenbindung | ja |
+| Reservierungen: Auto-Zuweisung, Frontend-Verfügbarkeitsanzeige | ja |
+| PWA – POS als installierbare App | nein |
 
 ---
 

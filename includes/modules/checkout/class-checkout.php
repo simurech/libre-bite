@@ -130,6 +130,8 @@ class LBite_Checkout {
 		// Schweizer MWST-Umschaltung (Premium)
 		if ( lbite_freemius()->is__premium_only() && lbite_feature_enabled( 'enable_swiss_vat' ) ) {
 			$this->loader->add_filter( 'woocommerce_product_get_tax_class', $this, 'filter_swiss_vat_tax_class__premium_only', 10, 2 );
+			// Varianten nutzen ggf. einen eigenen Filter-Hook.
+			$this->loader->add_filter( 'woocommerce_product_variation_get_tax_class', $this, 'filter_swiss_vat_tax_class__premium_only', 10, 2 );
 			// Priorität 5: vor dem Add-on-Hook (Prio 10 in class-product-options.php).
 			$this->loader->add_action( 'woocommerce_checkout_create_order_line_item', $this, 'correct_line_item_subtotal_for_vat__premium_only', 5, 4 );
 		}
@@ -1666,6 +1668,14 @@ class LBite_Checkout {
 		if ( ! $product || ! $product->is_taxable() || ! wc_prices_include_tax() ) {
 			return;
 		}
+
+		// WooCommerce ruft in add_product() intern get_tax_class('unfiltered') auf,
+		// sodass die gespeicherte Steuerklasse des Bestellpostens die Originalklasse enthalten kann.
+		// Hier wird die gefilterte Steuerklasse explizit gesetzt, damit calculate_totals()
+		// den korrekten Steuersatz (z.B. 2.6%) ausweist.
+		$filtered_class = $product->get_tax_class(); // Geht durch unseren Filter.
+		$item->set_tax_class( $filtered_class );
+
 		$qty               = $item->get_quantity();
 		$gross_per_unit    = (float) $values['data']->get_price(); // Warenkorb-Preis (ggf. inkl. Add-ons)
 		$correct_net_total = self::gross_to_net_at_filtered_class( $product, $gross_per_unit ) * $qty;

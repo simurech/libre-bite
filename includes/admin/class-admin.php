@@ -632,6 +632,8 @@ class LBite_Admin {
 						'exitFullscreen'     => __( 'Exit fullscreen', 'libre-bite' ),
 						'sendReceipt'        => __( 'Send receipt', 'libre-bite' ),
 						'enterEmail'         => __( 'Enter customer email address:', 'libre-bite' ),
+						'takeaway'           => __( 'Takeaway', 'libre-bite' ),
+						'dineIn'             => __( 'Dine-in', 'libre-bite' ),
 					),
 				)
 			);
