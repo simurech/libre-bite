@@ -166,6 +166,11 @@
 	color: #b45309;
 }
 
+.lbite-badge-dine-in {
+	background: #e8f4fd;
+	color: #1a5276;
+}
+
 /* Artikel-Liste: gross und fett */
 .lbite-kanban-card-items {
 	margin-bottom: 6px;

@@ -421,6 +421,8 @@
 			}
 			if (order.table_id) {
 				$badge.append($('<span class="lbite-badge-chip lbite-badge-table"></span>').text(`🪑 Tisch`));
+			} else if (order.service_type === 'dine_in') {
+				$badge.append($('<span class="lbite-badge-chip lbite-badge-dine-in"></span>').text(lbiteDashboard.strings.dineIn || 'Dine-in'));
 			} else {
 				$badge.append($('<span class="lbite-badge-chip lbite-badge-takeaway"></span>').text(lbiteDashboard.strings.takeaway || 'Take-away'));
 			}

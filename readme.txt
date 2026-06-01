@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.4 =
+* Feature: Order Type Selection — customers can now choose Takeaway or Dine-in directly in the checkout form (Pro). When Swiss VAT Switching is active, the selection also controls which tax rate applies. With the Table module enabled, Dine-in reveals an optional table number field.
+* Feature: POS — order type indicator (Takeaway / Dine-in) is now shown in the cart box below the total.
+* Feature: POS settings — new option to configure the default order type (Takeaway or Dine-in) pre-selected on page load; selection persists across automatic page refreshes via localStorage.
+* Fix: GitHub README — logo path corrected.
 
 = 2.0.3 =
 * Fix: Swiss VAT — tax class is now explicitly set on the order line item during checkout, ensuring calculate_totals() uses the correct rate (e.g. 2.6%) and the order tax breakdown displays the right rate instead of the original standard rate.

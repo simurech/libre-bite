@@ -56,11 +56,13 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		case 'checkout':
 			$lbite_features = get_option( 'lbite_features', array() );
 			if ( $lbite_premium_allowed ) {
-				$lbite_features['enable_optimized_checkout'] = isset( $_POST['lbite_feature_toggle']['enable_optimized_checkout'] );
-				$lbite_features['enable_tips']               = isset( $_POST['lbite_feature_toggle']['enable_tips'] );
+				$lbite_features['enable_optimized_checkout']    = isset( $_POST['lbite_feature_toggle']['enable_optimized_checkout'] );
+				$lbite_features['enable_tips']                  = isset( $_POST['lbite_feature_toggle']['enable_tips'] );
+				$lbite_features['enable_order_type_selection']  = isset( $_POST['lbite_feature_toggle']['enable_order_type_selection'] );
 			} else {
-				$lbite_features['enable_optimized_checkout'] = false;
-				$lbite_features['enable_tips']               = false;
+				$lbite_features['enable_optimized_checkout']   = false;
+				$lbite_features['enable_tips']                 = false;
+				$lbite_features['enable_order_type_selection'] = false;
 			}
 			update_option( 'lbite_features', $lbite_features );
 
@@ -423,6 +425,13 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					$lbite_toggle_key             = 'enable_tips';
 					$lbite_toggle_label           = __( 'Tips', 'libre-bite' );
 					$lbite_toggle_description     = __( 'Allow customers to add a tip at checkout.', 'libre-bite' );
+					$lbite_toggle_is_pro          = true;
+					$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
+					$lbite_toggle_key             = 'enable_order_type_selection';
+					$lbite_toggle_label           = __( 'Order Type Selection', 'libre-bite' );
+					$lbite_toggle_description     = __( 'Show a Takeaway / Dine-in selector in the checkout. When Swiss VAT Switching is enabled, the selection also controls the applicable tax rate. With the Table module active, Dine-in reveals an optional table number field.', 'libre-bite' );
 					$lbite_toggle_is_pro          = true;
 					$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';

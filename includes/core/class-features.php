@@ -96,6 +96,13 @@ class LBite_Features {
 			'label'       => 'Swiss VAT Switching',
 			'description' => 'Apply different VAT rates for dine-in (8.1%) vs. takeaway (2.6%)',
 		),
+		'enable_order_type_selection' => array(
+			'group'       => 'checkout',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Order Type Selection',
+			'description' => 'Show a Takeaway / Dine-in selector in the checkout form. When Swiss VAT Switching is active, also controls which tax rate applies.',
+		),
 
 		// Locations
 		'enable_location_selector'  => array(

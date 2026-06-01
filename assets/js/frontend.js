@@ -50,6 +50,13 @@
 		bindEvents: function() {
 			// Zeitfeld anzeigen/verstecken
 			// Wird in checkout-location-time.php Template gehandhabt
+
+			// Bestelltyp-Auswahl: Tischnummer-Feld ein-/ausblenden + Steuer neu berechnen
+			$(document).on('change', 'input[name="lbite_service_type"]', function() {
+				var isDineIn = $(this).val() === 'dine_in';
+				$('#lbite-table-number-wrap').toggle(isDineIn);
+				$(document.body).trigger('update_checkout');
+			});
 		}
 	};
 

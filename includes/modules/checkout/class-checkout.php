@@ -135,6 +135,13 @@ class LBite_Checkout {
 			// Priorität 5: vor dem Add-on-Hook (Prio 10 in class-product-options.php).
 			$this->loader->add_action( 'woocommerce_checkout_create_order_line_item', $this, 'correct_line_item_subtotal_for_vat__premium_only', 5, 4 );
 		}
+
+		// Bestelltyp-Auswahl im Checkout (Premium)
+		if ( lbite_freemius()->is__premium_only() && lbite_feature_enabled( 'enable_order_type_selection' ) ) {
+			$this->loader->add_action( 'woocommerce_checkout_before_order_review', $this, 'render_order_type_selector__premium_only' );
+			$this->loader->add_action( 'woocommerce_checkout_update_order_review', $this, 'save_order_type_to_session__premium_only' );
+			$this->loader->add_action( 'woocommerce_checkout_create_order', $this, 'save_order_type_to_order__premium_only', 10, 2 );
+		}
 	}
 
 	/**
@@ -1723,6 +1730,14 @@ class LBite_Checkout {
 		}
 		// Frontend-Checkout-Kontext
 		if ( WC()->session ) {
+			// Explizite Bestelltyp-Auswahl des Kunden hat Vorrang vor automatischer Tisch-Erkennung.
+			$service_type = WC()->session->get( 'lbite_service_type' );
+			if ( $service_type ) {
+				$key = 'lbite_tax_class_' . $service_type;
+				$new = get_option( $key, false );
+				return false !== $new ? $new : $tax_class;
+			}
+			// Fallback: Tisch-ID aus Session (QR-Code-Scan, bisheriges Verhalten).
 			$table_id = WC()->session->get( 'lbite_table_id' );
 			$key      = $table_id ? 'lbite_tax_class_dine_in' : 'lbite_tax_class_takeaway';
 			$new      = get_option( $key, false );
@@ -1745,5 +1760,80 @@ class LBite_Checkout {
 	 */
 	public static function clear_pos_vat_context() {
 		self::$pos_vat_context = null;
+	}
+
+	/**
+	 * Bestelltyp-Auswahl (Takeaway / Dine-in) im Checkout-Formular ausgeben.
+	 */
+	public function render_order_type_selector__premium_only() {
+		$current      = WC()->session ? WC()->session->get( 'lbite_service_type', '' ) : '';
+		$table_in_session = WC()->session ? WC()->session->get( 'lbite_table_id' ) : '';
+		// QR-Code-Scan → Dine-in vorauswählen.
+		if ( ! $current && $table_in_session ) {
+			$current = 'dine_in';
+		}
+		$show_table = lbite_feature_enabled( 'enable_table_ordering' );
+		?>
+		<div id="lbite-order-type-selector" class="lbite-order-type-selector">
+			<h3><?php esc_html_e( 'Order Type', 'libre-bite' ); ?></h3>
+			<div class="lbite-order-type-options">
+				<label class="lbite-order-type-option">
+					<input type="radio" name="lbite_service_type" value="takeaway" <?php checked( $current !== 'dine_in' ); ?>>
+					<span><?php esc_html_e( 'Takeaway', 'libre-bite' ); ?></span>
+				</label>
+				<label class="lbite-order-type-option">
+					<input type="radio" name="lbite_service_type" value="dine_in" <?php checked( $current, 'dine_in' ); ?>>
+					<span><?php esc_html_e( 'Dine-in', 'libre-bite' ); ?></span>
+				</label>
+			</div>
+			<?php if ( $show_table ) : ?>
+			<div id="lbite-table-number-wrap" class="lbite-table-number-wrap" style="<?php echo 'dine_in' === $current ? '' : 'display:none;'; ?>">
+				<label for="lbite-table-number"><?php esc_html_e( 'Table Number (optional):', 'libre-bite' ); ?></label>
+				<input type="text" id="lbite-table-number" name="lbite_checkout_table_number" class="input-text" value="<?php echo esc_attr( WC()->session ? WC()->session->get( 'lbite_checkout_table_number', '' ) : '' ); ?>" placeholder="<?php esc_attr_e( 'e.g. 5', 'libre-bite' ); ?>">
+			</div>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Bestelltyp-Auswahl in die WC-Session speichern (wird bei update_order_review aufgerufen).
+	 *
+	 * @param string $post_data URL-enkodierte POST-Daten des Checkout-AJAX.
+	 */
+	public function save_order_type_to_session__premium_only( $post_data ) {
+		if ( ! WC()->session ) {
+			return;
+		}
+		$parsed = array();
+		parse_str( $post_data, $parsed );
+
+		$service_type = isset( $parsed['lbite_service_type'] ) ? sanitize_key( $parsed['lbite_service_type'] ) : '';
+		if ( in_array( $service_type, array( 'takeaway', 'dine_in' ), true ) ) {
+			WC()->session->set( 'lbite_service_type', $service_type );
+		}
+
+		$table_number = isset( $parsed['lbite_checkout_table_number'] ) ? sanitize_text_field( wp_unslash( $parsed['lbite_checkout_table_number'] ) ) : '';
+		WC()->session->set( 'lbite_checkout_table_number', $table_number );
+	}
+
+	/**
+	 * Bestelltyp und Tischnummer als Order-Meta speichern.
+	 *
+	 * @param WC_Order $order Bestellung.
+	 * @param array    $data  Checkout-Formulardaten.
+	 */
+	public function save_order_type_to_order__premium_only( $order, $data ) {
+		$service_type = WC()->session ? WC()->session->get( 'lbite_service_type', '' ) : '';
+		if ( in_array( $service_type, array( 'takeaway', 'dine_in' ), true ) ) {
+			$order->update_meta_data( '_lbite_service_type', $service_type );
+		}
+
+		if ( 'dine_in' === $service_type && lbite_feature_enabled( 'enable_table_ordering' ) ) {
+			$table_number = WC()->session ? WC()->session->get( 'lbite_checkout_table_number', '' ) : '';
+			if ( ! empty( $table_number ) ) {
+				$order->update_meta_data( '_lbite_checkout_table_number', sanitize_text_field( $table_number ) );
+			}
+		}
 	}
 }

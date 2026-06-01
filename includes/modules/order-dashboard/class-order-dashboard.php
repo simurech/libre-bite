@@ -274,6 +274,7 @@ class LBite_Order_Dashboard {
 		$location       = $order->get_meta( '_lbite_location_name', true );
 		$table_id       = $order->get_meta( '_lbite_table_id', true );
 		$payment_method = $order->get_meta( '_lbite_payment_method', true );
+		$service_type   = $order->get_meta( '_lbite_service_type', true );
 
 		$items = array();
 		foreach ( $order->get_items() as $item ) {
@@ -306,6 +307,7 @@ class LBite_Order_Dashboard {
 			'pickup_time'    => $pickup_time ? $this->format_pickup_time_for_display( $pickup_time ) : '',
 			'location'       => $location,
 			'table_id'       => $table_id,
+			'service_type'   => $service_type,
 			'customer'       => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
 			'total'          => $order->get_formatted_order_total(),
 			'items'          => $items,
