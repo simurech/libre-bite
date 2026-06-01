@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $lbite_premium_allowed        = true; // Nur erreichbar wenn Premium aktiv
 $lbite_table_order_page       = get_option( 'lbite_table_order_page_id', 0 );
+$lbite_table_dropdown_sort    = get_option( 'lbite_table_dropdown_sort', 'natural' );
 $lbite_pages                  = get_pages();
 ?>
 <form method="post">
@@ -39,6 +40,16 @@ $lbite_pages                  = get_pages();
 					<?php endforeach; ?>
 				</select>
 				<p class="description"><?php esc_html_e( 'The WooCommerce shop page customers are redirected to after scanning the table QR code.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><?php esc_html_e( 'Table Sort Order', 'libre-bite' ); ?></th>
+			<td>
+				<select name="lbite_table_dropdown_sort">
+					<option value="natural" <?php selected( $lbite_table_dropdown_sort, 'natural' ); ?>><?php esc_html_e( 'Alphabetical with natural number sort (1, 2, 10, 11)', 'libre-bite' ); ?></option>
+					<option value="menu_order" <?php selected( $lbite_table_dropdown_sort, 'menu_order' ); ?>><?php esc_html_e( 'Menu order (drag to reorder in table list)', 'libre-bite' ); ?></option>
+				</select>
+				<p class="description"><?php esc_html_e( 'Controls how tables are sorted in the checkout dropdown.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 	</table>

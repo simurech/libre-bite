@@ -89,7 +89,7 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 		</div>
 	<?php else : ?>
 		<div class="lbite-no-selection">
-			<p><?php esc_html_e( 'Please select a location and pickup time.', 'libre-bite' ); ?></p>
+			<p><?php esc_html_e( 'Please select a location to continue.', 'libre-bite' ); ?></p>
 		</div>
 	<?php endif; ?>
 
@@ -108,26 +108,33 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 				$lbite_sel_table_nr = $lbite_sel_table_post->post_title;
 			}
 		}
-		$lbite_sel_tables = array();
+		$lbite_sel_tables     = array();
+		$lbite_table_sort_opt = get_option( 'lbite_table_dropdown_sort', 'natural' );
 		if ( $lbite_sel_show_table && $lbite_location_id ) {
 			$lbite_sel_tables = get_posts( array(
 				'post_type'      => 'lbite_table',
 				'posts_per_page' => 50,
-				'orderby'        => 'title',
+				'orderby'        => 'menu_order' === $lbite_table_sort_opt ? 'menu_order' : 'title',
 				'order'          => 'ASC',
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Tischabfrage auf max. 50 Einträge begrenzt.
 				'meta_query'     => array( array( 'key' => '_lbite_location_id', 'value' => $lbite_location_id ) ),
 			) );
+			if ( 'natural' === $lbite_table_sort_opt ) {
+				usort( $lbite_sel_tables, function( $a, $b ) {
+					return strnatcasecmp( $a->post_title, $b->post_title );
+				} );
+			}
 		}
 	?>
 	<div class="lbite-service-type-selector">
+		<p class="lbite-service-type-label"><?php esc_html_e( 'How would you like your order?', 'libre-bite' ); ?> <span class="required">*</span></p>
 		<div class="lbite-order-type-options" id="lbite-order-type-selector">
 			<label class="lbite-order-type-option">
-				<input type="radio" name="lbite_service_type" value="takeaway" <?php checked( ! $lbite_sel_is_dine_in ); ?>>
+				<input type="radio" name="lbite_service_type" value="takeaway" <?php echo ( 'takeaway' === $lbite_sel_service_type ) ? 'checked' : ''; ?>>
 				<span><?php esc_html_e( 'To take away', 'libre-bite' ); ?></span>
 			</label>
 			<label class="lbite-order-type-option">
-				<input type="radio" name="lbite_service_type" value="dine_in" <?php checked( $lbite_sel_is_dine_in ); ?>>
+				<input type="radio" name="lbite_service_type" value="dine_in" <?php echo ( 'dine_in' === $lbite_sel_service_type ) ? 'checked' : ''; ?>>
 				<span><?php esc_html_e( 'Eat here', 'libre-bite' ); ?></span>
 			</label>
 		</div>
@@ -135,7 +142,7 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 		<div id="lbite-table-number-wrap" class="lbite-table-number-wrap" style="<?php echo $lbite_sel_is_dine_in ? '' : 'display:none;'; ?>">
 			<label for="lbite-table-number"><?php esc_html_e( 'Table (optional):', 'libre-bite' ); ?></label>
 			<?php if ( ! empty( $lbite_sel_tables ) ) : ?>
-			<select id="lbite-table-number" name="lbite_checkout_table_number" class="input-text">
+			<select id="lbite-table-number" name="lbite_checkout_table_number" class="input-text lbite-select">
 				<option value=""><?php esc_html_e( 'Select table (optional)', 'libre-bite' ); ?></option>
 				<?php foreach ( $lbite_sel_tables as $lbite_ct ) : ?>
 				<option value="<?php echo esc_attr( $lbite_ct->post_title ); ?>" <?php selected( $lbite_sel_table_nr, $lbite_ct->post_title ); ?>><?php echo esc_html( $lbite_ct->post_title ); ?></option>
@@ -543,5 +550,18 @@ jQuery(document).ready(function($) {
 	if (lbiteInitialLocation) {
 		updateNowOptionState(lbiteInitialLocation);
 	}
+
+	// Bestelltyp-Pflichtfeld: Checkout-Submit verhindern wenn keine Auswahl getroffen
+	$(document.body).on('checkout_place_order', function() {
+		var $options = $('#lbite-order-type-selector');
+		if ($options.length && !$('input[name="lbite_service_type"]:checked').val()) {
+			$options.addClass('lbite-required-highlight');
+			$('html, body').animate({ scrollTop: $options.offset().top - 120 }, 300);
+			return false;
+		}
+	});
+	$(document).on('change', 'input[name="lbite_service_type"]', function() {
+		$('#lbite-order-type-selector').removeClass('lbite-required-highlight');
+	});
 });
 <?php wp_add_inline_script( 'lbite-frontend', ob_get_clean() ); ?>

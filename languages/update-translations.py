@@ -1113,9 +1113,23 @@ NEW_STRINGS_FORMAL_SS = {
     'X minutes before pickup time (configurable under Settings → General), they are automatically moved to the "Prepare Now" column.':
         'X Minuten vor der Abholzeit (konfigurierbar unter Einstellungen → Allgemein) werden sie automatisch in die Spalte «Jetzt vorbereiten» verschoben.',
 
-    # ── v2.0.10: Checkout-Box-Titel ──────────────────────────────────────────
+    # ── v2.0.11: Checkout-UX-Fixes ───────────────────────────────────────────
     'Order Options':
         'Bestelloptionen',
+    'Please select a location to continue.':
+        'Bitte wählen Sie einen Standort, um fortzufahren.',
+    'How would you like your order?':
+        'Wie möchten Sie bestellen?',
+    'Please select whether you want to take away or eat here.':
+        'Bitte wählen Sie, ob Sie Ihre Bestellung mitnehmen oder vor Ort konsumieren möchten.',
+    'Table Sort Order':
+        'Tisch-Sortierung',
+    'Alphabetical with natural number sort (1, 2, 10, 11)':
+        'Alphabetisch mit natürlicher Zahlensortierung (1, 2, 10, 11)',
+    'Menu order (drag to reorder in table list)':
+        'Menüreihenfolge (in der Tischliste per Drag & Drop anpassen)',
+    'Controls how tables are sorted in the checkout dropdown.':
+        'Legt die Sortierreihenfolge der Tische im Checkout-Dropdown fest.',
 
     # ── v2.0.9: Frontend-Bestelltyp-Wording und Tisch-Dropdown ───────────────
     'To take away':
@@ -1156,6 +1170,10 @@ CUSTOMER_INFORMAL_SS = {
     "Please select an order type.":                 "Bitte wähle eine Bestellart.",
     "Please select a pickup time.":                 "Bitte wähle eine Abholzeit.",
     "Please select a location and pickup time.":    "Bitte wähle einen Standort und eine Abholzeit.",
+    "Please select a location to continue.":        "Bitte wähle einen Standort, um fortzufahren.",
+    "How would you like your order?":               "Wie möchtest du bestellen?",
+    "Please select whether you want to take away or eat here.":
+        "Bitte wähle, ob du deine Bestellung mitnehmen oder vor Ort konsumieren möchtest.",
     "Would you like to leave a tip?":               "Möchtest du ein Trinkgeld hinterlassen?",
     "Please select your desired location:":         "Bitte wähle deinen gewünschten Standort:",
     "When would you like to order?":                "Wann möchtest du bestellen?",

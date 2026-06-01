@@ -262,9 +262,11 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				$lbite_features['enable_table_ordering'] = isset( $_POST['lbite_feature_toggle']['enable_table_ordering'] );
 				update_option( 'lbite_features', $lbite_features );
 				$lbite_tbl_values = lbite_enforce_pro_options( array(
-					'lbite_table_order_page_id' => isset( $_POST['lbite_table_order_page_id'] ) ? intval( wp_unslash( $_POST['lbite_table_order_page_id'] ) ) : 0,
+					'lbite_table_order_page_id'   => isset( $_POST['lbite_table_order_page_id'] ) ? intval( wp_unslash( $_POST['lbite_table_order_page_id'] ) ) : 0,
+					'lbite_table_dropdown_sort'   => isset( $_POST['lbite_table_dropdown_sort'] ) && 'menu_order' === $_POST['lbite_table_dropdown_sort'] ? 'menu_order' : 'natural',
 				) );
 				update_option( 'lbite_table_order_page_id', $lbite_tbl_values['lbite_table_order_page_id'] );
+				update_option( 'lbite_table_dropdown_sort', $lbite_tbl_values['lbite_table_dropdown_sort'] );
 			}
 			$lbite_did_save = true;
 			break;

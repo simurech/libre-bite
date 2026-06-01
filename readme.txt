@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.10
+Stable tag: 2.0.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,15 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.11 =
+* Fix: Optimized checkout — order type (takeaway / eat here) no longer pre-selected; customer must make an explicit choice. JS and server-side validation added.
+* Fix: Optimized checkout — radio buttons now have proper spacing and separator from the location block above.
+* Fix: Optimized checkout — table dropdown now fully visible and correctly styled.
+* Improvement: Table dropdown in checkout now uses natural number sorting by default (Tisch 1, 2, 10, 11 instead of 1, 10, 11, 2).
+* Improvement: New setting in Tables tab: control table sort order (natural or menu order).
+* Improvement: "Please select a location and pickup time" replaced with more neutral wording.
+* Translations: All 5 locales updated (1399 strings).
 
 = 2.0.10 =
 * Fix: Optimized checkout — Order Type selector is now rendered inside the "Location & Pickup Time" box instead of a separate second box below it.
