@@ -990,6 +990,128 @@ NEW_STRINGS_FORMAL_SS = {
         'Take-away',
     'Dine-in':
         'Tischbestellung',
+
+    # ── v2.0.4: Frontend-Bestelltyp-Auswahl ──────────────────────────────────
+    'Order Type Selection':
+        'Bestelltyp-Auswahl',
+    'Default Order Type':
+        'Standard-Bestelltyp',
+    'Which order type is pre-selected when the POS is opened or reloaded.':
+        'Welcher Bestelltyp beim Öffnen oder Aktualisieren der Kasse vorausgewählt ist.',
+    'Show a Takeaway / Dine-in selector in the checkout. When Swiss VAT Switching is enabled, '
+    'the selection also controls the applicable tax rate. With the Table module active, '
+    'Dine-in reveals an optional table number field.':
+        'Zeigt im Checkout einen Bestelltyp-Selektor (Take-away / Tischbestellung) an. Wenn die '
+        'Schweizer MWST-Umschaltung aktiv ist, steuert die Auswahl auch den anzuwendenden Steuersatz. '
+        'Mit aktivem Tisch-Modul wird bei Tischbestellung ein optionales Tischnummer-Feld eingeblendet.',
+    'Table Number (optional):':
+        'Tischnummer (optional):',
+    'e.g. 5':
+        'z.B. 5',
+
+    # ── v2.0.5: Statistik-Erweiterungen ──────────────────────────────────────
+    'Export CSV':
+        'CSV exportieren',
+    'Share':
+        'Anteil',
+    'By Quantity':
+        'Nach Menge',
+    'By Revenue':
+        'Nach Umsatz',
+    'Qty':
+        'Menge',
+    'Combined with':
+        'Kombiniert mit',
+    'By Location':
+        'Nach Standort',
+    'Payment Methods (POS)':
+        'Zahlungsarten (Kassensystem)',
+    'All Locations':
+        'Alle Standorte',
+    'Top Products':
+        'Top-Produkte',
+    'Product':
+        'Produkt',
+
+    # ── v2.0.5: Beta-Label ────────────────────────────────────────────────────
+    'Beta':
+        'Beta',
+    'Hover over table → change shape (◐) and size (⊞) · Auto-refresh every 30 sec.':
+        'Tisch überfahren → Form (◐) und Grösse (⊞) ändern · Automatisch alle 30 Sek. aktualisiert.',
+    'Hover over a table: ◐ switches shape (square/round), ⊞ switches size (S/M/L)':
+        'Tisch überfahren: ◐ wechselt Form (eckig/rund), ⊞ wechselt Grösse (S/M/L)',
+
+    # ── Fehlende Help-Strings ─────────────────────────────────────────────────
+    "Didn't find what you were looking for? I'm happy to help.":
+        'Nicht das Gesuchte gefunden? Ich helfe gerne.',
+    'Unlock all premium features to realize the full potential of Libre Bite.':
+        'Schalten Sie alle Premium-Funktionen frei, um das volle Potenzial von Libre Bite auszuschöpfen.',
+    'Tip: A sound plays when new orders arrive. Make sure the sound is enabled.':
+        'Tipp: Ein Sound wird abgespielt, wenn neue Bestellungen eintreffen. Stellen Sie sicher, dass der Sound aktiviert ist.',
+    'Kanban board for incoming orders with status tracking and fullscreen mode':
+        'Kanban-Board für eingehende Bestellungen mit Statusverfolgung und Vollbild-Modus',
+
+    # ── Tisch / QR-Code ───────────────────────────────────────────────────────
+    'Which page are guests redirected to after scanning the QR code? Default: WooCommerce shop page.':
+        'Zu welcher Seite werden Gäste nach dem Scannen des QR-Codes weitergeleitet? Standard: WooCommerce-Shop-Seite.',
+    'You can use these URLs in emails, QR codes, or on social media, for example.':
+        'Diese URLs können beispielsweise in E-Mails, QR-Codes oder in sozialen Medien verwendet werden.',
+    "When scanning the QR code, the location is automatically preset in the customer's browser.":
+        'Beim Scannen des QR-Codes wird der Standort im Browser des Kunden automatisch voreingestellt.',
+    "Customers at a table don't need to enter address data. The system only asks for name and (optional) email.":
+        'Kunden an einem Tisch müssen keine Adressdaten eingeben. Das System fragt nur nach Name und (optional) E-Mail.',
+    'QR code-based table ordering – guests scan and order directly at the table.':
+        'QR-Code-basierte Tischbestellung – Gäste scannen und bestellen direkt am Tisch.',
+    'The WooCommerce shop page customers are redirected to after scanning the table QR code.':
+        'Die WooCommerce-Shop-Seite, zu der Kunden nach dem Scannen des Tisch-QR-Codes weitergeleitet werden.',
+    'Create tables and generate QR codes for each. Guests scan the QR code to start ordering.':
+        'Tische erstellen und für jeden einen QR-Code generieren. Gäste scannen den QR-Code, um zu bestellen.',
+
+    # ── Öffnungszeiten / Standort ─────────────────────────────────────────────
+    "The location is completely closed on this date. The date is blocked in the customer's date picker.":
+        'Der Standort ist an diesem Datum vollständig geschlossen. Das Datum ist in der Datumsauswahl des Kunden gesperrt.',
+    'The location dropdown receives a colored border matching the selected color.':
+        'Das Standort-Dropdown erhält einen farbigen Rahmen passend zur gewählten Farbe.',
+    'The location dropdown in the order overview is also highlighted in color.':
+        'Das Standort-Dropdown in der Bestellübersicht wird ebenfalls farblich hervorgehoben.',
+
+    # ── Reservierungen ────────────────────────────────────────────────────────
+    'Insert the following shortcode on any page to display the reservation form:':
+        'Folgenden Shortcode auf einer beliebigen Seite einbinden, um das Reservierungsformular anzuzeigen:',
+    'You can find the location ID in the URL when editing the location (post=…).':
+        'Die Standort-ID befindet sich in der URL beim Bearbeiten des Standorts (post=…).',
+    'A table selection by the guest is intentionally not provided — table assignment is done by staff in the backend.':
+        'Eine Tischauswahl durch den Gast ist bewusst nicht vorgesehen – die Tischzuweisung erfolgt durch das Personal im Backend.',
+    'Contains all details and a direct link to the reservation in the backend.':
+        'Enthält alle Details und einen direkten Link zur Reservierung im Backend.',
+    'Receive table inquiries via a frontend form, manage and confirm via email.':
+        'Tischanfragen über ein Frontend-Formular empfangen, verwalten und per E-Mail bestätigen.',
+
+    # ── Bestellablauf / Help-Texte ─────────────────────────────────────────────
+    'The customer selects products, a location and a pickup time on the website.':
+        'Der Kunde wählt Produkte, einen Standort und eine Abholzeit auf der Website.',
+    'You can optionally hide future pre-orders completely until they are relevant.':
+        'Zukünftige Vorbestellungen können optional vollständig ausgeblendet werden, bis sie relevant sind.',
+    'Add products to the cart by tapping – including variants and product options':
+        'Produkte durch Antippen in den Warenkorb legen – inkl. Varianten und Produkt-Add-ons',
+    'The selected location is currently closed. Please select a pre-order time.':
+        'Der gewählte Standort ist derzeit geschlossen. Bitte wählen Sie eine Vorbestellzeit.',
+    'Add-on':
+        'Add-on',
+
+    # ── Kanban-Spaltenbezeichnungen (neue Strings) ─────────────────────────────
+    'Pre-orders are automatically moved from "Pre-orders" to "Prepare Now" X minutes before pickup time.':
+        'Vorbestellungen werden automatisch X Minuten vor der Abholzeit von «Vorbestellungen» nach «Jetzt vorbereiten» verschoben.',
+    'The order immediately appears in the "Pre-orders" column of the order overview. Optionally a sound plays.':
+        'Die Bestellung erscheint sofort in der Spalte «Vorbestellungen» der Bestellübersicht. Optional wird ein Sound abgespielt.',
+    'Order is moved to "Prepare Now". For pre-orders, this happens automatically X minutes before pickup time.':
+        'Bestellung wird in «Jetzt vorbereiten» verschoben. Bei Vorbestellungen geschieht dies automatisch X Minuten vor der Abholzeit.',
+    'The Kanban board is your real-time overview of all active orders. It has three columns: Pre-orders, Prepare Now, and Completed.':
+        'Das Kanban-Board ist Ihre Echtzeit-Übersicht aller aktiven Bestellungen. Es hat drei Spalten: Vorbestellungen, Jetzt vorbereiten und Abgeschlossen.',
+    'Pre-orders initially appear in "Pre-orders" with the pickup time shown.':
+        'Vorbestellungen erscheinen zunächst in «Vorbestellungen» mit der angezeigten Abholzeit.',
+    'X minutes before pickup time (configurable under Settings → General), they are automatically moved to the "Prepare Now" column.':
+        'X Minuten vor der Abholzeit (konfigurierbar unter Einstellungen → Allgemein) werden sie automatisch in die Spalte «Jetzt vorbereiten» verschoben.',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT
