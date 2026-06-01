@@ -40,7 +40,9 @@ class LBite_Admin_Settings {
 		// Einstellungen speichern
 		$this->loader->add_action( 'admin_init', $this, 'register_settings' );
 		$this->loader->add_action( 'admin_init', $this, 'save_admin_settings' );
-		$this->loader->add_action( 'admin_init', $this, 'save_manager_assignments__premium_only' );
+		if ( lbite_freemius()->is__premium_only() ) {
+			$this->loader->add_action( 'admin_init', $this, 'save_manager_assignments__premium_only' );
+		}
 
 		// Plugin-Name überschreiben
 		$this->loader->add_filter( 'lbite_plugin_display_name', $this, 'get_custom_plugin_name' );

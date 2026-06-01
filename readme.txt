@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.13
+Stable tag: 2.0.15
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,9 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.15 =
+* Fix: Fatal error on every admin page in the free version caused by an unguarded premium-only method registration on the admin_init hook. The backend was completely inaccessible after installing the free version.
 
 = 2.0.14 =
 * Fix: Cart total now stays the same for the customer regardless of which tax class is applied (takeaway vs. dine-in). WooCommerce's internal 'unfiltered' tax class lookup was bypassing the rate switch and recalculating a different gross price.
