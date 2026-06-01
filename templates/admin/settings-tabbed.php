@@ -151,12 +151,12 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		case 'notifications':
 			$lbite_features = get_option( 'lbite_features', array() );
 			if ( $lbite_premium_allowed ) {
-				$lbite_features['enable_pickup_reminders']   = isset( $_POST['lbite_feature_toggle']['enable_pickup_reminders'] );
-				$lbite_features['enable_sound_notifications'] = isset( $_POST['lbite_feature_toggle']['enable_sound_notifications'] );
+				$lbite_features['enable_pickup_reminders'] = isset( $_POST['lbite_feature_toggle']['enable_pickup_reminders'] );
 			} else {
-				$lbite_features['enable_pickup_reminders']   = false;
-				$lbite_features['enable_sound_notifications'] = false;
+				$lbite_features['enable_pickup_reminders'] = false;
 			}
+			// Sound notifications are a free feature.
+			$lbite_features['enable_sound_notifications'] = isset( $_POST['lbite_feature_toggle']['enable_sound_notifications'] );
 			update_option( 'lbite_features', $lbite_features );
 
 			$lbite_not_values = lbite_enforce_pro_options( array(

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
 
-if ( $lbite_premium_allowed && lbite_feature_enabled( 'enable_sound_notifications' ) ) {
+if ( lbite_feature_enabled( 'enable_sound_notifications' ) ) {
 	wp_enqueue_media();
 }
 
@@ -34,12 +34,12 @@ $lbite_notification_sound   = get_option( 'lbite_notification_sound', $lbite_def
 	$lbite_toggle_key             = 'enable_sound_notifications';
 	$lbite_toggle_label           = __( 'Sound Notifications', 'libre-bite' );
 	$lbite_toggle_description     = __( 'Play a sound when a new order arrives in the order overview.', 'libre-bite' );
-	$lbite_toggle_is_pro          = true;
-	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+	$lbite_toggle_is_pro          = false;
+	$lbite_toggle_premium_allowed = true;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 	?>
 
-	<?php if ( $lbite_premium_allowed && lbite_feature_enabled( 'enable_sound_notifications' ) ) : ?>
+	<?php if ( lbite_feature_enabled( 'enable_sound_notifications' ) ) : ?>
 	<table class="form-table">
 		<tr>
 			<th><?php esc_html_e( 'Notification Sound', 'libre-bite' ); ?></th>
@@ -75,7 +75,7 @@ $lbite_notification_sound   = get_option( 'lbite_notification_sound', $lbite_def
 	<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 </form>
 
-<?php if ( $lbite_premium_allowed && lbite_feature_enabled( 'enable_sound_notifications' ) ) : ?>
+<?php if ( lbite_feature_enabled( 'enable_sound_notifications' ) ) : ?>
 <script>
 jQuery(document).ready(function($) {
 	var lbiteSoundFrame;

@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.15
+Stable tag: 2.0.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,10 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.16 =
+* Improvement: Sound Notifications is now a free feature — no Pro subscription required to hear new order alerts in the Order Overview.
+* Improvement: Roles & Menus settings — added a tip to assign a location to each Libre Bite Staff user so they only see orders relevant to their location.
 
 = 2.0.15 =
 * Fix: Fatal error on every admin page in the free version caused by an unguarded premium-only method registration on the admin_init hook. The backend was completely inaccessible after installing the free version.

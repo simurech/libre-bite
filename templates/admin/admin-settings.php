@@ -192,6 +192,16 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 								<li>&#x2713; <?php esc_html_e( 'POS System', 'libre-bite' ); ?></li>
 								<li>&#x2713; <?php esc_html_e( 'Help & Support', 'libre-bite' ); ?></li>
 							</ul>
+							<p class="description" style="margin-top: 10px; padding: 8px 12px; background: #f0f6fc; border-left: 3px solid #2271b1; border-radius: 0 3px 3px 0;">
+								<strong><?php esc_html_e( 'Tip:', 'libre-bite' ); ?></strong>
+								<?php
+								printf(
+									/* translators: %s: link to users list */
+									esc_html__( 'Assign a location to each Staff user on their %s so they only see orders and options for their location.', 'libre-bite' ),
+									'<a href="' . esc_url( admin_url( 'users.php' ) ) . '">' . esc_html__( 'user profile', 'libre-bite' ) . '</a>'
+								);
+								?>
+							</p>
 						<?php else : ?>
 							<p class="description" style="margin-bottom: 15px;">
 								<?php

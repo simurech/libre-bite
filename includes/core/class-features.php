@@ -124,7 +124,7 @@ class LBite_Features {
 		'enable_sound_notifications' => array(
 			'group'       => 'notifications',
 			'default'     => false,
-			'premium'     => true,
+			'premium'     => false,
 			'label'       => 'Sound Notifications',
 			'description' => 'Play a sound for new orders',
 		),
