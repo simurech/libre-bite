@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.5 =
+* Feature: Statistics — extended reporting with top products by quantity and revenue, add-on breakdown with product combos, payment method share bars, and CSV export.
+* UI: Table Plan and Reservations pages now show a Beta badge in the page title.
+* Roadmap: fr_CH and it_CH translation entries added; Barcode-Scanning removed.
 
 = 2.0.4 =
 * Feature: Order Type Selection — customers can now choose Takeaway or Dine-in directly in the checkout form (Pro). When Swiss VAT Switching is active, the selection also controls which tax rate applies. With the Table module enabled, Dine-in reveals an optional table number field.

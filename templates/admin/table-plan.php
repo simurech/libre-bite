@@ -23,7 +23,7 @@ $lbite_locations = get_posts(
 $lbite_selected_location = intval( get_user_meta( get_current_user_id(), '_lbite_floor_plan_location', true ) );
 ?>
 <div class="wrap lbite-admin-wrap">
-	<h1><?php esc_html_e( 'Table Plan', 'libre-bite' ); ?></h1>
+	<h1><?php esc_html_e( 'Table Plan', 'libre-bite' ); ?> <span class="lbite-beta-badge"><?php esc_html_e( 'Beta', 'libre-bite' ); ?></span></h1>
 	<p class="description">
 		<?php esc_html_e( 'Drag tables to the desired position. Click on a table to see the current order.', 'libre-bite' ); ?>
 	</p>
