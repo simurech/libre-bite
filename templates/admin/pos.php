@@ -86,14 +86,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php endif; ?>
 
 		<?php if ( lbite_feature_enabled( 'enable_swiss_vat' ) ) : ?>
+		<?php $lbite_pos_vat_default = get_option( 'lbite_pos_default_vat_type', 'takeaway' ); ?>
 		<div id="lbite-pos-vat-selector">
 			<label style="margin-right:6px;font-weight:600;"><?php esc_html_e( 'Order type:', 'libre-bite' ); ?></label>
 			<label class="lbite-pos-vat-option">
-				<input type="radio" name="lbite_pos_vat_type" value="takeaway" checked>
+				<input type="radio" name="lbite_pos_vat_type" value="takeaway" <?php checked( $lbite_pos_vat_default, 'takeaway' ); ?>>
 				<?php esc_html_e( 'Takeaway', 'libre-bite' ); ?>
 			</label>
 			<label class="lbite-pos-vat-option" style="margin-left:10px;">
-				<input type="radio" name="lbite_pos_vat_type" value="dine_in">
+				<input type="radio" name="lbite_pos_vat_type" value="dine_in" <?php checked( $lbite_pos_vat_default, 'dine_in' ); ?>>
 				<?php esc_html_e( 'Dine-in', 'libre-bite' ); ?>
 			</label>
 		</div>
@@ -150,6 +151,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 			</div>
 
+			<?php if ( lbite_feature_enabled( 'enable_swiss_vat' ) ) : ?>
+			<div id="lbite-pos-vat-indicator" class="lbite-pos-vat-indicator"></div>
+			<?php endif; ?>
 
 		<div class="lbite-pos-coupons">
 			<div id="lbite-pos-applied-coupons"></div>

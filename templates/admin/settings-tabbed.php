@@ -196,6 +196,10 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				);
 			}
 			update_option( 'lbite_pos_payment_methods', $lbite_payment_methods );
+
+			$lbite_pos_default_vat_type = isset( $_POST['lbite_pos_default_vat_type'] ) && 'dine_in' === sanitize_key( wp_unslash( $_POST['lbite_pos_default_vat_type'] ) ) ? 'dine_in' : 'takeaway';
+			update_option( 'lbite_pos_default_vat_type', $lbite_pos_default_vat_type );
+
 			$lbite_did_save = true;
 			break;
 
@@ -725,6 +729,23 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 								<p class="description" style="margin-top: 8px;"><?php esc_html_e( 'At least one payment method must be active.', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
+						<?php if ( lbite_feature_enabled( 'enable_swiss_vat' ) ) : ?>
+						<?php $lbite_pos_default_vat = get_option( 'lbite_pos_default_vat_type', 'takeaway' ); ?>
+						<tr>
+							<th><?php esc_html_e( 'Default Order Type', 'libre-bite' ); ?></th>
+							<td>
+								<label style="margin-right: 16px;">
+									<input type="radio" name="lbite_pos_default_vat_type" value="takeaway" <?php checked( $lbite_pos_default_vat, 'takeaway' ); ?>>
+									<?php esc_html_e( 'Takeaway', 'libre-bite' ); ?>
+								</label>
+								<label>
+									<input type="radio" name="lbite_pos_default_vat_type" value="dine_in" <?php checked( $lbite_pos_default_vat, 'dine_in' ); ?>>
+									<?php esc_html_e( 'Dine-in', 'libre-bite' ); ?>
+								</label>
+								<p class="description"><?php esc_html_e( 'Which order type is pre-selected when the POS is opened or reloaded.', 'libre-bite' ); ?></p>
+							</td>
+						</tr>
+						<?php endif; ?>
 					</table>
 					<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 				</form>

@@ -71,6 +71,22 @@
 				}
 			});
 
+			// VAT-Typ aus localStorage wiederherstellen (überschreibt PHP-Default nach Reload)
+			if ($('input[name="lbite_pos_vat_type"]').length) {
+				const savedVatType = localStorage.getItem('lbite_pos_vat_type');
+				if (savedVatType) {
+					$('input[name="lbite_pos_vat_type"][value="' + savedVatType + '"]').prop('checked', true);
+				}
+				this.updateVatIndicator();
+				$(document).on('change', 'input[name="lbite_pos_vat_type"]', () => {
+					const type = $('input[name="lbite_pos_vat_type"]:checked').val();
+					if (type) {
+						localStorage.setItem('lbite_pos_vat_type', type);
+					}
+					this.updateVatIndicator();
+				});
+			}
+
 			// Initiale Standort-Farbe und Overlay-Status setzen
 			const initialLocation = $('#lbite-pos-location').val();
 			this.applyLocationColor(initialLocation);
@@ -117,6 +133,24 @@
 			} else {
 				$products.removeClass('lbite-pos-no-location');
 			}
+		},
+
+		/**
+		 * VAT-Typ-Indikator im Warenkorb aktualisieren
+		 */
+		updateVatIndicator: function() {
+			const $indicator = $('#lbite-pos-vat-indicator');
+			if ($indicator.length === 0) return;
+			const $checked = $('input[name="lbite_pos_vat_type"]:checked');
+			if ($checked.length === 0) {
+				$indicator.hide();
+				return;
+			}
+			const val = $checked.val();
+			const label = val === 'dine_in'
+				? (lbitePos.strings.dineIn || 'Dine-in')
+				: (lbitePos.strings.takeaway || 'Takeaway');
+			$indicator.text(label).attr('data-type', val).show();
 		},
 
 		/**

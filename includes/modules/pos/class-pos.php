@@ -170,6 +170,8 @@ class LBite_POS {
 					'loadingCoupons'        => __( 'Loading coupons...', 'libre-bite' ),
 					'noCoupons'             => __( 'No active coupons available', 'libre-bite' ),
 					'wakeLockNotSupported'  => __( 'Wake Lock is not supported by this browser.', 'libre-bite' ),
+					'takeaway'              => __( 'Takeaway', 'libre-bite' ),
+					'dineIn'                => __( 'Dine-in', 'libre-bite' ),
 				),
 			)
 		);
