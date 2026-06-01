@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the Libre Bite package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Libre Bite 2.0.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-01 15:37+0200\n"
+"POT-Creation-Date: 2026-06-01 15:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -493,17 +493,17 @@ msgid "No locations available."
 msgstr ""
 
 #: includes/modules/checkout/class-checkout.php:707
-#: templates/checkout-location-time.php:231
+#: templates/checkout-location-time.php:287
 msgid "Please select a location."
 msgstr ""
 
 #: includes/modules/checkout/class-checkout.php:711
-#: templates/checkout-location-time.php:236
+#: templates/checkout-location-time.php:292
 msgid "Please select an order type."
 msgstr ""
 
 #: includes/modules/checkout/class-checkout.php:718
-#: templates/checkout-location-time.php:241
+#: templates/checkout-location-time.php:297
 msgid "Please select a pickup time."
 msgstr ""
 
@@ -552,27 +552,27 @@ msgid "Note"
 msgstr ""
 
 #: includes/modules/checkout/class-checkout.php:1804
-#: templates/checkout-optimized.php:118
+#: templates/checkout-location-time.php:127
 msgid "To take away"
 msgstr ""
 
 #: includes/modules/checkout/class-checkout.php:1808
-#: templates/checkout-optimized.php:122
+#: templates/checkout-location-time.php:131
 msgid "Eat here"
 msgstr ""
 
 #: includes/modules/checkout/class-checkout.php:1813 templates/admin/pos.php:78
-#: templates/checkout-optimized.php:128
+#: templates/checkout-location-time.php:136
 msgid "Table (optional):"
 msgstr ""
 
 #: includes/modules/checkout/class-checkout.php:1816
-#: templates/checkout-optimized.php:131
+#: templates/checkout-location-time.php:139
 msgid "Select table (optional)"
 msgstr ""
 
 #: includes/modules/checkout/class-checkout.php:1824
-#: templates/checkout-optimized.php:139
+#: templates/checkout-location-time.php:145
 msgid "e.g. 5"
 msgstr ""
 
@@ -608,7 +608,7 @@ msgstr ""
 #: templates/admin/documentation.php:156
 #: templates/admin/help-partials/reservations.php:29
 #: templates/admin/statistics.php:222 templates/admin/statistics.php:437
-#: templates/checkout-location-time.php:100
+#: templates/checkout-location-time.php:156
 #: templates/frontend/reservation-form.php:24
 #: templates/thankyou-optimized.php:119
 msgid "Location"
@@ -1496,8 +1496,7 @@ msgid "Guests"
 msgstr ""
 
 #: includes/modules/reservations/class-reservations.php:229
-#: templates/admin/holidays-settings.php:43
-#: templates/checkout-optimized.php:169
+#: templates/admin/holidays-settings.php:43 templates/checkout-optimized.php:47
 #: templates/frontend/reservation-form.php:86
 msgid "Name"
 msgstr ""
@@ -4909,8 +4908,7 @@ msgstr ""
 
 #: templates/admin/order-board.php:32 templates/admin/pos.php:34
 #: templates/admin/reservation-board.php:32 templates/admin/statistics.php:277
-#: templates/admin/table-plan.php:33 templates/checkout-optimized.php:106
-#: templates/emails/pickup-reminder.php:36
+#: templates/admin/table-plan.php:33 templates/emails/pickup-reminder.php:36
 #: templates/emails/plain/pickup-reminder.php:38
 msgid "Location:"
 msgstr ""
@@ -5020,7 +5018,7 @@ msgid "Until further notice"
 msgstr ""
 
 #: templates/admin/pos.php:282 templates/admin/pos.php:300
-#: templates/checkout-location-time.php:166
+#: templates/checkout-location-time.php:222
 msgid "Cancel"
 msgstr ""
 
@@ -5139,7 +5137,7 @@ msgstr ""
 
 #: templates/admin/settings-tabbed.php:434
 msgid ""
-"Show a Takeaway / Dine-in selector in the checkout. When Swiss VAT Switching "
+"Show a Takeaway / Dine-in selector in the checkout. When Multiple Tax Rates "
 "is enabled, the selection also controls the applicable tax rate. With the "
 "Table module active, Dine-in reveals an optional table number field."
 msgstr ""
@@ -5236,13 +5234,13 @@ msgid ""
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:564
-msgid "Swiss VAT Switching"
+msgid "Multiple Tax Rates"
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:565
 msgid ""
-"Automatically apply different VAT rates: takeaway orders use the reduced "
-"rate, dine-in (table) orders use the standard rate."
+"Apply a different tax class per order type: configure which tax class "
+"applies to Takeaway orders and which applies to Dine-in orders."
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:574
@@ -5256,7 +5254,7 @@ msgid "Takeaway Tax Class"
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:589
-msgid "Tax class for pickup/takeaway orders (typically 2.6% in Switzerland)."
+msgid "Tax class applied to takeaway and pickup orders."
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:593
@@ -5264,7 +5262,7 @@ msgid "Dine-in Tax Class"
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:604
-msgid "Tax class for table/dine-in orders (typically 8.1% in Switzerland)."
+msgid "Tax class applied to dine-in and table orders."
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:616
@@ -5576,7 +5574,7 @@ msgstr ""
 
 #: templates/admin/settings/branding.php:134
 #: templates/checkout-location-time.php:59
-#: templates/checkout-location-time.php:123 templates/location-modal.php:42
+#: templates/checkout-location-time.php:179 templates/location-modal.php:42
 msgid "Order Now"
 msgstr ""
 
@@ -5777,7 +5775,7 @@ msgstr ""
 msgid "Payment Method"
 msgstr ""
 
-#: templates/admin/statistics.php:225 templates/checkout-location-time.php:114
+#: templates/admin/statistics.php:225 templates/checkout-location-time.php:170
 msgid "Order Type"
 msgstr ""
 
@@ -5986,7 +5984,7 @@ msgstr ""
 
 #: templates/admin/super-admin-settings.php:249
 #: templates/admin/support-settings.php:199
-#: templates/checkout-location-time.php:246
+#: templates/checkout-location-time.php:302
 msgid "Saving..."
 msgstr ""
 
@@ -6119,7 +6117,7 @@ msgid "Location & Pickup Time"
 msgstr ""
 
 #: templates/checkout-location-time.php:57
-#: templates/checkout-location-time.php:121
+#: templates/checkout-location-time.php:177
 msgid "Table Service"
 msgstr ""
 
@@ -6135,84 +6133,76 @@ msgstr ""
 msgid "Please select a location and pickup time."
 msgstr ""
 
-#: templates/checkout-location-time.php:103
+#: templates/checkout-location-time.php:159
 msgid "Select location..."
 msgstr ""
 
-#: templates/checkout-location-time.php:129
+#: templates/checkout-location-time.php:185
 msgid "Pre-order for Later"
 msgstr ""
 
-#: templates/checkout-location-time.php:134
+#: templates/checkout-location-time.php:190
 #: templates/location-selector-banner.php:159
 #: templates/location-selector-tiles.php:167
 msgid "Immediate order not available –"
 msgstr ""
 
-#: templates/checkout-location-time.php:140
+#: templates/checkout-location-time.php:196
 msgid "Pickup Date"
 msgstr ""
 
-#: templates/checkout-location-time.php:153
+#: templates/checkout-location-time.php:209
 msgid "Pickup Time"
 msgstr ""
 
-#: templates/checkout-location-time.php:156
-#: templates/checkout-location-time.php:305
+#: templates/checkout-location-time.php:212
+#: templates/checkout-location-time.php:361
 msgid "Select time..."
 msgstr ""
 
-#: templates/checkout-location-time.php:162
-#: templates/checkout-location-time.php:273
-#: templates/checkout-location-time.php:278
+#: templates/checkout-location-time.php:218
+#: templates/checkout-location-time.php:329
+#: templates/checkout-location-time.php:334
 msgid "Apply"
 msgstr ""
 
-#: templates/checkout-location-time.php:272
+#: templates/checkout-location-time.php:328
 msgid "Error saving."
 msgstr ""
 
-#: templates/checkout-location-time.php:277
+#: templates/checkout-location-time.php:333
 msgid "Error saving. Please try again."
 msgstr ""
 
-#: templates/checkout-location-time.php:394
+#: templates/checkout-location-time.php:450
 msgid "Automatically changed to:"
 msgstr ""
 
-#: templates/checkout-location-time.php:404
+#: templates/checkout-location-time.php:460
 msgid "No opening day found in the next 14 days."
 msgstr ""
 
-#: templates/checkout-optimized.php:89
+#: templates/checkout-optimized.php:31
 msgid "Complete Order"
 msgstr ""
 
-#: templates/checkout-optimized.php:146
-msgid "Table:"
-msgstr ""
-
-#: templates/checkout-optimized.php:153 templates/checkout-optimized.php:158
-msgid "Pickup:"
-msgstr ""
-
-#: templates/checkout-optimized.php:167
+#: templates/checkout-optimized.php:45
 msgid "What's your name?"
 msgstr ""
 
-#: templates/checkout-optimized.php:170
+#: templates/checkout-optimized.php:48
 msgid "Your Name"
 msgstr ""
 
-#: templates/checkout-optimized.php:175
+#: templates/checkout-optimized.php:53
 msgid "Your Email"
 msgstr ""
 
-#: templates/checkout-optimized.php:177
+#: templates/checkout-optimized.php:55
 msgid "Email address"
 msgstr ""
 
-#: templates/checkout-optimized.php:186 templates/thankyou-optimized.php:185
+#: templates/checkout-optimized.php:64 templates/thankyou-optimized.php:185
 msgid "Your Order"
 msgstr ""
 

@@ -431,7 +431,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 
 					$lbite_toggle_key             = 'enable_order_type_selection';
 					$lbite_toggle_label           = __( 'Order Type Selection', 'libre-bite' );
-					$lbite_toggle_description     = __( 'Show a Takeaway / Dine-in selector in the checkout. When Swiss VAT Switching is enabled, the selection also controls the applicable tax rate. With the Table module active, Dine-in reveals an optional table number field.', 'libre-bite' );
+					$lbite_toggle_description     = __( 'Show a Takeaway / Dine-in selector in the checkout. When Multiple Tax Rates is enabled, the selection also controls the applicable tax rate. With the Table module active, Dine-in reveals an optional table number field.', 'libre-bite' );
 					$lbite_toggle_is_pro          = true;
 					$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
@@ -561,8 +561,8 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 
 					$lbite_toggle_key             = 'enable_swiss_vat';
-					$lbite_toggle_label           = __( 'Swiss VAT Switching', 'libre-bite' );
-					$lbite_toggle_description     = __( 'Automatically apply different VAT rates: takeaway orders use the reduced rate, dine-in (table) orders use the standard rate.', 'libre-bite' );
+					$lbite_toggle_label           = __( 'Multiple Tax Rates', 'libre-bite' );
+					$lbite_toggle_description     = __( 'Apply a different tax class per order type: configure which tax class applies to Takeaway orders and which applies to Dine-in orders.', 'libre-bite' );
 					$lbite_toggle_is_pro          = true;
 					$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
@@ -586,7 +586,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 										</option>
 									<?php endforeach; ?>
 								</select>
-								<p class="description"><?php esc_html_e( 'Tax class for pickup/takeaway orders (typically 2.6% in Switzerland).', 'libre-bite' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Tax class applied to takeaway and pickup orders.', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
 						<tr>
@@ -601,7 +601,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 										</option>
 									<?php endforeach; ?>
 								</select>
-								<p class="description"><?php esc_html_e( 'Tax class for table/dine-in orders (typically 8.1% in Switzerland).', 'libre-bite' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Tax class applied to dine-in and table orders.', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
 					</table>

@@ -968,22 +968,22 @@ NEW_STRINGS_FORMAL_SS = {
     'Note':
         'Notiz',
 
-    # ── v1.6.0: F_TAX – Schweizer MWST ───────────────────────────────────────
+    # ── v1.6.0: F_TAX – Steuerklassen pro Bestelltyp ─────────────────────────
     # "Standard" = Standard-Steuerklasse in WooCommerce
     'Standard':
         'Standard',
-    'Swiss VAT Switching':
-        'Schweizer MWST-Umschaltung',
-    'Automatically apply different VAT rates: takeaway orders use the reduced rate, dine-in (table) orders use the standard rate.':
-        'Automatisch unterschiedliche MWST-Sätze anwenden: Take-away-Bestellungen erhalten den reduzierten Satz, Tischbestellungen den Normalsatz.',
+    'Multiple Tax Rates':
+        'Mehrere Steuerklassen',
+    'Apply a different tax class per order type: configure which tax class applies to Takeaway orders and which applies to Dine-in orders.':
+        'Unterschiedliche Steuerklassen pro Bestelltyp: konfiguriere, welche Steuerklasse für Take-away- und welche für Tischbestellungen gilt.',
     'Takeaway Tax Class':
         'Take-away-Steuerklasse',
     'Dine-in Tax Class':
         'Tisch-Steuerklasse',
-    'Tax class for pickup/takeaway orders (typically 2.6% in Switzerland).':
-        'Steuerklasse für Abholbestellungen/Take-away (typischerweise 2.6 % in der Schweiz).',
-    'Tax class for table/dine-in orders (typically 8.1% in Switzerland).':
-        'Steuerklasse für Tischbestellungen (typischerweise 8.1 % in der Schweiz).',
+    'Tax class applied to takeaway and pickup orders.':
+        'Steuerklasse für Take-away- und Abholbestellungen.',
+    'Tax class applied to dine-in and table orders.':
+        'Steuerklasse für Tischbestellungen (vor Ort).',
     'Order type:':
         'Bestellart:',
     'Takeaway':
@@ -998,11 +998,11 @@ NEW_STRINGS_FORMAL_SS = {
         'Standard-Bestelltyp',
     'Which order type is pre-selected when the POS is opened or reloaded.':
         'Welcher Bestelltyp beim Öffnen oder Aktualisieren der Kasse vorausgewählt ist.',
-    'Show a Takeaway / Dine-in selector in the checkout. When Swiss VAT Switching is enabled, '
+    'Show a Takeaway / Dine-in selector in the checkout. When Multiple Tax Rates is enabled, '
     'the selection also controls the applicable tax rate. With the Table module active, '
     'Dine-in reveals an optional table number field.':
-        'Zeigt im Checkout einen Bestelltyp-Selektor (Take-away / Tischbestellung) an. Wenn die '
-        'Schweizer MWST-Umschaltung aktiv ist, steuert die Auswahl auch den anzuwendenden Steuersatz. '
+        'Zeigt im Checkout einen Bestelltyp-Selektor (Take-away / Tischbestellung) an. Wenn «Mehrere '
+        'Steuerklassen» aktiv ist, steuert die Auswahl auch den anzuwendenden Steuersatz. '
         'Mit aktivem Tisch-Modul wird bei Tischbestellung ein optionales Tischnummer-Feld eingeblendet.',
     'Table Number (optional):':
         'Tischnummer (optional):',
