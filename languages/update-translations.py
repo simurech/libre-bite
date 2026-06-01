@@ -1113,6 +1113,10 @@ NEW_STRINGS_FORMAL_SS = {
     'X minutes before pickup time (configurable under Settings → General), they are automatically moved to the "Prepare Now" column.':
         'X Minuten vor der Abholzeit (konfigurierbar unter Einstellungen → Allgemein) werden sie automatisch in die Spalte «Jetzt vorbereiten» verschoben.',
 
+    # ── v2.0.10: Checkout-Box-Titel ──────────────────────────────────────────
+    'Order Options':
+        'Bestelloptionen',
+
     # ── v2.0.9: Frontend-Bestelltyp-Wording und Tisch-Dropdown ───────────────
     'To take away':
         'zum Mitnehmen',

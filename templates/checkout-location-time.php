@@ -17,7 +17,7 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 ?>
 
 <div class="lbite-checkout-selection">
-	<h3><?php esc_html_e( 'Location & Pickup Time', 'libre-bite' ); ?></h3>
+	<h3><?php esc_html_e( 'Order Options', 'libre-bite' ); ?></h3>
 
 	<!-- Versteckte Felder für das Formular -->
 	<input type="hidden" name="lbite_location_id" id="lbite_location_id" value="<?php echo esc_attr( $lbite_location_id ); ?>" required>

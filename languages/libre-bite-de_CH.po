@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libre Bite 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-01 15:53+0200\n"
+"POT-Creation-Date: 2026-06-01 15:59+0200\n"
 "PO-Revision-Date: 2026-04-14\n"
 "Last-Translator: Simon Urech\n"
 "Language-Team: Simon Urech\n"
@@ -6114,8 +6114,8 @@ msgid ""
 msgstr "Tisch überfahren → Form (◐) und Grösse (⊞) ändern · Automatisch alle 30 Sek. aktualisiert."
 
 #: templates/checkout-location-time.php:20
-msgid "Location & Pickup Time"
-msgstr "Standort & Abholzeit"
+msgid "Order Options"
+msgstr "Bestelloptionen"
 
 #: templates/checkout-location-time.php:57
 #: templates/checkout-location-time.php:177
@@ -6433,6 +6433,9 @@ msgstr "Beleg gesendet"
 #: templates/thankyou-optimized.php:332
 msgid "Error sending receipt."
 msgstr "Fehler beim Senden. Bitte versuchen Sie es erneut."
+
+#~ msgid "Location & Pickup Time"
+#~ msgstr "Standort & Abholzeit"
 
 #~ msgid "Swiss VAT Switching"
 #~ msgstr "Schweizer MWST-Umschaltung"
