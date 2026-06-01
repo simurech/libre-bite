@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.8
+Stable tag: 2.0.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,13 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.9 =
+* Improvement: Optimized checkout — Order Type selector ("To take away" / "Eat here") is now integrated into the location info box at the top of the form.
+* Improvement: Optimized checkout — Table field replaced by a dropdown of configured tables; falls back to text input if no tables are set up for the location.
+* Improvement: Pickup time in info box is hidden for dine-in orders (not applicable).
+* Improvement: POS settings — "Default Order Type" is now visible when Table Management is active, not only when Swiss VAT Switching is enabled. Added link to Prices & Taxes settings when relevant.
+* Translations: All 5 locales updated to 1395 translated strings (0 untranslated).
 
 = 2.0.8 =
 * Security: Removed developer override constant that bypassed license verification for premium features.

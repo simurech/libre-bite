@@ -1770,30 +1770,59 @@ class LBite_Checkout {
 		if ( ! empty( $GLOBALS['lbite_order_type_rendered'] ) ) {
 			return;
 		}
-		$current      = WC()->session ? WC()->session->get( 'lbite_service_type', '' ) : '';
+		$current          = WC()->session ? WC()->session->get( 'lbite_service_type', '' ) : '';
 		$table_in_session = WC()->session ? WC()->session->get( 'lbite_table_id' ) : '';
 		// QR-Code-Scan → Dine-in vorauswählen.
 		if ( ! $current && $table_in_session ) {
 			$current = 'dine_in';
 		}
-		$show_table = lbite_feature_enabled( 'enable_table_ordering' );
+		$is_dine_in    = 'dine_in' === $current;
+		$show_table    = lbite_feature_enabled( 'enable_table_ordering' );
+		$location_id   = WC()->session ? (int) WC()->session->get( 'lbite_location_id' ) : 0;
+		$table_nr      = WC()->session ? WC()->session->get( 'lbite_checkout_table_number', '' ) : '';
+		$tables        = array();
+		if ( $show_table && $location_id ) {
+			$tables = get_posts( array(
+				'post_type'      => 'lbite_table',
+				'posts_per_page' => 50,
+				'orderby'        => 'title',
+				'order'          => 'ASC',
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Tischabfrage auf max. 50 Einträge begrenzt.
+				'meta_query'     => array(
+					array(
+						'key'   => '_lbite_location_id',
+						'value' => $location_id,
+					),
+				),
+			) );
+		}
 		?>
 		<div id="lbite-order-type-selector" class="lbite-order-type-selector">
-			<h3><?php esc_html_e( 'Order Type', 'libre-bite' ); ?></h3>
 			<div class="lbite-order-type-options">
 				<label class="lbite-order-type-option">
-					<input type="radio" name="lbite_service_type" value="takeaway" <?php checked( $current !== 'dine_in' ); ?>>
-					<span><?php esc_html_e( 'Takeaway', 'libre-bite' ); ?></span>
+					<input type="radio" name="lbite_service_type" value="takeaway" <?php checked( ! $is_dine_in ); ?>>
+					<span><?php esc_html_e( 'To take away', 'libre-bite' ); ?></span>
 				</label>
 				<label class="lbite-order-type-option">
-					<input type="radio" name="lbite_service_type" value="dine_in" <?php checked( $current, 'dine_in' ); ?>>
-					<span><?php esc_html_e( 'Dine-in', 'libre-bite' ); ?></span>
+					<input type="radio" name="lbite_service_type" value="dine_in" <?php checked( $is_dine_in ); ?>>
+					<span><?php esc_html_e( 'Eat here', 'libre-bite' ); ?></span>
 				</label>
 			</div>
 			<?php if ( $show_table ) : ?>
-			<div id="lbite-table-number-wrap" class="lbite-table-number-wrap" style="<?php echo 'dine_in' === $current ? '' : 'display:none;'; ?>">
-				<label for="lbite-table-number"><?php esc_html_e( 'Table Number (optional):', 'libre-bite' ); ?></label>
-				<input type="text" id="lbite-table-number" name="lbite_checkout_table_number" class="input-text" value="<?php echo esc_attr( WC()->session ? WC()->session->get( 'lbite_checkout_table_number', '' ) : '' ); ?>" placeholder="<?php esc_attr_e( 'e.g. 5', 'libre-bite' ); ?>">
+			<div id="lbite-table-number-wrap" class="lbite-table-number-wrap" style="<?php echo $is_dine_in ? '' : 'display:none;'; ?>">
+				<label for="lbite-table-number"><?php esc_html_e( 'Table (optional):', 'libre-bite' ); ?></label>
+				<?php if ( ! empty( $tables ) ) : ?>
+				<select id="lbite-table-number" name="lbite_checkout_table_number" class="input-text">
+					<option value=""><?php esc_html_e( 'Select table (optional)', 'libre-bite' ); ?></option>
+					<?php foreach ( $tables as $lbite_ct ) : ?>
+					<option value="<?php echo esc_attr( $lbite_ct->post_title ); ?>" <?php selected( $table_nr, $lbite_ct->post_title ); ?>>
+						<?php echo esc_html( $lbite_ct->post_title ); ?>
+					</option>
+					<?php endforeach; ?>
+				</select>
+				<?php else : ?>
+				<input type="text" id="lbite-table-number" name="lbite_checkout_table_number" class="input-text" value="<?php echo esc_attr( $table_nr ); ?>" placeholder="<?php esc_attr_e( 'e.g. 5', 'libre-bite' ); ?>">
+				<?php endif; ?>
 			</div>
 			<?php endif; ?>
 		</div>

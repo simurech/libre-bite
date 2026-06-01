@@ -1112,6 +1112,18 @@ NEW_STRINGS_FORMAL_SS = {
         'Vorbestellungen erscheinen zunächst in «Vorbestellungen» mit der angezeigten Abholzeit.',
     'X minutes before pickup time (configurable under Settings → General), they are automatically moved to the "Prepare Now" column.':
         'X Minuten vor der Abholzeit (konfigurierbar unter Einstellungen → Allgemein) werden sie automatisch in die Spalte «Jetzt vorbereiten» verschoben.',
+
+    # ── v2.0.9: Frontend-Bestelltyp-Wording und Tisch-Dropdown ───────────────
+    'To take away':
+        'zum Mitnehmen',
+    'Eat here':
+        'vor Ort konsumieren',
+    'Table (optional):':
+        'Tisch (optional):',
+    'Select table (optional)':
+        'Tisch auswählen (optional)',
+    'The VAT rate per order type is configured under %s.':
+        'Der Mehrwertsteuersatz pro Bestelltyp wird unter %s konfiguriert.',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT

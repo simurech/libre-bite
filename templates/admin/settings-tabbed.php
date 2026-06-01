@@ -738,7 +738,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 								<p class="description" style="margin-top: 8px;"><?php esc_html_e( 'At least one payment method must be active.', 'libre-bite' ); ?></p>
 							</td>
 						</tr>
-						<?php if ( lbite_feature_enabled( 'enable_swiss_vat' ) ) : ?>
+						<?php if ( lbite_feature_enabled( 'enable_swiss_vat' ) || lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
 						<?php $lbite_pos_default_vat = get_option( 'lbite_pos_default_vat_type', 'takeaway' ); ?>
 						<tr>
 							<th><?php esc_html_e( 'Default Order Type', 'libre-bite' ); ?></th>
@@ -752,6 +752,17 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 									<?php esc_html_e( 'Dine-in', 'libre-bite' ); ?>
 								</label>
 								<p class="description"><?php esc_html_e( 'Which order type is pre-selected when the POS is opened or reloaded.', 'libre-bite' ); ?></p>
+								<?php if ( lbite_feature_enabled( 'enable_swiss_vat' ) ) : ?>
+								<p class="description">
+									<?php
+									printf(
+										/* translators: %s: link to Prices & Taxes settings */
+										esc_html__( 'The VAT rate per order type is configured under %s.', 'libre-bite' ),
+										'<a href="' . esc_url( admin_url( 'admin.php?page=lbite-settings&tab=prices_taxes' ) ) . '">' . esc_html__( 'Prices & Taxes', 'libre-bite' ) . '</a>'
+									);
+									?>
+								</p>
+								<?php endif; ?>
 							</td>
 						</tr>
 						<?php endif; ?>
