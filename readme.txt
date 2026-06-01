@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.11
+Stable tag: 2.0.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.12 =
+* Improvement: Order dashboard — table badge now shows actual table name (e.g. "Tisch 3") instead of generic "Tisch".
+* Improvement: Order dashboard — card footer now shows order creation time alongside order number and customer name.
+* Fix: When a table QR code is scanned, the session service type is now explicitly set to "dine_in" so VAT and checkout defaults are correct from the start.
+* Fix: Table QR code box moved to the sidebar in the table edit screen for better overview.
 
 = 2.0.11 =
 * Fix: Optimized checkout — order type (takeaway / eat here) no longer pre-selected; customer must make an explicit choice. JS and server-side validation added.

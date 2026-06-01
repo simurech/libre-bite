@@ -299,6 +299,15 @@ class LBite_Order_Dashboard {
 
 		$billing_email = $order->get_billing_email();
 
+		$table_name = '';
+		if ( $table_id ) {
+			$table_post = get_post( (int) $table_id );
+			$table_name = $table_post ? $table_post->post_title : '';
+		}
+		if ( ! $table_name ) {
+			$table_name = $order->get_meta( '_lbite_checkout_table_number', true );
+		}
+
 		$data = array(
 			'id'             => $order->get_id(),
 			'number'         => $order->get_order_number(),
@@ -307,6 +316,7 @@ class LBite_Order_Dashboard {
 			'pickup_time'    => $pickup_time ? $this->format_pickup_time_for_display( $pickup_time ) : '',
 			'location'       => $location,
 			'table_id'       => $table_id,
+			'table_name'     => $table_name,
 			'service_type'   => $service_type,
 			'customer'       => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
 			'total'          => $order->get_formatted_order_total(),

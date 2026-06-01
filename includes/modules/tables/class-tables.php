@@ -464,8 +464,8 @@ class LBite_Tables {
 			
 			if ( $table_id ) {
 				WC()->session->set( 'lbite_table_id', $table_id );
-				// Bei Tischbestellung erzwingen wir meist "Sofort"
 				WC()->session->set( 'lbite_order_type', 'now' );
+				WC()->session->set( 'lbite_service_type', 'dine_in' );
 			}
 		}
 	}
@@ -551,6 +551,14 @@ class LBite_Tables {
 			'normal',
 			'high'
 		);
+		add_meta_box(
+			'lbite_table_qr',
+			__( 'QR Code', 'libre-bite' ),
+			array( $this, 'render_table_qr_meta_box' ),
+			self::POST_TYPE,
+			'side',
+			'default'
+		);
 	}
 
 	/**
@@ -591,48 +599,50 @@ class LBite_Tables {
 					<p class="description"><?php esc_html_e( 'Number of seats at this table (optional, for reservations).', 'libre-bite' ); ?></p>
 				</td>
 			</tr>
-			<tr>
-				<th><label><?php esc_html_e( 'QR Code Link', 'libre-bite' ); ?></label></th>
-				<td>
-					<?php if ( $location_id ) :
-						// Zielseite: konfigurierbare Menü-Seite oder Standard-Shop.
-						$lbite_target_page_id = (int) get_option( 'lbite_table_order_page_id', 0 );
-						if ( $lbite_target_page_id ) {
-							$lbite_base_url = get_permalink( $lbite_target_page_id );
-						} elseif ( function_exists( 'wc_get_page_permalink' ) ) {
-							$lbite_base_url = wc_get_page_permalink( 'shop' );
-						} else {
-							$lbite_base_url = home_url();
-						}
-						$url = add_query_arg( array(
-							'lbite_location' => $location_id,
-							'lbite_table'    => $post->ID,
-						), $lbite_base_url );
-					?>
-						<div class="lbite-qr-meta-url">
-							<input type="text" value="<?php echo esc_url( $url ); ?>" class="large-text" readonly onclick="this.select();">
-						</div>
-						
-						<div class="lbite-qr-display">
-							<?php
-							$qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . rawurlencode( $url );
-							?>
-							<img src="<?php echo esc_url( $qr_url ); ?>" alt="QR Code">
-						</div>
-						<p class="description">
-							<?php esc_html_e( 'You can use this link or QR code for the table.', 'libre-bite' ); ?><br>
-							<a href="<?php echo esc_url( $qr_url ); ?>&format=png" target="_blank" download="qr-table-<?php echo esc_attr( $post->ID ); ?>.png" class="button"><?php esc_html_e( 'Download QR Code', 'libre-bite' ); ?></a>
-							<button type="button" class="button lbite-print-qr-btn" data-title="<?php echo esc_attr( $post->post_title ); ?>" data-qr="<?php echo esc_url( $qr_url ); ?>">
-								<?php esc_html_e( 'Print QR Code', 'libre-bite' ); ?>
-							</button>
-						</p>
-
-					<?php else : ?>
-						<p class="description"><?php esc_html_e( 'Please select a location first and save to generate the link.', 'libre-bite' ); ?></p>
-					<?php endif; ?>
-				</td>
-			</tr>
 		</table>
+		<?php
+	}
+
+	/**
+	 * QR-Code-Meta-Box (Sidebar) rendern
+	 *
+	 * @param WP_Post $post Post-Objekt
+	 */
+	public function render_table_qr_meta_box( $post ) {
+		$location_id = get_post_meta( $post->ID, '_lbite_location_id', true );
+
+		if ( ! $location_id ) {
+			echo '<p class="description">' . esc_html__( 'Please select a location first and save to generate the link.', 'libre-bite' ) . '</p>';
+			return;
+		}
+
+		$lbite_target_page_id = (int) get_option( 'lbite_table_order_page_id', 0 );
+		if ( $lbite_target_page_id ) {
+			$lbite_base_url = get_permalink( $lbite_target_page_id );
+		} elseif ( function_exists( 'wc_get_page_permalink' ) ) {
+			$lbite_base_url = wc_get_page_permalink( 'shop' );
+		} else {
+			$lbite_base_url = home_url();
+		}
+
+		$url     = add_query_arg( array(
+			'lbite_location' => $location_id,
+			'lbite_table'    => $post->ID,
+		), $lbite_base_url );
+		$qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . rawurlencode( $url );
+		?>
+		<div class="lbite-qr-display" style="text-align:center; margin-bottom:10px;">
+			<img src="<?php echo esc_url( $qr_url ); ?>" alt="QR Code" style="max-width:100%;">
+		</div>
+		<div class="lbite-qr-meta-url" style="margin-bottom:8px;">
+			<input type="text" value="<?php echo esc_url( $url ); ?>" class="large-text" readonly onclick="this.select();" style="font-size:11px;">
+		</div>
+		<p>
+			<a href="<?php echo esc_url( $qr_url ); ?>&format=png" target="_blank" download="qr-table-<?php echo esc_attr( $post->ID ); ?>.png" class="button button-small"><?php esc_html_e( 'Download QR Code', 'libre-bite' ); ?></a>
+			<button type="button" class="button button-small lbite-print-qr-btn" data-title="<?php echo esc_attr( $post->post_title ); ?>" data-qr="<?php echo esc_url( $qr_url ); ?>">
+				<?php esc_html_e( 'Print QR Code', 'libre-bite' ); ?>
+			</button>
+		</p>
 		<?php
 	}
 

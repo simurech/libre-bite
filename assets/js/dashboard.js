@@ -420,7 +420,8 @@
 				$badge.append($('<span class="lbite-order-type-now lbite-badge-chip"></span>').text('🔥 Sofort'));
 			}
 			if (order.table_id) {
-				$badge.append($('<span class="lbite-badge-chip lbite-badge-table"></span>').text(`🪑 Tisch`));
+				const tableLabel = order.table_name ? `🪑 ${order.table_name}` : '🪑 Tisch';
+				$badge.append($('<span class="lbite-badge-chip lbite-badge-table"></span>').text(tableLabel));
 			} else if (order.service_type === 'dine_in') {
 				$badge.append($('<span class="lbite-badge-chip lbite-badge-dine-in"></span>').text(lbiteDashboard.strings.dineIn || 'Dine-in'));
 			} else {
@@ -458,8 +459,10 @@
 			// Fusszeile: Nr + Name + Buttons
 			const $footer = $('<div class="lbite-kanban-card-footer"></div>');
 			const customerNameRaw = order.customer && order.customer.trim() ? order.customer.trim() : '';
-			const footerText = `#${order.number}${customerNameRaw ? ' · ' + customerNameRaw : ''}`;
-			$footer.append($('<span class="lbite-card-footer-info"></span>').text(footerText));
+			const footerParts = [`#${order.number}`];
+			if (order.date) footerParts.push(order.date);
+			if (customerNameRaw) footerParts.push(customerNameRaw);
+			$footer.append($('<span class="lbite-card-footer-info"></span>').text(footerParts.join(' · ')));
 
 			// Status-Button
 			const statusButtons = {
