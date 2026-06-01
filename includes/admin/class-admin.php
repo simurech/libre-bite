@@ -1317,25 +1317,18 @@ class LBite_Admin {
 			wp_send_json_error( array( 'message' => __( 'Invalid data', 'libre-bite' ) ) );
 		}
 
-		// Pro-Features serverseitig schützen – Quelle der Wahrheit: LBite_Features
-		// LBITE_PREMIUM_OVERRIDE berücksichtigen (Entwicklerumgebung ohne aktive Lizenz)
-		$premium_allowed = ( defined( 'LBITE_PREMIUM_OVERRIDE' ) && LBITE_PREMIUM_OVERRIDE )
-			|| ( function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() );
-		$premium_keys    = LBite_Features::get_premium_features();
-		$known_keys      = array_keys( LBite_Features::get_definitions() );
+		$known_keys = array_keys( LBite_Features::get_definitions() );
 
-		// Alle Feature-Werte als boolean sanitieren; nur bekannte Keys übernehmen
+		// Alle Feature-Werte als boolean sanitieren; nur bekannte Keys übernehmen.
+		// Die Lizenzprüfung erfolgt ausschliesslich zur Laufzeit via lbite_feature_enabled() –
+		// der gespeicherte Wert hat keinen Effekt wenn der Premium-Code nicht ausführbar ist.
 		$sanitized_features = array();
 		foreach ( $features as $key => $value ) {
 			$clean_key = sanitize_key( $key );
 			if ( ! in_array( $clean_key, $known_keys, true ) ) {
 				continue;
 			}
-			if ( ! $premium_allowed && in_array( $clean_key, $premium_keys, true ) ) {
-				$sanitized_features[ $clean_key ] = false;
-			} else {
-				$sanitized_features[ $clean_key ] = (bool) $value;
-			}
+			$sanitized_features[ $clean_key ] = (bool) $value;
 		}
 
 		update_option( 'lbite_features', $sanitized_features );

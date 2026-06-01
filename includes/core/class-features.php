@@ -245,11 +245,6 @@ class LBite_Features {
 		if ( $is_premium_feature ) {
 			// Dieser Block wird vom Freemius-Generator in der Gratis-Version automatisch entfernt.
 			if ( lbite_freemius()->is__premium_only() ) {
-				// Entwickler-Override via Konstante (nur in Premium-Version verfügbar)
-				if ( defined( 'LBITE_PREMIUM_OVERRIDE' ) && LBITE_PREMIUM_OVERRIDE ) {
-					return apply_filters( 'lbite_feature_enabled', true, $feature );
-				}
-
 				if ( ! lbite_freemius()->can_use_premium_code__premium_only() ) {
 					return apply_filters( 'lbite_feature_enabled', false, $feature );
 				}
