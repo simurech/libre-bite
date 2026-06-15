@@ -31,6 +31,36 @@ class LBite_Order_List {
 		$this->loader->add_action( 'manage_shop_order_posts_custom_column', $this, 'render_location_column_legacy', 10, 2 );
 		$this->loader->add_action( 'restrict_manage_posts', $this, 'render_location_filter_legacy' );
 		$this->loader->add_action( 'pre_get_posts', $this, 'apply_location_filter_legacy' );
+
+		// Bestelluhrzeit in Datumsspalte
+		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_order_time_script' );
+	}
+
+	/**
+	 * Inline-Script für Bestelluhrzeit einbinden (nur auf Bestelllisten-Seiten).
+	 *
+	 * WooCommerce gibt das Datum als <time datetime="ISO8601">…</time> aus.
+	 * Das ISO8601-Attribut enthält die exakte Uhrzeit, die wir hier ergänzen.
+	 *
+	 * @param string $hook Aktueller Admin-Seiten-Hook.
+	 */
+	public function enqueue_order_time_script( string $hook ): void {
+		$is_hpos_orders   = 'woocommerce_page_wc-orders' === $hook;
+		$is_legacy_orders = 'edit.php' === $hook && isset( $_GET['post_type'] ) && 'shop_order' === $_GET['post_type']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! $is_hpos_orders && ! $is_legacy_orders ) {
+			return;
+		}
+		wp_add_inline_script( 'jquery', '
+			jQuery(function($){
+				$("td.order_date time, td.column-order_date time").each(function(){
+					var dt = $(this).attr("datetime");
+					if(!dt) return;
+					var d = new Date(dt);
+					var t = String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+					$(this).append("<br><span style=\"font-size:11px;color:#888;\">"+t+"</span>");
+				});
+			});
+		' );
 	}
 
 	/**

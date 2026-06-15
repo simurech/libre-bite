@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.18
+Stable tag: 2.0.19
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.19 =
+* Fix: 5-cent rounding now applies to the final cart total after coupon discounts, not to the pre-discount subtotal.
+* Fix: Statistics page now correctly shows orders for the current day instead of always showing zero.
+* Improvement: Order creation time is now displayed below the date in the WooCommerce orders list.
 
 = 2.0.18 =
 * Fix: Sound notification settings — Free users no longer see the media library picker, which is a Pro-only feature. Free users see a preview of the default sound instead. The built-in notification sound is now always used for Free installations, regardless of any previously saved empty value.

@@ -995,7 +995,11 @@ class LBite_Checkout {
 			}
 		}
 
-		$current_total = $subtotal + $fees_total;
+		// Gutschein-Rabatt abziehen (inkl. Steueranteil), damit auf den tatsächlichen
+		// Endbetrag gerundet wird und nicht auf den Betrag vor dem Rabatt.
+		$discount_total = $cart->get_discount_total() + $cart->get_discount_tax();
+
+		$current_total = $subtotal + $fees_total - $discount_total;
 
 		// Auf 5 Rappen runden.
 		$rounded_total = round( $current_total / 0.05 ) * 0.05;

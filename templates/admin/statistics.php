@@ -68,7 +68,8 @@ if ( ! in_array( $lbite_period, $lbite_valid_periods, true ) ) {
 	$lbite_period = '7days';
 }
 
-$lbite_now = current_time( 'timestamp' );
+$lbite_now         = current_time( 'timestamp' );
+$lbite_date_before = null;
 switch ( $lbite_period ) {
 	case '7days':
 		$lbite_date_after = date( 'Y-m-d', strtotime( '-7 days', $lbite_now ) );
@@ -79,16 +80,24 @@ switch ( $lbite_period ) {
 	case 'year':
 		$lbite_date_after = date( 'Y-01-01', $lbite_now );
 		break;
-	default:
-		$lbite_date_after = date( 'Y-m-d', $lbite_now );
+	default: // today
+		// date_after ist exklusiv: 'heute' würde 0 Resultate liefern.
+		// Gestern als Untergrenze + Morgen als Obergrenze eingrenzen.
+		$lbite_date_after  = date( 'Y-m-d', strtotime( '-1 day', $lbite_now ) );
+		$lbite_date_before = date( 'Y-m-d', strtotime( '+1 day', $lbite_now ) );
 }
 
-$lbite_stat_orders = wc_get_orders( array(
+$lbite_query_args = array(
 	'status'     => array( 'wc-completed', 'wc-processing' ),
 	'date_after' => $lbite_date_after,
 	'limit'      => -1,
 	'return'     => 'objects',
-) );
+);
+if ( $lbite_date_before ) {
+	$lbite_query_args['date_before'] = $lbite_date_before;
+}
+
+$lbite_stat_orders = wc_get_orders( $lbite_query_args );
 
 // Zahlungsarten-Label-Map aufbauen.
 $lbite_pm_config    = get_option( 'lbite_pos_payment_methods', array() );
