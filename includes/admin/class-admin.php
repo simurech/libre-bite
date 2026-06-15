@@ -77,7 +77,6 @@ class LBite_Admin {
 
 		// AJAX-Handler.
 		$this->loader->add_action( 'wp_ajax_lbite_save_pos_location', $this, 'ajax_save_pos_location' );
-		$this->loader->add_action( 'wp_ajax_lbite_pos_get_products', $this, 'ajax_pos_get_products' );
 		$this->loader->add_action( 'wp_ajax_lbite_pos_get_product_details', $this, 'ajax_pos_get_product_details' );
 		$this->loader->add_action( 'wp_ajax_lbite_pos_create_order', $this, 'ajax_pos_create_order' );
 		$this->loader->add_action( 'wp_ajax_lbite_pos_get_coupons', $this, 'ajax_pos_get_coupons' );
@@ -703,76 +702,6 @@ class LBite_Admin {
 	/**
 	 * AJAX: POS-Produkte laden (mit Caching)
 	 */
-	public function ajax_pos_get_products() {
-		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
-
-		if ( ! current_user_can( 'lbite_use_pos' ) ) {
-			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
-		}
-
-		$category_id = isset( $_POST['category_id'] ) ? intval( $_POST['category_id'] ) : 0;
-
-		// Transient-Cache prüfen (5 Minuten).
-		$cache_key    = 'lbite_pos_products_' . $category_id;
-		$product_data = get_transient( $cache_key );
-
-		if ( false === $product_data ) {
-			// Nicht im Cache - Daten laden.
-			$args = array(
-				'post_type'      => 'product',
-				'posts_per_page' => 500, // Begrenzt für Performance.
-				'post_status'    => 'publish',
-				'orderby'        => array(
-					'menu_order' => 'ASC',
-					'title'      => 'ASC',
-				),
-			);
-
-			// Nach Kategorie filtern.
-			if ( $category_id > 0 ) {
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Produkt-Standort-Filterung via Taxonomy ist für WooCommerce-Plugins unvermeidbar; Limit begrenzt die Abfrage.
-				$args['tax_query'] = array(
-					array(
-						'taxonomy' => 'product_cat',
-						'field'    => 'term_id',
-						'terms'    => $category_id,
-					),
-				);
-			}
-
-			$products     = get_posts( $args );
-			$product_data = array();
-
-			foreach ( $products as $product_post ) {
-				$product = wc_get_product( $product_post->ID );
-
-				if ( ! $product ) {
-					continue;
-				}
-
-				// Prüfen ob Produkt Varianten oder Optionen hat.
-				$has_variations  = $product->is_type( 'variable' );
-				$product_options = get_post_meta( $product->get_id(), '_lbite_product_options', true );
-				$has_options     = ! empty( $product_options );
-
-				$product_data[] = array(
-					'id'             => $product->get_id(),
-					'name'           => $product->get_name(),
-					'price'          => $product->get_price(),
-					'image'          => wp_get_attachment_image_url( $product->get_image_id(), 'thumbnail' ),
-					'has_variations' => $has_variations,
-					'has_options'    => $has_options,
-					'type'           => $product->get_type(),
-				);
-			}
-
-			// Im Cache speichern (5 Minuten).
-			set_transient( $cache_key, $product_data, 5 * MINUTE_IN_SECONDS );
-		}
-
-		wp_send_json_success( array( 'products' => $product_data ) );
-	}
-
 	/**
 	 * AJAX: POS-Produkt-Details laden (Varianten & Optionen)
 	 */

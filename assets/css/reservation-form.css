@@ -173,3 +173,11 @@ input[type="date"].lbite-res-input {
 	font-size: 15px;
 	line-height: 1.6;
 }
+
+.lbite-res-hp {
+	position: absolute;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}

@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.16
+Stable tag: 2.0.17
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,10 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.17 =
+* Fix: Duplicate AJAX handler for lbite_pos_get_products removed from the admin class. The admin handler was registered first and took precedence over the POS module handler, causing location-based product filtering to be bypassed entirely.
+* Security: Added a honeypot field to the public reservation form to block automated spam submissions.
 
 = 2.0.16 =
 * Improvement: Sound Notifications is now a free feature — no Pro subscription required to hear new order alerts in the Order Overview.

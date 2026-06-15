@@ -128,6 +128,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					rows="3"></textarea>
 			</div>
 
+				<div class="lbite-res-hp" aria-hidden="true">
+				<label for="lbite-res-website"><?php esc_html_e( 'Website', 'libre-bite' ); ?></label>
+				<input type="text" id="lbite-res-website" name="lbite_website" value="" tabindex="-1" autocomplete="off">
+			</div>
+
 			<div class="lbite-res-notice lbite-res-notice--error" id="lbite-res-error" style="display:none;"></div>
 
 			<div class="lbite-res-actions">

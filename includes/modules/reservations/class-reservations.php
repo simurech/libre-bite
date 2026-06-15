@@ -562,6 +562,11 @@ class LBite_Reservations {
 	public function ajax_submit_reservation() {
 		check_ajax_referer( 'lbite_reservation_form', 'nonce' );
 
+		// Honeypot: Dieses Feld muss leer bleiben – Bots füllen es automatisch aus.
+		if ( ! empty( $_POST['lbite_website'] ) ) {
+			wp_send_json_error( array( 'message' => __( 'Submission rejected.', 'libre-bite' ) ) );
+		}
+
 		// Eingaben sanitisieren
 		$lbite_location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 		$lbite_table_id    = isset( $_POST['table_id'] ) ? intval( wp_unslash( $_POST['table_id'] ) ) : 0;
