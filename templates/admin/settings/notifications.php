@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
 
-if ( lbite_feature_enabled( 'enable_sound_notifications' ) ) {
+if ( lbite_feature_enabled( 'enable_sound_notifications' ) && $lbite_premium_allowed ) {
 	wp_enqueue_media();
 }
 
@@ -44,6 +44,7 @@ $lbite_notification_sound   = get_option( 'lbite_notification_sound', $lbite_def
 		<tr>
 			<th><?php esc_html_e( 'Notification Sound', 'libre-bite' ); ?></th>
 			<td>
+				<?php if ( $lbite_premium_allowed ) : ?>
 				<div style="display: flex; align-items: center; gap: 10px;">
 					<input type="text" id="lbite_notification_sound" name="lbite_notification_sound"
 						value="<?php echo esc_attr( $lbite_notification_sound ); ?>" class="regular-text"
@@ -67,6 +68,16 @@ $lbite_notification_sound   = get_option( 'lbite_notification_sound', $lbite_def
 						: __( 'Select a sound from your media library.', 'libre-bite' )
 					); ?>
 				</p>
+				<?php else : ?>
+				<?php if ( $lbite_default_sound_exists ) : ?>
+					<audio controls style="max-width: 300px;">
+						<source src="<?php echo esc_url( $lbite_default_sound_url ); ?>" type="audio/mpeg">
+					</audio>
+				<?php endif; ?>
+				<p class="description">
+					<?php esc_html_e( 'The default notification sound is used. Upgrade to Pro to use a custom sound from your media library.', 'libre-bite' ); ?>
+				</p>
+				<?php endif; ?>
 			</td>
 		</tr>
 	</table>
@@ -75,7 +86,7 @@ $lbite_notification_sound   = get_option( 'lbite_notification_sound', $lbite_def
 	<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 </form>
 
-<?php if ( lbite_feature_enabled( 'enable_sound_notifications' ) ) : ?>
+<?php if ( lbite_feature_enabled( 'enable_sound_notifications' ) && $lbite_premium_allowed ) : ?>
 <script>
 jQuery(document).ready(function($) {
 	var lbiteSoundFrame;

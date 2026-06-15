@@ -595,6 +595,12 @@ class LBite_Admin {
 				}
 			}
 
+			$lbite_is_premium   = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+			$lbite_custom_sound = get_option( 'lbite_notification_sound', '' );
+			$lbite_sound_url    = ( $lbite_is_premium && ! empty( $lbite_custom_sound ) )
+				? $lbite_custom_sound
+				: LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3';
+
 			wp_localize_script(
 				'lbite-dashboard',
 				'lbiteDashboard',
@@ -603,7 +609,7 @@ class LBite_Admin {
 					'orderEditUrl'          => admin_url( 'post.php' ),
 					'nonce'                 => wp_create_nonce( 'lbite_dashboard_nonce' ),
 					'receiptNonce'          => wp_create_nonce( 'lbite_admin_nonce' ),
-					'soundUrl'              => get_option( 'lbite_notification_sound', LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' ),
+					'soundUrl'              => $lbite_sound_url,
 					'refreshInterval'       => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
 					'locationColors'        => $lbite_dashboard_colors,
 					'paymentMethods'        => $lbite_pm_labels,
