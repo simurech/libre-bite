@@ -17,6 +17,9 @@ class LBite_Order_List {
 
 	private $loader;
 
+	/**
+	 * @param object $loader Hook-Loader-Instanz.
+	 */
 	public function __construct( $loader ) {
 		$this->loader = $loader;
 
