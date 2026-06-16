@@ -72,14 +72,20 @@ libre-bite/
 
 | Feature | Pro? |
 |---|---|
-| Nexi Terminal-Integration via OPI-Proxy (Zahlungsterminal direkt an POS angebunden) | ja |
-| Offene Bestellungen / Laufender Tab für Tischservice | ja |
-| Multi-Location Phase 2: vollständige Datenisolation pro Standort (Manager sieht nur eigene Bestellungen/Auswertungen), Franchise-Modell mit zentralem Produktkatalog und lokaler Konfiguration | ja |
-| Küchen-Display (KDS): dediziertes Tablet-Display für die Küche – kein Login nötig, Positions-Status (einzelne Gerichte abhaken), Stations-Splitting (z.B. Getränke vs. Speisen) | ja |
-| Treuepunkte / Kundenbindung | ja |
-| Reservierungen: Auto-Zuweisung, Frontend-Verfügbarkeitsanzeige | ja |
 | Übersetzungen Französisch (fr_CH) und Italienisch (it_CH) | nein |
-| PWA – POS als installierbare App | nein |
+| Split-Payment – Betrag auf mehrere Zahlarten aufteilen | ja |
+| Offene Tabs – laufender Tischservice-Tab im POS | ja |
+| Reservierungen – Zeitfenster, Auto-Tischzuweisung, Frontend-Verfügbarkeit | ja |
+| PWA – POS als installierbare App (echter Vollbildmodus) | nein |
+| Offline-Modus für POS | ja |
+| Automatisierte Tests (AJAX-Endpoints) | – |
+| Multi-Location Phase 2 / Franchise | ja |
+| Erweiterte Analytik (Heatmap, Stosszeiten, CSV-Export) | ja |
+| Treuepunkte / Kundenbindung | ja |
+| Barcode-Scanning im POS | ja |
+| Kassenbon-Druck (Thermodrucker) | ja |
+| Kunden-Display / Zweiter Bildschirm | ja |
+| Liefer-Modul (Zonen, Gebühren) | ja |
 
 ---
 
