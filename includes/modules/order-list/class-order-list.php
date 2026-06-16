@@ -51,22 +51,16 @@ class LBite_Order_List {
 			return;
 		}
 
-		// WP-Timezone-Offset in Millisekunden: Browser-unabhängige Darstellung in Site-Zeit.
-		$offset_ms = wp_timezone()->getOffset( new DateTime( 'now', new DateTimeZone( 'UTC' ) ) ) * 1000;
-
+		// WC_DateTime::date('c') gibt die Lokalzeit mit falschem +00:00-Suffix aus (via gmdate + getOffsetTimestamp).
+		// Daher direkt T HH:MM aus dem datetime-String extrahieren – das ist bereits die korrekte Site-Zeit.
 		wp_add_inline_script( 'jquery', '
 			jQuery(function($){
-				var offsetMs = ' . (int) $offset_ms . ';
 				$("td.order_date time, td.column-order_date time").each(function(){
 					var dt = $(this).attr("datetime");
 					if(!dt) return;
-					// Sicherstellen dass timezone-neutrale Strings als UTC geparst werden.
-					var iso = (/Z$|[+-]\d\d:\d\d$/.test(dt)) ? dt : (dt + "Z");
-					var utcMs = new Date(iso).getTime();
-					if(isNaN(utcMs)) return;
-					var local = new Date(utcMs + offsetMs);
-					var t = String(local.getUTCHours()).padStart(2,"0")+":"+String(local.getUTCMinutes()).padStart(2,"0");
-					$(this).append("<br><span style=\"font-size:11px;color:#888;\">"+t+"</span>");
+					var m = dt.match(/T(\d{2}:\d{2})/);
+					if(!m) return;
+					$(this).append("<br><span style=\"font-size:11px;color:#888;\">"+m[1]+"</span>");
 				});
 			});
 		' );
