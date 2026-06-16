@@ -50,13 +50,22 @@ class LBite_Order_List {
 		if ( ! $is_hpos_orders && ! $is_legacy_orders ) {
 			return;
 		}
+
+		// WP-Timezone-Offset in Millisekunden: Browser-unabhängige Darstellung in Site-Zeit.
+		$offset_ms = wp_timezone()->getOffset( new DateTime( 'now', new DateTimeZone( 'UTC' ) ) ) * 1000;
+
 		wp_add_inline_script( 'jquery', '
 			jQuery(function($){
+				var offsetMs = ' . (int) $offset_ms . ';
 				$("td.order_date time, td.column-order_date time").each(function(){
 					var dt = $(this).attr("datetime");
 					if(!dt) return;
-					var d = new Date(dt);
-					var t = String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+					// Sicherstellen dass timezone-neutrale Strings als UTC geparst werden.
+					var iso = (/Z$|[+-]\d\d:\d\d$/.test(dt)) ? dt : (dt + "Z");
+					var utcMs = new Date(iso).getTime();
+					if(isNaN(utcMs)) return;
+					var local = new Date(utcMs + offsetMs);
+					var t = String(local.getUTCHours()).padStart(2,"0")+":"+String(local.getUTCMinutes()).padStart(2,"0");
 					$(this).append("<br><span style=\"font-size:11px;color:#888;\">"+t+"</span>");
 				});
 			});
