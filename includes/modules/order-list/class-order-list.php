@@ -137,7 +137,7 @@ class LBite_Order_List {
 	private function output_location_filter_select(): void {
 		$locations = get_posts( array(
 			'post_type'      => 'lbite_location',
-			'posts_per_page' => 100,
+			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'orderby'        => 'title',
 			'order'          => 'ASC',
