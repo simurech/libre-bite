@@ -400,10 +400,7 @@ class LBite_POS {
 		}
 
 		// POS-Cache leeren damit neue Daten geladen werden.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-		$wpdb->query(
-			"DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_lbite_pos_products_%' OR option_name LIKE '_transient_timeout_lbite_pos_products_%'"
-		);
+		$this->clear_all_product_caches();
 	}
 
 	/**

@@ -1137,8 +1137,13 @@ class LBite_Admin {
 
 		// POS-Transient-Cache für alle Standorte leeren.
 		global $wpdb;
-		$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-			"DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_lbite_pos_products_%' OR option_name LIKE '_transient_timeout_lbite_pos_products_%'"
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Bulk-Löschung von Transients via LIKE, WP-API unterstützt kein Wildcard-Delete.
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+				$wpdb->esc_like( '_transient_lbite_pos_products_' ) . '%',
+				$wpdb->esc_like( '_transient_timeout_lbite_pos_products_' ) . '%'
+			)
 		);
 
 		wp_send_json_success( array( 'stock_status' => $stock_status ) );
