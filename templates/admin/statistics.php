@@ -81,9 +81,7 @@ switch ( $lbite_period ) {
 		$lbite_date_after = date( 'Y-01-01', $lbite_now );
 		break;
 	default: // today
-		// date_after ist exklusiv: 'heute' würde 0 Resultate liefern.
-		// Gestern als Untergrenze + Morgen als Obergrenze eingrenzen.
-		$lbite_date_after  = date( 'Y-m-d', strtotime( '-1 day', $lbite_now ) );
+		$lbite_date_after  = date( 'Y-m-d', $lbite_now );
 		$lbite_date_before = date( 'Y-m-d', strtotime( '+1 day', $lbite_now ) );
 }
 
