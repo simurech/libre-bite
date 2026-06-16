@@ -73,6 +73,8 @@ libre-bite/
 | Feature | Pro? |
 |---|---|
 | Übersetzungen Französisch (fr_CH) und Italienisch (it_CH) | nein |
+| Rate-Limiting für Reservierungsformular | nein |
+| POS-Erstladezeit: Meta-Daten gebatcht laden | nein |
 | Split-Payment – Betrag auf mehrere Zahlarten aufteilen | ja |
 | Offene Tabs – laufender Tischservice-Tab im POS | ja |
 | Reservierungen – Zeitfenster, Auto-Tischzuweisung, Frontend-Verfügbarkeit | ja |

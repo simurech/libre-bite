@@ -106,7 +106,7 @@ Automatic email reminders to customers X minutes before the scheduled pickup tim
 EU-compliant nutritional values and allergen declarations for every product. Displayed clearly on the product page and during checkout.
 
 **Advanced Sound Notifications**
-A browser signal tone when a new order arrives on the Kanban board. Configurable individually per location.
+A browser signal tone when a new order arrives on the Kanban board. Custom sound files can be uploaded via the media library (Pro).
 
 ---
 
@@ -206,7 +206,7 @@ Libre Bite uses Freemius for license management and delivery of Pro features. Da
 
 * WordPress 6.0 or higher
 * WooCommerce 8.0 or higher
-* PHP 7.4 or higher (PHP 8.1+ recommended)
+* PHP 8.1 or higher (PHP 8.2+ recommended)
 * A modern browser for Kanban board and POS interface
 
 = Is Libre Bite available in multiple languages? =
