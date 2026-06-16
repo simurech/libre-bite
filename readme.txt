@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.23
+Stable tag: 2.0.24
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.0.24 =
+* Improvement: Translations updated for all German locales (de_CH, de_DE, de_AT) — all new strings translated and .pot file regenerated.
+* Code: Duplicate transient-delete queries replaced with shared method; SQL query now uses prepare() and esc_like() consistently.
+* Code: PHPDoc added to all remaining undocumented public methods.
 
 = 2.0.23 =
 * Fix: Statistics page "Today" filter no longer includes orders from the previous day.
