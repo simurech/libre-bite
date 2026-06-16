@@ -141,7 +141,7 @@ Install Libre Bite directly into your existing WordPress/WooCommerce site. Any t
 Run Libre Bite as a dedicated installation on a subdomain, such as `order.myrestaurant.com` — completely independent from your main website, purpose-built for your gastronomy operation.
 
 **Option 3 — Managed hosting by Libre Bite**
-Libre Bite handles the complete setup: installation, configuration, hosting, and ongoing maintenance — from A to Z. Available as a paid service. Contact via GitHub.
+Libre Bite handles the complete setup: installation, configuration, hosting, and ongoing maintenance — from A to Z. Available as a paid service. Get in touch via https://urech.dev
 
 ---
 
