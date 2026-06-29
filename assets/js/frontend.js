@@ -191,8 +191,10 @@
 			});
 
 			if (unavailableCount > 0) {
-				var label       = $notice.data('unavailable-label') || '';
-				var filterShow  = $notice.data('filter-show') || '';
+				var labelSingular = $notice.data('unavailable-singular') || '';
+				var labelPlural   = $notice.data('unavailable-plural') || '';
+				var label         = unavailableCount === 1 ? labelSingular : labelPlural;
+				var filterShow    = $notice.data('filter-show') || '';
 
 				$notice.html(
 					'<span class="lbite-notice-text">' +

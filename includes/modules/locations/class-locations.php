@@ -738,7 +738,8 @@ class LBite_Locations {
 		}
 
 		echo '<div id="lbite-location-notice" style="display:none;"'
-			. ' data-unavailable-label="' . esc_attr( _n( 'product not available', 'products not available', 2, 'libre-bite' ) ) . '"'
+			. ' data-unavailable-singular="' . esc_attr__( 'product not available', 'libre-bite' ) . '"'
+			. ' data-unavailable-plural="' . esc_attr__( 'products not available', 'libre-bite' ) . '"'
 			. ' data-filter-show="' . esc_attr__( 'Show only available products', 'libre-bite' ) . '"'
 			. ' data-filter-show-all="' . esc_attr__( 'Show all products', 'libre-bite' ) . '"'
 			. '></div>';
