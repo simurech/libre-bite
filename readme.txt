@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.0.24
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,12 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.1.0 =
+* New: Location-based product filtering on shop pages — products not available at the selected location are visually dimmed, with a filter toggle to hide them entirely.
+* New: POS-only products — products can now be marked as visible exclusively in the POS system, hidden from the frontend shop and all customer-facing URLs.
+* New: Swiss French (fr_CH) and Swiss Italian (it_CH) translations added.
+* Security: IP-based rate limiting added to the reservation form (max. 5 submissions per 60 seconds per IP), supplementing the existing honeypot protection.
 
 = 2.0.24 =
 * Improvement: Translations updated for all German locales (de_CH, de_DE, de_AT) — all new strings translated and .pot file regenerated.
