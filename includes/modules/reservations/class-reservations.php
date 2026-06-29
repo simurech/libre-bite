@@ -567,6 +567,14 @@ class LBite_Reservations {
 			wp_send_json_error( array( 'message' => __( 'Submission rejected.', 'libre-bite' ) ) );
 		}
 
+		// IP-basiertes Rate-Limiting: max. 5 Versuche pro 60 Sekunden.
+		$ip_key   = 'lbite_rl_' . md5( isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '' );
+		$attempts = (int) get_transient( $ip_key );
+		if ( $attempts >= 5 ) {
+			wp_send_json_error( array( 'message' => __( 'Too many requests. Please try again later.', 'libre-bite' ) ) );
+		}
+		set_transient( $ip_key, $attempts + 1, 60 );
+
 		// Eingaben sanitisieren
 		$lbite_location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 		$lbite_table_id    = isset( $_POST['table_id'] ) ? intval( wp_unslash( $_POST['table_id'] ) ) : 0;
