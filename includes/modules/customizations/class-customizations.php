@@ -48,6 +48,11 @@ class LBite_Customizations {
 
 		// WooCommerce "Mein Konto" anpassen
 		$this->loader->add_filter( 'woocommerce_account_menu_items', $this, 'customize_my_account_menu' );
+
+		// POS-Only Produkte im Frontend verstecken
+		$this->loader->add_filter( 'woocommerce_product_is_visible', $this, 'hide_pos_only_from_catalog', 10, 2 );
+		$this->loader->add_action( 'pre_get_posts', $this, 'exclude_pos_only_from_frontend', 20 );
+		$this->loader->add_action( 'template_redirect', $this, 'redirect_pos_only_product' );
 	}
 
 	/**
@@ -151,5 +156,82 @@ class LBite_Customizations {
 		}
 
 		return $items;
+	}
+
+	/**
+	 * POS-Only Produkte aus WooCommerce-Katalog und Suchresultaten ausblenden.
+	 *
+	 * @param bool $visible    Aktueller Sichtbarkeitswert.
+	 * @param int  $product_id Produkt-ID.
+	 * @return bool
+	 */
+	public function hide_pos_only_from_catalog( $visible, $product_id ) {
+		if ( '1' === get_post_meta( $product_id, '_lbite_pos_only', true ) ) {
+			return false;
+		}
+		return $visible;
+	}
+
+	/**
+	 * POS-Only Produkte aus allen Frontend-WP_Queries ausschliessen.
+	 * Admin- und REST-Kontext bleiben unberührt, damit das POS funktioniert.
+	 *
+	 * @param WP_Query $query Aktuelles Query-Objekt.
+	 */
+	public function exclude_pos_only_from_frontend( $query ) {
+		if ( is_admin() ) {
+			return;
+		}
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			return;
+		}
+
+		$is_product_query = false;
+		if ( $query->is_main_query() && ( $query->is_shop() || $query->is_product_category() || $query->is_product_tag() || $query->is_search() ) ) {
+			$is_product_query = true;
+		} else {
+			$post_type = $query->get( 'post_type' );
+			if ( 'product' === $post_type || ( is_array( $post_type ) && in_array( 'product', $post_type, true ) ) ) {
+				$is_product_query = true;
+			}
+		}
+
+		if ( ! $is_product_query ) {
+			return;
+		}
+
+		$existing = $query->get( 'meta_query' );
+		if ( ! is_array( $existing ) ) {
+			$existing = array();
+		}
+		$existing[] = array(
+			'relation' => 'OR',
+			array(
+				'key'     => '_lbite_pos_only',
+				'compare' => 'NOT EXISTS',
+			),
+			array(
+				'key'     => '_lbite_pos_only',
+				'value'   => '1',
+				'compare' => '!=',
+			),
+		);
+		$query->set( 'meta_query', $existing );
+	}
+
+	/**
+	 * Direktzugriff auf POS-Only Produktseiten mit 404 beantworten.
+	 */
+	public function redirect_pos_only_product() {
+		if ( ! is_singular( 'product' ) ) {
+			return;
+		}
+		if ( '1' !== get_post_meta( get_queried_object_id(), '_lbite_pos_only', true ) ) {
+			return;
+		}
+		global $wp_query;
+		$wp_query->set_404();
+		status_header( 404 );
+		nocache_headers();
 	}
 }
