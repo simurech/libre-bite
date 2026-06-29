@@ -86,6 +86,7 @@ class LBite_Admin {
 		$this->loader->add_action( 'wp_ajax_lbite_save_support_settings', $this, 'ajax_save_support_settings' );
 		$this->loader->add_action( 'wp_ajax_lbite_get_location_tables', $this, 'ajax_get_location_tables' );
 		$this->loader->add_action( 'wp_ajax_lbite_dismiss_welcome_notice', $this, 'ajax_dismiss_welcome_notice' );
+		$this->loader->add_action( 'wp_ajax_lbite_save_pos_product_order', $this, 'ajax_save_pos_product_order' );
 
 		// Bestellungs-Counter im Menü-Badge (nach Menü-Aufbau)
 		$this->loader->add_action( 'admin_menu', $this, 'inject_order_count_badge', 999 );
@@ -541,10 +542,21 @@ class LBite_Admin {
 
 		// Einstellungen-Seite JS (nur auf Settings- und Haupt-Plugin-Seite laden).
 		if ( strpos( $hook, 'lbite-settings' ) !== false || strpos( $hook, 'lbite-statistics' ) !== false || 'toplevel_page_libre-bite' === $hook ) {
+			if ( ! wp_script_is( 'sortablejs', 'registered' ) ) {
+				wp_register_script(
+					'sortablejs',
+					LBITE_PLUGIN_URL . 'assets/js/vendor/sortable.min.js',
+					array(),
+					LBITE_VERSION,
+					true
+				);
+			}
+			wp_enqueue_script( 'sortablejs' );
+
 			wp_enqueue_script(
 				'lbite-admin-settings',
 				LBITE_PLUGIN_URL . 'assets/js/admin-settings-page.js',
-				array( 'jquery' ),
+				array( 'jquery', 'sortablejs' ),
 				LBITE_VERSION,
 				true
 			);
@@ -1674,6 +1686,45 @@ class LBite_Admin {
 			</tr>
 		</table>
 		<?php
+	}
+
+	/**
+	 * AJAX: POS-Produktreihenfolge speichern (via menu_order)
+	 */
+	public function ajax_save_pos_product_order() {
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
+		}
+
+		$order = isset( $_POST['order'] ) && is_array( $_POST['order'] )
+			? array_map( 'absint', wp_unslash( $_POST['order'] ) )
+			: array();
+
+		if ( empty( $order ) ) {
+			wp_send_json_error( array( 'message' => __( 'No order provided', 'libre-bite' ) ) );
+		}
+
+		foreach ( $order as $position => $product_id ) {
+			wp_update_post( array(
+				'ID'         => $product_id,
+				'menu_order' => $position,
+			) );
+		}
+
+		// POS-Produkt-Cache leeren.
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+				$wpdb->esc_like( '_transient_lbite_pos_products_' ) . '%',
+				$wpdb->esc_like( '_transient_timeout_lbite_pos_products_' ) . '%'
+			)
+		);
+
+		wp_send_json_success( array( 'message' => __( 'Product order saved.', 'libre-bite' ) ) );
 	}
 
 	/**

@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,9 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.1.1 =
+* New: Drag & drop product ordering in POS settings — products can now be reordered directly via a sortable list under Settings > POS System. The order is saved as WordPress menu_order and applies to both the POS and the WooCommerce store catalog.
 
 = 2.1.0 =
 * New: Location-based product filtering on shop pages — products not available at the selected location are visually dimmed, with a filter toggle to hide them entirely.

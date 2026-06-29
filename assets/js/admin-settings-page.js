@@ -72,4 +72,43 @@ jQuery(document).ready(function($) {
 		var nameInput = $('#lbite_role_name_' + roleKey);
 		nameInput.css('opacity', '0.5');
 	});
+
+	// POS-Produktreihenfolge per Drag & Drop
+	var posOrderList = document.getElementById('lbite-pos-product-order');
+	if (posOrderList && typeof Sortable !== 'undefined') {
+		Sortable.create(posOrderList, {
+			handle: '.dashicons-menu',
+			animation: 150
+		});
+
+		$('#lbite-save-pos-product-order').on('click', function() {
+			var $btn = $(this);
+			var $status = $('#lbite-pos-product-order-status');
+
+			var order = [];
+			$('#lbite-pos-product-order li').each(function() {
+				order.push($(this).data('id'));
+			});
+
+			$btn.prop('disabled', true);
+			$status.text('');
+
+			$.post(ajaxurl, {
+				action: 'lbite_save_pos_product_order',
+				nonce: lbiteAdminSettings.nonce,
+				order: order
+			}, function(response) {
+				$btn.prop('disabled', false);
+				if (response.success) {
+					$status.css('color', '#3c763d').text('✓ ' + response.data.message);
+					setTimeout(function() { $status.text(''); }, 3000);
+				} else {
+					$status.css('color', '#a94442').text('✗ ' + (response.data ? response.data.message : 'Error'));
+				}
+			}).fail(function() {
+				$btn.prop('disabled', false);
+				$status.css('color', '#a94442').text('✗ Connection error');
+			});
+		});
+	}
 });

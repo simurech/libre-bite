@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Libre Bite 1.2.5\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/libre-bite\n"
-"POT-Creation-Date: 2026-06-29T13:05:59+00:00\n"
+"Report-Msgid-Bugs-To: simon@urech.dev\n"
+"POT-Creation-Date: 2026-06-29 19:57+0200\n"
 "PO-Revision-Date: 2026-04-14\n"
 "Last-Translator: Simon Urech\n"
 "Language-Team: Simon Urech\n"
@@ -15,55 +15,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. Plugin Name of the plugin
-#: libre-bite.php includes/admin/class-admin.php:179
-#: includes/admin/class-admin.php:180 includes/admin/class-admin.php:1659
-#: libre-bite.php:171 libre-bite.php:185 templates/admin/dashboard.php:15
-#: templates/admin/debug-info.php:19 templates/admin/documentation.php:16
-#: templates/admin/settings-tabbed.php:317 templates/admin/settings.php:86
-msgid "Libre Bite"
-msgstr "Libre Bite"
-
-#. Plugin URI of the plugin
-#: libre-bite.php
-msgid "https://github.com/simurech/libre-bite"
-msgstr "https://github.com/simurech/libre-bite"
-
-#. Description of the plugin
-#: libre-bite.php
-msgid ""
-"Complete order and location management system for WooCommerce restaurants "
-"and food businesses."
-msgstr ""
-"Vollständiges Bestell- und Standortverwaltungssystem für WooCommerce-"
-"Restaurants und Food-Unternehmen."
-
-#. Author of the plugin
-#: libre-bite.php
-msgid "urech.dev"
-msgstr "urech.dev"
-
-#. Author URI of the plugin
-#: libre-bite.php
-msgid "https://urech.dev/"
-msgstr "https://urech.dev/"
-
 #: includes/admin/class-admin-settings.php:206
 msgid "Settings saved successfully."
 msgstr "Einstellungen erfolgreich gespeichert."
 
-#: includes/admin/class-admin.php:202 includes/admin/class-admin.php:203
+#: includes/admin/class-admin.php:180 includes/admin/class-admin.php:181
+#: includes/admin/class-admin.php:1671 libre-bite.php:171 libre-bite.php:185
+#: templates/admin/dashboard.php:15 templates/admin/debug-info.php:19
+#: templates/admin/documentation.php:16 templates/admin/settings-tabbed.php:317
+#: templates/admin/settings.php:86
+msgid "Libre Bite"
+msgstr "Libre Bite"
+
+#: includes/admin/class-admin.php:203 includes/admin/class-admin.php:204
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: includes/admin/class-admin.php:220 includes/admin/class-admin.php:221
+#: includes/admin/class-admin.php:221 includes/admin/class-admin.php:222
 #: templates/admin/admin-settings.php:191 templates/admin/dashboard.php:26
 #: templates/admin/help-partials/settings.php:143
 #: templates/admin/order-board.php:15
 msgid "Order Overview"
 msgstr "Bestellübersicht"
 
-#: includes/admin/class-admin.php:232 includes/admin/class-admin.php:233
+#: includes/admin/class-admin.php:233 includes/admin/class-admin.php:234
 #: templates/admin/admin-settings.php:192 templates/admin/dashboard.php:37
 #: templates/admin/help-partials/settings.php:177
 #: templates/admin/help-staff.php:68 templates/admin/pos.php:15
@@ -73,7 +48,7 @@ msgstr "Bestellübersicht"
 msgid "POS System"
 msgstr "Kassensystem"
 
-#: includes/admin/class-admin.php:247 includes/admin/class-admin.php:248
+#: includes/admin/class-admin.php:248 includes/admin/class-admin.php:249
 #: includes/modules/locations/class-locations.php:152
 #: includes/modules/locations/class-locations.php:154
 #: includes/modules/locations/class-locations.php:755
@@ -88,7 +63,7 @@ msgstr "Kassensystem"
 msgid "Locations"
 msgstr "Standorte"
 
-#: includes/admin/class-admin.php:257 includes/admin/class-admin.php:258
+#: includes/admin/class-admin.php:258 includes/admin/class-admin.php:259
 #: includes/modules/tables/class-tables.php:511
 #: includes/modules/tables/class-tables.php:513
 #: templates/admin/dashboard.php:57 templates/admin/help-admin.php:54
@@ -96,18 +71,18 @@ msgstr "Standorte"
 msgid "Tables"
 msgstr "Tische"
 
-#: includes/admin/class-admin.php:264 includes/admin/class-admin.php:265
+#: includes/admin/class-admin.php:265 includes/admin/class-admin.php:266
 #: templates/admin/help-partials/tables.php:79
 #: templates/admin/settings/tables__premium_only.php:70
 #: templates/admin/table-plan.php:26
 msgid "Table Plan"
 msgstr "Tischplan"
 
-#: includes/admin/class-admin.php:276
+#: includes/admin/class-admin.php:277
 msgid "Reservations Overview"
 msgstr "Reservierungsübersicht"
 
-#: includes/admin/class-admin.php:277 includes/admin/class-admin.php:673
+#: includes/admin/class-admin.php:278 includes/admin/class-admin.php:685
 #: includes/modules/reservations/class-reservations.php:125
 #: templates/admin/dashboard.php:67 templates/admin/help-admin.php:60
 #: templates/admin/help-admin.php:178
@@ -117,7 +92,7 @@ msgstr "Reservierungsübersicht"
 msgid "Reservations"
 msgstr "Reservierungen"
 
-#: includes/admin/class-admin.php:288 includes/admin/class-admin.php:289
+#: includes/admin/class-admin.php:289 includes/admin/class-admin.php:290
 #: includes/modules/product-options/class-product-options.php:73
 #: includes/modules/product-options/class-product-options.php:75
 #: includes/modules/product-options/class-product-options.php:173
@@ -126,31 +101,31 @@ msgstr "Reservierungen"
 msgid "Product Options"
 msgstr "Produkt-Add-ons"
 
-#: includes/admin/class-admin.php:302 includes/admin/class-admin.php:303
-#: includes/admin/class-admin.php:1371 includes/admin/class-admin.php:1373
+#: includes/admin/class-admin.php:303 includes/admin/class-admin.php:304
+#: includes/admin/class-admin.php:1383 includes/admin/class-admin.php:1385
 #: templates/admin/admin-settings.php:193 templates/admin/dashboard.php:88
 #: templates/admin/help-admin.php:32 templates/admin/help-staff.php:26
 msgid "Help & Support"
 msgstr "Hilfe & Support"
 
-#: includes/admin/class-admin.php:312 includes/admin/class-admin.php:313
+#: includes/admin/class-admin.php:313 includes/admin/class-admin.php:314
 #: templates/admin/dashboard.php:78
 #: templates/admin/help-partials/orders.php:172
 #: templates/admin/statistics.php:272
 msgid "Statistics"
 msgstr "Statistik"
 
-#: includes/admin/class-admin.php:323
+#: includes/admin/class-admin.php:324
 #: templates/admin/settings/_master-toggle.php:45
 #: templates/admin/settings/_pro-locked.php:30
 msgid "Upgrade to Pro"
 msgstr "Upgrade auf Pro"
 
-#: includes/admin/class-admin.php:324
+#: includes/admin/class-admin.php:325
 msgid "Pricing"
 msgstr "Preise"
 
-#: includes/admin/class-admin.php:334 includes/admin/class-admin.php:335
+#: includes/admin/class-admin.php:335 includes/admin/class-admin.php:336
 #: templates/admin/dashboard.php:97 templates/admin/help-admin.php:65
 #: templates/admin/help-admin.php:193
 #: templates/admin/help-partials/settings.php:15
@@ -158,17 +133,17 @@ msgstr "Preise"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: includes/admin/class-admin.php:362 includes/admin/class-admin.php:397
-#: includes/admin/class-admin.php:450 includes/admin/class-admin.php:460
+#: includes/admin/class-admin.php:363 includes/admin/class-admin.php:398
+#: includes/admin/class-admin.php:451 includes/admin/class-admin.php:461
 #: templates/admin/admin-settings.php:16 templates/admin/statistics.php:16
 msgid "You do not have permission to access this page."
 msgstr "Sie haben keine Berechtigung für diese Seite."
 
-#: includes/admin/class-admin.php:473
+#: includes/admin/class-admin.php:474
 msgid "Upgrade to Libre Bite Pro"
 msgstr "Upgrade auf Libre Bite Pro"
 
-#: includes/admin/class-admin.php:474
+#: includes/admin/class-admin.php:475
 msgid ""
 "Unlock all premium features to realize the full potential of Libre Bite."
 msgstr ""
@@ -176,19 +151,19 @@ msgstr ""
 "Bite auszuschöpfen.Schalten Sie alle Premium-Funktionen frei, um das volle "
 "Potenzial von Libre Bite auszuschöpfen."
 
-#: includes/admin/class-admin.php:475
+#: includes/admin/class-admin.php:476
 msgid "View Pricing"
 msgstr "Preise anzeigen"
 
-#: includes/admin/class-admin.php:534
+#: includes/admin/class-admin.php:535
 msgid "Really delete?"
 msgstr "Wirklich löschen?"
 
-#: includes/admin/class-admin.php:535
+#: includes/admin/class-admin.php:536
 msgid "Successfully saved"
 msgstr "Erfolgreich gespeichert"
 
-#: includes/admin/class-admin.php:536
+#: includes/admin/class-admin.php:537
 #: includes/modules/tables/class-tables.php:175
 #: templates/admin/super-admin-settings.php:266
 #: templates/admin/support-settings.php:220
@@ -196,61 +171,61 @@ msgstr "Erfolgreich gespeichert"
 msgid "Error saving"
 msgstr "Fehler beim Speichern"
 
-#: includes/admin/class-admin.php:537 includes/admin/class-admin.php:675
+#: includes/admin/class-admin.php:538 includes/admin/class-admin.php:687
 #: templates/admin/pos.php:81
 msgid "No table"
 msgstr "Kein Tisch"
 
-#: includes/admin/class-admin.php:584 templates/admin/settings-tabbed.php:176
+#: includes/admin/class-admin.php:596 templates/admin/settings-tabbed.php:176
 #: templates/admin/settings-tabbed.php:711 templates/admin/statistics.php:103
 msgid "Cash"
 msgstr "Bar"
 
-#: includes/admin/class-admin.php:585 templates/admin/settings-tabbed.php:177
+#: includes/admin/class-admin.php:597 templates/admin/settings-tabbed.php:177
 #: templates/admin/settings-tabbed.php:712 templates/admin/statistics.php:104
 msgid "Card"
 msgstr "Karte"
 
-#: includes/admin/class-admin.php:586 templates/admin/settings-tabbed.php:178
+#: includes/admin/class-admin.php:598 templates/admin/settings-tabbed.php:178
 #: templates/admin/settings-tabbed.php:713 templates/admin/statistics.php:105
 msgid "Twint"
 msgstr "Twint"
 
-#: includes/admin/class-admin.php:587 templates/admin/settings-tabbed.php:179
+#: includes/admin/class-admin.php:599 templates/admin/settings-tabbed.php:179
 #: templates/admin/settings-tabbed.php:714 templates/admin/statistics.php:106
 msgid "Other"
 msgstr "Andere"
 
-#: includes/admin/class-admin.php:618
+#: includes/admin/class-admin.php:630
 #: includes/modules/order-dashboard/class-order-dashboard.php:434
 msgid "Status updated"
 msgstr "Status aktualisiert"
 
-#: includes/admin/class-admin.php:619
+#: includes/admin/class-admin.php:631
 msgid "Error updating"
 msgstr "Fehler beim Aktualisieren"
 
-#: includes/admin/class-admin.php:620
+#: includes/admin/class-admin.php:632
 msgid "Sound active"
 msgstr "Sound aktiv"
 
-#: includes/admin/class-admin.php:621
+#: includes/admin/class-admin.php:633
 msgid "Sound off"
 msgstr "Sound aus"
 
-#: includes/admin/class-admin.php:622
+#: includes/admin/class-admin.php:634
 msgid "Loading orders..."
 msgstr "Bestellungen werden geladen..."
 
-#: includes/admin/class-admin.php:623
+#: includes/admin/class-admin.php:635
 msgid "Error loading orders"
 msgstr "Fehler beim Laden der Bestellungen"
 
-#: includes/admin/class-admin.php:624
+#: includes/admin/class-admin.php:636
 msgid "Error loading more orders"
 msgstr "Fehler beim Laden weiterer Bestellungen"
 
-#: includes/admin/class-admin.php:625
+#: includes/admin/class-admin.php:637
 msgid ""
 "Do you really want to cancel this order?\n"
 "\n"
@@ -263,80 +238,80 @@ msgstr ""
 "\n"
 "Die Zahlung wird automatisch zurückerstattet."
 
-#: includes/admin/class-admin.php:626
+#: includes/admin/class-admin.php:638
 msgid "Cancelling order..."
 msgstr "Bestellung wird storniert..."
 
-#: includes/admin/class-admin.php:627
+#: includes/admin/class-admin.php:639
 msgid "Order cancelled and payment refunded"
 msgstr "Bestellung storniert und Zahlung zurückerstattet"
 
-#: includes/admin/class-admin.php:628
+#: includes/admin/class-admin.php:640
 #: includes/modules/order-dashboard/class-order-dashboard.php:491
 msgid "Order cancelled"
 msgstr "Bestellung storniert"
 
-#: includes/admin/class-admin.php:629
+#: includes/admin/class-admin.php:641
 msgid "Error cancelling"
 msgstr "Fehler beim Stornieren"
 
-#: includes/admin/class-admin.php:630
+#: includes/admin/class-admin.php:642
 msgid "Error cancelling order"
 msgstr "Fehler beim Stornieren der Bestellung"
 
-#: includes/admin/class-admin.php:631
+#: includes/admin/class-admin.php:643
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
 
-#: includes/admin/class-admin.php:632
+#: includes/admin/class-admin.php:644
 msgid "more order(s)"
 msgstr "weitere Bestellung(en)"
 
-#: includes/admin/class-admin.php:633
+#: includes/admin/class-admin.php:645
 msgid "Prepare Now →"
 msgstr "Jetzt vorbereiten →"
 
-#: includes/admin/class-admin.php:634
+#: includes/admin/class-admin.php:646
 msgid "✓ Complete"
 msgstr "✓ Abgeschlossen"
 
-#: includes/admin/class-admin.php:635
+#: includes/admin/class-admin.php:647
 msgid "Cancel order"
 msgstr "Bestellung stornieren"
 
-#: includes/admin/class-admin.php:636
+#: includes/admin/class-admin.php:648
 msgid "Fullscreen"
 msgstr "Vollbild"
 
-#: includes/admin/class-admin.php:637 includes/modules/pos/class-pos.php:164
+#: includes/admin/class-admin.php:649 includes/modules/pos/class-pos.php:164
 msgid "Exit fullscreen"
 msgstr "Vollbild beenden"
 
-#: includes/admin/class-admin.php:638
+#: includes/admin/class-admin.php:650
 msgid "Send receipt"
 msgstr "Beleg senden"
 
-#: includes/admin/class-admin.php:639
+#: includes/admin/class-admin.php:651
 msgid "Enter customer email address:"
 msgstr "E-Mail-Adresse des Kunden eingeben:"
 
-#: includes/admin/class-admin.php:640 includes/modules/pos/class-pos.php:173
+#: includes/admin/class-admin.php:652 includes/modules/pos/class-pos.php:173
 #: templates/admin/pos.php:66 templates/admin/settings-tabbed.php:774
 msgid "Takeaway"
 msgstr "Take-away"
 
-#: includes/admin/class-admin.php:641 includes/modules/pos/class-pos.php:174
+#: includes/admin/class-admin.php:653 includes/modules/pos/class-pos.php:174
 #: templates/admin/pos.php:70 templates/admin/settings-tabbed.php:778
 #: templates/thankyou-optimized.php:164 templates/thankyou-optimized.php:168
 msgid "Dine-in"
 msgstr "Tischbestellung"
 
-#: includes/admin/class-admin.php:672
+#: includes/admin/class-admin.php:684
 #: includes/modules/reservations/class-reservations.php:126
 msgid "Reservation"
 msgstr "Reservierung"
 
-#: includes/admin/class-admin.php:674
+#: includes/admin/class-admin.php:686
 #: includes/modules/reservations/class-reservations.php:221
 #: includes/modules/reservations/class-reservations.php:292
 #: includes/modules/tables/class-tables.php:512
@@ -344,11 +319,12 @@ msgstr "Reservierung"
 msgid "Table"
 msgstr "Tisch"
 
-#: includes/admin/class-admin.php:691 includes/admin/class-admin.php:718
-#: includes/admin/class-admin.php:813 includes/admin/class-admin.php:1059
-#: includes/admin/class-admin.php:1100 includes/admin/class-admin.php:1159
-#: includes/admin/class-admin.php:1249 includes/admin/class-admin.php:1286
-#: includes/admin/class-admin.php:1309 includes/admin/class-admin.php:1429
+#: includes/admin/class-admin.php:703 includes/admin/class-admin.php:730
+#: includes/admin/class-admin.php:825 includes/admin/class-admin.php:1071
+#: includes/admin/class-admin.php:1112 includes/admin/class-admin.php:1171
+#: includes/admin/class-admin.php:1261 includes/admin/class-admin.php:1298
+#: includes/admin/class-admin.php:1321 includes/admin/class-admin.php:1441
+#: includes/admin/class-admin.php:1698
 #: includes/modules/order-dashboard/class-order-dashboard.php:117
 #: includes/modules/order-dashboard/class-order-dashboard.php:400
 #: includes/modules/order-dashboard/class-order-dashboard.php:446
@@ -368,144 +344,144 @@ msgstr "Tisch"
 msgid "No permission"
 msgstr "Keine Berechtigung"
 
-#: includes/admin/class-admin.php:697
+#: includes/admin/class-admin.php:709
 #: includes/modules/order-dashboard/class-order-dashboard.php:452
 msgid "Location is fixed for your account"
 msgstr "Standort ist für Ihr Konto festgelegt"
 
-#: includes/admin/class-admin.php:724
+#: includes/admin/class-admin.php:736
 msgid "No Product ID specified"
 msgstr "Keine Produkt-ID angegeben"
 
-#: includes/admin/class-admin.php:730 includes/admin/class-admin.php:1113
+#: includes/admin/class-admin.php:742 includes/admin/class-admin.php:1125
 msgid "Product not found"
 msgstr "Produkt nicht gefunden"
 
-#: includes/admin/class-admin.php:767 includes/modules/pos/class-pos.php:324
+#: includes/admin/class-admin.php:779 includes/modules/pos/class-pos.php:324
 msgid "Variant"
 msgstr "Variante"
 
-#: includes/admin/class-admin.php:821 includes/admin/class-admin.php:861
+#: includes/admin/class-admin.php:833 includes/admin/class-admin.php:873
 #: includes/modules/pos/class-pos.php:144
 #: includes/modules/pos/class-pos.php:491
 #: includes/modules/pos/class-pos.php:522
 msgid "Cart is empty"
 msgstr "Warenkorb ist leer"
 
-#: includes/admin/class-admin.php:828 includes/modules/pos/class-pos.php:498
+#: includes/admin/class-admin.php:840 includes/modules/pos/class-pos.php:498
 msgid "Invalid cart data"
 msgstr "Ungültige Warenkorbdaten"
 
-#: includes/admin/class-admin.php:887 includes/modules/pos/class-pos.php:530
+#: includes/admin/class-admin.php:899 includes/modules/pos/class-pos.php:530
 msgid "No location selected"
 msgstr "Kein Standort ausgewählt"
 
-#: includes/admin/class-admin.php:948 templates/admin/statistics.php:407
+#: includes/admin/class-admin.php:960 templates/admin/statistics.php:407
 msgid "Add-on"
 msgstr "Add-on"
 
-#: includes/admin/class-admin.php:1029
+#: includes/admin/class-admin.php:1041
 msgid "Order created via POS system."
 msgstr "Bestellung über Kassensystem erstellt."
 
-#: includes/admin/class-admin.php:1108
+#: includes/admin/class-admin.php:1120
 msgid "Invalid parameters"
 msgstr "Ungültige Parameter"
 
-#: includes/admin/class-admin.php:1257
+#: includes/admin/class-admin.php:1269
 #: includes/modules/tables/class-tables.php:272
 msgid "Invalid data"
 msgstr "Ungültige Daten"
 
-#: includes/admin/class-admin.php:1276 templates/admin/settings-tabbed.php:337
+#: includes/admin/class-admin.php:1288 templates/admin/settings-tabbed.php:337
 msgid "Settings saved"
 msgstr "Einstellungen gespeichert"
 
-#: includes/admin/class-admin.php:1299
+#: includes/admin/class-admin.php:1311
 msgid "Support settings saved"
 msgstr "Support-Einstellungen gespeichert"
 
-#: includes/admin/class-admin.php:1369
+#: includes/admin/class-admin.php:1381
 msgid "Help"
 msgstr "Hilfe"
 
-#: includes/admin/class-admin.php:1374
+#: includes/admin/class-admin.php:1386
 msgid "Close"
 msgstr "Schliessen"
 
-#: includes/admin/class-admin.php:1380
+#: includes/admin/class-admin.php:1392
 msgid "First check the help area – you'll find guides for all features there."
 msgstr ""
 "Schauen Sie zuerst in den Hilfebereich – dort finden Sie Anleitungen zu "
 "allen Funktionen.Schauen Sie zuerst in den Hilfe-Bereich – dort finden Sie "
 "Anleitungen zu allen Funktionen."
 
-#: includes/admin/class-admin.php:1384
+#: includes/admin/class-admin.php:1396
 msgid "Open Help Area"
 msgstr "Hilfe-Bereich öffnen"
 
-#: includes/admin/class-admin.php:1390
+#: includes/admin/class-admin.php:1402
 msgid "Didn't find what you're looking for?"
 msgstr "Nicht fündig geworden?"
 
-#: includes/admin/class-admin.php:1493
+#: includes/admin/class-admin.php:1505
 msgid "Receipt"
 msgstr "Beleg"
 
-#: includes/admin/class-admin.php:1526 includes/admin/class-admin.php:1578
+#: includes/admin/class-admin.php:1538 includes/admin/class-admin.php:1590
 msgid "To:"
 msgstr "An:"
 
 #. translators: %s: date/time
-#: includes/admin/class-admin.php:1533
+#: includes/admin/class-admin.php:1545
 #, php-format
 msgid "Last sent: %s"
 msgstr "Zuletzt gesendet: %s"
 
-#: includes/admin/class-admin.php:1542 templates/thankyou-optimized.php:121
+#: includes/admin/class-admin.php:1554 templates/thankyou-optimized.php:121
 msgid "Send Receipt by Email"
 msgstr "Beleg per E-Mail senden"
 
-#: includes/admin/class-admin.php:1555 includes/admin/class-admin.php:1620
+#: includes/admin/class-admin.php:1567 includes/admin/class-admin.php:1632
 #: includes/modules/checkout/class-checkout.php:1630
 #: includes/modules/reservations/class-reservations.php:601
 #: templates/thankyou-optimized.php:347
 msgid "Please enter a valid email address."
 msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 
-#: includes/admin/class-admin.php:1583
+#: includes/admin/class-admin.php:1595
 msgid "Error"
 msgstr "Fehler"
 
-#: includes/admin/class-admin.php:1601
+#: includes/admin/class-admin.php:1613
 msgid "Insufficient permissions."
 msgstr "Keine ausreichenden Berechtigungen."
 
-#: includes/admin/class-admin.php:1606
+#: includes/admin/class-admin.php:1618
 #: includes/modules/checkout/class-checkout.php:1608
 msgid "Invalid order."
 msgstr "Ungültige Bestellung."
 
-#: includes/admin/class-admin.php:1611
+#: includes/admin/class-admin.php:1623
 #: includes/modules/checkout/class-checkout.php:1615
 msgid "Order not found."
 msgstr "Bestellung nicht gefunden"
 
 #. translators: %s: date/time
-#: includes/admin/class-admin.php:1637
+#: includes/admin/class-admin.php:1649
 #, php-format
 msgid "Receipt sent (%s)"
 msgstr "Beleg gesendet (%s)"
 
-#: includes/admin/class-admin.php:1662
+#: includes/admin/class-admin.php:1674
 msgid "Assigned Location"
 msgstr "Zugewiesener Standort"
 
-#: includes/admin/class-admin.php:1665
+#: includes/admin/class-admin.php:1677
 msgid "No fixed location (user can select freely)"
 msgstr "Kein fixer Standort (Benutzer kann frei wählen)"
 
-#: includes/admin/class-admin.php:1672
+#: includes/admin/class-admin.php:1684
 msgid ""
 "When set, this location is pre-selected in POS and Order Overview and cannot "
 "be changed by the user."
@@ -514,6 +490,15 @@ msgstr ""
 "und kann vom Benutzer nicht geändert werden.Wenn gesetzt, wird dieser "
 "Standort in POS und Bestellübersicht vorausgewählt und kann vom Benutzer "
 "nicht geändert werden."
+
+#: includes/admin/class-admin.php:1706
+#, fuzzy
+msgid "No order provided"
+msgstr "Keine Reihenfolge angegeben."
+
+#: includes/admin/class-admin.php:1727
+msgid "Product order saved."
+msgstr "Produktreihenfolge gespeichert."
 
 #: includes/modules/checkout/class-checkout.php:515
 #: includes/modules/checkout/class-checkout.php:609
@@ -983,7 +968,9 @@ msgstr "Nur im POS (für Kunden nicht sichtbar)"
 
 #: includes/modules/locations/class-locations.php:809
 msgid "Product is visible in POS but not shown on shop pages or product URLs."
-msgstr "Produkt ist im POS sichtbar, wird aber nicht auf Shop-Seiten oder Produkt-URLs angezeigt."
+msgstr ""
+"Produkt ist im POS sichtbar, wird aber nicht auf Shop-Seiten oder Produkt-"
+"URLs angezeigt."
 
 #. translators: %s: closing time
 #: includes/modules/locations/class-locations.php:1138
@@ -4594,7 +4581,7 @@ msgstr ""
 
 #: templates/admin/help-partials/settings.php:129
 #: templates/admin/settings-tabbed.php:457
-#: templates/admin/settings-tabbed.php:832
+#: templates/admin/settings-tabbed.php:868
 msgid "Important:"
 msgstr "Achtung:"
 
@@ -5596,7 +5583,7 @@ msgstr "Feiertag hinzufügen"
 #: templates/admin/settings-tabbed.php:636
 #: templates/admin/settings-tabbed.php:704
 #: templates/admin/settings-tabbed.php:796
-#: templates/admin/settings-tabbed.php:838
+#: templates/admin/settings-tabbed.php:874
 #: templates/admin/settings/locations.php:112
 #: templates/admin/settings/notifications.php:86
 #: templates/admin/settings/products.php:73
@@ -6120,19 +6107,33 @@ msgstr ""
 msgid "The VAT rate per order type is configured under %s."
 msgstr "Der Mehrwertsteuersatz pro Bestelltyp wird unter %s konfiguriert."
 
-#: templates/admin/settings-tabbed.php:822
+#: templates/admin/settings-tabbed.php:801
+msgid "Product Order"
+msgstr "Produktreihenfolge"
+
+#: templates/admin/settings-tabbed.php:803
+msgid ""
+"Drag products into the desired order. This order applies to the POS and to "
+"the store's catalog (when WooCommerce uses custom ordering)."
+msgstr "Produkte in die gewünschte Reihenfolge ziehen. Diese Reihenfolge gilt im POS und im Shop-Katalog (wenn WooCommerce «Benutzerdefinierte Reihenfolge» verwendet)."
+
+#: templates/admin/settings-tabbed.php:829
+msgid "Save Order"
+msgstr "Reihenfolge speichern"
+
+#: templates/admin/settings-tabbed.php:858
 msgid "Uninstallation"
 msgstr "Deinstallation"
 
-#: templates/admin/settings-tabbed.php:825
+#: templates/admin/settings-tabbed.php:861
 msgid "Delete Data on Uninstall"
 msgstr "Daten bei Deinstallation löschen"
 
-#: templates/admin/settings-tabbed.php:829
+#: templates/admin/settings-tabbed.php:865
 msgid "Completely delete all plugin data on uninstall"
 msgstr "Alle Plugin-Daten bei der Deinstallation vollständig löschen"
 
-#: templates/admin/settings-tabbed.php:833
+#: templates/admin/settings-tabbed.php:869
 msgid ""
 "This option will permanently delete all locations, product options, "
 "settings, and order metadata!"
@@ -6237,6 +6238,28 @@ msgstr ""
 "Zu welcher Seite werden Gäste nach dem Scannen des QR-Codes weitergeleitet? "
 "Standard: WooCommerce-Shop-Seite.Zu welcher Seite werden Gäste nach dem "
 "Scannen des QR-Codes weitergeleitet? Standard: WooCommerce-Shop-Seite."
+
+#: templates/admin/settings/_master-toggle.php:58
+msgid "Enable"
+msgstr "Aktivieren"
+
+#: templates/admin/settings/_pro-locked.php:21
+msgid "Pro Feature"
+msgstr "Pro-Funktion"
+
+#: templates/admin/settings/_pro-locked.php:25
+msgid ""
+"This feature is available in Libre Bite Pro. Start your free 7-day trial to "
+"unlock it – no credit card required."
+msgstr ""
+"Diese Funktion ist in Libre Bite Pro verfügbar. Starten Sie Ihre kostenlose "
+"7-Tage-Testversion – keine Kreditkarte erforderlich.Diese Funktion ist in "
+"Libre Bite Pro verfügbar. Starten Sie Ihre kostenlose 7-Tage-Testphase, um "
+"sie freizuschalten – keine Kreditkarte erforderlich."
+
+#: templates/admin/settings/_pro-locked.php:33
+msgid "7-day free trial · No credit card required"
+msgstr "7-Tage-Gratis-Testphase · Keine Kreditkarte erforderlich"
 
 #: templates/admin/settings/branding.php:24
 msgid "Classic"
@@ -6593,28 +6616,6 @@ msgstr ""
 "Tische erstellen und für jeden einen QR-Code generieren. Gäste scannen den "
 "QR-Code, um die Bestellung zu starten.Tische erstellen und für jeden einen "
 "QR-Code generieren. Gäste scannen den QR-Code, um zu bestellen."
-
-#: templates/admin/settings/_master-toggle.php:58
-msgid "Enable"
-msgstr "Aktivieren"
-
-#: templates/admin/settings/_pro-locked.php:21
-msgid "Pro Feature"
-msgstr "Pro-Funktion"
-
-#: templates/admin/settings/_pro-locked.php:25
-msgid ""
-"This feature is available in Libre Bite Pro. Start your free 7-day trial to "
-"unlock it – no credit card required."
-msgstr ""
-"Diese Funktion ist in Libre Bite Pro verfügbar. Starten Sie Ihre kostenlose "
-"7-Tage-Testversion – keine Kreditkarte erforderlich.Diese Funktion ist in "
-"Libre Bite Pro verfügbar. Starten Sie Ihre kostenlose 7-Tage-Testphase, um "
-"sie freizuschalten – keine Kreditkarte erforderlich."
-
-#: templates/admin/settings/_pro-locked.php:33
-msgid "7-day free trial · No credit card required"
-msgstr "7-Tage-Gratis-Testphase · Keine Kreditkarte erforderlich"
 
 #: templates/admin/statistics.php:36
 msgid "Last 7 Days"
@@ -7334,6 +7335,22 @@ msgstr "Beleg gesendet"
 #: templates/thankyou-optimized.php:367
 msgid "Error sending receipt."
 msgstr "Fehler beim Senden. Bitte versuchen Sie es erneut."
+
+#~ msgid "https://github.com/simurech/libre-bite"
+#~ msgstr "https://github.com/simurech/libre-bite"
+
+#~ msgid ""
+#~ "Complete order and location management system for WooCommerce restaurants "
+#~ "and food businesses."
+#~ msgstr ""
+#~ "Vollständiges Bestell- und Standortverwaltungssystem für WooCommerce-"
+#~ "Restaurants und Food-Unternehmen."
+
+#~ msgid "urech.dev"
+#~ msgstr "urech.dev"
+
+#~ msgid "https://urech.dev/"
+#~ msgstr "https://urech.dev/"
 
 #~ msgid "QR Code Link"
 #~ msgstr "QR-Code Link"
