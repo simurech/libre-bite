@@ -1185,6 +1185,7 @@ class LBite_Checkout {
 		wp_send_json_success(
 			array(
 				'message'       => __( 'Location set', 'libre-bite' ),
+				'location_id'   => $location_id,
 				'location_name' => $location_post->post_title,
 			)
 		);

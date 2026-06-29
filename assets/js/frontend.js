@@ -141,6 +141,112 @@
 	};
 
 	/**
+	 * Standort-Filterung im Shop
+	 *
+	 * Liest den gewählten Standort aus localStorage (gesetzt beim Standort-Wechsel via AJAX)
+	 * und markiert nicht verfügbare Produkte visuell. Ein Toggle-Button blendet sie aus/ein.
+	 */
+	const LocationFilter = {
+		filtering: false,
+
+		init: function() {
+			if (typeof window.lbiteProductLocations === 'undefined') {
+				return;
+			}
+			this.apply();
+			$(document).on('click', '.lbite-filter-btn', function() {
+				LocationFilter.toggle();
+			});
+		},
+
+		apply: function() {
+			var locationId   = parseInt(localStorage.getItem('lbite_location_id') || '0', 10);
+			var locationName = localStorage.getItem('lbite_location_name') || '';
+			var $notice      = $('#lbite-location-notice');
+
+			if (!locationId || !$notice.length) {
+				return;
+			}
+
+			var unavailableCount = 0;
+
+			$('.products .product').each(function() {
+				var match = this.className.match(/\bpost-(\d+)\b/);
+				if (!match) { return; }
+				var productId        = parseInt(match[1], 10);
+				var productLocations = window.lbiteProductLocations[productId];
+
+				// Leeres Array oder kein Eintrag = überall verfügbar
+				if (!productLocations || productLocations.length === 0) {
+					$(this).removeClass('lbite-unavailable');
+					return;
+				}
+
+				if (productLocations.indexOf(locationId) === -1) {
+					$(this).addClass('lbite-unavailable');
+					unavailableCount++;
+				} else {
+					$(this).removeClass('lbite-unavailable');
+				}
+			});
+
+			if (unavailableCount > 0) {
+				var label       = $notice.data('unavailable-label') || '';
+				var filterShow  = $notice.data('filter-show') || '';
+
+				$notice.html(
+					'<span class="lbite-notice-text">' +
+						(locationName ? '📍 ' + $('<span>').text(locationName).html() + ' &mdash; ' : '') +
+						unavailableCount + ' ' + label +
+					'</span>' +
+					'<button class="lbite-filter-btn button">' + filterShow + '</button>'
+				).show();
+
+				// Gefilterten Zustand wiederherstellen falls aktiv
+				if (this.filtering) {
+					$('.products .product.lbite-unavailable').hide();
+				}
+			} else {
+				$notice.hide();
+			}
+		},
+
+		toggle: function() {
+			this.filtering = !this.filtering;
+			var $notice      = $('#lbite-location-notice');
+			var filterShow    = $notice.data('filter-show') || '';
+			var filterShowAll = $notice.data('filter-show-all') || '';
+
+			if (this.filtering) {
+				$('.products .product.lbite-unavailable').hide();
+				$notice.find('.lbite-filter-btn').text(filterShowAll);
+			} else {
+				$('.products .product.lbite-unavailable').show();
+				$notice.find('.lbite-filter-btn').text(filterShow);
+			}
+		}
+	};
+
+	/**
+	 * Gewählten Standort in localStorage speichern wenn lbite_set_location erfolgreich war.
+	 * Zentrale Abfangstelle für alle Templates (Banner, Modal, Tiles, Inline).
+	 */
+	$(document).ajaxSuccess(function(event, xhr, settings, response) {
+		if (typeof settings.data !== 'string') { return; }
+		if (settings.data.indexOf('action=lbite_set_location') === -1) { return; }
+		if (!response || !response.success) { return; }
+
+		var locationId   = response.data && response.data.location_id ? response.data.location_id : 0;
+		var locationName = response.data && response.data.location_name ? response.data.location_name : '';
+		localStorage.setItem('lbite_location_id', locationId || '');
+		localStorage.setItem('lbite_location_name', locationName);
+
+		// Sofort neu markieren falls Produktdaten auf der Seite vorhanden
+		LocationFilter.filtering = false;
+		LocationFilter.apply();
+	});
+
+	/**
 	 * Initialisierung
 	 */
 	$(document).ready(function() {
@@ -148,6 +254,7 @@
 		ProductOptions.init();
 		Checkout.init();
 		OpeningHours.init();
+		LocationFilter.init();
 	});
 
 })(jQuery);

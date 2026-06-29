@@ -172,6 +172,50 @@
 	max-width: 280px;
 }
 
+/* Standort-Filterung im Shop */
+#lbite-location-notice {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	background: #f8f8f8;
+	border: 1px solid #e5e5e5;
+	border-radius: 4px;
+	padding: 10px 14px;
+	margin-bottom: 20px;
+	font-size: 0.88em;
+	color: #555;
+	flex-wrap: wrap;
+}
+
+.lbite-notice-text {
+	flex: 1;
+}
+
+.lbite-filter-btn.button {
+	white-space: nowrap;
+	font-size: 0.85em !important;
+	padding: 4px 12px !important;
+	height: auto !important;
+	line-height: 1.6 !important;
+	flex-shrink: 0;
+}
+
+li.product.lbite-unavailable {
+	position: relative;
+	opacity: 0.45;
+	pointer-events: none;
+}
+
+li.product.lbite-unavailable::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border: 2px dashed rgba(0, 0, 0, 0.18);
+	border-radius: 4px;
+	pointer-events: none;
+}
+
 /* Item notes in checkout cart */
 .lbite-item-note-wrap {
 	margin-top: 4px;

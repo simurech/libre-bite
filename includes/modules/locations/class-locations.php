@@ -63,6 +63,9 @@ class LBite_Locations {
 		// Free-User auf 1 publizierten Standort begrenzen
 		$this->loader->add_action( 'transition_post_status', $this, 'enforce_location_limit', 10, 3 );
 		$this->loader->add_action( 'admin_notices', $this, 'show_location_limit_notice' );
+
+		// Standort-Filterdaten im Shop-Loop ausgeben
+		$this->loader->add_action( 'woocommerce_before_shop_loop', $this, 'render_shop_location_data' );
 	}
 
 	/**
@@ -715,6 +718,34 @@ class LBite_Locations {
 	}
 
 	/**
+	 * Inline-Skript mit Produkt-Standort-Daten für die Standort-Filterung ausgeben.
+	 * Nur auf Shop- und Kategorieseiten aktiv.
+	 */
+	public function render_shop_location_data() {
+		if ( ! ( is_shop() || is_product_category() || is_product_tag() ) ) {
+			return;
+		}
+
+		global $wp_query;
+		if ( empty( $wp_query->posts ) ) {
+			return;
+		}
+
+		$location_map = array();
+		foreach ( $wp_query->posts as $post ) {
+			$locations = get_post_meta( $post->ID, '_lbite_locations', true );
+			$location_map[ $post->ID ] = is_array( $locations ) ? array_map( 'intval', $locations ) : array();
+		}
+
+		echo '<div id="lbite-location-notice" style="display:none;"'
+			. ' data-unavailable-label="' . esc_attr( _n( 'product not available', 'products not available', 2, 'libre-bite' ) ) . '"'
+			. ' data-filter-show="' . esc_attr__( 'Show only available products', 'libre-bite' ) . '"'
+			. ' data-filter-show-all="' . esc_attr__( 'Show all products', 'libre-bite' ) . '"'
+			. '></div>';
+		echo '<script>window.lbiteProductLocations = ' . wp_json_encode( $location_map ) . ';</script>';
+	}
+
+	/**
 	 * Produkt-Meta-Box hinzufügen
 	 */
 	public function add_product_meta_box() {
@@ -766,6 +797,15 @@ class LBite_Locations {
 			<?php
 		}
 		echo '</div>';
+
+		// POS-Only-Option
+		$pos_only = get_post_meta( $post->ID, '_lbite_pos_only', true );
+		echo '<hr style="margin: 10px 0;">';
+		echo '<label style="display: block; margin-top: 6px; font-weight: 600;">';
+		echo '<input type="checkbox" name="lbite_pos_only" value="1" ' . checked( $pos_only, '1', false ) . '>';
+		echo ' ' . esc_html__( 'POS only (hidden from customers)', 'libre-bite' );
+		echo '</label>';
+		echo '<p class="description" style="margin-top: 4px; font-size: 11px;">' . esc_html__( 'Product is visible in POS but not shown on shop pages or product URLs.', 'libre-bite' ) . '</p>';
 	}
 
 	/**
@@ -790,6 +830,10 @@ class LBite_Locations {
 			: array();
 
 		update_post_meta( $post_id, '_lbite_locations', $locations );
+
+		// POS-Only speichern.
+		$pos_only = isset( $_POST['lbite_pos_only'] ) ? '1' : '';
+		update_post_meta( $post_id, '_lbite_pos_only', $pos_only );
 	}
 
 	/**
