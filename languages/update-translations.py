@@ -1142,6 +1142,22 @@ NEW_STRINGS_FORMAL_SS = {
         'Tisch auswählen (optional)',
     'The VAT rate per order type is configured under %s.':
         'Der Mehrwertsteuersatz pro Bestelltyp wird unter %s konfiguriert.',
+
+    # ── v2.1.x: POS-Produktmarkierung & Drag-Drop-Reihenfolge ────────────────
+    'POS only (hidden from customers)':
+        'Nur im POS (für Kunden nicht sichtbar)',
+    'Product is visible in POS but not shown on shop pages or product URLs.':
+        'Produkt ist im POS sichtbar, wird aber nicht auf Shop-Seiten oder '
+        'Produkt-URLs angezeigt.',
+    'Product Order':
+        'Produktreihenfolge',
+    'Drag products into the desired order. This order applies to the POS and to '
+    "the store's catalog (when WooCommerce uses custom ordering).":
+        'Produkte in die gewünschte Reihenfolge ziehen. Diese Reihenfolge gilt im '
+        'POS und im Shop-Katalog (wenn WooCommerce «Benutzerdefinierte Reihenfolge» '
+        'verwendet).',
+    'Save Order':
+        'Reihenfolge speichern',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT

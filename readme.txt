@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.1.2 =
+* Fix: Correct translation loading order to ensure bundled translations are always applied, even when WordPress.org language packs are present.
+* Fix: Missing German translations for several recently added strings (POS-only product label, product order settings).
+* Maintenance: Updated translation files for de_CH, de_DE, de_AT.
 
 = 2.1.1 =
 * New: Drag & drop product ordering in POS settings — products can now be reordered directly via a sortable list under Settings > POS System. The order is saved as WordPress menu_order and applies to both the POS and the WooCommerce store catalog.

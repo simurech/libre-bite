@@ -3,7 +3,7 @@
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://github.com/simurech/libre-bite
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
- * Version:           2.1.1
+ * Version:           2.1.2
  * Requires at least: 6.0
  * Requires PHP:      8.1
  * Author:            urech.dev
@@ -74,7 +74,7 @@ if ( function_exists( 'lbite_freemius' ) ) {
 }
 
 // Plugin-Konstanten definieren
-define( 'LBITE_VERSION', '2.1.1' );
+define( 'LBITE_VERSION', '2.1.2' );
 define( 'LBITE_PLUGIN_FILE', __FILE__ );
 define( 'LBITE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LBITE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -129,7 +129,19 @@ spl_autoload_register( function ( $class ) {
  * Übersetzungen laden
  */
 function lbite_load_textdomain() {
-	load_plugin_textdomain( 'libre-bite', false, dirname( plugin_basename( LBITE_PLUGIN_FILE ) ) . '/languages' );
+	$locale = apply_filters( 'plugin_locale', determine_locale(), 'libre-bite' );
+
+	// Bundled translations first — ensures new strings not yet on translate.wordpress.org are available.
+	$bundled = plugin_dir_path( LBITE_PLUGIN_FILE ) . 'languages/libre-bite-' . $locale . '.mo';
+	if ( is_readable( $bundled ) ) {
+		load_textdomain( 'libre-bite', $bundled );
+	}
+
+	// WP.org language pack on top — community strings win for conflicts, new bundled strings survive.
+	$wporg = WP_LANG_DIR . '/plugins/libre-bite-' . $locale . '.mo';
+	if ( is_readable( $wporg ) ) {
+		load_textdomain( 'libre-bite', $wporg );
+	}
 }
 add_action( 'plugins_loaded', 'lbite_load_textdomain', 10 );
 
