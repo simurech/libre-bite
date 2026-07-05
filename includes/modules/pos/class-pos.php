@@ -207,13 +207,15 @@ class LBite_POS {
 
 		$products = get_posts(
 			array(
-				'post_type'      => 'product',
-				'posts_per_page' => 500, // Begrenzt auf 500 für Performance.
-				'post_status'    => 'publish',
-				'orderby'        => array(
+				'post_type'              => 'product',
+				'posts_per_page'         => 500, // Begrenzt auf 500 für Performance.
+				'post_status'            => 'publish',
+				'orderby'                => array(
 					'menu_order' => 'ASC',
 					'title'      => 'ASC',
 				),
+				'update_post_meta_cache' => true,
+				'update_post_term_cache' => true,
 			)
 		);
 
@@ -251,11 +253,11 @@ class LBite_POS {
 			$product_options = get_post_meta( $product_id, '_lbite_product_options', true );
 			$has_options     = ! empty( $product_options );
 
-			// Kategorien des Produkts.
-			$product_cats = wp_get_post_terms( $product_id, 'product_cat', array( 'fields' => 'ids' ) );
-			if ( is_wp_error( $product_cats ) ) {
-				$product_cats = array();
-			}
+			// Kategorien des Produkts (nutzt den von get_posts geprimten Term-Cache).
+			$product_cat_terms = get_the_terms( $product_id, 'product_cat' );
+			$product_cats      = ( $product_cat_terms && ! is_wp_error( $product_cat_terms ) )
+				? wp_list_pluck( $product_cat_terms, 'term_id' )
+				: array();
 
 			// Standort-Zuweisung (für Client-seitige Filterung).
 			$product_location_ids = get_post_meta( $product_id, '_lbite_locations', true );
@@ -417,13 +419,15 @@ class LBite_POS {
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
 		$args = array(
-			'post_type'      => 'product',
-			'posts_per_page' => 500, // Begrenzt für Performance.
-			'post_status'    => 'publish',
-			'orderby'        => array(
+			'post_type'              => 'product',
+			'posts_per_page'         => 500, // Begrenzt für Performance.
+			'post_status'            => 'publish',
+			'orderby'                => array(
 				'menu_order' => 'ASC',
 				'title'      => 'ASC',
 			),
+			'update_post_meta_cache' => true,
+			'update_post_term_cache' => true,
 		);
 
 		// Nach Kategorie filtern

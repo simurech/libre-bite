@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,9 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.1.3 =
+* Performance: POS product query now uses WordPress term cache instead of individual database queries per product, significantly reducing DB load on cache miss with large product catalogs.
 
 = 2.1.2 =
 * Fix: Correct translation loading order to ensure bundled translations are always applied, even when WordPress.org language packs are present.
