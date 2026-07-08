@@ -198,6 +198,7 @@ GEMINI.md
 .ai-cache/
 
 # Lokale KI-Kontextdateien & interne Planungsdokumente
+/plans/
 AI-KONTEXT.md
 PROJEKT-KONTEXT.md
 MASSNAHMENPLAN.md
