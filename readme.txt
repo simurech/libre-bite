@@ -4,9 +4,9 @@ Donate link: https://github.com/simurech/libre-bite
 Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
-Requires PHP: 8.1
-Stable tag: 2.1.4
-License: GPLv2 or later
+Requires PHP: 7.4
+Stable tag: 2.1.5
+License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Stress-free orders, happy guests, full tables — the WooCommerce plugin built for restaurants, take-aways, and cafés.
@@ -223,6 +223,10 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.1.5 =
+* Update: Lowered minimum required PHP version to 7.4 (no 8.0+ language features are used)
+* Fix: License field now uses the consistent SPDX identifier GPL-2.0-or-later
 
 = 2.1.4 =
 * Maintenance: Updated Freemius SDK to version 2.13.3.
