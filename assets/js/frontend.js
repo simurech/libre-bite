@@ -157,6 +157,87 @@
 			$(document).on('click', '.lbite-filter-btn', function() {
 				LocationFilter.toggle();
 			});
+			$(document).on('change', '.lbite-location-picker', function() {
+				LocationFilter.chooseLocation($(this));
+			});
+			$(document).on('click', '.lbite-notice-change-location', function() {
+				LocationFilter.changeLocation();
+			});
+		},
+
+		/**
+		 * Standort-Auswahl direkt in der Hinweisleiste (kein Standort in localStorage,
+		 * aber mindestens ein Produkt auf der Seite hat eine Standort-Einschränkung).
+		 */
+		renderPicker: function($notice) {
+			if (typeof window.lbiteLocations === 'undefined' || window.lbiteLocations.length < 2) {
+				$notice.hide();
+				return;
+			}
+
+			var hasRestriction = Object.keys(window.lbiteProductLocations).some(function(id) {
+				var excluded = window.lbiteProductLocations[id];
+				return excluded && excluded.length > 0;
+			});
+			if (!hasRestriction) {
+				$notice.hide();
+				return;
+			}
+
+			var label       = $notice.data('choose-location') || '';
+			var placeholder = $notice.data('choose-placeholder') || '';
+			var $select     = $('<select class="lbite-location-picker"></select>');
+			$select.append($('<option value=""></option>').text(placeholder));
+			window.lbiteLocations.forEach(function(loc) {
+				$select.append($('<option></option>').attr('value', loc.id).text(loc.name));
+			});
+
+			$notice.empty()
+				.append($('<span class="lbite-notice-text">📍 </span>').append($('<span></span>').text(label)))
+				.append($select)
+				.show();
+		},
+
+		/**
+		 * Standort aus dem Picker übernehmen — setzt den echten Bestell-Standort
+		 * (gleicher AJAX-Endpoint wie der normale Standort-Selector), damit es kein
+		 * zweites, paralleles Konzept von "aktueller Standort" gibt.
+		 */
+		chooseLocation: function($select) {
+			var locationId = $select.val();
+			if (!locationId) {
+				return;
+			}
+			var locationName = $select.find('option:selected').text();
+
+			$select.prop('disabled', true);
+
+			$.ajax({
+				url: lbiteData.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'lbite_set_location',
+					nonce: lbiteData.nonce,
+					location_id: locationId,
+					// Leer statt "now": Hier wird nur zum Durchstöbern des Menüs ausgewählt,
+					// keine Bestellabsicht. Bestelltyp/-zeit werden erst im Checkout-Flow
+					// festgelegt (auch für Standorte, die erst künftig öffnen).
+					order_type: ''
+				},
+				success: function(response) {
+					if (response.success) {
+						localStorage.setItem('lbite_location_id', locationId);
+						localStorage.setItem('lbite_location_name', locationName);
+						LocationFilter.apply();
+					} else {
+						$select.prop('disabled', false);
+						alert((response.data && response.data.message) || 'Error');
+					}
+				},
+				error: function() {
+					$select.prop('disabled', false);
+				}
+			});
 		},
 
 		apply: function() {
@@ -164,7 +245,12 @@
 			var locationName = localStorage.getItem('lbite_location_name') || '';
 			var $notice      = $('#lbite-location-notice');
 
-			if (!locationId || !$notice.length) {
+			if (!$notice.length) {
+				return;
+			}
+
+			if (!locationId) {
+				this.renderPicker($notice);
 				return;
 			}
 
@@ -190,27 +276,51 @@
 				}
 			});
 
+			var changeLocationLabel = $notice.data('change-location') || '';
+			var $changeBtn = $('<button type="button" class="lbite-notice-change-location"></button>').text(changeLocationLabel);
+
 			if (unavailableCount > 0) {
 				var labelSingular = $notice.data('unavailable-singular') || '';
 				var labelPlural   = $notice.data('unavailable-plural') || '';
 				var label         = unavailableCount === 1 ? labelSingular : labelPlural;
 				var filterShow    = $notice.data('filter-show') || '';
 
-				$notice.html(
-					'<span class="lbite-notice-text">' +
-						(locationName ? '📍 ' + $('<span>').text(locationName).html() + ' &mdash; ' : '') +
-						unavailableCount + ' ' + label +
-					'</span>' +
-					'<button class="lbite-filter-btn button">' + filterShow + '</button>'
-				).show();
+				$notice.empty()
+					.append(
+						$('<span class="lbite-notice-text"></span>').html(
+							(locationName ? '📍 ' + $('<span>').text(locationName).html() + ' &mdash; ' : '') +
+							unavailableCount + ' ' + label
+						)
+					)
+					.append('<button class="lbite-filter-btn button">' + filterShow + '</button>')
+					.append($changeBtn)
+					.show();
 
 				// Gefilterten Zustand wiederherstellen falls aktiv
 				if (this.filtering) {
 					$('.products .product.lbite-unavailable').hide();
 				}
+			} else if (locationName) {
+				// Standort gewählt, aber nichts eingeschränkt: Leiste bleibt sichtbar,
+				// damit der Standort trotzdem jederzeit gewechselt werden kann.
+				$notice.empty()
+					.append($('<span class="lbite-notice-text">📍 </span>').append($('<span></span>').text(locationName)))
+					.append($changeBtn)
+					.show();
 			} else {
 				$notice.hide();
 			}
+		},
+
+		/**
+		 * Standort-Auswahl zurücksetzen und wieder den Picker anzeigen.
+		 */
+		changeLocation: function() {
+			localStorage.removeItem('lbite_location_id');
+			localStorage.removeItem('lbite_location_name');
+			this.filtering = false;
+			$('.products .product.lbite-unavailable').show();
+			this.apply();
 		},
 
 		toggle: function() {
@@ -234,6 +344,14 @@
 	 */
 	const ProductAvailability = {
 		init: function() {
+			// Auf der Einzelprodukt-Seite direkt nach dem Titel positionieren – per JS statt Hook-
+			// Priorität, da manche Themes (z. B. Astra) die Summary-Reihenfolge selbst umbauen.
+			var $singleBadge = $('.single-product .entry-summary > .lbite-availability');
+			var $title       = $('.single-product .entry-summary > .product_title');
+			if ($singleBadge.length && $title.length) {
+				$singleBadge.insertAfter($title);
+			}
+
 			$(document).on('click', '.lbite-availability-toggle', function(e) {
 				e.stopPropagation();
 				var $toggle = $(this);

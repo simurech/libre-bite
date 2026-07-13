@@ -201,37 +201,71 @@
 	flex-shrink: 0;
 }
 
-li.product.lbite-unavailable {
-	position: relative;
-	opacity: 0.45;
-	pointer-events: none;
+.lbite-location-picker {
+	font-size: 0.9em;
+	padding: 4px 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background: #fff;
+	flex-shrink: 0;
 }
 
-li.product.lbite-unavailable::after {
-	content: '';
-	position: absolute;
-	inset: 0;
-	border: 2px dashed rgba(0, 0, 0, 0.18);
-	border-radius: 4px;
-	pointer-events: none;
+/* .lbite-unavailable dient nur noch als JS-Hook für den "Nur verfügbare Produkte
+   anzeigen"-Toggle (siehe LocationFilter.toggle() in frontend.js) — keine passive
+   Ausgrau-Optik mehr; der rote Verfügbarkeits-Badge übernimmt den Hinweis. */
+
+.lbite-notice-change-location,
+.lbite-notice-change-location:hover,
+.lbite-notice-change-location:focus,
+.lbite-notice-change-location:active,
+.lbite-notice-change-location:visited {
+	background: none;
+	border: none;
+	box-shadow: none;
+	outline: none;
+	text-shadow: none;
+	padding: 0;
+	margin-left: 8px;
+	color: #555;
+	text-decoration: underline;
+	cursor: pointer;
+	font-size: 1em;
+	flex-shrink: 0;
+}
+
+.lbite-notice-change-location:hover,
+.lbite-notice-change-location:focus {
+	color: #222;
 }
 
 /* Produkt-Verfügbarkeits-Hinweis (Grid-Item & Einzelprodukt-Seite) */
 .lbite-availability {
 	position: relative;
 	margin-top: 6px;
-	font-size: 0.82em;
+	font-size: 13px;
 }
 
-.lbite-availability-toggle {
+.lbite-availability--compact {
+	margin-top: 4px;
+	font-size: 11px;
+}
+
+.lbite-availability-toggle,
+.lbite-availability-toggle:hover,
+.lbite-availability-toggle:focus,
+.lbite-availability-toggle:active,
+.lbite-availability-toggle:visited {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
-	background: none;
+	background: transparent;
 	border: none;
+	box-shadow: none;
+	outline: none;
+	text-shadow: none;
 	padding: 0;
 	margin: 0;
-	color: #666;
+	color: #d63638;
 	cursor: pointer;
 	font-size: 1em;
 	line-height: 1.4;
@@ -239,13 +273,19 @@ li.product.lbite-unavailable::after {
 
 .lbite-availability-toggle:hover,
 .lbite-availability-toggle:focus {
-	color: #333;
+	color: #a02324;
 }
 
 .lbite-availability-toggle .dashicons {
-	font-size: 16px;
-	width: 16px;
-	height: 16px;
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+}
+
+.lbite-availability--compact .lbite-availability-toggle .dashicons {
+	font-size: 12px;
+	width: 12px;
+	height: 12px;
 }
 
 .lbite-availability-popup {
@@ -261,21 +301,32 @@ li.product.lbite-unavailable::after {
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 	padding: 8px 12px;
 	min-width: 180px;
+	color: #333;
 }
 
 .lbite-availability-popup.lbite-visible {
 	display: block;
 }
 
+/* Am Desktop (Maus/Trackpad) öffnet Hover das Popup direkt; auf Touch-Geräten
+   bleibt der Klick/Tap-Toggle (siehe frontend.js) die einzige Interaktion. */
+@media (hover: hover) and (pointer: fine) {
+	.lbite-availability:hover .lbite-availability-popup {
+		display: block;
+	}
+}
+
 .lbite-availability-table {
 	width: 100%;
 	border-collapse: collapse;
 	font-size: 0.95em;
+	color: #333;
 }
 
 .lbite-availability-table td {
 	padding: 3px 4px;
 	white-space: nowrap;
+	color: #333;
 }
 
 .lbite-availability-table td:last-child {

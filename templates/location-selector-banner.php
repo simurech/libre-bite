@@ -37,8 +37,9 @@ $lbite_align_class = ( 'center' !== $atts['align'] ) ? ' lbite-align-' . $atts['
 			$lbite_activation     = LBite_Locations::get_activation_status( $lbite_location->ID );
 			$lbite_card_is_locked = false;
 			if ( $lbite_activation ) {
-				$lbite_status_data    = $lbite_activation;
-				$lbite_card_is_locked = true;
+				$lbite_status_data = $lbite_activation;
+				// Nur "expired" (endgültig geschlossen) blockiert die Karte komplett.
+				$lbite_card_is_locked = ( 'expired' === $lbite_activation['type'] );
 			}
 		?>
 		<div class="lbite-banner-card lbite-location-card<?php echo $lbite_card_is_locked ? ' lbite-location-card-locked' : ''; ?>"
@@ -275,7 +276,7 @@ jQuery(document).ready(function($) {
 
 		const $nowOption = $('.lbite-time-option[data-time-type="now"]');
 		const $closedNotice = $('#lbite-closed-now-notice');
-		if (statusType === 'closed') {
+		if (statusType === 'closed' || statusType === 'upcoming') {
 			$nowOption.addClass('lbite-time-option-disabled');
 			$('#lbite-closed-notice-text').text(statusText || '<?php echo esc_js( __( 'Currently closed', 'libre-bite' ) ); ?>');
 			$closedNotice.show();
@@ -411,6 +412,8 @@ jQuery(document).ready(function($) {
 
 	let closedDaysCache = [];
 	var closedDatesCache = [];
+	var activeFromCache  = '';
+	var activeUntilCache = '';
 
 	function updateDisabledDates() {
 		if (!selectedLocationId) return;
@@ -422,6 +425,16 @@ jQuery(document).ready(function($) {
 				if (response.success) {
 					closedDaysCache  = response.data.closed_days  || [];
 					closedDatesCache = response.data.closed_dates || [];
+					activeFromCache  = response.data.active_from  || '';
+					activeUntilCache = response.data.active_until || '';
+
+					var todayStr = '<?php echo esc_js( current_time( 'Y-m-d' ) ); ?>';
+					var minDate  = (activeFromCache && activeFromCache > todayStr) ? activeFromCache : todayStr;
+					$('#lbite-pickup-date').attr('min', minDate);
+					if ($('#lbite-pickup-date').val() < minDate) {
+						$('#lbite-pickup-date').val(minDate);
+					}
+
 					validateSelectedDate();
 				}
 			}
@@ -429,6 +442,8 @@ jQuery(document).ready(function($) {
 	}
 
 	function isDateDisabled(isoDate) {
+		if (activeFromCache && isoDate < activeFromCache) return true;
+		if (activeUntilCache && isoDate > activeUntilCache) return true;
 		if (closedDatesCache.indexOf(isoDate) !== -1) return true;
 		const date    = new Date(isoDate + 'T00:00:00');
 		const dayName = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'][date.getDay()];

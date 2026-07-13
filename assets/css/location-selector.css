@@ -801,15 +801,16 @@ a.lbite-location-address.lbite-maps-link:hover {
 	text-align: right;
 }
 
-/* Grid & Card in Single-Location-Modus ebenfalls ausrichten */
+/* Grid & Card in Single-Location-Modus ebenfalls ausrichten (nur im Single-Modus,
+   sonst schrumpft die Karte im Multi-Standort-Grid auf ihre Inhaltsbreite). */
 .lbite-location-selector-tiles.lbite-align-left .lbite-location-grid.lbite-single,
-.lbite-location-selector-tiles.lbite-align-left .lbite-location-card {
+.lbite-location-selector-tiles.lbite-align-left.lbite-single-location .lbite-location-card {
 	margin-left: 0;
 	margin-right: auto;
 }
 
 .lbite-location-selector-tiles.lbite-align-right .lbite-location-grid.lbite-single,
-.lbite-location-selector-tiles.lbite-align-right .lbite-location-card {
+.lbite-location-selector-tiles.lbite-align-right.lbite-single-location .lbite-location-card {
 	margin-left: auto;
 	margin-right: 0;
 }
@@ -918,13 +919,19 @@ a.lbite-location-address.lbite-maps-link:hover {
 	padding: 0;
 	margin: -12px auto 20px;
 	width: fit-content;
-	font-size: 15px;
+	font-size: 14px;
 	color: var(--lbite-color-primary, #0073aa);
 	cursor: pointer;
 	transition: color 0.2s;
 	-webkit-appearance: none;
 	appearance: none;
 	outline: none;
+}
+
+/* Tiles-Kontext (Multi-Standort): linksbündig wie Name/Adresse statt zentriert */
+.lbite-location-selector-tiles:not(.lbite-single-location) .lbite-hours-toggle {
+	margin-left: 20px;
+	margin-right: 20px;
 }
 
 .lbite-hours-toggle:hover,

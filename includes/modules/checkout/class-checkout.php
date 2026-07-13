@@ -394,7 +394,7 @@ class LBite_Checkout {
 		$has_shortcode = is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'lbite_location_selector' );
 
 		// Nur auf relevanten WooCommerce-Seiten oder wenn Shortcode vorhanden ist.
-		if ( ! is_shop() && ! is_product() && ! is_cart() && ! is_checkout() && ! $has_shortcode ) {
+		if ( ! is_shop() && ! is_product() && ! is_product_category() && ! is_product_tag() && ! is_cart() && ! is_checkout() && ! $has_shortcode ) {
 			return;
 		}
 
@@ -713,11 +713,26 @@ class LBite_Checkout {
 			wc_add_notice( __( 'Please select an order type.', 'libre-bite' ), 'error' );
 		}
 
-		if ( 'later' === $order_type ) {
-			// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-			$pickup_time = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
-			if ( ! $pickup_time ) {
-				wc_add_notice( __( 'Please select a pickup time.', 'libre-bite' ), 'error' );
+		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
+		$pickup_time = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
+
+		if ( 'later' === $order_type && ! $pickup_time ) {
+			wc_add_notice( __( 'Please select a pickup time.', 'libre-bite' ), 'error' );
+		}
+
+		// Verfügbarkeitsfenster prüfen (ab/bis-Datum des Standorts).
+		if ( $location_id ) {
+			$lbite_activation = LBite_Locations::get_activation_status( $location_id );
+			if ( $lbite_activation ) {
+				$lbite_window_ok = false;
+				if ( 'upcoming' === $lbite_activation['type'] && 'later' === $order_type && $pickup_time ) {
+					$lbite_active_from = get_post_meta( $location_id, '_lbite_active_from', true );
+					$lbite_pickup_date = substr( $pickup_time, 0, 10 );
+					$lbite_window_ok   = ! $lbite_active_from || $lbite_pickup_date >= $lbite_active_from;
+				}
+				if ( ! $lbite_window_ok ) {
+					wc_add_notice( $lbite_activation['text'], 'error' );
+				}
 			}
 		}
 
@@ -1163,9 +1178,27 @@ class LBite_Checkout {
 		}
 
 		// Verfügbarkeitsfenster prüfen (Schutz gegen direkte Links auf noch nicht aktive Standorte).
+		// Vorbestellungen ab dem Eröffnungsdatum sind bei einem "upcoming"-Standort erlaubt; ein
+		// leerer order_type (reines Durchstöbern des Menüs, z.B. via Verfügbarkeits-Filter im Shop-
+		// Loop) ist ebenfalls erlaubt – die eigentliche Bestellabsicht wird erst im Checkout-Flow
+		// festgelegt und dort separat validiert (validate_location_time()).
 		$activation_status = LBite_Locations::get_activation_status( $location_id );
 		if ( $activation_status ) {
-			wp_send_json_error( array( 'message' => $activation_status['text'] ) );
+			$lbite_allow = ( '' === $order_type );
+			if ( 'now' === $order_type ) {
+				$lbite_allow = false;
+			}
+			if ( 'later' === $order_type ) {
+				$active_from = get_post_meta( $location_id, '_lbite_active_from', true );
+				$pickup_date = $pickup_time ? substr( $pickup_time, 0, 10 ) : '';
+				$lbite_allow = $pickup_date && ( ! $active_from || $pickup_date >= $active_from );
+			}
+			if ( 'expired' === $activation_status['type'] ) {
+				$lbite_allow = false;
+			}
+			if ( ! $lbite_allow ) {
+				wp_send_json_error( array( 'message' => $activation_status['text'] ) );
+			}
 		}
 
 		// Session initialisieren falls nötig.
@@ -1241,11 +1274,15 @@ class LBite_Checkout {
 		}
 
 		$closed_dates = LBite_Locations::get_closed_holiday_dates( $location_id );
+		$active_from  = get_post_meta( $location_id, '_lbite_active_from', true );
+		$active_until = get_post_meta( $location_id, '_lbite_active_until', true );
 
 		wp_send_json_success(
 			array(
 				'closed_days'  => $closed_days,
 				'closed_dates' => $closed_dates,
+				'active_from'  => $active_from ? $active_from : '',
+				'active_until' => $active_until ? $active_until : '',
 			)
 		);
 	}
@@ -1289,6 +1326,13 @@ class LBite_Checkout {
 			if ( false !== $cached ) {
 				return $cached;
 			}
+		}
+
+		// Verfügbarkeitsfenster des Standorts (ab/bis-Datum) – ausserhalb des Fensters keine Slots.
+		$active_from  = get_post_meta( $location_id, '_lbite_active_from', true );
+		$active_until = get_post_meta( $location_id, '_lbite_active_until', true );
+		if ( ( $active_from && $date < $active_from ) || ( $active_until && $date > $active_until ) ) {
+			return array();
 		}
 
 		$opening_hours = LBite_Locations::get_opening_hours( $location_id );

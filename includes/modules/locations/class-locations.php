@@ -64,12 +64,14 @@ class LBite_Locations {
 		$this->loader->add_action( 'transition_post_status', $this, 'enforce_location_limit', 10, 3 );
 		$this->loader->add_action( 'admin_notices', $this, 'show_location_limit_notice' );
 
-		// Standort-Filterdaten im Shop-Loop ausgeben
-		$this->loader->add_action( 'woocommerce_before_shop_loop', $this, 'render_shop_location_data' );
+		// Standort-Filter-Hinweisleiste: Platzhalter vor dem Loop (erscheint oben im Grid),
+		// Produkt-Daten nach dem Loop (erst dann sind die Produkt-IDs bekannt).
+		$this->loader->add_action( 'woocommerce_before_shop_loop', $this, 'render_shop_location_notice_placeholder' );
+		$this->loader->add_action( 'woocommerce_after_shop_loop', $this, 'render_shop_location_data' );
 
 		// Verfügbarkeits-Hinweis pro Produkt (Grid-Item & Einzelprodukt-Seite)
 		$this->loader->add_action( 'woocommerce_after_shop_loop_item', $this, 'render_product_availability_badge', 15 );
-		$this->loader->add_action( 'woocommerce_single_product_summary', $this, 'render_product_availability_badge', 35 );
+		$this->loader->add_action( 'woocommerce_single_product_summary', $this, 'render_product_availability_badge', 6 );
 	}
 
 	/**
@@ -783,23 +785,23 @@ class LBite_Locations {
 	}
 
 	/**
-	 * Inline-Skript mit Produkt-Standort-Daten für die Standort-Filterung ausgeben.
-	 * Nur auf Shop- und Kategorieseiten aktiv.
+	 * Produkt-IDs, die während des aktuellen Shop-Loops via
+	 * render_product_availability_badge() gesehen wurden (für render_shop_location_data()).
+	 *
+	 * @var int[]
 	 */
-	public function render_shop_location_data() {
-		if ( ! ( is_shop() || is_product_category() || is_product_tag() ) ) {
-			return;
-		}
+	private static $collected_product_ids = array();
 
-		global $wp_query;
-		if ( empty( $wp_query->posts ) ) {
+	/**
+	 * Platzhalter für die Standort-Filter-Hinweisleiste ausgeben (vor dem Shop-Loop,
+	 * damit sie bei vielen Produkten oben statt ganz unten erscheint). Enthält auch
+	 * die Standortliste, damit ein Kunde ohne gewählten Standort direkt hier einen
+	 * auswählen kann (siehe LocationFilter in frontend.js).
+	 */
+	public function render_shop_location_notice_placeholder() {
+		$locations = self::get_all_locations();
+		if ( empty( $locations ) ) {
 			return;
-		}
-
-		$location_map = array();
-		foreach ( $wp_query->posts as $post ) {
-			$excluded = get_post_meta( $post->ID, '_lbite_locations_excluded', true );
-			$location_map[ $post->ID ] = is_array( $excluded ) ? array_map( 'intval', $excluded ) : array();
 		}
 
 		echo '<div id="lbite-location-notice" style="display:none;"'
@@ -807,8 +809,44 @@ class LBite_Locations {
 			. ' data-unavailable-plural="' . esc_attr__( 'products not available', 'libre-bite' ) . '"'
 			. ' data-filter-show="' . esc_attr__( 'Show only available products', 'libre-bite' ) . '"'
 			. ' data-filter-show-all="' . esc_attr__( 'Show all products', 'libre-bite' ) . '"'
+			. ' data-choose-location="' . esc_attr__( 'Choose a location to see what is available', 'libre-bite' ) . '"'
+			. ' data-choose-placeholder="' . esc_attr__( 'Please choose...', 'libre-bite' ) . '"'
+			. ' data-change-location="' . esc_attr__( 'Change location', 'libre-bite' ) . '"'
 			. '></div>';
+
+		$location_list = array();
+		foreach ( $locations as $location ) {
+			$location_list[] = array(
+				'id'   => $location->ID,
+				'name' => $location->post_title,
+			);
+		}
+		echo '<script>window.lbiteLocations = ' . wp_json_encode( $location_list ) . ';</script>';
+	}
+
+	/**
+	 * Inline-Skript mit Produkt-Standort-Daten für die Standort-Filterung ausgeben.
+	 *
+	 * Basiert auf den während des Loops via render_product_availability_badge() gesammelten
+	 * Produkt-IDs statt auf is_shop()/$wp_query, da Shop-Seiten häufig über Shortcodes oder
+	 * eigene Templates gerendert werden und dort weder die Bedingungs-Tags noch der globale
+	 * $wp_query zuverlässig die angezeigten Produkte widerspiegeln.
+	 */
+	public function render_shop_location_data() {
+		if ( empty( self::$collected_product_ids ) ) {
+			return;
+		}
+
+		$location_map = array();
+		foreach ( self::$collected_product_ids as $product_id ) {
+			$excluded = get_post_meta( $product_id, '_lbite_locations_excluded', true );
+			$location_map[ $product_id ] = is_array( $excluded ) ? array_map( 'intval', $excluded ) : array();
+		}
+
 		echo '<script>window.lbiteProductLocations = ' . wp_json_encode( $location_map ) . ';</script>';
+
+		// Zurücksetzen für einen evtl. weiteren Loop auf derselben Seite (z. B. verwandte Produkte).
+		self::$collected_product_ids = array();
 	}
 
 	/**
@@ -823,6 +861,11 @@ class LBite_Locations {
 
 		if ( ! $product instanceof WC_Product ) {
 			return;
+		}
+
+		$lbite_is_grid = ( 'woocommerce_single_product_summary' !== current_action() );
+		if ( $lbite_is_grid ) {
+			self::$collected_product_ids[] = $product->get_id();
 		}
 
 		$locations = self::get_all_locations();
@@ -840,7 +883,7 @@ class LBite_Locations {
 		$total     = count( $locations );
 		$available = $total - count( $excluded );
 		?>
-		<div class="lbite-availability">
+		<div class="lbite-availability<?php echo $lbite_is_grid ? ' lbite-availability--compact' : ''; ?>">
 			<button type="button" class="lbite-availability-toggle" aria-expanded="false">
 				<span class="dashicons dashicons-info-outline"></span>
 				<?php
