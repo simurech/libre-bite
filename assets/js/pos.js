@@ -189,7 +189,7 @@
 		/**
 		 * Produkte nach gewähltem Standort filtern und Ansicht aktualisieren.
 		 *
-		 * Produkte ohne Standort-Zuweisung (leeres location_ids-Array) sind überall verfügbar.
+		 * Produkte ohne Ausschluss (leeres excluded_location_ids-Array) sind überall verfügbar.
 		 */
 		filterByLocation: function(locationId) {
 			locationId = locationId ? parseInt(locationId, 10) : 0;
@@ -198,10 +198,10 @@
 				this.filteredProducts = this.allProducts;
 			} else {
 				this.filteredProducts = this.allProducts.filter(function(product) {
-					if (!product.location_ids || product.location_ids.length === 0) {
+					if (!product.excluded_location_ids || product.excluded_location_ids.length === 0) {
 						return true;
 					}
-					return product.location_ids.indexOf(locationId) !== -1;
+					return product.excluded_location_ids.indexOf(locationId) === -1;
 				});
 			}
 

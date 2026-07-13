@@ -18,10 +18,6 @@ $lbite_location_class     = ( $lbite_is_single_location ? 'lbite-location-select
 <div class="<?php echo esc_attr( $lbite_location_class ); ?>">
 	<!-- Schritt 1: Standort-Auswahl -->
 	<div class="lbite-step lbite-step-location active" id="lbite-step-location">
-		<?php if ( ! $lbite_is_single_location ) : ?>
-			<h2 class="lbite-step-title"><?php esc_html_e( 'Select Your Location', 'libre-bite' ); ?></h2>
-		<?php endif; ?>
-
 		<div class="lbite-location-grid<?php echo $lbite_is_single_location ? ' lbite-single' : ''; ?>">
 			<?php foreach ( $lbite_locations as $lbite_location ) : ?>
 				<?php
@@ -45,15 +41,22 @@ $lbite_location_class     = ( $lbite_is_single_location ? 'lbite-location-select
 					$lbite_address[] = trim( $lbite_zip . ' ' . $lbite_city );
 				}
 
-				// Status-Badge berechnen
-				$lbite_opening_hours = LBite_Locations::get_opening_hours( $lbite_location->ID );
-				$lbite_status_data = LBite_Locations::get_location_status( $lbite_opening_hours );
+				// Status-Badge berechnen (Verfügbarkeitsfenster hat Vorrang vor den Öffnungszeiten).
+				$lbite_opening_hours  = LBite_Locations::get_opening_hours( $lbite_location->ID );
+				$lbite_status_data    = LBite_Locations::get_location_status( $lbite_opening_hours );
+				$lbite_activation     = LBite_Locations::get_activation_status( $lbite_location->ID );
+				$lbite_card_is_locked = false;
+				if ( $lbite_activation ) {
+					$lbite_status_data    = $lbite_activation;
+					$lbite_card_is_locked = true;
+				}
 				?>
-				<div class="lbite-location-card"
+				<div class="lbite-location-card<?php echo $lbite_card_is_locked ? ' lbite-location-card-locked' : ''; ?>"
 					data-location-id="<?php echo esc_attr( $lbite_location->ID ); ?>"
 					data-maps-url="<?php echo esc_attr( $lbite_maps_url ); ?>"
 					data-status-text="<?php echo $lbite_status_data ? esc_attr( $lbite_status_data['text'] ) : ''; ?>"
-					data-status-type="<?php echo $lbite_status_data ? esc_attr( $lbite_status_data['type'] ) : ''; ?>">
+					data-status-type="<?php echo $lbite_status_data ? esc_attr( $lbite_status_data['type'] ) : ''; ?>"
+					<?php echo $lbite_card_is_locked ? 'data-locked="1"' : ''; ?>>
 					<?php if ( $lbite_image_url ) : ?>
 						<div class="lbite-location-image">
 							<img class="lbite-location-img"
@@ -238,6 +241,7 @@ jQuery(document).ready(function($) {
 
 	// Standort-Karte auswählen
 	$('.lbite-location-card').on('click', function(e) {
+		if ($(this).data('locked')) return;
 		if ($(e.target).closest('.lbite-hours-toggle, .lbite-hours-popup').length) return;
 		selectedLocationId = $(this).data('location-id');
 		const mapsUrl    = $(this).data('maps-url');

@@ -259,10 +259,10 @@ class LBite_POS {
 				? wp_list_pluck( $product_cat_terms, 'term_id' )
 				: array();
 
-			// Standort-Zuweisung (für Client-seitige Filterung).
-			$product_location_ids = get_post_meta( $product_id, '_lbite_locations', true );
-			if ( ! is_array( $product_location_ids ) ) {
-				$product_location_ids = array();
+			// Standort-Ausschluss (für Client-seitige Filterung).
+			$product_excluded_location_ids = get_post_meta( $product_id, '_lbite_locations_excluded', true );
+			if ( ! is_array( $product_excluded_location_ids ) ) {
+				$product_excluded_location_ids = array();
 			}
 
 			// Preisspanne für variable Produkte.
@@ -277,18 +277,18 @@ class LBite_POS {
 			// Basis-Produktdaten.
 			$unavailable_until = get_post_meta( $product_id, '_lbite_unavailable_until', true );
 			$products_data[]   = array(
-				'id'                => $product_id,
-				'name'              => $product->get_name(),
-				'price'             => $product->get_price(),
-				'max_price'         => $price_max,
-				'image'             => wp_get_attachment_image_url( $product->get_image_id(), 'thumbnail' ),
-				'has_variations'    => $has_variations,
-				'has_options'       => $has_options,
-				'type'              => $product->get_type(),
-				'categories'        => $product_cats,
-				'location_ids'      => array_map( 'intval', $product_location_ids ),
-				'stock_status'      => $product->get_stock_status(),
-				'unavailable_until' => $unavailable_until ? $unavailable_until : '',
+				'id'                     => $product_id,
+				'name'                   => $product->get_name(),
+				'price'                  => $product->get_price(),
+				'max_price'              => $price_max,
+				'image'                  => wp_get_attachment_image_url( $product->get_image_id(), 'thumbnail' ),
+				'has_variations'         => $has_variations,
+				'has_options'            => $has_options,
+				'type'                   => $product->get_type(),
+				'categories'             => $product_cats,
+				'excluded_location_ids'  => array_map( 'intval', $product_excluded_location_ids ),
+				'stock_status'           => $product->get_stock_status(),
+				'unavailable_until'      => $unavailable_until ? $unavailable_until : '',
 			);
 
 			// Details nur für Produkte mit Konfiguration.
@@ -463,14 +463,14 @@ class LBite_POS {
 				continue;
 			}
 
-			$product_location_ids = get_post_meta( $product->get_id(), '_lbite_locations', true );
+			$product_excluded_location_ids = get_post_meta( $product->get_id(), '_lbite_locations_excluded', true );
 
 			$formatted_products[] = array(
-				'id'           => $product->get_id(),
-				'name'         => $product->get_name(),
-				'price'        => $product->get_price(),
-				'image'        => get_the_post_thumbnail_url( $product->get_id(), 'thumbnail' ),
-				'location_ids' => array_map( 'intval', is_array( $product_location_ids ) ? $product_location_ids : array() ),
+				'id'                    => $product->get_id(),
+				'name'                  => $product->get_name(),
+				'price'                 => $product->get_price(),
+				'image'                 => get_the_post_thumbnail_url( $product->get_id(), 'thumbnail' ),
+				'excluded_location_ids' => array_map( 'intval', is_array( $product_excluded_location_ids ) ? $product_excluded_location_ids : array() ),
 			);
 		}
 

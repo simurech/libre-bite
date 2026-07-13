@@ -268,9 +268,54 @@ class LBite_Installer {
 			self::set_default_support_settings();
 		}
 
+		// Migration auf 2.2.0: Produkt-Standort-Zuordnung von Opt-In auf Opt-Out umstellen
+		if ( version_compare( $current_version, '2.2.0', '<' ) ) {
+			self::migrate_product_locations_to_opt_out();
+		}
+
 		// Version aktualisieren
 		if ( version_compare( $current_version, LBITE_VERSION, '<' ) ) {
 			update_option( 'lbite_version', LBITE_VERSION );
+		}
+	}
+
+	/**
+	 * Produkt-Standort-Zuordnung von Whitelist (_lbite_locations) auf
+	 * Blacklist (_lbite_locations_excluded) umstellen, ohne das bestehende
+	 * Verhalten für bereits eingeschränkte Produkte zu verändern.
+	 */
+	private static function migrate_product_locations_to_opt_out() {
+		if ( ! class_exists( 'LBite_Locations' ) ) {
+			require_once LBITE_PLUGIN_DIR . 'includes/modules/locations/class-locations.php';
+		}
+
+		$all_location_ids = wp_list_pluck( LBite_Locations::get_all_locations(), 'ID' );
+
+		$products = get_posts(
+			array(
+				'post_type'      => 'product',
+				'post_status'    => 'any',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					array(
+						'key'     => '_lbite_locations',
+						'compare' => 'EXISTS',
+					),
+				),
+			)
+		);
+
+		foreach ( $products as $product_id ) {
+			$included = get_post_meta( $product_id, '_lbite_locations', true );
+			$included = is_array( $included ) ? array_map( 'intval', $included ) : array();
+
+			if ( ! empty( $included ) ) {
+				$excluded = array_values( array_diff( $all_location_ids, $included ) );
+				update_post_meta( $product_id, '_lbite_locations_excluded', $excluded );
+			}
+
+			delete_post_meta( $product_id, '_lbite_locations' );
 		}
 	}
 

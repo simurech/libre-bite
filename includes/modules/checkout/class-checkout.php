@@ -1162,6 +1162,12 @@ class LBite_Checkout {
 			wp_send_json_error( array( 'message' => __( 'Invalid location', 'libre-bite' ) ) );
 		}
 
+		// Verfügbarkeitsfenster prüfen (Schutz gegen direkte Links auf noch nicht aktive Standorte).
+		$activation_status = LBite_Locations::get_activation_status( $location_id );
+		if ( $activation_status ) {
+			wp_send_json_error( array( 'message' => $activation_status['text'] ) );
+		}
+
 		// Session initialisieren falls nötig.
 		if ( ! WC()->session ) {
 			WC()->session = new WC_Session_Handler();

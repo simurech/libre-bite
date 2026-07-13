@@ -337,6 +337,18 @@ input[type="date"].lbite-input {
 	color: #fff;
 }
 
+.lbite-status-upcoming,
+.lbite-status-expired {
+	background: rgba(107, 114, 128, 0.95);
+	color: #fff;
+}
+
+.lbite-location-card-locked,
+.lbite-location-item.lbite-location-card-locked {
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
 .lbite-location-placeholder {
 	display: flex;
 	align-items: center;

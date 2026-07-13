@@ -216,6 +216,80 @@ li.product.lbite-unavailable::after {
 	pointer-events: none;
 }
 
+/* Produkt-Verfügbarkeits-Hinweis (Grid-Item & Einzelprodukt-Seite) */
+.lbite-availability {
+	position: relative;
+	margin-top: 6px;
+	font-size: 0.82em;
+}
+
+.lbite-availability-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
+	color: #666;
+	cursor: pointer;
+	font-size: 1em;
+	line-height: 1.4;
+}
+
+.lbite-availability-toggle:hover,
+.lbite-availability-toggle:focus {
+	color: #333;
+}
+
+.lbite-availability-toggle .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.lbite-availability-popup {
+	display: none;
+	position: absolute;
+	z-index: 20;
+	top: 100%;
+	left: 0;
+	margin-top: 4px;
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+	padding: 8px 12px;
+	min-width: 180px;
+}
+
+.lbite-availability-popup.lbite-visible {
+	display: block;
+}
+
+.lbite-availability-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.95em;
+}
+
+.lbite-availability-table td {
+	padding: 3px 4px;
+	white-space: nowrap;
+}
+
+.lbite-availability-table td:last-child {
+	text-align: right;
+}
+
+.lbite-availability-yes {
+	color: #10b981;
+}
+
+.lbite-availability-no {
+	color: #d63638;
+}
+
 /* Item notes in checkout cart */
 .lbite-item-note-wrap {
 	margin-top: 4px;

@@ -32,14 +32,21 @@ $lbite_align_class = ( 'center' !== $atts['align'] ) ? ' lbite-align-' . $atts['
 				$lbite_address[] = trim( $lbite_zip . ' ' . $lbite_city );
 			}
 
-			$lbite_opening_hours = LBite_Locations::get_opening_hours( $lbite_location->ID );
-			$lbite_status_data   = LBite_Locations::get_location_status( $lbite_opening_hours );
+			$lbite_opening_hours  = LBite_Locations::get_opening_hours( $lbite_location->ID );
+			$lbite_status_data    = LBite_Locations::get_location_status( $lbite_opening_hours );
+			$lbite_activation     = LBite_Locations::get_activation_status( $lbite_location->ID );
+			$lbite_card_is_locked = false;
+			if ( $lbite_activation ) {
+				$lbite_status_data    = $lbite_activation;
+				$lbite_card_is_locked = true;
+			}
 		?>
-		<div class="lbite-banner-card lbite-location-card"
+		<div class="lbite-banner-card lbite-location-card<?php echo $lbite_card_is_locked ? ' lbite-location-card-locked' : ''; ?>"
 			data-location-id="<?php echo esc_attr( $lbite_location->ID ); ?>"
 			data-maps-url="<?php echo esc_attr( $lbite_maps_url ); ?>"
 			data-status-text="<?php echo $lbite_status_data ? esc_attr( $lbite_status_data['text'] ) : ''; ?>"
-			data-status-type="<?php echo $lbite_status_data ? esc_attr( $lbite_status_data['type'] ) : ''; ?>">
+			data-status-type="<?php echo $lbite_status_data ? esc_attr( $lbite_status_data['type'] ) : ''; ?>"
+			<?php echo $lbite_card_is_locked ? 'data-locked="1"' : ''; ?>>
 
 			<!-- Linke Spalte: Bild -->
 			<?php if ( $lbite_image_url ) : ?>
@@ -231,6 +238,7 @@ jQuery(document).ready(function($) {
 
 	// Standort-Karte auswählen
 	$('.lbite-banner-card.lbite-location-card').on('click', function(e) {
+		if ($(this).data('locked')) return;
 		if ($(e.target).is('a') || $(e.target).closest('a').length) return;
 		if ($(e.target).closest('.lbite-hours-toggle, .lbite-hours-popup').length) return;
 		selectedLocationId = $(this).data('location-id');

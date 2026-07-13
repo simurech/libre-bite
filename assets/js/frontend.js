@@ -173,16 +173,16 @@
 			$('.products .product').each(function() {
 				var match = this.className.match(/\bpost-(\d+)\b/);
 				if (!match) { return; }
-				var productId        = parseInt(match[1], 10);
-				var productLocations = window.lbiteProductLocations[productId];
+				var productId         = parseInt(match[1], 10);
+				var excludedLocations = window.lbiteProductLocations[productId];
 
-				// Leeres Array oder kein Eintrag = überall verfügbar
-				if (!productLocations || productLocations.length === 0) {
+				// Leeres Array oder kein Eintrag = überall verfügbar (nichts ausgeschlossen)
+				if (!excludedLocations || excludedLocations.length === 0) {
 					$(this).removeClass('lbite-unavailable');
 					return;
 				}
 
-				if (productLocations.indexOf(locationId) === -1) {
+				if (excludedLocations.indexOf(locationId) !== -1) {
 					$(this).addClass('lbite-unavailable');
 					unavailableCount++;
 				} else {
@@ -230,6 +230,33 @@
 	};
 
 	/**
+	 * Verfügbarkeits-Popup am Grid-Item/Produktseite (Klick-Toggle, analog OpeningHours-Popup).
+	 */
+	const ProductAvailability = {
+		init: function() {
+			$(document).on('click', '.lbite-availability-toggle', function(e) {
+				e.stopPropagation();
+				var $toggle = $(this);
+				var $popup  = $toggle.siblings('.lbite-availability-popup');
+				var wasOpen = $popup.hasClass('lbite-visible');
+
+				$('.lbite-availability-popup').removeClass('lbite-visible');
+				$('.lbite-availability-toggle').attr('aria-expanded', 'false');
+
+				if (!wasOpen) {
+					$popup.addClass('lbite-visible');
+					$toggle.attr('aria-expanded', 'true');
+				}
+			});
+
+			$(document).on('click', function() {
+				$('.lbite-availability-popup').removeClass('lbite-visible');
+				$('.lbite-availability-toggle').attr('aria-expanded', 'false');
+			});
+		}
+	};
+
+	/**
 	 * Gewählten Standort in localStorage speichern wenn lbite_set_location erfolgreich war.
 	 * Zentrale Abfangstelle für alle Templates (Banner, Modal, Tiles, Inline).
 	 */
@@ -257,6 +284,7 @@
 		Checkout.init();
 		OpeningHours.init();
 		LocationFilter.init();
+		ProductAvailability.init();
 	});
 
 })(jQuery);

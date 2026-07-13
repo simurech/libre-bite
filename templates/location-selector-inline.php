@@ -25,8 +25,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<select id="lbite-location-select" name="lbite_location_id" class="lbite-select" required>
 				<option value=""><?php esc_html_e( 'Please choose...', 'libre-bite' ); ?></option>
 				<?php foreach ( $lbite_locations as $location ) : ?>
-					<option value="<?php echo esc_attr( $location->ID ); ?>" <?php selected( $lbite_location_id, $location->ID ); ?>>
+					<?php $lbite_activation = LBite_Locations::get_activation_status( $location->ID ); ?>
+					<option value="<?php echo esc_attr( $location->ID ); ?>" <?php selected( $lbite_location_id, $location->ID ); ?> <?php disabled( (bool) $lbite_activation ); ?>>
 						<?php echo esc_html( $location->post_title ); ?>
+						<?php if ( $lbite_activation ) : ?>
+							(<?php echo esc_html( $lbite_activation['text'] ); ?>)
+						<?php endif; ?>
 					</option>
 				<?php endforeach; ?>
 			</select>

@@ -19,17 +19,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="lbite-location-list">
 			<?php foreach ( $lbite_locations as $lbite_location ) : ?>
 				<?php
-				$lbite_street = get_post_meta( $lbite_location->ID, '_lbite_street', true );
-				$lbite_zip    = get_post_meta( $lbite_location->ID, '_lbite_zip', true );
-				$lbite_city   = get_post_meta( $lbite_location->ID, '_lbite_city', true );
+				$lbite_street     = get_post_meta( $lbite_location->ID, '_lbite_street', true );
+				$lbite_zip        = get_post_meta( $lbite_location->ID, '_lbite_zip', true );
+				$lbite_city       = get_post_meta( $lbite_location->ID, '_lbite_city', true );
+				$lbite_activation = LBite_Locations::get_activation_status( $lbite_location->ID );
 				?>
-				<div class="lbite-location-item" data-location-id="<?php echo esc_attr( $lbite_location->ID ); ?>">
+				<div class="lbite-location-item<?php echo $lbite_activation ? ' lbite-location-card-locked' : ''; ?>"
+					data-location-id="<?php echo esc_attr( $lbite_location->ID ); ?>"
+					<?php echo $lbite_activation ? 'data-locked="1"' : ''; ?>>
 					<h3><?php echo esc_html( $lbite_location->post_title ); ?></h3>
 					<?php if ( $lbite_street || $lbite_city ) : ?>
 						<p class="lbite-location-address">
 							<?php echo esc_html( $lbite_street ); ?><br>
 							<?php echo esc_html( $lbite_zip . ' ' . $lbite_city ); ?>
 						</p>
+					<?php endif; ?>
+					<?php if ( $lbite_activation ) : ?>
+						<p class="lbite-location-status lbite-status-<?php echo esc_attr( $lbite_activation['type'] ); ?>"><?php echo esc_html( $lbite_activation['text'] ); ?></p>
 					<?php endif; ?>
 				</div>
 			<?php endforeach; ?>
@@ -65,6 +71,7 @@ jQuery(document).ready(function($) {
 
 	// Standort auswählen
 	$('.lbite-location-item').on('click', function() {
+		if ($(this).data('locked')) return;
 		$('.lbite-location-item').removeClass('selected');
 		$(this).addClass('selected');
 		selectedLocation = $(this).data('location-id');

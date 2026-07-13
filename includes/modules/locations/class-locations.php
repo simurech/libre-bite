@@ -66,6 +66,10 @@ class LBite_Locations {
 
 		// Standort-Filterdaten im Shop-Loop ausgeben
 		$this->loader->add_action( 'woocommerce_before_shop_loop', $this, 'render_shop_location_data' );
+
+		// Verfügbarkeits-Hinweis pro Produkt (Grid-Item & Einzelprodukt-Seite)
+		$this->loader->add_action( 'woocommerce_after_shop_loop_item', $this, 'render_product_availability_badge', 15 );
+		$this->loader->add_action( 'woocommerce_single_product_summary', $this, 'render_product_availability_badge', 35 );
 	}
 
 	/**
@@ -224,6 +228,15 @@ class LBite_Locations {
 			'lbite_location_time_settings',
 			__( 'Time Settings (Override)', 'libre-bite' ),
 			array( $this, 'render_time_settings_meta_box' ),
+			self::POST_TYPE,
+			'side',
+			'default'
+		);
+
+		add_meta_box(
+			'lbite_location_availability',
+			__( 'Availability', 'libre-bite' ),
+			array( $this, 'render_availability_meta_box' ),
 			self::POST_TYPE,
 			'side',
 			'default'
@@ -515,8 +528,33 @@ class LBite_Locations {
 			}
 		}
 
+		// Verfügbarkeitsfenster speichern (leer oder gültiges Y-m-d, sonst verwerfen).
+		if ( isset( $_POST['lbite_location_active_from'] ) ) {
+			$active_from = sanitize_text_field( wp_unslash( $_POST['lbite_location_active_from'] ) );
+			if ( '' === $active_from || self::is_valid_date( $active_from ) ) {
+				update_post_meta( $post_id, '_lbite_active_from', $active_from );
+			}
+		}
+		if ( isset( $_POST['lbite_location_active_until'] ) ) {
+			$active_until = sanitize_text_field( wp_unslash( $_POST['lbite_location_active_until'] ) );
+			if ( '' === $active_until || self::is_valid_date( $active_until ) ) {
+				update_post_meta( $post_id, '_lbite_active_until', $active_until );
+			}
+		}
+
 		// Farben-Cache invalidieren (Standort-Farbe kann sich geändert haben).
 		delete_transient( 'lbite_location_colors' );
+	}
+
+	/**
+	 * Prüft ob ein String ein gültiges Datum im Format Y-m-d ist.
+	 *
+	 * @param string $date Datumsstring.
+	 * @return bool
+	 */
+	private static function is_valid_date( $date ) {
+		$parsed = DateTime::createFromFormat( 'Y-m-d', $date );
+		return $parsed && $parsed->format( 'Y-m-d' ) === $date;
 	}
 
 	/**
@@ -633,6 +671,33 @@ class LBite_Locations {
 	}
 
 	/**
+	 * Verfügbarkeitsfenster-Meta-Box rendern
+	 *
+	 * @param WP_Post $post Post-Objekt
+	 */
+	public function render_availability_meta_box( $post ) {
+		$active_from  = get_post_meta( $post->ID, '_lbite_active_from', true );
+		$active_until = get_post_meta( $post->ID, '_lbite_active_until', true );
+		?>
+		<p class="description" style="margin-bottom:12px;">
+			<?php esc_html_e( 'Restrict this location to a specific date range (e.g. for a new location that opens in the future, or one closing temporarily). Leave both fields empty for no restriction.', 'libre-bite' ); ?>
+		</p>
+		<p>
+			<label style="display:block;margin-bottom:2px;font-weight:600;" for="lbite_location_active_from">
+				<?php esc_html_e( 'Active from', 'libre-bite' ); ?>
+			</label>
+			<input type="date" id="lbite_location_active_from" name="lbite_location_active_from" value="<?php echo esc_attr( $active_from ); ?>">
+		</p>
+		<p style="margin-top:10px;">
+			<label style="display:block;margin-bottom:2px;font-weight:600;" for="lbite_location_active_until">
+				<?php esc_html_e( 'Active until', 'libre-bite' ); ?>
+			</label>
+			<input type="date" id="lbite_location_active_until" name="lbite_location_active_until" value="<?php echo esc_attr( $active_until ); ?>">
+		</p>
+		<?php
+	}
+
+	/**
 	 * QR-Code Meta-Box rendern
 	 *
 	 * @param WP_Post $post Post-Objekt
@@ -733,8 +798,8 @@ class LBite_Locations {
 
 		$location_map = array();
 		foreach ( $wp_query->posts as $post ) {
-			$locations = get_post_meta( $post->ID, '_lbite_locations', true );
-			$location_map[ $post->ID ] = is_array( $locations ) ? array_map( 'intval', $locations ) : array();
+			$excluded = get_post_meta( $post->ID, '_lbite_locations_excluded', true );
+			$location_map[ $post->ID ] = is_array( $excluded ) ? array_map( 'intval', $excluded ) : array();
 		}
 
 		echo '<div id="lbite-location-notice" style="display:none;"'
@@ -744,6 +809,70 @@ class LBite_Locations {
 			. ' data-filter-show-all="' . esc_attr__( 'Show all products', 'libre-bite' ) . '"'
 			. '></div>';
 		echo '<script>window.lbiteProductLocations = ' . wp_json_encode( $location_map ) . ';</script>';
+	}
+
+	/**
+	 * Verfügbarkeits-Hinweis für ein Produkt ausgeben (Grid-Item & Einzelprodukt-Seite).
+	 *
+	 * Rein serverseitig aus statischen Post-Meta-Daten gerendert (kein Session-/Cookie-Bezug),
+	 * daher Full-Page-Cache-kompatibel. Erscheint nur bei mehreren Standorten und wenn das
+	 * Produkt tatsächlich an mindestens einem Standort deaktiviert ist.
+	 */
+	public function render_product_availability_badge() {
+		global $product;
+
+		if ( ! $product instanceof WC_Product ) {
+			return;
+		}
+
+		$locations = self::get_all_locations();
+		if ( count( $locations ) < 2 ) {
+			return;
+		}
+
+		$excluded = get_post_meta( $product->get_id(), '_lbite_locations_excluded', true );
+		$excluded = is_array( $excluded ) ? array_map( 'intval', $excluded ) : array();
+
+		if ( empty( $excluded ) ) {
+			return;
+		}
+
+		$total     = count( $locations );
+		$available = $total - count( $excluded );
+		?>
+		<div class="lbite-availability">
+			<button type="button" class="lbite-availability-toggle" aria-expanded="false">
+				<span class="dashicons dashicons-info-outline"></span>
+				<?php
+				printf(
+					/* translators: %1$d: number of locations where the product is available, %2$d: total number of locations */
+					esc_html__( 'Available at %1$d of %2$d locations', 'libre-bite' ),
+					(int) $available,
+					(int) $total
+				);
+				?>
+			</button>
+			<div class="lbite-availability-popup">
+				<table class="lbite-availability-table">
+					<tbody>
+					<?php foreach ( $locations as $lbite_avail_location ) : ?>
+						<?php $lbite_is_excluded = in_array( (int) $lbite_avail_location->ID, $excluded, true ); ?>
+						<tr>
+							<td><?php echo esc_html( $lbite_avail_location->post_title ); ?></td>
+							<td>
+								<?php if ( $lbite_is_excluded ) : ?>
+									<span class="dashicons dashicons-no-alt lbite-availability-no"></span>
+								<?php else : ?>
+									<span class="dashicons dashicons-yes lbite-availability-yes"></span>
+								<?php endif; ?>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<?php
 	}
 
 	/**
@@ -768,9 +897,9 @@ class LBite_Locations {
 	public function render_product_locations_meta_box( $post ) {
 		wp_nonce_field( 'lbite_save_product_locations', 'lbite_product_locations_nonce' );
 
-		$selected_locations = get_post_meta( $post->ID, '_lbite_locations', true );
-		if ( ! is_array( $selected_locations ) ) {
-			$selected_locations = array();
+		$excluded_locations = get_post_meta( $post->ID, '_lbite_locations_excluded', true );
+		if ( ! is_array( $excluded_locations ) ) {
+			$excluded_locations = array();
 		}
 
 		$locations = get_posts(
@@ -782,6 +911,8 @@ class LBite_Locations {
 			)
 		);
 
+		echo '<p class="description" style="margin-top:0;">' . esc_html__( 'Available at all locations by default. Check a location to disable this product there.', 'libre-bite' ) . '</p>';
+
 		if ( empty( $locations ) ) {
 			echo '<p>' . esc_html__( 'No locations available yet.', 'libre-bite' ) . '</p>';
 			return;
@@ -789,10 +920,10 @@ class LBite_Locations {
 
 		echo '<div style="max-height: 200px; overflow-y: auto;">';
 		foreach ( $locations as $location ) {
-			$checked = in_array( $location->ID, $selected_locations, true );
+			$checked = in_array( $location->ID, $excluded_locations, true );
 			?>
 			<label style="display: block; margin-bottom: 5px;">
-				<input type="checkbox" name="lbite_product_locations[]" value="<?php echo esc_attr( $location->ID ); ?>" <?php checked( $checked ); ?>>
+				<input type="checkbox" name="lbite_product_locations_excluded[]" value="<?php echo esc_attr( $location->ID ); ?>" <?php checked( $checked ); ?>>
 				<?php echo esc_html( $location->post_title ); ?>
 			</label>
 			<?php
@@ -825,12 +956,12 @@ class LBite_Locations {
 			return;
 		}
 
-		// Standorte speichern.
-		$locations = isset( $_POST['lbite_product_locations'] ) && is_array( $_POST['lbite_product_locations'] )
-			? array_map( 'intval', wp_unslash( $_POST['lbite_product_locations'] ) )
+		// Deaktivierte Standorte speichern (leer = überall verfügbar).
+		$excluded_locations = isset( $_POST['lbite_product_locations_excluded'] ) && is_array( $_POST['lbite_product_locations_excluded'] )
+			? array_map( 'intval', wp_unslash( $_POST['lbite_product_locations_excluded'] ) )
 			: array();
 
-		update_post_meta( $post_id, '_lbite_locations', $locations );
+		update_post_meta( $post_id, '_lbite_locations_excluded', $excluded_locations );
 
 		// POS-Only speichern.
 		$pos_only = isset( $_POST['lbite_pos_only'] ) ? '1' : '';
@@ -845,10 +976,11 @@ class LBite_Locations {
 	 */
 	public function add_admin_columns( $columns ) {
 		$new_columns = array();
-		$new_columns['cb']      = $columns['cb'];
-		$new_columns['title']   = $columns['title'];
-		$new_columns['address'] = __( 'Address', 'libre-bite' );
-		$new_columns['date']    = $columns['date'];
+		$new_columns['cb']           = $columns['cb'];
+		$new_columns['title']        = $columns['title'];
+		$new_columns['address']      = __( 'Address', 'libre-bite' );
+		$new_columns['availability'] = __( 'Availability', 'libre-bite' );
+		$new_columns['date']         = $columns['date'];
 
 		return $new_columns;
 	}
@@ -870,6 +1002,28 @@ class LBite_Locations {
 			} else {
 				echo '—';
 			}
+		}
+
+		if ( 'availability' === $column ) {
+			$active_from  = get_post_meta( $post_id, '_lbite_active_from', true );
+			$active_until = get_post_meta( $post_id, '_lbite_active_until', true );
+			$date_format  = get_option( 'date_format' );
+
+			if ( ! $active_from && ! $active_until ) {
+				echo '—';
+				return;
+			}
+
+			$parts = array();
+			if ( $active_from ) {
+				/* translators: %s: formatted date */
+				$parts[] = sprintf( __( 'from %s', 'libre-bite' ), date_i18n( $date_format, strtotime( $active_from ) ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+			}
+			if ( $active_until ) {
+				/* translators: %s: formatted date */
+				$parts[] = sprintf( __( 'until %s', 'libre-bite' ), date_i18n( $date_format, strtotime( $active_until ) ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+			}
+			echo esc_html( implode( ', ', $parts ) );
 		}
 	}
 
@@ -911,7 +1065,7 @@ class LBite_Locations {
 	/**
 	 * Prüft ob ein Produkt an einem Standort verfügbar ist.
 	 *
-	 * Leeres Locations-Array = keine Einschränkung = überall verfügbar.
+	 * Leeres Ausschluss-Array = keine Einschränkung = überall verfügbar (Opt-Out).
 	 *
 	 * @param int $product_id  Produkt-ID
 	 * @param int $location_id Standort-ID
@@ -921,11 +1075,11 @@ class LBite_Locations {
 		if ( ! $location_id ) {
 			return true;
 		}
-		$assigned = get_post_meta( $product_id, '_lbite_locations', true );
-		if ( empty( $assigned ) || ! is_array( $assigned ) ) {
+		$excluded = get_post_meta( $product_id, '_lbite_locations_excluded', true );
+		if ( empty( $excluded ) || ! is_array( $excluded ) ) {
 			return true;
 		}
-		return in_array( (int) $location_id, array_map( 'intval', $assigned ), true );
+		return ! in_array( (int) $location_id, array_map( 'intval', $excluded ), true );
 	}
 
 	/**
@@ -1084,6 +1238,38 @@ class LBite_Locations {
 	private static function normalize_time( $time ) {
 		// strtotime mit festem Datum, damit Sommer-/Winterzeit keine Rolle spielt.
 		return date( 'H:i', strtotime( '2000-01-01 ' . $time ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+	}
+
+	/**
+	 * Prüft ob ein Standort ausserhalb seines Verfügbarkeitsfensters liegt (ab/bis-Datum).
+	 *
+	 * Hat Vorrang vor get_location_status(): ein Standort ausserhalb seines Fensters
+	 * gilt unabhängig von den Öffnungszeiten als gesperrt.
+	 *
+	 * @param int $location_id Standort-ID.
+	 * @return array|null Status-Daten (type: 'upcoming'|'expired', text) oder null wenn innerhalb des Fensters.
+	 */
+	public static function get_activation_status( $location_id ) {
+		$active_from  = get_post_meta( $location_id, '_lbite_active_from', true );
+		$active_until = get_post_meta( $location_id, '_lbite_active_until', true );
+		$today        = wp_date( 'Y-m-d' );
+
+		if ( $active_from && $today < $active_from ) {
+			return array(
+				'type' => 'upcoming',
+				/* translators: %s: formatted opening date */
+				'text' => sprintf( __( 'Opens on %s', 'libre-bite' ), date_i18n( get_option( 'date_format' ), strtotime( $active_from ) ) ), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+			);
+		}
+
+		if ( $active_until && $today > $active_until ) {
+			return array(
+				'type' => 'expired',
+				'text' => __( 'No longer available', 'libre-bite' ),
+			);
+		}
+
+		return null;
 	}
 
 	/**
