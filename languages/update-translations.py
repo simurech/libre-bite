@@ -1158,6 +1158,35 @@ NEW_STRINGS_FORMAL_SS = {
         'verwendet).',
     'Save Order':
         'Reihenfolge speichern',
+
+    # ── v2.2.0: Standort-Verfügbarkeitsfenster & Produkt-Opt-Out ─────────────
+    'Availability':
+        'Verfügbarkeit',
+    'Active from':
+        'Aktiv ab',
+    'Active until':
+        'Aktiv bis',
+    'Restrict this location to a specific date range (e.g. for a new location '
+    'that opens in the future, or one closing temporarily). Leave both fields '
+    'empty for no restriction.':
+        'Schränken Sie diesen Standort auf einen bestimmten Zeitraum ein '
+        '(z. B. für einen neuen Standort, der erst künftig öffnet, oder einen '
+        'vorübergehend geschlossenen). Beide Felder leer lassen für keine '
+        'Einschränkung.',
+    'Opens on %s':
+        'Öffnet am %s',
+    'No longer available':
+        'Nicht mehr verfügbar',
+    'from %s':
+        'ab %s',
+    'until %s':
+        'bis %s',
+    'Available at all locations by default. Check a location to disable this '
+    'product there.':
+        'Standardmässig an allen Standorten verfügbar. Standort anhaken, um '
+        'das Produkt dort zu deaktivieren.',
+    'Available at %1$d of %2$d locations':
+        'Verfügbar an %1$d von %2$d Standorten',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT
