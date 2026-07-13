@@ -1159,6 +1159,16 @@ NEW_STRINGS_FORMAL_SS = {
     'Save Order':
         'Reihenfolge speichern',
 
+    # ── Nachtrag: fehlende Übersetzungen in de_CH_informal/de_DE_formal ──────
+    'product not available':
+        'Produkt nicht am Standort verfügbar',
+    'products not available':
+        'Produkte nicht am Standort verfügbar',
+    'Show only available products':
+        'Nur verfügbare Produkte anzeigen',
+    'Show all products':
+        'Alle Produkte anzeigen',
+
     # ── v2.2.0: Standort-Verfügbarkeitsfenster & Produkt-Opt-Out ─────────────
     'Availability':
         'Verfügbarkeit',
@@ -1187,6 +1197,12 @@ NEW_STRINGS_FORMAL_SS = {
         'das Produkt dort zu deaktivieren.',
     'Available at %1$d of %2$d locations':
         'Verfügbar an %1$d von %2$d Standorten',
+
+    # ── v2.2.0: Standort-Auswahl im Verfügbarkeits-Filter ────────────────────
+    'Choose a location to see what is available':
+        'Standort wählen, um die Verfügbarkeit zu sehen',
+    'Change location':
+        'Standort ändern',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT
