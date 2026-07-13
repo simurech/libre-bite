@@ -560,19 +560,35 @@
 			$variantLabel.append($('<span style="color: red;" aria-hidden="true">*</span>'));
 			$group.append($variantLabel);
 			
+			// Standard-Variante gemäss WooCommerce «Default Form Values» ermitteln (Fallback: erste Variante).
+			const defaultAttributes = productData.default_attributes || {};
+			let defaultIndex = productData.variations.findIndex(function(variation) {
+				return Object.keys(defaultAttributes).every(function(attrName) {
+					const defaultValue = defaultAttributes[attrName];
+					if (!defaultValue) {
+						return true; // Leer = «Any», keine Einschränkung.
+					}
+					const variationValue = variation.attributes['attribute_' + attrName];
+					return variationValue && variationValue.toLowerCase() === defaultValue.toLowerCase();
+				});
+			});
+			if (defaultIndex === -1) {
+				defaultIndex = 0;
+			}
+
 			productData.variations.forEach((variation, index) => {
 				const inputId = 'modal_choice_' + (choiceCounter++);
 				const $label = $('<label class="lbite-option-choice"></label>').attr('for', inputId);
-				
+
 				const $radio = $('<input type="radio" name="variation">')
 					.attr('id', inputId)
 					.val(variation.id)
 					.attr('data-price', variation.price);
-				
-				if (index === 0) {
+
+				if (index === defaultIndex) {
 					$radio.prop('checked', true);
 				}
-				
+
 				$label.append($radio);
 				$label.append($('<span class="lbite-option-choice-label"></span>').text(variation.name || 'Variante ' + (index + 1)));
 				$label.append($('<span class="lbite-option-choice-price"></span>').text(this.formatPrice(variation.price)));

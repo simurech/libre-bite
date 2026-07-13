@@ -745,12 +745,13 @@ class LBite_Admin {
 		try {
 
 		$response = array(
-			'id'         => $product->get_id(),
-			'name'       => $product->get_name(),
-			'type'       => $product->get_type(),
-			'price'      => $product->get_price(),
-			'variations' => array(),
-			'options'    => array(),
+			'id'                 => $product->get_id(),
+			'name'               => $product->get_name(),
+			'type'               => $product->get_type(),
+			'price'              => $product->get_price(),
+			'variations'         => array(),
+			'options'            => array(),
+			'default_attributes' => $product->is_type( 'variable' ) ? $product->get_default_attributes() : array(),
 		);
 
 		// Varianten laden (für variable Produkte)

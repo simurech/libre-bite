@@ -294,12 +294,13 @@ class LBite_POS {
 			// Details nur für Produkte mit Konfiguration.
 			if ( $has_variations || $has_options ) {
 				$detail = array(
-					'id'         => $product_id,
-					'name'       => $product->get_name(),
-					'type'       => $product->get_type(),
-					'price'      => $product->get_price(),
-					'variations' => array(),
-					'options'    => array(),
+					'id'                 => $product_id,
+					'name'               => $product->get_name(),
+					'type'               => $product->get_type(),
+					'price'              => $product->get_price(),
+					'variations'         => array(),
+					'options'            => array(),
+					'default_attributes' => $has_variations ? $product->get_default_attributes() : array(),
 				);
 
 				// Varianten.
