@@ -114,7 +114,12 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				}
 				$lbite_locs = isset( $lbite_h['locations'] ) ? $lbite_h['locations'] : 'all';
 				if ( is_array( $lbite_locs ) ) {
-					$lbite_locs = array_map( 'intval', $lbite_locs );
+					// «Alle»-Checkbox wird als Wert 'all' im selben Array übertragen; sonst geht der Sentinel bei intval() verloren.
+					if ( in_array( 'all', $lbite_locs, true ) ) {
+						$lbite_locs = 'all';
+					} else {
+						$lbite_locs = array_map( 'intval', $lbite_locs );
+					}
 				} else {
 					$lbite_locs = 'all';
 				}
