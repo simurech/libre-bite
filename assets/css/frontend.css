@@ -239,10 +239,20 @@
 }
 
 /* Produkt-Verfügbarkeits-Hinweis (Grid-Item & Einzelprodukt-Seite) */
+/* display/width/flex/grid-column erzwingen eine eigene Zeile, unabhängig davon, ob das Theme
+   den Shop-Loop-Eintrag als Flex- oder Grid-Container aufbaut (siehe frontend.js für Themes,
+   die zusätzlich flex-wrap: nowrap verwenden). */
 .lbite-availability {
 	position: relative;
 	margin-top: 6px;
 	font-size: 13px;
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	flex: 0 0 100%;
+	grid-column: 1 / -1;
+	box-sizing: border-box;
+	clear: both;
 }
 
 .lbite-availability--compact {
@@ -288,49 +298,72 @@
 	height: 12px;
 }
 
+/* Reine Inhaltsvorlage: wird nie inline angezeigt, sondern von ProductAvailability in
+   frontend.js in das schwebende .lbite-availability-floating-popup kopiert. */
 .lbite-availability-popup {
 	display: none;
-	position: absolute;
-	z-index: 20;
-	top: 100%;
-	left: 0;
-	margin-top: 4px;
+}
+
+/* Schwebendes Popup: ein einzelnes wiederverwendetes Element als Kind von <body>, per JS
+   (position: fixed + berechnete Koordinaten) neben dem jeweiligen Toggle-Button platziert.
+   Dadurch bleibt die kompakte Darstellung wie zuvor erhalten, ohne dass Theme-Produktkarten
+   mit overflow:hidden (z. B. für Hover-Zoom-Effekte) das Popup abschneiden können. */
+.lbite-availability-floating-popup {
+	display: none;
+	position: fixed;
+	z-index: 999999;
 	background: #fff;
 	border: 1px solid #e0e0e0;
 	border-radius: 4px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-	padding: 8px 12px;
-	min-width: 180px;
+	padding: 6px 8px;
+	min-width: 140px;
+	max-width: 230px;
+	height: auto;
+	overflow: hidden;
 	color: #333;
+	box-sizing: border-box;
 }
 
-.lbite-availability-popup.lbite-visible {
+.lbite-availability-floating-popup.lbite-visible {
 	display: block;
 }
 
-/* Am Desktop (Maus/Trackpad) öffnet Hover das Popup direkt; auf Touch-Geräten
-   bleibt der Klick/Tap-Toggle (siehe frontend.js) die einzige Interaktion. */
-@media (hover: hover) and (pointer: fine) {
-	.lbite-availability:hover .lbite-availability-popup {
-		display: block;
-	}
-}
-
-.lbite-availability-table {
+/* Selektoren unter .lbite-availability-floating-popup verschachtelt (höhere Spezifität), damit
+   generische Theme-/WooCommerce-Tabellenstile (z. B. grosszügiges table/td-Padding) unser
+   kompaktes Popup nicht aufblasen. */
+.lbite-availability-floating-popup .lbite-availability-table {
 	width: 100%;
+	height: auto;
+	table-layout: fixed;
 	border-collapse: collapse;
-	font-size: 0.95em;
+	font-size: 0.85em;
 	color: #333;
+	margin: 0;
 }
 
-.lbite-availability-table td {
-	padding: 3px 4px;
-	white-space: nowrap;
+.lbite-availability-floating-popup .lbite-availability-table td {
+	padding: 2px 3px;
 	color: #333;
+	white-space: normal;
+	word-break: break-word;
+	vertical-align: middle;
 }
 
-.lbite-availability-table td:last-child {
+.lbite-availability-floating-popup .lbite-availability-table td:last-child {
+	width: 18px;
 	text-align: right;
+	white-space: nowrap;
+}
+
+.lbite-availability-floating-popup .lbite-availability-yes,
+.lbite-availability-floating-popup .lbite-availability-no {
+	display: inline-block;
+	font-size: 12px;
+	width: 12px;
+	height: 12px;
+	line-height: 12px;
+	vertical-align: middle;
 }
 
 .lbite-availability-yes {
@@ -339,6 +372,33 @@
 
 .lbite-availability-no {
 	color: #d63638;
+}
+
+/* Darstellungsstil "text": reine Textzeile ohne Button/Popup, für Themes mit ungewöhnlichem
+   Shop-Loop-Markup am robustesten. */
+.lbite-availability-text {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	color: #d63638;
+	line-height: 1.4;
+}
+
+.lbite-availability-text .dashicons {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+}
+
+.lbite-availability--compact .lbite-availability-text .dashicons {
+	font-size: 12px;
+	width: 12px;
+	height: 12px;
+}
+
+/* Darstellungsstil "list": Standortliste immer sichtbar statt im Hover-/Klick-Popup. */
+.lbite-availability-table--static {
+	margin-top: 4px;
 }
 
 /* Item notes in checkout cart */

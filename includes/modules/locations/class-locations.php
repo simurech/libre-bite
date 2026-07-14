@@ -799,6 +799,10 @@ class LBite_Locations {
 	 * auswählen kann (siehe LocationFilter in frontend.js).
 	 */
 	public function render_shop_location_notice_placeholder() {
+		if ( ! lbite_feature_enabled( 'enable_availability_filter' ) ) {
+			return;
+		}
+
 		$locations = self::get_all_locations();
 		if ( empty( $locations ) ) {
 			return;
@@ -833,6 +837,10 @@ class LBite_Locations {
 	 * $wp_query zuverlässig die angezeigten Produkte widerspiegeln.
 	 */
 	public function render_shop_location_data() {
+		if ( ! lbite_feature_enabled( 'enable_availability_filter' ) ) {
+			return;
+		}
+
 		if ( empty( self::$collected_product_ids ) ) {
 			return;
 		}
@@ -864,8 +872,15 @@ class LBite_Locations {
 		}
 
 		$lbite_is_grid = ( 'woocommerce_single_product_summary' !== current_action() );
-		if ( $lbite_is_grid ) {
+		if ( $lbite_is_grid && lbite_feature_enabled( 'enable_availability_filter' ) ) {
 			self::$collected_product_ids[] = $product->get_id();
+		}
+
+		$lbite_hint_enabled = $lbite_is_grid
+			? lbite_feature_enabled( 'enable_availability_hint_category' )
+			: lbite_feature_enabled( 'enable_availability_hint_product' );
+		if ( ! $lbite_hint_enabled ) {
+			return;
 		}
 
 		$locations = self::get_all_locations();
@@ -882,38 +897,75 @@ class LBite_Locations {
 
 		$total     = count( $locations );
 		$available = $total - count( $excluded );
+		$style     = get_option( 'lbite_availability_hint_style', 'popup' );
+		if ( ! in_array( $style, array( 'popup', 'list', 'text' ), true ) ) {
+			$style = 'popup';
+		}
 		?>
-		<div class="lbite-availability<?php echo $lbite_is_grid ? ' lbite-availability--compact' : ''; ?>">
-			<button type="button" class="lbite-availability-toggle" aria-expanded="false">
-				<span class="dashicons dashicons-info-outline"></span>
-				<?php
-				printf(
-					/* translators: %1$d: number of locations where the product is available, %2$d: total number of locations */
-					esc_html__( 'Available at %1$d of %2$d locations', 'libre-bite' ),
-					(int) $available,
-					(int) $total
-				);
-				?>
-			</button>
-			<div class="lbite-availability-popup">
-				<table class="lbite-availability-table">
-					<tbody>
-					<?php foreach ( $locations as $lbite_avail_location ) : ?>
-						<?php $lbite_is_excluded = in_array( (int) $lbite_avail_location->ID, $excluded, true ); ?>
-						<tr>
-							<td><?php echo esc_html( $lbite_avail_location->post_title ); ?></td>
-							<td>
-								<?php if ( $lbite_is_excluded ) : ?>
-									<span class="dashicons dashicons-no-alt lbite-availability-no"></span>
-								<?php else : ?>
-									<span class="dashicons dashicons-yes lbite-availability-yes"></span>
-								<?php endif; ?>
-							</td>
-						</tr>
-					<?php endforeach; ?>
-					</tbody>
-				</table>
-			</div>
+		<div class="lbite-availability lbite-availability--<?php echo esc_attr( $style ); ?><?php echo $lbite_is_grid ? ' lbite-availability--compact' : ''; ?>">
+			<?php if ( 'popup' === $style ) : ?>
+				<button type="button" class="lbite-availability-toggle" aria-expanded="false">
+					<span class="dashicons dashicons-info-outline"></span>
+					<?php
+					printf(
+						/* translators: %1$d: number of locations where the product is available, %2$d: total number of locations */
+						esc_html__( 'Available at %1$d of %2$d locations', 'libre-bite' ),
+						(int) $available,
+						(int) $total
+					);
+					?>
+				</button>
+				<div class="lbite-availability-popup">
+					<table class="lbite-availability-table">
+						<tbody>
+						<?php foreach ( $locations as $lbite_avail_location ) : ?>
+							<?php $lbite_is_excluded = in_array( (int) $lbite_avail_location->ID, $excluded, true ); ?>
+							<tr>
+								<td><?php echo esc_html( $lbite_avail_location->post_title ); ?></td>
+								<td>
+									<?php if ( $lbite_is_excluded ) : ?>
+										<span class="dashicons dashicons-no-alt lbite-availability-no"></span>
+									<?php else : ?>
+										<span class="dashicons dashicons-yes lbite-availability-yes"></span>
+									<?php endif; ?>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
+			<?php else : ?>
+				<span class="lbite-availability-text">
+					<span class="dashicons dashicons-info-outline"></span>
+					<?php
+					printf(
+						/* translators: %1$d: number of locations where the product is available, %2$d: total number of locations */
+						esc_html__( 'Available at %1$d of %2$d locations', 'libre-bite' ),
+						(int) $available,
+						(int) $total
+					);
+					?>
+				</span>
+				<?php if ( 'list' === $style ) : ?>
+					<table class="lbite-availability-table lbite-availability-table--static">
+						<tbody>
+						<?php foreach ( $locations as $lbite_avail_location ) : ?>
+							<?php $lbite_is_excluded = in_array( (int) $lbite_avail_location->ID, $excluded, true ); ?>
+							<tr>
+								<td><?php echo esc_html( $lbite_avail_location->post_title ); ?></td>
+								<td>
+									<?php if ( $lbite_is_excluded ) : ?>
+										<span class="dashicons dashicons-no-alt lbite-availability-no"></span>
+									<?php else : ?>
+										<span class="dashicons dashicons-yes lbite-availability-yes"></span>
+									<?php endif; ?>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+						</tbody>
+					</table>
+				<?php endif; ?>
+			<?php endif; ?>
 		</div>
 		<?php
 	}

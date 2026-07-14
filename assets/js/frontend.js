@@ -340,9 +340,20 @@
 	};
 
 	/**
-	 * Verfügbarkeits-Popup am Grid-Item/Produktseite (Klick-Toggle, analog OpeningHours-Popup).
+	 * Verfügbarkeits-Popup am Grid-Item/Produktseite (Hover am Desktop, Klick-Toggle auf Touch).
+	 *
+	 * Das sichtbare Popup ist ein einzelnes, wiederverwendetes Element als Kind von <body>
+	 * (position: fixed, per JS anhand der Toggle-Button-Position platziert) statt eines
+	 * position:absolute-Elements innerhalb der Produktkarte. So bleibt die gewohnte, kompakte
+	 * Darstellung nahe am Button erhalten, aber ohne dass Theme-Produktkarten mit
+	 * overflow:hidden (z. B. für Hover-Zoom-Effekte) das Popup abschneiden können – das PHP
+	 * rendert weiterhin ein verstecktes .lbite-availability-popup pro Produkt, das hier nur als
+	 * Inhaltsquelle dient (siehe render_product_availability_badge()).
 	 */
 	const ProductAvailability = {
+		$floatingPopup: null,
+		$openToggle: null,
+
 		init: function() {
 			// Auf der Einzelprodukt-Seite direkt nach dem Titel positionieren – per JS statt Hook-
 			// Priorität, da manche Themes (z. B. Astra) die Summary-Reihenfolge selbst umbauen.
@@ -352,24 +363,94 @@
 				$singleBadge.insertAfter($title);
 			}
 
-			$(document).on('click', '.lbite-availability-toggle', function(e) {
-				e.stopPropagation();
-				var $toggle = $(this);
-				var $popup  = $toggle.siblings('.lbite-availability-popup');
-				var wasOpen = $popup.hasClass('lbite-visible');
-
-				$('.lbite-availability-popup').removeClass('lbite-visible');
-				$('.lbite-availability-toggle').attr('aria-expanded', 'false');
-
-				if (!wasOpen) {
-					$popup.addClass('lbite-visible');
-					$toggle.attr('aria-expanded', 'true');
+			// Shop-Loop: Themes, die li.product als Flex-Container ohne Umbruch aufbauen (Bild
+			// links, Inhalt rechts, z. B. Astra "List Style"), reihen unser Badge sonst als
+			// drittes Flex-Geschwisterkind rechts daneben statt darunter ein. In diesen Fällen
+			// das Badge in den vorherigen Geschwister-Container (den Inhalts-Wrapper) verschieben.
+			$('ul.products li.product > .lbite-availability').each(function() {
+				var $badge  = $(this);
+				var $parent = $badge.parent();
+				var display = $parent.css('display');
+				var wrap    = $parent.css('flex-wrap');
+				if (display === 'flex' && wrap !== 'wrap') {
+					var $prev = $badge.prev();
+					if ($prev.length) {
+						$prev.append($badge);
+					}
 				}
 			});
 
+			if (!$('.lbite-availability-toggle').length) {
+				return;
+			}
+
+			var self = this;
+			self.$floatingPopup = $('<div class="lbite-availability-floating-popup"></div>').appendTo('body');
+
+			var isHoverCapable = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+			$(document).on('click', '.lbite-availability-toggle', function(e) {
+				e.stopPropagation();
+				var $toggle = $(this);
+				var wasOpen = self.$openToggle && self.$openToggle.is($toggle);
+				self.close();
+				if (!wasOpen) {
+					self.open($toggle);
+				}
+			});
+
+			if (isHoverCapable) {
+				$(document).on('mouseenter', '.lbite-availability', function() {
+					self.open($(this).find('.lbite-availability-toggle'));
+				});
+				$(document).on('mouseleave', '.lbite-availability', function() {
+					self.close();
+				});
+			}
+
 			$(document).on('click', function() {
-				$('.lbite-availability-popup').removeClass('lbite-visible');
-				$('.lbite-availability-toggle').attr('aria-expanded', 'false');
+				self.close();
+			});
+
+			$(window).on('scroll resize', function() {
+				if (self.$openToggle) {
+					self.reposition();
+				}
+			});
+		},
+
+		open: function($toggle) {
+			var $source = $toggle.siblings('.lbite-availability-popup').find('.lbite-availability-table');
+			if (!$source.length) {
+				return;
+			}
+			this.$floatingPopup.html($source.prop('outerHTML')).addClass('lbite-visible');
+			this.$openToggle = $toggle;
+			this.reposition();
+			$toggle.attr('aria-expanded', 'true');
+		},
+
+		close: function() {
+			this.$floatingPopup.removeClass('lbite-visible');
+			if (this.$openToggle) {
+				this.$openToggle.attr('aria-expanded', 'false');
+				this.$openToggle = null;
+			}
+		},
+
+		reposition: function() {
+			var rect       = this.$openToggle[0].getBoundingClientRect();
+			var popupWidth = this.$floatingPopup.outerWidth();
+			var left       = rect.left;
+			var maxLeft    = window.innerWidth - popupWidth - 8;
+
+			if (left > maxLeft) {
+				left = Math.max(8, maxLeft);
+			}
+
+			this.$floatingPopup.css({
+				top:  ( rect.bottom + 4 ) + 'px',
+				left: left + 'px'
 			});
 		}
 	};

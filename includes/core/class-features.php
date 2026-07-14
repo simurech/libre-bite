@@ -158,6 +158,27 @@ class LBite_Features {
 			'label'       => 'Nutritional Information',
 			'description' => 'Show nutritional information for products',
 		),
+		'enable_availability_hint_category' => array(
+			'group'       => 'products',
+			'default'     => true,
+			'premium'     => true,
+			'label'       => 'Availability Hint (Category Pages)',
+			'description' => 'Show the "Available at X of Y locations" hint on shop/category pages',
+		),
+		'enable_availability_hint_product'  => array(
+			'group'       => 'products',
+			'default'     => true,
+			'premium'     => true,
+			'label'       => 'Availability Hint (Product Page)',
+			'description' => 'Show the "Available at X of Y locations" hint on the single product page',
+		),
+		'enable_availability_filter'        => array(
+			'group'       => 'products',
+			'default'     => true,
+			'premium'     => true,
+			'label'       => 'Availability Filter (Shop)',
+			'description' => 'Show the "Show only available products" filter bar on shop/category pages',
+		),
 		'enable_allergens'          => array(
 			'group'       => 'products',
 			'default'     => false,
@@ -348,6 +369,7 @@ class LBite_Features {
 			'lbite_tip_mode'              => 'percentage',
 			'lbite_tip_title'             => '',
 			'lbite_tip_default_selection' => 'none',
+			'lbite_availability_hint_style' => 'popup',
 		);
 	}
 

@@ -1203,6 +1203,43 @@ NEW_STRINGS_FORMAL_SS = {
         'Standort wählen, um die Verfügbarkeit zu sehen',
     'Change location':
         'Standort ändern',
+
+    # ── v2.2.1: Einstellungen für Verfügbarkeits-Hinweis & -Filter ───────────
+    'Availability Hint & Filter':
+        'Verfügbarkeits-Hinweis & Filter',
+    'Controls the "Available at X of Y locations" hint on category and product pages, '
+    'and the "Show only available products" filter on the shop page. Both appear for '
+    'products that are disabled at at least one location.':
+        'Steuert den Hinweis «Verfügbar an X von Y Standorten» auf Kategorie- und '
+        'Produktseiten sowie den Filter «Nur verfügbare Produkte anzeigen» auf der '
+        'Shop-Seite. Beide erscheinen bei Produkten, die an mindestens einem Standort '
+        'deaktiviert sind.',
+    'Availability Hint on Category Pages':
+        'Verfügbarkeits-Hinweis auf Kategorieseiten',
+    'Show the availability hint on shop and category (archive) pages.':
+        'Zeigt den Verfügbarkeits-Hinweis auf Shop- und Kategorieseiten (Archivseiten) an.',
+    'Availability Hint on Product Page':
+        'Verfügbarkeits-Hinweis auf Produktseite',
+    'Show the availability hint on the single product page.':
+        'Zeigt den Verfügbarkeits-Hinweis auf der Einzelprodukt-Seite an.',
+    'Availability Filter on Shop Page':
+        'Verfügbarkeits-Filter auf Shop-Seite',
+    'Show a "Show only available products" filter bar on the shop and category pages.':
+        'Zeigt eine Filterleiste «Nur verfügbare Produkte anzeigen» auf Shop- und '
+        'Kategorieseiten an.',
+    'Availability Hint Style':
+        'Darstellung des Verfügbarkeits-Hinweises',
+    'Popup (icon + hover/click popup)':
+        'Popup (Symbol + Hover-/Klick-Popup)',
+    'List (location list always visible)':
+        'Liste (Standortliste immer sichtbar)',
+    'Text only (single line, no popup)':
+        'Nur Text (einzeilig, ohne Popup)',
+    'Choose how the availability hint is displayed. If the hint looks out of place with '
+    'your theme, try "Text only" for the simplest, most compatible layout.':
+        'Wählen Sie, wie der Verfügbarkeits-Hinweis dargestellt wird. Falls der Hinweis '
+        'mit Ihrem Theme nicht gut aussieht, versuchen Sie «Nur Text» für die einfachste, '
+        'kompatibelste Darstellung.',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT

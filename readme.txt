@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,13 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.2.1 =
+* Fix: Product availability hint no longer breaks the shop grid layout in themes that lay out product loop items as a horizontal flex row (e.g. Astra's "List Style"), where it previously appeared as an unwanted extra column instead of below the product content.
+* Fix: Availability popup can no longer be clipped by product cards with hidden overflow (e.g. hover-zoom image effects) and now sizes itself correctly to its content.
+* Fix: Low-contrast "Opens on ..." location status badge and text overflowing its box on mobile in the location selector.
+* New: Availability hint (category & product page) and availability filter (shop page) can now be independently enabled/disabled in Settings → Products (Pro).
+* New: Three display styles for the availability hint — popup (default), always-visible list, or plain text — for better compatibility with different themes.
 
 = 2.2.0 =
 * New: Locations can now have an optional activity window (active from / until date) for future or temporary locations. Until the opening date, the location stays visible but locked with an "Opens on ..." notice; pre-orders for the opening date or later are already possible.

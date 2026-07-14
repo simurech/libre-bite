@@ -253,13 +253,27 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			$lbite_features['enable_item_notes_pos']      = isset( $_POST['lbite_feature_toggle']['enable_item_notes_pos'] );
 			$lbite_features['enable_item_notes_checkout'] = isset( $_POST['lbite_feature_toggle']['enable_item_notes_checkout'] );
 			if ( $lbite_premium_allowed ) {
-				$lbite_features['enable_nutritional_info'] = isset( $_POST['lbite_feature_toggle']['enable_nutritional_info'] );
-				$lbite_features['enable_allergens']        = isset( $_POST['lbite_feature_toggle']['enable_allergens'] );
+				$lbite_features['enable_nutritional_info']            = isset( $_POST['lbite_feature_toggle']['enable_nutritional_info'] );
+				$lbite_features['enable_allergens']                   = isset( $_POST['lbite_feature_toggle']['enable_allergens'] );
+				$lbite_features['enable_availability_hint_category']  = isset( $_POST['lbite_feature_toggle']['enable_availability_hint_category'] );
+				$lbite_features['enable_availability_hint_product']   = isset( $_POST['lbite_feature_toggle']['enable_availability_hint_product'] );
+				$lbite_features['enable_availability_filter']         = isset( $_POST['lbite_feature_toggle']['enable_availability_filter'] );
 			} else {
-				$lbite_features['enable_nutritional_info'] = false;
-				$lbite_features['enable_allergens']        = false;
+				$lbite_features['enable_nutritional_info']            = false;
+				$lbite_features['enable_allergens']                   = false;
+				$lbite_features['enable_availability_hint_category']  = false;
+				$lbite_features['enable_availability_hint_product']   = false;
+				$lbite_features['enable_availability_filter']         = false;
 			}
 			update_option( 'lbite_features', $lbite_features );
+
+			$lbite_hint_style_values = lbite_enforce_pro_options( array(
+				'lbite_availability_hint_style' => isset( $_POST['lbite_availability_hint_style'] ) && in_array( wp_unslash( $_POST['lbite_availability_hint_style'] ), array( 'popup', 'list', 'text' ), true )
+					? wp_unslash( $_POST['lbite_availability_hint_style'] )
+					: 'popup',
+			) );
+			update_option( 'lbite_availability_hint_style', $lbite_hint_style_values['lbite_availability_hint_style'] );
+
 			$lbite_did_save = true;
 			break;
 

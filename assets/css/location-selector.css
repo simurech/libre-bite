@@ -337,8 +337,10 @@ input[type="date"].lbite-input {
 	color: #fff;
 }
 
-.lbite-status-upcoming,
-.lbite-status-expired {
+.lbite-location-status.lbite-status-upcoming,
+.lbite-location-status.lbite-status-expired,
+.lbite-selected-location-status.lbite-status-upcoming,
+.lbite-selected-location-status.lbite-status-expired {
 	background: rgba(107, 114, 128, 0.95);
 	color: #fff;
 }
@@ -438,6 +440,10 @@ a.lbite-location-address.lbite-maps-link:hover {
 	background-position: center;
 	background-color: #e0e0e0;
 	flex-shrink: 0;
+}
+
+.lbite-selected-location-details {
+	min-width: 0;
 }
 
 .lbite-selected-location-details h3 {
