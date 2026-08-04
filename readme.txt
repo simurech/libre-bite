@@ -5,7 +5,7 @@ Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.2.1
+Stable tag: 2.2.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,7 +141,7 @@ Install Libre Bite directly into your existing WordPress/WooCommerce site. Any t
 Run Libre Bite as a dedicated installation on a subdomain, such as `order.myrestaurant.com` — completely independent from your main website, purpose-built for your gastronomy operation.
 
 **Option 3 — Managed hosting by Libre Bite**
-Libre Bite handles the complete setup: installation, configuration, hosting, and ongoing maintenance — from A to Z. Available as a paid service. Get in touch via https://urech.dev
+Libre Bite handles the complete setup: installation, configuration, hosting, and ongoing maintenance — from A to Z. Available as a paid service. Get in touch via https://pulacha-labs.ch/
 
 ---
 
@@ -223,6 +223,9 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.2.2 =
+* Autor-Rebranding zu Pulacha Labs.
 
 = 2.2.1 =
 * Fix: Product availability hint no longer breaks the shop grid layout in themes that lay out product loop items as a horizontal flex row (e.g. Astra's "List Style"), where it previously appeared as an unwanted extra column instead of below the product content.

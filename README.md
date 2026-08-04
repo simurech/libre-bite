@@ -6,7 +6,7 @@
 
 **Die WooCommerce-Erweiterung für Restaurants, Take-Aways, Cafés und Bars.**
 
-[![Stable Tag](https://img.shields.io/badge/stable-2.2.1-blue.svg)](https://github.com/simurech/libre-bite/releases)
+[![Stable Tag](https://img.shields.io/badge/stable-2.2.2-blue.svg)](https://github.com/simurech/libre-bite/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.0%2B-96588a.svg)](https://woocommerce.com/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-8892be.svg)](https://php.net/)
@@ -92,4 +92,4 @@ libre-bite/
 
 **Libre Bite** steht unter der [GNU General Public License v2.0 oder später](https://www.gnu.org/licenses/gpl-2.0.html).
 
-**Autor:** Simon Urech — [@simurech](https://github.com/simurech)
+**Autor:** Pulacha Labs — [@simurech](https://github.com/simurech)
