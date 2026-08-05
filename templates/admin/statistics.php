@@ -72,17 +72,17 @@ $lbite_now         = current_time( 'timestamp' );
 $lbite_date_before = null;
 switch ( $lbite_period ) {
 	case '7days':
-		$lbite_date_after = date( 'Y-m-d', strtotime( '-7 days', $lbite_now ) );
+		$lbite_date_after = gmdate( 'Y-m-d', strtotime( '-7 days', $lbite_now ) );
 		break;
 	case '30days':
-		$lbite_date_after = date( 'Y-m-d', strtotime( '-30 days', $lbite_now ) );
+		$lbite_date_after = gmdate( 'Y-m-d', strtotime( '-30 days', $lbite_now ) );
 		break;
 	case 'year':
-		$lbite_date_after = date( 'Y-01-01', $lbite_now );
+		$lbite_date_after = gmdate( 'Y-01-01', $lbite_now );
 		break;
 	default: // today
-		$lbite_date_after  = date( 'Y-m-d', $lbite_now );
-		$lbite_date_before = date( 'Y-m-d', strtotime( '+1 day', $lbite_now ) );
+		$lbite_date_after  = gmdate( 'Y-m-d', $lbite_now );
+		$lbite_date_before = gmdate( 'Y-m-d', strtotime( '+1 day', $lbite_now ) );
 }
 
 $lbite_query_args = array(
@@ -218,7 +218,7 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 	while ( ob_get_level() > 0 ) {
 		ob_end_clean();
 	}
-	$lbite_filename = 'lbite-statistics-' . $lbite_period . '-' . date( 'Y-m-d' ) . '.csv';
+	$lbite_filename = 'lbite-statistics-' . $lbite_period . '-' . gmdate( 'Y-m-d' ) . '.csv';
 	header( 'Content-Type: text/csv; charset=utf-8' );
 	header( 'Content-Disposition: attachment; filename="' . $lbite_filename . '"' );
 	$lbite_fp = fopen( 'php://output', 'w' );
@@ -257,7 +257,7 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 			implode( ' | ', $lbite_csv_items ),
 		), ';' );
 	}
-	fclose( $lbite_fp );
+	fclose( $lbite_fp ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- php://output ist ein Direct-Download-Stream (CSV-Export), kein Dateisystem-Zugriff; WP_Filesystem ist hierfür nicht anwendbar.
 	exit;
 }
 

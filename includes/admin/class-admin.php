@@ -879,7 +879,7 @@ class LBite_Admin {
 		$order_type     = 'now'; // POS-Bestellungen sind immer sofort.
 		$customer_name  = isset( $_POST['customer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_name'] ) ) : '';
 		$payment_method = isset( $_POST['payment_method'] ) ? sanitize_key( wp_unslash( $_POST['payment_method'] ) ) : 'cash';
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce bereits geprüft (lbite_pos_nonce).
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce bereits geprüft (lbite_pos_nonce); Einträge werden unten per array_map('sanitize_text_field', ...) sanitisiert.
 		$raw_coupons    = isset( $_POST['coupon_codes'] ) ? wp_unslash( $_POST['coupon_codes'] ) : '[]';
 		$coupon_codes   = json_decode( $raw_coupons, true );
 		if ( ! is_array( $coupon_codes ) ) {

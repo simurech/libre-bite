@@ -134,6 +134,7 @@ spl_autoload_register( function ( $class ) {
  * Übersetzungen laden
  */
 function lbite_load_textdomain() {
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- 'plugin_locale' ist ein WordPress-Core-Hook (Standard-i18n-Pattern), kein eigener Hook.
 	$locale = apply_filters( 'plugin_locale', determine_locale(), 'libre-bite' );
 
 	// Bundled translations first — ensures new strings not yet on translate.wordpress.org are available.

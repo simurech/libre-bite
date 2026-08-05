@@ -107,12 +107,12 @@ $lbite_align_class = ( 'center' !== $atts['align'] ) ? ' lbite-align-' . $atts['
 										<?php
 										$lbite_windows = array();
 										if ( ! empty( $lbite_day_data['open'] ) && ! empty( $lbite_day_data['close'] ) ) {
-											$lbite_windows[] = esc_html( $lbite_day_data['open'] ) . ' – ' . esc_html( $lbite_day_data['close'] );
+											$lbite_windows[] = $lbite_day_data['open'] . ' – ' . $lbite_day_data['close'];
 										}
 										if ( ! empty( $lbite_day_data['open2'] ) && ! empty( $lbite_day_data['close2'] ) ) {
-											$lbite_windows[] = esc_html( $lbite_day_data['open2'] ) . ' – ' . esc_html( $lbite_day_data['close2'] );
+											$lbite_windows[] = $lbite_day_data['open2'] . ' – ' . $lbite_day_data['close2'];
 										}
-										echo implode( ', ', $lbite_windows );
+										echo esc_html( implode( ', ', $lbite_windows ) );
 										?>
 									<?php endif; ?>
 									</td>

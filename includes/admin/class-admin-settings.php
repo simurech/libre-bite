@@ -224,9 +224,9 @@ class LBite_Admin_Settings {
 			return;
 		}
 
-		$managers = get_users( array( 'role' => 'lbite_manager' ) );
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
+		$managers  = get_users( array( 'role' => 'lbite_manager' ) );
 		$submitted = isset( $_POST['lbite_manager_locations'] ) && is_array( $_POST['lbite_manager_locations'] )
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nur Post-IDs, werden unten mit array_map( 'intval', ... ) gecastet.
 			? wp_unslash( $_POST['lbite_manager_locations'] )
 			: array();
 

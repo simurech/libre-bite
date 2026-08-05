@@ -495,7 +495,7 @@ class LBite_Locations {
 
 		// Zeiteinstellungen pro Standort (Override, leeres Feld = globaler Fallback).
 		if ( isset( $_POST['lbite_location_prep_time'] ) ) {
-			$prep = wp_unslash( $_POST['lbite_location_prep_time'] );
+			$prep = sanitize_text_field( wp_unslash( $_POST['lbite_location_prep_time'] ) );
 			if ( '' === $prep || ! is_numeric( $prep ) ) {
 				delete_post_meta( $post_id, '_lbite_preparation_time' );
 			} else {
@@ -503,7 +503,7 @@ class LBite_Locations {
 			}
 		}
 		if ( isset( $_POST['lbite_location_timeslot_interval'] ) ) {
-			$interval = wp_unslash( $_POST['lbite_location_timeslot_interval'] );
+			$interval = sanitize_text_field( wp_unslash( $_POST['lbite_location_timeslot_interval'] ) );
 			if ( '' === $interval || ! is_numeric( $interval ) ) {
 				delete_post_meta( $post_id, '_lbite_timeslot_interval' );
 			} else {
@@ -513,7 +513,7 @@ class LBite_Locations {
 
 		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() ) {
 			if ( isset( $_POST['lbite_location_slot_buffer_start'] ) ) {
-				$buf = wp_unslash( $_POST['lbite_location_slot_buffer_start'] );
+				$buf = sanitize_text_field( wp_unslash( $_POST['lbite_location_slot_buffer_start'] ) );
 				if ( '' === $buf || ! is_numeric( $buf ) ) {
 					delete_post_meta( $post_id, '_lbite_slot_buffer_start' );
 				} else {
@@ -521,7 +521,7 @@ class LBite_Locations {
 				}
 			}
 			if ( isset( $_POST['lbite_location_slot_buffer_end'] ) ) {
-				$buf = wp_unslash( $_POST['lbite_location_slot_buffer_end'] );
+				$buf = sanitize_text_field( wp_unslash( $_POST['lbite_location_slot_buffer_end'] ) );
 				if ( '' === $buf || ! is_numeric( $buf ) ) {
 					delete_post_meta( $post_id, '_lbite_slot_buffer_end' );
 				} else {
@@ -597,10 +597,10 @@ class LBite_Locations {
 			<?php esc_html_e( 'minutes', 'libre-bite' ); ?>
 			<p class="description" style="margin-top:4px;">
 				<?php
-				/* translators: %d = global default in minutes */
 				printf(
+					/* translators: %d = global default in minutes */
 					esc_html__( 'Minimum lead time before a pickup slot becomes available. Global default: %d min.', 'libre-bite' ),
-					$global_prep
+					(int) $global_prep
 				);
 				?>
 			</p>
@@ -620,7 +620,7 @@ class LBite_Locations {
 				printf(
 					/* translators: %d = global default in minutes */
 					esc_html__( 'Interval between pickup slots. Global default: %d min.', 'libre-bite' ),
-					$global_interval
+					(int) $global_interval
 				);
 				?>
 			</p>
@@ -639,10 +639,10 @@ class LBite_Locations {
 			<?php esc_html_e( 'minutes', 'libre-bite' ); ?>
 			<p class="description" style="margin-top:4px;">
 				<?php
-				/* translators: %d = global default in minutes */
 				printf(
+					/* translators: %d = global default in minutes */
 					esc_html__( 'Hides the first X minutes of each opening window from the slot picker (e.g. setup time after opening). Global default: %d min.', 'libre-bite' ),
-					$global_start
+					(int) $global_start
 				);
 				?>
 			</p>
@@ -661,10 +661,10 @@ class LBite_Locations {
 			<?php esc_html_e( 'minutes', 'libre-bite' ); ?>
 			<p class="description" style="margin-top:4px;">
 				<?php
-				/* translators: %d = global default in minutes */
 				printf(
+					/* translators: %d = global default in minutes */
 					esc_html__( 'Hides the last X minutes of each opening window from the slot picker (e.g. to stop accepting orders before closing). Global default: %d min.', 'libre-bite' ),
-					$global_end
+					(int) $global_end
 				);
 				?>
 			</p>
@@ -1552,13 +1552,12 @@ class LBite_Locations {
 			array(
 				'post_type'      => self::POST_TYPE,
 				'post_status'    => 'publish',
-				'posts_per_page' => 1,
-				'post__not_in'   => array( $post->ID ),
+				'posts_per_page' => 2,
 				'fields'         => 'ids',
 			)
 		);
 
-		if ( empty( $existing ) ) {
+		if ( empty( array_diff( $existing, array( $post->ID ) ) ) ) {
 			return; // Erster Standort – erlaubt.
 		}
 

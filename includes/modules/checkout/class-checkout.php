@@ -923,9 +923,9 @@ class LBite_Checkout {
 		} else {
 			// Nur benötigte Felder extrahieren (nicht ganzen $_POST kopieren).
 			$form_data = array(
-				'lbite_tip_type'       => isset( $_POST['lbite_tip_type'] ) ? wp_unslash( $_POST['lbite_tip_type'] ) : '',
-				'lbite_tip_percentage' => isset( $_POST['lbite_tip_percentage'] ) ? wp_unslash( $_POST['lbite_tip_percentage'] ) : '',
-				'lbite_tip_custom'     => isset( $_POST['lbite_tip_custom'] ) ? wp_unslash( $_POST['lbite_tip_custom'] ) : '',
+				'lbite_tip_type'       => isset( $_POST['lbite_tip_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_type'] ) ) : '',
+				'lbite_tip_percentage' => isset( $_POST['lbite_tip_percentage'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_percentage'] ) ) : '',
+				'lbite_tip_custom'     => isset( $_POST['lbite_tip_custom'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_custom'] ) ) : '',
 			);
 		}
 
@@ -1067,7 +1067,9 @@ class LBite_Checkout {
 	 * Öffentlich (nopriv), gesichert über WooCommerce Order Key.
 	 */
 	public function ajax_check_order_status() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Kein Nonce nötig: Zugriff ist bereits über den geheimen WooCommerce Order Key abgesichert (siehe Docblock).
 		$order_id  = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Kein Nonce nötig: Zugriff ist bereits über den geheimen WooCommerce Order Key abgesichert (siehe Docblock).
 		$order_key = isset( $_POST['order_key'] ) ? sanitize_text_field( wp_unslash( $_POST['order_key'] ) ) : '';
 
 		if ( ! $order_id || ! $order_key ) {
@@ -1580,7 +1582,7 @@ class LBite_Checkout {
 			isset( $result['messages'] ) &&
 			is_string( $result['messages'] ) &&
 			'' !== $result['messages'] &&
-			$result['messages'] === strip_tags( $result['messages'] )
+			$result['messages'] === wp_strip_all_tags( $result['messages'] )
 		) {
 			$result['messages'] = '<p>' . esc_html( $result['messages'] ) . '</p>';
 		}
@@ -1722,6 +1724,7 @@ class LBite_Checkout {
 		if ( empty( $_POST['lbite_item_notes'][ $cart_item_key ] ) ) {
 			return;
 		}
+		// phpcs:ignore WordPress.Security.NonceVerification -- Nonce wird von WooCommerce geprüft.
 		$note = sanitize_text_field( wp_unslash( $_POST['lbite_item_notes'][ $cart_item_key ] ) );
 		if ( '' !== $note ) {
 			$item->add_meta_data( 'Note', $note, true );

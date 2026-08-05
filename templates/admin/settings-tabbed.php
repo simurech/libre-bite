@@ -86,8 +86,10 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_tip_label_1', isset( $_POST['lbite_tip_label_1'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_1'] ) ) : '' );
 			update_option( 'lbite_tip_label_2', isset( $_POST['lbite_tip_label_2'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_2'] ) ) : '' );
 			update_option( 'lbite_tip_label_3', isset( $_POST['lbite_tip_label_3'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_3'] ) ) : '' );
-			$lbite_email_gateways_raw = isset( $_POST['lbite_email_required_gateways'] ) ? (array) $_POST['lbite_email_required_gateways'] : array();
-			update_option( 'lbite_email_required_gateways', array_map( 'sanitize_key', $lbite_email_gateways_raw ) );
+			$lbite_email_gateways_raw = isset( $_POST['lbite_email_required_gateways'] )
+				? array_map( 'sanitize_key', wp_unslash( (array) $_POST['lbite_email_required_gateways'] ) )
+				: array();
+			update_option( 'lbite_email_required_gateways', $lbite_email_gateways_raw );
 			$lbite_did_save = true;
 			break;
 
@@ -268,8 +270,8 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_features', $lbite_features );
 
 			$lbite_hint_style_values = lbite_enforce_pro_options( array(
-				'lbite_availability_hint_style' => isset( $_POST['lbite_availability_hint_style'] ) && in_array( wp_unslash( $_POST['lbite_availability_hint_style'] ), array( 'popup', 'list', 'text' ), true )
-					? wp_unslash( $_POST['lbite_availability_hint_style'] )
+				'lbite_availability_hint_style' => isset( $_POST['lbite_availability_hint_style'] ) && in_array( sanitize_key( wp_unslash( $_POST['lbite_availability_hint_style'] ) ), array( 'popup', 'list', 'text' ), true )
+					? sanitize_key( wp_unslash( $_POST['lbite_availability_hint_style'] ) )
 					: 'popup',
 			) );
 			update_option( 'lbite_availability_hint_style', $lbite_hint_style_values['lbite_availability_hint_style'] );

@@ -568,7 +568,7 @@ class LBite_Reservations {
 		}
 
 		// IP-basiertes Rate-Limiting: max. 5 Versuche pro 60 Sekunden.
-		$ip_key   = 'lbite_rl_' . md5( isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '' );
+		$ip_key   = 'lbite_rl_' . md5( isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '' );
 		$attempts = (int) get_transient( $ip_key );
 		if ( $attempts >= 5 ) {
 			wp_send_json_error( array( 'message' => __( 'Too many requests. Please try again later.', 'libre-bite' ) ) );
