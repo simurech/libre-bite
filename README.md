@@ -68,26 +68,6 @@ libre-bite/
 
 ---
 
-## Roadmap
-
-| Feature | Pro? |
-|---|---|
-| POS-Erstladezeit: Meta-Daten gebatcht laden | nein |
-| Split-Payment – Betrag auf mehrere Zahlarten aufteilen | ja |
-| Offene Tabs – laufender Tischservice-Tab im POS | ja |
-| Reservierungen – Zeitfenster, Auto-Tischzuweisung, Frontend-Verfügbarkeit | ja |
-| PWA – POS als installierbare App (echter Vollbildmodus) | nein |
-| Offline-Modus für POS | ja |
-| Automatisierte Tests (AJAX-Endpoints) | – |
-| Multi-Location Phase 2 / Franchise | ja |
-| Erweiterte Analytik (Heatmap, Stosszeiten, CSV-Export) | ja |
-| Treuepunkte / Kundenbindung | ja |
-| Kassenbon-Druck (Thermodrucker) | ja |
-| Kunden-Display / Zweiter Bildschirm | ja |
-| Liefer-Modul (Zonen, Gebühren) | ja |
-
----
-
 ## Lizenz
 
 **Libre Bite** steht unter der [GNU General Public License v2.0 oder später](https://www.gnu.org/licenses/gpl-2.0.html).
