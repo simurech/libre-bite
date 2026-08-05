@@ -1,11 +1,14 @@
 .git
 .github
 .gitignore
+.gitkeep
 .distignore
 .claude
 CLAUDE.md
 README.md
 plans
+node_modules
+assets/wp-org
 build
 *.zip
 .DS_Store
