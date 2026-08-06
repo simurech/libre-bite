@@ -3,7 +3,7 @@
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://wordpress.org/plugins/libre-bite/
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
- * Version:           2.2.2
+ * Version:           2.2.3
  * Requires at least: 6.0
  * Tested up to:      7.0
  * Requires PHP:      7.4
@@ -79,7 +79,7 @@ if ( function_exists( 'lbite_freemius' ) ) {
 }
 
 // Plugin-Konstanten definieren
-define( 'LBITE_VERSION', '2.2.2' );
+define( 'LBITE_VERSION', '2.2.3' );
 define( 'LBITE_PLUGIN_FILE', __FILE__ );
 define( 'LBITE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LBITE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
