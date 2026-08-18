@@ -3,10 +3,10 @@ Contributors: simon61
 Donate link: https://github.com/simurech/libre-bite
 Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 2.2.3
+Stable tag: 2.2.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,9 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.2.4 =
+* Maintenance: Confirmed compatibility with WordPress 7.1, "Tested up to" updated.
 
 = 2.2.3 =
 * Maintenance: Resolved remaining WP.org Plugin Check findings (missing translators comments, unescaped output, discouraged date()/strip_tags() usage, missing input sanitization) that were fixed on GitHub after 2.2.2 was tagged.
