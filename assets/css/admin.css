@@ -33,14 +33,14 @@
 
 .lbite-kanban-card-meta {
 	font-size: 12px;
-	color: #666;
+	color: var(--lbite-text-muted, #666);
 	margin: 5px 0;
 }
 
 .lbite-kanban-card-items {
 	margin: 10px 0;
 	padding: 10px 0;
-	border-top: 1px solid #eee;
+	border-top: 1px solid var(--lbite-border-subtle, #eee);
 	font-size: 13px;
 }
 
@@ -51,7 +51,7 @@
 .lbite-kanban-card-actions {
 	margin-top: 10px;
 	padding-top: 10px;
-	border-top: 1px solid #eee;
+	border-top: 1px solid var(--lbite-border-subtle, #eee);
 	display: flex;
 	gap: 5px;
 }
@@ -60,14 +60,14 @@
 	padding: 4px 8px;
 	font-size: 11px;
 	border: none;
-	background: #0073aa;
-	color: #fff;
+	background: var(--lbite-color-primary, #0073aa);
+	color: var(--lbite-text-on-primary, #fff);
 	border-radius: 3px;
 	cursor: pointer;
 }
 
 .lbite-kanban-card-actions button:hover {
-	background: #005a87;
+	background: var(--lbite-color-primary-hover, #005a87);
 }
 
 /* Drag & Drop Feedback */
@@ -94,13 +94,13 @@
 }
 
 .lbite-pos-product-price {
-	color: #0073aa;
+	color: var(--lbite-color-primary, #0073aa);
 	font-weight: 600;
 }
 
 .lbite-pos-cart-item {
 	padding: 10px;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--lbite-border-subtle, #eee);
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -122,26 +122,26 @@
 	width: 25px;
 	height: 25px;
 	padding: 0;
-	border: 1px solid #ddd;
-	background: #fff;
+	border: 1px solid var(--lbite-border, #ddd);
+	background: var(--lbite-surface, #fff);
 	border-radius: 3px;
 	cursor: pointer;
 }
 
 .lbite-pos-cart-item-qty button:hover {
-	background: #f0f0f0;
+	background: var(--lbite-surface-sunken, #f0f0f0);
 }
 
 .lbite-pos-cart-item-price {
 	font-weight: 600;
-	color: #0073aa;
+	color: var(--lbite-color-primary, #0073aa);
 	min-width: 80px;
 	text-align: right;
 }
 
 .lbite-pos-cart-item-remove {
 	margin-left: 10px;
-	color: #dc3232;
+	color: var(--lbite-danger, #dc3232);
 	cursor: pointer;
 	font-size: 18px;
 }
@@ -170,7 +170,7 @@
 	height: 20px;
 	border: 3px solid rgba(0,0,0,0.1);
 	border-radius: 50%;
-	border-top-color: #0073aa;
+	border-top-color: var(--lbite-color-primary, #0073aa);
 	animation: lbite-spin 1s linear infinite;
 }
 
@@ -183,20 +183,20 @@
 	position: fixed;
 	top: 32px;
 	right: 20px;
-	background: #fff;
+	background: var(--lbite-surface, #fff);
 	padding: 15px 20px;
-	border-left: 4px solid #0073aa;
+	border-left: 4px solid var(--lbite-color-primary, #0073aa);
 	box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 	z-index: 999999;
 	animation: lbite-slide-in 0.3s ease-out;
 }
 
 .lbite-notification.success {
-	border-left-color: #46b450;
+	border-left-color: var(--lbite-success, #46b450);
 }
 
 .lbite-notification.error {
-	border-left-color: #dc3232;
+	border-left-color: var(--lbite-danger, #dc3232);
 }
 
 @keyframes lbite-slide-in {
@@ -219,8 +219,8 @@
 	display: flex;
 	align-items: center;
 	gap: 6px;
-	background: #646970;
-	color: #fff;
+	background: var(--lbite-text-muted, #646970);
+	color: var(--lbite-text-on-primary, #fff);
 	border-radius: 4px;
 	padding: 8px 14px;
 	font-size: 13px;
@@ -231,7 +231,7 @@
 	transition: background 0.15s;
 }
 #lbite-help-btn:hover {
-	background: #50575e;
+	background: var(--lbite-text-muted, #50575e);
 }
 #lbite-help-btn > .dashicons {
 	font-size: 16px;
@@ -244,12 +244,12 @@
 	bottom: calc(100% + 8px);
 	right: 0;
 	width: 260px;
-	background: #fff;
-	border: 1px solid #ccd0d4;
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border-strong, #ccd0d4);
 	border-radius: 4px;
 	box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 	font-size: 13px;
-	color: #3c434a;
+	color: var(--lbite-text, #3c434a);
 	overflow: hidden;
 }
 #lbite-help-panel.is-open {
@@ -260,13 +260,13 @@
 	align-items: center;
 	justify-content: space-between;
 	padding: 10px 14px 9px;
-	border-bottom: 1px solid #f0f0f1;
+	border-bottom: 1px solid var(--lbite-border-subtle, #f0f0f1);
 }
 .lbite-help-panel-close {
 	background: none;
 	border: none;
 	cursor: pointer;
-	color: #787c82;
+	color: var(--lbite-text-subtle, #787c82);
 	font-size: 14px;
 	line-height: 1;
 	padding: 0;
@@ -274,13 +274,13 @@
 .lbite-help-panel-close:hover { color: #1d2327; }
 .lbite-help-panel-primary {
 	padding: 14px;
-	background: #f6f7f7;
-	border-bottom: 1px solid #e8e8e8;
+	background: var(--lbite-surface-muted, #f6f7f7);
+	border-bottom: 1px solid var(--lbite-border-subtle, #e8e8e8);
 }
 .lbite-help-panel-primary-text {
 	margin: 0 0 10px;
 	font-size: 12px;
-	color: #646970;
+	color: var(--lbite-text-muted, #646970);
 	line-height: 1.5;
 }
 .lbite-help-panel-cta {
@@ -304,7 +304,7 @@
 	padding: 8px 14px 6px;
 	font-size: 11px;
 	font-weight: 600;
-	color: #787c82;
+	color: var(--lbite-text-subtle, #787c82);
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
 }
@@ -316,7 +316,7 @@
 	gap: 7px;
 }
 .lbite-help-panel-support p a {
-	color: #3c434a;
+	color: var(--lbite-text, #3c434a);
 	text-decoration: none;
 	word-break: break-all;
 }
@@ -327,10 +327,10 @@
 	height: 15px;
 	flex-shrink: 0;
 	margin-top: 1px;
-	color: #787c82;
+	color: var(--lbite-text-subtle, #787c82);
 }
 .lbite-help-panel-note {
-	color: #646970 !important;
+	color: var(--lbite-text-muted, #646970) !important;
 	font-size: 12px !important;
 }
 

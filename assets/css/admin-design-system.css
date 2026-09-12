@@ -151,22 +151,29 @@
  * Basis
  * ════════════════════════════════════════════════════════════════════ */
 
-.lbite-app {
+/* Wichtig: `.lbite-app` sitzt auf <body>, damit die Tokens überall
+ * verfügbar sind. Basisregeln dürfen deshalb NICHT global greifen, sonst
+ * würden sie das WordPress-Adminmenü und die Adminbar mit umstellen.
+ * Alles Folgende ist daher auf den Inhaltsbereich bzw. auf Elemente mit
+ * `lbite-`-Klasse eingegrenzt. */
+
+.lbite-app #wpbody-content {
 	font-family: var(--lbite-font);
 	font-size: var(--lbite-text-base);
 	line-height: var(--lbite-leading-normal);
 	color: var(--lbite-text);
 }
 
-.lbite-app *,
-.lbite-app *::before,
-.lbite-app *::after {
+.lbite-app [class^="lbite-"],
+.lbite-app [class*=" lbite-"],
+.lbite-app [class^="lbite-"] *,
+.lbite-app [class*=" lbite-"] * {
 	box-sizing: border-box;
 }
 
-/* Sichtbarer Fokus überall – ersetzt den Browser-Default, ohne ihn für
- * Mausklicks aufzudrängen. */
-.lbite-app :focus-visible {
+/* Sichtbarer Fokus im Inhaltsbereich – ersetzt den Browser-Default, ohne
+ * ihn für Mausklicks aufzudrängen. Die Adminbar bleibt unberührt. */
+.lbite-app #wpbody-content :focus-visible {
 	outline: none;
 	box-shadow: var(--lbite-focus-ring);
 	border-radius: var(--lbite-radius-xs);
@@ -873,9 +880,9 @@ body.lbite-screen-doc .lbite-app {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.lbite-app *,
-	.lbite-app *::before,
-	.lbite-app *::after {
+	.lbite-app #wpbody-content *,
+	.lbite-app #wpbody-content *::before,
+	.lbite-app #wpbody-content *::after {
 		animation-duration: 1ms !important;
 		animation-iteration-count: 1 !important;
 		transition-duration: 1ms !important;
@@ -902,7 +909,7 @@ body.lbite-screen-doc .lbite-app {
 		min-height: 36px;
 	}
 
-	.lbite-app {
+	.lbite-app #wpbody-content {
 		-webkit-tap-highlight-color: transparent;
 	}
 

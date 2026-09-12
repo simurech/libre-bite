@@ -61,6 +61,7 @@ class LBite_Admin {
 	private function init_hooks() {
 		$this->loader->add_action( 'admin_menu', $this, 'add_admin_menu' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_admin_assets' );
+		$this->loader->add_filter( 'admin_body_class', $this, 'add_admin_body_classes' );
 		$this->loader->add_action( 'admin_init', $this, 'maybe_upgrade' );
 
 		// WooCommerce leitet Benutzer ohne edit_posts/manage_woocommerce aus dem Backend um.
@@ -483,6 +484,51 @@ class LBite_Admin {
 			echo '<a href="' . esc_url( lbite_freemius()->get_upgrade_url() ) . '" class="button button-primary">' . esc_html__( 'View Pricing', 'libre-bite' ) . '</a>';
 			echo '</div>';
 		}
+	}
+
+	/**
+	 * Screen-Modus als Body-Klasse setzen
+	 *
+	 * Arbeits-Screens (Kanban, POS, Tischplan, Reservierungsboard) laufen im
+	 * App-Modus: sie füllen den Viewport und scrollen intern. Normale
+	 * Einstellungsseiten bleiben im Dokument-Modus und damit WP-Standard.
+	 * `lbite-app` aktiviert zusätzlich die Basisregeln des Design-Systems
+	 * (Typografie, Fokusringe, prefers-reduced-motion, Touch-Zielgrössen).
+	 *
+	 * @param string $classes Bestehende Body-Klassen.
+	 * @return string
+	 */
+	public function add_admin_body_classes( $classes ) {
+		$lbite_screen = get_current_screen();
+
+		if ( ! $lbite_screen || ! isset( $lbite_screen->id ) ) {
+			return $classes;
+		}
+
+		$lbite_id = (string) $lbite_screen->id;
+
+		if ( false === strpos( $lbite_id, 'libre-bite' ) && false === strpos( $lbite_id, 'lbite-' ) ) {
+			return $classes;
+		}
+
+		$lbite_app_screens = array(
+			'lbite-order-board',
+			'lbite-pos',
+			'lbite-table-plan',
+			'lbite-reservation-board',
+		);
+
+		$lbite_is_app = false;
+		foreach ( $lbite_app_screens as $lbite_needle ) {
+			if ( false !== strpos( $lbite_id, $lbite_needle ) ) {
+				$lbite_is_app = true;
+				break;
+			}
+		}
+
+		$classes .= ' lbite-app ' . ( $lbite_is_app ? 'lbite-screen-app' : 'lbite-screen-doc' ) . ' ';
+
+		return $classes;
 	}
 
 	/**
