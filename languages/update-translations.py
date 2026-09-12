@@ -23,6 +23,11 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # POS-Markierung ausserhalb des Zeitplans (F40)
+    "This product is outside its scheduled availability right now.":
+        "Dieses Produkt liegt derzeit ausserhalb seines Verfügbarkeits-Zeitplans.",
+    "Off-menu":
+        "Ausser Karte",
     # REST-API-Fehlermeldungen (F38)
     "No permission for this location":
         "Keine Berechtigung für diesen Standort",

@@ -1165,3 +1165,37 @@ body.lbite-fullscreen-active #lbite-pos-cart-items {
 	font-style: italic;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+ * Ausserhalb des Verfügbarkeits-Zeitplans (F40)
+ *
+ * An der Kasse wird bewusst nur markiert und nicht gesperrt: das Personal
+ * soll ein spätes Frühstück verkaufen können, ohne erst Einstellungen
+ * ändern zu müssen.
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-pos-product-item.lbite-off-schedule {
+	position: relative;
+	border-color: var(--lbite-warning-border);
+}
+
+.lbite-pos-product-item.lbite-off-schedule img,
+.lbite-pos-product-item.lbite-off-schedule .lbite-pos-product-name,
+.lbite-pos-product-item.lbite-off-schedule .lbite-pos-product-price {
+	opacity: 0.6;
+}
+
+.lbite-off-schedule-badge {
+	position: absolute;
+	left: var(--lbite-space-2);
+	bottom: var(--lbite-space-2);
+	padding: 1px var(--lbite-space-2);
+	border: 1px solid var(--lbite-warning-border);
+	border-radius: var(--lbite-radius-pill);
+	background: var(--lbite-warning-soft);
+	color: var(--lbite-warning);
+	font-size: var(--lbite-text-2xs);
+	font-weight: var(--lbite-weight-bold);
+	line-height: 1.5;
+	pointer-events: none;
+}

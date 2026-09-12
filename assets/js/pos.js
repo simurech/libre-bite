@@ -479,6 +479,15 @@
 					$item.addClass('lbite-out-of-stock');
 				}
 
+				// Ausserhalb des Verfügbarkeits-Zeitplans (F40): nur markieren,
+				// nicht sperren – das Personal darf bewusst abweichen.
+				if (product.off_schedule) {
+					$item.addClass('lbite-off-schedule');
+					$item.attr('title', lbitePos.strings.offSchedule || 'Outside its scheduled time');
+					$item.append($('<span class="lbite-off-schedule-badge"></span>')
+						.text(lbitePos.strings.offScheduleShort || 'Off-menu'));
+				}
+
 				// Lagerbestand-Toggle (oben rechts)
 				const $toggleLabel = $('<label class="lbite-stock-toggle"></label>')
 					.on('click', (e) => e.stopPropagation());

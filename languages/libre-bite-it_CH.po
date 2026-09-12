@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libre Bite 2.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/libre-bite\n"
-"POT-Creation-Date: 2026-09-12T22:37:08+00:00\n"
+"POT-Creation-Date: 2026-09-12T22:39:01+00:00\n"
 "PO-Revision-Date: 2026-06-29\n"
 "Last-Translator: Pulacha Labs <https://pulacha-labs.ch/>\n"
 "Language-Team: Italian (Switzerland)\n"
@@ -326,7 +326,7 @@ msgstr "Annulla ordine"
 msgid "Fullscreen"
 msgstr "Schermo intero"
 
-#: includes/admin/class-admin.php:934 includes/modules/pos/class-pos.php:164
+#: includes/admin/class-admin.php:934 includes/modules/pos/class-pos.php:166
 msgid "Exit fullscreen"
 msgstr "Esci dalla modalità a schermo intero"
 
@@ -338,22 +338,22 @@ msgstr "Invia scontrino"
 msgid "Enter customer email address:"
 msgstr "Inserire l'indirizzo e-mail del cliente:"
 
-#: includes/admin/class-admin.php:937 includes/modules/pos/class-pos.php:173
+#: includes/admin/class-admin.php:937 includes/modules/pos/class-pos.php:175
 #: templates/admin/pos.php:74 templates/admin/settings-tabbed.php:920
 msgid "Takeaway"
 msgstr "Asporto"
 
-#: includes/admin/class-admin.php:938 includes/modules/pos/class-pos.php:174
+#: includes/admin/class-admin.php:938 includes/modules/pos/class-pos.php:176
 #: templates/admin/pos.php:78 templates/admin/settings-tabbed.php:924
 #: templates/thankyou-optimized.php:164 templates/thankyou-optimized.php:168
 msgid "Dine-in"
 msgstr "Consumazione sul posto"
 
-#: includes/admin/class-admin.php:939 includes/modules/pos/class-pos.php:177
+#: includes/admin/class-admin.php:939 includes/modules/pos/class-pos.php:179
 msgid "Tab"
 msgstr "Conto"
 
-#: includes/admin/class-admin.php:940 includes/modules/pos/class-pos.php:178
+#: includes/admin/class-admin.php:940 includes/modules/pos/class-pos.php:180
 msgid "Round"
 msgstr "Giro"
 
@@ -409,8 +409,8 @@ msgstr "Prenotazione"
 #: includes/modules/order-dashboard/class-order-dashboard.php:683
 #: includes/modules/order-dashboard/class-order-dashboard.php:707
 #: includes/modules/order-dashboard/class-order-dashboard.php:757
-#: includes/modules/pos/class-pos.php:432
-#: includes/modules/pos/class-pos.php:504
+#: includes/modules/pos/class-pos.php:439
+#: includes/modules/pos/class-pos.php:511
 #: includes/modules/reservations/class-reservation-dashboard.php:57
 #: includes/modules/reservations/class-reservation-dashboard.php:163
 #: includes/modules/reservations/class-reservation-dashboard.php:197
@@ -436,12 +436,12 @@ msgstr "Nessun ID prodotto specificato"
 msgid "Product not found"
 msgstr "Prodotto non trovato"
 
-#: includes/admin/class-admin.php:1073 includes/modules/pos/class-pos.php:343
+#: includes/admin/class-admin.php:1073 includes/modules/pos/class-pos.php:350
 msgid "Variant"
 msgstr "Variante"
 
 #: includes/admin/class-admin.php:1150 includes/admin/class-admin.php:1521
-#: includes/modules/pos/class-pos.php:551
+#: includes/modules/pos/class-pos.php:558
 msgid "No location selected"
 msgstr "Nessuna sede selezionata"
 
@@ -458,13 +458,13 @@ msgid "Add-on"
 msgstr "Extra"
 
 #: includes/admin/class-admin.php:1379 includes/admin/class-admin.php:1419
-#: includes/modules/pos/class-pos.php:144
-#: includes/modules/pos/class-pos.php:512
-#: includes/modules/pos/class-pos.php:543
+#: includes/modules/pos/class-pos.php:146
+#: includes/modules/pos/class-pos.php:519
+#: includes/modules/pos/class-pos.php:550
 msgid "Cart is empty"
 msgstr "Il carrello è vuoto"
 
-#: includes/admin/class-admin.php:1386 includes/modules/pos/class-pos.php:519
+#: includes/admin/class-admin.php:1386 includes/modules/pos/class-pos.php:526
 msgid "Invalid cart data"
 msgstr "Dati del carrello non validi"
 
@@ -474,7 +474,7 @@ msgstr "Dati del carrello non validi"
 msgid "Open Tabs is not enabled"
 msgstr "Conti aperti non è attivato"
 
-#: includes/admin/class-admin.php:1524 includes/modules/pos/class-pos.php:183
+#: includes/admin/class-admin.php:1524 includes/modules/pos/class-pos.php:185
 msgid "Please select a table"
 msgstr "Seleziona un tavolo"
 
@@ -629,7 +629,7 @@ msgstr "La bacheca ordini non è disponibile"
 
 #: includes/modules/checkout/class-checkout.php:515
 #: includes/modules/checkout/class-checkout.php:609
-#: includes/modules/pos/class-pos.php:145 templates/admin/order-board.php:44
+#: includes/modules/pos/class-pos.php:147 templates/admin/order-board.php:44
 #: templates/admin/order-board.php:80 templates/admin/pos.php:53
 #: templates/admin/reservation-board.php:34
 #: templates/admin/reservation-board.php:57 templates/location-modal.php:83
@@ -1588,193 +1588,201 @@ msgid "All Locations"
 msgstr "Tutte le sedi"
 
 #: includes/modules/pos/class-pos.php:140
+msgid "This product is outside its scheduled availability right now."
+msgstr "Questo prodotto è attualmente fuori dalla sua fascia di disponibilità."
+
+#: includes/modules/pos/class-pos.php:141
+msgid "Off-menu"
+msgstr "Fuori menu"
+
+#: includes/modules/pos/class-pos.php:142
 msgid "Add to Cart"
 msgstr "Aggiungi al carrello"
 
-#: includes/modules/pos/class-pos.php:141
+#: includes/modules/pos/class-pos.php:143
 #: templates/admin/settings/branding.php:68
 #: templates/admin/settings/notifications.php:57
 msgid "Remove"
 msgstr "Rimuovi"
 
-#: includes/modules/pos/class-pos.php:142
+#: includes/modules/pos/class-pos.php:144
 msgid "Order created"
 msgstr "Ordine creato"
 
-#: includes/modules/pos/class-pos.php:143
+#: includes/modules/pos/class-pos.php:145
 msgid "Error creating order"
 msgstr "Errore nella creazione dell'ordine"
 
-#: includes/modules/pos/class-pos.php:146 templates/admin/pos.php:123
+#: includes/modules/pos/class-pos.php:148 templates/admin/pos.php:123
 msgid "Please select a location first"
 msgstr "Selezionare prima una sede"
 
-#: includes/modules/pos/class-pos.php:147
+#: includes/modules/pos/class-pos.php:149
 msgid "Error loading products"
 msgstr "Errore nel caricamento dei prodotti"
 
-#: includes/modules/pos/class-pos.php:148
+#: includes/modules/pos/class-pos.php:150
 msgid "Try again"
 msgstr "Riprova"
 
-#: includes/modules/pos/class-pos.php:149
+#: includes/modules/pos/class-pos.php:151
 msgid "Creating order..."
 msgstr "Creazione ordine in corso..."
 
-#: includes/modules/pos/class-pos.php:150 templates/admin/statistics.php:245
+#: includes/modules/pos/class-pos.php:152 templates/admin/statistics.php:245
 msgid "Order #"
 msgstr "Ordine n. "
 
-#: includes/modules/pos/class-pos.php:151
+#: includes/modules/pos/class-pos.php:153
 msgid " created"
 msgstr " creato"
 
-#: includes/modules/pos/class-pos.php:152
+#: includes/modules/pos/class-pos.php:154
 msgid "Really empty the cart?"
 msgstr "Svuotare davvero il carrello?"
 
-#: includes/modules/pos/class-pos.php:153
+#: includes/modules/pos/class-pos.php:155
 msgid "Loading products..."
 msgstr "Caricamento prodotti..."
 
-#: includes/modules/pos/class-pos.php:154
+#: includes/modules/pos/class-pos.php:156
 msgid "Loading product details..."
 msgstr "Caricamento dettagli prodotto..."
 
-#: includes/modules/pos/class-pos.php:155
+#: includes/modules/pos/class-pos.php:157
 msgid "Error loading product details"
 msgstr "Errore nel caricamento dei dettagli del prodotto"
 
-#: includes/modules/pos/class-pos.php:156 templates/admin/statistics.php:435
+#: includes/modules/pos/class-pos.php:158 templates/admin/statistics.php:435
 msgid "Add-ons"
 msgstr "Extra"
 
-#: includes/modules/pos/class-pos.php:157
+#: includes/modules/pos/class-pos.php:159
 msgid "Select variant"
 msgstr "Seleziona variante"
 
-#: includes/modules/pos/class-pos.php:158
+#: includes/modules/pos/class-pos.php:160
 msgid "Out of stock"
 msgstr "Esaurito"
 
-#: includes/modules/pos/class-pos.php:159
+#: includes/modules/pos/class-pos.php:161
 msgid "Mark as out of stock"
 msgstr "Segna come esaurito"
 
-#: includes/modules/pos/class-pos.php:160
+#: includes/modules/pos/class-pos.php:162
 msgid "Mark as in stock"
 msgstr "Segna come disponibile"
 
-#: includes/modules/pos/class-pos.php:161
+#: includes/modules/pos/class-pos.php:163
 msgid "Mark this product as out of stock?"
 msgstr "Segnare questo prodotto come esaurito?"
 
-#: includes/modules/pos/class-pos.php:162
+#: includes/modules/pos/class-pos.php:164
 msgid "Mark this product as available again?"
 msgstr "Segnare questo prodotto come nuovamente disponibile?"
 
-#: includes/modules/pos/class-pos.php:163
+#: includes/modules/pos/class-pos.php:165
 msgid "Enter fullscreen"
 msgstr "Vai a schermo intero"
 
-#: includes/modules/pos/class-pos.php:165
+#: includes/modules/pos/class-pos.php:167
 msgid "Note..."
 msgstr "Nota..."
 
-#: includes/modules/pos/class-pos.php:166
+#: includes/modules/pos/class-pos.php:168
 msgid "Coupon"
 msgstr "Coupon"
 
-#: includes/modules/pos/class-pos.php:167 templates/admin/pos.php:181
+#: includes/modules/pos/class-pos.php:169 templates/admin/pos.php:181
 #: templates/admin/pos.php:323
 msgid "Add Coupon"
 msgstr "Aggiungi coupon"
 
-#: includes/modules/pos/class-pos.php:168
+#: includes/modules/pos/class-pos.php:170
 msgid "Coupon added"
 msgstr "Coupon aggiunto"
 
-#: includes/modules/pos/class-pos.php:169
+#: includes/modules/pos/class-pos.php:171
 msgid "Coupon removed"
 msgstr "Coupon rimosso"
 
-#: includes/modules/pos/class-pos.php:170
+#: includes/modules/pos/class-pos.php:172
 msgid "Loading coupons..."
 msgstr "Caricamento coupon..."
 
-#: includes/modules/pos/class-pos.php:171
+#: includes/modules/pos/class-pos.php:173
 msgid "No active coupons available"
 msgstr "Nessun coupon attivo disponibile"
 
-#: includes/modules/pos/class-pos.php:172
+#: includes/modules/pos/class-pos.php:174
 msgid "Wake Lock is not supported by this browser."
 msgstr "Wake Lock non è supportato da questo browser."
 
-#: includes/modules/pos/class-pos.php:175
+#: includes/modules/pos/class-pos.php:177
 msgid "Assigned"
 msgstr "Assegnato"
 
-#: includes/modules/pos/class-pos.php:176
+#: includes/modules/pos/class-pos.php:178
 #: includes/modules/tables/class-tables.php:184
 #: templates/admin/statistics.php:248 templates/thankyou-optimized.php:325
 msgid "Total"
 msgstr "Totale"
 
-#: includes/modules/pos/class-pos.php:179
+#: includes/modules/pos/class-pos.php:181
 msgid "Add items"
 msgstr "Aggiungi articoli"
 
-#: includes/modules/pos/class-pos.php:180
+#: includes/modules/pos/class-pos.php:182
 msgid "Pay / Close"
 msgstr "Paga / Chiudi"
 
-#: includes/modules/pos/class-pos.php:181 templates/admin/pos.php:153
+#: includes/modules/pos/class-pos.php:183 templates/admin/pos.php:153
 #: templates/admin/pos.php:344 templates/admin/pos.php:362
 #: templates/checkout-location-time.php:244
 msgid "Cancel"
 msgstr "Annulla"
 
-#: includes/modules/pos/class-pos.php:182
+#: includes/modules/pos/class-pos.php:184
 msgid "Close tab"
 msgstr "Chiudi conto"
 
-#: includes/modules/pos/class-pos.php:184
+#: includes/modules/pos/class-pos.php:186
 msgid "Tab opened"
 msgstr "Conto aperto"
 
-#: includes/modules/pos/class-pos.php:185
+#: includes/modules/pos/class-pos.php:187
 msgid "Items added"
 msgstr "Articoli aggiunti"
 
-#: includes/modules/pos/class-pos.php:186
+#: includes/modules/pos/class-pos.php:188
 msgid "Tab closed"
 msgstr "Conto chiuso"
 
-#: includes/modules/pos/class-pos.php:187
+#: includes/modules/pos/class-pos.php:189
 msgid "Tab cancelled"
 msgstr "Conto annullato"
 
-#: includes/modules/pos/class-pos.php:188
+#: includes/modules/pos/class-pos.php:190
 msgid "Cancel this tab?"
 msgstr "Annullare questo conto?"
 
-#: includes/modules/pos/class-pos.php:189
+#: includes/modules/pos/class-pos.php:191
 msgid "Adding to tab:"
 msgstr "Aggiunta al conto:"
 
-#: includes/modules/pos/class-pos.php:190
+#: includes/modules/pos/class-pos.php:192
 msgid "No open tabs"
 msgstr "Nessun conto aperto"
 
-#: includes/modules/pos/class-pos.php:588
+#: includes/modules/pos/class-pos.php:595
 msgid "POS Order"
 msgstr "Ordine POS"
 
-#: includes/modules/pos/class-pos.php:595
+#: includes/modules/pos/class-pos.php:602
 msgid "Order successfully created"
 msgstr "Ordine creato con successo"
 
-#: includes/modules/pos/class-pos.php:605
+#: includes/modules/pos/class-pos.php:612
 msgid "Error creating order: "
 msgstr "Errore nella creazione dell'ordine: "
 

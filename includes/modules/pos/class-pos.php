@@ -137,6 +137,8 @@ class LBite_POS {
 				'preloadData'    => $product_data,
 				'locationColors' => $pos_location_colors,
 				'strings'        => array(
+					'offSchedule'         => __( 'This product is outside its scheduled availability right now.', 'libre-bite' ),
+					'offScheduleShort'    => __( 'Off-menu', 'libre-bite' ),
 					'addToCart'           => __( 'Add to Cart', 'libre-bite' ),
 					'removeFromCart'      => __( 'Remove', 'libre-bite' ),
 					'orderCreated'        => __( 'Order created', 'libre-bite' ),
@@ -305,6 +307,11 @@ class LBite_POS {
 				'excluded_location_ids'  => array_map( 'intval', $product_excluded_location_ids ),
 				'stock_status'           => $product->get_stock_status(),
 				'unavailable_until'      => $unavailable_until ? $unavailable_until : '',
+				// Zeitgesteuerte Verfügbarkeit (F40): an der Kasse wird der
+				// Artikel nur markiert, nicht ausgeblendet – das Personal soll
+				// bewusst abweichen können, etwa bei einem späten Frühstück.
+				'off_schedule'           => class_exists( 'LBite_Menu_Schedule' )
+					&& ! LBite_Menu_Schedule::is_product_available( $product_id ),
 			);
 
 			// Details nur für Produkte mit Konfiguration.
