@@ -773,6 +773,11 @@ class LBite_Admin {
 					'kanbanColumns'             => LBite_Order_Dashboard::get_columns(),
 					'kanbanCustomizationActive' => lbite_feature_enabled( 'enable_kanban_customization' ),
 					'kanbanDragDropEnabled'     => $lbite_kanban_dragdrop,
+					'kdsTimerEnabled'           => '0' !== (string) get_option( 'lbite_kds_timer_enabled', 1 ),
+					'kdsWarnMinutes'            => (int) get_option( 'lbite_kds_warn_minutes', 0 ),
+					'kdsLateMinutes'            => (int) get_option( 'lbite_kds_late_minutes', 0 ),
+					'soundRepeatInterval'       => max( 0, (int) get_option( 'lbite_sound_repeat_interval', 0 ) ) * 1000,
+					'serverTime'                => time(),
 					'strings'               => array(
 						'orderUpdated'    => __( 'Status updated', 'libre-bite' ),
 						'updateError'     => __( 'Error updating', 'libre-bite' ),
@@ -802,6 +807,9 @@ class LBite_Admin {
 						'round'              => __( 'Round', 'libre-bite' ),
 						'table'              => __( 'Table', 'libre-bite' ),
 						'asap'               => __( 'ASAP', 'libre-bite' ),
+						'waiting'            => __( 'Waiting time', 'libre-bite' ),
+						'overdue'            => __( 'Overdue', 'libre-bite' ),
+						'minutesShort'       => __( 'min', 'libre-bite' ),
 						'back'               => __( 'Back', 'libre-bite' ),
 					),
 				)

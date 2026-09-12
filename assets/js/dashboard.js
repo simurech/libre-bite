@@ -31,6 +31,14 @@
 		currentFilter: 'all',
 		allOrders: {},
 		lastActivity: Date.now(),
+		kdsTimerInterval: null,
+		soundRepeatTimer: null,
+		// Versatz zwischen Server- und Clientuhr. Ohne diese Korrektur würde
+		// eine falsch gestellte Kassen-Uhr die Wartezeiten verfälschen.
+		serverOffsetMs: (function() {
+			const srv = parseInt(lbiteDashboard.serverTime, 10);
+			return isNaN(srv) ? 0 : (srv * 1000) - Date.now();
+		})(),
 
 		/**
 		 * Initialisierung
@@ -51,6 +59,7 @@
 
 			this.startAutoRefresh();
 			this.startAutoReload();
+			this.startWaitTimers();
 		},
 
 		/**
@@ -160,6 +169,10 @@
 			$('#lbite-sound-enabled').on('change', (e) => {
 				this.soundEnabled = e.target.checked;
 				localStorage.setItem('lbite_dashboard_sound', this.soundEnabled ? '1' : '0');
+				// Beim Ausschalten sofort verstummen, nicht erst beim nächsten Intervall.
+				if (!this.soundEnabled) {
+					this.updateSoundRepeat(0);
+				}
 			});
 		},
 
@@ -439,7 +452,7 @@
 				if (status === 'completed' && completedTotal > completedOffset) {
 					const remainingCount = completedTotal - completedOffset;
 					const $loadMoreBtn = $('<button class="lbite-load-more-completed"></button>')
-						.text(`📋 ${remainingCount} weitere Bestellung(en) anzeigen`)
+						.text(`📋 ${remainingCount} ${lbiteDashboard.strings.moreOrders || 'more order(s)'}`)
 						.on('click', () => this.loadMoreCompleted());
 					$column.append($loadMoreBtn);
 				}
@@ -452,6 +465,13 @@
 		}
 
 		this.lastOrderCount = activeOrders;
+
+		// Wiederholter Alarmton, solange in der ersten Spalte etwas liegt.
+		const firstColumnKey = (Array.isArray(lbiteDashboard.kanbanColumns) && lbiteDashboard.kanbanColumns.length)
+			? lbiteDashboard.kanbanColumns[0].key
+			: 'incoming';
+		const pendingOrders = (ordersByStatus[firstColumnKey] || []).length;
+		this.updateSoundRepeat(pendingOrders);
 
 		// Drag & Drop nach jedem Render neu initialisieren (Spalten wurden geleert/neu befüllt).
 		if (lbiteDashboard.kanbanDragDropEnabled) {
@@ -470,6 +490,11 @@
 
 			// Badge-Zeile: Bestelltyp + Zeit
 			const $badge = $('<div class="lbite-kanban-card-badge"></div>');
+
+			const $timer = this.createWaitTimer(order, currentStatus);
+			if ($timer) {
+				$badge.append($timer);
+			}
 			if (order.type === 'later') {
 				$badge.append($('<span class="lbite-order-type-later lbite-badge-chip"></span>').text(`⏰ ${order.pickup_time || ''}`));
 			} else {
@@ -865,6 +890,155 @@
 			printWindow.onload = function() {
 				printWindow.print();
 			};
+		},
+
+		/**
+		 * Wartezeit-Timer für eine Bestellkarte erzeugen
+		 *
+		 * Reiner Client-Zusatz: der Bestellzeitstempel liegt bereits in den
+		 * Kartendaten, es ist kein zusätzlicher Server-Roundtrip nötig.
+		 * Vorbestellungen in der Zukunft bekommen keinen Timer – dort wäre
+		 * die Zeit seit Bestelleingang ohne Aussage.
+		 *
+		 * @param {Object} order         Bestelldaten.
+		 * @param {string} currentStatus Schlüssel der Spalte.
+		 * @return {jQuery|null} Timer-Element oder null.
+		 */
+		createWaitTimer: function(order, currentStatus) {
+			if (!lbiteDashboard.kdsTimerEnabled) {
+				return null;
+			}
+			if (!order.created_ts || order.is_future) {
+				return null;
+			}
+			if (this.columnCountsAsCompleted(currentStatus)) {
+				return null;
+			}
+
+			const $timer = $('<span class="lbite-order-timer"></span>')
+				.attr('data-created-ts', order.created_ts)
+				.attr('data-prep-minutes', order.prep_minutes || 0)
+				.attr('title', lbiteDashboard.strings.waiting || 'Waiting time');
+
+			$timer.append('<span class="lbite-order-timer__ring" aria-hidden="true"></span>');
+			$timer.append('<span class="lbite-order-timer__value"></span>');
+
+			this.updateWaitTimer($timer);
+			return $timer;
+		},
+
+        /**
+		 * Prüfen, ob eine Spalte als abgeschlossen zählt
+		 *
+		 * @param {string} key Spalten-Schlüssel.
+		 * @return {boolean}
+		 */
+		columnCountsAsCompleted: function(key) {
+			const columns = lbiteDashboard.kanbanColumns || [];
+			for (let i = 0; i < columns.length; i++) {
+				if (columns[i].key === key) {
+					return !!columns[i].counts_as_completed;
+				}
+			}
+			// Ohne Spaltenkonfiguration gilt der Standardschlüssel.
+			return key === 'completed';
+		},
+
+		/**
+		 * Einen einzelnen Timer neu berechnen und einfärben
+		 *
+		 * @param {jQuery} $timer Timer-Element.
+		 */
+		updateWaitTimer: function($timer) {
+			const createdTs = parseInt($timer.attr('data-created-ts'), 10);
+			if (!createdTs) {
+				return;
+			}
+
+			const nowMs   = Date.now() + this.serverOffsetMs;
+			const minutes = Math.max(0, Math.floor((nowMs - (createdTs * 1000)) / 60000));
+
+			const prepMinutes = parseInt($timer.attr('data-prep-minutes'), 10) || 0;
+			// 0 bedeutet in den Einstellungen "Zubereitungszeit des Standorts
+			// verwenden" – so passen die Schwellen bei mehreren Filialen
+			// automatisch zur jeweiligen Küche.
+			let warnAt = parseInt(lbiteDashboard.kdsWarnMinutes, 10) || 0;
+			if (!warnAt) {
+				warnAt = prepMinutes || 10;
+			}
+			let lateAt = parseInt(lbiteDashboard.kdsLateMinutes, 10) || 0;
+			if (!lateAt) {
+				lateAt = Math.round(warnAt * 1.5);
+			}
+			if (lateAt <= warnAt) {
+				lateAt = warnAt + 1;
+			}
+
+			$timer.removeClass('is-warn is-late');
+			if (minutes >= lateAt) {
+				$timer.addClass('is-late');
+				$timer.attr('title', lbiteDashboard.strings.overdue || 'Overdue');
+			} else if (minutes >= warnAt) {
+				$timer.addClass('is-warn');
+			}
+
+			// Ringfüllung: bis zur Spätschwelle proportional, danach voll.
+			const ratio = Math.max(0, Math.min(1, minutes / lateAt));
+			$timer.css('--lbite-timer-progress', (ratio * 360) + 'deg');
+
+			$timer.find('.lbite-order-timer__value')
+				.text(minutes + ' ' + (lbiteDashboard.strings.minutesShort || 'min'));
+		},
+
+		/**
+		 * Alle sichtbaren Timer aktualisieren
+		 *
+		 * Läuft unabhängig vom Board-Refresh, damit die Wartezeit auch
+		 * zwischen zwei Abfragen weiterzählt.
+		 */
+		startWaitTimers: function() {
+			if (!lbiteDashboard.kdsTimerEnabled || this.kdsTimerInterval) {
+				return;
+			}
+			this.kdsTimerInterval = setInterval(() => {
+				$('.lbite-order-timer').each((i, el) => {
+					this.updateWaitTimer($(el));
+				});
+			}, 30000);
+		},
+
+		/**
+		 * Wiederholten Alarmton starten oder stoppen
+		 *
+		 * Wiederholt den Ton, solange mindestens eine Bestellung in der
+		 * ersten Spalte liegt. Das Weiterschieben einer Bestellung ist damit
+		 * die Quittierung – es braucht keine zusätzliche Schaltfläche.
+		 *
+		 * @param {number} pendingCount Anzahl Bestellungen in der ersten Spalte.
+		 */
+		updateSoundRepeat: function(pendingCount) {
+			const interval = parseInt(lbiteDashboard.soundRepeatInterval, 10) || 0;
+
+			if (!interval || !pendingCount || !this.soundEnabled) {
+				if (this.soundRepeatTimer) {
+					clearInterval(this.soundRepeatTimer);
+					this.soundRepeatTimer = null;
+				}
+				return;
+			}
+
+			if (this.soundRepeatTimer) {
+				return;
+			}
+
+			this.soundRepeatTimer = setInterval(() => {
+				if (!this.soundEnabled) {
+					clearInterval(this.soundRepeatTimer);
+					this.soundRepeatTimer = null;
+					return;
+				}
+				this.playNotificationSound();
+			}, interval);
 		},
 
 		/**

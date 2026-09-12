@@ -153,6 +153,10 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				'lbite_kanban_columns'           => LBite_Order_Dashboard::sanitize_columns_input( isset( $_POST['columns'] ) && is_array( $_POST['columns'] ) ? wp_unslash( $_POST['columns'] ) : array() ),
 			) );
 			update_option( 'lbite_dashboard_refresh_interval', isset( $_POST['lbite_dashboard_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_dashboard_refresh_interval'] ) ) : 30 );
+			update_option( 'lbite_kds_timer_enabled', isset( $_POST['lbite_kds_timer_enabled'] ) ? 1 : 0 );
+			update_option( 'lbite_kds_warn_minutes', isset( $_POST['lbite_kds_warn_minutes'] ) ? max( 0, intval( wp_unslash( $_POST['lbite_kds_warn_minutes'] ) ) ) : 0 );
+			update_option( 'lbite_kds_late_minutes', isset( $_POST['lbite_kds_late_minutes'] ) ? max( 0, intval( wp_unslash( $_POST['lbite_kds_late_minutes'] ) ) ) : 0 );
+			update_option( 'lbite_sound_repeat_interval', isset( $_POST['lbite_sound_repeat_interval'] ) ? max( 0, intval( wp_unslash( $_POST['lbite_sound_repeat_interval'] ) ) ) : 0 );
 			update_option( 'lbite_show_future_orders', $lbite_ord_values['lbite_show_future_orders'] );
 			update_option( 'lbite_dim_future_orders', $lbite_ord_values['lbite_dim_future_orders'] );
 			update_option( 'lbite_kanban_drag_drop_enabled', $lbite_ord_values['lbite_kanban_drag_drop_enabled'] );
@@ -681,7 +685,11 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				break;
 
 			case 'orders':
-			$lbite_refresh = get_option( 'lbite_dashboard_refresh_interval', 30 );
+			$lbite_refresh          = get_option( 'lbite_dashboard_refresh_interval', 30 );
+			$lbite_kds_timer        = '0' !== (string) get_option( 'lbite_kds_timer_enabled', 1 );
+			$lbite_kds_warn         = (int) get_option( 'lbite_kds_warn_minutes', 0 );
+			$lbite_kds_late         = (int) get_option( 'lbite_kds_late_minutes', 0 );
+			$lbite_sound_repeat     = (int) get_option( 'lbite_sound_repeat_interval', 0 );
 			?>
 			<form method="post">
 				<?php wp_nonce_field( 'lbite_settings' ); ?>
@@ -701,6 +709,37 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 						<td>
 							<input type="number" min="10" name="lbite_dashboard_refresh_interval" value="<?php echo esc_attr( $lbite_refresh ); ?>" class="small-text"> <?php esc_html_e( 'Seconds', 'libre-bite' ); ?>
 							<p class="description"><?php esc_html_e( 'How often the order overview checks for new orders.', 'libre-bite' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'Waiting Time Timer', 'libre-bite' ); ?></th>
+						<td>
+							<label>
+								<input type="checkbox" name="lbite_kds_timer_enabled" value="1" <?php checked( $lbite_kds_timer ); ?>>
+								<?php esc_html_e( 'Show how long each order has been waiting', 'libre-bite' ); ?>
+							</label>
+							<p class="description"><?php esc_html_e( 'Each order card shows the minutes since the order came in, turning amber and then red as it ages. Future pre-orders are excluded.', 'libre-bite' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'Amber After', 'libre-bite' ); ?></th>
+						<td>
+							<input type="number" min="0" name="lbite_kds_warn_minutes" value="<?php echo esc_attr( $lbite_kds_warn ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+							<p class="description"><?php esc_html_e( 'Leave at 0 to use the preparation time configured for each location.', 'libre-bite' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'Red After', 'libre-bite' ); ?></th>
+						<td>
+							<input type="number" min="0" name="lbite_kds_late_minutes" value="<?php echo esc_attr( $lbite_kds_late ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+							<p class="description"><?php esc_html_e( 'Leave at 0 to use one and a half times the amber threshold.', 'libre-bite' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'Repeat Alert Sound', 'libre-bite' ); ?></th>
+						<td>
+							<input type="number" min="0" name="lbite_sound_repeat_interval" value="<?php echo esc_attr( $lbite_sound_repeat ); ?>" class="small-text"> <?php esc_html_e( 'Seconds', 'libre-bite' ); ?>
+							<p class="description"><?php esc_html_e( 'Repeat the alert sound while orders are still waiting in the first column. Moving an order onwards acknowledges it and stops the sound. Set to 0 to play the sound only once per new order.', 'libre-bite' ); ?></p>
 						</td>
 					</tr>
 					<tr>

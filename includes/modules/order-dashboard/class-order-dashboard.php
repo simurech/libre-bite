@@ -442,10 +442,23 @@ class LBite_Order_Dashboard {
 			$table_name = $order->get_meta( '_lbite_checkout_table_number', true );
 		}
 
+		// Rohzeitstempel für den Wartezeit-Timer im Board. Die Berechnung
+		// läuft clientseitig, daher wird hier nur die Basis mitgegeben.
+		$date_created = $order->get_date_created();
+		$created_ts   = $date_created ? $date_created->getTimestamp() : 0;
+
+		$prep_minutes = (int) LBite_Locations::get_time_setting(
+			(int) $order->get_meta( '_lbite_location_id', true ),
+			'preparation_time',
+			30
+		);
+
 		$data = array(
 			'id'             => $order->get_id(),
 			'number'         => $order->get_order_number(),
-			'date'           => $order->get_date_created()->format( 'H:i' ),
+			'date'           => $date_created ? $date_created->format( 'H:i' ) : '',
+			'created_ts'     => $created_ts,
+			'prep_minutes'   => $prep_minutes,
 			'type'           => $order_type,
 			'pickup_time'    => $pickup_time ? $this->format_pickup_time_for_display( $pickup_time ) : '',
 			'location'       => $location,

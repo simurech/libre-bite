@@ -23,6 +23,31 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # KDS-Wartezeit-Timer und Alarmwiederholung (F49)
+    "Waiting time":
+        "Wartezeit",
+    "Overdue":
+        "Überfällig",
+    "min":
+        "Min.",
+    "Waiting Time Timer":
+        "Wartezeit-Timer",
+    "Show how long each order has been waiting":
+        "Anzeigen, wie lange eine Bestellung bereits wartet",
+    "Each order card shows the minutes since the order came in, turning amber and then red as it ages. Future pre-orders are excluded.":
+        "Jede Bestellkarte zeigt die Minuten seit Bestelleingang und wechselt mit zunehmender Wartezeit auf Gelb und dann auf Rot. Vorbestellungen in der Zukunft sind ausgenommen.",
+    "Amber After":
+        "Gelb ab",
+    "Red After":
+        "Rot ab",
+    "Leave at 0 to use the preparation time configured for each location.":
+        "Bei 0 wird die je Standort hinterlegte Zubereitungszeit verwendet.",
+    "Leave at 0 to use one and a half times the amber threshold.":
+        "Bei 0 wird das Anderthalbfache der Gelb-Schwelle verwendet.",
+    "Repeat Alert Sound":
+        "Alarmton wiederholen",
+    "Repeat the alert sound while orders are still waiting in the first column. Moving an order onwards acknowledges it and stops the sound. Set to 0 to play the sound only once per new order.":
+        "Wiederholt den Alarmton, solange in der ersten Spalte Bestellungen warten. Das Weiterschieben einer Bestellung quittiert sie und beendet den Ton. Bei 0 ertönt der Ton nur einmal pro neuer Bestellung.",
     # Kanban: Tisch-/Sofort-Badges (i18n-Fix, waren hart codiert deutsch)
     "(Table: %s)":
         "(Tisch: %s)",

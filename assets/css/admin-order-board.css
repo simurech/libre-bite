@@ -657,3 +657,81 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 	font-weight: 600;
 	font-size: 13px;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+ * Wartezeit-Timer auf der Bestellkarte (F49)
+ *
+ * Der Ring wird rein per conic-gradient gezeichnet – kein SVG, kein
+ * zusätzliches Markup pro Segment. Die Füllung steuert die vom JS
+ * gesetzte Custom-Property --lbite-timer-progress (0deg … 360deg).
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-order-timer {
+	--lbite-timer-progress: 0deg;
+	--lbite-timer-color: var(--lbite-success);
+	--lbite-timer-track: var(--lbite-success-soft);
+
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lbite-space-2);
+	padding: 2px var(--lbite-space-2) 2px 2px;
+	border: 1px solid var(--lbite-success-border);
+	border-radius: var(--lbite-radius-pill);
+	background: var(--lbite-success-soft);
+	color: var(--lbite-timer-color);
+	font-size: var(--lbite-text-xs);
+	font-weight: var(--lbite-weight-bold);
+	font-variant-numeric: tabular-nums;
+	line-height: 1.4;
+	white-space: nowrap;
+}
+
+.lbite-order-timer__ring {
+	position: relative;
+	flex: 0 0 auto;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: conic-gradient(
+		var(--lbite-timer-color) var(--lbite-timer-progress),
+		var(--lbite-timer-track) var(--lbite-timer-progress)
+	);
+	transition: background var(--lbite-duration-slow) linear;
+}
+
+/* Innenfläche ausstanzen, damit ein Ring statt einer Scheibe entsteht */
+.lbite-order-timer__ring::after {
+	content: "";
+	position: absolute;
+	inset: 4px;
+	border-radius: 50%;
+	background: var(--lbite-surface);
+}
+
+.lbite-order-timer.is-warn {
+	--lbite-timer-color: var(--lbite-warning);
+	--lbite-timer-track: var(--lbite-warning-soft);
+	background: var(--lbite-warning-soft);
+	border-color: var(--lbite-warning-border);
+}
+
+.lbite-order-timer.is-late {
+	--lbite-timer-color: var(--lbite-danger);
+	--lbite-timer-track: var(--lbite-danger-soft);
+	background: var(--lbite-danger-soft);
+	border-color: var(--lbite-danger-border);
+	animation: lbite-timer-late 1.6s ease-in-out infinite;
+}
+
+@keyframes lbite-timer-late {
+	0%, 100% { opacity: 1; }
+	50%      { opacity: 0.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.lbite-order-timer.is-late {
+		animation: none;
+		/* Ohne Blinken muss die Dringlichkeit anders lesbar bleiben */
+		box-shadow: 0 0 0 2px var(--lbite-danger-border);
+	}
+}
