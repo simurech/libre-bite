@@ -28,8 +28,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	$lbite_assigned_location  = (int) get_user_meta( get_current_user_id(), 'lbite_assigned_location', true );
 	$lbite_is_location_locked = $lbite_assigned_location > 0 && ! current_user_can( 'lbite_manage_locations' );
+	$lbite_all_locations      = LBite_Locations::get_all_locations();
+	// Bei genau 1 Standort gibt es nichts auszuwählen — verhält sich wie eine gesperrte Zuweisung.
+	$lbite_is_single_location = 1 === count( $lbite_all_locations );
 	if ( $lbite_is_location_locked ) {
 		$lbite_selected_location = $lbite_assigned_location;
+	} elseif ( $lbite_is_single_location ) {
+		$lbite_selected_location = $lbite_all_locations[0]->ID;
 	} else {
 		$lbite_selected_location = get_user_meta( get_current_user_id(), 'lbite_pos_location', true );
 	}
@@ -39,17 +44,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<label for="lbite-pos-location">
 				<strong><?php esc_html_e( 'Location:', 'libre-bite' ); ?></strong>
 			</label>
-			<?php if ( $lbite_is_location_locked ) : ?>
-				<?php $lbite_locked_post = get_post( $lbite_assigned_location ); ?>
+			<?php if ( $lbite_is_location_locked || $lbite_is_single_location ) : ?>
+				<?php $lbite_locked_post = $lbite_is_location_locked ? get_post( $lbite_assigned_location ) : $lbite_all_locations[0]; ?>
 				<span class="lbite-location-locked"><?php echo esc_html( $lbite_locked_post ? $lbite_locked_post->post_title : '' ); ?></span>
-				<input type="hidden" id="lbite-pos-location" value="<?php echo esc_attr( $lbite_assigned_location ); ?>">
+				<input type="hidden" id="lbite-pos-location" value="<?php echo esc_attr( $lbite_selected_location ); ?>">
 			<?php else : ?>
 				<select id="lbite-pos-location" class="lbite-pos-location-select">
 					<option value=""><?php esc_html_e( 'Please select a location', 'libre-bite' ); ?></option>
-					<?php
-					$lbite_locations = LBite_Locations::get_all_locations();
-					foreach ( $lbite_locations as $lbite_location ) :
-						?>
+					<?php foreach ( $lbite_all_locations as $lbite_location ) : ?>
 						<option value="<?php echo esc_attr( $lbite_location->ID ); ?>" <?php selected( $lbite_selected_location, $lbite_location->ID ); ?>>
 							<?php echo esc_html( $lbite_location->post_title ); ?>
 						</option>

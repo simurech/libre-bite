@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libre Bite 1.2.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/libre-bite\n"
-"POT-Creation-Date: 2026-08-18T19:47:30+00:00\n"
+"POT-Creation-Date: 2026-09-12T13:38:34+00:00\n"
 "PO-Revision-Date: 2026-04-14\n"
 "Last-Translator: Pulacha Labs\n"
 "Language-Team: German\n"
@@ -76,7 +76,7 @@ msgstr "Kassensystem"
 #: includes/admin/class-admin.php:255 includes/admin/class-admin.php:256
 #: includes/modules/locations/class-locations.php:158
 #: includes/modules/locations/class-locations.php:160
-#: includes/modules/locations/class-locations.php:979
+#: includes/modules/locations/class-locations.php:1036
 #: templates/admin/dashboard.php:48 templates/admin/debug-info.php:72
 #: templates/admin/help-admin.php:49 templates/admin/help-admin.php:147
 #: templates/admin/help-partials/settings.php:83
@@ -194,7 +194,7 @@ msgid "Error saving"
 msgstr "Fehler beim Speichern"
 
 #: includes/admin/class-admin.php:545 includes/admin/class-admin.php:697
-#: templates/admin/pos.php:87
+#: templates/admin/pos.php:89
 msgid "No table"
 msgstr "Kein Tisch"
 
@@ -315,21 +315,21 @@ msgid "Enter customer email address:"
 msgstr "E-Mail-Adresse des Kunden eingeben:"
 
 #: includes/admin/class-admin.php:660 includes/modules/pos/class-pos.php:173
-#: templates/admin/pos.php:72 templates/admin/settings-tabbed.php:813
+#: templates/admin/pos.php:74 templates/admin/settings-tabbed.php:813
 msgid "Takeaway"
 msgstr "Take-away"
 
 #: includes/admin/class-admin.php:661 includes/modules/pos/class-pos.php:174
-#: templates/admin/pos.php:76 templates/admin/settings-tabbed.php:817
+#: templates/admin/pos.php:78 templates/admin/settings-tabbed.php:817
 #: templates/thankyou-optimized.php:164 templates/thankyou-optimized.php:168
 msgid "Dine-in"
 msgstr "Tischbestellung"
 
-#: includes/admin/class-admin.php:662 includes/modules/pos/class-pos.php:179
+#: includes/admin/class-admin.php:662 includes/modules/pos/class-pos.php:177
 msgid "Tab"
 msgstr "Tab"
 
-#: includes/admin/class-admin.php:663 includes/modules/pos/class-pos.php:180
+#: includes/admin/class-admin.php:663 includes/modules/pos/class-pos.php:178
 msgid "Round"
 msgstr "Runde"
 
@@ -359,8 +359,8 @@ msgstr "Tisch"
 #: includes/modules/order-dashboard/class-order-dashboard.php:457
 #: includes/modules/order-dashboard/class-order-dashboard.php:481
 #: includes/modules/order-dashboard/class-order-dashboard.php:531
-#: includes/modules/pos/class-pos.php:434
-#: includes/modules/pos/class-pos.php:506
+#: includes/modules/pos/class-pos.php:432
+#: includes/modules/pos/class-pos.php:504
 #: includes/modules/reservations/class-reservation-dashboard.php:57
 #: includes/modules/reservations/class-reservation-dashboard.php:163
 #: includes/modules/reservations/class-reservation-dashboard.php:197
@@ -386,12 +386,12 @@ msgstr "Keine Produkt-ID angegeben"
 msgid "Product not found"
 msgstr "Produkt nicht gefunden"
 
-#: includes/admin/class-admin.php:790 includes/modules/pos/class-pos.php:345
+#: includes/admin/class-admin.php:790 includes/modules/pos/class-pos.php:343
 msgid "Variant"
 msgstr "Variante"
 
 #: includes/admin/class-admin.php:867 includes/admin/class-admin.php:1230
-#: includes/modules/pos/class-pos.php:553
+#: includes/modules/pos/class-pos.php:551
 msgid "No location selected"
 msgstr "Kein Standort ausgewählt"
 
@@ -409,12 +409,12 @@ msgstr "Add-on"
 
 #: includes/admin/class-admin.php:1088 includes/admin/class-admin.php:1128
 #: includes/modules/pos/class-pos.php:144
-#: includes/modules/pos/class-pos.php:514
-#: includes/modules/pos/class-pos.php:545
+#: includes/modules/pos/class-pos.php:512
+#: includes/modules/pos/class-pos.php:543
 msgid "Cart is empty"
 msgstr "Warenkorb ist leer"
 
-#: includes/admin/class-admin.php:1095 includes/modules/pos/class-pos.php:521
+#: includes/admin/class-admin.php:1095 includes/modules/pos/class-pos.php:519
 msgid "Invalid cart data"
 msgstr "Ungültige Warenkorbdaten"
 
@@ -424,7 +424,7 @@ msgstr "Ungültige Warenkorbdaten"
 msgid "Open Tabs is not enabled"
 msgstr "Offene Tabs ist nicht aktiviert"
 
-#: includes/admin/class-admin.php:1233 includes/modules/pos/class-pos.php:185
+#: includes/admin/class-admin.php:1233 includes/modules/pos/class-pos.php:183
 msgid "Please select a table"
 msgstr "Bitte einen Tisch auswählen"
 
@@ -477,7 +477,7 @@ msgstr "Support-Einstellungen gespeichert"
 msgid "Help"
 msgstr "Hilfe"
 
-#: includes/admin/class-admin.php:1825 templates/admin/pos.php:309
+#: includes/admin/class-admin.php:1825 templates/admin/pos.php:311
 msgid "Close"
 msgstr "Schliessen"
 
@@ -512,7 +512,7 @@ msgid "Send Receipt by Email"
 msgstr "Beleg per E-Mail senden"
 
 #: includes/admin/class-admin.php:2006 includes/admin/class-admin.php:2071
-#: includes/modules/checkout/class-checkout.php:1682
+#: includes/modules/checkout/class-checkout.php:1735
 #: includes/modules/reservations/class-reservations.php:601
 #: templates/thankyou-optimized.php:347
 msgid "Please enter a valid email address."
@@ -527,12 +527,12 @@ msgid "Insufficient permissions."
 msgstr "Keine ausreichenden Berechtigungen."
 
 #: includes/admin/class-admin.php:2057
-#: includes/modules/checkout/class-checkout.php:1660
+#: includes/modules/checkout/class-checkout.php:1713
 msgid "Invalid order."
 msgstr "Ungültige Bestellung."
 
 #: includes/admin/class-admin.php:2062
-#: includes/modules/checkout/class-checkout.php:1667
+#: includes/modules/checkout/class-checkout.php:1720
 msgid "Order not found."
 msgstr "Bestellung nicht gefunden."
 
@@ -566,8 +566,8 @@ msgstr ""
 
 #: includes/modules/checkout/class-checkout.php:515
 #: includes/modules/checkout/class-checkout.php:609
-#: includes/modules/pos/class-pos.php:145 templates/admin/order-board.php:39
-#: templates/admin/order-board.php:84 templates/admin/pos.php:48
+#: includes/modules/pos/class-pos.php:145 templates/admin/order-board.php:44
+#: templates/admin/order-board.php:80 templates/admin/pos.php:53
 #: templates/admin/reservation-board.php:34
 #: templates/admin/reservation-board.php:57 templates/location-modal.php:83
 msgid "Please select a location"
@@ -582,96 +582,96 @@ msgstr "Bitte wähle eine Abholzeit"
 msgid "No locations available."
 msgstr "Keine Standorte verfügbar."
 
-#: includes/modules/checkout/class-checkout.php:709
-#: templates/checkout-location-time.php:299
+#: includes/modules/checkout/class-checkout.php:725
+#: templates/checkout-location-time.php:309
 msgid "Please select a location."
 msgstr "Bitte wähle einen Standort."
 
-#: includes/modules/checkout/class-checkout.php:713
-#: templates/checkout-location-time.php:304
+#: includes/modules/checkout/class-checkout.php:729
+#: templates/checkout-location-time.php:314
 msgid "Please select an order type."
 msgstr "Bitte wähle eine Bestellart."
 
-#: includes/modules/checkout/class-checkout.php:720
-#: templates/checkout-location-time.php:309
+#: includes/modules/checkout/class-checkout.php:736
+#: templates/checkout-location-time.php:319
 msgid "Please select a pickup time."
 msgstr "Bitte wähle eine Abholzeit."
 
-#: includes/modules/checkout/class-checkout.php:748
+#: includes/modules/checkout/class-checkout.php:764
 msgid "Please select whether you want to take away or eat here."
 msgstr "Bitte wähle, ob du deine Bestellung mitnehmen oder vor Ort konsumieren möchtest."
 
-#: includes/modules/checkout/class-checkout.php:757
+#: includes/modules/checkout/class-checkout.php:773
 msgid ""
 "The selected location is currently closed. Please select a pre-order time."
 msgstr "Der gewählte Standort ist derzeit geschlossen. Bitte wählen Sie eine Vorbestellzeit."
 
 #. translators: %s: product name
-#: includes/modules/checkout/class-checkout.php:769
-#: includes/modules/checkout/class-checkout.php:800
+#: includes/modules/checkout/class-checkout.php:785
+#: includes/modules/checkout/class-checkout.php:816
 #, php-format
 msgid "\"%s\" is not available at the selected location."
 msgstr "«%s» ist am gewählten Standort nicht verfügbar."
 
-#: includes/modules/checkout/class-checkout.php:967
-#: includes/modules/checkout/class-checkout.php:990
+#: includes/modules/checkout/class-checkout.php:983
+#: includes/modules/checkout/class-checkout.php:1006
 msgid "Tip"
 msgstr "Trinkgeld"
 
-#: includes/modules/checkout/class-checkout.php:1008
-#: includes/modules/checkout/class-checkout.php:1028
+#: includes/modules/checkout/class-checkout.php:1024
+#: includes/modules/checkout/class-checkout.php:1044
 msgid "Rounding"
 msgstr "Rundung"
 
-#: includes/modules/checkout/class-checkout.php:1174
-#: includes/modules/checkout/class-checkout.php:1179
-#: includes/modules/checkout/class-checkout.php:1262
+#: includes/modules/checkout/class-checkout.php:1222
+#: includes/modules/checkout/class-checkout.php:1230
+#: includes/modules/checkout/class-checkout.php:1315
 msgid "Invalid location"
 msgstr "Ungültiger Standort"
 
-#: includes/modules/checkout/class-checkout.php:1228
+#: includes/modules/checkout/class-checkout.php:1283
 msgid "Location set"
 msgstr "Standort gesetzt"
 
-#: includes/modules/checkout/class-checkout.php:1672
+#: includes/modules/checkout/class-checkout.php:1725
 msgid "Receipt already sent."
 msgstr "Beleg wurde bereits gesendet."
 
-#: includes/modules/checkout/class-checkout.php:1696
+#: includes/modules/checkout/class-checkout.php:1749
 msgid "Receipt sent."
 msgstr "Beleg gesendet."
 
-#: includes/modules/checkout/class-checkout.php:1711
+#: includes/modules/checkout/class-checkout.php:1764
 #: includes/modules/reservations/class-reservations.php:242
 msgid "Note"
 msgstr "Notiz"
 
-#: includes/modules/checkout/class-checkout.php:1914
+#: includes/modules/checkout/class-checkout.php:1967
 #: templates/checkout-location-time.php:130
 msgid "How would you like your order?"
 msgstr "Wie möchtest du bestellen?"
 
-#: includes/modules/checkout/class-checkout.php:1918
+#: includes/modules/checkout/class-checkout.php:1971
 #: templates/checkout-location-time.php:134
 msgid "To take away"
 msgstr "zum Mitnehmen"
 
-#: includes/modules/checkout/class-checkout.php:1922
+#: includes/modules/checkout/class-checkout.php:1975
 #: templates/checkout-location-time.php:138
 msgid "Eat here"
 msgstr "vor Ort konsumieren"
 
-#: includes/modules/checkout/class-checkout.php:1927 templates/admin/pos.php:84
+#: includes/modules/checkout/class-checkout.php:1980 templates/admin/pos.php:86
 #: templates/checkout-location-time.php:143
 msgid "Table (optional):"
 msgstr "Tisch (optional):"
 
-#: includes/modules/checkout/class-checkout.php:1930
+#: includes/modules/checkout/class-checkout.php:1983
 #: templates/checkout-location-time.php:146
 msgid "Select table (optional)"
 msgstr "Tisch auswählen (optional)"
 
-#: includes/modules/checkout/class-checkout.php:1938
+#: includes/modules/checkout/class-checkout.php:1991
 #: templates/checkout-location-time.php:152
 msgid "e.g. 5"
 msgstr "z.B. 5"
@@ -685,7 +685,7 @@ msgid "Use Image"
 msgstr "Bild verwenden"
 
 #: includes/modules/locations/class-locations.php:112
-#: includes/modules/locations/class-locations.php:272
+#: includes/modules/locations/class-locations.php:281
 msgid "No image selected"
 msgstr "Kein Bild ausgewählt"
 
@@ -752,7 +752,7 @@ msgid "Color"
 msgstr "Farbe"
 
 #: includes/modules/locations/class-locations.php:213
-#: includes/modules/locations/class-locations.php:1076
+#: includes/modules/locations/class-locations.php:1133
 #: templates/admin/help-partials/locations.php:23
 msgid "Address"
 msgstr "Adresse"
@@ -770,7 +770,7 @@ msgid "Time Settings (Override)"
 msgstr "Zeiteinstellungen (Standort)"
 
 #: includes/modules/locations/class-locations.php:240
-#: includes/modules/locations/class-locations.php:1077
+#: includes/modules/locations/class-locations.php:1134
 #: templates/admin/help-partials/support.php:50
 msgid "Availability"
 msgstr "Verfügbarkeit"
@@ -781,83 +781,87 @@ msgstr "Verfügbarkeit"
 msgid "QR Code"
 msgstr "QR-Code"
 
-#: includes/modules/locations/class-locations.php:278
+#: includes/modules/locations/class-locations.php:258
+msgid "Products at this location"
+msgstr "Produkte an diesem Standort"
+
+#: includes/modules/locations/class-locations.php:287
 msgid "Select Image"
 msgstr "Bild auswählen"
 
-#: includes/modules/locations/class-locations.php:281
+#: includes/modules/locations/class-locations.php:290
 msgid "Remove Image"
 msgstr "Bild entfernen"
 
-#: includes/modules/locations/class-locations.php:284
+#: includes/modules/locations/class-locations.php:293
 msgid "Optional: Displayed as tile image in location selection."
 msgstr "Optional: Wird in der Standort-Auswahl als Kachel-Bild angezeigt."
 
-#: includes/modules/locations/class-locations.php:299
+#: includes/modules/locations/class-locations.php:308
 msgid "Displayed as accent color in POS and order overview."
 msgstr "Wird in POS und Bestellübersicht als Akzentfarbe angezeigt."
 
-#: includes/modules/locations/class-locations.php:324
+#: includes/modules/locations/class-locations.php:333
 msgid "Street & Number"
 msgstr "Strasse & Nr."
 
-#: includes/modules/locations/class-locations.php:330
+#: includes/modules/locations/class-locations.php:339
 msgid "ZIP Code"
 msgstr "PLZ"
 
-#: includes/modules/locations/class-locations.php:336
+#: includes/modules/locations/class-locations.php:345
 #: templates/admin/checkout-fields.php:71
 #: templates/admin/checkout-fields.php:84
 msgid "City"
 msgstr "Ort"
 
-#: includes/modules/locations/class-locations.php:342
+#: includes/modules/locations/class-locations.php:351
 #: templates/admin/checkout-fields.php:73
 #: templates/admin/checkout-fields.php:86
 msgid "Country"
 msgstr "Land"
 
-#: includes/modules/locations/class-locations.php:348
+#: includes/modules/locations/class-locations.php:357
 msgid "Google Maps Link"
 msgstr "Google Maps Link"
 
-#: includes/modules/locations/class-locations.php:351
+#: includes/modules/locations/class-locations.php:360
 msgid ""
 "Optional: Link to Google Maps for this location. The address will be linked "
 "on order confirmation and in emails."
 msgstr "Optional: Link zu Google Maps für diesen Standort. Die Adresse wird auf der Bestellbestätigung und in E-Mails verlinkt."
 
-#: includes/modules/locations/class-locations.php:370
+#: includes/modules/locations/class-locations.php:379
 msgid "Monday"
 msgstr "Montag"
 
-#: includes/modules/locations/class-locations.php:371
+#: includes/modules/locations/class-locations.php:380
 msgid "Tuesday"
 msgstr "Dienstag"
 
-#: includes/modules/locations/class-locations.php:372
+#: includes/modules/locations/class-locations.php:381
 msgid "Wednesday"
 msgstr "Mittwoch"
 
-#: includes/modules/locations/class-locations.php:373
+#: includes/modules/locations/class-locations.php:382
 msgid "Thursday"
 msgstr "Donnerstag"
 
-#: includes/modules/locations/class-locations.php:374
+#: includes/modules/locations/class-locations.php:383
 msgid "Friday"
 msgstr "Freitag"
 
-#: includes/modules/locations/class-locations.php:375
+#: includes/modules/locations/class-locations.php:384
 msgid "Saturday"
 msgstr "Samstag"
 
-#: includes/modules/locations/class-locations.php:376
+#: includes/modules/locations/class-locations.php:385
 #: templates/admin/help-partials/locations.php:68
 msgid "Sunday"
 msgstr "Sonntag"
 
-#: includes/modules/locations/class-locations.php:393
-#: includes/modules/locations/class-locations.php:1455
+#: includes/modules/locations/class-locations.php:402
+#: includes/modules/locations/class-locations.php:1512
 #: templates/admin/help-partials/locations.php:66
 #: templates/admin/holidays-settings.php:89
 #: templates/admin/holidays-settings.php:148
@@ -866,16 +870,16 @@ msgstr "Sonntag"
 msgid "Closed"
 msgstr "Geschlossen"
 
-#: includes/modules/locations/class-locations.php:397
-#: includes/modules/locations/class-locations.php:407
+#: includes/modules/locations/class-locations.php:406
+#: includes/modules/locations/class-locations.php:416
 #: includes/modules/tables/class-tables.php:876
 #: templates/admin/holidays-settings.php:94
 #: templates/admin/holidays-settings.php:153
 msgid "From"
 msgstr "Von"
 
-#: includes/modules/locations/class-locations.php:401
-#: includes/modules/locations/class-locations.php:411
+#: includes/modules/locations/class-locations.php:410
+#: includes/modules/locations/class-locations.php:420
 #: includes/modules/tables/class-tables.php:879
 #: templates/admin/holidays-settings.php:96
 #: templates/admin/holidays-settings.php:101
@@ -884,147 +888,159 @@ msgstr "Von"
 msgid "To"
 msgstr "Bis"
 
-#: includes/modules/locations/class-locations.php:405
+#: includes/modules/locations/class-locations.php:414
 msgid "2nd window (optional):"
 msgstr "2. Fenster (optional):"
 
-#: includes/modules/locations/class-locations.php:584
+#: includes/modules/locations/class-locations.php:593
 msgid ""
 "These settings override the global defaults for this location only. Leave "
 "blank to use the global value."
 msgstr "Diese Einstellungen überschreiben die globalen Standardwerte nur für diesen Standort. Leer lassen, um den globalen Wert zu verwenden."
 
-#: includes/modules/locations/class-locations.php:591
+#: includes/modules/locations/class-locations.php:600
 #: templates/admin/debug-info.php:102
 #: templates/admin/help-partials/settings.php:33
 #: templates/admin/settings.php:122 templates/admin/settings/locations.php:73
 msgid "Preparation Time"
 msgstr "Vorbereitungszeit"
 
-#: includes/modules/locations/class-locations.php:597
-#: includes/modules/locations/class-locations.php:617
-#: includes/modules/locations/class-locations.php:639
-#: includes/modules/locations/class-locations.php:661
+#: includes/modules/locations/class-locations.php:606
+#: includes/modules/locations/class-locations.php:626
+#: includes/modules/locations/class-locations.php:648
+#: includes/modules/locations/class-locations.php:670
 #: templates/admin/debug-info.php:103
 msgid "minutes"
 msgstr "Minuten"
 
 #. translators: %d = global default in minutes
-#: includes/modules/locations/class-locations.php:602
+#: includes/modules/locations/class-locations.php:611
 #, php-format
 msgid ""
 "Minimum lead time before a pickup slot becomes available. Global default: %d "
 "min."
 msgstr "Minimale Vorlaufzeit, bevor ein Abholzeitfenster verfügbar wird. Globaler Standardwert: %d Min."
 
-#: includes/modules/locations/class-locations.php:611
+#: includes/modules/locations/class-locations.php:620
 msgid "Timeslot Interval"
 msgstr "Zeitslot-Intervall"
 
 #. translators: %d = global default in minutes
-#: includes/modules/locations/class-locations.php:622
+#: includes/modules/locations/class-locations.php:631
 #, php-format
 msgid "Interval between pickup slots. Global default: %d min."
 msgstr "Abstand zwischen Abholzeitfenstern. Globaler Standardwert: %d Min."
 
-#: includes/modules/locations/class-locations.php:631
+#: includes/modules/locations/class-locations.php:640
 #: templates/admin/help-partials/settings.php:48
 #: templates/admin/settings.php:144 templates/admin/settings/locations.php:88
 msgid "Slot Buffer Start"
 msgstr "Puffer Anfang"
 
 #. translators: %d = global default in minutes
-#: includes/modules/locations/class-locations.php:644
+#: includes/modules/locations/class-locations.php:653
 #, php-format
 msgid ""
 "Hides the first X minutes of each opening window from the slot picker (e.g. "
 "setup time after opening). Global default: %d min."
 msgstr "Blendet die ersten X Minuten jedes Öffnungsfensters aus dem Zeitfenster-Picker aus (z. B. Einrichtungszeit nach Öffnung). Globaler Standardwert: %d Min."
 
-#: includes/modules/locations/class-locations.php:653
+#: includes/modules/locations/class-locations.php:662
 #: templates/admin/help-partials/settings.php:52
 #: templates/admin/settings.php:156 templates/admin/settings/locations.php:100
 msgid "Slot Buffer End"
 msgstr "Puffer Ende"
 
 #. translators: %d = global default in minutes
-#: includes/modules/locations/class-locations.php:666
+#: includes/modules/locations/class-locations.php:675
 #, php-format
 msgid ""
 "Hides the last X minutes of each opening window from the slot picker (e.g. "
 "to stop accepting orders before closing). Global default: %d min."
 msgstr "Blendet die letzten X Minuten jedes Öffnungsfensters aus dem Zeitfenster-Picker aus (z. B. um Bestellungen vor dem Schliessen nicht mehr anzunehmen). Globaler Standardwert: %d Min."
 
-#: includes/modules/locations/class-locations.php:685
+#: includes/modules/locations/class-locations.php:694
 msgid ""
 "Restrict this location to a specific date range (e.g. for a new location "
 "that opens in the future, or one closing temporarily). Leave both fields "
 "empty for no restriction."
 msgstr "Schränken Sie diesen Standort auf einen bestimmten Zeitraum ein (z. B. für einen neuen Standort, der erst künftig öffnet, oder einen vorübergehend geschlossenen). Beide Felder leer lassen für keine Einschränkung."
 
-#: includes/modules/locations/class-locations.php:689
+#: includes/modules/locations/class-locations.php:698
 msgid "Active from"
 msgstr "Aktiv ab"
 
-#: includes/modules/locations/class-locations.php:695
+#: includes/modules/locations/class-locations.php:704
 msgid "Active until"
 msgstr "Aktiv bis"
 
-#: includes/modules/locations/class-locations.php:710
+#: includes/modules/locations/class-locations.php:719
 msgid "Save the location first to generate the QR code."
 msgstr "Standort zuerst speichern, um den QR-Code zu generieren."
 
-#: includes/modules/locations/class-locations.php:730
+#: includes/modules/locations/class-locations.php:739
 msgid "Order type for QR code"
 msgstr "Bestelltyp für QR-Code"
 
-#: includes/modules/locations/class-locations.php:733
+#: includes/modules/locations/class-locations.php:742
 msgid "No pre-selection"
 msgstr "Keine Vorauswahl"
 
-#: includes/modules/locations/class-locations.php:737
+#: includes/modules/locations/class-locations.php:746
 msgid "Now (fastest pickup)"
 msgstr "Sofort (schnellstmögliche Abholung)"
 
-#: includes/modules/locations/class-locations.php:741
+#: includes/modules/locations/class-locations.php:750
 msgid "Pre-order (customer chooses time)"
 msgstr "Vorbestellen (Kunde wählt Abholzeit selbst)"
 
-#: includes/modules/locations/class-locations.php:751
+#: includes/modules/locations/class-locations.php:760
 msgid "You can use this link or QR code for the location."
 msgstr "Diesen Link oder QR-Code für den Standort verwenden."
 
-#: includes/modules/locations/class-locations.php:752
+#: includes/modules/locations/class-locations.php:761
 #: includes/modules/tables/class-tables.php:641
 msgid "Download QR Code"
 msgstr "QR-Code herunterladen"
 
-#: includes/modules/locations/class-locations.php:754
+#: includes/modules/locations/class-locations.php:763
 #: includes/modules/tables/class-tables.php:643
 msgid "Print QR Code"
 msgstr "QR-Code drucken"
 
-#: includes/modules/locations/class-locations.php:812
+#: includes/modules/locations/class-locations.php:803
+msgid "Save the location first to see available products."
+msgstr "Speichern Sie den Standort zuerst, um die verfügbaren Produkte zu sehen."
+
+#: includes/modules/locations/class-locations.php:825
+msgid "No products available at this location."
+msgstr "Keine Produkte an diesem Standort verfügbar."
+
+#: includes/modules/locations/class-locations.php:836
+msgid "POS only"
+msgstr "Nur POS"
+
+#: includes/modules/locations/class-locations.php:869
 msgid "product not available"
 msgstr "Produkt nicht am Standort verfügbar"
 
-#: includes/modules/locations/class-locations.php:813
+#: includes/modules/locations/class-locations.php:870
 msgid "products not available"
 msgstr "Produkte nicht am Standort verfügbar"
 
-#: includes/modules/locations/class-locations.php:814
+#: includes/modules/locations/class-locations.php:871
 msgid "Show only available products"
 msgstr "Nur verfügbare Produkte anzeigen"
 
-#: includes/modules/locations/class-locations.php:815
+#: includes/modules/locations/class-locations.php:872
 msgid "Show all products"
 msgstr "Alle Produkte anzeigen"
 
-#: includes/modules/locations/class-locations.php:816
+#: includes/modules/locations/class-locations.php:873
 msgid "Choose a location to see what is available"
 msgstr "Standort wählen, um die Verfügbarkeit zu sehen"
 
-#: includes/modules/locations/class-locations.php:817
+#: includes/modules/locations/class-locations.php:874
 #: templates/location-selector-banner.php:361
 #: templates/location-selector-inline.php:26
 #: templates/location-selector-inline.php:149
@@ -1032,96 +1048,96 @@ msgstr "Standort wählen, um die Verfügbarkeit zu sehen"
 msgid "Please choose..."
 msgstr "Bitte wählen..."
 
-#: includes/modules/locations/class-locations.php:818
+#: includes/modules/locations/class-locations.php:875
 msgid "Change location"
 msgstr "Standort ändern"
 
 #. translators: %1$d: number of locations where the product is available, %2$d: total number of locations
-#: includes/modules/locations/class-locations.php:912
-#: includes/modules/locations/class-locations.php:943
+#: includes/modules/locations/class-locations.php:969
+#: includes/modules/locations/class-locations.php:1000
 #, php-format
 msgid "Available at %1$d of %2$d locations"
 msgstr "Verfügbar an %1$d von %2$d Standorten"
 
-#: includes/modules/locations/class-locations.php:1009
+#: includes/modules/locations/class-locations.php:1066
 msgid ""
 "Available at all locations by default. Check a location to disable this "
 "product there."
 msgstr "Standardmässig an allen Standorten verfügbar. Standort anhaken, um das Produkt dort zu deaktivieren."
 
-#: includes/modules/locations/class-locations.php:1012
+#: includes/modules/locations/class-locations.php:1069
 msgid "No locations available yet."
 msgstr "Noch keine Standorte vorhanden."
 
-#: includes/modules/locations/class-locations.php:1033
+#: includes/modules/locations/class-locations.php:1090
 msgid "POS only (hidden from customers)"
 msgstr "Nur im POS (für Kunden nicht sichtbar)"
 
-#: includes/modules/locations/class-locations.php:1035
+#: includes/modules/locations/class-locations.php:1092
 msgid "Product is visible in POS but not shown on shop pages or product URLs."
 msgstr "Produkt ist im POS sichtbar, wird aber nicht auf Shop-Seiten oder Produkt-URLs angezeigt."
 
 #. translators: %s: formatted date
-#: includes/modules/locations/class-locations.php:1115
+#: includes/modules/locations/class-locations.php:1172
 #, php-format
 msgid "from %s"
 msgstr "ab %s"
 
 #. translators: %s: formatted date
-#: includes/modules/locations/class-locations.php:1119
+#: includes/modules/locations/class-locations.php:1176
 #, php-format
 msgid "until %s"
 msgstr "bis %s"
 
 #. translators: %s: formatted opening date
-#: includes/modules/locations/class-locations.php:1356
+#: includes/modules/locations/class-locations.php:1413
 #, php-format
 msgid "Opens on %s"
 msgstr "Öffnet am %s"
 
-#: includes/modules/locations/class-locations.php:1363
+#: includes/modules/locations/class-locations.php:1420
 msgid "No longer available"
 msgstr "Nicht mehr verfügbar"
 
 #. translators: %s: closing time
-#: includes/modules/locations/class-locations.php:1419
+#: includes/modules/locations/class-locations.php:1476
 #, php-format
 msgid "Closes at %s"
 msgstr "Schliesst um %s"
 
-#: includes/modules/locations/class-locations.php:1425
+#: includes/modules/locations/class-locations.php:1482
 msgid "Open"
 msgstr "Geöffnet"
 
 #. translators: %s: opening time
-#: includes/modules/locations/class-locations.php:1436
+#: includes/modules/locations/class-locations.php:1493
 #, php-format
 msgid "Opens at %s"
 msgstr "Öffnet um %s"
 
 #. translators: %s: opening time
-#: includes/modules/locations/class-locations.php:1509
+#: includes/modules/locations/class-locations.php:1566
 #, php-format
 msgid "Opens today %s"
 msgstr "Öffnet heute %s"
 
 #. translators: %s: opening time
-#: includes/modules/locations/class-locations.php:1512
+#: includes/modules/locations/class-locations.php:1569
 #, php-format
 msgid "Opens tomorrow %s"
 msgstr "Öffnet morgen %s"
 
 #. translators: %1$s: day abbreviation, %2$s: opening time
-#: includes/modules/locations/class-locations.php:1516
+#: includes/modules/locations/class-locations.php:1573
 #, php-format
 msgid "Opens %1$s %2$s"
 msgstr "Öffnet %1$s %2$s"
 
-#: includes/modules/locations/class-locations.php:1602
+#: includes/modules/locations/class-locations.php:1659
 msgid "Location not published – the Free plan is limited to 1 location."
 msgstr "Standort nicht veröffentlicht – der Free-Plan ist auf 1 Standort begrenzt."
 
-#: includes/modules/locations/class-locations.php:1605
+#: includes/modules/locations/class-locations.php:1662
 msgid "Upgrade to Pro for unlimited locations →"
 msgstr "Auf Pro upgraden für unbegrenzte Standorte →"
 
@@ -1360,21 +1376,21 @@ msgstr "Enthält:"
 
 #: includes/modules/order-dashboard/class-order-dashboard.php:73
 #: templates/admin/help-partials/orders.php:43
-#: templates/admin/order-board.php:91
+#: templates/admin/order-board.php:87
 #: templates/admin/super-admin-settings.php:35
 msgid "Pre-orders"
 msgstr "Vorbestellungen"
 
 #: includes/modules/order-dashboard/class-order-dashboard.php:74
 #: templates/admin/help-partials/orders.php:48
-#: templates/admin/order-board.php:96
+#: templates/admin/order-board.php:92
 msgid "Prepare Now"
 msgstr "Jetzt zubereiten"
 
 #: includes/modules/order-dashboard/class-order-dashboard.php:75
 #: templates/admin/help-partials/orders.php:53
 #: templates/admin/help-partials/reservations.php:79
-#: templates/admin/order-board.php:101
+#: templates/admin/order-board.php:97
 msgid "Completed"
 msgstr "Abgeschlossen"
 
@@ -1436,7 +1452,7 @@ msgstr "Bestellung erstellt"
 msgid "Error creating order"
 msgstr "Fehler beim Erstellen der Bestellung"
 
-#: includes/modules/pos/class-pos.php:146 templates/admin/pos.php:121
+#: includes/modules/pos/class-pos.php:146 templates/admin/pos.php:123
 msgid "Please select a location first"
 msgstr "Bitte zuerst einen Standort wählen"
 
@@ -1516,8 +1532,8 @@ msgstr "Notiz..."
 msgid "Coupon"
 msgstr "Gutschein"
 
-#: includes/modules/pos/class-pos.php:167 templates/admin/pos.php:179
-#: templates/admin/pos.php:321
+#: includes/modules/pos/class-pos.php:167 templates/admin/pos.php:181
+#: templates/admin/pos.php:323
 msgid "Add Coupon"
 msgstr "Gutschein hinzufügen"
 
@@ -1541,79 +1557,71 @@ msgstr "Keine aktiven Gutscheine vorhanden"
 msgid "Wake Lock is not supported by this browser."
 msgstr "Wake Lock wird von diesem Browser nicht unterstützt."
 
-#: includes/modules/pos/class-pos.php:175 templates/admin/pos.php:259
-msgid "Split payment"
-msgstr "Zahlung aufteilen"
-
-#: includes/modules/pos/class-pos.php:176 templates/admin/pos.php:268
-msgid "Rest"
-msgstr "Rest"
-
-#: includes/modules/pos/class-pos.php:177
+#: includes/modules/pos/class-pos.php:175
 msgid "Assigned"
 msgstr "Zugewiesen"
 
-#: includes/modules/pos/class-pos.php:178
+#: includes/modules/pos/class-pos.php:176
 #: includes/modules/tables/class-tables.php:184
 #: templates/admin/statistics.php:248 templates/thankyou-optimized.php:325
 msgid "Total"
 msgstr "Total"
 
-#: includes/modules/pos/class-pos.php:181
+#: includes/modules/pos/class-pos.php:179
 msgid "Add items"
 msgstr "Positionen hinzufügen"
 
-#: includes/modules/pos/class-pos.php:182
+#: includes/modules/pos/class-pos.php:180
 msgid "Pay / Close"
 msgstr "Bezahlen / Abschliessen"
 
-#: includes/modules/pos/class-pos.php:183 templates/admin/pos.php:151
-#: templates/admin/pos.php:342 templates/admin/pos.php:360
-#: templates/checkout-location-time.php:234
+#: includes/modules/pos/class-pos.php:181 templates/admin/pos.php:153
+#: templates/admin/pos.php:344 templates/admin/pos.php:362
+#: templates/checkout-location-time.php:244
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: includes/modules/pos/class-pos.php:184
+#: includes/modules/pos/class-pos.php:182
 msgid "Close tab"
 msgstr "Tab abschliessen"
 
-#: includes/modules/pos/class-pos.php:186
+#: includes/modules/pos/class-pos.php:184
 msgid "Tab opened"
 msgstr "Tab eröffnet"
 
-#: includes/modules/pos/class-pos.php:187
+#: includes/modules/pos/class-pos.php:185
 msgid "Items added"
 msgstr "Positionen hinzugefügt"
 
-#: includes/modules/pos/class-pos.php:188
+#: includes/modules/pos/class-pos.php:186
 msgid "Tab closed"
 msgstr "Tab abgeschlossen"
 
-#: includes/modules/pos/class-pos.php:189
+#: includes/modules/pos/class-pos.php:187
 msgid "Tab cancelled"
 msgstr "Tab storniert"
 
-#: includes/modules/pos/class-pos.php:190
+#: includes/modules/pos/class-pos.php:188
 msgid "Cancel this tab?"
 msgstr "Diesen Tab stornieren?"
 
-#: includes/modules/pos/class-pos.php:191
+#: includes/modules/pos/class-pos.php:189
 msgid "Adding to tab:"
 msgstr "Wird zu Tab hinzugefügt:"
 
-#: includes/modules/pos/class-pos.php:192
+#: includes/modules/pos/class-pos.php:190
 msgid "No open tabs"
 msgstr "Keine offenen Tabs"
 
-#: includes/modules/pos/class-pos.php:590
+#: includes/modules/pos/class-pos.php:588
 msgid "POS Order"
 msgstr "POS-Bestellung"
 
-#: includes/modules/pos/class-pos.php:597
+#: includes/modules/pos/class-pos.php:595
 msgid "Order successfully created"
 msgstr "Bestellung erfolgreich erstellt"
 
-#: includes/modules/pos/class-pos.php:607
+#: includes/modules/pos/class-pos.php:605
 msgid "Error creating order: "
 msgstr "Fehler beim Erstellen der Bestellung: "
 
@@ -5165,7 +5173,7 @@ msgstr "Noch keine Feiertage definiert."
 #: templates/admin/holidays-settings.php:74
 #: templates/admin/holidays-settings.php:83
 #: templates/admin/holidays-settings.php:133
-#: templates/admin/holidays-settings.php:142 templates/admin/pos.php:124
+#: templates/admin/holidays-settings.php:142 templates/admin/pos.php:126
 msgid "All"
 msgstr "Alle"
 
@@ -5206,130 +5214,138 @@ msgstr "Speichern"
 msgid "e.g. Christmas"
 msgstr "z.B. Weihnachten"
 
-#: templates/admin/order-board.php:32 templates/admin/pos.php:40
+#: templates/admin/order-board.php:37 templates/admin/pos.php:45
 #: templates/admin/reservation-board.php:32 templates/admin/statistics.php:316
 #: templates/admin/table-plan.php:33 templates/emails/pickup-reminder.php:36
 #: templates/emails/plain/pickup-reminder.php:38
 msgid "Location:"
 msgstr "Standort:"
 
-#: templates/admin/order-board.php:60
+#: templates/admin/order-board.php:56
 msgid "Filter:"
 msgstr "Filter:"
 
-#: templates/admin/order-board.php:62
+#: templates/admin/order-board.php:58
 msgid "All Orders"
 msgstr "Alle Bestellungen"
 
-#: templates/admin/order-board.php:63
+#: templates/admin/order-board.php:59
 msgid "Table Orders Only"
 msgstr "Nur Tischbestellungen"
 
-#: templates/admin/order-board.php:64
+#: templates/admin/order-board.php:60
 msgid "Takeaway Only"
 msgstr "Nur Take-Away"
 
-#: templates/admin/order-board.php:71 templates/admin/pos.php:116
+#: templates/admin/order-board.php:67 templates/admin/pos.php:118
 msgid "Prevent Standby"
 msgstr "Standby verhindern"
 
-#: templates/admin/order-board.php:76
+#: templates/admin/order-board.php:72
 #: templates/admin/settings/notifications.php:35
 #: templates/admin/super-admin-settings.php:119
 msgid "Sound Notifications"
 msgstr "Sound-Benachrichtigungen"
 
-#: templates/admin/order-board.php:85
+#: templates/admin/order-board.php:81
 msgid "The order overview is displayed for the selected location."
 msgstr "Die Bestellübersicht wird für den gewählten Standort angezeigt."
 
-#: templates/admin/pos.php:18 templates/admin/pos.php:300
+#: templates/admin/pos.php:18 templates/admin/pos.php:302
 msgid "Open Tabs"
 msgstr "Offene Tabs"
 
-#: templates/admin/pos.php:69
+#: templates/admin/pos.php:71
 msgid "Order type:"
 msgstr "Bestellart:"
 
-#: templates/admin/pos.php:147
+#: templates/admin/pos.php:149
 msgid "Cart"
 msgstr "Warenkorb"
 
-#: templates/admin/pos.php:158
+#: templates/admin/pos.php:160
 msgid "Subtotal:"
 msgstr "Zwischensumme:"
 
-#: templates/admin/pos.php:162
+#: templates/admin/pos.php:164
 msgid "Discount:"
 msgstr "Rabatt:"
 
-#: templates/admin/pos.php:166
+#: templates/admin/pos.php:168
 msgid "Total:"
 msgstr "Total:"
 
-#: templates/admin/pos.php:185
+#: templates/admin/pos.php:187
 msgid "First Name (optional):"
 msgstr "Vorname (optional):"
 
-#: templates/admin/pos.php:187
+#: templates/admin/pos.php:189
 msgid "e.g. Max"
 msgstr "z.B. Max"
 
-#: templates/admin/pos.php:191
+#: templates/admin/pos.php:193
 msgid "Clear"
 msgstr "Leeren"
 
-#: templates/admin/pos.php:194
+#: templates/admin/pos.php:196
 msgid "Create Order"
 msgstr "Bestellung erstellen"
 
-#: templates/admin/pos.php:205
+#: templates/admin/pos.php:207
 msgid "Payment Confirmation"
 msgstr "Zahlungsbestätigung"
 
-#: templates/admin/pos.php:215
+#: templates/admin/pos.php:217
 msgid "Total Amount:"
 msgstr "Gesamtbetrag:"
 
-#: templates/admin/pos.php:237
+#: templates/admin/pos.php:239
 msgid "Payment Method:"
 msgstr "Zahlungsart:"
 
-#: templates/admin/pos.php:280 templates/admin/settings/branding.php:135
+#: templates/admin/pos.php:261
+msgid "Split payment"
+msgstr "Zahlung aufteilen"
+
+#: templates/admin/pos.php:270
+msgid "Rest"
+msgstr "Rest"
+
+#: templates/admin/pos.php:282 templates/admin/settings/branding.php:135
 #: templates/location-selector-banner.php:144
 #: templates/location-selector-tiles.php:149
 msgid "Back"
 msgstr "Zurück"
 
-#: templates/admin/pos.php:284
+#: templates/admin/pos.php:286
 msgid "Open tab"
 msgstr "Tab eröffnen"
 
-#: templates/admin/pos.php:288
+#: templates/admin/pos.php:290
 msgid "Payment Confirmed – Create Order"
 msgstr "Zahlung bestätigt – Bestellung erstellen"
 
-#: templates/admin/pos.php:335
+#: templates/admin/pos.php:337
 msgid "Mark as Unavailable"
 msgstr "Als nicht verfügbar markieren"
 
-#: templates/admin/pos.php:338
+#: templates/admin/pos.php:340
 msgid "How long should this product be unavailable?"
 msgstr "Wie lange soll dieses Produkt nicht verfügbar sein?"
 
-#: templates/admin/pos.php:340
+#: templates/admin/pos.php:342
 msgid "Today only"
 msgstr "Nur heute"
 
-#: templates/admin/pos.php:341
+#: templates/admin/pos.php:343
 msgid "Until further notice"
 msgstr "Bis auf Weiteres"
 
-#: templates/admin/pos.php:353
+#: templates/admin/pos.php:355
 msgid "Configure Product"
 msgstr "Produkt konfigurieren"
 
-#: templates/admin/pos.php:361
+#: templates/admin/pos.php:363
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -5917,7 +5933,7 @@ msgstr "Live-Vorschau"
 
 #: templates/admin/settings/branding.php:134
 #: templates/checkout-location-time.php:59
-#: templates/checkout-location-time.php:191 templates/location-modal.php:48
+#: templates/checkout-location-time.php:201 templates/location-modal.php:48
 msgid "Order Now"
 msgstr "Jetzt bestellen"
 
@@ -6224,7 +6240,7 @@ msgstr "Split"
 msgid "Payment Method"
 msgstr "Zahlungsart"
 
-#: templates/admin/statistics.php:250 templates/checkout-location-time.php:182
+#: templates/admin/statistics.php:250 templates/checkout-location-time.php:192
 msgid "Order Type"
 msgstr "Bestellart"
 
@@ -6433,7 +6449,7 @@ msgstr "Premium-Funktion"
 
 #: templates/admin/super-admin-settings.php:249
 #: templates/admin/support-settings.php:199
-#: templates/checkout-location-time.php:314
+#: templates/checkout-location-time.php:324
 msgid "Saving..."
 msgstr "Wird gespeichert..."
 
@@ -6566,7 +6582,7 @@ msgid "Order Options"
 msgstr "Bestelloptionen"
 
 #: templates/checkout-location-time.php:57
-#: templates/checkout-location-time.php:189
+#: templates/checkout-location-time.php:199
 msgid "Table Service"
 msgstr "Service am Tisch"
 
@@ -6582,52 +6598,53 @@ msgstr "Ändern"
 msgid "Please select a location to continue."
 msgstr "Bitte wähle einen Standort, um fortzufahren."
 
-#: templates/checkout-location-time.php:166
+#: templates/checkout-location-time.php:167
+#: templates/checkout-location-time.php:185
 msgid "Select location..."
 msgstr "Standort wählen..."
 
-#: templates/checkout-location-time.php:197
+#: templates/checkout-location-time.php:207
 msgid "Pre-order for Later"
 msgstr "Für später vorbestellen"
 
-#: templates/checkout-location-time.php:202
+#: templates/checkout-location-time.php:212
 #: templates/location-selector-banner.php:167
 #: templates/location-selector-tiles.php:172
 msgid "Immediate order not available –"
 msgstr "Sofort-Bestellung nicht möglich –"
 
-#: templates/checkout-location-time.php:208
+#: templates/checkout-location-time.php:218
 msgid "Pickup Date"
 msgstr "Abholdatum"
 
-#: templates/checkout-location-time.php:221
+#: templates/checkout-location-time.php:231
 msgid "Pickup Time"
 msgstr "Abholzeit"
 
-#: templates/checkout-location-time.php:224
-#: templates/checkout-location-time.php:373
+#: templates/checkout-location-time.php:234
+#: templates/checkout-location-time.php:383
 msgid "Select time..."
 msgstr "Zeit wählen..."
 
-#: templates/checkout-location-time.php:230
-#: templates/checkout-location-time.php:341
-#: templates/checkout-location-time.php:346
+#: templates/checkout-location-time.php:240
+#: templates/checkout-location-time.php:351
+#: templates/checkout-location-time.php:356
 msgid "Apply"
 msgstr "Übernehmen"
 
-#: templates/checkout-location-time.php:340
+#: templates/checkout-location-time.php:350
 msgid "Error saving."
 msgstr "Fehler beim Speichern."
 
-#: templates/checkout-location-time.php:345
+#: templates/checkout-location-time.php:355
 msgid "Error saving. Please try again."
 msgstr "Fehler beim Speichern. Bitte versuche es erneut."
 
-#: templates/checkout-location-time.php:462
+#: templates/checkout-location-time.php:472
 msgid "Automatically changed to:"
 msgstr "Automatisch geändert zu:"
 
-#: templates/checkout-location-time.php:472
+#: templates/checkout-location-time.php:482
 msgid "No opening day found in the next 14 days."
 msgstr "Kein Öffnungstag in den nächsten 14 Tagen gefunden."
 

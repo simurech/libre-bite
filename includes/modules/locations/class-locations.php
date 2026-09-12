@@ -252,6 +252,15 @@ class LBite_Locations {
 			'side',
 			'default'
 		);
+
+		add_meta_box(
+			'lbite_location_products',
+			__( 'Products at this location', 'libre-bite' ),
+			array( $this, 'render_products_meta_box' ),
+			self::POST_TYPE,
+			'normal',
+			'default'
+		);
 	}
 
 	/**
@@ -782,6 +791,54 @@ class LBite_Locations {
 		})();
 		</script>
 		<?php
+	}
+
+	/**
+	 * Meta-Box: Produkte an diesem Standort (schreibgeschützt)
+	 *
+	 * @param WP_Post $post Post-Objekt (Standort).
+	 */
+	public function render_products_meta_box( $post ) {
+		if ( ! $post->ID || 'auto-draft' === $post->post_status ) {
+			echo '<p class="description">' . esc_html__( 'Save the location first to see available products.', 'libre-bite' ) . '</p>';
+			return;
+		}
+
+		$products = get_posts(
+			array(
+				'post_type'      => 'product',
+				'post_status'    => 'publish',
+				'posts_per_page' => 500, // Begrenzt für Performance.
+				'orderby'        => 'title',
+				'order'          => 'ASC',
+			)
+		);
+
+		$products = array_filter(
+			$products,
+			function ( $product ) use ( $post ) {
+				return self::is_product_available_at_location( $product->ID, $post->ID );
+			}
+		);
+
+		if ( empty( $products ) ) {
+			echo '<p>' . esc_html__( 'No products available at this location.', 'libre-bite' ) . '</p>';
+			return;
+		}
+
+		echo '<div style="max-height: 300px; overflow-y: auto;">';
+		foreach ( $products as $product ) {
+			$pos_only = '1' === get_post_meta( $product->ID, '_lbite_pos_only', true );
+			?>
+			<div style="display: flex; align-items: center; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #f0f0f1;">
+				<a href="<?php echo esc_url( get_edit_post_link( $product->ID ) ); ?>"><?php echo esc_html( $product->post_title ); ?></a>
+				<?php if ( $pos_only ) : ?>
+					<span class="description" style="color: #757575; font-size: 11px; margin-left: 8px;"><?php esc_html_e( 'POS only', 'libre-bite' ); ?></span>
+				<?php endif; ?>
+			</div>
+			<?php
+		}
+		echo '</div>';
 	}
 
 	/**

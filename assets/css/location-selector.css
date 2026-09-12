@@ -417,7 +417,9 @@ a.lbite-location-address.lbite-maps-link:hover {
 	transition: all 0.2s;
 }
 
-.lbite-back-button:hover {
+.lbite-location-selector-tiles .lbite-back-button:hover,
+.lbite-location-selector-banner .lbite-back-button:hover {
+	background: transparent;
 	color: var(--lbite-color-primary-hover, #005a87);
 	transform: translateX(-4px);
 }

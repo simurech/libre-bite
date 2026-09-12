@@ -570,6 +570,15 @@ jQuery(document).ready(function($) {
 		return day + '.' + month + '.' + year;
 	}
 
+	<?php if ( $lbite_skip_location_step ) : ?>
+	// Single-Location-Modus: Auswahlschritt automatisch überspringen, ausser die einzige Karte
+	// ist gesperrt (z.B. abgelaufenes Aktivierungsfenster) — dann bleibt Schritt 1 sichtbar.
+	var $lbiteSingleCard = $('.lbite-location-card').first();
+	if ($lbiteSingleCard.length && !$lbiteSingleCard.data('locked')) {
+		$lbiteSingleCard.trigger('click');
+	}
+	<?php endif; ?>
+
 	// URL-Parameter verarbeiten (für Direktlinks; ?lbite_location=ID oder Legacy ?location=ID)
 	const urlParams = new URLSearchParams(window.location.search);
 	const locationParam = urlParams.get('lbite_location') || urlParams.get('location');

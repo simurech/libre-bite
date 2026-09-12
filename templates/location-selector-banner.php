@@ -486,6 +486,15 @@ jQuery(document).ready(function($) {
 		return ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear();
 	}
 
+	<?php if ( $lbite_skip_location_step ) : ?>
+	// Single-Location-Modus: Auswahlschritt automatisch überspringen, ausser die einzige Karte
+	// ist gesperrt (z.B. abgelaufenes Aktivierungsfenster) — dann bleibt Schritt 1 sichtbar.
+	var $lbiteSingleCard = $('.lbite-banner-card.lbite-location-card').first();
+	if ($lbiteSingleCard.length && !$lbiteSingleCard.data('locked')) {
+		$lbiteSingleCard.trigger('click');
+	}
+	<?php endif; ?>
+
 	// Deep-Link: ?lbite_location=ID
 	const urlParams = new URLSearchParams(window.location.search);
 	const locationParam = urlParams.get('lbite_location') || urlParams.get('location');

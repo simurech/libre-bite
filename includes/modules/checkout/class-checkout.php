@@ -632,6 +632,14 @@ class LBite_Checkout {
 			return '<p>' . esc_html__( 'No locations available.', 'libre-bite' ) . '</p>';
 		}
 
+		// Single-Location-Modus: gibt es nur einen Standort, entfällt die Auswahl — der Standort
+		// wird serverseitig direkt in der Session vermerkt (ohne order_type, die eigentliche
+		// Bestellabsicht wird weiterhin im Zeitwahl-Schritt festgelegt), nur dieser wird gerendert.
+		$lbite_skip_location_step = ( 1 === count( $lbite_locations ) );
+		if ( $lbite_skip_location_step && ! ( WC()->session && WC()->session->get( 'lbite_location_id' ) ) ) {
+			$this->set_location_session( $lbite_locations[0]->ID, '' );
+		}
+
 		$lbite_location_id = WC()->session ? WC()->session->get( 'lbite_location_id' ) : null;
 		$lbite_order_type = WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now';
 		$lbite_pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time' ) : null;
@@ -684,6 +692,14 @@ class LBite_Checkout {
 		$lbite_pickup_time = WC()->session ? WC()->session->get( 'lbite_pickup_time' ) : null;
 
 		$lbite_locations = LBite_Locations::get_all_locations();
+
+		// Single-Location-Modus: fehlt trotz nur einem Standort noch die Session (z.B. Direktaufruf
+		// des Checkouts ohne vorherigen Standort-Auswahlschritt), automatisch setzen.
+		if ( ! $lbite_location_id && 1 === count( $lbite_locations ) ) {
+			$this->set_location_session( $lbite_locations[0]->ID, '' );
+			$lbite_location_id = WC()->session ? WC()->session->get( 'lbite_location_id' ) : null;
+			$lbite_order_type  = WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now';
+		}
 
 		include LBITE_PLUGIN_DIR . 'templates/checkout-location-time.php';
 	}
@@ -1170,13 +1186,49 @@ class LBite_Checkout {
 		$order_type  = isset( $_POST['order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['order_type'] ) ) : 'now';
 		$pickup_time = isset( $_POST['pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_time'] ) ) : '';
 
+		$lbite_result = $this->set_location_session( $location_id, $order_type, $pickup_time );
+
+		if ( ! $lbite_result['success'] ) {
+			wp_send_json_error( array( 'message' => $lbite_result['message'] ) );
+		}
+
+		wp_send_json_success(
+			array(
+				'message'       => $lbite_result['message'],
+				'location_id'   => $location_id,
+				'location_name' => $lbite_result['location_name'],
+			)
+		);
+	}
+
+	/**
+	 * Kernlogik zum Setzen des Standorts in der WC-Session (Validierung + Session-Schreibzugriff).
+	 *
+	 * Gemeinsam genutzt von ajax_set_location() und dem automatischen Single-Location-Modus
+	 * (shortcode_location_selector(), render_location_time_selection()), damit beide Aufrufer
+	 * exakt dieselbe Validierung (inkl. Verfügbarkeitsfenster) durchlaufen.
+	 *
+	 * @param int    $location_id Standort-ID.
+	 * @param string $order_type  'now', 'later' oder '' (nur Standort setzen, keine Bestellabsicht).
+	 * @param string $pickup_time Abholzeit bei order_type 'later'.
+	 * @return array{success: bool, message: string, location_name?: string}
+	 */
+	private function set_location_session( $location_id, $order_type = 'now', $pickup_time = '' ) {
+		$location_id = (int) $location_id;
+
 		if ( ! $location_id ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid location', 'libre-bite' ) ) );
+			return array(
+				'success' => false,
+				'message' => __( 'Invalid location', 'libre-bite' ),
+			);
 		}
 
 		$location_post = get_post( $location_id );
 		if ( ! $location_post || 'lbite_location' !== $location_post->post_type || 'publish' !== $location_post->post_status ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid location', 'libre-bite' ) ) );
+			return array(
+				'success' => false,
+				'message' => __( 'Invalid location', 'libre-bite' ),
+			);
 		}
 
 		// Verfügbarkeitsfenster prüfen (Schutz gegen direkte Links auf noch nicht aktive Standorte).
@@ -1199,7 +1251,10 @@ class LBite_Checkout {
 				$lbite_allow = false;
 			}
 			if ( ! $lbite_allow ) {
-				wp_send_json_error( array( 'message' => $activation_status['text'] ) );
+				return array(
+					'success' => false,
+					'message' => $activation_status['text'],
+				);
 			}
 		}
 
@@ -1223,12 +1278,10 @@ class LBite_Checkout {
 			WC()->session->__unset( 'lbite_pickup_time' );
 		}
 
-		wp_send_json_success(
-			array(
-				'message'       => __( 'Location set', 'libre-bite' ),
-				'location_id'   => $location_id,
-				'location_name' => $location_post->post_title,
-			)
+		return array(
+			'success'       => true,
+			'message'       => __( 'Location set', 'libre-bite' ),
+			'location_name' => $location_post->post_title,
 		);
 	}
 

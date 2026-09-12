@@ -162,19 +162,29 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 			<label>
 				<?php esc_html_e( 'Location', 'libre-bite' ); ?> <span class="required">*</span>
 			</label>
-			<select id="lbite_location_select" class="lbite-select">
-				<option value=""><?php esc_html_e( 'Select location...', 'libre-bite' ); ?></option>
-				<?php foreach ( $lbite_locations as $loc ) :
-					$lbite_loc_address = LBite_Locations::get_formatted_address( $loc->ID );
-					$lbite_loc_label   = $lbite_loc_address
-						? $loc->post_title . ' (' . $lbite_loc_address . ')'
-						: $loc->post_title;
-				?>
-					<option value="<?php echo esc_attr( $loc->ID ); ?>" <?php selected( $lbite_location_id, $loc->ID ); ?>>
-						<?php echo esc_html( $lbite_loc_label ); ?>
-					</option>
-				<?php endforeach; ?>
-			</select>
+			<?php if ( count( $lbite_locations ) > 1 ) : ?>
+				<select id="lbite_location_select" class="lbite-select">
+					<option value=""><?php esc_html_e( 'Select location...', 'libre-bite' ); ?></option>
+					<?php foreach ( $lbite_locations as $loc ) :
+						$lbite_loc_address = LBite_Locations::get_formatted_address( $loc->ID );
+						$lbite_loc_label   = $lbite_loc_address
+							? $loc->post_title . ' (' . $lbite_loc_address . ')'
+							: $loc->post_title;
+					?>
+						<option value="<?php echo esc_attr( $loc->ID ); ?>" <?php selected( $lbite_location_id, $loc->ID ); ?>>
+							<?php echo esc_html( $lbite_loc_label ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+			<?php elseif ( ! empty( $lbite_locations ) ) : ?>
+				<?php $lbite_single_location = $lbite_locations[0]; ?>
+				<p class="lbite-location-locked"><?php echo esc_html( $lbite_single_location->post_title ); ?></p>
+				<input type="hidden" id="lbite_location_select" value="<?php echo esc_attr( $lbite_single_location->ID ); ?>">
+			<?php else : ?>
+				<select id="lbite_location_select" class="lbite-select">
+					<option value=""><?php esc_html_e( 'Select location...', 'libre-bite' ); ?></option>
+				</select>
+			<?php endif; ?>
 		</div>
 
 		<div class="lbite-form-group">

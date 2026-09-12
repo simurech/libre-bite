@@ -1310,6 +1310,15 @@ NEW_STRINGS_FORMAL_SS = {
         'Wählen Sie, wie der Verfügbarkeits-Hinweis dargestellt wird. Falls der Hinweis '
         'mit Ihrem Theme nicht gut aussieht, versuchen Sie «Nur Text» für die einfachste, '
         'kompatibelste Darstellung.',
+    # Produkte-Übersicht im Standort-Editor (v2.3.1)
+    'Products at this location':
+        'Produkte an diesem Standort',
+    'Save the location first to see available products.':
+        'Speichern Sie den Standort zuerst, um die verfügbaren Produkte zu sehen.',
+    'No products available at this location.':
+        'Keine Produkte an diesem Standort verfügbar.',
+    'POS only':
+        'Nur POS',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT

@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 2.3.0
+Stable tag: 2.3.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,11 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.3.1 =
+* Fix: Corrected a contrast issue where the "Back" button in the location selector could become unreadable (black background/text) on hover due to theme style conflicts.
+* New: Locations are now selected automatically when only one location exists — no more redundant location step in the POS, Kanban board, or storefront checkout.
+* New: The location editor now shows a read-only list of all products available at that location, with quick links to edit each one.
 
 = 2.3.0 =
 * New: Split payment in the POS — divide an order's total across multiple payment methods (e.g. part cash, part card) directly in the payment dialog, with automatic reconciliation for small rounding differences (Pro).
