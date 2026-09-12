@@ -120,9 +120,14 @@ Delivery platforms take up to 30% commission. Dedicated restaurant SaaS tools ch
 
 * **Commission-free ordering** — guests order directly on your website, no platform cut
 * **No transaction fees** — ever
+* **No order limits, no quotas** — take as many orders and reservations as you want, in every plan
+* **No usage tracking** — your orders and reservations are never counted, hashed, or reported to any external server
 * **Twint, card, cash** — accept any payment WooCommerce supports
 * **Swiss 5-cent rounding built in** — essential for CHF cash payments
+* **Separate VAT rates for takeaway and dine-in** — handled correctly, not bolted on (Pro)
 * **QR code ordering at the table** — guests scan, choose, and pay in seconds (Pro)
+* **Split payments and open tabs** — settle one bill across several payment methods, or keep a table running (Pro)
+* **Multiple locations from one installation** — each branch with its own board, POS, and order flow (Pro)
 * **Modular** — activate only what your business needs, nothing else
 * **Your data stays yours** — in your own WordPress installation
 * **Affordable Pro plans** — designed for small businesses, not enterprise budgets
@@ -160,7 +165,9 @@ During plugin activation, you can opt-in to data sharing with Freemius. Basic in
 
 No data is sent to Freemius if you skip or decline the opt-in during activation.
 
-The Table Management feature (Pro) uses the **goQR.me API** (https://goqr.me/api/) to generate QR codes for table ordering links. The QR code URL is transmitted to generate the corresponding image. No personal or order data is sent.
+Libre Bite uses the **goQR.me API** (https://goqr.me/api/) to render QR code images in the WordPress admin area. This happens in two places: the location editor, which generates a QR code linking to your menu for a specific location (free feature), and the table editor, which generates a QR code for table ordering (Pro feature).
+
+Only the encoded target URL of your own website is transmitted, so that the service can render the matching image. No personal data, customer data, or order data is sent. The request is only made while an administrator has the corresponding editor screen open — never during a customer order or on any public page.
 
 * goQR.me API: https://goqr.me/api/
 * goQR.me Privacy Policy: https://goqr.me/privacy-policy/
@@ -201,6 +208,10 @@ In Switzerland, cash payments are rounded to the nearest 5 cents as 1- and 2-cen
 = Does the POS system work offline? =
 
 The integrated POS system requires an active WordPress/WooCommerce session and an internet connection. It is a browser-based interface that currently does not support offline mode.
+
+= Are there any order or reservation limits? =
+
+No. Libre Bite never limits how many orders, reservations, or locations you can handle — not in the free version and not in any Pro plan. Your order volume is never counted, transmitted, or validated against an external server, so your ordering system keeps working even if our servers do not.
 
 = Does Libre Bite share my data with third parties? =
 
