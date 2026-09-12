@@ -176,6 +176,9 @@ TODO-INTERN.md
 messages.mo
 languages/messages.mo
 languages/*.po~
+languages/__pycache__/
+__pycache__/
+*.pyc
 
 # -----------------------------------------------------------------------------
 # Plugin-Check / Analyse-Exporte
