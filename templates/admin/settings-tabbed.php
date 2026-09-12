@@ -177,6 +177,8 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		case 'pos':
 			$lbite_features = get_option( 'lbite_features', array() );
 			$lbite_features['enable_pos'] = isset( $_POST['lbite_feature_toggle']['enable_pos'] );
+			$lbite_features['enable_split_payment'] = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_split_payment'] );
+			$lbite_features['enable_open_tabs'] = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_open_tabs'] );
 			update_option( 'lbite_features', $lbite_features );
 
 			$lbite_pos_defaults = array(
@@ -756,6 +758,22 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					$lbite_toggle_label       = __( 'POS System', 'libre-bite' );
 					$lbite_toggle_description = __( 'Enable the Point of Sale interface for in-person orders.', 'libre-bite' );
 					$lbite_toggle_is_pro      = false;
+					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
+					$lbite_toggle_key             = 'enable_split_payment';
+					$lbite_toggle_label           = __( 'Split Payment', 'libre-bite' );
+					$lbite_toggle_description     = __( 'Allow splitting the total across multiple payment methods in the POS payment modal.', 'libre-bite' );
+					$lbite_toggle_is_pro          = true;
+					$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
+					$lbite_toggle_key             = 'enable_open_tabs';
+					$lbite_toggle_label           = __( 'Open Tabs (Table Service)', 'libre-bite' );
+					$lbite_toggle_description     = lbite_feature_enabled( 'enable_table_ordering' )
+						? __( 'Keep orders open per table and add items until the guests pay.', 'libre-bite' )
+						: __( 'Keep orders open per table and add items until the guests pay. Requires the Table Management module to select a table.', 'libre-bite' );
+					$lbite_toggle_is_pro          = true;
+					$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 					include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 					?>
 

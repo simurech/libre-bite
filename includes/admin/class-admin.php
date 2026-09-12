@@ -88,6 +88,13 @@ class LBite_Admin {
 		$this->loader->add_action( 'wp_ajax_lbite_dismiss_welcome_notice', $this, 'ajax_dismiss_welcome_notice' );
 		$this->loader->add_action( 'wp_ajax_lbite_save_pos_product_order', $this, 'ajax_save_pos_product_order' );
 
+		// Offene Tabs (F_TAB).
+		$this->loader->add_action( 'wp_ajax_lbite_pos_get_open_tabs', $this, 'ajax_pos_get_open_tabs' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_open_tab', $this, 'ajax_pos_open_tab' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_add_to_tab', $this, 'ajax_pos_add_to_tab' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_close_tab', $this, 'ajax_pos_close_tab' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_cancel_tab', $this, 'ajax_pos_cancel_tab' );
+
 		// Bestellungs-Counter im Menü-Badge (nach Menü-Aufbau)
 		$this->loader->add_action( 'admin_menu', $this, 'inject_order_count_badge', 999 );
 
@@ -625,6 +632,7 @@ class LBite_Admin {
 					'refreshInterval'       => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
 					'locationColors'        => $lbite_dashboard_colors,
 					'paymentMethods'        => $lbite_pm_labels,
+					'currency'              => html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ),
 					'futureDimmingEnabled'  => lbite_feature_enabled( 'enable_future_orders_dimmed' ) && '0' !== get_option( 'lbite_dim_future_orders', 1 ),
 					'strings'               => array(
 						'orderUpdated'    => __( 'Status updated', 'libre-bite' ),
@@ -651,6 +659,8 @@ class LBite_Admin {
 						'enterEmail'         => __( 'Enter customer email address:', 'libre-bite' ),
 						'takeaway'           => __( 'Takeaway', 'libre-bite' ),
 						'dineIn'             => __( 'Dine-in', 'libre-bite' ),
+						'tab'                => __( 'Tab', 'libre-bite' ),
+						'round'              => __( 'Round', 'libre-bite' ),
 					),
 				)
 			);
@@ -826,7 +836,251 @@ class LBite_Admin {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
-		// Rohes JSON laden und validieren.
+		$cart_items = $this->parse_cart_items_from_post();
+
+		$location_id    = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$table_id       = isset( $_POST['table_id'] ) ? intval( wp_unslash( $_POST['table_id'] ) ) : 0;
+		$order_type     = 'now'; // POS-Bestellungen sind immer sofort.
+		$customer_name  = isset( $_POST['customer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_name'] ) ) : '';
+		$payment_method = isset( $_POST['payment_method'] ) ? sanitize_key( wp_unslash( $_POST['payment_method'] ) ) : 'cash';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce bereits geprüft (lbite_pos_nonce); Einträge werden unten per array_map('sanitize_text_field', ...) sanitisiert.
+		$raw_coupons    = isset( $_POST['coupon_codes'] ) ? wp_unslash( $_POST['coupon_codes'] ) : '[]';
+		$coupon_codes   = json_decode( $raw_coupons, true );
+		if ( ! is_array( $coupon_codes ) ) {
+			$coupon_codes = array();
+		}
+		$coupon_codes = array_map( 'sanitize_text_field', $coupon_codes );
+
+		// Erlaubte Zahlungsarten aus Einstellungen lesen (Fallback: alle vier Standardarten).
+		$allowed_payment_methods = $this->get_allowed_payment_methods();
+		if ( ! in_array( $payment_method, $allowed_payment_methods, true ) ) {
+			$payment_method = $allowed_payment_methods[0] ?? 'other';
+		}
+
+		// Split-Payment: Beträge parsen und gegen die Zahlungsart-Whitelist validieren.
+		$split_payments = $this->parse_split_payments( $allowed_payment_methods );
+		if ( ! empty( $split_payments ) ) {
+			$payment_method = 'split';
+		}
+
+		if ( ! $location_id ) {
+			wp_send_json_error( array( 'message' => __( 'No location selected', 'libre-bite' ) ) );
+		}
+
+		// Schweizer MWST: Kontext setzen damit der Tax-Filter die richtige Steuerklasse anwendet.
+		// Expliziter vat_order_type aus POS-Selektor hat Vorrang, sonst Fallback via Tisch-ID.
+		if ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) ) {
+			$vat_order_type = isset( $_POST['vat_order_type'] ) ? sanitize_key( wp_unslash( $_POST['vat_order_type'] ) ) : '';
+			if ( 'dine_in' === $vat_order_type ) {
+				LBite_Checkout::set_pos_vat_context( 'dine_in' );
+			} elseif ( 'takeaway' === $vat_order_type ) {
+				LBite_Checkout::set_pos_vat_context( 'takeaway' );
+			} else {
+				LBite_Checkout::set_pos_vat_context( $table_id ? 'dine_in' : 'takeaway' );
+			}
+		}
+
+		try {
+			// WooCommerce-Bestellung erstellen.
+			$order = wc_create_order();
+
+			// Produkte hinzufügen.
+			$this->add_cart_items_to_order( $order, $cart_items );
+
+			// Bestellmeta setzen.
+			$order->update_meta_data( '_lbite_location_id', $location_id );
+
+			// Tisch-ID speichern.
+			if ( $table_id ) {
+				$order->update_meta_data( '_lbite_table_id', $table_id );
+				$table = get_post( $table_id );
+				if ( $table ) {
+					$order->update_meta_data( '_lbite_table_name', $table->post_title );
+				}
+			}
+
+			// Standort-Name speichern.
+			$location = get_post( $location_id );
+			if ( $location ) {
+				$order->update_meta_data( '_lbite_location_name', $location->post_title );
+			}
+
+			$order->update_meta_data( '_lbite_order_type', 'now' );
+			$order->delete_meta_data( '_lbite_pickup_time' ); // POS-Bestellungen sind immer sofort.
+			$order->update_meta_data( '_lbite_order_status', 'preparing' );
+			$order->update_meta_data( '_lbite_order_source', 'pos' );
+			$order->update_meta_data( '_lbite_payment_method', $payment_method );
+
+			// Kundenname speichern (falls angegeben).
+			if ( ! empty( $customer_name ) ) {
+				$order->set_billing_first_name( $customer_name );
+				$order->update_meta_data( '_lbite_customer_name', $customer_name );
+			}
+
+			// Gutscheine anwenden (vor calculate_totals).
+			foreach ( $coupon_codes as $coupon_code ) {
+				if ( ! empty( $coupon_code ) ) {
+					$order->apply_coupon( $coupon_code );
+				}
+			}
+
+			// Berechnen.
+			$order->calculate_totals();
+
+			// Split-Payment: Summe gegen das Bestelltotal abgleichen (Toleranz wegen Rappenrundung/Coupons).
+			if ( ! empty( $split_payments ) ) {
+				$reconciled_split = $this->reconcile_split_payments( $split_payments, (float) $order->get_total() );
+				if ( null === $reconciled_split ) {
+					if ( class_exists( 'LBite_Checkout' ) ) {
+						LBite_Checkout::clear_pos_vat_context();
+					}
+					$order->delete( true );
+					delete_transient( 'lbite_incoming_orders_count' );
+					wp_send_json_error( array( 'message' => __( 'Split amounts do not match the order total', 'libre-bite' ) ) );
+				}
+				$split_payments = $reconciled_split;
+				$order->update_meta_data( '_lbite_split_payments', $split_payments );
+			}
+
+			// Schweizer MWST: Kontext zurücksetzen.
+			if ( class_exists( 'LBite_Checkout' ) ) {
+				LBite_Checkout::clear_pos_vat_context();
+			}
+
+			// Status setzen.
+			$order->update_status( 'processing', __( 'Order created via POS system.', 'libre-bite' ) );
+
+			// Transient-Cache löschen, damit der Kanban-Badge-Counter sofort aktualisiert wird.
+			delete_transient( 'lbite_incoming_orders_count' );
+
+			// Währungssymbol dekodieren (z.B. &#67;&#72;&#70; -> CHF).
+			$currency = html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' );
+
+			wp_send_json_success(
+				array(
+					'order_id'     => $order->get_id(),
+					'order_number' => $order->get_order_number(),
+					'total'        => $currency . ' ' . number_format( $order->get_total(), 2, '.', "'" ),
+				)
+			);
+		} catch ( Exception $e ) {
+			if ( class_exists( 'LBite_Checkout' ) ) {
+				LBite_Checkout::clear_pos_vat_context();
+			}
+			wp_send_json_error( array( 'message' => $e->getMessage() ) );
+		}
+	}
+
+	/**
+	 * Warenkorb-Positionen (Produkte, Add-ons, Notizen) einer Bestellung hinzufügen.
+	 *
+	 * Gemeinsam genutzt von ajax_pos_create_order() (regulärer POS-Bestellfluss) und den
+	 * Open-Tabs-Endpoints (F_TAB): $round > 0 markiert nachgebuchte Positionen mit der
+	 * Rundennummer, damit die Küche im Kanban erkennt, was neu ist.
+	 *
+	 * @param WC_Order $order      Ziel-Bestellung.
+	 * @param array    $cart_items Validierte Warenkorb-Items [{id, quantity, meta, option_ids, note}].
+	 * @param int      $round      0 = regulärer Bestellfluss, >0 = Tab-Rundennummer.
+	 */
+	private function add_cart_items_to_order( WC_Order $order, array $cart_items, int $round = 0 ) {
+		foreach ( $cart_items as $item ) {
+			$product = wc_get_product( $item['id'] );
+			if ( ! $product || ! $product->is_purchasable() ) {
+				continue;
+			}
+
+			// Nettopreis berechnen: bei aktiver Schweizer MWST-Umschaltung Zielstufe nutzen,
+			// da wc_get_price_excluding_tax() intern get_tax_class('unfiltered') aufruft.
+			$unit_price_excl = ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) )
+				? LBite_Checkout::gross_to_net_at_filtered_class( $product, (float) $product->get_price() )
+				: wc_get_price_excluding_tax( $product );
+			$price_excl_tax  = $unit_price_excl * $item['quantity'];
+
+			$order_item_id = $order->add_product(
+				$product,
+				$item['quantity'],
+				array(
+					'subtotal' => $price_excl_tax,
+					'total'    => $price_excl_tax,
+				)
+			);
+
+			// Add-ons als separate Gebührenpositionen erfassen (je Add-on eine eigene Zeile).
+			$addon_names_for_meta = array();
+			$fee_items_for_round  = array();
+			if ( ! empty( $item['option_ids'] ) ) {
+				// _lbite_product_options hängt am Eltern-Produkt; bei Varianten Parent-ID nutzen.
+				$options_lookup_id = $product->is_type( 'variation' ) ? $product->get_parent_id() : $item['id'];
+				$allowed_options   = get_post_meta( $options_lookup_id, '_lbite_product_options', true );
+				if ( ! is_array( $allowed_options ) ) {
+					$allowed_options = array();
+				}
+				foreach ( $item['option_ids'] as $opt_id ) {
+					// Lose Prüfung: WP serialisiert Integers; JSON-Decode liefert ebenfalls Integers,
+					// aber beim Mischen von alten/neuen Datenbankwerten können Typen abweichen.
+					if ( ! in_array( $opt_id, $allowed_options ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+						continue;
+					}
+					$opt_price = get_post_meta( $opt_id, '_lbite_price', true );
+					$opt_name  = get_the_title( $opt_id );
+					if ( ! $opt_name ) {
+						$opt_name = __( 'Add-on', 'libre-bite' );
+					}
+					$addon_names_for_meta[] = $opt_name;
+					if ( $opt_price ) {
+						$fee_net = ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) )
+							? LBite_Checkout::gross_to_net_at_filtered_class( $product, floatval( $opt_price ) ) * $item['quantity']
+							: wc_get_price_excluding_tax( $product, array( 'price' => floatval( $opt_price ) ) ) * $item['quantity'];
+						$fee_item = new WC_Order_Item_Fee();
+						$fee_item->set_name( $opt_name );
+						$fee_item->set_amount( $fee_net );
+						$fee_item->set_total( $fee_net );
+						$fee_item->set_tax_class( $product->get_tax_class() );
+						$fee_item->set_tax_status( $product->get_tax_status() );
+						$order->add_item( $fee_item );
+						$fee_items_for_round[] = $fee_item;
+					}
+				}
+			}
+
+			// Meta-Daten (Varianten & Optionen) hinzufügen.
+			if ( $order_item_id ) {
+				$order_item = $order->get_item( $order_item_id );
+				if ( $order_item ) {
+					if ( ! empty( $addon_names_for_meta ) ) {
+						$order_item->add_meta_data( 'Add-on', implode( ', ', $addon_names_for_meta ), true );
+					} elseif ( ! empty( $item['meta'] ) ) {
+						$order_item->add_meta_data( 'Add-on', $item['meta'], true );
+					}
+					if ( ! empty( $item['note'] ) && lbite_feature_enabled( 'enable_item_notes_pos' ) ) {
+						$order_item->add_meta_data( 'Note', sanitize_text_field( $item['note'] ), true );
+					}
+					if ( $round > 0 ) {
+						$order_item->add_meta_data( '_lbite_tab_round', $round, true );
+					}
+					$order_item->save();
+				}
+			}
+
+			// Rundennummer auch auf zugehörigen Add-on-Fee-Positionen speichern (Küchen-Sichtbarkeit).
+			if ( $round > 0 ) {
+				foreach ( $fee_items_for_round as $fee_item ) {
+					$fee_item->add_meta_data( '_lbite_tab_round', $round, true );
+					$fee_item->save();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Warenkorb-Items aus $_POST['cart_items'] parsen und validieren.
+	 *
+	 * Gemeinsam genutzt von ajax_pos_create_order(), ajax_pos_open_tab() und ajax_pos_add_to_tab().
+	 * Bricht bei leerem/ungültigem Warenkorb den Request direkt via wp_send_json_error() ab.
+	 *
+	 * @return array Validierte Items [{id, quantity, meta, option_ids, note}].
+	 */
+	private function parse_cart_items_from_post() {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON wird nach dem Decode Feld für Feld validiert.
 		$cart_items_raw = isset( $_POST['cart_items'] ) ? wp_unslash( $_POST['cart_items'] ) : '';
 
@@ -874,192 +1128,376 @@ class LBite_Admin {
 			wp_send_json_error( array( 'message' => __( 'Cart is empty', 'libre-bite' ) ) );
 		}
 
-		$location_id    = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
-		$table_id       = isset( $_POST['table_id'] ) ? intval( wp_unslash( $_POST['table_id'] ) ) : 0;
-		$order_type     = 'now'; // POS-Bestellungen sind immer sofort.
-		$customer_name  = isset( $_POST['customer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_name'] ) ) : '';
-		$payment_method = isset( $_POST['payment_method'] ) ? sanitize_key( wp_unslash( $_POST['payment_method'] ) ) : 'cash';
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce bereits geprüft (lbite_pos_nonce); Einträge werden unten per array_map('sanitize_text_field', ...) sanitisiert.
-		$raw_coupons    = isset( $_POST['coupon_codes'] ) ? wp_unslash( $_POST['coupon_codes'] ) : '[]';
-		$coupon_codes   = json_decode( $raw_coupons, true );
-		if ( ! is_array( $coupon_codes ) ) {
-			$coupon_codes = array();
-		}
-		$coupon_codes = array_map( 'sanitize_text_field', $coupon_codes );
+		return $cart_items;
+	}
 
-		// Erlaubte Zahlungsarten aus Einstellungen lesen (Fallback: alle vier Standardarten).
-		$configured_methods      = get_option( 'lbite_pos_payment_methods', array() );
-		$allowed_payment_methods = ! empty( $configured_methods )
+	/**
+	 * Erlaubte POS-Zahlungsart-Keys aus den Einstellungen lesen (Fallback: vier Standardarten).
+	 *
+	 * @return array Liste gültiger Zahlungsart-Keys.
+	 */
+	private function get_allowed_payment_methods() {
+		$configured_methods = get_option( 'lbite_pos_payment_methods', array() );
+		return ! empty( $configured_methods )
 			? array_column( $configured_methods, 'key' )
 			: array( 'cash', 'card', 'twint', 'other' );
-		if ( ! in_array( $payment_method, $allowed_payment_methods, true ) ) {
-			$payment_method = $allowed_payment_methods[0] ?? 'other';
+	}
+
+	/**
+	 * AJAX: Offene Tabs (F_TAB) für einen Standort auflisten.
+	 */
+	public function ajax_pos_get_open_tabs() {
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
+
+		if ( ! lbite_feature_enabled( 'enable_open_tabs' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Open Tabs is not enabled', 'libre-bite' ) ) );
+		}
+
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		if ( ! $location_id ) {
+			wp_send_json_success( array( 'tabs' => array() ) );
+		}
+
+		$orders = wc_get_orders( array(
+			'limit'      => 100,
+			'status'     => array( 'wc-on-hold' ),
+			'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'relation' => 'AND',
+				array(
+					'key'   => '_lbite_tab_open',
+					'value' => '1',
+				),
+				array(
+					'key'   => '_lbite_location_id',
+					'value' => $location_id,
+				),
+			),
+		) );
+
+		$tabs = array();
+		foreach ( $orders as $tab_order ) {
+			$items = array();
+			foreach ( $tab_order->get_items() as $tab_item ) {
+				$items[] = array(
+					'name'     => $tab_item->get_name(),
+					'quantity' => $tab_item->get_quantity(),
+					'round'    => (int) $tab_item->get_meta( '_lbite_tab_round', true ),
+				);
+			}
+			$tab_date_created = $tab_order->get_date_created();
+			$tabs[]            = array(
+				'order_id'      => $tab_order->get_id(),
+				'table_id'      => (int) $tab_order->get_meta( '_lbite_table_id', true ),
+				'table_name'    => $tab_order->get_meta( '_lbite_table_name', true ),
+				'customer_name' => $tab_order->get_meta( '_lbite_customer_name', true ),
+				'total'         => html_entity_decode( wp_strip_all_tags( $tab_order->get_formatted_order_total() ), ENT_QUOTES, 'UTF-8' ),
+				'total_raw'     => (float) $tab_order->get_total(),
+				'item_count'    => count( $items ),
+				'round_count'   => (int) $tab_order->get_meta( '_lbite_tab_round_count', true ),
+				'created'       => $tab_date_created ? $tab_date_created->date( 'H:i' ) : '',
+				'items'         => $items,
+			);
+		}
+
+		wp_send_json_success( array( 'tabs' => $tabs ) );
+	}
+
+	/**
+	 * AJAX: Neuen offenen Tab an einem Tisch eröffnen (F_TAB).
+	 */
+	public function ajax_pos_open_tab() {
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
+		}
+
+		if ( ! lbite_feature_enabled( 'enable_open_tabs' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Open Tabs is not enabled', 'libre-bite' ) ) );
+		}
+
+		$cart_items = $this->parse_cart_items_from_post();
+
+		$location_id   = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$table_id      = isset( $_POST['table_id'] ) ? intval( wp_unslash( $_POST['table_id'] ) ) : 0;
+		$customer_name = isset( $_POST['customer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_name'] ) ) : '';
 
 		if ( ! $location_id ) {
 			wp_send_json_error( array( 'message' => __( 'No location selected', 'libre-bite' ) ) );
 		}
+		if ( ! $table_id ) {
+			wp_send_json_error( array( 'message' => __( 'Please select a table', 'libre-bite' ) ) );
+		}
 
-		// Schweizer MWST: Kontext setzen damit der Tax-Filter die richtige Steuerklasse anwendet.
-		// Expliziter vat_order_type aus POS-Selektor hat Vorrang, sonst Fallback via Tisch-ID.
 		if ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) ) {
-			$vat_order_type = isset( $_POST['vat_order_type'] ) ? sanitize_key( wp_unslash( $_POST['vat_order_type'] ) ) : '';
-			if ( 'dine_in' === $vat_order_type ) {
-				LBite_Checkout::set_pos_vat_context( 'dine_in' );
-			} elseif ( 'takeaway' === $vat_order_type ) {
-				LBite_Checkout::set_pos_vat_context( 'takeaway' );
-			} else {
-				LBite_Checkout::set_pos_vat_context( $table_id ? 'dine_in' : 'takeaway' );
-			}
+			LBite_Checkout::set_pos_vat_context( 'dine_in' );
 		}
 
 		try {
-			// WooCommerce-Bestellung erstellen.
 			$order = wc_create_order();
 
-			// Produkte hinzufügen.
-			foreach ( $cart_items as $item ) {
-				$product = wc_get_product( $item['id'] );
-				if ( ! $product || ! $product->is_purchasable() ) {
-					continue;
-				}
+			$this->add_cart_items_to_order( $order, $cart_items, 1 );
 
-				// Nettopreis berechnen: bei aktiver Schweizer MWST-Umschaltung Zielstufe nutzen,
-				// da wc_get_price_excluding_tax() intern get_tax_class('unfiltered') aufruft.
-				$unit_price_excl = ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) )
-					? LBite_Checkout::gross_to_net_at_filtered_class( $product, (float) $product->get_price() )
-					: wc_get_price_excluding_tax( $product );
-				$price_excl_tax  = $unit_price_excl * $item['quantity'];
-
-				$order_item_id = $order->add_product(
-					$product,
-					$item['quantity'],
-					array(
-						'subtotal' => $price_excl_tax,
-						'total'    => $price_excl_tax,
-					)
-				);
-
-				// Add-ons als separate Gebührenpositionen erfassen (je Add-on eine eigene Zeile).
-				$addon_names_for_meta = array();
-				if ( ! empty( $item['option_ids'] ) ) {
-					// _lbite_product_options hängt am Eltern-Produkt; bei Varianten Parent-ID nutzen.
-					$options_lookup_id = $product->is_type( 'variation' ) ? $product->get_parent_id() : $item['id'];
-					$allowed_options   = get_post_meta( $options_lookup_id, '_lbite_product_options', true );
-					if ( ! is_array( $allowed_options ) ) {
-						$allowed_options = array();
-					}
-					foreach ( $item['option_ids'] as $opt_id ) {
-						// Lose Prüfung: WP serialisiert Integers; JSON-Decode liefert ebenfalls Integers,
-						// aber beim Mischen von alten/neuen Datenbankwerten können Typen abweichen.
-						if ( ! in_array( $opt_id, $allowed_options ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-							continue;
-						}
-						$opt_price = get_post_meta( $opt_id, '_lbite_price', true );
-						$opt_name  = get_the_title( $opt_id );
-						if ( ! $opt_name ) {
-							$opt_name = __( 'Add-on', 'libre-bite' );
-						}
-						$addon_names_for_meta[] = $opt_name;
-						if ( $opt_price ) {
-							$fee_net = ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) )
-								? LBite_Checkout::gross_to_net_at_filtered_class( $product, floatval( $opt_price ) ) * $item['quantity']
-								: wc_get_price_excluding_tax( $product, array( 'price' => floatval( $opt_price ) ) ) * $item['quantity'];
-							$fee_item = new WC_Order_Item_Fee();
-							$fee_item->set_name( $opt_name );
-							$fee_item->set_amount( $fee_net );
-							$fee_item->set_total( $fee_net );
-							$fee_item->set_tax_class( $product->get_tax_class() );
-							$fee_item->set_tax_status( $product->get_tax_status() );
-							$order->add_item( $fee_item );
-						}
-					}
-				}
-
-				// Meta-Daten (Varianten & Optionen) hinzufügen.
-				if ( $order_item_id ) {
-					$order_item = $order->get_item( $order_item_id );
-					if ( $order_item ) {
-						if ( ! empty( $addon_names_for_meta ) ) {
-							$order_item->add_meta_data( 'Add-on', implode( ', ', $addon_names_for_meta ), true );
-						} elseif ( ! empty( $item['meta'] ) ) {
-							$order_item->add_meta_data( 'Add-on', $item['meta'], true );
-						}
-						if ( ! empty( $item['note'] ) && lbite_feature_enabled( 'enable_item_notes_pos' ) ) {
-							$order_item->add_meta_data( 'Note', sanitize_text_field( $item['note'] ), true );
-						}
-						$order_item->save();
-					}
-				}
-			}
-
-			// Bestellmeta setzen.
 			$order->update_meta_data( '_lbite_location_id', $location_id );
 
-			// Tisch-ID speichern.
-			if ( $table_id ) {
-				$order->update_meta_data( '_lbite_table_id', $table_id );
-				$table = get_post( $table_id );
-				if ( $table ) {
-					$order->update_meta_data( '_lbite_table_name', $table->post_title );
-				}
-			}
-
-			// Standort-Name speichern.
 			$location = get_post( $location_id );
 			if ( $location ) {
 				$order->update_meta_data( '_lbite_location_name', $location->post_title );
 			}
 
+			$order->update_meta_data( '_lbite_table_id', $table_id );
+			$table = get_post( $table_id );
+			if ( $table ) {
+				$order->update_meta_data( '_lbite_table_name', $table->post_title );
+			}
+
 			$order->update_meta_data( '_lbite_order_type', 'now' );
-			$order->delete_meta_data( '_lbite_pickup_time' ); // POS-Bestellungen sind immer sofort.
 			$order->update_meta_data( '_lbite_order_status', 'preparing' );
 			$order->update_meta_data( '_lbite_order_source', 'pos' );
-			$order->update_meta_data( '_lbite_payment_method', $payment_method );
+			$order->update_meta_data( '_lbite_service_type', 'dine_in' );
+			$order->update_meta_data( '_lbite_tab_open', '1' );
+			$order->update_meta_data( '_lbite_tab_round_count', 1 );
 
-			// Kundenname speichern (falls angegeben).
 			if ( ! empty( $customer_name ) ) {
 				$order->set_billing_first_name( $customer_name );
 				$order->update_meta_data( '_lbite_customer_name', $customer_name );
 			}
 
-			// Gutscheine anwenden (vor calculate_totals).
-			foreach ( $coupon_codes as $coupon_code ) {
-				if ( ! empty( $coupon_code ) ) {
-					$order->apply_coupon( $coupon_code );
-				}
-			}
-
-			// Berechnen.
 			$order->calculate_totals();
 
-			// Schweizer MWST: Kontext zurücksetzen.
 			if ( class_exists( 'LBite_Checkout' ) ) {
 				LBite_Checkout::clear_pos_vat_context();
 			}
 
-			// Status setzen.
-			$order->update_status( 'processing', __( 'Order created via POS system.', 'libre-bite' ) );
+			$order->update_status( 'on-hold', __( 'Tab opened via POS.', 'libre-bite' ) );
 
-			// Transient-Cache löschen, damit der Kanban-Badge-Counter sofort aktualisiert wird.
 			delete_transient( 'lbite_incoming_orders_count' );
 
-			// Währungssymbol dekodieren (z.B. &#67;&#72;&#70; -> CHF).
-			$currency = html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' );
-
-			wp_send_json_success(
-				array(
-					'order_id'     => $order->get_id(),
-					'order_number' => $order->get_order_number(),
-					'total'        => $currency . ' ' . number_format( $order->get_total(), 2, '.', "'" ),
-				)
-			);
+			wp_send_json_success( array( 'order_id' => $order->get_id() ) );
 		} catch ( Exception $e ) {
 			if ( class_exists( 'LBite_Checkout' ) ) {
 				LBite_Checkout::clear_pos_vat_context();
 			}
 			wp_send_json_error( array( 'message' => $e->getMessage() ) );
 		}
+	}
+
+	/**
+	 * Offenen Tab anhand order_id + location_id laden und validieren. Bricht den Request bei
+	 * fehlender/fremder/geschlossener Bestellung via wp_send_json_error() ab.
+	 *
+	 * @param int $expected_location_id Erwartete Standort-ID (0 = nicht prüfen).
+	 * @return WC_Order
+	 */
+	private function get_validated_open_tab_order( $expected_location_id = 0 ) {
+		$order_id = isset( $_POST['order_id'] ) ? intval( wp_unslash( $_POST['order_id'] ) ) : 0;
+		$order    = $order_id ? wc_get_order( $order_id ) : false;
+
+		if ( ! $order instanceof WC_Order ) {
+			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
+		}
+		if ( 'on-hold' !== $order->get_status() || '1' !== (string) $order->get_meta( '_lbite_tab_open', true ) ) {
+			wp_send_json_error( array( 'message' => __( 'This tab is no longer open', 'libre-bite' ) ) );
+		}
+		if ( $expected_location_id && (int) $order->get_meta( '_lbite_location_id', true ) !== $expected_location_id ) {
+			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
+		}
+
+		return $order;
+	}
+
+	/**
+	 * AJAX: Weitere Positionen zu einem offenen Tab hinzubuchen (F_TAB).
+	 */
+	public function ajax_pos_add_to_tab() {
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
+		}
+
+		if ( ! lbite_feature_enabled( 'enable_open_tabs' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Open Tabs is not enabled', 'libre-bite' ) ) );
+		}
+
+		$cart_items  = $this->parse_cart_items_from_post();
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$order       = $this->get_validated_open_tab_order( $location_id );
+
+		// VAT-Kontext aus dem beim Öffnen persistierten Bestelltyp ableiten, nicht aus dem Client-POST
+		// (sonst würden Nachbuchungen bei aktivierter Schweizer MWST die falsche Steuerklasse erhalten).
+		if ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) ) {
+			$service_type = $order->get_meta( '_lbite_service_type', true );
+			LBite_Checkout::set_pos_vat_context( 'dine_in' === $service_type ? 'dine_in' : 'takeaway' );
+		}
+
+		try {
+			$round = (int) $order->get_meta( '_lbite_tab_round_count', true ) + 1;
+
+			$this->add_cart_items_to_order( $order, $cart_items, $round );
+
+			$order->update_meta_data( '_lbite_tab_round_count', $round );
+			$order->calculate_totals();
+
+			if ( class_exists( 'LBite_Checkout' ) ) {
+				LBite_Checkout::clear_pos_vat_context();
+			}
+
+			// translators: %d: Rundennummer.
+			$order->add_order_note( sprintf( __( 'Round %d added via POS', 'libre-bite' ), $round ) );
+			$order->save();
+
+			wp_send_json_success( array( 'order_id' => $order->get_id(), 'round' => $round ) );
+		} catch ( Exception $e ) {
+			if ( class_exists( 'LBite_Checkout' ) ) {
+				LBite_Checkout::clear_pos_vat_context();
+			}
+			wp_send_json_error( array( 'message' => $e->getMessage() ) );
+		}
+	}
+
+	/**
+	 * AJAX: Offenen Tab abschliessen und bezahlen (F_TAB).
+	 */
+	public function ajax_pos_close_tab() {
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
+		}
+
+		if ( ! lbite_feature_enabled( 'enable_open_tabs' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Open Tabs is not enabled', 'libre-bite' ) ) );
+		}
+
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$order       = $this->get_validated_open_tab_order( $location_id );
+
+		$allowed_payment_methods = $this->get_allowed_payment_methods();
+		$payment_method          = isset( $_POST['payment_method'] ) ? sanitize_key( wp_unslash( $_POST['payment_method'] ) ) : 'cash';
+		if ( ! in_array( $payment_method, $allowed_payment_methods, true ) ) {
+			$payment_method = $allowed_payment_methods[0] ?? 'other';
+		}
+
+		$split_payments = $this->parse_split_payments( $allowed_payment_methods );
+		if ( ! empty( $split_payments ) ) {
+			$payment_method = 'split';
+			$reconciled     = $this->reconcile_split_payments( $split_payments, (float) $order->get_total() );
+			if ( null === $reconciled ) {
+				wp_send_json_error( array( 'message' => __( 'Split amounts do not match the order total', 'libre-bite' ) ) );
+			}
+			$split_payments = $reconciled;
+		}
+
+		$order->update_meta_data( '_lbite_payment_method', $payment_method );
+		if ( ! empty( $split_payments ) ) {
+			$order->update_meta_data( '_lbite_split_payments', $split_payments );
+		}
+		$order->delete_meta_data( '_lbite_tab_open' );
+		$order->update_status( 'processing', __( 'Tab closed via POS.', 'libre-bite' ) );
+
+		delete_transient( 'lbite_incoming_orders_count' );
+
+		wp_send_json_success( array( 'order_id' => $order->get_id() ) );
+	}
+
+	/**
+	 * AJAX: Offenen Tab stornieren (F_TAB) – eigener Endpoint statt Nonce-Streuung, da
+	 * ajax_cancel_order() im Kanban-Modul einen anderen Nonce (lbite_dashboard_nonce) erwartet.
+	 */
+	public function ajax_pos_cancel_tab() {
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
+		}
+
+		if ( ! lbite_feature_enabled( 'enable_open_tabs' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Open Tabs is not enabled', 'libre-bite' ) ) );
+		}
+
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$order       = $this->get_validated_open_tab_order( $location_id );
+
+		$order->update_status( 'cancelled', __( 'Tab cancelled via POS.', 'libre-bite' ) );
+		delete_transient( 'lbite_incoming_orders_count' );
+
+		wp_send_json_success( array( 'order_id' => $order->get_id() ) );
+	}
+
+	/**
+	 * Split-Payment-Beträge aus $_POST['split_payments'] parsen und gegen die Zahlungsart-
+	 * Whitelist validieren. Gemeinsam genutzt von ajax_pos_create_order() und ajax_pos_close_tab().
+	 *
+	 * @param array $allowed_payment_methods Whitelist gültiger Zahlungsart-Keys.
+	 * @return array Liste [{method, amount}], leer wenn Feature aus oder kein Split gesendet.
+	 */
+	private function parse_split_payments( array $allowed_payment_methods ) {
+		$split_payments = array();
+		if ( ! lbite_feature_enabled( 'enable_split_payment' ) || empty( $_POST['split_payments'] ) ) {
+			return $split_payments;
+		}
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON wird nach dem Decode Feld für Feld validiert.
+		$split_payments_raw     = wp_unslash( $_POST['split_payments'] );
+		$split_payments_decoded = json_decode( $split_payments_raw, true );
+		if ( ! is_array( $split_payments_decoded ) ) {
+			return $split_payments;
+		}
+		foreach ( $split_payments_decoded as $split_row ) {
+			if ( ! is_array( $split_row ) || empty( $split_row['method'] ) ) {
+				continue;
+			}
+			$split_method = sanitize_key( $split_row['method'] );
+			$split_amount = round( (float) ( $split_row['amount'] ?? 0 ), 2 );
+			if ( ! in_array( $split_method, $allowed_payment_methods, true ) || $split_amount <= 0 ) {
+				continue;
+			}
+			$split_payments[] = array(
+				'method' => $split_method,
+				'amount' => $split_amount,
+			);
+		}
+		return $split_payments;
+	}
+
+	/**
+	 * Split-Payment-Summe gegen das Bestelltotal abgleichen und kleine Abweichungen normalisieren.
+	 *
+	 * Toleranzstufen: Abweichung > 0.10 gilt als echte Fehlbedienung (Aufrufer lehnt ab),
+	 * 0.001–0.10 wird als Rappenrundung/Coupon-Drift dem grössten Split-Eintrag zugeschlagen,
+	 * damit array_sum( $split_payments ) === $order->get_total() als Invariante gilt.
+	 * Gemeinsam genutzt von ajax_pos_create_order() und ajax_pos_close_tab().
+	 *
+	 * @param array $split_payments Liste [{method, amount}].
+	 * @param float $order_total    Tatsächliches Bestelltotal.
+	 * @return array|null Normalisierte Liste, oder null bei Abweichung > 0.10.
+	 */
+	private function reconcile_split_payments( array $split_payments, float $order_total ) {
+		$split_sum = 0.0;
+		foreach ( $split_payments as $split_row ) {
+			$split_sum += $split_row['amount'];
+		}
+		$diff = round( $order_total - $split_sum, 2 );
+
+		if ( abs( $diff ) > 0.10 ) {
+			return null;
+		}
+
+		if ( 0.0 !== $diff ) {
+			$largest_index = 0;
+			foreach ( $split_payments as $split_index => $split_row ) {
+				if ( $split_row['amount'] > $split_payments[ $largest_index ]['amount'] ) {
+					$largest_index = $split_index;
+				}
+			}
+			$split_payments[ $largest_index ]['amount'] = round( $split_payments[ $largest_index ]['amount'] + $diff, 2 );
+		}
+
+		return $split_payments;
 	}
 
 	/**

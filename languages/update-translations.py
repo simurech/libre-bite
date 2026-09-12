@@ -44,6 +44,76 @@ NEW_STRINGS_FORMAL_SS = {
         "Unbekannter Fehler",
     "more order(s)":
         "weitere Bestellung(en)",
+    # Split-Payment (F29)
+    "Split Payment":
+        "Zahlung aufteilen",
+    "Split payment":
+        "Zahlung aufteilen",
+    "Rest":
+        "Rest",
+    "Assigned":
+        "Zugewiesen",
+    "Split amounts do not match the order total":
+        "Die aufgeteilten Beträge ergeben nicht die Bestellsumme",
+    "Allow splitting the total across multiple payment methods in the POS payment modal.":
+        "Erlaubt das Aufteilen des Totalbetrags auf mehrere Zahlungsarten im POS-Zahlungsdialog.",
+    # Offene Tabs (F_TAB)
+    "Open Tabs":
+        "Offene Tabs",
+    "Open Tabs (Table Service)":
+        "Offene Tabs (Tischservice)",
+    "Keep orders open per table and add items until the guests pay":
+        "Bestellungen pro Tisch offen halten und Positionen nachbuchen, bis die Gäste bezahlen",
+    "Keep orders open per table and add items until the guests pay.":
+        "Bestellungen pro Tisch offen halten und Positionen nachbuchen, bis die Gäste bezahlen.",
+    "Keep orders open per table and add items until the guests pay. Requires the Table Management module to select a table.":
+        "Bestellungen pro Tisch offen halten und Positionen nachbuchen, bis die Gäste bezahlen. Benötigt das Tischverwaltungs-Modul, um einen Tisch auszuwählen.",
+    "Open tab":
+        "Tab eröffnen",
+    "Please select a table":
+        "Bitte einen Tisch auswählen",
+    "This tab is no longer open":
+        "Dieser Tab ist nicht mehr offen",
+    "Tab opened via POS.":
+        "Tab über POS eröffnet.",
+    "Round %d added via POS":
+        "Runde %d über POS hinzugefügt",
+    "Tab closed via POS.":
+        "Tab über POS abgeschlossen.",
+    "Tab cancelled via POS.":
+        "Tab über POS storniert.",
+    "Open Tabs is not enabled":
+        "Offene Tabs ist nicht aktiviert",
+    "Close the tab in the POS first":
+        "Zuerst den Tab im POS abschliessen",
+    "Tab":
+        "Tab",
+    "Round":
+        "Runde",
+    "Add items":
+        "Positionen hinzufügen",
+    "Pay / Close":
+        "Bezahlen / Abschliessen",
+    "Cancel":
+        "Abbrechen",
+    "Close tab":
+        "Tab abschliessen",
+    "Tab opened":
+        "Tab eröffnet",
+    "Items added":
+        "Positionen hinzugefügt",
+    "Tab closed":
+        "Tab abgeschlossen",
+    "Tab cancelled":
+        "Tab storniert",
+    "Cancel this tab?":
+        "Diesen Tab stornieren?",
+    "Adding to tab:":
+        "Wird zu Tab hinzugefügt:",
+    "No open tabs":
+        "Keine offenen Tabs",
+    "Split":
+        "Split",
     # Produkt-Add-ons (bisher «Options»/«Optionen»)
     "Product Options":
         "Produkt-Add-ons",

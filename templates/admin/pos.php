@@ -13,6 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wrap lbite-pos">
 	<div class="lbite-pos-header">
 		<h1><?php esc_html_e( 'POS System', 'libre-bite' ); ?></h1>
+		<?php if ( lbite_feature_enabled( 'enable_open_tabs' ) ) : ?>
+		<button type="button" id="lbite-pos-tabs-btn" class="button button-large">
+			<?php esc_html_e( 'Open Tabs', 'libre-bite' ); ?>
+			<span id="lbite-pos-tabs-count" class="lbite-pos-tabs-badge" style="display:none;">0</span>
+		</button>
+		<?php endif; ?>
 		<button type="button" id="lbite-pos-fullscreen" class="button button-large" title="Vollbild">
 			<span class="dashicons dashicons-editor-expand"></span>
 		</button>
@@ -139,6 +145,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="lbite-pos-cart">
 			<h2><?php esc_html_e( 'Cart', 'libre-bite' ); ?></h2>
+			<?php if ( lbite_feature_enabled( 'enable_open_tabs' ) ) : ?>
+			<div id="lbite-pos-active-tab-banner" class="lbite-pos-active-tab-banner" style="display:none;">
+				<span id="lbite-pos-active-tab-label"></span>
+				<button type="button" id="lbite-pos-active-tab-clear" class="button-link" aria-label="<?php esc_attr_e( 'Cancel', 'libre-bite' ); ?>">&times;</button>
+			</div>
+			<?php endif; ?>
 			<div id="lbite-pos-cart-items"></div>
 
 			<div class="lbite-pos-totals">
@@ -241,17 +253,65 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 				</div>
 
+				<?php if ( lbite_feature_enabled( 'enable_split_payment' ) ) : ?>
+				<div class="lbite-split-payment-toggle-row">
+					<button type="button" class="button" id="lbite-split-payment-toggle">
+						<?php esc_html_e( 'Split payment', 'libre-bite' ); ?>
+					</button>
+				</div>
+				<div id="lbite-split-payment-panel" class="lbite-split-payment-panel" style="display: none;">
+					<?php foreach ( $lbite_active_pm as $lbite_pm ) : ?>
+					<div class="lbite-split-row" data-method="<?php echo esc_attr( $lbite_pm['key'] ); ?>">
+						<span class="lbite-split-row-icon"><?php echo esc_html( ! empty( $lbite_pm['icon'] ) ? $lbite_pm['icon'] : ( $lbite_default_icons[ $lbite_pm['key'] ] ?? '💱' ) ); ?></span>
+						<span class="lbite-split-row-label"><?php echo esc_html( $lbite_pm['label'] ); ?></span>
+						<input type="number" step="0.05" min="0" class="lbite-split-amount" data-method="<?php echo esc_attr( $lbite_pm['key'] ); ?>" value="">
+						<button type="button" class="button lbite-split-rest" data-method="<?php echo esc_attr( $lbite_pm['key'] ); ?>"><?php esc_html_e( 'Rest', 'libre-bite' ); ?></button>
+					</div>
+					<?php endforeach; ?>
+					<div id="lbite-split-summary" class="lbite-split-summary">
+						<span id="lbite-split-summary-text"></span>
+					</div>
+				</div>
+				<?php endif; ?>
+
 			</div>
 			<div class="lbite-modal-footer">
 				<button type="button" class="button button-large" id="lbite-payment-modal-cancel">
 					<?php esc_html_e( 'Back', 'libre-bite' ); ?>
 				</button>
+				<?php if ( lbite_feature_enabled( 'enable_open_tabs' ) ) : ?>
+				<button type="button" class="button button-large" id="lbite-payment-modal-open-tab">
+					<?php esc_html_e( 'Open tab', 'libre-bite' ); ?>
+				</button>
+				<?php endif; ?>
 				<button type="button" class="button button-primary button-hero" id="lbite-payment-modal-confirm">
 					<?php esc_html_e( 'Payment Confirmed – Create Order', 'libre-bite' ); ?>
 				</button>
 			</div>
 		</div>
 	</div>
+
+	<!-- Tabs-Panel -->
+	<?php if ( lbite_feature_enabled( 'enable_open_tabs' ) ) : ?>
+	<div id="lbite-pos-tabs-panel" class="lbite-modal" style="display: none;">
+		<div id="lbite-pos-tabs-panel-overlay" class="lbite-modal-overlay"></div>
+		<div class="lbite-modal-content lbite-tabs-panel-content">
+			<div class="lbite-modal-header">
+				<h2><?php esc_html_e( 'Open Tabs', 'libre-bite' ); ?></h2>
+			</div>
+			<div class="lbite-modal-body">
+				<div id="lbite-pos-tabs-list">
+					<!-- Wird dynamisch befüllt -->
+				</div>
+			</div>
+			<div class="lbite-modal-footer">
+				<button type="button" class="button button-large" id="lbite-pos-tabs-panel-close">
+					<?php esc_html_e( 'Close', 'libre-bite' ); ?>
+				</button>
+			</div>
+		</div>
+	</div>
+	<?php endif; ?>
 
 	<!-- Gutschein-Popup -->
 	<div id="lbite-pos-coupon-popup" class="lbite-modal" style="display: none;">

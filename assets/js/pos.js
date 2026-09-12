@@ -32,6 +32,7 @@
 		dataLoaded: false,
 		wakeLock: null,
 		fullscreenDesired: false,
+		activeTab: null,
 
 		/**
 		 * Initialisierung
@@ -101,6 +102,12 @@
 				// Fallback auf AJAX
 				this.loadProducts();
 			}
+
+			// Offene-Tabs-Badge (nur relevant wenn Feature aktiv, Button dann im DOM vorhanden).
+			this.refreshTabsBadge();
+			$('#lbite-pos-location').on('change', () => {
+				this.refreshTabsBadge();
+			});
 		},
 
 		/**
@@ -285,15 +292,85 @@
 				this.closeCouponPopup();
 			});
 
-			// Zahlung bestätigen und Bestellung anlegen
+			// Split-Payment-Panel ein-/ausblenden
+			$(document).on('click', '#lbite-split-payment-toggle', function() {
+				POS.toggleSplitPanel();
+			});
+
+			// Split-Betrag geändert
+			$(document).on('input', '.lbite-split-amount', function() {
+				POS.updateSplitSummary();
+			});
+
+			// Restbetrag in ein Split-Feld eintragen
+			$(document).on('click', '.lbite-split-rest', function() {
+				const $target = $(`.lbite-split-amount[data-method="${$(this).data('method')}"]`);
+				const total = parseFloat($('#lbite-payment-modal').data('total')) || 0;
+				let others = 0;
+				$('.lbite-split-amount').not($target).each(function() {
+					others += parseFloat($(this).val()) || 0;
+				});
+				const rest = Math.max(0, Math.round((total - others) * 100) / 100);
+				$target.val(rest.toFixed(2));
+				POS.updateSplitSummary();
+			});
+
+			// Zahlung bestätigen: regulärer Bestellfluss ODER Tab-Abschluss.
 			$(document).on('click', '#lbite-payment-modal-confirm', function() {
-				const paymentMethod = $('input[name="lbite-payment-method"]:checked').val() || 'cash';
+				const mode = $('#lbite-payment-modal').data('mode') || 'order';
+				const splitPayments = POS.getSplitPayments();
+				const paymentMethod = splitPayments ? 'split' : ($('input[name="lbite-payment-method"]:checked').val() || 'cash');
+
+				if (mode === 'close_tab') {
+					const orderId = $('#lbite-payment-modal').data('tab-order-id');
+					POS.closePaymentModal();
+					POS.closeTab(orderId, paymentMethod, splitPayments);
+					return;
+				}
+
 				const locationId = $('#lbite-pos-location').val();
 				const tableId = $('#lbite-pos-table').val() || 0;
 				const customerName = $('#lbite-pos-customer-name').val().trim();
 				const vatType = $('input[name="lbite_pos_vat_type"]:checked').val() || '';
 				POS.closePaymentModal();
-				POS.createOrder(locationId, 'now', '', customerName, paymentMethod, tableId, vatType);
+				POS.createOrder(locationId, 'now', '', customerName, paymentMethod, tableId, vatType, splitPayments);
+			});
+
+			// Tab eröffnen (statt regulärer Bestellung).
+			$(document).on('click', '#lbite-payment-modal-open-tab', function() {
+				POS.closePaymentModal();
+				POS.openTab();
+			});
+
+			// Tabs-Panel öffnen/schliessen.
+			$(document).on('click', '#lbite-pos-tabs-btn', () => {
+				this.loadOpenTabs();
+			});
+			$(document).on('click', '#lbite-pos-tabs-panel-close, #lbite-pos-tabs-panel-overlay', () => {
+				$('#lbite-pos-tabs-panel').fadeOut(200);
+			});
+
+			// Aktiven Tab-Modus verlassen.
+			$(document).on('click', '#lbite-pos-active-tab-clear', () => {
+				this.clearActiveTab();
+			});
+
+			// Tabs-Panel: Aktionen pro Tab (delegiert, da dynamisch gerendert).
+			$(document).on('click', '.lbite-tab-add-items', function() {
+				const orderId = $(this).data('order-id');
+				const tableName = $(this).closest('.lbite-tab-card').data('table-name');
+				POS.setActiveTab(orderId, tableName);
+				$('#lbite-pos-tabs-panel').fadeOut(200);
+			});
+			$(document).on('click', '.lbite-tab-pay-close', function() {
+				const orderId = $(this).data('order-id');
+				POS.startCloseTab(orderId);
+			});
+			$(document).on('click', '.lbite-tab-cancel', function() {
+				const orderId = $(this).data('order-id');
+				if (confirm(lbitePos.strings.confirmCancelTab || 'Cancel this tab?')) {
+					POS.cancelTab(orderId);
+				}
 			});
 		},
 
@@ -850,6 +927,12 @@
 				return;
 			}
 
+			// Aktiver Tab-Modus: Positionen direkt nachbuchen statt Zahlungs-Modal zu öffnen.
+			if (this.activeTab) {
+				this.addToTab();
+				return;
+			}
+
 			// Zahlungs-Modal öffnen
 			this.openPaymentModal();
 		},
@@ -857,47 +940,81 @@
 		/**
 		 * Zahlungs-Modal öffnen und befüllen
 		 */
-		openPaymentModal: function() {
-			const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-			const discount = this.calculateDiscount(subtotal);
-			const total    = this.applyRounding(subtotal - discount);
+		openPaymentModal: function(mode = 'order', tabData = null) {
+			const $modal = $('#lbite-payment-modal');
+			$modal.data('mode', mode);
+			$modal.data('tab-order-id', tabData ? tabData.order_id : null);
 
-			// Bestellpositionen rendern
 			const $items = $('#lbite-payment-modal-items');
 			$items.empty();
 
-			this.cart.forEach((item) => {
-				const $row = $('<div class="lbite-payment-modal-item"></div>');
-				const $name = $('<span class="lbite-payment-modal-item-name"></span>').text(item.name);
-				if (item.meta) {
-					$name.append($('<small></small>').text(` (${item.meta})`));
-				}
-				$row.append($name);
-				$row.append($('<span class="lbite-payment-modal-item-qty"></span>').text(`× ${item.quantity}`));
-				$row.append($('<span class="lbite-payment-modal-item-price"></span>').text(this.formatPrice(item.price * item.quantity)));
-				$items.append($row);
-			});
+			let total;
 
-			// Gutscheine mit Rabattbetrag anzeigen
-			if (this.coupons.length > 0) {
-				const $couponRow = $('<div class="lbite-payment-modal-item lbite-payment-modal-coupon-row"></div>');
-				$couponRow.append($('<span class="lbite-payment-modal-item-name"></span>').text(
-					(lbitePos.strings.coupon || 'Coupon') + ': ' + this.coupons.map(c => c.code).join(', ')
-				));
-				$couponRow.append($('<span></span>'));
-				$couponRow.append($('<span class="lbite-payment-modal-item-price" style="color:#27ae60;"></span>').text(
-					discount > 0 ? '− ' + this.formatPrice(discount) : '✓'
-				));
-				$items.append($couponRow);
+			if (mode === 'close_tab' && tabData) {
+				total = parseFloat(tabData.total_raw) || 0;
+				tabData.items.forEach((item) => {
+					const $row = $('<div class="lbite-payment-modal-item"></div>');
+					$row.append($('<span class="lbite-payment-modal-item-name"></span>').text(item.name));
+					$row.append($('<span class="lbite-payment-modal-item-qty"></span>').text(`× ${item.quantity}`));
+					$row.append($('<span class="lbite-payment-modal-item-price"></span>').text(''));
+					$items.append($row);
+				});
+			} else {
+				const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+				const discount = this.calculateDiscount(subtotal);
+				total = this.applyRounding(subtotal - discount);
+
+				this.cart.forEach((item) => {
+					const $row = $('<div class="lbite-payment-modal-item"></div>');
+					const $name = $('<span class="lbite-payment-modal-item-name"></span>').text(item.name);
+					if (item.meta) {
+						$name.append($('<small></small>').text(` (${item.meta})`));
+					}
+					$row.append($name);
+					$row.append($('<span class="lbite-payment-modal-item-qty"></span>').text(`× ${item.quantity}`));
+					$row.append($('<span class="lbite-payment-modal-item-price"></span>').text(this.formatPrice(item.price * item.quantity)));
+					$items.append($row);
+				});
+
+				// Gutscheine mit Rabattbetrag anzeigen
+				if (this.coupons.length > 0) {
+					const $couponRow = $('<div class="lbite-payment-modal-item lbite-payment-modal-coupon-row"></div>');
+					$couponRow.append($('<span class="lbite-payment-modal-item-name"></span>').text(
+						(lbitePos.strings.coupon || 'Coupon') + ': ' + this.coupons.map(c => c.code).join(', ')
+					));
+					$couponRow.append($('<span></span>'));
+					$couponRow.append($('<span class="lbite-payment-modal-item-price" style="color:#27ae60;"></span>').text(
+						discount > 0 ? '− ' + this.formatPrice(discount) : '✓'
+					));
+					$items.append($couponRow);
+				}
 			}
 
 			$('#lbite-payment-modal-total').text(this.formatPrice(total));
+			$modal.data('total', total);
 
 			// Zahlungsart zurücksetzen (ersten verfügbaren aktivieren)
-			$('#lbite-payment-modal input[name="lbite-payment-method"]').prop('checked', false);
-			$('#lbite-payment-modal input[name="lbite-payment-method"]:first').prop('checked', true);
+			$modal.find('input[name="lbite-payment-method"]').prop('checked', false);
+			$modal.find('input[name="lbite-payment-method"]:first').prop('checked', true);
 
-			$('#lbite-payment-modal').fadeIn(200);
+			// Split-Payment-Panel zurücksetzen
+			$('.lbite-split-amount').val('');
+			$('#lbite-split-payment-panel').hide();
+			$modal.removeClass('lbite-split-active');
+			$('#lbite-payment-modal-confirm').prop('disabled', false);
+			this.updateSplitSummary();
+
+			// «Open tab»-Button nur im regulären Bestellmodus anzeigen.
+			$('#lbite-payment-modal-open-tab').toggle(mode === 'order');
+
+			if (! this.paymentConfirmDefaultText) {
+				this.paymentConfirmDefaultText = $('#lbite-payment-modal-confirm').text();
+			}
+			$('#lbite-payment-modal-confirm').text(
+				mode === 'close_tab' ? (lbitePos.strings.closeTab || 'Close tab') : this.paymentConfirmDefaultText
+			);
+
+			$modal.fadeIn(200);
 		},
 
 		/**
@@ -908,9 +1025,376 @@
 		},
 
 		/**
+		 * Split-Payment-Panel ein-/ausblenden
+		 */
+		toggleSplitPanel: function() {
+			const $panel = $('#lbite-split-payment-panel');
+			const active = $panel.is(':visible');
+			$panel.slideToggle(150);
+			$('#lbite-payment-modal').toggleClass('lbite-split-active', ! active);
+			if (! active) {
+				this.updateSplitSummary();
+			} else {
+				$('#lbite-payment-modal-confirm').prop('disabled', false);
+			}
+		},
+
+		/**
+		 * Summenzeile des Split-Panels aktualisieren und Confirm-Button sperren/freigeben
+		 */
+		updateSplitSummary: function() {
+			const total = parseFloat($('#lbite-payment-modal').data('total')) || 0;
+			let assigned = 0;
+			$('.lbite-split-amount').each(function() {
+				assigned += parseFloat($(this).val()) || 0;
+			});
+			assigned = Math.round(assigned * 100) / 100;
+
+			const label = (lbitePos.strings.splitAssigned || 'Assigned') + ': ' + this.formatPrice(assigned) +
+				' / ' + (lbitePos.strings.splitTotal || 'Total') + ': ' + this.formatPrice(total);
+			$('#lbite-split-summary-text').text(label);
+
+			const matches = Math.abs(total - assigned) <= 0.001;
+			$('#lbite-split-summary').toggleClass('lbite-split-mismatch', ! matches);
+
+			if ($('#lbite-payment-modal').hasClass('lbite-split-active')) {
+				$('#lbite-payment-modal-confirm').prop('disabled', ! matches);
+			}
+		},
+
+		/**
+		 * Liest die eingetragenen Split-Beträge aus. Liefert null, wenn Split inaktiv oder ungültig.
+		 */
+		getSplitPayments: function() {
+			if (! $('#lbite-payment-modal').hasClass('lbite-split-active')) {
+				return null;
+			}
+			const total = parseFloat($('#lbite-payment-modal').data('total')) || 0;
+			const payments = [];
+			let assigned = 0;
+			$('.lbite-split-amount').each(function() {
+				const amount = Math.round((parseFloat($(this).val()) || 0) * 100) / 100;
+				if (amount > 0) {
+					payments.push({ method: $(this).data('method'), amount: amount });
+					assigned += amount;
+				}
+			});
+			assigned = Math.round(assigned * 100) / 100;
+			if (payments.length === 0 || Math.abs(total - assigned) > 0.001) {
+				return null;
+			}
+			return payments;
+		},
+
+		/**
+		 * Offene Tabs für den aktuellen Standort laden und im Panel anzeigen.
+		 */
+		loadOpenTabs: function() {
+			const locationId = $('#lbite-pos-location').val();
+			if (! locationId) {
+				window.lbiteNotify.error(lbitePos.strings.selectLocation);
+				return;
+			}
+			$.ajax({
+				url: lbitePos.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'lbite_pos_get_open_tabs',
+					nonce: lbitePos.nonce,
+					location_id: locationId
+				},
+				success: (response) => {
+					if (response.success) {
+						this.renderTabsPanel(response.data.tabs || []);
+						$('#lbite-pos-tabs-panel').fadeIn(200);
+					} else {
+						window.lbiteNotify.error(response.data.message || lbitePos.strings.loadOrdersError);
+					}
+				},
+				error: () => {
+					window.lbiteNotify.error(lbitePos.strings.loadOrdersError || 'Error');
+				}
+			});
+		},
+
+		/**
+		 * Badge-Zähler in der Topbar aktualisieren, ohne das Panel zu öffnen.
+		 */
+		refreshTabsBadge: function() {
+			const locationId = $('#lbite-pos-location').val();
+			if (! locationId || ! $('#lbite-pos-tabs-btn').length) {
+				return;
+			}
+			$.ajax({
+				url: lbitePos.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'lbite_pos_get_open_tabs',
+					nonce: lbitePos.nonce,
+					location_id: locationId
+				},
+				success: (response) => {
+					if (response.success) {
+						const count = (response.data.tabs || []).length;
+						$('#lbite-pos-tabs-count').text(count).toggle(count > 0);
+					}
+				}
+			});
+		},
+
+		/**
+		 * Liste offener Tabs im Panel rendern.
+		 */
+		renderTabsPanel: function(tabs) {
+			$('#lbite-pos-tabs-count').text(tabs.length).toggle(tabs.length > 0);
+
+			const $list = $('#lbite-pos-tabs-list');
+			$list.empty();
+
+			if (tabs.length === 0) {
+				$list.append($('<p class="lbite-tabs-empty"></p>').text(lbitePos.strings.noOpenTabs || 'No open tabs'));
+				return;
+			}
+
+			tabs.forEach((tab) => {
+				const $card = $('<div class="lbite-tab-card"></div>')
+					.attr('data-order-id', tab.order_id)
+					.attr('data-table-name', tab.table_name || '');
+
+				const $header = $('<div class="lbite-tab-card-header"></div>');
+				$header.append($('<strong></strong>').text(tab.table_name || (lbitePos.strings.tab || 'Tab')));
+				$header.append($('<span class="lbite-tab-card-time"></span>').text(tab.created));
+				$card.append($header);
+
+				const roundLabel = (lbitePos.strings.round || 'Round') + ' ' + tab.round_count;
+				$card.append($('<div class="lbite-tab-card-body"></div>').text(`${tab.item_count} × — ${roundLabel}`));
+				$card.append($('<div class="lbite-tab-card-total"></div>').text(tab.total));
+
+				const $actions = $('<div class="lbite-tab-card-actions"></div>');
+				$actions.append(
+					$('<button type="button" class="button lbite-tab-add-items"></button>')
+						.attr('data-order-id', tab.order_id)
+						.text(lbitePos.strings.addItems || 'Add items')
+				);
+				$actions.append(
+					$('<button type="button" class="button button-primary lbite-tab-pay-close"></button>')
+						.attr('data-order-id', tab.order_id)
+						.text(lbitePos.strings.payClose || 'Pay / Close')
+				);
+				$actions.append(
+					$('<button type="button" class="button-link lbite-tab-cancel"></button>')
+						.attr('data-order-id', tab.order_id)
+						.text(lbitePos.strings.cancelOrder || 'Cancel')
+				);
+				$card.append($actions);
+
+				$list.append($card);
+			});
+		},
+
+		/**
+		 * POS in den Tab-Nachbuchungsmodus versetzen (Warenkorb wird an den Tab, nicht als
+		 * neue Bestellung übermittelt).
+		 */
+		setActiveTab: function(orderId, tableName) {
+			this.activeTab = { orderId: orderId, tableName: tableName };
+			this.clearCart();
+			$('#lbite-pos-active-tab-label').text((lbitePos.strings.addingToTab || 'Adding to tab:') + ' ' + (tableName || ''));
+			$('#lbite-pos-active-tab-banner').show();
+		},
+
+		/**
+		 * Tab-Nachbuchungsmodus verlassen, ohne den Warenkorb zu übertragen.
+		 */
+		clearActiveTab: function() {
+			this.activeTab = null;
+			$('#lbite-pos-active-tab-banner').hide();
+			this.clearCart();
+		},
+
+		/**
+		 * Warenkorb als neuen Tab an einem Tisch eröffnen.
+		 */
+		openTab: function() {
+			if (this.cart.length === 0) {
+				window.lbiteNotify.error(lbitePos.strings.cartEmpty);
+				return;
+			}
+			const locationId = $('#lbite-pos-location').val();
+			const tableId = $('#lbite-pos-table').val() || 0;
+			if (! locationId) {
+				window.lbiteNotify.error(lbitePos.strings.selectLocation);
+				return;
+			}
+			if (! tableId) {
+				window.lbiteNotify.error(lbitePos.strings.selectTable || 'Please select a table');
+				return;
+			}
+			const customerName = $('#lbite-pos-customer-name').val().trim();
+
+			this.showLoading(lbitePos.strings.creatingOrder || 'Creating order...');
+			$.ajax({
+				url: lbitePos.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'lbite_pos_open_tab',
+					nonce: lbitePos.nonce,
+					cart_items: JSON.stringify(this.cart),
+					location_id: locationId,
+					table_id: tableId,
+					customer_name: customerName
+				},
+				success: (response) => {
+					if (response.success) {
+						window.lbiteNotify.success(lbitePos.strings.tabOpened || 'Tab opened');
+						this.clearCart();
+						this.refreshTabsBadge();
+					} else {
+						window.lbiteNotify.error(response.data.message || lbitePos.strings.orderError);
+					}
+				},
+				error: () => {
+					window.lbiteNotify.error(lbitePos.strings.orderError);
+				},
+				complete: () => {
+					this.hideLoading();
+				}
+			});
+		},
+
+		/**
+		 * Warenkorb-Positionen an den aktiven Tab nachbuchen (Runde+1).
+		 */
+		addToTab: function() {
+			if (! this.activeTab || this.cart.length === 0) {
+				return;
+			}
+			const locationId = $('#lbite-pos-location').val();
+
+			this.showLoading(lbitePos.strings.creatingOrder || 'Creating order...');
+			$.ajax({
+				url: lbitePos.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'lbite_pos_add_to_tab',
+					nonce: lbitePos.nonce,
+					order_id: this.activeTab.orderId,
+					cart_items: JSON.stringify(this.cart),
+					location_id: locationId
+				},
+				success: (response) => {
+					if (response.success) {
+						window.lbiteNotify.success(lbitePos.strings.itemsAdded || 'Items added');
+						this.clearActiveTab();
+						this.refreshTabsBadge();
+					} else {
+						window.lbiteNotify.error(response.data.message || lbitePos.strings.orderError);
+					}
+				},
+				error: () => {
+					window.lbiteNotify.error(lbitePos.strings.orderError);
+				},
+				complete: () => {
+					this.hideLoading();
+				}
+			});
+		},
+
+		/**
+		 * Zahlungs-Modal im Tab-Abschluss-Modus öffnen (Positionen des Tabs statt Warenkorb).
+		 */
+		startCloseTab: function(orderId) {
+			const locationId = $('#lbite-pos-location').val();
+			$.ajax({
+				url: lbitePos.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'lbite_pos_get_open_tabs',
+					nonce: lbitePos.nonce,
+					location_id: locationId
+				},
+				success: (response) => {
+					if (! response.success) {
+						window.lbiteNotify.error(response.data.message || lbitePos.strings.loadOrdersError);
+						return;
+					}
+					const tab = (response.data.tabs || []).find((t) => String(t.order_id) === String(orderId));
+					if (! tab) {
+						window.lbiteNotify.error(lbitePos.strings.orderError);
+						return;
+					}
+					$('#lbite-pos-tabs-panel').fadeOut(200);
+					this.openPaymentModal('close_tab', tab);
+				}
+			});
+		},
+
+		/**
+		 * Tab abschliessen und bezahlen.
+		 */
+		closeTab: function(orderId, paymentMethod, splitPayments) {
+			const locationId = $('#lbite-pos-location').val();
+			this.showLoading(lbitePos.strings.creatingOrder || 'Creating order...');
+			$.ajax({
+				url: lbitePos.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'lbite_pos_close_tab',
+					nonce: lbitePos.nonce,
+					order_id: orderId,
+					location_id: locationId,
+					payment_method: paymentMethod || 'cash',
+					split_payments: splitPayments ? JSON.stringify(splitPayments) : ''
+				},
+				success: (response) => {
+					if (response.success) {
+						window.lbiteNotify.success(lbitePos.strings.tabClosed || 'Tab closed');
+						this.refreshTabsBadge();
+					} else {
+						window.lbiteNotify.error(response.data.message || lbitePos.strings.orderError);
+					}
+				},
+				error: () => {
+					window.lbiteNotify.error(lbitePos.strings.orderError);
+				},
+				complete: () => {
+					this.hideLoading();
+				}
+			});
+		},
+
+		/**
+		 * Offenen Tab stornieren.
+		 */
+		cancelTab: function(orderId) {
+			const locationId = $('#lbite-pos-location').val();
+			$.ajax({
+				url: lbitePos.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'lbite_pos_cancel_tab',
+					nonce: lbitePos.nonce,
+					order_id: orderId,
+					location_id: locationId
+				},
+				success: (response) => {
+					if (response.success) {
+						window.lbiteNotify.success(lbitePos.strings.tabCancelled || 'Tab cancelled');
+						this.loadOpenTabs();
+					} else {
+						window.lbiteNotify.error(response.data.message || lbitePos.strings.orderError);
+					}
+				},
+				error: () => {
+					window.lbiteNotify.error(lbitePos.strings.orderError);
+				}
+			});
+		},
+
+		/**
 		 * Bestellung erstellen
 		 */
-		createOrder: function(locationId, orderType, pickupTime, customerName, paymentMethod, tableId = 0, vatType = '') {
+		createOrder: function(locationId, orderType, pickupTime, customerName, paymentMethod, tableId = 0, vatType = '', splitPayments = null) {
 			// Doppelklick-Schutz.
 			this.isProcessingOrder = true;
 
@@ -932,7 +1416,8 @@
 					pickup_time: pickupTime,
 					customer_name: customerName,
 					payment_method: paymentMethod || 'cash',
-					vat_order_type: vatType
+					vat_order_type: vatType,
+					split_payments: splitPayments ? JSON.stringify(splitPayments) : ''
 				},
 				success: (response) => {
 					if (response.success) {

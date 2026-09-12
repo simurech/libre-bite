@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 2.2.4
+Stable tag: 2.3.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,10 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.3.0 =
+* New: Split payment in the POS — divide an order's total across multiple payment methods (e.g. part cash, part card) directly in the payment dialog, with automatic reconciliation for small rounding differences (Pro).
+* New: Open tabs for table service — start a tab for a table, add further rounds of items before the guest pays, and close it out with a single payment at the end; the Kanban board keeps the order open until the tab is closed (Pro).
 
 = 2.2.4 =
 * Maintenance: Confirmed compatibility with WordPress 7.1, "Tested up to" updated.

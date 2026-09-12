@@ -427,7 +427,18 @@
 			} else {
 				$badge.append($('<span class="lbite-badge-chip lbite-badge-takeaway"></span>').text(lbiteDashboard.strings.takeaway || 'Take-away'));
 			}
-			if (order.payment_method) {
+			if (order.is_open_tab) {
+				$badge.append($('<span class="lbite-badge-chip lbite-badge-tab"></span>').text(lbiteDashboard.strings.tab || 'Tab'));
+			}
+			if (order.payment_method === 'split' && Array.isArray(order.split_payments) && order.split_payments.length > 0) {
+				order.split_payments.forEach(split => {
+					const pmLabel = (lbiteDashboard.paymentMethods && lbiteDashboard.paymentMethods[split.method])
+						? lbiteDashboard.paymentMethods[split.method]
+						: split.method;
+					const amount = (lbiteDashboard.currency || '') + ' ' + parseFloat(split.amount).toFixed(2);
+					$badge.append($('<span class="lbite-badge-chip lbite-badge-payment"></span>').text(`${pmLabel} ${amount}`));
+				});
+			} else if (order.payment_method) {
 				const pmLabel = (lbiteDashboard.paymentMethods && lbiteDashboard.paymentMethods[order.payment_method])
 					? lbiteDashboard.paymentMethods[order.payment_method]
 					: order.payment_method;
@@ -437,7 +448,13 @@
 
 			// Artikel-Liste (Hauptinhalt)
 			const $items = $('<div class="lbite-kanban-card-items"></div>');
+			let lastRound = null;
 			order.items.forEach(item => {
+				if (order.is_open_tab && item.round > 0 && item.round !== lastRound) {
+					const roundLabel = (lbiteDashboard.strings.round || 'Round') + ' ' + item.round;
+					$items.append($('<div class="lbite-kanban-round-divider"></div>').text(`— ${roundLabel} —`));
+					lastRound = item.round;
+				}
 				const $itemDiv = $('<div class="lbite-kanban-card-item"></div>');
 				$itemDiv.append($('<span class="lbite-item-qty"></span>').text(`${item.quantity}×`));
 				$itemDiv.append($('<span class="lbite-item-name"></span>').text(` ${item.name}`));

@@ -285,6 +285,7 @@ class LBite_Order_Dashboard {
 				'quantity' => $item->get_quantity(),
 				'meta'     => $meta_data['config'],
 				'note'     => $meta_data['note'],
+				'round'    => (int) $item->get_meta( '_lbite_tab_round', true ),
 			);
 		}
 
@@ -325,6 +326,9 @@ class LBite_Order_Dashboard {
 			'is_future'      => $is_future,
 			'has_email'      => ! empty( $billing_email ) && strpos( $billing_email, '@nomail.local' ) === false,
 			'payment_method' => $payment_method ?: '',
+			'split_payments' => $order->get_meta( '_lbite_split_payments', true ) ?: array(),
+			'is_open_tab'    => '1' === (string) $order->get_meta( '_lbite_tab_open', true ),
+			'round_count'    => (int) $order->get_meta( '_lbite_tab_round_count', true ),
 		);
 
 		return apply_filters( 'lbite_dashboard_order_data', $data, $order );
@@ -415,6 +419,13 @@ class LBite_Order_Dashboard {
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
 			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
+		}
+
+		// Offene Tabs (F_TAB) dürfen erst nach dem Abschluss in der POS-Oberfläche als
+		// abgeschlossen markiert werden – sonst bleibt _lbite_tab_open gesetzt, obwohl die
+		// Bestellung im Kanban bereits als fertig gilt.
+		if ( 'completed' === $new_status && '1' === (string) $order->get_meta( '_lbite_tab_open', true ) ) {
+			wp_send_json_error( array( 'message' => __( 'Close the tab in the POS first', 'libre-bite' ) ) );
 		}
 
 		$order->update_meta_data( '_lbite_order_status', $new_status );

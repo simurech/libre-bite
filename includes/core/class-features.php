@@ -52,12 +52,26 @@ class LBite_Features {
 			'label'       => 'Pre-orders',
 			'description' => 'Customers can place orders for a later time',
 		),
+		'enable_split_payment'      => array(
+			'group'       => 'order_system',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Split Payment (POS)',
+			'description' => 'Split the total across multiple payment methods in the POS checkout',
+		),
 		'enable_table_ordering'     => array(
 			'group'       => 'order_system',
 			'default'     => false,
 			'premium'     => true,
 			'label'       => 'Table Management & Table Ordering',
 			'description' => 'Create tables, define seats, generate QR codes and allow orders directly at the table',
+		),
+		'enable_open_tabs'          => array(
+			'group'       => 'order_system',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Open Tabs (Table Service)',
+			'description' => 'Keep orders open per table and add items until the guests pay',
 		),
 		'enable_reservations'       => array(
 			'group'       => 'order_system',

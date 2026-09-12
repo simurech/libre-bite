@@ -180,9 +180,27 @@ foreach ( $lbite_stat_orders as $lbite_order ) {
 		$lbite_addon_totals[ $lbite_fn ]['revenue'] += $lbite_fee_total;
 	}
 
-	// Zahlungsart erfassen.
+	// Zahlungsart erfassen. Bei Split-Payment: Anzahl einmalig auf Pseudo-Zeile "Split",
+	// Umsatz auf die tatsächlich genutzten Einzel-Zahlarten verteilen.
 	$lbite_pm_key = $lbite_order->get_meta( '_lbite_payment_method' );
-	if ( $lbite_pm_key ) {
+	if ( 'split' === $lbite_pm_key ) {
+		$lbite_split_rows = $lbite_order->get_meta( '_lbite_split_payments', true );
+		if ( is_array( $lbite_split_rows ) && ! empty( $lbite_split_rows ) ) {
+			$lbite_split_label = __( 'Split', 'libre-bite' );
+			if ( ! isset( $lbite_payment_totals[ $lbite_split_label ] ) ) {
+				$lbite_payment_totals[ $lbite_split_label ] = array( 'count' => 0, 'revenue' => 0.0 );
+			}
+			$lbite_payment_totals[ $lbite_split_label ]['count']++;
+			foreach ( $lbite_split_rows as $lbite_split_row ) {
+				$lbite_split_pm_key = isset( $lbite_split_row['method'] ) ? $lbite_split_row['method'] : '';
+				$lbite_split_display = isset( $lbite_pm_label_map[ $lbite_split_pm_key ] ) ? $lbite_pm_label_map[ $lbite_split_pm_key ] : $lbite_split_pm_key;
+				if ( ! isset( $lbite_payment_totals[ $lbite_split_display ] ) ) {
+					$lbite_payment_totals[ $lbite_split_display ] = array( 'count' => 0, 'revenue' => 0.0 );
+				}
+				$lbite_payment_totals[ $lbite_split_display ]['revenue'] += isset( $lbite_split_row['amount'] ) ? (float) $lbite_split_row['amount'] : 0.0;
+			}
+		}
+	} elseif ( $lbite_pm_key ) {
 		$lbite_pm_display = isset( $lbite_pm_label_map[ $lbite_pm_key ] ) ? $lbite_pm_label_map[ $lbite_pm_key ] : $lbite_pm_key;
 		if ( ! isset( $lbite_payment_totals[ $lbite_pm_display ] ) ) {
 			$lbite_payment_totals[ $lbite_pm_display ] = array( 'count' => 0, 'revenue' => 0.0 );
@@ -241,7 +259,21 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 			continue;
 		}
 		$lbite_csv_pm_key  = $lbite_csv_order->get_meta( '_lbite_payment_method' );
-		$lbite_csv_pm      = isset( $lbite_pm_label_map[ $lbite_csv_pm_key ] ) ? $lbite_pm_label_map[ $lbite_csv_pm_key ] : $lbite_csv_pm_key;
+		if ( 'split' === $lbite_csv_pm_key ) {
+			$lbite_csv_split_rows = $lbite_csv_order->get_meta( '_lbite_split_payments', true );
+			$lbite_csv_split_parts = array();
+			if ( is_array( $lbite_csv_split_rows ) ) {
+				foreach ( $lbite_csv_split_rows as $lbite_csv_split_row ) {
+					$lbite_csv_split_key  = isset( $lbite_csv_split_row['method'] ) ? $lbite_csv_split_row['method'] : '';
+					$lbite_csv_split_disp = isset( $lbite_pm_label_map[ $lbite_csv_split_key ] ) ? $lbite_pm_label_map[ $lbite_csv_split_key ] : $lbite_csv_split_key;
+					$lbite_csv_split_amt  = isset( $lbite_csv_split_row['amount'] ) ? number_format( (float) $lbite_csv_split_row['amount'], 2, '.', '' ) : '0.00';
+					$lbite_csv_split_parts[] = $lbite_csv_split_disp . ' ' . $lbite_csv_split_amt;
+				}
+			}
+			$lbite_csv_pm = __( 'Split', 'libre-bite' ) . ' (' . implode( ' + ', $lbite_csv_split_parts ) . ')';
+		} else {
+			$lbite_csv_pm = isset( $lbite_pm_label_map[ $lbite_csv_pm_key ] ) ? $lbite_pm_label_map[ $lbite_csv_pm_key ] : $lbite_csv_pm_key;
+		}
 		$lbite_csv_stype   = $lbite_csv_order->get_meta( '_lbite_service_type' );
 		$lbite_csv_items   = array();
 		foreach ( $lbite_csv_order->get_items() as $lbite_csv_item ) {
