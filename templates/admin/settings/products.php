@@ -69,6 +69,13 @@ $lbite_availability_hint_style = get_option( 'lbite_availability_hint_style', 'p
 	$lbite_toggle_is_pro          = true;
 	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
+	$lbite_toggle_key             = 'enable_menu_schedule';
+	$lbite_toggle_label           = __( 'Scheduled Availability', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Limit products or whole categories to certain weekdays, times of day, or date ranges — a breakfast menu that disappears at 11:30, a seasonal item that only shows in December. Configured per product and per product category.', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 	?>
 
 	<hr style="margin: 24px 0;">

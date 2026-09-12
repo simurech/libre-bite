@@ -23,6 +23,50 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # REST-API-Fehlermeldungen (F38)
+    "No permission for this location":
+        "Keine Berechtigung für diesen Standort",
+    "Order board is not available":
+        "Die Bestellübersicht ist nicht verfügbar",
+    "Unknown column":
+        "Unbekannte Spalte",
+    # Zeitgesteuerte Verfügbarkeit (F40)
+    "Availability Schedule":
+        "Verfügbarkeits-Zeitplan",
+    "Scheduled Availability":
+        "Zeitgesteuerte Verfügbarkeit",
+    "Limit availability to certain times":
+        "Verfügbarkeit zeitlich einschränken",
+    "Leave both times empty to limit by weekday only. A window may run past midnight, for example 22:00 to 02:00.":
+        "Beide Zeiten leer lassen, um nur nach Wochentag einzuschränken. Ein Fenster darf über Mitternacht laufen, zum Beispiel 22:00 bis 02:00.",
+    "Only between":
+        "Nur zwischen",
+    "Optional date range, for seasonal items. Leave empty for no date limit.":
+        "Optionaler Datumsbereich für Saisonartikel. Leer lassen für keine Datumsgrenze.",
+    "\"%s\" is not available at the moment.":
+        "«%s» ist zurzeit nicht verfügbar.",
+    "Limit products or whole categories to certain weekdays, times of day, or date ranges \u2014 a breakfast menu that disappears at 11:30, a seasonal item that only shows in December. Configured per product and per product category.":
+        "Schränkt Produkte oder ganze Kategorien auf bestimmte Wochentage, Tageszeiten oder Datumsbereiche ein \u2014 eine Frühstückskarte, die um 11:30 verschwindet, ein Saisonartikel, der nur im Dezember erscheint. Wird je Produkt und je Produktkategorie konfiguriert.",
+    "Mon":
+        "Mo",
+    "Tue":
+        "Di",
+    "Wed":
+        "Mi",
+    "Thu":
+        "Do",
+    "Fri":
+        "Fr",
+    "Sat":
+        "Sa",
+    "Sun":
+        "So",
+    "From":
+        "Von",
+    "To":
+        "Bis",
+    "and":
+        "und",
     # Dunkles Farbschema im Admin (F36b)
     "Libre Bite colour scheme":
         "Libre-Bite-Farbschema",

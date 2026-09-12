@@ -151,6 +151,13 @@ class LBite_Features {
 			'label'       => 'Product Options',
 			'description' => 'Additional options for products (add-ons)',
 		),
+		'enable_menu_schedule'      => array(
+			'group'       => 'products',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Scheduled Availability',
+			'description' => 'Limit products or whole categories to certain weekdays, times of day, or date ranges — for example a breakfast menu that disappears at 11:30.',
+		),
 		'enable_item_notes_pos'     => array(
 			'group'       => 'products',
 			'default'     => false,
