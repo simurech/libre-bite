@@ -307,6 +307,13 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				$lbite_features['enable_reservations'] = isset( $_POST['lbite_feature_toggle']['enable_reservations'] );
 				update_option( 'lbite_features', $lbite_features );
 				update_option( 'lbite_reservation_refresh_interval', isset( $_POST['lbite_reservation_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_reservation_refresh_interval'] ) ) : 60 );
+				update_option(
+					'lbite_reservation_fields',
+					array(
+						'phone' => array( 'enabled' => isset( $_POST['lbite_reservation_fields']['phone'] ) ),
+						'notes' => array( 'enabled' => isset( $_POST['lbite_reservation_fields']['notes'] ) ),
+					)
+				);
 			}
 			$lbite_did_save = true;
 			break;

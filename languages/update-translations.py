@@ -1344,6 +1344,40 @@ NEW_STRINGS_FORMAL_SS = {
         'Keine Produkte an diesem Standort verfügbar.',
     'POS only':
         'Nur POS',
+
+    # ── v2.5.0: Reservierungsformular als 3-Schritte-Assistent ───────────────
+    'When & How Many':
+        'Wann & wie viele',
+    'Your Details':
+        'Ihre Angaben',
+    'Confirmation':
+        'Bestätigung',
+    'Next':
+        'Weiter',
+    'Date:':
+        'Datum:',
+    'Time:':
+        'Zeit:',
+    'Guests:':
+        'Personen:',
+    'Name:':
+        'Name:',
+    'Email:':
+        'E-Mail:',
+    'Phone:':
+        'Telefon:',
+    'Notes:':
+        'Notiz:',
+    'Reservation Form Fields':
+        'Felder im Reservierungsformular',
+    'Show Phone Number Field':
+        'Telefonnummer-Feld anzeigen',
+    'Show Notes Field':
+        'Notizfeld anzeigen',
+    'Both fields are optional for the guest either way — hide them here to keep the form as '
+    'short as possible.':
+        'Beide Felder sind für den Gast ohnehin optional — blenden Sie sie hier aus, um das '
+        'Formular so kurz wie möglich zu halten.',
 }
 
 # Formelle Kunden-Anrede (Sie) – für de_CH formal und de_DE_formal und de_AT
@@ -1367,6 +1401,7 @@ CUSTOMER_INFORMAL_SS = {
     "Your Name":                                    "Dein Name",
     "Your Order":                                   "Deine Bestellung",
     "Your Pickup Number":                           "Deine Abholnummer",
+    "Your Details":                                 "Deine Angaben",
     "your@email.com":                               "deine@email.ch",
     "Please select a location.":                    "Bitte wähle einen Standort.",
     "Please select an order type.":                 "Bitte wähle eine Bestellart.",

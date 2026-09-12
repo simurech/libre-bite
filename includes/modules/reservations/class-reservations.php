@@ -486,17 +486,21 @@ class LBite_Reservations {
 			'lbite_reservation_form'
 		);
 
-		$lbite_locations = get_posts(
-			array(
-				'post_type'      => 'lbite_location',
-				'posts_per_page' => 100,
-				'post_status'    => 'publish',
-				'orderby'        => 'title',
-				'order'          => 'ASC',
-			)
-		);
+		$lbite_locations = LBite_Locations::get_all_locations();
 
 		$lbite_preselected_location = intval( $lbite_atts['location_id'] );
+
+		// Single-Location-Modus: gibt es nur einen Standort, wird er immer automatisch
+		// vorausgewählt und die Standortwahl entfällt in Schritt 1 (analog zu
+		// LBite_Checkout::shortcode_location_selector()).
+		if ( 1 === count( $lbite_locations ) ) {
+			$lbite_preselected_location = $lbite_locations[0]->ID;
+		}
+
+		// Feld-Sichtbarkeit Telefon/Notizen (Default: beide sichtbar, analog zu lbite_checkout_fields).
+		$lbite_reservation_fields = get_option( 'lbite_reservation_fields', array() );
+		$lbite_show_phone_field   = ! isset( $lbite_reservation_fields['phone']['enabled'] ) || $lbite_reservation_fields['phone']['enabled'];
+		$lbite_show_notes_field   = ! isset( $lbite_reservation_fields['notes']['enabled'] ) || $lbite_reservation_fields['notes']['enabled'];
 
 		ob_start();
 		include LBITE_PLUGIN_DIR . 'templates/frontend/reservation-form.php';

@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 2.4.0
+Stable tag: 2.5.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -227,6 +227,10 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.5.0 =
+* New: The reservation form is now a clear, guided 3-step process — When & How Many, Your Details, and a final Confirmation summary — instead of one long form (Pro).
+* New: The phone number and notes fields on the reservation form can now be hidden in the settings for guests who don't need them (Pro).
 
 = 2.4.0 =
 * New: Customizable Kanban board columns — rename, add, remove and reorder columns (2 to 5), mark any number of them as "completed", and add a one-step back button to each order card (Pro).

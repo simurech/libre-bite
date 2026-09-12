@@ -10,6 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $lbite_res_refresh = get_option( 'lbite_reservation_refresh_interval', 60 );
+$lbite_res_fields  = get_option( 'lbite_reservation_fields', array() );
+$lbite_res_show_phone = ! isset( $lbite_res_fields['phone']['enabled'] ) || $lbite_res_fields['phone']['enabled'];
+$lbite_res_show_notes = ! isset( $lbite_res_fields['notes']['enabled'] ) || $lbite_res_fields['notes']['enabled'];
 ?>
 <form method="post">
 	<?php wp_nonce_field( 'lbite_settings' ); ?>
@@ -31,6 +34,21 @@ $lbite_res_refresh = get_option( 'lbite_reservation_refresh_interval', 60 );
 				<input type="number" min="10" name="lbite_reservation_refresh_interval" value="<?php echo esc_attr( $lbite_res_refresh ); ?>" class="small-text">
 				<?php esc_html_e( 'Seconds', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'How often the reservations overview is updated. Default: 60 seconds.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><?php esc_html_e( 'Reservation Form Fields', 'libre-bite' ); ?></th>
+			<td>
+				<label>
+					<input type="checkbox" name="lbite_reservation_fields[phone]" value="1" <?php checked( $lbite_res_show_phone ); ?>>
+					<?php esc_html_e( 'Show Phone Number Field', 'libre-bite' ); ?>
+				</label>
+				<br>
+				<label>
+					<input type="checkbox" name="lbite_reservation_fields[notes]" value="1" <?php checked( $lbite_res_show_notes ); ?>>
+					<?php esc_html_e( 'Show Notes Field', 'libre-bite' ); ?>
+				</label>
+				<p class="description"><?php esc_html_e( 'Both fields are optional for the guest either way — hide them here to keep the form as short as possible.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 	</table>
