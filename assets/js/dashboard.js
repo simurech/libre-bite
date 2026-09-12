@@ -473,10 +473,10 @@
 			if (order.type === 'later') {
 				$badge.append($('<span class="lbite-order-type-later lbite-badge-chip"></span>').text(`⏰ ${order.pickup_time || ''}`));
 			} else {
-				$badge.append($('<span class="lbite-order-type-now lbite-badge-chip"></span>').text('🔥 Sofort'));
+				$badge.append($('<span class="lbite-order-type-now lbite-badge-chip"></span>').text(`🔥 ${lbiteDashboard.strings.asap || 'ASAP'}`));
 			}
 			if (order.table_id) {
-				const tableLabel = order.table_name ? `🪑 ${order.table_name}` : '🪑 Tisch';
+				const tableLabel = `🪑 ${order.table_name || lbiteDashboard.strings.table || 'Table'}`;
 				$badge.append($('<span class="lbite-badge-chip lbite-badge-table"></span>').text(tableLabel));
 			} else if (order.service_type === 'dine_in') {
 				$badge.append($('<span class="lbite-badge-chip lbite-badge-dine-in"></span>').text(lbiteDashboard.strings.dineIn || 'Dine-in'));

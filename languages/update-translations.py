@@ -23,6 +23,13 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Kanban: Tisch-/Sofort-Badges (i18n-Fix, waren hart codiert deutsch)
+    "(Table: %s)":
+        "(Tisch: %s)",
+    "ASAP":
+        "Sofort",
+    "No order provided":
+        "Keine Bestellung übergeben",
     # Dashboard-Strings
     "Loading orders...":
         "Bestellungen werden geladen...",

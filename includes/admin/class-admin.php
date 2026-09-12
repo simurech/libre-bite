@@ -683,6 +683,8 @@ class LBite_Admin {
 						'dineIn'             => __( 'Dine-in', 'libre-bite' ),
 						'tab'                => __( 'Tab', 'libre-bite' ),
 						'round'              => __( 'Round', 'libre-bite' ),
+						'table'              => __( 'Table', 'libre-bite' ),
+						'asap'               => __( 'ASAP', 'libre-bite' ),
 						'back'               => __( 'Back', 'libre-bite' ),
 					),
 				)

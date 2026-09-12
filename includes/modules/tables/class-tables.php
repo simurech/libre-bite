@@ -498,7 +498,11 @@ class LBite_Tables {
 	public function add_table_name_to_dashboard_data( $data, $order ) {
 		$table_name = $order->get_meta( '_lbite_table_name', true );
 		if ( $table_name ) {
-			$data['customer'] .= ' (Tisch: ' . $table_name . ')';
+			$data['customer'] .= ' ' . sprintf(
+				/* translators: %s: name of the table, e.g. "Table 1" */
+				__( '(Table: %s)', 'libre-bite' ),
+				$table_name
+			);
 		}
 		return $data;
 	}
