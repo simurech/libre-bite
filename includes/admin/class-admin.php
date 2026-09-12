@@ -911,6 +911,7 @@ class LBite_Admin {
 					'kdsLateMinutes'            => (int) get_option( 'lbite_kds_late_minutes', 0 ),
 					'soundRepeatInterval'       => max( 0, (int) get_option( 'lbite_sound_repeat_interval', 0 ) ) * 1000,
 					'serverTime'                => time(),
+					'receiptTypes'              => class_exists( 'LBite_Receipts' ) ? LBite_Receipts::get_types() : array(),
 					'strings'               => array(
 						'orderUpdated'    => __( 'Status updated', 'libre-bite' ),
 						'updateError'     => __( 'Error updating', 'libre-bite' ),
@@ -943,6 +944,10 @@ class LBite_Admin {
 						'waiting'            => __( 'Waiting time', 'libre-bite' ),
 						'overdue'            => __( 'Overdue', 'libre-bite' ),
 						'minutesShort'       => __( 'min', 'libre-bite' ),
+						'printReceipt'       => __( 'Print (right-click to choose a template)', 'libre-bite' ),
+						'printError'         => __( 'Could not create the receipt', 'libre-bite' ),
+						'popupBlocked'       => __( 'Please allow pop-ups for this site to print', 'libre-bite' ),
+						'wakeLockUnsupported' => __( 'This browser does not support keeping the screen awake.', 'libre-bite' ),
 						'back'               => __( 'Back', 'libre-bite' ),
 					),
 				)

@@ -735,3 +735,73 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 		box-shadow: 0 0 0 2px var(--lbite-danger-border);
 	}
 }
+
+/* ════════════════════════════════════════════════════════════════════
+ * Bondruck (F42)
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-print-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	padding: 0;
+	border: 1px solid var(--lbite-border);
+	border-radius: var(--lbite-radius-sm);
+	background: var(--lbite-surface);
+	color: var(--lbite-text-muted);
+	cursor: pointer;
+	transition: background-color var(--lbite-duration-fast) var(--lbite-ease-crisp),
+		color var(--lbite-duration-fast) var(--lbite-ease-crisp),
+		border-color var(--lbite-duration-fast) var(--lbite-ease-crisp);
+}
+
+.lbite-print-button:hover {
+	background: var(--lbite-surface-sunken);
+	border-color: var(--lbite-border-strong);
+	color: var(--lbite-text);
+}
+
+.lbite-print-button .dashicons {
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+	line-height: 1;
+}
+
+.lbite-print-menu {
+	position: absolute;
+	right: var(--lbite-space-2);
+	bottom: var(--lbite-space-8);
+	z-index: var(--lbite-z-dropdown);
+	display: flex;
+	flex-direction: column;
+	min-width: 160px;
+	padding: var(--lbite-space-1);
+	background: var(--lbite-surface);
+	border: 1px solid var(--lbite-border);
+	border-radius: var(--lbite-radius-md);
+	box-shadow: var(--lbite-shadow-lg);
+	animation: lbite-fade-in var(--lbite-duration-fast) var(--lbite-ease-soft);
+}
+
+.lbite-print-menu button {
+	padding: var(--lbite-space-2) var(--lbite-space-3);
+	border: none;
+	border-radius: var(--lbite-radius-sm);
+	background: transparent;
+	color: var(--lbite-text);
+	font-size: var(--lbite-text-base);
+	text-align: left;
+	cursor: pointer;
+}
+
+.lbite-print-menu button:hover {
+	background: var(--lbite-surface-sunken);
+}
+
+/* Karte muss die Bezugsebene für das Menü sein */
+.lbite-kanban-card {
+	position: relative;
+}

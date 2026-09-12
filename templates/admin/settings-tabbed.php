@@ -157,6 +157,12 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_kds_warn_minutes', isset( $_POST['lbite_kds_warn_minutes'] ) ? max( 0, intval( wp_unslash( $_POST['lbite_kds_warn_minutes'] ) ) ) : 0 );
 			update_option( 'lbite_kds_late_minutes', isset( $_POST['lbite_kds_late_minutes'] ) ? max( 0, intval( wp_unslash( $_POST['lbite_kds_late_minutes'] ) ) ) : 0 );
 			update_option( 'lbite_sound_repeat_interval', isset( $_POST['lbite_sound_repeat_interval'] ) ? max( 0, intval( wp_unslash( $_POST['lbite_sound_repeat_interval'] ) ) ) : 0 );
+			if ( class_exists( 'LBite_Receipts' ) ) {
+				$lbite_receipt_raw = isset( $_POST['lbite_receipt_fields'] ) && is_array( $_POST['lbite_receipt_fields'] )
+					? wp_unslash( $_POST['lbite_receipt_fields'] )
+					: array();
+				update_option( LBite_Receipts::OPTION_FIELDS, LBite_Receipts::sanitize_fields( $lbite_receipt_raw ) );
+			}
 			update_option( 'lbite_show_future_orders', $lbite_ord_values['lbite_show_future_orders'] );
 			update_option( 'lbite_dim_future_orders', $lbite_ord_values['lbite_dim_future_orders'] );
 			update_option( 'lbite_kanban_drag_drop_enabled', $lbite_ord_values['lbite_kanban_drag_drop_enabled'] );
@@ -838,6 +844,10 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 						</td>
 					</tr>
 				</table>
+
+				<hr style="margin: 24px 0;">
+				<?php include LBITE_PLUGIN_DIR . 'templates/admin/settings/receipts.php'; ?>
+
 				<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 			</form>
 			<?php

@@ -89,6 +89,11 @@ class LBite_Plugin {
 
 		// Basis-Module (immer laden)
 		$this->load_module( 'customizations', 'LBite_Customizations' );
+
+		// Bon-Vorlagen: ersetzen den bisherigen Kartendruck, bleiben wie dieser
+		// kostenlos – ein vorhandenes Feature hinter eine Bezahlschranke zu
+		// schieben wäre eine Verschlechterung für Bestandsnutzer.
+		$this->load_module( 'receipts', 'LBite_Receipts' );
 		$this->load_module( 'locations', 'LBite_Locations' );
 		$this->load_module( 'checkout', 'LBite_Checkout' );
 

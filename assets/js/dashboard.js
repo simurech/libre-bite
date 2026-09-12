@@ -181,7 +181,7 @@
 		 */
 		async requestWakeLock() {
 			if (!('wakeLock' in navigator)) {
-				alert('Wake Lock wird von diesem Browser nicht unterstützt.');
+				this.showToast(lbiteDashboard.strings.wakeLockUnsupported || 'This browser does not support keeping the screen awake.', 'warning');
 				$('#lbite-wake-lock').prop('checked', false);
 				return;
 			}
@@ -628,6 +628,19 @@
 			$rBtn.append($('<span class="dashicons dashicons-email-alt"></span>'));
 			$btnGroup.append($rBtn);
 
+			// Druck-Button: Klick druckt das Küchenticket, langer Druck bzw.
+			// Rechtsklick öffnet die Auswahl der drei Bonvorlagen.
+			const $pBtn = $('<button class="lbite-print-button"></button>')
+				.attr('title', lbiteDashboard.strings.printReceipt || 'Print')
+				.on('click', (e) => { e.stopPropagation(); this.printOrder(order.id, 'kitchen'); })
+				.on('contextmenu', (e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					this.showPrintMenu(order.id, $pBtn);
+				});
+			$pBtn.append($('<span class="dashicons dashicons-printer"></span>'));
+			$btnGroup.append($pBtn);
+
 			$footer.append($btnGroup);
 			$card.append($footer);
 			return $card;
@@ -864,32 +877,70 @@
 		/**
 		 * Bestellung drucken
 		 */
-		printOrder: function(orderId) {
-			const $card = $(`.lbite-kanban-card[data-order-id="${orderId}"]`);
-			if ($card.length === 0) return;
+		/**
+		 * Auswahl der Bonvorlagen einblenden
+		 *
+		 * @param {number} orderId Bestell-ID.
+		 * @param {jQuery} $anchor Auslösender Knopf.
+		 */
+		showPrintMenu: function(orderId, $anchor) {
+			$('.lbite-print-menu').remove();
 
-			const printWindow = window.open('', '', 'width=300,height=600');
-			
-			// CSS Handles holen (einfachere Lösung für ein Popup ohne komplettes Head-Management)
-			const cssUrl = $('link[id="lbite-order-board-css"]').attr('href') || '';
-			
-			printWindow.document.write(`
-				<html>
-				<head>
-					<title>Bestellung #${orderId}</title>
-					${cssUrl ? `<link rel="stylesheet" href="${cssUrl}">` : ''}
-				</head>
-				<body class="lbite-print-body">
-					${$card.html()}
-				</body>
-				</html>
-			`);
-			printWindow.document.close();
-			
-			// Warten bis Styles geladen sind
-			printWindow.onload = function() {
-				printWindow.print();
-			};
+			const types = lbiteDashboard.receiptTypes || {};
+			const $menu = $('<div class="lbite-print-menu"></div>');
+
+			Object.keys(types).forEach((key) => {
+				$('<button type="button"></button>')
+					.text(types[key])
+					.on('click', (e) => {
+						e.stopPropagation();
+						$menu.remove();
+						this.printOrder(orderId, key);
+					})
+					.appendTo($menu);
+			});
+
+			$anchor.closest('.lbite-kanban-card').append($menu);
+
+			// Beim nächsten Klick irgendwo schliessen.
+			setTimeout(() => {
+				$(document).one('click', () => $menu.remove());
+			}, 0);
+		},
+
+		printOrder: function(orderId, type) {
+			// Holt eine echte 80-mm-Bonvorlage vom Server. Früher wurde das
+			// HTML der Kanban-Karte samt Bedienknöpfen gedruckt.
+			$.post(lbiteDashboard.ajaxUrl, {
+				action: 'lbite_get_receipt',
+				nonce: lbiteDashboard.nonce,
+				order_id: orderId,
+				type: type || 'kitchen'
+			}).done((response) => {
+				if (!response || !response.success || !response.data || !response.data.html) {
+					this.showToast(lbiteDashboard.strings.printError || 'Could not create receipt', 'error');
+					return;
+				}
+
+				const printWindow = window.open('', '', 'width=380,height=700');
+				if (!printWindow) {
+					this.showToast(lbiteDashboard.strings.popupBlocked || 'Please allow pop-ups to print', 'error');
+					return;
+				}
+
+				printWindow.document.write(response.data.html);
+				printWindow.document.title = response.data.title || '';
+				printWindow.document.close();
+
+				// Der Beleg bringt sein CSS eingebettet mit, es ist also nichts
+				// nachzuladen – ein kurzer Aufschub reicht fürs Layout.
+				printWindow.onload = () => printWindow.print();
+				setTimeout(() => {
+					try { printWindow.print(); } catch (e) {}
+				}, 250);
+			}).fail(() => {
+				this.showToast(lbiteDashboard.strings.printError || 'Could not create receipt', 'error');
+			});
 		},
 
 		/**
@@ -1039,6 +1090,35 @@
 				}
 				this.playNotificationSound();
 			}, interval);
+		},
+
+		/**
+		 * Kurze Rückmeldung einblenden
+		 *
+		 * Nutzt die Toast-Komponente des Design-Systems. Vorher gab es im
+		 * Board gar keinen Melde-Mechanismus ausser einem blockierenden
+		 * alert().
+		 *
+		 * @param {string} message Text.
+		 * @param {string} type    success, warning, danger oder info.
+		 */
+		showToast: function(message, type) {
+			let $stack = $('.lbite-toast-stack');
+			if ($stack.length === 0) {
+				$stack = $('<div class="lbite-toast-stack"></div>').appendTo('body');
+			}
+
+			const variant = ({ error: 'danger', warning: 'warning', success: 'success' })[type] || 'info';
+			const $toast = $('<div class="lbite-toast"></div>')
+				.addClass('lbite-toast--' + variant)
+				.attr('role', 'status')
+				.text(message)
+				.appendTo($stack);
+
+			setTimeout(() => {
+				$toast.addClass('is-leaving');
+				setTimeout(() => $toast.remove(), 300);
+			}, 4000);
 		},
 
 		/**

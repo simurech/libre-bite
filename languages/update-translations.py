@@ -23,6 +23,36 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    "Customer": "Kunde",
+    "Round %d": "Runde %d",
+    # Bon-Vorlagen (F42)
+    "Receipt Templates": "Bon-Vorlagen",
+    "Kitchen ticket": "Küchenticket",
+    "Customer receipt": "Kundenbon",
+    "Delivery note": "Lieferschein",
+    "Order number": "Bestellnummer",
+    "Order time": "Bestellzeit",
+    "Pickup / delivery time": "Abhol- bzw. Lieferzeit",
+    "Customer name": "Kundenname",
+    "Phone number": "Telefonnummer",
+    "Line items": "Positionen",
+    "Prices and total": "Preise und Summe",
+    "Customer note": "Kundennotiz",
+    "Payment method": "Zahlungsart",
+    "Field": "Feld",
+    "Received": "Eingegangen",
+    "For": "Für",
+    "Note": "Notiz",
+    "Payment": "Zahlung",
+    "Phone": "Telefon",
+    "Address": "Adresse",
+    "Choose which information appears on which printed document. The kitchen needs items, notes and allergens but no prices; the guest needs prices but no preparation notes; the driver needs the address and phone number.":
+        "Legen Sie fest, welche Angabe auf welchem Ausdruck erscheint. Die Küche braucht Positionen, Notizen und Allergene, aber keine Preise; der Gast braucht Preise, aber keine Zubereitungsnotizen; der Fahrer braucht Adresse und Telefonnummer.",
+    "Print (right-click to choose a template)": "Drucken (Rechtsklick für Vorlagenauswahl)",
+    "Could not create the receipt": "Der Beleg konnte nicht erstellt werden",
+    "Please allow pop-ups for this site to print": "Bitte Pop-ups für diese Seite erlauben, um zu drucken",
+    "This browser does not support keeping the screen awake.": "Dieser Browser kann den Bildschirm nicht wachhalten.",
+    "%1$s – Order %2$s": "%1$s – Bestellung %2$s",
     # Kapazitätsdeckelung pro Zeitfenster (F45)
     "Time Slot Capacity":
         "Kapazität pro Zeitfenster",
