@@ -114,6 +114,31 @@ NEW_STRINGS_FORMAL_SS = {
         "Keine offenen Tabs",
     "Split":
         "Split",
+    # Kanban-Spalten-Anpassung (F30)
+    "Customizable Kanban Columns":
+        "Anpassbare Kanban-Spalten",
+    "Rename, add, remove and reorder Kanban board columns; optional drag & drop and a one-step back action":
+        "Kanban-Spalten umbenennen, hinzufügen, entfernen und neu anordnen; optional mit Drag & Drop und einem Zurück-Schritt",
+    "Rename, add, remove and reorder Kanban board columns; enables a one-step back action.":
+        "Kanban-Spalten umbenennen, hinzufügen, entfernen und neu anordnen; ermöglicht einen Zurück-Schritt.",
+    "Kanban Columns":
+        "Kanban-Spalten",
+    "Counts as completed":
+        "Zählt als abgeschlossen",
+    "Add column":
+        "Spalte hinzufügen",
+    "Remove column":
+        "Spalte entfernen",
+    "Drag rows to reorder. Minimum 2, maximum 5 columns.":
+        "Zeilen zum Neuanordnen ziehen. Minimum 2, maximum 5 Spalten.",
+    "Drag & Drop":
+        "Drag & Drop",
+    "Allow dragging order cards between columns on the Kanban board.":
+        "Erlaubt das Verschieben von Bestellkarten zwischen Spalten im Kanban-Board per Drag & Drop.",
+    "Back":
+        "Zurück",
+    "Order moved back from completed via Dashboard":
+        "Bestellung über Dashboard von «Abgeschlossen» zurückverschoben",
     # Produkt-Add-ons (bisher «Options»/«Optionen»)
     "Product Options":
         "Produkt-Add-ons",

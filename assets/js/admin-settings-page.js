@@ -111,4 +111,43 @@ jQuery(document).ready(function($) {
 			});
 		});
 	}
+
+	// Kanban-Spalten-Editor per Drag & Drop, Add/Remove-Buttons (F30)
+	var kanbanEditor = document.getElementById('lbite-kanban-columns-editor');
+	if (kanbanEditor && typeof Sortable !== 'undefined') {
+		Sortable.create(kanbanEditor, {
+			handle: '.lbite-kanban-drag-handle',
+			animation: 150
+		});
+
+		function updateKanbanButtonsState() {
+			var rows = $('#lbite-kanban-columns-editor .lbite-kanban-column-row').length;
+			$('#lbite-kanban-add-column').prop('disabled', rows >= 5);
+			$('.lbite-kanban-remove-column').prop('disabled', rows <= 2);
+		}
+
+		$('#lbite-kanban-add-column').on('click', function() {
+			var $editor    = $('#lbite-kanban-columns-editor');
+			var nextIndex  = parseInt($editor.data('next-index'), 10);
+			var countsLabel = (lbiteAdminSettings.strings && lbiteAdminSettings.strings.countsAsCompleted) || 'Counts as completed';
+			var $row = $(
+				'<div class="lbite-kanban-column-row" data-index="' + nextIndex + '">' +
+					'<span class="dashicons dashicons-menu lbite-kanban-drag-handle"></span>' +
+					'<input type="hidden" name="columns[' + nextIndex + '][key]" value="">' +
+					'<input type="text" name="columns[' + nextIndex + '][label]" class="regular-text">' +
+					'<label><input type="checkbox" name="columns[' + nextIndex + '][counts_as_completed]" value="1"> ' + countsLabel + '</label>' +
+					'<button type="button" class="button lbite-kanban-remove-column">&times;</button>' +
+				'</div>'
+			);
+			$editor.append($row).data('next-index', nextIndex + 1);
+			updateKanbanButtonsState();
+		});
+
+		$(document).on('click', '.lbite-kanban-remove-column', function() {
+			$(this).closest('.lbite-kanban-column-row').remove();
+			updateKanbanButtonsState();
+		});
+
+		updateKanbanButtonsState();
+	}
 });

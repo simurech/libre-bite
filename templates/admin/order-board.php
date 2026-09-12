@@ -82,20 +82,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div class="lbite-kanban-board" id="lbite-kanban-board" style="<?php echo esc_attr( $lbite_saved_location ? '' : 'display: none;' ); ?>">
-		<div class="lbite-kanban-column" data-status="incoming">
-			<h2><?php esc_html_e( 'Pre-orders', 'libre-bite' ); ?></h2>
-			<div class="lbite-kanban-cards" id="lbite-column-incoming"></div>
+	<?php
+	$lbite_board_columns = LBite_Order_Dashboard::get_columns();
+	$lbite_board_style   = '--lbite-kanban-columns: ' . (int) count( $lbite_board_columns ) . ';' . ( $lbite_saved_location ? '' : ' display: none;' );
+	?>
+	<div class="lbite-kanban-board" id="lbite-kanban-board" style="<?php echo esc_attr( $lbite_board_style ); ?>">
+		<?php foreach ( $lbite_board_columns as $lbite_board_col ) : ?>
+		<div class="lbite-kanban-column" data-status="<?php echo esc_attr( $lbite_board_col['key'] ); ?>" data-drop-zone="<?php echo esc_attr( $lbite_board_col['key'] ); ?>">
+			<h2><?php echo esc_html( $lbite_board_col['label'] ); ?></h2>
+			<div class="lbite-kanban-cards" id="lbite-column-<?php echo esc_attr( $lbite_board_col['key'] ); ?>"></div>
 		</div>
-
-		<div class="lbite-kanban-column" data-status="preparing">
-			<h2><?php esc_html_e( 'Prepare Now', 'libre-bite' ); ?></h2>
-			<div class="lbite-kanban-cards" id="lbite-column-preparing"></div>
-		</div>
-
-		<div class="lbite-kanban-column" data-status="completed">
-			<h2><?php esc_html_e( 'Completed', 'libre-bite' ); ?></h2>
-			<div class="lbite-kanban-cards" id="lbite-column-completed"></div>
-		</div>
+		<?php endforeach; ?>
 	</div>
 </div>

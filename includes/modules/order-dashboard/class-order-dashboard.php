@@ -22,15 +22,119 @@ class LBite_Order_Dashboard {
 	private $loader;
 
 	/**
-	 * Status-Keys (für interne Validierung)
+	 * Standard-Spaltenkonfiguration (Fallback wenn Feature aus oder keine Custom-Config)
 	 *
-	 * @var array
+	 * @return array
 	 */
-	const STATUSES = array(
-		'incoming'  => 'incoming',
-		'preparing' => 'preparing',
-		'completed' => 'completed',
-	);
+	private static function get_default_columns() {
+		return array(
+			array(
+				'key'                 => 'incoming',
+				'label'               => __( 'Pre-orders', 'libre-bite' ),
+				'counts_as_completed' => false,
+			),
+			array(
+				'key'                 => 'preparing',
+				'label'               => __( 'Prepare Now', 'libre-bite' ),
+				'counts_as_completed' => false,
+			),
+			array(
+				'key'                 => 'completed',
+				'label'               => __( 'Completed', 'libre-bite' ),
+				'counts_as_completed' => true,
+			),
+		);
+	}
+
+	/**
+	 * Aktuell gültige Kanban-Spaltenkonfiguration abrufen
+	 *
+	 * @return array
+	 */
+	public static function get_columns() {
+		if ( ! lbite_feature_enabled( 'enable_kanban_customization' ) ) {
+			return self::get_default_columns();
+		}
+
+		$stored  = get_option( 'lbite_kanban_columns', array() );
+		$columns = self::sanitize_columns_input( is_array( $stored ) ? $stored : array() );
+
+		return empty( $columns ) ? self::get_default_columns() : $columns;
+	}
+
+	/**
+	 * Spaltenkonfiguration als Key-indizierte Map abrufen
+	 *
+	 * @return array
+	 */
+	public static function get_columns_by_key() {
+		$map = array();
+		foreach ( self::get_columns() as $col ) {
+			$map[ $col['key'] ] = $col;
+		}
+		return $map;
+	}
+
+	/**
+	 * Rohe Spaltendaten (aus Option oder $_POST) validieren und normalisieren
+	 *
+	 * @param array $raw Rohe Spaltendaten
+	 * @return array Bereinigte Spaltenliste, leeres Array wenn ungültig
+	 */
+	public static function sanitize_columns_input( $raw ) {
+		if ( ! is_array( $raw ) ) {
+			return array();
+		}
+
+		$used_keys = array();
+		$columns   = array();
+
+		foreach ( $raw as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+
+			$label = isset( $row['label'] ) ? sanitize_text_field( wp_unslash( $row['label'] ) ) : '';
+			if ( '' === $label ) {
+				continue;
+			}
+
+			$key = isset( $row['key'] ) ? sanitize_key( wp_unslash( $row['key'] ) ) : '';
+			if ( '' === $key || isset( $used_keys[ $key ] ) ) {
+				do {
+					$key = 'col_' . substr( md5( $label . wp_generate_password( 8, false ) ), 0, 8 );
+				} while ( isset( $used_keys[ $key ] ) );
+			}
+
+			$used_keys[ $key ] = true;
+			$columns[]         = array(
+				'key'                 => $key,
+				'label'               => $label,
+				'counts_as_completed' => ! empty( $row['counts_as_completed'] ),
+			);
+
+			if ( count( $columns ) >= 5 ) {
+				break;
+			}
+		}
+
+		if ( count( $columns ) < 2 ) {
+			return array();
+		}
+
+		$has_completed = false;
+		foreach ( $columns as $c ) {
+			if ( $c['counts_as_completed'] ) {
+				$has_completed = true;
+				break;
+			}
+		}
+		if ( ! $has_completed ) {
+			$columns[ count( $columns ) - 1 ]['counts_as_completed'] = true;
+		}
+
+		return $columns;
+	}
 
 	/**
 	 * Anzahl eingehender Bestellungen für Menü-Badge zurückgeben (gecacht)
@@ -43,6 +147,8 @@ class LBite_Order_Dashboard {
 			return (int) $cached;
 		}
 
+		$default_status_key = self::get_columns()[0]['key'];
+
 		$order_ids = wc_get_orders( array(
 			'limit'  => 500,
 			'status' => array( 'processing', 'on-hold' ),
@@ -51,7 +157,7 @@ class LBite_Order_Dashboard {
 			'meta_query' => array(
 				array(
 					'key'     => '_lbite_order_status',
-					'value'   => 'incoming',
+					'value'   => $default_status_key,
 					'compare' => '=',
 				),
 			),
@@ -69,11 +175,11 @@ class LBite_Order_Dashboard {
 	 * @return array
 	 */
 	public static function get_status_labels() {
-		return array(
-			'incoming'  => __( 'Pre-orders', 'libre-bite' ),
-			'preparing' => __( 'Prepare Now', 'libre-bite' ),
-			'completed' => __( 'Completed', 'libre-bite' ),
-		);
+		$labels = array();
+		foreach ( self::get_columns() as $col ) {
+			$labels[ $col['key'] ] = $col['label'];
+		}
+		return $labels;
 	}
 
 	/**
@@ -119,15 +225,15 @@ class LBite_Order_Dashboard {
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
+		$columns         = self::get_columns();
+		$column_keys     = wp_list_pluck( $columns, 'key' );
+		$columns_by_key  = self::get_columns_by_key();
+
 		// Standort ist Pflicht.
 		if ( ! $location_id ) {
 			wp_send_json_success(
 				array(
-					'orders' => array(
-						'incoming'  => array(),
-						'preparing' => array(),
-						'completed' => array(),
-					),
+					'orders' => array_fill_keys( $column_keys, array() ),
 				)
 			);
 		}
@@ -169,11 +275,21 @@ class LBite_Order_Dashboard {
 		$orders_active    = wc_get_orders( $args_active );
 		$orders_completed = wc_get_orders( $args_completed );
 
-		$orders_by_status = array(
-			'incoming'  => array(),
-			'preparing' => array(),
-			'completed' => array(),
-		);
+		$orders_by_status = array_fill_keys( $column_keys, array() );
+
+		// Legacy-Routing («ready»-Mapping, order_type-Heuristik) nur, wenn die Standard-Keys
+		// «incoming»/«preparing» noch in der aktuellen Spaltenkonfiguration existieren.
+		$legacy_active_routing = isset( $columns_by_key['incoming'], $columns_by_key['preparing'] );
+
+		// Generischer Fallback für ungültige/fehlende Status bei aktiven Bestellungen:
+		// erste Spalte, die nicht als «abgeschlossen» zählt.
+		$fallback_active_key = $column_keys[0];
+		foreach ( $columns as $col ) {
+			if ( ! $col['counts_as_completed'] ) {
+				$fallback_active_key = $col['key'];
+				break;
+			}
+		}
 
 		// Aktive Bestellungen nach Dringlichkeit sortieren:
 		// «now»-Bestellungen nach Erstellungszeit, «later»-Bestellungen nach Abholzeit.
@@ -197,24 +313,33 @@ class LBite_Order_Dashboard {
 			$lbite_status = $order->get_meta( '_lbite_order_status', true );
 
 			// Rückwärtskompatibilität: «ready» existiert nicht mehr → Spalte B.
-			if ( 'ready' === $lbite_status ) {
+			if ( $legacy_active_routing && 'ready' === $lbite_status ) {
 				$lbite_status = 'preparing';
 			}
 
-			// Ungültige oder fehlende Status: Routing nach Bestelltyp.
-			// «now»-Bestellungen → Spalte B (Jetzt zubereiten).
-			// «later»-Bestellungen → Spalte A (Vorbestellungen).
-			if ( ! $lbite_status || ! isset( $orders_by_status[ $lbite_status ] ) ) {
-				$order_type   = $order->get_meta( '_lbite_order_type', true );
-				$lbite_status = ( 'later' === $order_type ) ? 'incoming' : 'preparing';
+			// Ungültige oder fehlende Status: Routing nach Bestelltyp (nur mit Standard-Keys)
+			// bzw. genereller Fallback auf die erste Nicht-«abgeschlossen»-Spalte.
+			if ( ! $lbite_status || ! isset( $columns_by_key[ $lbite_status ] ) ) {
+				if ( $legacy_active_routing ) {
+					$order_type   = $order->get_meta( '_lbite_order_type', true );
+					$lbite_status = ( 'later' === $order_type ) ? 'incoming' : 'preparing';
+				} else {
+					$lbite_status = $fallback_active_key;
+				}
 			}
 
-			// «incoming»-Bestellungen mit Typ «now» gehören in Spalte B.
-			if ( 'incoming' === $lbite_status ) {
+			// «incoming»-Bestellungen mit Typ «now» gehören in Spalte B (nur mit Standard-Keys).
+			if ( $legacy_active_routing && 'incoming' === $lbite_status ) {
 				$order_type = $order->get_meta( '_lbite_order_type', true );
 				if ( 'now' === $order_type || '' === $order_type ) {
 					$lbite_status = 'preparing';
 				}
+			}
+
+			// Sicherheitsnetz: Zielspalte muss existieren und darf nicht als «abgeschlossen» zählen
+			// (eine aktive WC-Bestellung gehört nie in eine completed-Spalte).
+			if ( ! isset( $columns_by_key[ $lbite_status ] ) || $columns_by_key[ $lbite_status ]['counts_as_completed'] ) {
+				$lbite_status = $fallback_active_key;
 			}
 
 			$orders_by_status[ $lbite_status ][] = $this->format_order_for_dashboard( $order );
@@ -223,9 +348,10 @@ class LBite_Order_Dashboard {
 		// Process completed orders (already filtered to today only).
 		foreach ( $orders_completed as $order ) {
 			$lbite_status = $order->get_meta( '_lbite_order_status', true );
-			// Only add to completed if status is 'completed'.
-			if ( 'completed' === $lbite_status ) {
-				$orders_by_status['completed'][] = $this->format_order_for_dashboard( $order );
+			// Nur einsortieren, wenn die gespeicherte Spalte noch existiert und als
+			// «abgeschlossen» zählt (es kann mehrere solcher Spalten geben).
+			if ( isset( $columns_by_key[ $lbite_status ] ) && $columns_by_key[ $lbite_status ]['counts_as_completed'] ) {
+				$orders_by_status[ $lbite_status ][] = $this->format_order_for_dashboard( $order );
 			}
 		}
 
@@ -245,19 +371,26 @@ class LBite_Order_Dashboard {
 			unset( $status_orders );
 		}
 
-		// Bei abgeschlossenen Bestellungen: Neueste zuerst, nur die letzten 3 initial anzeigen.
-		if ( ! empty( $orders_by_status['completed'] ) ) {
-			$orders_by_status['completed'] = array_reverse( $orders_by_status['completed'] );
-			$completed_count               = count( $orders_by_status['completed'] );
-			$orders_by_status['completed'] = array_slice( $orders_by_status['completed'], 0, 3 );
-		} else {
-			$completed_count = 0;
+		// Bei allen «abgeschlossen»-Spalten: Neueste zuerst, nur die letzten 3 initial anzeigen.
+		$completed_counts = array();
+		foreach ( $columns as $col ) {
+			if ( ! $col['counts_as_completed'] ) {
+				continue;
+			}
+			$key = $col['key'];
+			if ( ! empty( $orders_by_status[ $key ] ) ) {
+				$orders_by_status[ $key ] = array_reverse( $orders_by_status[ $key ] );
+				$completed_counts[ $key ] = count( $orders_by_status[ $key ] );
+				$orders_by_status[ $key ] = array_slice( $orders_by_status[ $key ], 0, 3 );
+			} else {
+				$completed_counts[ $key ] = 0;
+			}
 		}
 
 		wp_send_json_success(
 			array(
-				'orders'          => $orders_by_status,
-				'completed_count' => $completed_count,
+				'orders'           => $orders_by_status,
+				'completed_counts' => $completed_counts,
 			)
 		);
 	}
@@ -412,7 +545,9 @@ class LBite_Order_Dashboard {
 			$new_status = 'preparing';
 		}
 
-		if ( ! $order_id || ! isset( self::STATUSES[ $new_status ] ) ) {
+		$columns_by_key = self::get_columns_by_key();
+
+		if ( ! $order_id || ! isset( $columns_by_key[ $new_status ] ) ) {
 			wp_send_json_error();
 		}
 
@@ -421,12 +556,17 @@ class LBite_Order_Dashboard {
 			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
 		}
 
-		// Offene Tabs (F_TAB) dürfen erst nach dem Abschluss in der POS-Oberfläche als
-		// abgeschlossen markiert werden – sonst bleibt _lbite_tab_open gesetzt, obwohl die
-		// Bestellung im Kanban bereits als fertig gilt.
-		if ( 'completed' === $new_status && '1' === (string) $order->get_meta( '_lbite_tab_open', true ) ) {
+		$target_counts_as_completed = $columns_by_key[ $new_status ]['counts_as_completed'];
+
+		// Offene Tabs (F_TAB) dürfen erst nach dem Abschluss in der POS-Oberfläche in eine
+		// «abgeschlossen»-Spalte verschoben werden – sonst bleibt _lbite_tab_open gesetzt, obwohl
+		// die Bestellung im Kanban bereits als fertig gilt.
+		if ( $target_counts_as_completed && '1' === (string) $order->get_meta( '_lbite_tab_open', true ) ) {
 			wp_send_json_error( array( 'message' => __( 'Close the tab in the POS first', 'libre-bite' ) ) );
 		}
+
+		$old_status              = $order->get_meta( '_lbite_order_status', true );
+		$old_counts_as_completed = isset( $columns_by_key[ $old_status ] ) && $columns_by_key[ $old_status ]['counts_as_completed'];
 
 		$order->update_meta_data( '_lbite_order_status', $new_status );
 		$order->update_meta_data( '_lbite_status_changed', current_time( 'mysql' ) );
@@ -435,9 +575,13 @@ class LBite_Order_Dashboard {
 		// Menü-Badge-Cache invalidieren.
 		delete_transient( 'lbite_incoming_orders_count' );
 
-		// Bei "Abgeschlossen" - WooCommerce Status ändern
-		if ( 'completed' === $new_status ) {
+		if ( $target_counts_as_completed ) {
+			// In eine «abgeschlossen»-Spalte verschoben - WooCommerce-Status entsprechend setzen.
 			$order->update_status( 'completed', __( 'Order completed via Dashboard', 'libre-bite' ) );
+		} elseif ( $old_counts_as_completed && 'completed' === $order->get_status() ) {
+			// Zurück-Button: aus einer «abgeschlossen»-Spalte heraus verschoben - WC-Status
+			// zurücksetzen, damit die Statistik-Seite konsistent bleibt.
+			$order->update_status( 'processing', __( 'Order moved back from completed via Dashboard', 'libre-bite' ) );
 		}
 
 		wp_send_json_success(
@@ -533,8 +677,15 @@ class LBite_Order_Dashboard {
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 		$offset      = isset( $_POST['offset'] ) ? intval( wp_unslash( $_POST['offset'] ) ) : 0;
+		$column      = isset( $_POST['column'] ) ? sanitize_key( wp_unslash( $_POST['column'] ) ) : 'completed';
 
 		if ( ! $location_id ) {
+			wp_send_json_success( array( 'orders' => array() ) );
+		}
+
+		// Angeforderte Spalte muss existieren und als «abgeschlossen» zählen.
+		$columns_by_key = self::get_columns_by_key();
+		if ( ! isset( $columns_by_key[ $column ] ) || ! $columns_by_key[ $column ]['counts_as_completed'] ) {
 			wp_send_json_success( array( 'orders' => array() ) );
 		}
 
@@ -555,7 +706,7 @@ class LBite_Order_Dashboard {
 				),
 				array(
 					'key'     => '_lbite_order_status',
-					'value'   => 'completed',
+					'value'   => $column,
 					'compare' => '=',
 				),
 			),
@@ -588,6 +739,13 @@ class LBite_Order_Dashboard {
 	 * Geplante Bestellungen prüfen und automatisch verschieben
 	 */
 	public function check_scheduled_orders() {
+		// Auto-Vorbereitung ergibt bei frei umbenannten/entfernten Standard-Spalten keinen Sinn
+		// mehr - bewusste Einschränkung bei aktiver Kanban-Spalten-Anpassung ohne Standard-Keys.
+		$columns_by_key = self::get_columns_by_key();
+		if ( ! isset( $columns_by_key['incoming'], $columns_by_key['preparing'] ) ) {
+			return;
+		}
+
 		// Bestellungen mit Pickup-Zeit in der Zukunft
 		$orders = wc_get_orders(
 			array(
@@ -646,7 +804,7 @@ class LBite_Order_Dashboard {
 
 		$lbite_status = $order->get_meta( '_lbite_order_status', true );
 		if ( ! $lbite_status ) {
-			$order->update_meta_data( '_lbite_order_status', 'incoming' );
+			$order->update_meta_data( '_lbite_order_status', self::get_columns()[0]['key'] );
 			$order->save();
 
 			// Menü-Badge-Cache invalidieren.
@@ -731,8 +889,9 @@ class LBite_Order_Dashboard {
 		}
 
 		$current_status = $order->get_meta( '_lbite_order_status', true );
-		if ( ! $current_status ) {
-			$current_status = 'incoming';
+		$status_labels  = self::get_status_labels();
+		if ( ! $current_status || ! isset( $status_labels[ $current_status ] ) ) {
+			$current_status = self::get_columns()[0]['key'];
 		}
 
 		$status_changed = $order->get_meta( '_lbite_status_changed', true );
@@ -741,7 +900,7 @@ class LBite_Order_Dashboard {
 			<p>
 				<strong><?php esc_html_e( 'Current Status:', 'libre-bite' ); ?></strong><br>
 				<span class="lbite-status-badge lbite-status-<?php echo esc_attr( $current_status ); ?>">
-					<?php echo esc_html( self::get_status_labels()[ $current_status ] ); ?>
+					<?php echo esc_html( $status_labels[ $current_status ] ); ?>
 				</span>
 			</p>
 

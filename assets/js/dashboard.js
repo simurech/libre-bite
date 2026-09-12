@@ -23,8 +23,9 @@
 		soundEnabled: true,
 		lastOrderCount: 0,
 		audio: null,
-		completedCount: 0,
-		completedOffset: 3,
+		completedCounts: {},
+		completedOffsets: {},
+		sortableInstances: [],
 		isLoading: false,
 		pendingActions: new Set(),
 		currentFilter: 'all',
@@ -328,13 +329,20 @@
 				success: (response) => {
 					if (response.success && response.data.orders) {
 						this.allOrders = response.data.orders;
-						this.completedCount = response.data.completed_count || 0;
-						const prevOffset = this.completedOffset;
-						this.completedOffset = 3;
+						this.completedCounts = response.data.completed_counts || {};
+						const prevOffsets = this.completedOffsets;
+						this.completedOffsets = {};
+						Object.keys(this.completedCounts).forEach(key => {
+							this.completedOffsets[key] = 3;
+						});
 						this.renderOrders(response.data.orders, silent);
 						// Bei stillem Refresh: extra geladene abgeschlossene Bestellungen neu abrufen.
-						if (silent && prevOffset > 3) {
-							this.loadMoreCompleted();
+						if (silent) {
+							Object.keys(prevOffsets).forEach(key => {
+								if (prevOffsets[key] > 3 && this.completedOffsets.hasOwnProperty(key)) {
+									this.loadMoreCompleted(key);
+								}
+							});
 						}
 					}
 				},
@@ -355,45 +363,88 @@
 	 */
 	renderOrders: function(ordersByStatus, silent) {
 		this.allOrders = ordersByStatus;
-		
+
 		let totalOrders = 0;
 		let activeOrders = 0; // Nur nicht-abgeschlossene Bestellungen
 
-		Object.keys(ordersByStatus).forEach(status => {
-			let orders = ordersByStatus[status];
-			const $column = $('#lbite-column-' + status);
+		if (lbiteDashboard.kanbanCustomizationActive && Array.isArray(lbiteDashboard.kanbanColumns)) {
+			// Feature aktiv: generisch über die konfigurierten Spalten iterieren.
+			lbiteDashboard.kanbanColumns.forEach(col => {
+				const status = col.key;
+				let orders = ordersByStatus[status] || [];
+				const $column = $('#lbite-column-' + status);
 
-			// Filter anwenden
-			if (this.currentFilter === 'table') {
-				orders = orders.filter(o => !!o.table_id);
-			} else if (this.currentFilter === 'takeaway') {
-				orders = orders.filter(o => !o.table_id);
-			}
+				if (this.currentFilter === 'table') {
+					orders = orders.filter(o => !!o.table_id);
+				} else if (this.currentFilter === 'takeaway') {
+					orders = orders.filter(o => !o.table_id);
+				}
 
-			totalOrders += orders.length;
+				totalOrders += orders.length;
 
-			// Zähle nur aktive Bestellungen (nicht abgeschlossen) für Sound-Trigger
-			if (status !== 'completed') {
-				activeOrders += orders.length;
-			}
+				if (!col.counts_as_completed) {
+					activeOrders += orders.length;
+				}
 
-			// Leer machen
-			$column.empty();
+				$column.empty();
 
-			// Bestellungen rendern
-			orders.forEach(order => {
-				$column.append(this.createOrderCard(order, status));
+				orders.forEach(order => {
+					$column.append(this.createOrderCard(order, status));
+				});
+
+				if (col.counts_as_completed) {
+					const total = this.completedCounts[status] || 0;
+					const offset = this.completedOffsets[status] || 3;
+					if (total > offset) {
+						const remainingCount = total - offset;
+						const $loadMoreBtn = $('<button class="lbite-load-more-completed"></button>')
+							.attr('data-column', status)
+							.text(`📋 ${remainingCount} ` + (lbiteDashboard.strings.moreOrders || 'more order(s)'))
+							.on('click', () => this.loadMoreCompleted(status));
+						$column.append($loadMoreBtn);
+					}
+				}
 			});
+		} else {
+			// Feature aus: unverändertes Verhalten wie vor F30.
+			Object.keys(ordersByStatus).forEach(status => {
+				let orders = ordersByStatus[status];
+				const $column = $('#lbite-column-' + status);
 
-			// "Mehr laden" Button bei abgeschlossenen Bestellungen
-			if (status === 'completed' && this.completedCount > this.completedOffset) {
-				const remainingCount = this.completedCount - this.completedOffset;
-				const $loadMoreBtn = $('<button class="lbite-load-more-completed"></button>')
-					.text(`📋 ${remainingCount} weitere Bestellung(en) anzeigen`)
-					.on('click', () => this.loadMoreCompleted());
-				$column.append($loadMoreBtn);
-			}
-		});
+				// Filter anwenden
+				if (this.currentFilter === 'table') {
+					orders = orders.filter(o => !!o.table_id);
+				} else if (this.currentFilter === 'takeaway') {
+					orders = orders.filter(o => !o.table_id);
+				}
+
+				totalOrders += orders.length;
+
+				// Zähle nur aktive Bestellungen (nicht abgeschlossen) für Sound-Trigger
+				if (status !== 'completed') {
+					activeOrders += orders.length;
+				}
+
+				// Leer machen
+				$column.empty();
+
+				// Bestellungen rendern
+				orders.forEach(order => {
+					$column.append(this.createOrderCard(order, status));
+				});
+
+				// "Mehr laden" Button bei abgeschlossenen Bestellungen
+				const completedTotal  = this.completedCounts['completed'] || 0;
+				const completedOffset = this.completedOffsets['completed'] || 3;
+				if (status === 'completed' && completedTotal > completedOffset) {
+					const remainingCount = completedTotal - completedOffset;
+					const $loadMoreBtn = $('<button class="lbite-load-more-completed"></button>')
+						.text(`📋 ${remainingCount} weitere Bestellung(en) anzeigen`)
+						.on('click', () => this.loadMoreCompleted());
+					$column.append($loadMoreBtn);
+				}
+			});
+		}
 
 		// Neue Bestellung erkannt (auch bei Auto-Refresh prüfen)
 		if (activeOrders > this.lastOrderCount) {
@@ -401,6 +452,11 @@
 		}
 
 		this.lastOrderCount = activeOrders;
+
+		// Drag & Drop nach jedem Render neu initialisieren (Spalten wurden geleert/neu befüllt).
+		if (lbiteDashboard.kanbanDragDropEnabled) {
+			this.initDragDrop();
+		}
 	},
 
 		/**
@@ -481,29 +537,63 @@
 			if (customerNameRaw) footerParts.push(customerNameRaw);
 			$footer.append($('<span class="lbite-card-footer-info"></span>').text(footerParts.join(' · ')));
 
-			// Status-Button
-			const statusButtons = {
-				'incoming':  { next: 'preparing', label: lbiteDashboard.strings.startPreparation },
-				'preparing': { next: 'completed',  label: lbiteDashboard.strings.completed },
-				'completed': null
-			};
-			const statusButton = statusButtons[currentStatus];
 			const $btnGroup = $('<span class="lbite-card-footer-btns"></span>');
-			if (statusButton) {
-				const $sBtn = $('<button class="lbite-status-button"></button>')
-					.addClass(`lbite-status-button-${currentStatus}`)
-					.text(statusButton.label)
-					.on('click', (e) => { e.stopPropagation(); this.moveToNextStatus(order.id, statusButton.next); });
-				$btnGroup.append($sBtn);
-			}
 
-			// Stornieren-Button
-			if (currentStatus !== 'completed') {
-				const $cBtn = $('<button class="lbite-cancel-button"></button>')
-					.attr('title', lbiteDashboard.strings.cancelOrder)
-					.text('✕')
-					.on('click', (e) => { e.stopPropagation(); this.cancelOrder(order.id); });
-				$btnGroup.append($cBtn);
+			if (lbiteDashboard.kanbanCustomizationActive && Array.isArray(lbiteDashboard.kanbanColumns)) {
+				// Feature aktiv: Vorwärts-/Zurück-Button aus den Spalten-Nachbarn ableiten.
+				const columns  = lbiteDashboard.kanbanColumns;
+				const colIndex = columns.findIndex(c => c.key === currentStatus);
+				const col      = colIndex >= 0 ? columns[colIndex] : null;
+				const prevCol  = colIndex > 0 ? columns[colIndex - 1] : null;
+				const nextCol  = (colIndex >= 0 && colIndex < columns.length - 1) ? columns[colIndex + 1] : null;
+
+				if (prevCol) {
+					const $bBtn = $('<button class="lbite-status-button lbite-status-button--back"></button>')
+						.text('← ' + (lbiteDashboard.strings.back || 'Back'))
+						.on('click', (e) => { e.stopPropagation(); this.moveToNextStatus(order.id, prevCol.key); });
+					$btnGroup.append($bBtn);
+				}
+
+				if (nextCol) {
+					const nextLabel = nextCol.counts_as_completed ? ('✓ ' + nextCol.label) : (nextCol.label + ' →');
+					const $sBtn = $('<button class="lbite-status-button"></button>')
+						.addClass(`lbite-status-button-${currentStatus}`)
+						.text(nextLabel)
+						.on('click', (e) => { e.stopPropagation(); this.moveToNextStatus(order.id, nextCol.key); });
+					$btnGroup.append($sBtn);
+				}
+
+				if (!col || !col.counts_as_completed) {
+					const $cBtn = $('<button class="lbite-cancel-button"></button>')
+						.attr('title', lbiteDashboard.strings.cancelOrder)
+						.text('✕')
+						.on('click', (e) => { e.stopPropagation(); this.cancelOrder(order.id); });
+					$btnGroup.append($cBtn);
+				}
+			} else {
+				// Feature aus: unverändertes Verhalten wie vor F30.
+				const statusButtons = {
+					'incoming':  { next: 'preparing', label: lbiteDashboard.strings.startPreparation },
+					'preparing': { next: 'completed',  label: lbiteDashboard.strings.completed },
+					'completed': null
+				};
+				const statusButton = statusButtons[currentStatus];
+				if (statusButton) {
+					const $sBtn = $('<button class="lbite-status-button"></button>')
+						.addClass(`lbite-status-button-${currentStatus}`)
+						.text(statusButton.label)
+						.on('click', (e) => { e.stopPropagation(); this.moveToNextStatus(order.id, statusButton.next); });
+					$btnGroup.append($sBtn);
+				}
+
+				// Stornieren-Button
+				if (currentStatus !== 'completed') {
+					const $cBtn = $('<button class="lbite-cancel-button"></button>')
+						.attr('title', lbiteDashboard.strings.cancelOrder)
+						.text('✕')
+						.on('click', (e) => { e.stopPropagation(); this.cancelOrder(order.id); });
+					$btnGroup.append($cBtn);
+				}
 			}
 
 			// Beleg-Button
@@ -566,6 +656,40 @@
 		 */
 		moveToNextStatus: function(orderId, newStatus) {
 			this.updateOrderStatus(orderId, newStatus);
+		},
+
+		/**
+		 * Drag & Drop zwischen Kanban-Spalten initialisieren (F30, nur wenn aktiviert)
+		 * Muss nach jedem renderOrders()-Aufruf erneut laufen, da die Spalten dabei
+		 * geleert/neu befüllt werden und alte SortableJS-Instanzen an entfernte DOM-Knoten
+		 * gebunden sind.
+		 */
+		initDragDrop: function() {
+			if (typeof Sortable === 'undefined') {
+				return;
+			}
+
+			this.sortableInstances.forEach(instance => instance.destroy());
+			this.sortableInstances = [];
+
+			$('.lbite-kanban-cards').each((i, el) => {
+				const instance = Sortable.create(el, {
+					group: 'lbite-kanban',
+					animation: 150,
+					ghostClass: 'lbite-kanban-ghost',
+					chosenClass: 'lbite-kanban-chosen',
+					dragClass: 'lbite-kanban-dragging',
+					onEnd: (evt) => {
+						const orderId    = $(evt.item).data('order-id');
+						const newColumn  = $(evt.to).closest('.lbite-kanban-column').data('drop-zone');
+						const oldColumn  = $(evt.from).closest('.lbite-kanban-column').data('drop-zone');
+						if (orderId && newColumn && newColumn !== oldColumn) {
+							this.updateOrderStatus(orderId, newColumn);
+						}
+					}
+				});
+				this.sortableInstances.push(instance);
+			});
 		},
 
 		/**
@@ -652,7 +776,8 @@
 		/**
 		 * Weitere abgeschlossene Bestellungen laden
 	 */
-	loadMoreCompleted: function() {
+	loadMoreCompleted: function(columnKey) {
+		const column     = columnKey || 'completed';
 		const locationId = $('#lbite-board-location').val();
 
 		if (!locationId) {
@@ -666,29 +791,31 @@
 				action: 'lbite_load_more_completed',
 				nonce: lbiteDashboard.nonce,
 				location_id: locationId,
-				offset: this.completedOffset
+				offset: this.completedOffsets[column] || 3,
+				column: column
 			},
 			success: (response) => {
 				if (response.success && response.data.orders) {
-					const $column = $('#lbite-column-completed');
+					const $column = $('#lbite-column-' + column);
 
 					// Button entfernen
 					$column.find('.lbite-load-more-completed').remove();
 
 					// Neue Bestellungen hinzufügen
 					response.data.orders.forEach(order => {
-						$column.append(this.createOrderCard(order, 'completed'));
+						$column.append(this.createOrderCard(order, column));
 					});
 
 					// Offset aktualisieren
-					this.completedOffset += response.data.orders.length;
+					this.completedOffsets[column] = (this.completedOffsets[column] || 3) + response.data.orders.length;
 
 					// Button wieder hinzufügen wenn noch mehr vorhanden
-					if (this.completedOffset < response.data.total_count) {
-						const remainingCount = response.data.total_count - this.completedOffset;
+					if (this.completedOffsets[column] < response.data.total_count) {
+						const remainingCount = response.data.total_count - this.completedOffsets[column];
 						const $loadMoreBtn = $('<button class="lbite-load-more-completed"></button>')
+							.attr('data-column', column)
 							.text(`📋 ${remainingCount} ` + (lbiteDashboard.strings.moreOrders || 'more order(s)'))
-							.on('click', () => this.loadMoreCompleted());
+							.on('click', () => this.loadMoreCompleted(column));
 						$column.append($loadMoreBtn);
 					}
 				}

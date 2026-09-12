@@ -143,15 +143,20 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		case 'orders':
 			$lbite_features = get_option( 'lbite_features', array() );
 			$lbite_features['enable_kanban_board'] = isset( $_POST['lbite_feature_toggle']['enable_kanban_board'] );
+			$lbite_features['enable_kanban_customization'] = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_kanban_customization'] );
 			update_option( 'lbite_features', $lbite_features );
 
 			$lbite_ord_values = lbite_enforce_pro_options( array(
-				'lbite_show_future_orders' => isset( $_POST['lbite_show_future_orders'] ) ? 1 : 0,
-				'lbite_dim_future_orders'  => isset( $_POST['lbite_dim_future_orders'] ) ? 1 : 0,
+				'lbite_show_future_orders'       => isset( $_POST['lbite_show_future_orders'] ) ? 1 : 0,
+				'lbite_dim_future_orders'        => isset( $_POST['lbite_dim_future_orders'] ) ? 1 : 0,
+				'lbite_kanban_drag_drop_enabled' => isset( $_POST['lbite_kanban_drag_drop_enabled'] ) ? 1 : 0,
+				'lbite_kanban_columns'           => LBite_Order_Dashboard::sanitize_columns_input( isset( $_POST['columns'] ) && is_array( $_POST['columns'] ) ? wp_unslash( $_POST['columns'] ) : array() ),
 			) );
 			update_option( 'lbite_dashboard_refresh_interval', isset( $_POST['lbite_dashboard_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_dashboard_refresh_interval'] ) ) : 30 );
 			update_option( 'lbite_show_future_orders', $lbite_ord_values['lbite_show_future_orders'] );
 			update_option( 'lbite_dim_future_orders', $lbite_ord_values['lbite_dim_future_orders'] );
+			update_option( 'lbite_kanban_drag_drop_enabled', $lbite_ord_values['lbite_kanban_drag_drop_enabled'] );
+			update_option( 'lbite_kanban_columns', $lbite_ord_values['lbite_kanban_columns'] );
 			$lbite_did_save = true;
 			break;
 
@@ -720,6 +725,60 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 									<?php checked( get_option( 'lbite_dim_future_orders', 1 ), 1 ); ?>
 									<?php disabled( ! $lbite_premium_allowed ); ?>>
 								<?php esc_html_e( 'Display future pre-orders dimmed (greyed out) in the Kanban board.', 'libre-bite' ); ?>
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<th>
+							<?php esc_html_e( 'Customizable Kanban Columns', 'libre-bite' ); ?>
+							<?php if ( ! $lbite_premium_allowed ) : ?>
+								<span class="lbite-pro-badge">Pro</span>
+							<?php endif; ?>
+						</th>
+						<td>
+							<label class="<?php echo $lbite_premium_allowed ? '' : 'lbite-locked'; ?>">
+								<input type="checkbox" name="lbite_feature_toggle[enable_kanban_customization]" value="1"
+									<?php checked( lbite_feature_enabled( 'enable_kanban_customization' ), true ); ?>
+									<?php disabled( ! $lbite_premium_allowed ); ?>>
+								<?php esc_html_e( 'Rename, add, remove and reorder Kanban board columns; enables a one-step back action.', 'libre-bite' ); ?>
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'Kanban Columns', 'libre-bite' ); ?></th>
+						<td>
+							<?php $lbite_kanban_cols = LBite_Order_Dashboard::get_columns(); ?>
+							<div id="lbite-kanban-columns-editor" data-next-index="<?php echo (int) count( $lbite_kanban_cols ); ?>">
+								<?php foreach ( $lbite_kanban_cols as $lbite_i => $lbite_col ) : ?>
+								<div class="lbite-kanban-column-row" data-index="<?php echo (int) $lbite_i; ?>">
+									<span class="dashicons dashicons-menu lbite-kanban-drag-handle"></span>
+									<input type="hidden" name="columns[<?php echo (int) $lbite_i; ?>][key]" value="<?php echo esc_attr( $lbite_col['key'] ); ?>">
+									<input type="text" name="columns[<?php echo (int) $lbite_i; ?>][label]" value="<?php echo esc_attr( $lbite_col['label'] ); ?>" class="regular-text" <?php disabled( ! $lbite_premium_allowed ); ?>>
+									<label>
+										<input type="checkbox" name="columns[<?php echo (int) $lbite_i; ?>][counts_as_completed]" value="1" <?php checked( $lbite_col['counts_as_completed'] ); ?> <?php disabled( ! $lbite_premium_allowed ); ?>>
+										<?php esc_html_e( 'Counts as completed', 'libre-bite' ); ?>
+									</label>
+									<button type="button" class="button lbite-kanban-remove-column" title="<?php esc_attr_e( 'Remove column', 'libre-bite' ); ?>" <?php disabled( ! $lbite_premium_allowed ); ?>>&times;</button>
+								</div>
+								<?php endforeach; ?>
+							</div>
+							<button type="button" id="lbite-kanban-add-column" class="button" <?php disabled( ! $lbite_premium_allowed ); ?>><?php esc_html_e( 'Add column', 'libre-bite' ); ?></button>
+							<p class="description"><?php esc_html_e( 'Drag rows to reorder. Minimum 2, maximum 5 columns.', 'libre-bite' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th>
+							<?php esc_html_e( 'Drag & Drop', 'libre-bite' ); ?>
+							<?php if ( ! $lbite_premium_allowed ) : ?>
+								<span class="lbite-pro-badge">Pro</span>
+							<?php endif; ?>
+						</th>
+						<td>
+							<label class="<?php echo $lbite_premium_allowed ? '' : 'lbite-locked'; ?>">
+								<input type="checkbox" name="lbite_kanban_drag_drop_enabled" value="1"
+									<?php checked( get_option( 'lbite_kanban_drag_drop_enabled', 0 ), 1 ); ?>
+									<?php disabled( ! $lbite_premium_allowed ); ?>>
+								<?php esc_html_e( 'Allow dragging order cards between columns on the Kanban board.', 'libre-bite' ); ?>
 							</label>
 						</td>
 					</tr>

@@ -571,7 +571,10 @@ class LBite_Admin {
 				'lbite-admin-settings',
 				'lbiteAdminSettings',
 				array(
-					'nonce' => wp_create_nonce( 'lbite_admin_nonce' ),
+					'nonce'   => wp_create_nonce( 'lbite_admin_nonce' ),
+					'strings' => array(
+						'countsAsCompleted' => __( 'Counts as completed', 'libre-bite' ),
+					),
 				)
 			);
 		}
@@ -585,10 +588,26 @@ class LBite_Admin {
 				LBITE_VERSION
 			);
 
+			$lbite_kanban_dragdrop = lbite_feature_enabled( 'enable_kanban_customization' )
+				&& '1' === (string) get_option( 'lbite_kanban_drag_drop_enabled', 0 );
+			$lbite_dashboard_deps = array( 'jquery' );
+			if ( $lbite_kanban_dragdrop ) {
+				if ( ! wp_script_is( 'sortablejs', 'registered' ) ) {
+					wp_register_script(
+						'sortablejs',
+						LBITE_PLUGIN_URL . 'assets/js/vendor/sortable.min.js',
+						array(),
+						LBITE_VERSION,
+						true
+					);
+				}
+				$lbite_dashboard_deps[] = 'sortablejs';
+			}
+
 			wp_enqueue_script(
 				'lbite-dashboard',
 				LBITE_PLUGIN_URL . 'assets/js/dashboard.js',
-				array( 'jquery' ),
+				$lbite_dashboard_deps,
 				LBITE_VERSION,
 				true
 			);
@@ -634,6 +653,9 @@ class LBite_Admin {
 					'paymentMethods'        => $lbite_pm_labels,
 					'currency'              => html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ),
 					'futureDimmingEnabled'  => lbite_feature_enabled( 'enable_future_orders_dimmed' ) && '0' !== get_option( 'lbite_dim_future_orders', 1 ),
+					'kanbanColumns'             => LBite_Order_Dashboard::get_columns(),
+					'kanbanCustomizationActive' => lbite_feature_enabled( 'enable_kanban_customization' ),
+					'kanbanDragDropEnabled'     => $lbite_kanban_dragdrop,
 					'strings'               => array(
 						'orderUpdated'    => __( 'Status updated', 'libre-bite' ),
 						'updateError'     => __( 'Error updating', 'libre-bite' ),
@@ -661,6 +683,7 @@ class LBite_Admin {
 						'dineIn'             => __( 'Dine-in', 'libre-bite' ),
 						'tab'                => __( 'Tab', 'libre-bite' ),
 						'round'              => __( 'Round', 'libre-bite' ),
+						'back'               => __( 'Back', 'libre-bite' ),
 					),
 				)
 			);

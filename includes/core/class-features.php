@@ -216,6 +216,13 @@ class LBite_Features {
 			'label'       => 'Dim Future Pre-orders',
 			'description' => 'Grey out pre-orders with pickup time beyond preparation time in the Kanban board',
 		),
+		'enable_kanban_customization' => array(
+			'group'       => 'dashboard',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Customizable Kanban Columns',
+			'description' => 'Rename, add, remove and reorder Kanban board columns; optional drag & drop and a one-step back action',
+		),
 	);
 
 	/**
@@ -384,6 +391,8 @@ class LBite_Features {
 			'lbite_tip_title'             => '',
 			'lbite_tip_default_selection' => 'none',
 			'lbite_availability_hint_style' => 'popup',
+			'lbite_kanban_columns'           => array(),
+			'lbite_kanban_drag_drop_enabled' => 0,
 		);
 	}
 

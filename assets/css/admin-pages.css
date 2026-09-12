@@ -455,6 +455,34 @@ table.wp-list-table code {
 	color: #00a32a;
 }
 
+/* F30: Kanban-Spalten-Editor (Einstellungen -> Orders) */
+.lbite-kanban-column-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 0;
+	border-bottom: 1px solid #eee;
+}
+
+.lbite-kanban-column-row:last-child {
+	border-bottom: none;
+}
+
+.lbite-kanban-drag-handle {
+	cursor: grab;
+	color: #999;
+}
+
+.lbite-kanban-remove-column {
+	color: #a94442;
+	border-color: #a94442;
+}
+
+.lbite-kanban-remove-column:hover:not(:disabled) {
+	background: #a94442;
+	color: #fff;
+}
+
 /* Pro-Badge & Lock-State */
 .lbite-pro-badge {
 	display: inline-block;

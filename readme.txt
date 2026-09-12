@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 2.3.1
+Stable tag: 2.4.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,6 +108,9 @@ EU-compliant nutritional values and allergen declarations for every product. Dis
 
 **Advanced Sound Notifications**
 A browser signal tone when a new order arrives on the Kanban board. Custom sound files can be uploaded via the media library (Pro).
+
+**Customizable Kanban Columns**
+Rename, add, remove and reorder the columns of the Kanban order board to match your own workflow — mark any number of columns as "completed", add a one-step back button per order card, and optionally enable drag & drop between columns (Pro).
 
 ---
 
@@ -224,6 +227,10 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.4.0 =
+* New: Customizable Kanban board columns — rename, add, remove and reorder columns (2 to 5), mark any number of them as "completed", and add a one-step back button to each order card (Pro).
+* New: Optional drag & drop between Kanban columns, configurable independently of the column layout (Pro).
 
 = 2.3.1 =
 * Fix: Corrected a contrast issue where the "Back" button in the location selector could become unreadable (black background/text) on hover due to theme style conflicts.
