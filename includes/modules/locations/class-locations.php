@@ -118,7 +118,7 @@ class LBite_Locations {
 			wp_enqueue_style(
 				'lbite-admin-tables',
 				LBITE_PLUGIN_URL . 'assets/css/admin-tables.css',
-				array(),
+				array( 'lbite-admin-design-system' ),
 				LBITE_VERSION
 			);
 			wp_enqueue_script(

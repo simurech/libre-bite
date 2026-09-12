@@ -94,7 +94,7 @@ class LBite_POS {
 		wp_enqueue_style(
 			'lbite-pos-page',
 			LBITE_PLUGIN_URL . 'assets/css/admin-pos-page.css',
-			array(),
+			array( 'lbite-admin-design-system' ),
 			LBITE_VERSION
 		);
 

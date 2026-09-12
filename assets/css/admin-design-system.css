@@ -1,0 +1,913 @@
+/**
+ * Libre Bite – Admin Design System
+ *
+ * Zentrale Design-Tokens und Basiskomponenten für den gesamten Admin-Bereich.
+ * Diese Datei ist die einzige Quelle für Farben, Abstände, Radien, Schatten,
+ * Typografie und Bewegung. Screen-spezifisches CSS (admin-order-board.css,
+ * admin-pos-page.css …) baut ausschliesslich auf diesen Tokens auf und
+ * definiert keine eigenen Rohwerte mehr.
+ *
+ * Namensschema knüpft an das bereits bestehende `--lbite-color-primary` aus
+ * checkout-optimized.css an – bewusst dieselbe Vokabel, nicht ein zweites
+ * Präfix daneben.
+ *
+ * Die Marken-Tokens (--lbite-color-primary/-secondary/-accent) werden zur
+ * Laufzeit aus den Branding-Einstellungen überschrieben, siehe
+ * LBite_Admin::admin_branding_tokens().
+ *
+ * @package LibreBite
+ */
+
+:root {
+	/* ── Marke ───────────────────────────────────────────────────────── */
+	--lbite-color-primary: #0073aa;
+	--lbite-color-primary-hover: #005a87;
+	--lbite-color-primary-soft: #f0f6fc;
+	--lbite-color-secondary: #23282d;
+	--lbite-color-accent: #00a32a;
+
+	/* ── Flächen ─────────────────────────────────────────────────────
+	 * canvas ≠ surface ist der zentrale Tiefenhebel: der WP-Default ist
+	 * Weiss auf Weiss, wodurch Karten optisch nicht vom Grund abheben.
+	 */
+	--lbite-canvas: #f4f5f7;
+	--lbite-surface: #ffffff;
+	--lbite-surface-muted: #f8f9fa;
+	--lbite-surface-sunken: #eef0f3;
+
+	/* ── Text ────────────────────────────────────────────────────────── */
+	--lbite-text: #1d2327;
+	--lbite-text-muted: #646970;
+	--lbite-text-subtle: #8c8f94;
+	--lbite-text-on-primary: #ffffff;
+
+	/* ── Rahmen ──────────────────────────────────────────────────────── */
+	--lbite-border: #dcdfe3;
+	--lbite-border-strong: #c3c4c7;
+	--lbite-border-subtle: #eceef0;
+
+	/* ── Statusrollen ────────────────────────────────────────────────
+	 * Jede Rolle hat eine gesättigte Variante für Text/Icon und eine
+	 * "soft"-Variante als Badge-Hintergrund. Volltonfarben wirken wie
+	 * eine Ampel, Pastellflächen mit sattem Text wirken informativ.
+	 */
+	--lbite-success: #1a7f37;
+	--lbite-success-soft: #e8f5ec;
+	--lbite-success-border: #b7e0c4;
+
+	--lbite-warning: #9a6700;
+	--lbite-warning-soft: #fff6e0;
+	--lbite-warning-border: #f0d9a0;
+
+	--lbite-danger: #b32d2e;
+	--lbite-danger-soft: #fdeceb;
+	--lbite-danger-border: #f2bcbb;
+
+	--lbite-info: #0b6aa2;
+	--lbite-info-soft: #eaf4fb;
+	--lbite-info-border: #b6d9ee;
+
+	--lbite-neutral: #50575e;
+	--lbite-neutral-soft: #f0f0f1;
+	--lbite-neutral-border: #dcdcde;
+
+	/* ── Radien ──────────────────────────────────────────────────────── */
+	--lbite-radius-xs: 3px;
+	--lbite-radius-sm: 6px;
+	--lbite-radius-md: 10px;
+	--lbite-radius-lg: 14px;
+	--lbite-radius-pill: 999px;
+
+	/* ── Schatten (Elevation-Stufen statt Einzelwerte) ───────────────── */
+	--lbite-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+	--lbite-shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
+	--lbite-shadow-md: 0 4px 8px rgba(16, 24, 40, 0.06), 0 2px 4px rgba(16, 24, 40, 0.04);
+	--lbite-shadow-lg: 0 12px 24px rgba(16, 24, 40, 0.10), 0 4px 8px rgba(16, 24, 40, 0.05);
+	--lbite-shadow-xl: 0 24px 48px rgba(16, 24, 40, 0.16), 0 8px 16px rgba(16, 24, 40, 0.06);
+
+	/* ── Abstände (4px-Basis) ────────────────────────────────────────── */
+	--lbite-space-1: 4px;
+	--lbite-space-2: 8px;
+	--lbite-space-3: 12px;
+	--lbite-space-4: 16px;
+	--lbite-space-5: 20px;
+	--lbite-space-6: 24px;
+	--lbite-space-8: 32px;
+	--lbite-space-10: 40px;
+	--lbite-space-12: 48px;
+
+	/* ── Typografie ──────────────────────────────────────────────────── */
+	--lbite-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	--lbite-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+	--lbite-text-2xs: 10px;
+	--lbite-text-xs: 11px;
+	--lbite-text-sm: 12px;
+	--lbite-text-base: 13px;
+	--lbite-text-md: 14px;
+	--lbite-text-lg: 16px;
+	--lbite-text-xl: 18px;
+	--lbite-text-2xl: 20px;
+	--lbite-text-3xl: 24px;
+	--lbite-text-4xl: 28px;
+
+	--lbite-weight-normal: 400;
+	--lbite-weight-medium: 500;
+	--lbite-weight-semibold: 600;
+	--lbite-weight-bold: 700;
+
+	--lbite-leading-tight: 1.25;
+	--lbite-leading-normal: 1.45;
+	--lbite-leading-relaxed: 1.6;
+
+	/* ── Bewegung ────────────────────────────────────────────────────
+	 * Unterschiedliche Kurven für unterschiedliche "Gewichtsklassen":
+	 * Knöpfe knackig, Overlays weich abgebremst.
+	 */
+	--lbite-duration-fast: 120ms;
+	--lbite-duration-base: 180ms;
+	--lbite-duration-slow: 260ms;
+	--lbite-ease-crisp: cubic-bezier(0.33, 1, 0.68, 1);
+	--lbite-ease-soft: cubic-bezier(0.2, 0.75, 0.25, 1);
+
+	/* ── Ebenen ──────────────────────────────────────────────────────── */
+	--lbite-z-base: 1;
+	--lbite-z-sticky: 10;
+	--lbite-z-dropdown: 100;
+	--lbite-z-overlay: 1000;
+	--lbite-z-modal: 1010;
+	--lbite-z-toast: 1020;
+
+	/* ── Fokus ───────────────────────────────────────────────────────── */
+	--lbite-focus-ring: 0 0 0 2px var(--lbite-surface), 0 0 0 4px rgba(0, 115, 170, 0.45);
+
+	/* ── Touch ───────────────────────────────────────────────────────
+	 * Mindestzielgrösse für POS und Kanban auf Tablets.
+	 */
+	--lbite-touch-target: 44px;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Basis
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-app {
+	font-family: var(--lbite-font);
+	font-size: var(--lbite-text-base);
+	line-height: var(--lbite-leading-normal);
+	color: var(--lbite-text);
+}
+
+.lbite-app *,
+.lbite-app *::before,
+.lbite-app *::after {
+	box-sizing: border-box;
+}
+
+/* Sichtbarer Fokus überall – ersetzt den Browser-Default, ohne ihn für
+ * Mausklicks aufzudrängen. */
+.lbite-app :focus-visible {
+	outline: none;
+	box-shadow: var(--lbite-focus-ring);
+	border-radius: var(--lbite-radius-xs);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Screen-Modi
+ *
+ * "App-Modus": Kanban, POS, Tischplan, Reservierungsboard füllen den
+ * Viewport und scrollen intern statt die ganze Seite zu scrollen.
+ * "Dokument-Modus": normale Einstellungsseiten bleiben WP-Standard.
+ * ════════════════════════════════════════════════════════════════════ */
+
+body.lbite-screen-app {
+	background: var(--lbite-canvas);
+}
+
+body.lbite-screen-app #wpfooter {
+	display: none;
+}
+
+body.lbite-screen-app #wpbody-content {
+	padding-bottom: 0;
+}
+
+body.lbite-screen-doc .lbite-app {
+	background: transparent;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Karten
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-card {
+	background: var(--lbite-surface);
+	border: 1px solid var(--lbite-border);
+	border-radius: var(--lbite-radius-md);
+	box-shadow: var(--lbite-shadow-sm);
+}
+
+.lbite-card--flat {
+	box-shadow: none;
+}
+
+.lbite-card--raised {
+	box-shadow: var(--lbite-shadow-md);
+}
+
+.lbite-card--interactive {
+	cursor: pointer;
+	transition: transform var(--lbite-duration-fast) var(--lbite-ease-crisp),
+		box-shadow var(--lbite-duration-fast) var(--lbite-ease-crisp),
+		border-color var(--lbite-duration-fast) var(--lbite-ease-crisp);
+}
+
+.lbite-card--interactive:hover {
+	transform: translateY(-1px);
+	box-shadow: var(--lbite-shadow-md);
+	border-color: var(--lbite-border-strong);
+}
+
+.lbite-card__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--lbite-space-3);
+	padding: var(--lbite-space-4) var(--lbite-space-5);
+	border-bottom: 1px solid var(--lbite-border-subtle);
+}
+
+.lbite-card__title {
+	margin: 0;
+	font-size: var(--lbite-text-md);
+	font-weight: var(--lbite-weight-semibold);
+	color: var(--lbite-text);
+}
+
+.lbite-card__body {
+	padding: var(--lbite-space-5);
+}
+
+.lbite-card__footer {
+	padding: var(--lbite-space-4) var(--lbite-space-5);
+	border-top: 1px solid var(--lbite-border-subtle);
+	background: var(--lbite-surface-muted);
+	border-radius: 0 0 var(--lbite-radius-md) var(--lbite-radius-md);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Buttons
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lbite-space-2);
+	min-height: 36px;
+	padding: 0 var(--lbite-space-4);
+	border: 1px solid transparent;
+	border-radius: var(--lbite-radius-sm);
+	font-family: inherit;
+	font-size: var(--lbite-text-base);
+	font-weight: var(--lbite-weight-semibold);
+	line-height: 1;
+	text-decoration: none;
+	cursor: pointer;
+	white-space: nowrap;
+	transition: background-color var(--lbite-duration-fast) var(--lbite-ease-crisp),
+		border-color var(--lbite-duration-fast) var(--lbite-ease-crisp),
+		color var(--lbite-duration-fast) var(--lbite-ease-crisp),
+		transform var(--lbite-duration-fast) var(--lbite-ease-crisp);
+}
+
+.lbite-btn:active:not(:disabled) {
+	transform: scale(0.97);
+}
+
+.lbite-btn:disabled,
+.lbite-btn[aria-disabled="true"] {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.lbite-btn--primary {
+	background: var(--lbite-color-primary);
+	border-color: var(--lbite-color-primary);
+	color: var(--lbite-text-on-primary);
+}
+
+.lbite-btn--primary:hover:not(:disabled) {
+	background: var(--lbite-color-primary-hover);
+	border-color: var(--lbite-color-primary-hover);
+	color: var(--lbite-text-on-primary);
+}
+
+.lbite-btn--secondary {
+	background: var(--lbite-surface);
+	border-color: var(--lbite-border-strong);
+	color: var(--lbite-text);
+}
+
+.lbite-btn--secondary:hover:not(:disabled) {
+	background: var(--lbite-surface-muted);
+	border-color: var(--lbite-text-subtle);
+	color: var(--lbite-text);
+}
+
+.lbite-btn--ghost {
+	background: transparent;
+	border-color: transparent;
+	color: var(--lbite-text-muted);
+}
+
+.lbite-btn--ghost:hover:not(:disabled) {
+	background: var(--lbite-surface-sunken);
+	color: var(--lbite-text);
+}
+
+.lbite-btn--danger {
+	background: var(--lbite-danger);
+	border-color: var(--lbite-danger);
+	color: #fff;
+}
+
+.lbite-btn--danger:hover:not(:disabled) {
+	background: #8f2324;
+	border-color: #8f2324;
+	color: #fff;
+}
+
+.lbite-btn--success {
+	background: var(--lbite-success);
+	border-color: var(--lbite-success);
+	color: #fff;
+}
+
+.lbite-btn--success:hover:not(:disabled) {
+	background: #14632b;
+	border-color: #14632b;
+	color: #fff;
+}
+
+.lbite-btn--sm {
+	min-height: 28px;
+	padding: 0 var(--lbite-space-3);
+	font-size: var(--lbite-text-sm);
+}
+
+.lbite-btn--lg {
+	min-height: var(--lbite-touch-target);
+	padding: 0 var(--lbite-space-6);
+	font-size: var(--lbite-text-md);
+}
+
+.lbite-btn--block {
+	display: flex;
+	width: 100%;
+}
+
+/* Ladezustand über aria-busy statt einer Zusatzklasse – so bleibt der
+ * zugängliche Zustand und die Optik zwangsläufig synchron. */
+.lbite-btn[aria-busy="true"] {
+	position: relative;
+	color: transparent !important;
+	pointer-events: none;
+}
+
+.lbite-btn[aria-busy="true"]::after {
+	content: "";
+	position: absolute;
+	width: 14px;
+	height: 14px;
+	border: 2px solid currentColor;
+	border-radius: 50%;
+	border-top-color: transparent;
+	color: var(--lbite-text-on-primary);
+	animation: lbite-spin 0.7s linear infinite;
+}
+
+.lbite-btn--secondary[aria-busy="true"]::after,
+.lbite-btn--ghost[aria-busy="true"]::after {
+	color: var(--lbite-text);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Status-Chips / Badges
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lbite-space-1);
+	padding: 3px var(--lbite-space-2);
+	border: 1px solid transparent;
+	border-radius: var(--lbite-radius-pill);
+	font-size: var(--lbite-text-xs);
+	font-weight: var(--lbite-weight-semibold);
+	line-height: 1.4;
+	white-space: nowrap;
+	background: var(--lbite-neutral-soft);
+	border-color: var(--lbite-neutral-border);
+	color: var(--lbite-neutral);
+}
+
+.lbite-chip--success {
+	background: var(--lbite-success-soft);
+	border-color: var(--lbite-success-border);
+	color: var(--lbite-success);
+}
+
+.lbite-chip--warning {
+	background: var(--lbite-warning-soft);
+	border-color: var(--lbite-warning-border);
+	color: var(--lbite-warning);
+}
+
+.lbite-chip--danger {
+	background: var(--lbite-danger-soft);
+	border-color: var(--lbite-danger-border);
+	color: var(--lbite-danger);
+}
+
+.lbite-chip--info {
+	background: var(--lbite-info-soft);
+	border-color: var(--lbite-info-border);
+	color: var(--lbite-info);
+}
+
+.lbite-chip--count {
+	min-width: 20px;
+	justify-content: center;
+	font-variant-numeric: tabular-nums;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Formulare
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-field {
+	display: block;
+	margin-bottom: var(--lbite-space-4);
+}
+
+.lbite-label {
+	display: block;
+	margin-bottom: var(--lbite-space-2);
+	font-size: var(--lbite-text-base);
+	font-weight: var(--lbite-weight-semibold);
+	color: var(--lbite-text);
+}
+
+.lbite-hint {
+	margin-top: var(--lbite-space-2);
+	font-size: var(--lbite-text-sm);
+	color: var(--lbite-text-muted);
+	line-height: var(--lbite-leading-normal);
+}
+
+.lbite-input,
+.lbite-select,
+.lbite-textarea {
+	display: block;
+	width: 100%;
+	min-height: 36px;
+	padding: var(--lbite-space-2) var(--lbite-space-3);
+	background: var(--lbite-surface);
+	border: 1px solid var(--lbite-border-strong);
+	border-radius: var(--lbite-radius-sm);
+	font-family: inherit;
+	font-size: var(--lbite-text-base);
+	color: var(--lbite-text);
+	transition: border-color var(--lbite-duration-fast) var(--lbite-ease-crisp),
+		box-shadow var(--lbite-duration-fast) var(--lbite-ease-crisp);
+}
+
+.lbite-input:focus,
+.lbite-select:focus,
+.lbite-textarea:focus {
+	border-color: var(--lbite-color-primary);
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(0, 115, 170, 0.14);
+}
+
+.lbite-textarea {
+	min-height: 90px;
+	line-height: var(--lbite-leading-normal);
+	resize: vertical;
+}
+
+/* Toggle – bewusst Pill-Form, konsistent mit Chips und Pill-Navigation */
+.lbite-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lbite-space-3);
+	cursor: pointer;
+	user-select: none;
+}
+
+.lbite-toggle__input {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.lbite-toggle__track {
+	position: relative;
+	flex: 0 0 auto;
+	width: 40px;
+	height: 22px;
+	background: var(--lbite-border-strong);
+	border-radius: var(--lbite-radius-pill);
+	transition: background-color var(--lbite-duration-base) var(--lbite-ease-crisp);
+}
+
+.lbite-toggle__track::after {
+	content: "";
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: 16px;
+	height: 16px;
+	background: #fff;
+	border-radius: 50%;
+	box-shadow: var(--lbite-shadow-xs);
+	transition: transform var(--lbite-duration-base) var(--lbite-ease-crisp);
+}
+
+.lbite-toggle__input:checked + .lbite-toggle__track {
+	background: var(--lbite-success);
+}
+
+.lbite-toggle__input:checked + .lbite-toggle__track::after {
+	transform: translateX(18px);
+}
+
+.lbite-toggle__input:focus-visible + .lbite-toggle__track {
+	box-shadow: var(--lbite-focus-ring);
+}
+
+.lbite-toggle__input:disabled + .lbite-toggle__track {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Tabellen
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	font-size: var(--lbite-text-base);
+}
+
+.lbite-table th {
+	position: sticky;
+	top: 0;
+	z-index: var(--lbite-z-sticky);
+	padding: var(--lbite-space-3) var(--lbite-space-4);
+	background: var(--lbite-surface-muted);
+	border-bottom: 1px solid var(--lbite-border);
+	text-align: left;
+	font-size: var(--lbite-text-xs);
+	font-weight: var(--lbite-weight-bold);
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--lbite-text-muted);
+	white-space: nowrap;
+}
+
+.lbite-table td {
+	padding: var(--lbite-space-3) var(--lbite-space-4);
+	border-bottom: 1px solid var(--lbite-border-subtle);
+	vertical-align: middle;
+}
+
+.lbite-table tbody tr:hover td {
+	background: var(--lbite-surface-muted);
+}
+
+.lbite-table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.lbite-table__num {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Breite Tabellen scrollen in ihrem eigenen Container, nie die Seite */
+.lbite-table-scroll {
+	overflow-x: auto;
+	border-radius: var(--lbite-radius-md);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Pill-Navigation (ersetzt die WP-Untermenü-Tabs)
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-nav {
+	display: flex;
+	gap: var(--lbite-space-1);
+	padding: var(--lbite-space-2);
+	margin-bottom: var(--lbite-space-5);
+	background: var(--lbite-surface);
+	border: 1px solid var(--lbite-border);
+	border-radius: var(--lbite-radius-lg);
+	box-shadow: var(--lbite-shadow-xs);
+	overflow-x: auto;
+	scrollbar-width: thin;
+}
+
+.lbite-nav__item {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lbite-space-2);
+	padding: var(--lbite-space-2) var(--lbite-space-4);
+	border-radius: var(--lbite-radius-pill);
+	font-size: var(--lbite-text-base);
+	font-weight: var(--lbite-weight-semibold);
+	color: var(--lbite-text-muted);
+	text-decoration: none;
+	white-space: nowrap;
+	transition: background-color var(--lbite-duration-fast) var(--lbite-ease-crisp),
+		color var(--lbite-duration-fast) var(--lbite-ease-crisp);
+}
+
+.lbite-nav__item:hover {
+	background: var(--lbite-surface-sunken);
+	color: var(--lbite-text);
+}
+
+.lbite-nav__item.is-active {
+	background: var(--lbite-color-primary);
+	color: var(--lbite-text-on-primary);
+}
+
+.lbite-nav__item.is-active:hover {
+	background: var(--lbite-color-primary-hover);
+	color: var(--lbite-text-on-primary);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Leerzustände
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lbite-space-3);
+	padding: var(--lbite-space-10) var(--lbite-space-6);
+	text-align: center;
+	color: var(--lbite-text-muted);
+}
+
+.lbite-empty__art {
+	width: 84px;
+	height: 84px;
+	opacity: 0.6;
+}
+
+.lbite-empty__title {
+	margin: 0;
+	font-size: var(--lbite-text-md);
+	font-weight: var(--lbite-weight-semibold);
+	color: var(--lbite-text);
+}
+
+.lbite-empty__text {
+	margin: 0;
+	max-width: 40ch;
+	font-size: var(--lbite-text-base);
+	line-height: var(--lbite-leading-relaxed);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Skeletons
+ *
+ * Variable Zeilenbreiten statt gleichförmiger Balken – das liest sich
+ * als Text und nicht als Platzhalter.
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-skeleton {
+	display: block;
+	height: 12px;
+	margin-bottom: var(--lbite-space-2);
+	background: var(--lbite-surface-sunken);
+	border-radius: var(--lbite-radius-xs);
+	animation: lbite-pulse 1.3s ease-in-out infinite;
+}
+
+.lbite-skeleton--w1 { width: 52%; }
+.lbite-skeleton--w2 { width: 63%; }
+.lbite-skeleton--w3 { width: 74%; }
+.lbite-skeleton--w4 { width: 85%; }
+.lbite-skeleton--title { height: 16px; width: 40%; }
+
+/* ════════════════════════════════════════════════════════════════════
+ * Toasts
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-toast-stack {
+	position: fixed;
+	top: 52px;
+	right: 24px;
+	z-index: var(--lbite-z-toast);
+	display: flex;
+	flex-direction: column;
+	gap: var(--lbite-space-2);
+	pointer-events: none;
+}
+
+.lbite-toast {
+	display: flex;
+	align-items: center;
+	gap: var(--lbite-space-3);
+	min-width: 240px;
+	max-width: 380px;
+	padding: var(--lbite-space-3) var(--lbite-space-4);
+	background: var(--lbite-surface);
+	border: 1px solid var(--lbite-border);
+	border-left: 3px solid var(--lbite-neutral);
+	border-radius: var(--lbite-radius-sm);
+	box-shadow: var(--lbite-shadow-lg);
+	font-size: var(--lbite-text-base);
+	color: var(--lbite-text);
+	pointer-events: auto;
+	animation: lbite-slide-in var(--lbite-duration-slow) var(--lbite-ease-soft);
+}
+
+.lbite-toast--success { border-left-color: var(--lbite-success); }
+.lbite-toast--warning { border-left-color: var(--lbite-warning); }
+.lbite-toast--danger  { border-left-color: var(--lbite-danger); }
+.lbite-toast--info    { border-left-color: var(--lbite-info); }
+
+.lbite-toast.is-leaving {
+	animation: lbite-fade-out var(--lbite-duration-base) var(--lbite-ease-soft) forwards;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Modals
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-modal-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: var(--lbite-z-overlay);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--lbite-space-6);
+	background: rgba(16, 24, 40, 0.45);
+	animation: lbite-fade-in var(--lbite-duration-base) var(--lbite-ease-soft);
+}
+
+.lbite-modal {
+	position: relative;
+	z-index: var(--lbite-z-modal);
+	width: 100%;
+	max-width: 520px;
+	max-height: calc(100vh - 96px);
+	display: flex;
+	flex-direction: column;
+	background: var(--lbite-surface);
+	border-radius: var(--lbite-radius-lg);
+	box-shadow: var(--lbite-shadow-xl);
+	animation: lbite-modal-in var(--lbite-duration-slow) var(--lbite-ease-soft);
+}
+
+.lbite-modal--wide { max-width: 800px; }
+
+.lbite-modal__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--lbite-space-4);
+	padding: var(--lbite-space-5) var(--lbite-space-6);
+	border-bottom: 1px solid var(--lbite-border-subtle);
+}
+
+.lbite-modal__title {
+	margin: 0;
+	font-size: var(--lbite-text-xl);
+	font-weight: var(--lbite-weight-semibold);
+}
+
+.lbite-modal__body {
+	padding: var(--lbite-space-6);
+	overflow-y: auto;
+}
+
+.lbite-modal__footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--lbite-space-2);
+	padding: var(--lbite-space-4) var(--lbite-space-6);
+	border-top: 1px solid var(--lbite-border-subtle);
+	background: var(--lbite-surface-muted);
+	border-radius: 0 0 var(--lbite-radius-lg) var(--lbite-radius-lg);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Layout-Hilfen
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-stack     { display: flex; flex-direction: column; gap: var(--lbite-space-4); }
+.lbite-stack--sm { gap: var(--lbite-space-2); }
+.lbite-stack--lg { gap: var(--lbite-space-6); }
+
+.lbite-row       { display: flex; align-items: center; gap: var(--lbite-space-3); }
+.lbite-row--wrap { flex-wrap: wrap; }
+.lbite-row--end  { justify-content: flex-end; }
+.lbite-row--between { justify-content: space-between; }
+
+.lbite-grid {
+	display: grid;
+	gap: var(--lbite-space-4);
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.lbite-spacer { flex: 1 1 auto; }
+
+/* ════════════════════════════════════════════════════════════════════
+ * Bewegung – ein gemeinsames Set statt pro Modul dupliziert
+ * ════════════════════════════════════════════════════════════════════ */
+
+@keyframes lbite-spin {
+	to { transform: rotate(360deg); }
+}
+
+@keyframes lbite-pulse {
+	0%, 100% { opacity: 1; }
+	50%      { opacity: 0.45; }
+}
+
+@keyframes lbite-fade-in {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+
+@keyframes lbite-fade-out {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+
+@keyframes lbite-slide-in {
+	from { opacity: 0; transform: translateX(12px); }
+	to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes lbite-modal-in {
+	from { opacity: 0; transform: translateY(14px) scale(0.98); }
+	to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes lbite-attention {
+	0%, 100% { box-shadow: var(--lbite-shadow-sm); }
+	50%      { box-shadow: 0 0 0 4px var(--lbite-danger-soft), var(--lbite-shadow-md); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.lbite-app *,
+	.lbite-app *::before,
+	.lbite-app *::after {
+		animation-duration: 1ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 1ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Touch / Tablet
+ *
+ * Auf Zeigegeräten ohne Hover (POS- und Küchen-Tablets) werden alle
+ * interaktiven Elemente auf die Mindestzielgrösse angehoben.
+ * ════════════════════════════════════════════════════════════════════ */
+
+@media (hover: none) and (pointer: coarse) {
+	.lbite-app .lbite-btn,
+	.lbite-app .lbite-nav__item,
+	.lbite-app .lbite-input,
+	.lbite-app .lbite-select {
+		min-height: var(--lbite-touch-target);
+	}
+
+	.lbite-app .lbite-btn--sm {
+		min-height: 36px;
+	}
+
+	.lbite-app {
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.lbite-app .lbite-btn,
+	.lbite-app .lbite-nav__item {
+		touch-action: manipulation;
+	}
+}

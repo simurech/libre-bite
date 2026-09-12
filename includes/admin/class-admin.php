@@ -486,6 +486,113 @@ class LBite_Admin {
 	}
 
 	/**
+	 * Branding-Farben als Design-Token-Overrides ausgeben
+	 *
+	 * Die im Branding-Tab gesetzte Primär-/Sekundär-/Akzentfarbe gilt damit
+	 * nicht nur im Frontend-Checkout, sondern auch im Backend. Fällt eine
+	 * Option auf den Standardwert zurück, bleibt der Token aus dem
+	 * Design-System unverändert.
+	 *
+	 * @return string CSS-Regel für wp_add_inline_style()
+	 */
+	private static function get_branding_tokens() {
+		$lbite_primary   = sanitize_hex_color( (string) get_option( 'lbite_color_primary', '#0073aa' ) );
+		$lbite_secondary = sanitize_hex_color( (string) get_option( 'lbite_color_secondary', '#23282d' ) );
+		$lbite_accent    = sanitize_hex_color( (string) get_option( 'lbite_color_accent', '#00a32a' ) );
+
+		$lbite_vars = array();
+
+		if ( $lbite_primary ) {
+			$lbite_vars[] = '--lbite-color-primary:' . $lbite_primary;
+			$lbite_vars[] = '--lbite-color-primary-hover:' . self::shade_hex_color( $lbite_primary, -0.18 );
+			$lbite_vars[] = '--lbite-color-primary-soft:' . self::shade_hex_color( $lbite_primary, 0.92 );
+			$lbite_vars[] = '--lbite-focus-ring:0 0 0 2px var(--lbite-surface),0 0 0 4px ' . self::hex_to_rgba( $lbite_primary, 0.45 );
+		}
+
+		if ( $lbite_secondary ) {
+			$lbite_vars[] = '--lbite-color-secondary:' . $lbite_secondary;
+		}
+
+		if ( $lbite_accent ) {
+			$lbite_vars[] = '--lbite-color-accent:' . $lbite_accent;
+		}
+
+		if ( empty( $lbite_vars ) ) {
+			return '';
+		}
+
+		return ':root{' . implode( ';', $lbite_vars ) . ';}';
+	}
+
+	/**
+	 * Hex-Farbe abdunkeln oder aufhellen
+	 *
+	 * @param string $hex    Hex-Farbe inkl. führendem #.
+	 * @param float  $amount Negativ = abdunkeln, positiv = Richtung Weiss mischen (0..1).
+	 * @return string Hex-Farbe inkl. führendem #.
+	 */
+	private static function shade_hex_color( $hex, $amount ) {
+		$lbite_rgb = self::hex_to_rgb( $hex );
+
+		if ( null === $lbite_rgb ) {
+			return $hex;
+		}
+
+		foreach ( $lbite_rgb as $lbite_i => $lbite_channel ) {
+			if ( $amount < 0 ) {
+				$lbite_value = $lbite_channel * ( 1 + $amount );
+			} else {
+				$lbite_value = $lbite_channel + ( ( 255 - $lbite_channel ) * $amount );
+			}
+
+			$lbite_rgb[ $lbite_i ] = max( 0, min( 255, (int) round( $lbite_value ) ) );
+		}
+
+		return sprintf( '#%02x%02x%02x', $lbite_rgb[0], $lbite_rgb[1], $lbite_rgb[2] );
+	}
+
+	/**
+	 * Hex-Farbe als rgba()-String
+	 *
+	 * @param string $hex   Hex-Farbe inkl. führendem #.
+	 * @param float  $alpha Deckkraft 0..1.
+	 * @return string
+	 */
+	private static function hex_to_rgba( $hex, $alpha ) {
+		$lbite_rgb = self::hex_to_rgb( $hex );
+
+		if ( null === $lbite_rgb ) {
+			return 'rgba(0,115,170,' . $alpha . ')';
+		}
+
+		return sprintf( 'rgba(%d,%d,%d,%s)', $lbite_rgb[0], $lbite_rgb[1], $lbite_rgb[2], $alpha );
+	}
+
+	/**
+	 * Hex-Farbe in RGB-Kanäle zerlegen
+	 *
+	 * @param string $hex Hex-Farbe inkl. führendem #.
+	 * @return array|null Array mit drei Kanälen oder null bei ungültiger Eingabe.
+	 */
+	private static function hex_to_rgb( $hex ) {
+		$lbite_hex = ltrim( (string) $hex, '#' );
+
+		if ( 3 === strlen( $lbite_hex ) ) {
+			$lbite_hex = $lbite_hex[0] . $lbite_hex[0] . $lbite_hex[1] . $lbite_hex[1] . $lbite_hex[2] . $lbite_hex[2];
+		}
+
+		if ( 6 !== strlen( $lbite_hex ) || ! ctype_xdigit( $lbite_hex ) ) {
+			return null;
+		}
+
+		return array(
+			hexdec( substr( $lbite_hex, 0, 2 ) ),
+			hexdec( substr( $lbite_hex, 2, 2 ) ),
+			hexdec( substr( $lbite_hex, 4, 2 ) ),
+		);
+	}
+
+	/**
 	 * Admin-Assets laden
 	 *
 	 * @param string $hook Aktuelle Admin-Seite
@@ -496,11 +603,21 @@ class LBite_Admin {
 			return;
 		}
 
+		// Design-System zuerst: definiert alle Tokens, auf denen das
+		// übrige Admin-CSS aufbaut.
+		wp_enqueue_style(
+			'lbite-admin-design-system',
+			LBITE_PLUGIN_URL . 'assets/css/admin-design-system.css',
+			array(),
+			LBITE_VERSION
+		);
+		wp_add_inline_style( 'lbite-admin-design-system', self::get_branding_tokens() );
+
 		// CSS
 		wp_enqueue_style(
 			'lbite-admin',
 			LBITE_PLUGIN_URL . 'assets/css/admin.css',
-			array(),
+			array( 'lbite-admin-design-system' ),
 			LBITE_VERSION
 		);
 

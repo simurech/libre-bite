@@ -101,7 +101,7 @@ class LBite_Tables {
 		wp_enqueue_style(
 			'lbite-admin-tables',
 			LBITE_PLUGIN_URL . 'assets/css/admin-tables.css',
-			array(),
+			array( 'lbite-admin-design-system' ),
 			LBITE_VERSION
 		);
 
@@ -135,7 +135,7 @@ class LBite_Tables {
 		wp_enqueue_style(
 			'lbite-admin-table-plan',
 			LBITE_PLUGIN_URL . 'assets/css/admin-table-plan.css',
-			array(),
+			array( 'lbite-admin-design-system' ),
 			LBITE_VERSION
 		);
 
