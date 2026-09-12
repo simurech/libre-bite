@@ -45,6 +45,13 @@ class LBite_Features {
 			'label'       => 'POS System',
 			'description' => 'Enable point-of-sale system for on-site orders',
 		),
+		'enable_slot_capacity'      => array(
+			'group'       => 'order_system',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Time Slot Capacity',
+			'description' => 'Cap how many orders each time slot accepts, so the kitchen is not flooded at peak times.',
+		),
 		'enable_scheduled_orders'   => array(
 			'group'       => 'order_system',
 			'default'     => true,
@@ -400,6 +407,7 @@ class LBite_Features {
 			'lbite_availability_hint_style' => 'popup',
 			'lbite_kanban_columns'           => array(),
 			'lbite_kanban_drag_drop_enabled' => 0,
+			'lbite_max_orders_per_slot'      => 0,
 		);
 	}
 

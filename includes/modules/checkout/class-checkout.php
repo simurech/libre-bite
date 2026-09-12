@@ -736,6 +736,16 @@ class LBite_Checkout {
 			wc_add_notice( __( 'Please select a pickup time.', 'libre-bite' ), 'error' );
 		}
 
+		// Kapazität erneut prüfen: zwischen Auswahl und Absenden kann das
+		// Zeitfenster von jemand anderem belegt worden sein.
+		if ( 'later' === $order_type && $pickup_time && $location_id
+			&& ! self::is_slot_available( $location_id, $pickup_time ) ) {
+			wc_add_notice(
+				__( 'This time slot has just been fully booked. Please choose another time.', 'libre-bite' ),
+				'error'
+			);
+		}
+
 		// Verfügbarkeitsfenster prüfen (ab/bis-Datum des Standorts).
 		if ( $location_id ) {
 			$lbite_activation = LBite_Locations::get_activation_status( $location_id );
@@ -1300,6 +1310,10 @@ class LBite_Checkout {
 
 		$timeslots = $this->get_available_timeslots( $location_id, $date );
 
+		// Kapazitätsdeckelung bewusst NACH dem Transient-Cache: die Belegung
+		// ändert sich mit jeder Bestellung und darf nicht mitgecacht werden.
+		$timeslots = $this->apply_slot_capacity( $timeslots, $location_id );
+
 		wp_send_json_success( array( 'timeslots' => $timeslots ) );
 	}
 
@@ -1508,6 +1522,135 @@ class LBite_Checkout {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Maximale Bestellungen pro Zeitfenster
+	 *
+	 * @return int 0 bedeutet: keine Deckelung.
+	 */
+	public static function get_slot_capacity() {
+		if ( ! lbite_feature_enabled( 'enable_slot_capacity' ) ) {
+			return 0;
+		}
+
+		return max( 0, (int) get_option( 'lbite_max_orders_per_slot', 0 ) );
+	}
+
+	/**
+	 * Abholzeit auf den Zeitfenster-Schlüssel normalisieren
+	 *
+	 * Zeitfenster tragen das Format Y-m-d H:i. `_lbite_pickup_time` kann laut
+	 * Dokumentation auch als ISO-8601-Wert mit «T» vorliegen – ohne diese
+	 * Angleichung würden solche Bestellungen bei der Belegungszählung
+	 * stillschweigend übersehen.
+	 *
+	 * @param string $value Gespeicherte oder gewählte Abholzeit.
+	 * @return string
+	 */
+	private static function normalize_slot_key( $value ) {
+		return substr( str_replace( 'T', ' ', (string) $value ), 0, 16 );
+	}
+
+	/**
+	 * Belegung je Zeitfenster eines Standorts zählen
+	 *
+	 * Eine einzige Abfrage für alle Bestellungen des Standorts ab jetzt,
+	 * danach Gruppierung in PHP – nicht eine Abfrage pro Zeitfenster.
+	 *
+	 * @param int $location_id Standort-ID.
+	 * @return array Map Zeitfenster-Wert => Anzahl.
+	 */
+	public static function count_orders_per_slot( $location_id ) {
+		$location_id = (int) $location_id;
+
+		if ( ! $location_id || ! function_exists( 'wc_get_orders' ) ) {
+			return array();
+		}
+
+		$orders = wc_get_orders(
+			array(
+				'limit'      => 500,
+				'status'     => array( 'processing', 'on-hold', 'completed' ),
+				'date_after' => gmdate( 'Y-m-d', current_time( 'timestamp' ) - DAY_IN_SECONDS ),
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Standortbezogene Belegungszählung, auf 500 Einträge begrenzt.
+				'meta_query' => array(
+					array(
+						'key'   => '_lbite_location_id',
+						'value' => $location_id,
+					),
+				),
+			)
+		);
+
+		$counts = array();
+
+		foreach ( $orders as $order ) {
+			$pickup = (string) $order->get_meta( '_lbite_pickup_time', true );
+
+			if ( '' === $pickup ) {
+				continue;
+			}
+
+			$pickup = self::normalize_slot_key( $pickup );
+
+			$counts[ $pickup ] = isset( $counts[ $pickup ] ) ? $counts[ $pickup ] + 1 : 1;
+		}
+
+		return $counts;
+	}
+
+	/**
+	 * Ausgeschöpfte Zeitfenster entfernen
+	 *
+	 * @param array $timeslots   Zeitfenster.
+	 * @param int   $location_id Standort-ID.
+	 * @return array
+	 */
+	private function apply_slot_capacity( $timeslots, $location_id ) {
+		$capacity = self::get_slot_capacity();
+
+		if ( ! $capacity || empty( $timeslots ) ) {
+			return $timeslots;
+		}
+
+		$counts = self::count_orders_per_slot( $location_id );
+
+		return array_values(
+			array_filter(
+				$timeslots,
+				function ( $slot ) use ( $counts, $capacity ) {
+					$taken = isset( $counts[ $slot['value'] ] ) ? $counts[ $slot['value'] ] : 0;
+
+					return $taken < $capacity;
+				}
+			)
+		);
+	}
+
+	/**
+	 * Ist ein bestimmtes Zeitfenster noch frei?
+	 *
+	 * Wird beim Absenden der Bestellung erneut geprüft. Ohne diese zweite
+	 * Prüfung könnten zwei Gäste gleichzeitig das letzte freie Fenster
+	 * auswählen und beide durchkommen.
+	 *
+	 * @param int    $location_id Standort-ID.
+	 * @param string $pickup_time Gewähltes Zeitfenster (Y-m-d H:i).
+	 * @return bool
+	 */
+	public static function is_slot_available( $location_id, $pickup_time ) {
+		$capacity = self::get_slot_capacity();
+
+		if ( ! $capacity || '' === $pickup_time ) {
+			return true;
+		}
+
+		$counts = self::count_orders_per_slot( $location_id );
+		$key    = self::normalize_slot_key( $pickup_time );
+		$taken  = isset( $counts[ $key ] ) ? $counts[ $key ] : 0;
+
+		return $taken < $capacity;
 	}
 
 	/**

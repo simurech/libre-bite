@@ -23,6 +23,19 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Kapazitätsdeckelung pro Zeitfenster (F45)
+    "Time Slot Capacity":
+        "Kapazität pro Zeitfenster",
+    "Limit how many orders each time slot accepts":
+        "Begrenzen, wie viele Bestellungen ein Zeitfenster annimmt",
+    "Max Orders per Time Slot":
+        "Maximale Bestellungen pro Zeitfenster",
+    "Once a time slot has reached this many orders it disappears from the checkout, so the kitchen is not flooded at peak times. Set to 0 for no limit.":
+        "Sobald ein Zeitfenster diese Anzahl Bestellungen erreicht hat, verschwindet es aus der Kasse, damit die Küche zu Stosszeiten nicht überläuft. 0 bedeutet keine Begrenzung.",
+    "Cap how many orders each time slot accepts, so the kitchen is not flooded at peak times.":
+        "Begrenzt, wie viele Bestellungen ein Zeitfenster annimmt, damit die Küche zu Stosszeiten nicht überläuft.",
+    "This time slot has just been fully booked. Please choose another time.":
+        "Dieses Zeitfenster wurde soeben ausgebucht. Bitte wählen Sie eine andere Zeit.",
     # POS-Markierung ausserhalb des Zeitplans (F40)
     "This product is outside its scheduled availability right now.":
         "Dieses Produkt liegt derzeit ausserhalb seines Verfügbarkeits-Zeitplans.",

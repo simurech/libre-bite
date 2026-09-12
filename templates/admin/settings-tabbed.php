@@ -248,15 +248,22 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				}
 			}
 
+			// Kapazitätsmodul (Pro)
+			$lbite_features = get_option( 'lbite_features', array() );
+			$lbite_features['enable_slot_capacity'] = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_slot_capacity'] );
+			update_option( 'lbite_features', $lbite_features );
+
 			// Time settings
 			$lbite_loc_time = lbite_enforce_pro_options( array(
 				'lbite_slot_buffer_start' => isset( $_POST['lbite_slot_buffer_start'] ) ? intval( wp_unslash( $_POST['lbite_slot_buffer_start'] ) ) : 0,
 				'lbite_slot_buffer_end'   => isset( $_POST['lbite_slot_buffer_end'] ) ? intval( wp_unslash( $_POST['lbite_slot_buffer_end'] ) ) : 0,
+				'lbite_max_orders_per_slot' => isset( $_POST['lbite_max_orders_per_slot'] ) ? max( 0, intval( wp_unslash( $_POST['lbite_max_orders_per_slot'] ) ) ) : 0,
 			) );
 			update_option( 'lbite_preparation_time', isset( $_POST['lbite_preparation_time'] ) ? intval( wp_unslash( $_POST['lbite_preparation_time'] ) ) : 30 );
 			update_option( 'lbite_timeslot_interval', isset( $_POST['lbite_timeslot_interval'] ) ? intval( wp_unslash( $_POST['lbite_timeslot_interval'] ) ) : 15 );
 			update_option( 'lbite_slot_buffer_start', $lbite_loc_time['lbite_slot_buffer_start'] );
 			update_option( 'lbite_slot_buffer_end', $lbite_loc_time['lbite_slot_buffer_end'] );
+			update_option( 'lbite_max_orders_per_slot', $lbite_loc_time['lbite_max_orders_per_slot'] );
 			$lbite_did_save = true;
 			break;
 

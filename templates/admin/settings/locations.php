@@ -13,6 +13,7 @@ $lbite_location_page_id  = get_option( 'lbite_location_page_id', 0 );
 $lbite_preparation_time  = get_option( 'lbite_preparation_time', 30 );
 $lbite_timeslot_int      = get_option( 'lbite_timeslot_interval', 15 );
 $lbite_slot_buffer_start = get_option( 'lbite_slot_buffer_start', 0 );
+$lbite_max_per_slot      = get_option( 'lbite_max_orders_per_slot', 0 );
 $lbite_slot_buffer_end   = get_option( 'lbite_slot_buffer_end', 0 );
 $lbite_is_premium_loc    = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
 $lbite_all_pages         = get_pages( array( 'post_status' => 'publish' ) );
@@ -105,6 +106,32 @@ $lbite_all_pages         = get_pages( array( 'post_status' => 'publish' ) );
 			<td>
 				<input type="number" min="0" step="5" name="lbite_slot_buffer_end" value="<?php echo esc_attr( $lbite_slot_buffer_end ); ?>" class="small-text" <?php echo $lbite_is_premium_loc ? '' : 'disabled'; ?>> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'Cut off the last N minutes from each time window. Example: with 30 minutes, a window until 22:00 only shows slots up to 21:30.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<?php esc_html_e( 'Time Slot Capacity', 'libre-bite' ); ?>
+				<?php if ( ! $lbite_is_premium_loc ) : ?>
+					<span class="lbite-pro-badge">Pro</span>
+				<?php endif; ?>
+			</th>
+			<td>
+				<label>
+					<input type="checkbox" name="lbite_feature_toggle[enable_slot_capacity]" value="1" <?php checked( lbite_feature_enabled( 'enable_slot_capacity' ) ); ?> <?php echo $lbite_is_premium_loc ? '' : 'disabled'; ?>>
+					<?php esc_html_e( 'Limit how many orders each time slot accepts', 'libre-bite' ); ?>
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<?php esc_html_e( 'Max Orders per Time Slot', 'libre-bite' ); ?>
+				<?php if ( ! $lbite_is_premium_loc ) : ?>
+					<span class="lbite-pro-badge">Pro</span>
+				<?php endif; ?>
+			</th>
+			<td>
+				<input type="number" min="0" name="lbite_max_orders_per_slot" value="<?php echo esc_attr( $lbite_max_per_slot ); ?>" class="small-text" <?php echo $lbite_is_premium_loc ? '' : 'disabled'; ?>>
+				<p class="description"><?php esc_html_e( 'Once a time slot has reached this many orders it disappears from the checkout, so the kitchen is not flooded at peak times. Set to 0 for no limit.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 	</table>
