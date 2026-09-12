@@ -62,6 +62,10 @@ class LBite_Plugin {
 	private function load_dependencies() {
 		require_once LBITE_PLUGIN_DIR . 'includes/core/class-loader.php';
 		$this->loader = new LBite_Loader();
+
+		// REST-Fundament (lbite/v1). Läuft parallel zu admin-ajax.php und
+		// registriert seine Routen selbst auf rest_api_init.
+		require_once LBITE_PLUGIN_DIR . 'includes/core/class-rest-api.php';
 	}
 
 	/**
@@ -78,6 +82,10 @@ class LBite_Plugin {
 			$this->init_admin();
 			$this->load_module( 'order-list', 'LBite_Order_List' );
 		}
+
+		// REST-API: immer registrieren, damit externe Geräte unabhängig von
+		// den Admin-Screens andocken können.
+		$this->modules['rest-api'] = new LBite_REST_API( $this->loader );
 
 		// Basis-Module (immer laden)
 		$this->load_module( 'customizations', 'LBite_Customizations' );

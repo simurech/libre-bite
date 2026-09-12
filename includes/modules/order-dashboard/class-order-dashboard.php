@@ -225,16 +225,34 @@ class LBite_Order_Dashboard {
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
+		wp_send_json_success( $this->get_board_data( $location_id ) );
+	}
+
+	/**
+	 * Board-Daten für einen Standort zusammenstellen
+	 *
+	 * Gemeinsame Grundlage für den AJAX-Endpunkt des Kanban-Boards und die
+	 * REST-Route lbite/v1/orders. Bewusst als eigene Methode, damit beide
+	 * Zugänge nicht auseinanderlaufen können.
+	 *
+	 * @param int $location_id Standort-ID. 0 liefert leere Spalten.
+	 * @return array {
+	 *     @type array $orders           Bestellungen je Spalten-Schlüssel.
+	 *     @type array $completed_counts Gesamtzahl je «abgeschlossen»-Spalte.
+	 * }
+	 */
+	public function get_board_data( $location_id ) {
+		$location_id = (int) $location_id;
+
 		$columns         = self::get_columns();
 		$column_keys     = wp_list_pluck( $columns, 'key' );
 		$columns_by_key  = self::get_columns_by_key();
 
 		// Standort ist Pflicht.
 		if ( ! $location_id ) {
-			wp_send_json_success(
-				array(
-					'orders' => array_fill_keys( $column_keys, array() ),
-				)
+			return array(
+				'orders'           => array_fill_keys( $column_keys, array() ),
+				'completed_counts' => array(),
 			);
 		}
 
@@ -387,11 +405,9 @@ class LBite_Order_Dashboard {
 			}
 		}
 
-		wp_send_json_success(
-			array(
-				'orders'           => $orders_by_status,
-				'completed_counts' => $completed_counts,
-			)
+		return array(
+			'orders'           => $orders_by_status,
+			'completed_counts' => $completed_counts,
 		);
 	}
 
@@ -553,6 +569,35 @@ class LBite_Order_Dashboard {
 		$order_id   = isset( $_POST['order_id'] ) ? intval( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$new_status = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : '';
 
+		$result = $this->apply_order_status( $order_id, $new_status );
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+		}
+
+		wp_send_json_success(
+			array(
+				'message' => __( 'Status updated', 'libre-bite' ),
+			)
+		);
+	}
+
+	/**
+	 * Kanban-Status einer Bestellung setzen
+	 *
+	 * Gemeinsame Grundlage für den AJAX-Endpunkt und die REST-Route
+	 * lbite/v1/orders/<id>/status, damit Tab-Schutz, Legacy-Mapping und die
+	 * Rückführung des WooCommerce-Status nicht doppelt gepflegt werden.
+	 *
+	 * @param int    $order_id   Bestell-ID.
+	 * @param string $new_status Ziel-Spaltenschlüssel.
+	 * @return array|WP_Error
+	 */
+	public function apply_order_status( $order_id, $new_status ) {
+		$order_id   = (int) $order_id;
+		$new_status = sanitize_text_field( (string) $new_status );
+
+
 		// Rückwärtskompatibilität: «ready» auf «preparing» mappen.
 		if ( 'ready' === $new_status ) {
 			$new_status = 'preparing';
@@ -561,12 +606,20 @@ class LBite_Order_Dashboard {
 		$columns_by_key = self::get_columns_by_key();
 
 		if ( ! $order_id || ! isset( $columns_by_key[ $new_status ] ) ) {
-			wp_send_json_error();
+			return new WP_Error(
+				'lbite_invalid_status',
+				__( 'Unknown column', 'libre-bite' ),
+				array( 'status' => 400 )
+			);
 		}
 
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
-			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
+			return new WP_Error(
+				'lbite_order_not_found',
+				__( 'Order not found', 'libre-bite' ),
+				array( 'status' => 404 )
+			);
 		}
 
 		$target_counts_as_completed = $columns_by_key[ $new_status ]['counts_as_completed'];
@@ -575,7 +628,11 @@ class LBite_Order_Dashboard {
 		// «abgeschlossen»-Spalte verschoben werden – sonst bleibt _lbite_tab_open gesetzt, obwohl
 		// die Bestellung im Kanban bereits als fertig gilt.
 		if ( $target_counts_as_completed && '1' === (string) $order->get_meta( '_lbite_tab_open', true ) ) {
-			wp_send_json_error( array( 'message' => __( 'Close the tab in the POS first', 'libre-bite' ) ) );
+			return new WP_Error(
+				'lbite_tab_open',
+				__( 'Close the tab in the POS first', 'libre-bite' ),
+				array( 'status' => 409 )
+			);
 		}
 
 		$old_status              = $order->get_meta( '_lbite_order_status', true );
@@ -597,10 +654,9 @@ class LBite_Order_Dashboard {
 			$order->update_status( 'processing', __( 'Order moved back from completed via Dashboard', 'libre-bite' ) );
 		}
 
-		wp_send_json_success(
-			array(
-				'message' => __( 'Status updated', 'libre-bite' ),
-			)
+		return array(
+			'order_id' => $order_id,
+			'status'   => $new_status,
 		);
 	}
 
