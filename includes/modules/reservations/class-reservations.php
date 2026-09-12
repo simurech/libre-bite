@@ -670,6 +670,14 @@ class LBite_Reservations {
 		$this->send_confirmation_email( $lbite_post_id, $lbite_data );
 		$this->send_admin_notification( $lbite_post_id, $lbite_data );
 
+		/**
+		 * Nach dem Eingang einer Reservierungsanfrage.
+		 *
+		 * @param int   $reservation_id ID des Reservierungs-Eintrags.
+		 * @param array $data           Übermittelte Formulardaten.
+		 */
+		do_action( 'lbite_reservation_created', $lbite_post_id, $lbite_data );
+
 		wp_send_json_success(
 			array( 'message' => __( 'Reservation request successfully submitted!', 'libre-bite' ) )
 		);

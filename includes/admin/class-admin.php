@@ -1236,6 +1236,14 @@ class LBite_Admin {
 			// Transient-Cache löschen, damit der Kanban-Badge-Counter sofort aktualisiert wird.
 			delete_transient( 'lbite_incoming_orders_count' );
 
+			/**
+			 * Nach dem Anlegen einer Bestellung an der Kasse.
+			 *
+			 * @param int      $order_id Bestell-ID.
+			 * @param WC_Order $order    Bestellobjekt.
+			 */
+			do_action( 'lbite_pos_order_created', $order->get_id(), $order );
+
 			// Währungssymbol dekodieren (z.B. &#67;&#72;&#70; -> CHF).
 			$currency = html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' );
 
@@ -1560,6 +1568,14 @@ class LBite_Admin {
 
 			delete_transient( 'lbite_incoming_orders_count' );
 
+			/**
+			 * Nach dem Eröffnen eines offenen Tabs an einem Tisch.
+			 *
+			 * @param int      $order_id Bestell-ID.
+			 * @param WC_Order $order    Bestellobjekt.
+			 */
+			do_action( 'lbite_tab_opened', $order->get_id(), $order );
+
 			wp_send_json_success( array( 'order_id' => $order->get_id() ) );
 		} catch ( Exception $e ) {
 			if ( class_exists( 'LBite_Checkout' ) ) {
@@ -1634,6 +1650,15 @@ class LBite_Admin {
 			$order->add_order_note( sprintf( __( 'Round %d added via POS', 'libre-bite' ), $round ) );
 			$order->save();
 
+			/**
+			 * Nach dem Nachbuchen einer weiteren Runde auf einen offenen Tab.
+			 *
+			 * @param int      $order_id Bestell-ID.
+			 * @param int      $round    Rundennummer.
+			 * @param WC_Order $order    Bestellobjekt.
+			 */
+			do_action( 'lbite_tab_round_added', $order->get_id(), $round, $order );
+
 			wp_send_json_success( array( 'order_id' => $order->get_id(), 'round' => $round ) );
 		} catch ( Exception $e ) {
 			if ( class_exists( 'LBite_Checkout' ) ) {
@@ -1684,6 +1709,14 @@ class LBite_Admin {
 		$order->update_status( 'processing', __( 'Tab closed via POS.', 'libre-bite' ) );
 
 		delete_transient( 'lbite_incoming_orders_count' );
+
+		/**
+		 * Nach dem Abschluss eines offenen Tabs.
+		 *
+		 * @param int      $order_id Bestell-ID.
+		 * @param WC_Order $order    Bestellobjekt.
+		 */
+		do_action( 'lbite_tab_closed', $order->get_id(), $order );
 
 		wp_send_json_success( array( 'order_id' => $order->get_id() ) );
 	}

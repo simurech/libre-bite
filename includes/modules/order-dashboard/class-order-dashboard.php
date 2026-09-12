@@ -654,6 +654,19 @@ class LBite_Order_Dashboard {
 			$order->update_status( 'processing', __( 'Order moved back from completed via Dashboard', 'libre-bite' ) );
 		}
 
+		/**
+		 * Nach einem Kanban-Statuswechsel.
+		 *
+		 * Zentraler Erweiterungspunkt für Drucker-Brücken, Küchenanzeigen auf
+		 * Zweitgeräten und externe Benachrichtigungen.
+		 *
+		 * @param int      $order_id   Bestell-ID.
+		 * @param string   $new_status Neuer Spalten-Schlüssel.
+		 * @param string   $old_status Vorheriger Spalten-Schlüssel.
+		 * @param WC_Order $order      Bestellobjekt.
+		 */
+		do_action( 'lbite_order_status_changed', $order_id, $new_status, $old_status, $order );
+
 		return array(
 			'order_id' => $order_id,
 			'status'   => $new_status,
