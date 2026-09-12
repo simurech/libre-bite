@@ -13,15 +13,15 @@
 
 .lbite-res-date-nav input[type="date"] {
 	padding: 4px 8px;
-	border: 1px solid #8c8f94;
+	border: 1px solid var(--lbite-text-subtle, #8c8f94);
 	border-radius: 3px;
 	font-size: 14px;
 	line-height: 1.4;
 }
 
 .lbite-res-count-badge {
-	background: #2271b1;
-	color: #fff;
+	background: var(--lbite-color-primary, #2271b1);
+	color: var(--lbite-text-on-primary, #fff);
 	padding: 4px 14px;
 	border-radius: 20px;
 	font-size: 13px;
@@ -35,17 +35,17 @@
 	align-items: center;
 	gap: 10px;
 	padding: 20px 0;
-	color: #666;
+	color: var(--lbite-text-muted, #666);
 }
 
 .lbite-res-empty-state {
-	background: #fff;
-	border: 2px dashed #ccc;
+	background: var(--lbite-surface, #fff);
+	border: 2px dashed var(--lbite-border-strong, #ccc);
 	border-radius: 8px;
 	padding: 40px;
 	text-align: center;
 	margin: 20px 0;
-	color: #666;
+	color: var(--lbite-text-muted, #666);
 }
 
 /* Reservierungsliste */
@@ -58,8 +58,8 @@
 
 /* Reservierungskarte */
 .lbite-res-card {
-	background: #fff;
-	border: 1px solid #ccd0d4;
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border-strong, #ccd0d4);
 	border-radius: 6px;
 	overflow: hidden;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -70,20 +70,20 @@
 	align-items: center;
 	gap: 10px;
 	padding: 12px 16px;
-	background: #f6f7f7;
-	border-bottom: 1px solid #e0e0e0;
+	background: var(--lbite-surface-muted, #f6f7f7);
+	border-bottom: 1px solid var(--lbite-border, #e0e0e0);
 }
 
 .lbite-res-card__time {
 	font-size: 20px;
 	font-weight: 700;
-	color: #1d2327;
+	color: var(--lbite-text, #1d2327);
 }
 
 .lbite-res-card__guests {
 	font-size: 13px;
 	font-weight: 600;
-	color: #555;
+	color: var(--lbite-text-muted, #555);
 	background: #e0e0e0;
 	padding: 3px 8px;
 	border-radius: 12px;
@@ -92,7 +92,7 @@
 
 .lbite-res-status-badge {
 	margin-left: auto;
-	color: #fff !important;
+	color: var(--lbite-text-on-primary, #fff) !important;
 	border: none !important;
 	padding: 4px 12px !important;
 	border-radius: 12px !important;
@@ -120,7 +120,7 @@
 	font-weight: 600;
 	font-size: 15px;
 	margin-bottom: 6px;
-	color: #1d2327;
+	color: var(--lbite-text, #1d2327);
 }
 
 .lbite-res-card__phone {
@@ -128,7 +128,7 @@
 	align-items: center;
 	gap: 4px;
 	font-size: 13px;
-	color: #666;
+	color: var(--lbite-text-muted, #666);
 	margin-bottom: 6px;
 }
 
@@ -142,8 +142,8 @@
 .lbite-res-card__notes {
 	font-size: 12px;
 	color: #888;
-	background: #f9f9f9;
-	border-left: 3px solid #ddd;
+	background: var(--lbite-surface-muted, #f9f9f9);
+	border-left: 3px solid var(--lbite-border, #ddd);
 	padding: 6px 10px;
 	margin-bottom: 10px;
 	border-radius: 0 4px 4px 0;
@@ -154,13 +154,13 @@
 	align-items: center;
 	gap: 8px;
 	margin-top: 10px;
-	border-top: 1px solid #f0f0f0;
+	border-top: 1px solid var(--lbite-border-subtle, #f0f0f0);
 	padding-top: 10px;
 }
 
 .lbite-res-card__table-row label {
 	font-size: 13px;
-	color: #666;
+	color: var(--lbite-text-muted, #666);
 	white-space: nowrap;
 }
 

@@ -2,8 +2,8 @@
 
 /* --- help-partials/locations.php --- */
 .lbite-help-section {
-	background: #fff;
-	border: 1px solid #c3c4c7;
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border-strong, #c3c4c7);
 	border-radius: 4px;
 	padding: 20px;
 }
@@ -11,7 +11,7 @@
 .lbite-help-article {
 	margin-bottom: 30px;
 	padding-bottom: 30px;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--lbite-border-subtle, #eee);
 }
 
 .lbite-help-article:last-child {
@@ -32,15 +32,15 @@
 	display: flex;
 	align-items: flex-start;
 	gap: 10px;
-	background: #fff8e5;
+	background: var(--lbite-warning-soft, #fff8e5);
 	padding: 12px;
 	border-radius: 4px;
-	border-left: 3px solid #dba617;
+	border-left: 3px solid var(--lbite-warning, #dba617);
 	margin-top: 15px;
 }
 
 .lbite-help-tip .dashicons {
-	color: #dba617;
+	color: var(--lbite-warning, #dba617);
 }
 
 .lbite-help-tip p {
@@ -50,8 +50,8 @@
 
 /* --- help-partials/orders.php --- */
 .lbite-help-section {
-	background: #fff;
-	border: 1px solid #c3c4c7;
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border-strong, #c3c4c7);
 	border-radius: 4px;
 	padding: 20px;
 }
@@ -59,7 +59,7 @@
 .lbite-help-article {
 	margin-bottom: 30px;
 	padding-bottom: 30px;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--lbite-border-subtle, #eee);
 }
 
 .lbite-help-article:last-child {
@@ -119,21 +119,21 @@
 }
 
 .lbite-help-tip {
-	background: #fff8e5;
-	border-left: 3px solid #dba617;
+	background: var(--lbite-warning-soft, #fff8e5);
+	border-left: 3px solid var(--lbite-warning, #dba617);
 }
 
 .lbite-help-tip .dashicons {
-	color: #dba617;
+	color: var(--lbite-warning, #dba617);
 }
 
 .lbite-help-notice {
-	background: #f0f6fc;
-	border-left: 3px solid #2271b1;
+	background: var(--lbite-info-soft, #f0f6fc);
+	border-left: 3px solid var(--lbite-color-primary, #2271b1);
 }
 
 .lbite-help-notice .dashicons {
-	color: #2271b1;
+	color: var(--lbite-color-primary, #2271b1);
 }
 
 .lbite-help-tip p,
@@ -144,8 +144,8 @@
 
 /* --- help-partials/products.php --- */
 .lbite-help-section {
-	background: #fff;
-	border: 1px solid #c3c4c7;
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border-strong, #c3c4c7);
 	border-radius: 4px;
 	padding: 20px;
 }
@@ -153,7 +153,7 @@
 .lbite-help-article {
 	margin-bottom: 30px;
 	padding-bottom: 30px;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--lbite-border-subtle, #eee);
 }
 
 .lbite-help-article:last-child {
@@ -174,15 +174,15 @@
 	display: flex;
 	align-items: flex-start;
 	gap: 10px;
-	background: #fff8e5;
+	background: var(--lbite-warning-soft, #fff8e5);
 	padding: 12px;
 	border-radius: 4px;
-	border-left: 3px solid #dba617;
+	border-left: 3px solid var(--lbite-warning, #dba617);
 	margin-top: 15px;
 }
 
 .lbite-help-tip .dashicons {
-	color: #dba617;
+	color: var(--lbite-warning, #dba617);
 }
 
 .lbite-help-tip p {
@@ -192,8 +192,8 @@
 
 /* --- help-partials/settings.php --- */
 .lbite-help-section {
-	background: #fff;
-	border: 1px solid #c3c4c7;
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border-strong, #c3c4c7);
 	border-radius: 4px;
 	padding: 20px;
 }
@@ -201,7 +201,7 @@
 .lbite-help-article {
 	margin-bottom: 30px;
 	padding-bottom: 30px;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--lbite-border-subtle, #eee);
 }
 
 .lbite-help-article:last-child {
@@ -222,15 +222,15 @@
 	display: flex;
 	align-items: flex-start;
 	gap: 10px;
-	background: #fff8e5;
+	background: var(--lbite-warning-soft, #fff8e5);
 	padding: 12px;
 	border-radius: 4px;
-	border-left: 3px solid #dba617;
+	border-left: 3px solid var(--lbite-warning, #dba617);
 	margin-top: 15px;
 }
 
 .lbite-help-tip .dashicons {
-	color: #dba617;
+	color: var(--lbite-warning, #dba617);
 }
 
 .lbite-help-tip p {
@@ -240,8 +240,8 @@
 
 /* --- help-partials/support.php --- */
 .lbite-help-section {
-	background: #fff;
-	border: 1px solid #c3c4c7;
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border-strong, #c3c4c7);
 	border-radius: 4px;
 	padding: 20px;
 }
@@ -249,7 +249,7 @@
 .lbite-help-article {
 	margin-top: 30px;
 	padding-top: 30px;
-	border-top: 1px solid #eee;
+	border-top: 1px solid var(--lbite-border-subtle, #eee);
 }
 
 .lbite-help-article h3 {
@@ -257,7 +257,7 @@
 }
 
 .lbite-support-card {
-	background: #f6f7f7;
+	background: var(--lbite-surface-muted, #f6f7f7);
 	border-radius: 4px;
 	padding: 20px;
 }
@@ -275,7 +275,7 @@
 }
 
 .lbite-support-item .dashicons {
-	color: #2271b1;
+	color: var(--lbite-color-primary, #2271b1);
 	font-size: 24px;
 	width: 24px;
 	height: 24px;
@@ -298,15 +298,15 @@
 	display: flex;
 	align-items: flex-start;
 	gap: 10px;
-	background: #fff8e5;
+	background: var(--lbite-warning-soft, #fff8e5);
 	padding: 12px;
 	border-radius: 4px;
-	border-left: 3px solid #dba617;
+	border-left: 3px solid var(--lbite-warning, #dba617);
 	margin-top: 20px;
 }
 
 .lbite-billing-notice .dashicons {
-	color: #dba617;
+	color: var(--lbite-warning, #dba617);
 	flex-shrink: 0;
 }
 
@@ -317,13 +317,13 @@
 .lbite-custom-text {
 	margin-top: 20px;
 	padding-top: 20px;
-	border-top: 1px solid #ddd;
+	border-top: 1px solid var(--lbite-border, #ddd);
 }
 
 .lbite-faq-item {
 	margin-bottom: 20px;
 	padding-bottom: 20px;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--lbite-border-subtle, #eee);
 }
 
 .lbite-faq-item:last-child {
@@ -335,12 +335,12 @@
 .lbite-faq-item h4 {
 	margin-top: 0;
 	margin-bottom: 8px;
-	color: #1d2327;
+	color: var(--lbite-text, #1d2327);
 }
 
 .lbite-faq-item p {
 	margin: 0;
-	color: #50575e;
+	color: var(--lbite-text-muted, #50575e);
 }
 
 
@@ -360,8 +360,8 @@
 }
 
 .lbite-help-card {
-	background: #fff;
-	border: 1px solid #c3c4c7;
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border-strong, #c3c4c7);
 	border-radius: 4px;
 	padding: 20px;
 }
@@ -372,11 +372,11 @@
 	gap: 8px;
 	margin-top: 0;
 	padding-bottom: 10px;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--lbite-border-subtle, #eee);
 }
 
 .lbite-help-card h2 .dashicons {
-	color: #2271b1;
+	color: var(--lbite-color-primary, #2271b1);
 }
 
 .lbite-help-card ul {
@@ -390,7 +390,7 @@
 .lbite-help-quickstart {
 	grid-column: 1 / -1;
 	background: linear-gradient(135deg, #f0f6fc 0%, #fff 100%);
-	border-color: #2271b1;
+	border-color: var(--lbite-color-primary, #2271b1);
 }
 
 .lbite-quick-links {
@@ -407,7 +407,7 @@
 }
 
 .lbite-help-support {
-	background: #f6f7f7;
+	background: var(--lbite-surface-muted, #f6f7f7);
 }
 
 .lbite-support-info p {
@@ -418,22 +418,22 @@
 }
 
 .lbite-support-info .dashicons {
-	color: #2271b1;
+	color: var(--lbite-color-primary, #2271b1);
 }
 
 .lbite-billing-notice {
 	display: flex;
 	align-items: flex-start;
 	gap: 8px;
-	background: #fff8e5;
+	background: var(--lbite-warning-soft, #fff8e5);
 	padding: 12px;
 	border-radius: 4px;
-	border-left: 3px solid #dba617;
+	border-left: 3px solid var(--lbite-warning, #dba617);
 	margin-top: 15px;
 }
 
 .lbite-billing-notice .dashicons {
-	color: #dba617;
+	color: var(--lbite-warning, #dba617);
 	flex-shrink: 0;
 }
 
@@ -461,8 +461,8 @@
 }
 
 .lbite-help-card {
-	background: #fff;
-	border: 1px solid #c3c4c7;
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border-strong, #c3c4c7);
 	border-radius: 4px;
 	padding: 20px;
 }
@@ -473,11 +473,11 @@
 	gap: 8px;
 	margin-top: 0;
 	padding-bottom: 10px;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--lbite-border-subtle, #eee);
 }
 
 .lbite-help-card h2 .dashicons {
-	color: #2271b1;
+	color: var(--lbite-color-primary, #2271b1);
 }
 
 .lbite-help-card h3 {
@@ -498,7 +498,7 @@
 .lbite-help-quickstart {
 	grid-column: 1 / -1;
 	background: linear-gradient(135deg, #f0f6fc 0%, #fff 100%);
-	border-color: #2271b1;
+	border-color: var(--lbite-color-primary, #2271b1);
 }
 
 .lbite-quick-links {
@@ -518,14 +518,14 @@
 	display: flex;
 	align-items: flex-start;
 	gap: 10px;
-	background: #fff8e5;
+	background: var(--lbite-warning-soft, #fff8e5);
 	padding: 12px;
 	border-radius: 4px;
 	margin-top: 15px;
 }
 
 .lbite-help-tip .dashicons {
-	color: #dba617;
+	color: var(--lbite-warning, #dba617);
 	flex-shrink: 0;
 }
 
@@ -534,7 +534,7 @@
 }
 
 .lbite-help-support {
-	background: #f6f7f7;
+	background: var(--lbite-surface-muted, #f6f7f7);
 }
 
 .lbite-support-info p {
@@ -545,29 +545,29 @@
 }
 
 .lbite-support-info .dashicons {
-	color: #2271b1;
+	color: var(--lbite-color-primary, #2271b1);
 }
 
 .lbite-billing-notice {
 	display: flex;
 	align-items: flex-start;
 	gap: 8px;
-	background: #fff8e5;
+	background: var(--lbite-warning-soft, #fff8e5);
 	padding: 12px;
 	border-radius: 4px;
-	border-left: 3px solid #dba617;
+	border-left: 3px solid var(--lbite-warning, #dba617);
 	margin-top: 15px;
 }
 
 .lbite-billing-notice .dashicons {
-	color: #dba617;
+	color: var(--lbite-warning, #dba617);
 	flex-shrink: 0;
 }
 
 .lbite-custom-text {
 	margin-top: 15px;
 	padding-top: 15px;
-	border-top: 1px solid #ddd;
+	border-top: 1px solid var(--lbite-border, #ddd);
 }
 
 @media screen and (max-width: 782px) {
@@ -597,8 +597,8 @@
 }
 
 .lbite-help-card {
-	background: #fff;
-	border: 1px solid #c3c4c7;
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border-strong, #c3c4c7);
 	border-radius: 4px;
 	padding: 20px;
 }
@@ -609,27 +609,27 @@
 	gap: 8px;
 	margin-top: 0;
 	padding-bottom: 10px;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--lbite-border-subtle, #eee);
 }
 
 .lbite-help-card h2 .dashicons {
-	color: #2271b1;
+	color: var(--lbite-color-primary, #2271b1);
 }
 
 .lbite-help-quickstart {
 	grid-column: 1 / -1;
 	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-	color: #fff;
+	color: var(--lbite-text-on-primary, #fff);
 	border: none;
 }
 
 .lbite-help-quickstart h2 {
-	color: #fff;
+	color: var(--lbite-text-on-primary, #fff);
 	border-bottom-color: rgba(255,255,255,0.2);
 }
 
 .lbite-help-quickstart h2 .dashicons {
-	color: #fff;
+	color: var(--lbite-text-on-primary, #fff);
 }
 
 .lbite-quick-links {
@@ -646,8 +646,8 @@
 }
 
 .lbite-help-section {
-	background: #fff;
-	border: 1px solid #c3c4c7;
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border-strong, #c3c4c7);
 	border-radius: 4px;
 	padding: 20px;
 }
@@ -655,7 +655,7 @@
 .lbite-help-article {
 	margin-bottom: 30px;
 	padding-bottom: 30px;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--lbite-border-subtle, #eee);
 }
 
 .lbite-help-article:last-child {
@@ -673,25 +673,25 @@
 }
 
 .lbite-help-article pre {
-	background: #f6f7f7;
+	background: var(--lbite-surface-muted, #f6f7f7);
 	padding: 15px;
 	border-radius: 4px;
 	overflow-x: auto;
 }
 
 .lbite-status-enabled {
-	color: #00a32a;
+	color: var(--lbite-success, #00a32a);
 	font-weight: 500;
 }
 
 .lbite-status-disabled {
-	color: #d63638;
+	color: var(--lbite-danger, #d63638);
 }
 
 .lbite-faq-item {
 	margin-bottom: 20px;
 	padding: 15px;
-	background: #f6f7f7;
+	background: var(--lbite-surface-muted, #f6f7f7);
 	border-radius: 4px;
 }
 
@@ -711,21 +711,21 @@
 	padding: 12px;
 	border-radius: 4px;
 	margin-top: 15px;
-	background: #f0f6fc;
-	border-left: 3px solid #2271b1;
+	background: var(--lbite-info-soft, #f0f6fc);
+	border-left: 3px solid var(--lbite-color-primary, #2271b1);
 }
 
 .lbite-help-notice .dashicons {
-	color: #2271b1;
+	color: var(--lbite-color-primary, #2271b1);
 }
 
 .lbite-help-warning {
 	background: #fcf0f1;
-	border-left-color: #d63638;
+	border-left-color: var(--lbite-danger, #d63638);
 }
 
 .lbite-help-warning .dashicons {
-	color: #d63638;
+	color: var(--lbite-danger, #d63638);
 }
 
 .lbite-help-notice p {
@@ -733,7 +733,7 @@
 }
 
 .lbite-help-support {
-	background: #f6f7f7;
+	background: var(--lbite-surface-muted, #f6f7f7);
 }
 
 @media screen and (max-width: 782px) {

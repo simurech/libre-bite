@@ -11,9 +11,9 @@
 
 /* QR-Code Anzeige-Box */
 .lbite-qr-display {
-	background: #fff;
+	background: var(--lbite-surface, #fff);
 	padding: 10px;
-	border: 1px solid #ddd;
+	border: 1px solid var(--lbite-border, #ddd);
 	display: inline-block;
 }
 
