@@ -62,6 +62,9 @@ class LBite_Admin {
 		$this->loader->add_action( 'admin_menu', $this, 'add_admin_menu' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_admin_assets' );
 		$this->loader->add_filter( 'admin_body_class', $this, 'add_admin_body_classes' );
+		$this->loader->add_action( 'personal_options', $this, 'render_theme_user_option' );
+		$this->loader->add_action( 'personal_options_update', $this, 'save_theme_user_option' );
+		$this->loader->add_action( 'edit_user_profile_update', $this, 'save_theme_user_option' );
 		$this->loader->add_action( 'admin_init', $this, 'maybe_upgrade' );
 
 		// WooCommerce leitet Benutzer ohne edit_posts/manage_woocommerce aus dem Backend um.
@@ -487,6 +490,88 @@ class LBite_Admin {
 	}
 
 	/**
+	 * Gewähltes Farbschema des angemeldeten Benutzers
+	 *
+	 * @return string auto, light oder dark.
+	 */
+	public static function get_admin_theme() {
+		$lbite_theme = get_user_meta( get_current_user_id(), 'lbite_admin_theme', true );
+
+		if ( ! in_array( $lbite_theme, array( 'auto', 'light', 'dark' ), true ) ) {
+			return 'auto';
+		}
+
+		return $lbite_theme;
+	}
+
+	/**
+	 * Farbschema-Auswahl im Benutzerprofil rendern
+	 *
+	 * Bewusst eine persönliche Einstellung und keine globale Option: das
+	 * Küchen-Tablet und der Büro-Rechner sollen unabhängig voneinander
+	 * eingestellt werden können.
+	 *
+	 * @param WP_User $user Benutzerobjekt.
+	 */
+	public function render_theme_user_option( $user ) {
+		if ( ! isset( $user->ID ) ) {
+			return;
+		}
+
+		$lbite_current = get_user_meta( $user->ID, 'lbite_admin_theme', true );
+
+		if ( ! in_array( $lbite_current, array( 'auto', 'light', 'dark' ), true ) ) {
+			$lbite_current = 'auto';
+		}
+
+		$lbite_choices = array(
+			'auto'  => __( 'Follow system setting', 'libre-bite' ),
+			'light' => __( 'Always light', 'libre-bite' ),
+			'dark'  => __( 'Always dark', 'libre-bite' ),
+		);
+		?>
+		<tr class="lbite-admin-theme-row">
+			<th scope="row"><?php esc_html_e( 'Libre Bite colour scheme', 'libre-bite' ); ?></th>
+			<td>
+				<select name="lbite_admin_theme" id="lbite_admin_theme">
+					<?php foreach ( $lbite_choices as $lbite_value => $lbite_label ) : ?>
+						<option value="<?php echo esc_attr( $lbite_value ); ?>" <?php selected( $lbite_current, $lbite_value ); ?>>
+							<?php echo esc_html( $lbite_label ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+				<p class="description">
+					<?php esc_html_e( 'Applies to the Libre Bite screens only. A dark scheme is easier on the eyes on kitchen and counter displays that run all day.', 'libre-bite' ); ?>
+				</p>
+			</td>
+		</tr>
+		<?php
+	}
+
+	/**
+	 * Farbschema-Auswahl speichern
+	 *
+	 * @param int $user_id Benutzer-ID.
+	 */
+	public function save_theme_user_option( $user_id ) {
+		if ( ! current_user_can( 'edit_user', $user_id ) ) {
+			return;
+		}
+
+		check_admin_referer( 'update-user_' . $user_id );
+
+		$lbite_theme = isset( $_POST['lbite_admin_theme'] )
+			? sanitize_key( wp_unslash( $_POST['lbite_admin_theme'] ) )
+			: 'auto';
+
+		if ( ! in_array( $lbite_theme, array( 'auto', 'light', 'dark' ), true ) ) {
+			$lbite_theme = 'auto';
+		}
+
+		update_user_meta( $user_id, 'lbite_admin_theme', $lbite_theme );
+	}
+
+	/**
 	 * Screen-Modus als Body-Klasse setzen
 	 *
 	 * Arbeits-Screens (Kanban, POS, Tischplan, Reservierungsboard) laufen im
@@ -526,7 +611,9 @@ class LBite_Admin {
 			}
 		}
 
-		$classes .= ' lbite-app ' . ( $lbite_is_app ? 'lbite-screen-app' : 'lbite-screen-doc' ) . ' ';
+		$classes .= ' lbite-app '
+			. ( $lbite_is_app ? 'lbite-screen-app' : 'lbite-screen-doc' )
+			. ' lbite-theme-' . self::get_admin_theme() . ' ';
 
 		return $classes;
 	}

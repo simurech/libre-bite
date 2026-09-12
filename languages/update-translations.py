@@ -23,6 +23,17 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Dunkles Farbschema im Admin (F36b)
+    "Libre Bite colour scheme":
+        "Libre-Bite-Farbschema",
+    "Follow system setting":
+        "Systemeinstellung folgen",
+    "Always light":
+        "Immer hell",
+    "Always dark":
+        "Immer dunkel",
+    "Applies to the Libre Bite screens only. A dark scheme is easier on the eyes on kitchen and counter displays that run all day.":
+        "Gilt nur für die Libre-Bite-Seiten. Ein dunkles Schema ist auf Küchen- und Thekenbildschirmen im Dauerbetrieb angenehmer für die Augen.",
     # KDS-Wartezeit-Timer und Alarmwiederholung (F49)
     "Waiting time":
         "Wartezeit",

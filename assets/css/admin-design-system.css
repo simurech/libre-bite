@@ -918,3 +918,133 @@ body.lbite-screen-doc .lbite-app {
 		touch-action: manipulation;
 	}
 }
+
+/* ════════════════════════════════════════════════════════════════════
+ * Dunkles Farbschema
+ *
+ * Reiner Token-Tausch – es ist keine einzige Komponentenregel doppelt
+ * vorhanden. Das funktioniert nur, weil die Rohwerte property-bewusst
+ * migriert wurden: --lbite-surface wird dunkel, --lbite-text-on-primary
+ * bleibt hell. Eine pauschale Migration hätte hier weisse Schrift auf
+ * weissem Grund hinterlassen.
+ *
+ * Gedacht für Küchen- und Empfangsbildschirme im Dauerbetrieb.
+ *
+ * Steuerung über eine Body-Klasse, die serverseitig gesetzt wird –
+ * kein JavaScript und damit kein helles Aufblitzen beim Laden:
+ *   .lbite-theme-dark  – immer dunkel
+ *   .lbite-theme-light – immer hell
+ *   .lbite-theme-auto  – der Systemeinstellung folgen
+ * ════════════════════════════════════════════════════════════════════ */
+
+body.lbite-theme-dark {
+	--lbite-canvas: #14171c;
+	--lbite-surface: #1c2027;
+	--lbite-surface-muted: #232830;
+	--lbite-surface-sunken: #2a303a;
+
+	--lbite-text: #e8eaed;
+	--lbite-text-muted: #a2a9b4;
+	--lbite-text-subtle: #7b828d;
+	--lbite-text-on-primary: #ffffff;
+
+	--lbite-border: #333a45;
+	--lbite-border-strong: #454d5a;
+	--lbite-border-subtle: #282e37;
+
+	--lbite-color-primary: #4aa3d8;
+	--lbite-color-primary-hover: #68b6e4;
+	--lbite-color-primary-soft: #1b2c38;
+
+	--lbite-success: #5dc97f;
+	--lbite-success-soft: #172c1e;
+	--lbite-success-border: #2c5138;
+
+	--lbite-warning: #e3b34a;
+	--lbite-warning-soft: #2e2616;
+	--lbite-warning-border: #574828;
+
+	--lbite-danger: #ef7b7b;
+	--lbite-danger-soft: #321b1b;
+	--lbite-danger-border: #5d3232;
+
+	--lbite-info: #63b3e8;
+	--lbite-info-soft: #16262f;
+	--lbite-info-border: #2b4655;
+
+	--lbite-neutral: #a2a9b4;
+	--lbite-neutral-soft: #262b33;
+	--lbite-neutral-border: #3a414c;
+
+	/* Schatten tragen auf dunklem Grund kaum – dafür mehr Tiefe. */
+	--lbite-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+	--lbite-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.30);
+	--lbite-shadow-md: 0 4px 10px rgba(0, 0, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.30);
+	--lbite-shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.55), 0 4px 8px rgba(0, 0, 0, 0.35);
+	--lbite-shadow-xl: 0 24px 52px rgba(0, 0, 0, 0.65), 0 8px 16px rgba(0, 0, 0, 0.40);
+
+	--lbite-focus-ring: 0 0 0 2px var(--lbite-surface), 0 0 0 4px rgba(74, 163, 216, 0.55);
+}
+
+body.lbite-theme-dark #wpbody-content,
+body.lbite-theme-dark.lbite-screen-app {
+	background: var(--lbite-canvas);
+	color: var(--lbite-text);
+}
+
+/* Automatikmodus: dasselbe Token-Set, aber der Systemeinstellung folgend */
+@media (prefers-color-scheme: dark) {
+	body.lbite-theme-auto {
+		--lbite-canvas: #14171c;
+		--lbite-surface: #1c2027;
+		--lbite-surface-muted: #232830;
+		--lbite-surface-sunken: #2a303a;
+
+		--lbite-text: #e8eaed;
+		--lbite-text-muted: #a2a9b4;
+		--lbite-text-subtle: #7b828d;
+		--lbite-text-on-primary: #ffffff;
+
+		--lbite-border: #333a45;
+		--lbite-border-strong: #454d5a;
+		--lbite-border-subtle: #282e37;
+
+		--lbite-color-primary: #4aa3d8;
+		--lbite-color-primary-hover: #68b6e4;
+		--lbite-color-primary-soft: #1b2c38;
+
+		--lbite-success: #5dc97f;
+		--lbite-success-soft: #172c1e;
+		--lbite-success-border: #2c5138;
+
+		--lbite-warning: #e3b34a;
+		--lbite-warning-soft: #2e2616;
+		--lbite-warning-border: #574828;
+
+		--lbite-danger: #ef7b7b;
+		--lbite-danger-soft: #321b1b;
+		--lbite-danger-border: #5d3232;
+
+		--lbite-info: #63b3e8;
+		--lbite-info-soft: #16262f;
+		--lbite-info-border: #2b4655;
+
+		--lbite-neutral: #a2a9b4;
+		--lbite-neutral-soft: #262b33;
+		--lbite-neutral-border: #3a414c;
+
+		--lbite-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+		--lbite-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.30);
+		--lbite-shadow-md: 0 4px 10px rgba(0, 0, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.30);
+		--lbite-shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.55), 0 4px 8px rgba(0, 0, 0, 0.35);
+		--lbite-shadow-xl: 0 24px 52px rgba(0, 0, 0, 0.65), 0 8px 16px rgba(0, 0, 0, 0.40);
+
+		--lbite-focus-ring: 0 0 0 2px var(--lbite-surface), 0 0 0 4px rgba(74, 163, 216, 0.55);
+	}
+
+	body.lbite-theme-auto #wpbody-content,
+	body.lbite-theme-auto.lbite-screen-app {
+		background: var(--lbite-canvas);
+		color: var(--lbite-text);
+	}
+}
