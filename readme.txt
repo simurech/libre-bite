@@ -4,9 +4,9 @@ Donate link: https://github.com/simurech/libre-bite
 Tags: woocommerce, restaurant, pos, ordering, food-delivery
 Requires at least: 6.0
 Tested up to: 7.1
-Requires PHP: 7.4
+Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,10 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.0.1 =
+
+* Raised the minimum PHP version to 8.1. PHP 7.4 has been without security updates since November 2022, and sites still on it should not be running a payment-handling plugin. The code itself ran on 7.4, so nothing functional changes for anyone on a supported version.
 
 = 3.0.0 =
 
