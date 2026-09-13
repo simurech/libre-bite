@@ -223,6 +223,14 @@ class LBite_Order_Bumps {
 			wp_send_json_error( array( 'message' => __( 'Unknown offer', 'libre-bite' ) ) );
 		}
 
+		// WooCommerce wertet diesen Filter an seinen eigenen Eintrittspunkten aus,
+		// WC_Cart::add_to_cart() selbst tut es nicht. Ohne den Aufruf liesse sich
+		// hierüber ein Artikel bestellen, der am gewählten Standort gesperrt,
+		// ausserhalb seines Zeitfensters oder nur für die Kasse gedacht ist.
+		if ( ! apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, 1 ) ) {
+			wp_send_json_error( array( 'message' => __( 'This item is not available right now.', 'libre-bite' ) ) );
+		}
+
 		$added = WC()->cart->add_to_cart( $product_id, 1 );
 
 		if ( ! $added ) {
