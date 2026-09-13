@@ -392,19 +392,19 @@ msgstr "min"
 
 #: includes/admin/class-admin.php:974
 msgid "Print (right-click to choose a template)"
-msgstr ""
+msgstr "Stampa (clic destro per scegliere un modello)"
 
 #: includes/admin/class-admin.php:975
 msgid "Could not create the receipt"
-msgstr ""
+msgstr "Impossibile creare lo scontrino"
 
 #: includes/admin/class-admin.php:976
 msgid "Please allow pop-ups for this site to print"
-msgstr ""
+msgstr "Consenti i pop-up per questo sito per stampare"
 
 #: includes/admin/class-admin.php:977
 msgid "This browser does not support keeping the screen awake."
-msgstr ""
+msgstr "Questo browser non può mantenere lo schermo acceso."
 
 #: includes/admin/class-admin.php:978 templates/admin/pos.php:282
 #: templates/admin/settings/branding.php:135
@@ -415,7 +415,7 @@ msgstr ""
 #: templates/location-selector-banner.php:144
 #: templates/location-selector-tiles.php:149
 msgid "Back"
-msgstr ""
+msgstr "Indietro"
 
 #: includes/admin/class-admin.php:1009
 #: includes/modules/reservations/class-reservations.php:126
@@ -424,7 +424,7 @@ msgstr "Prenotazione"
 
 #: includes/admin/class-admin.php:1013
 msgid "Returning guest"
-msgstr ""
+msgstr "Cliente abituale"
 
 #: includes/admin/class-admin.php:1029 includes/admin/class-admin.php:1056
 #: includes/admin/class-admin.php:1152 includes/admin/class-admin.php:1477
@@ -659,11 +659,11 @@ msgstr "Ordine dei prodotti salvato."
 #: includes/admin/class-setup-wizard.php:69
 #: includes/admin/class-setup-wizard.php:70
 msgid "Setup"
-msgstr ""
+msgstr "Configurazione"
 
 #: includes/admin/class-setup-wizard.php:122
 msgid "WooCommerce is active"
-msgstr ""
+msgstr "WooCommerce è attivo"
 
 #: includes/admin/class-setup-wizard.php:124
 msgid "Libre Bite is a WooCommerce extension and cannot work without it."
@@ -673,17 +673,17 @@ msgstr ""
 #: includes/admin/class-setup-wizard.php:130
 #, php-format
 msgid "PHP %s or newer"
-msgstr ""
+msgstr "PHP %s o più recente"
 
 #. translators: %s: current PHP version
 #: includes/admin/class-setup-wizard.php:136
 #, php-format
 msgid "Currently running PHP %s."
-msgstr ""
+msgstr "Attualmente è in uso PHP %s."
 
 #: includes/admin/class-setup-wizard.php:142
 msgid "A currency is configured"
-msgstr ""
+msgstr "È configurata una valuta"
 
 #: includes/admin/class-setup-wizard.php:144
 msgid "Set your currency under WooCommerce → Settings → General."
@@ -691,7 +691,7 @@ msgstr ""
 
 #: includes/admin/class-setup-wizard.php:148
 msgid "At least one payment method is enabled"
-msgstr ""
+msgstr "È attivo almeno un metodo di pagamento"
 
 #: includes/admin/class-setup-wizard.php:150
 msgid "Without a payment method guests cannot complete an order."
@@ -699,7 +699,7 @@ msgstr ""
 
 #: includes/admin/class-setup-wizard.php:154
 msgid "Scheduled tasks are running"
-msgstr ""
+msgstr "Le attività pianificate sono in funzione"
 
 #: includes/admin/class-setup-wizard.php:156
 msgid "Pre-orders and pickup reminders rely on WordPress scheduled tasks."
@@ -707,103 +707,103 @@ msgstr ""
 
 #: includes/admin/class-setup-wizard.php:190
 msgid "WooCommerce is required."
-msgstr ""
+msgstr "WooCommerce è necessario."
 
 #: includes/admin/class-setup-wizard.php:224
 msgid "Main Branch"
-msgstr ""
+msgstr "Sede principale"
 
 #: includes/admin/class-setup-wizard.php:404
 msgid "Main dishes"
-msgstr ""
+msgstr "Piatti principali"
 
 #: includes/admin/class-setup-wizard.php:405
 msgid "Sides"
-msgstr ""
+msgstr "Contorni"
 
 #: includes/admin/class-setup-wizard.php:406
 msgid "Drinks"
-msgstr ""
+msgstr "Bevande"
 
 #: includes/admin/class-setup-wizard.php:418
 msgid "Extra cheese"
-msgstr ""
+msgstr "Formaggio extra"
 
 #: includes/admin/class-setup-wizard.php:422
 msgid "Extra bacon"
-msgstr ""
+msgstr "Pancetta extra"
 
 #: includes/admin/class-setup-wizard.php:426
 msgid "Side salad"
-msgstr ""
+msgstr "Insalata di contorno"
 
 #: includes/admin/class-setup-wizard.php:430
 msgid "Extra spicy"
-msgstr ""
+msgstr "Extra piccante"
 
 #: includes/admin/class-setup-wizard.php:444
 msgid "Classic Burger"
-msgstr ""
+msgstr "Burger classico"
 
 #: includes/admin/class-setup-wizard.php:445
 msgid "Beef patty, salad, tomato, house sauce."
-msgstr ""
+msgstr "Hamburger di manzo, insalata, pomodoro, salsa della casa."
 
 #: includes/admin/class-setup-wizard.php:453
 msgid "Veggie Bowl"
-msgstr ""
+msgstr "Bowl vegetariana"
 
 #: includes/admin/class-setup-wizard.php:454
 msgid "Seasonal vegetables, quinoa, herb dressing."
-msgstr ""
+msgstr "Verdure di stagione, quinoa, condimento alle erbe."
 
 #: includes/admin/class-setup-wizard.php:462
 msgid "Pasta of the Day"
-msgstr ""
+msgstr "Pasta del giorno"
 
 #: includes/admin/class-setup-wizard.php:463
 msgid "Fresh pasta with a changing sauce."
-msgstr ""
+msgstr "Pasta fresca con sugo variabile."
 
 #: includes/admin/class-setup-wizard.php:471
 msgid "Soup of the Day"
-msgstr ""
+msgstr "Zuppa del giorno"
 
 #: includes/admin/class-setup-wizard.php:472
 msgid "Ask our staff what is cooking today."
-msgstr ""
+msgstr "Chiedi al nostro personale cosa si cucina oggi."
 
 #: includes/admin/class-setup-wizard.php:480
 msgid "Fries"
-msgstr ""
+msgstr "Patatine"
 
 #: includes/admin/class-setup-wizard.php:481
 msgid "Crispy, with sea salt."
-msgstr ""
+msgstr "Croccanti, con sale marino."
 
 #: includes/admin/class-setup-wizard.php:489
 msgid "Green Salad"
-msgstr ""
+msgstr "Insalata verde"
 
 #: includes/admin/class-setup-wizard.php:490
 msgid "Leaf salad with vinaigrette."
-msgstr ""
+msgstr "Insalata in foglia con vinaigrette."
 
 #: includes/admin/class-setup-wizard.php:498
 msgid "Mineral Water 5dl"
-msgstr ""
+msgstr "Acqua minerale 5 dl"
 
 #: includes/admin/class-setup-wizard.php:499
 msgid "Sparkling or still."
-msgstr ""
+msgstr "Frizzante o naturale."
 
 #: includes/admin/class-setup-wizard.php:507
 msgid "Coffee"
-msgstr ""
+msgstr "Caffè"
 
 #: includes/admin/class-setup-wizard.php:508
 msgid "Espresso, or with milk on request."
-msgstr ""
+msgstr "Espresso, o con latte su richiesta."
 
 #: includes/core/class-rest-api.php:207
 msgid "No permission for this location"
@@ -934,11 +934,11 @@ msgstr "es. 5"
 
 #: includes/modules/guest-notes/class-guest-notes.php:181
 msgid "Guest notes (Libre Bite)"
-msgstr ""
+msgstr "Note sui clienti (Libre Bite)"
 
 #: includes/modules/guest-notes/class-guest-notes.php:184
 msgid "Allergies and intolerances"
-msgstr ""
+msgstr "Allergie e intolleranze"
 
 #: includes/modules/guest-notes/class-guest-notes.php:188
 msgid ""
@@ -947,7 +947,7 @@ msgstr ""
 
 #: includes/modules/guest-notes/class-guest-notes.php:192
 msgid "Notes"
-msgstr ""
+msgstr "Note"
 
 #: includes/modules/guest-notes/class-guest-notes.php:195
 msgid ""
@@ -1362,7 +1362,7 @@ msgstr "Scelga una sede per vedere la disponibilità"
 #: templates/location-selector-inline.php:149
 #: templates/location-selector-tiles.php:396
 msgid "Please choose..."
-msgstr ""
+msgstr "Scegli…"
 
 #: includes/modules/locations/class-locations.php:932
 msgid "Change location"
@@ -1532,34 +1532,34 @@ msgstr ""
 
 #: includes/modules/menu-view/class-menu-view.php:121
 msgid "Add to order"
-msgstr ""
+msgstr "Aggiungi all'ordine"
 
 #: includes/modules/menu-view/class-menu-view.php:122
 msgid "Adding…"
-msgstr ""
+msgstr "Aggiunta in corso…"
 
 #: includes/modules/menu-view/class-menu-view.php:123
 msgid "Added"
-msgstr ""
+msgstr "Aggiunto"
 
 #: includes/modules/menu-view/class-menu-view.php:124
 msgid "Could not add the item. Please try again."
-msgstr ""
+msgstr "Impossibile aggiungere l'articolo. Riprova."
 
 #: includes/modules/menu-view/class-menu-view.php:125
 #: templates/frontend/menu-view.php:130 templates/frontend/menu-view.php:133
 #: templates/frontend/menu-view.php:135
 msgid "Your order"
-msgstr ""
+msgstr "Il tuo ordine"
 
 #: includes/modules/menu-view/class-menu-view.php:126
 msgid "Nothing in your order yet."
-msgstr ""
+msgstr "Il tuo ordine è ancora vuoto."
 
 #: includes/modules/menu-view/class-menu-view.php:127
 #: templates/frontend/menu-view.php:141
 msgid "Go to checkout"
-msgstr ""
+msgstr "Vai alla cassa"
 
 #: includes/modules/menu-view/class-menu-view.php:129
 #: includes/modules/menu-view/class-menu-view.php:411
@@ -1571,11 +1571,11 @@ msgstr "Totale"
 
 #: includes/modules/menu-view/class-menu-view.php:130
 msgid "Please choose an option."
-msgstr ""
+msgstr "Effettua una scelta."
 
 #: includes/modules/menu-view/class-menu-view.php:446
 msgid "This product is not available."
-msgstr ""
+msgstr "Questo prodotto non è disponibile."
 
 #: includes/modules/notifications/class-email-pickup-reminder.php:22
 msgid "Libre Bite - Pickup Reminder"
@@ -1843,19 +1843,19 @@ msgstr "Contiene:"
 #: includes/modules/order-bumps/class-order-bumps.php:131
 #, php-format
 msgid "Add %s to your order?"
-msgstr ""
+msgstr "Aggiungere %s al tuo ordine?"
 
 #: includes/modules/order-bumps/class-order-bumps.php:213
 msgid "Not available"
-msgstr ""
+msgstr "Non disponibile"
 
 #: includes/modules/order-bumps/class-order-bumps.php:223
 msgid "Unknown offer"
-msgstr ""
+msgstr "Offerta sconosciuta"
 
 #: includes/modules/order-bumps/class-order-bumps.php:229
 msgid "Could not add the item"
-msgstr ""
+msgstr "Impossibile aggiungere l'articolo"
 
 #: includes/modules/order-dashboard/class-order-dashboard.php:33
 #: templates/admin/help-partials/orders.php:43
@@ -2196,7 +2196,7 @@ msgstr "Ora ordine"
 
 #: includes/modules/receipts/class-receipts.php:80
 msgid "Pickup / delivery time"
-msgstr ""
+msgstr "Orario di ritiro o consegna"
 
 #: includes/modules/receipts/class-receipts.php:92
 msgid "Customer name"
@@ -2218,7 +2218,7 @@ msgstr "Prezzi e totale"
 #: includes/modules/receipts/class-receipts.php:348
 #: templates/admin/super-admin-settings.php:137
 msgid "Allergens"
-msgstr ""
+msgstr "Allergeni"
 
 #: includes/modules/receipts/class-receipts.php:116
 msgid "Customer note"
@@ -2232,7 +2232,7 @@ msgstr "Metodo di pagamento"
 #: includes/modules/receipts/class-receipts.php:204
 #, php-format
 msgid "%1$s – Order %2$s"
-msgstr ""
+msgstr "%1$s – Ordine %2$s"
 
 #: includes/modules/receipts/class-receipts.php:260
 #: includes/modules/tables/class-tables.php:181
@@ -6024,7 +6024,7 @@ msgstr ""
 #. translators: %s: product name
 #: templates/admin/pos.php:363 templates/frontend/menu-view.php:105
 msgid "Add"
-msgstr ""
+msgstr "Aggiungi"
 
 #: templates/admin/reservation-board.php:24 templates/admin/table-plan.php:26
 msgid "Beta"
@@ -6088,7 +6088,7 @@ msgstr ""
 
 #: templates/admin/settings-tabbed.php:439
 msgid "Run the setup assistant"
-msgstr ""
+msgstr "Avvia l'assistente di configurazione"
 
 #: templates/admin/settings-tabbed.php:442
 msgid ""
@@ -6238,7 +6238,7 @@ msgstr ""
 
 #: templates/admin/settings-tabbed.php:687
 msgid "Order Bumps"
-msgstr ""
+msgstr "Offerte aggiuntive"
 
 #: templates/admin/settings-tabbed.php:693
 msgid ""
@@ -6250,7 +6250,7 @@ msgstr ""
 
 #: templates/admin/settings-tabbed.php:698
 msgid "Enable Order Bumps"
-msgstr ""
+msgstr "Attiva le offerte aggiuntive"
 
 #: templates/admin/settings-tabbed.php:704
 msgid "Show impulse offers in the checkout"
@@ -6260,11 +6260,11 @@ msgstr ""
 #: templates/admin/settings-tabbed.php:722
 #, php-format
 msgid "Offer %d"
-msgstr ""
+msgstr "Offerta %d"
 
 #: templates/admin/settings-tabbed.php:732
 msgid "Product ID"
-msgstr ""
+msgstr "ID prodotto"
 
 #: templates/admin/settings-tabbed.php:738
 msgid "Optional text, e.g. “Fries with that?”"
@@ -6272,7 +6272,7 @@ msgstr ""
 
 #: templates/admin/settings-tabbed.php:746
 msgid "Product not found."
-msgstr ""
+msgstr "Prodotto non trovato."
 
 #: templates/admin/settings-tabbed.php:759
 msgid "Fields in Standard Checkout"
@@ -6858,7 +6858,7 @@ msgstr ""
 
 #: templates/admin/settings/notifications.php:144
 msgid "SMS Notifications"
-msgstr ""
+msgstr "Notifiche SMS"
 
 #: templates/admin/settings/notifications.php:151
 msgid ""
@@ -6869,7 +6869,7 @@ msgstr ""
 
 #: templates/admin/settings/notifications.php:155
 msgid "Please note:"
-msgstr ""
+msgstr "Nota bene:"
 
 #: templates/admin/settings/notifications.php:156
 msgid ""
@@ -6880,15 +6880,15 @@ msgstr ""
 
 #: templates/admin/settings/notifications.php:161
 msgid "Enable SMS"
-msgstr ""
+msgstr "Attiva gli SMS"
 
 #: templates/admin/settings/notifications.php:167
 msgid "Send text messages via Twilio"
-msgstr ""
+msgstr "Invia SMS tramite Twilio"
 
 #: templates/admin/settings/notifications.php:170
 msgid "Credentials are stored."
-msgstr ""
+msgstr "Le credenziali sono memorizzate."
 
 #: templates/admin/settings/notifications.php:175
 msgid "Account SID"
@@ -6900,7 +6900,7 @@ msgstr ""
 
 #: templates/admin/settings/notifications.php:187
 msgid "Stored — leave empty to keep"
-msgstr ""
+msgstr "Memorizzato — lascia vuoto per mantenere"
 
 #: templates/admin/settings/notifications.php:189
 msgid ""
@@ -6910,11 +6910,11 @@ msgstr ""
 
 #: templates/admin/settings/notifications.php:193
 msgid "Sender number"
-msgstr ""
+msgstr "Numero mittente"
 
 #: templates/admin/settings/notifications.php:201
 msgid "Default country code"
-msgstr ""
+msgstr "Prefisso predefinito"
 
 #: templates/admin/settings/notifications.php:206
 msgid "Added to numbers that guests enter without one."
@@ -6922,19 +6922,19 @@ msgstr ""
 
 #: templates/admin/settings/notifications.php:210
 msgid "Send when moved to"
-msgstr ""
+msgstr "Invia al passaggio a"
 
 #: templates/admin/settings/notifications.php:213
 msgid "— never —"
-msgstr ""
+msgstr "— mai —"
 
 #: templates/admin/settings/notifications.php:220
 msgid "One message per order at most."
-msgstr ""
+msgstr "Al massimo un messaggio per ordine."
 
 #: templates/admin/settings/notifications.php:224
 msgid "Message"
-msgstr ""
+msgstr "Messaggio"
 
 #: templates/admin/settings/notifications.php:236
 msgid "Placeholders: {order_number}, {first_name}, {site}, {location}, {total}"
@@ -6988,7 +6988,7 @@ msgstr ""
 
 #: templates/admin/settings/products.php:74
 msgid "Theme-independent Menu View"
-msgstr ""
+msgstr "Vista del menu indipendente dal tema"
 
 #: templates/admin/settings/products.php:75
 msgid ""
@@ -7196,27 +7196,27 @@ msgstr ""
 
 #: templates/admin/setup-wizard.php:33
 msgid "Setup steps"
-msgstr ""
+msgstr "Passaggi di configurazione"
 
 #: templates/admin/setup-wizard.php:34
 msgid "Welcome"
-msgstr ""
+msgstr "Benvenuto"
 
 #: templates/admin/setup-wizard.php:35
 msgid "Check"
-msgstr ""
+msgstr "Verifica"
 
 #: templates/admin/setup-wizard.php:36
 msgid "Modules"
-msgstr ""
+msgstr "Moduli"
 
 #: templates/admin/setup-wizard.php:37
 msgid "Sample data"
-msgstr ""
+msgstr "Dati di esempio"
 
 #: templates/admin/setup-wizard.php:43
 msgid "Welcome to Libre Bite"
-msgstr ""
+msgstr "Benvenuto in Libre Bite"
 
 #: templates/admin/setup-wizard.php:45
 msgid ""
@@ -7239,15 +7239,15 @@ msgstr ""
 
 #: templates/admin/setup-wizard.php:54
 msgid "Skip setup"
-msgstr ""
+msgstr "Salta la configurazione"
 
 #: templates/admin/setup-wizard.php:56
 msgid "Get started"
-msgstr ""
+msgstr "Inizia"
 
 #: templates/admin/setup-wizard.php:62
 msgid "System check"
-msgstr ""
+msgstr "Verifica del sistema"
 
 #: templates/admin/setup-wizard.php:64
 msgid "A quick look at whether everything Libre Bite relies on is in place."
@@ -7261,11 +7261,11 @@ msgstr ""
 
 #: templates/admin/setup-wizard.php:89 templates/admin/setup-wizard.php:116
 msgid "Continue"
-msgstr ""
+msgstr "Continua"
 
 #: templates/admin/setup-wizard.php:95
 msgid "Which modules do you need?"
-msgstr ""
+msgstr "Di quali moduli hai bisogno?"
 
 #: templates/admin/setup-wizard.php:97
 msgid ""
@@ -7275,7 +7275,7 @@ msgstr ""
 
 #: templates/admin/setup-wizard.php:122
 msgid "Start with a sample menu?"
-msgstr ""
+msgstr "Iniziare con un menu di esempio?"
 
 #: templates/admin/setup-wizard.php:124
 msgid ""
@@ -7292,23 +7292,23 @@ msgstr ""
 
 #: templates/admin/setup-wizard.php:135
 msgid "Create sample menu"
-msgstr ""
+msgstr "Crea il menu di esempio"
 
 #: templates/admin/setup-wizard.php:138
 msgid "Finish setup"
-msgstr ""
+msgstr "Concludi la configurazione"
 
 #: templates/admin/setup-wizard.php:154
 msgid "Creating sample menu…"
-msgstr ""
+msgstr "Creazione del menu di esempio…"
 
 #: templates/admin/setup-wizard.php:155
 msgid "Sample menu created."
-msgstr ""
+msgstr "Menu di esempio creato."
 
 #: templates/admin/setup-wizard.php:156
 msgid "Something went wrong. Please try again."
-msgstr ""
+msgstr "Qualcosa è andato storto. Riprova."
 
 #: templates/admin/statistics.php:134
 msgid "Last 7 Days"
@@ -7797,26 +7797,26 @@ msgstr ""
 
 #: templates/frontend/menu-view.php:20
 msgid "No dishes are available right now. Please check back later."
-msgstr ""
+msgstr "Al momento non ci sono piatti disponibili. Torna più tardi."
 
 #: templates/frontend/menu-view.php:26
 msgid "Menu sections"
-msgstr ""
+msgstr "Sezioni del menu"
 
 #: templates/frontend/menu-view.php:34 templates/frontend/menu-view.php:50
 msgid "More"
-msgstr ""
+msgstr "Altro"
 
 #. translators: %s: product name
 #: templates/frontend/menu-view.php:104
 #, php-format
 msgid "Add %s"
-msgstr ""
+msgstr "Aggiungi %s"
 
 #. translators: %s: product name
 #: templates/frontend/menu-view.php:105
 msgid "Choose"
-msgstr ""
+msgstr "Scegli"
 
 #: templates/frontend/reservation-form.php:30
 #: templates/frontend/reservation-form.php:47
