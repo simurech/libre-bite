@@ -46,12 +46,18 @@ class LBite_Installer {
 		// Flush rewrite rules
 		flush_rewrite_rules();
 
+		// Erstinstallation erkennen, bevor die Version geschrieben wird – danach
+		// wäre die Abfrage immer falsch und der Willkommens-Hinweis erschiene nie.
+		$is_fresh_install = ! get_option( 'lbite_version' );
+
 		// Version speichern
 		update_option( 'lbite_version', LBITE_VERSION );
-		update_option( 'lbite_installed_date', current_time( 'mysql' ) );
+
+		// Das Installationsdatum bleibt das erste; eine Reaktivierung setzt es nicht zurück.
+		add_option( 'lbite_installed_date', current_time( 'mysql' ) );
 
 		// Welcome-Notice bei Erstinstallation anzeigen
-		if ( ! get_option( 'lbite_version' ) ) {
+		if ( $is_fresh_install ) {
 			add_option( 'lbite_show_welcome_notice', true );
 		}
 	}
