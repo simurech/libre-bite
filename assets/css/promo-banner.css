@@ -1,0 +1,32 @@
+/**
+ * Libre Bite – Ankündigungsleiste
+ *
+ * Bewusst schlank und ohne feste Position: eine über dem Inhalt klebende
+ * Leiste verdeckt auf Mobilgeräten regelmässig die Themenavigation.
+ */
+
+.lbite-promo-banner {
+	padding: 10px 16px;
+	background: var(--lbite-color-primary, #0073aa);
+	color: #fff;
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1.4;
+	text-align: center;
+}
+
+.lbite-promo-banner a {
+	color: #fff !important;
+	text-decoration: underline;
+}
+
+.lbite-promo-banner a:hover {
+	text-decoration: none;
+}
+
+@media (max-width: 600px) {
+	.lbite-promo-banner {
+		font-size: 14px;
+		padding: 9px 12px;
+	}
+}

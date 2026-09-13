@@ -1,0 +1,560 @@
+<?php
+/**
+ * Aktionen und Ankündigungen
+ *
+ * Regelbasierte Rabatte, die WooCommerce von sich aus nicht kennt: zwei zum
+ * Preis von einem, Prozente auf eine Kategorie, Nachlass ab einem
+ * Warenkorbwert — jeweils nur an bestimmten Tagen oder zu bestimmten Zeiten.
+ * Dazu eine Ankündigungsleiste, damit die Aktion auch gesehen wird.
+ *
+ * Zwei Entscheidungen, die den Ausschlag geben:
+ *
+ * 1. **Reihenfolge der Gebühren.** Warenkorb-Rabatte greifen bei Priorität 5,
+ *    also **vor** dem Trinkgeld (10) und der Rappenrundung (999). Andernfalls
+ *    würde das Trinkgeld auf einen Betrag berechnet, den niemand bezahlt, und
+ *    die Rundung liefe auf ein Zwischenergebnis.
+ * 2. **Zeitsteuerung wiederverwendet.** Die Wochentag- und Uhrzeitlogik ist
+ *    dieselbe wie bei der zeitgesteuerten Verfügbarkeit
+ *    (`LBite_Menu_Schedule::is_active()`) — bereits geprüft, inklusive
+ *    Fenstern über Mitternacht. Eine zweite Zeitlogik wäre eine zweite
+ *    Fehlerquelle.
+ *
+ * @package LibreBite
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Klasse LBite_Promotions
+ */
+class LBite_Promotions {
+
+	/**
+	 * Option mit den Aktionsregeln.
+	 */
+	const OPTION = 'lbite_promotions';
+
+	/**
+	 * Option mit der Ankündigungsleiste.
+	 */
+	const OPTION_BANNER = 'lbite_promo_banner';
+
+	/**
+	 * Loader-Instanz.
+	 *
+	 * @var LBite_Loader
+	 */
+	private $loader;
+
+	/**
+	 * Konstruktor
+	 *
+	 * @param LBite_Loader $loader Hook-Loader.
+	 */
+	public function __construct( $loader ) {
+		$this->loader = $loader;
+
+		// Produktbezogene Rabatte über den Positionspreis – nicht über eine
+		// Gebühr. So erscheint der Nachlass dort, wo er hingehört, und die
+		// Position bleibt auf Bon und in der Statistik korrekt zugeordnet.
+		$this->loader->add_action( 'woocommerce_before_calculate_totals', $this, 'apply_item_rules', 15 );
+
+		// Warenkorbweite Rabatte als negative Gebühr, bewusst vor dem
+		// Trinkgeld.
+		$this->loader->add_action( 'woocommerce_cart_calculate_fees', $this, 'apply_cart_rules', 5 );
+
+		// Ankündigungsleiste
+		$this->loader->add_action( 'wp_body_open', $this, 'render_banner' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_banner_style', 25 );
+	}
+
+	/* ═════════════════════════════════════════════════════════════════
+	 * Regeln
+	 * ═════════════════════════════════════════════════════════════════ */
+
+	/**
+	 * Verfügbare Regeltypen
+	 *
+	 * @return array Schlüssel => Beschriftung.
+	 */
+	public static function get_types() {
+		return array(
+			'product' => __( 'Discount on products or categories', 'libre-bite' ),
+			'bogo'    => __( 'Buy several, pay for fewer', 'libre-bite' ),
+			'cart'    => __( 'Discount on the whole order', 'libre-bite' ),
+		);
+	}
+
+	/**
+	 * Gespeicherte Regeln lesen
+	 *
+	 * @return array
+	 */
+	public static function get_rules() {
+		$raw = get_option( self::OPTION, array() );
+
+		return is_array( $raw ) ? $raw : array();
+	}
+
+	/**
+	 * Regeln aus dem Formular bereinigen
+	 *
+	 * @param mixed $raw Rohwert.
+	 * @return array
+	 */
+	public static function sanitize_rules( $raw ) {
+		if ( ! is_array( $raw ) ) {
+			return array();
+		}
+
+		$types = array_keys( self::get_types() );
+		$clean = array();
+
+		foreach ( $raw as $entry ) {
+			if ( ! is_array( $entry ) ) {
+				continue;
+			}
+
+			$label = isset( $entry['label'] ) ? sanitize_text_field( $entry['label'] ) : '';
+			$type  = isset( $entry['type'] ) ? sanitize_key( $entry['type'] ) : '';
+
+			// Eine Regel ohne Namen oder mit unbekanntem Typ ist unbrauchbar.
+			if ( '' === $label || ! in_array( $type, $types, true ) ) {
+				continue;
+			}
+
+			$rule = array(
+				'enabled'      => ! empty( $entry['enabled'] ),
+				'label'        => $label,
+				'type'         => $type,
+				'amount'       => isset( $entry['amount'] ) ? max( 0, (float) $entry['amount'] ) : 0.0,
+				'is_percent'   => ! empty( $entry['is_percent'] ),
+				'product_ids'  => self::sanitize_id_list( isset( $entry['product_ids'] ) ? $entry['product_ids'] : '' ),
+				'category_ids' => self::sanitize_id_list( isset( $entry['category_ids'] ) ? $entry['category_ids'] : '' ),
+				'min_total'    => isset( $entry['min_total'] ) ? max( 0, (float) $entry['min_total'] ) : 0.0,
+				'buy_qty'      => isset( $entry['buy_qty'] ) ? max( 2, (int) $entry['buy_qty'] ) : 2,
+				'free_qty'     => isset( $entry['free_qty'] ) ? max( 1, (int) $entry['free_qty'] ) : 1,
+				'schedule'     => class_exists( 'LBite_Menu_Schedule' )
+					? LBite_Menu_Schedule::sanitize_schedule( isset( $entry['schedule'] ) ? $entry['schedule'] : array() )
+					: array(),
+			);
+
+			// Bei „mehrere kaufen, weniger zahlen" muss die Gratismenge
+			// kleiner sein als die Kaufmenge – sonst wäre alles gratis.
+			if ( 'bogo' === $rule['type'] && $rule['free_qty'] >= $rule['buy_qty'] ) {
+				$rule['free_qty'] = $rule['buy_qty'] - 1;
+			}
+
+			$clean[] = $rule;
+
+			if ( count( $clean ) >= 10 ) {
+				break;
+			}
+		}
+
+		return $clean;
+	}
+
+	/**
+	 * Kommaliste von IDs bereinigen
+	 *
+	 * @param mixed $value Rohwert.
+	 * @return int[]
+	 */
+	private static function sanitize_id_list( $value ) {
+		if ( is_array( $value ) ) {
+			$parts = $value;
+		} else {
+			$parts = explode( ',', (string) $value );
+		}
+
+		$ids = array();
+
+		foreach ( $parts as $part ) {
+			$id = absint( trim( (string) $part ) );
+
+			if ( $id ) {
+				$ids[ $id ] = $id;
+			}
+		}
+
+		return array_values( $ids );
+	}
+
+	/**
+	 * Regeln, die gerade gelten
+	 *
+	 * @return array
+	 */
+	public static function get_active_rules() {
+		if ( ! lbite_feature_enabled( 'enable_promotions' ) ) {
+			return array();
+		}
+
+		$active = array();
+
+		foreach ( self::get_rules() as $rule ) {
+			if ( empty( $rule['enabled'] ) ) {
+				continue;
+			}
+
+			if ( ! self::is_within_schedule( $rule ) ) {
+				continue;
+			}
+
+			$active[] = $rule;
+		}
+
+		return $active;
+	}
+
+	/**
+	 * Gilt die Regel zum jetzigen Zeitpunkt?
+	 *
+	 * @param array $rule Regel.
+	 * @return bool
+	 */
+	private static function is_within_schedule( $rule ) {
+		if ( empty( $rule['schedule'] ) || ! class_exists( 'LBite_Menu_Schedule' ) ) {
+			return true;
+		}
+
+		return LBite_Menu_Schedule::is_active( $rule['schedule'], (int) current_time( 'timestamp' ) );
+	}
+
+	/**
+	 * Trifft eine Regel auf ein Produkt zu?
+	 *
+	 * Ohne Produkt- und Kategorieangabe gilt sie für alles.
+	 *
+	 * @param array $rule       Regel.
+	 * @param int   $product_id Produkt-ID.
+	 * @return bool
+	 */
+	public static function matches_product( $rule, $product_id ) {
+		$product_ids  = isset( $rule['product_ids'] ) ? $rule['product_ids'] : array();
+		$category_ids = isset( $rule['category_ids'] ) ? $rule['category_ids'] : array();
+
+		if ( empty( $product_ids ) && empty( $category_ids ) ) {
+			return true;
+		}
+
+		if ( in_array( (int) $product_id, array_map( 'absint', $product_ids ), true ) ) {
+			return true;
+		}
+
+		if ( empty( $category_ids ) ) {
+			return false;
+		}
+
+		$terms = get_the_terms( $product_id, 'product_cat' );
+
+		if ( empty( $terms ) || is_wp_error( $terms ) ) {
+			return false;
+		}
+
+		foreach ( $terms as $term ) {
+			if ( in_array( (int) $term->term_id, array_map( 'absint', $category_ids ), true ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/* ═════════════════════════════════════════════════════════════════
+	 * Anwendung auf Positionen
+	 * ═════════════════════════════════════════════════════════════════ */
+
+	/**
+	 * Produktbezogene Regeln auf den Warenkorb anwenden
+	 *
+	 * @param WC_Cart $cart Warenkorb.
+	 */
+	public function apply_item_rules( $cart ) {
+		if ( is_admin() && ! wp_doing_ajax() ) {
+			return;
+		}
+
+		// WooCommerce ruft diesen Hook mehrfach auf; ohne Schutz würde der
+		// Rabatt bei jedem Durchlauf erneut abgezogen.
+		static $applied = false;
+
+		if ( $applied ) {
+			return;
+		}
+
+		$rules = self::get_active_rules();
+
+		if ( empty( $rules ) ) {
+			return;
+		}
+
+		foreach ( $rules as $rule ) {
+			if ( 'product' === $rule['type'] ) {
+				$this->apply_product_discount( $cart, $rule );
+			} elseif ( 'bogo' === $rule['type'] ) {
+				$this->apply_bogo( $cart, $rule );
+			}
+		}
+
+		$applied = true;
+	}
+
+	/**
+	 * Prozentualen oder festen Nachlass auf passende Positionen
+	 *
+	 * @param WC_Cart $cart Warenkorb.
+	 * @param array   $rule Regel.
+	 */
+	private function apply_product_discount( $cart, $rule ) {
+		foreach ( $cart->get_cart() as $cart_item ) {
+			if ( ! isset( $cart_item['data'] ) ) {
+				continue;
+			}
+
+			$product_id = (int) $cart_item['product_id'];
+
+			if ( ! self::matches_product( $rule, $product_id ) ) {
+				continue;
+			}
+
+			$price = (float) $cart_item['data']->get_price();
+
+			if ( $price <= 0 ) {
+				continue;
+			}
+
+			$new_price = ! empty( $rule['is_percent'] )
+				? $price * ( 1 - ( min( 100, $rule['amount'] ) / 100 ) )
+				: max( 0, $price - $rule['amount'] );
+
+			$cart_item['data']->set_price( round( $new_price, wc_get_price_decimals() ) );
+		}
+	}
+
+	/**
+	 * Mehrere kaufen, weniger zahlen
+	 *
+	 * Gratis ist immer die günstigste passende Position — das entspricht dem,
+	 * was Gäste erwarten und verhindert, dass eine Aktion teurer wird als
+	 * beabsichtigt.
+	 *
+	 * @param WC_Cart $cart Warenkorb.
+	 * @param array   $rule Regel.
+	 */
+	private function apply_bogo( $cart, $rule ) {
+		$units = array();
+
+		foreach ( $cart->get_cart() as $key => $cart_item ) {
+			if ( ! isset( $cart_item['data'] ) ) {
+				continue;
+			}
+
+			if ( ! self::matches_product( $rule, (int) $cart_item['product_id'] ) ) {
+				continue;
+			}
+
+			$price = (float) $cart_item['data']->get_price();
+
+			// Jede Einheit einzeln betrachten, sonst liesse sich die Aktion
+			// mit einer Position der Menge 10 aushebeln.
+			for ( $i = 0; $i < (int) $cart_item['quantity']; $i++ ) {
+				$units[] = array(
+					'key'   => $key,
+					'price' => $price,
+				);
+			}
+		}
+
+		$buy = max( 2, (int) $rule['buy_qty'] );
+
+		if ( count( $units ) < $buy ) {
+			return;
+		}
+
+		usort(
+			$units,
+			function ( $a, $b ) {
+				return $a['price'] <=> $b['price'];
+			}
+		);
+
+		$sets      = (int) floor( count( $units ) / $buy );
+		$free_each = max( 1, (int) $rule['free_qty'] );
+		$free      = min( count( $units ), $sets * $free_each );
+
+		$discount = 0.0;
+
+		for ( $i = 0; $i < $free; $i++ ) {
+			$discount += $units[ $i ]['price'];
+		}
+
+		if ( $discount <= 0 ) {
+			return;
+		}
+
+		// Der Nachlass wird als eigene Warenkorb-Gebühr geführt, damit die
+		// Einzelpreise unverändert bleiben und der Gast sieht, wofür der
+		// Abzug steht.
+		$cart->add_fee(
+			sprintf(
+				/* translators: %s: promotion name */
+				__( 'Promotion: %s', 'libre-bite' ),
+				$rule['label']
+			),
+			-1 * round( $discount, wc_get_price_decimals() ),
+			false
+		);
+	}
+
+	/* ═════════════════════════════════════════════════════════════════
+	 * Anwendung auf den Warenkorb
+	 * ═════════════════════════════════════════════════════════════════ */
+
+	/**
+	 * Warenkorbweite Regeln anwenden
+	 *
+	 * Läuft bei Priorität 5 und damit vor Trinkgeld und Rundung.
+	 *
+	 * @param WC_Cart $cart Warenkorb.
+	 */
+	public function apply_cart_rules( $cart ) {
+		if ( is_admin() && ! wp_doing_ajax() ) {
+			return;
+		}
+
+		$subtotal = (float) $cart->get_subtotal();
+
+		foreach ( self::get_active_rules() as $rule ) {
+			if ( 'cart' !== $rule['type'] ) {
+				continue;
+			}
+
+			if ( $subtotal < (float) $rule['min_total'] ) {
+				continue;
+			}
+
+			$discount = ! empty( $rule['is_percent'] )
+				? $subtotal * ( min( 100, $rule['amount'] ) / 100 )
+				: min( $subtotal, $rule['amount'] );
+
+			if ( $discount <= 0 ) {
+				continue;
+			}
+
+			$cart->add_fee(
+				sprintf(
+					/* translators: %s: promotion name */
+					__( 'Promotion: %s', 'libre-bite' ),
+					$rule['label']
+				),
+				-1 * round( $discount, wc_get_price_decimals() ),
+				false
+			);
+		}
+	}
+
+	/* ═════════════════════════════════════════════════════════════════
+	 * Ankündigungsleiste
+	 * ═════════════════════════════════════════════════════════════════ */
+
+	/**
+	 * Konfiguration der Leiste
+	 *
+	 * @return array
+	 */
+	public static function get_banner() {
+		$raw = get_option( self::OPTION_BANNER, array() );
+
+		return wp_parse_args(
+			is_array( $raw ) ? $raw : array(),
+			array(
+				'enabled'  => false,
+				'text'     => '',
+				'link'     => '',
+				'schedule' => array(),
+			)
+		);
+	}
+
+	/**
+	 * Leiste bereinigen
+	 *
+	 * @param mixed $raw Rohwert.
+	 * @return array
+	 */
+	public static function sanitize_banner( $raw ) {
+		$raw = is_array( $raw ) ? $raw : array();
+
+		return array(
+			'enabled'  => ! empty( $raw['enabled'] ),
+			'text'     => isset( $raw['text'] ) ? sanitize_text_field( $raw['text'] ) : '',
+			'link'     => isset( $raw['link'] ) ? esc_url_raw( $raw['link'] ) : '',
+			'schedule' => class_exists( 'LBite_Menu_Schedule' )
+				? LBite_Menu_Schedule::sanitize_schedule( isset( $raw['schedule'] ) ? $raw['schedule'] : array() )
+				: array(),
+		);
+	}
+
+	/**
+	 * Stylesheet der Leiste laden
+	 */
+	public function enqueue_banner_style() {
+		if ( ! $this->banner_is_visible() ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'lbite-promo-banner',
+			LBITE_PLUGIN_URL . 'assets/css/promo-banner.css',
+			array(),
+			LBITE_VERSION
+		);
+	}
+
+	/**
+	 * Soll die Leiste erscheinen?
+	 *
+	 * @return bool
+	 */
+	private function banner_is_visible() {
+		if ( ! lbite_feature_enabled( 'enable_promotions' ) || is_admin() ) {
+			return false;
+		}
+
+		$banner = self::get_banner();
+
+		if ( empty( $banner['enabled'] ) || '' === trim( $banner['text'] ) ) {
+			return false;
+		}
+
+		if ( ! empty( $banner['schedule'] ) && class_exists( 'LBite_Menu_Schedule' ) ) {
+			return LBite_Menu_Schedule::is_active( $banner['schedule'], (int) current_time( 'timestamp' ) );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Leiste ausgeben
+	 */
+	public function render_banner() {
+		if ( ! $this->banner_is_visible() ) {
+			return;
+		}
+
+		$banner = self::get_banner();
+		?>
+		<div class="lbite-promo-banner" role="status">
+			<?php if ( '' !== $banner['link'] ) : ?>
+				<a href="<?php echo esc_url( $banner['link'] ); ?>"><?php echo esc_html( $banner['text'] ); ?></a>
+			<?php else : ?>
+				<span><?php echo esc_html( $banner['text'] ); ?></span>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+}

@@ -1,0 +1,65 @@
+/**
+ * Libre Bite – Stempelkarte
+ *
+ * Die Stempel sind bewusst gross und rund: die Karte soll auf einen Blick
+ * lesbar sein, nicht gelesen werden müssen.
+ */
+
+.lbite-stampcard {
+	margin: 20px 0;
+	padding: 20px;
+	border: 1px solid #e3e6ea;
+	border-radius: 14px;
+	background: #fff;
+	box-shadow: 0 1px 3px rgba(16, 24, 40, .08);
+}
+
+.lbite-stampcard__title {
+	margin: 0 0 14px;
+	font-size: 17px;
+	font-weight: 700;
+}
+
+.lbite-stampcard__stamps {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 14px;
+}
+
+.lbite-stampcard__stamp {
+	width: 30px;
+	height: 30px;
+	border: 2px dashed #c3c4c7;
+	border-radius: 50%;
+	background: transparent;
+	transition: background-color .2s ease, border-color .2s ease;
+}
+
+.lbite-stampcard__stamp.is-filled {
+	border-style: solid;
+	border-color: var(--lbite-color-primary, #0073aa);
+	background: var(--lbite-color-primary, #0073aa);
+}
+
+.lbite-stampcard__progress,
+.lbite-stampcard__reward {
+	margin: 0;
+	font-size: 15px;
+	line-height: 1.5;
+}
+
+.lbite-stampcard__reward {
+	padding: 10px 14px;
+	border-radius: 8px;
+	background: #e8f5ec;
+	border: 1px solid #b7e0c4;
+	color: #1a7f37;
+	font-weight: 600;
+}
+
+.lbite-stampcard__note {
+	margin: 10px 0 0;
+	font-size: 13px;
+	color: #646970;
+}

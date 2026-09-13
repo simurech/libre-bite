@@ -60,11 +60,15 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				$lbite_features['enable_tips']                  = isset( $_POST['lbite_feature_toggle']['enable_tips'] );
 				$lbite_features['enable_order_type_selection']  = isset( $_POST['lbite_feature_toggle']['enable_order_type_selection'] );
 				$lbite_features['enable_order_bumps']           = isset( $_POST['lbite_feature_toggle']['enable_order_bumps'] );
+				$lbite_features['enable_promotions']            = isset( $_POST['lbite_feature_toggle']['enable_promotions'] );
+				$lbite_features['enable_stampcard']             = isset( $_POST['lbite_feature_toggle']['enable_stampcard'] );
 			} else {
 				$lbite_features['enable_optimized_checkout']   = false;
 				$lbite_features['enable_tips']                 = false;
 				$lbite_features['enable_order_type_selection'] = false;
 				$lbite_features['enable_order_bumps']         = false;
+				$lbite_features['enable_promotions']          = false;
+				$lbite_features['enable_stampcard']           = false;
 			}
 			update_option( 'lbite_features', $lbite_features );
 
@@ -72,6 +76,30 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			// in genau diesem Request erst eingeschaltet, ist sie noch nicht da.
 			if ( ! class_exists( 'LBite_Order_Bumps' ) ) {
 				require_once LBITE_PLUGIN_DIR . 'includes/modules/order-bumps/class-order-bumps.php';
+			}
+
+			if ( ! class_exists( 'LBite_Promotions' ) ) {
+				require_once LBITE_PLUGIN_DIR . 'includes/modules/promotions/class-promotions.php';
+			}
+			$lbite_promo_val = lbite_enforce_pro_options(
+				array(
+					'lbite_promotions'   => LBite_Promotions::sanitize_rules( isset( $_POST['lbite_promotions'] ) && is_array( $_POST['lbite_promotions'] ) ? wp_unslash( $_POST['lbite_promotions'] ) : array() ),
+					'lbite_promo_banner' => LBite_Promotions::sanitize_banner( isset( $_POST['lbite_promo_banner'] ) && is_array( $_POST['lbite_promo_banner'] ) ? wp_unslash( $_POST['lbite_promo_banner'] ) : array() ),
+				)
+			);
+			update_option( 'lbite_promotions', $lbite_promo_val['lbite_promotions'] );
+			update_option( 'lbite_promo_banner', $lbite_promo_val['lbite_promo_banner'] );
+
+			$lbite_stamp_val = lbite_enforce_pro_options(
+				array(
+					'lbite_stampcard_target'        => isset( $_POST['lbite_stampcard_target'] ) ? max( 2, intval( wp_unslash( $_POST['lbite_stampcard_target'] ) ) ) : 10,
+					'lbite_stampcard_discount'      => isset( $_POST['lbite_stampcard_discount'] ) ? min( 100, max( 1, intval( wp_unslash( $_POST['lbite_stampcard_discount'] ) ) ) ) : 50,
+					'lbite_stampcard_min_total'     => isset( $_POST['lbite_stampcard_min_total'] ) ? max( 0, (float) wp_unslash( $_POST['lbite_stampcard_min_total'] ) ) : 0,
+					'lbite_stampcard_validity_days' => isset( $_POST['lbite_stampcard_validity_days'] ) ? max( 1, intval( wp_unslash( $_POST['lbite_stampcard_validity_days'] ) ) ) : 90,
+				)
+			);
+			foreach ( $lbite_stamp_val as $lbite_sk => $lbite_sv ) {
+				update_option( $lbite_sk, $lbite_sv );
 			}
 
 			if ( class_exists( 'LBite_Order_Bumps' ) ) {
@@ -751,6 +779,9 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 						</tr>
 					<?php endfor; ?>
 				</table>
+
+
+				<?php include LBITE_PLUGIN_DIR . 'templates/admin/settings/promotions.php'; ?>
 
 					<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 				</form>

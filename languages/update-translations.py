@@ -23,6 +23,73 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Aktionen (F34)
+    "Promotions": "Aktionen",
+    "Promotions & Announcements": "Aktionen & Ankündigungen",
+    "Enable promotions": "Aktionen aktivieren",
+    "Apply rule-based offers and show an announcement bar": "Regelbasierte Angebote anwenden und eine Ankündigungsleiste anzeigen",
+    "Discount on products or categories": "Rabatt auf Produkte oder Kategorien",
+    "Buy several, pay for fewer": "Mehrere kaufen, weniger zahlen",
+    "Discount on the whole order": "Rabatt auf die ganze Bestellung",
+    "Rule %d": "Regel %d",
+    "Active": "Aktiv",
+    "Rule is live": "Regel ist scharf",
+    "Name": "Name",
+    "Type": "Typ",
+    "Discount": "Rabatt",
+    "as percent": "als Prozent",
+    "Applies to": "Gilt für",
+    "Buy / free": "Kaufen / gratis",
+    "Minimum order value": "Mindestbestellwert",
+    "When": "Wann",
+    "Limit to certain days or times": "Auf bestimmte Tage oder Zeiten einschränken",
+    "Announcement bar": "Ankündigungsleiste",
+    "Show bar": "Leiste anzeigen",
+    "Show a bar at the top of the shop": "Eine Leiste oben im Shop anzeigen",
+    "Text": "Text",
+    "Link": "Link",
+    "Promotion: %s": "Aktion: %s",
+    "Optional. Leave empty for plain text.": "Optional. Leer lassen für reinen Text.",
+    "Leave both empty to apply to everything.": "Beide leer lassen, damit die Regel für alles gilt.",
+    "Product IDs, comma separated": "Produkt-IDs, kommagetrennt",
+    "Category IDs, comma separated": "Kategorie-IDs, kommagetrennt",
+    "e.g. Happy Hour": "z. B. Happy Hour",
+    "Appears on the guest\u2019s order as the reason for the discount.": "Erscheint auf der Bestellung des Gastes als Grund für den Abzug.",
+    "Discounts are applied before the tip and the 5-cent rounding, so the tip is never calculated on an amount nobody pays.":
+        "Rabatte greifen vor Trinkgeld und Fünf-Rappen-Rundung, damit das Trinkgeld nie auf einen Betrag berechnet wird, den niemand bezahlt.",
+    "Not used for \u201cbuy several, pay for fewer\u201d \u2014 there the cheapest items are free.":
+        "Wird bei «Mehrere kaufen, weniger zahlen» nicht verwendet \u2014 dort sind die günstigsten Artikel gratis.",
+    "Only for \u201cbuy several, pay for fewer\u201d. Example 3 and 1 means: three in the basket, the cheapest one is free.":
+        "Nur für «Mehrere kaufen, weniger zahlen». Beispiel 3 und 1 bedeutet: drei im Warenkorb, der günstigste ist gratis.",
+    "Only for \u201cdiscount on the whole order\u201d.": "Nur für «Rabatt auf die ganze Bestellung».",
+    "e.g. Happy Hour until 6 pm \u2014 every third drink is on us": "z. B. Happy Hour bis 18 Uhr \u2014 jedes dritte Getränk geht aufs Haus",
+    # Stempelkarte (F26)
+    "Stamp Card": "Stempelkarte",
+    "Enable stamp card": "Stempelkarte aktivieren",
+    "Collect stamps and issue vouchers": "Stempel sammeln und Gutscheine ausstellen",
+    "Your stamp card": "Ihre Stempelkarte",
+    "Stamps needed": "Benötigte Stempel",
+    "Reward": "Belohnung",
+    "Voucher valid for": "Gutschein gültig für",
+    "days": "Tage",
+    "Stamp card reward for %d orders": "Stempelkarten-Belohnung für %d Bestellungen",
+    "%1$d of %2$d stamps collected": "%1$d von %2$d Stempeln gesammelt",
+    "Your reward is ready: %1$d%% off with the code %2$s": "Ihre Belohnung ist bereit: %1$d%% Rabatt mit dem Code %2$s",
+    "%1$d more order and you get %2$d%% off.": "Noch %1$d Bestellung und Sie erhalten %2$d%% Rabatt.",
+    "%1$d more orders and you get %2$d%% off.": "Noch %1$d Bestellungen und Sie erhalten %2$d%% Rabatt.",
+    "Orders from %s count towards a stamp.": "Bestellungen ab %s zählen für einen Stempel.",
+    "Orders below this value do not earn a stamp. 0 means every order counts.":
+        "Bestellungen unter diesem Wert geben keinen Stempel. 0 bedeutet, jede Bestellung zählt.",
+    "Show the card anywhere with the shortcode [lbite_stampcard]. It also appears in the customer account.":
+        "Die Karte lässt sich mit dem Shortcode [lbite_stampcard] überall einbinden. Sie erscheint ausserdem im Kundenkonto.",
+    "Issued as a single-use WooCommerce coupon, tied to the guest\u2019s email address so it cannot be passed on.":
+        "Wird als einmalig einlösbarer WooCommerce-Gutschein ausgestellt, gebunden an die E-Mail-Adresse des Gastes, damit er nicht weitergegeben werden kann.",
+    "Guests collect a stamp per completed order and get a voucher once the card is full. Only works for orders placed with a customer account \u2014 guest checkouts cannot be attributed to anyone.":
+        "Gäste sammeln pro abgeschlossener Bestellung einen Stempel und erhalten einen Gutschein, sobald die Karte voll ist. Funktioniert nur bei Bestellungen mit Kundenkonto \u2014 Gastbestellungen lassen sich niemandem zuordnen.",
+    "One stamp per completed order above a minimum value; after a set number the guest gets a discount voucher. Guests grasp \u201cevery tenth order is cheaper\u201d immediately \u2014 a points balance with a conversion rate they do not.":
+        "Ein Stempel je abgeschlossener Bestellung über einem Mindestbetrag; nach einer festgelegten Anzahl erhält der Gast einen Rabattgutschein. «Jede zehnte Bestellung ist günstiger» versteht ein Gast sofort \u2014 einen Punktestand mit Umrechnungskurs nicht.",
+    "Rule-based offers that WooCommerce does not know by itself \u2014 buy several pay for fewer, a discount on a category, money off above a cart value \u2014 each limited to certain weekdays or times. Plus an announcement bar so the offer gets noticed.":
+        "Regelbasierte Angebote, die WooCommerce von sich aus nicht kennt \u2014 mehrere kaufen und weniger zahlen, Rabatt auf eine Kategorie, Nachlass ab einem Warenkorbwert \u2014 jeweils auf bestimmte Wochentage oder Zeiten begrenzt. Dazu eine Ankündigungsleiste, damit das Angebot gesehen wird.",
     # Restliche Strings aus Wizard, Matrix und Beispieldaten
     "Libre Bite is a WooCommerce extension and cannot work without it.":
         "Libre Bite ist eine WooCommerce-Erweiterung und kann ohne WooCommerce nicht arbeiten.",

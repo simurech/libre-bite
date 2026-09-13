@@ -110,6 +110,14 @@ class LBite_Plugin {
 			$this->load_module( 'order-bumps', 'LBite_Order_Bumps' );
 		}
 
+		if ( lbite_feature_enabled( 'enable_promotions' ) ) {
+			$this->load_module( 'promotions', 'LBite_Promotions' );
+		}
+
+		if ( lbite_feature_enabled( 'enable_stampcard' ) ) {
+			$this->load_module( 'stampcard', 'LBite_Stampcard' );
+		}
+
 		if ( lbite_feature_enabled( 'enable_menu_view' ) ) {
 			$this->load_module( 'menu-view', 'LBite_Menu_View' );
 		}

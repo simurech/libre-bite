@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 2.6.0
+Stable tag: 3.0.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,6 +108,12 @@ EU-compliant nutritional values and allergen declarations for every product. Dis
 
 **Advanced Sound Notifications**
 A browser signal tone when a new order arrives on the Kanban board. Custom sound files can be uploaded via the media library (Pro).
+
+**Promotions & Announcements**
+Rule-based offers WooCommerce does not know by itself: buy several pay for fewer, a discount on a category, money off above a cart value — each limited to certain weekdays or times. Plus an announcement bar.
+
+**Stamp Card**
+One stamp per completed order, then a discount voucher. Guests grasp "every tenth order is cheaper" immediately.
 
 **Theme-independent Menu View**
 Output your menu in its own layout — category navigation, product cards, a dialog for variations and add-ons, and a slide-in order panel. Works with any theme, no template editing required.
@@ -259,6 +265,20 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.0.0 =
+
+This release rounds out the feature set that 2.6.0 started. It is published as a **beta for testing** — please try it on a staging site before using it in production.
+
+**New**
+* Promotions engine: buy several and pay for fewer, a discount on products or a whole category, money off above a cart value — each limited to certain weekdays or times of day (Pro)
+* Announcement bar at the top of the shop, with the same scheduling (Pro)
+* Stamp card: one stamp per completed order above a minimum value, then a single-use discount voucher tied to the guest's email address (Pro)
+
+**Notes**
+* Promotion discounts are applied before the tip and the 5-cent rounding, so the tip is never calculated on an amount nobody pays
+* "Buy several, pay for fewer" always makes the cheapest qualifying items free
+* The stamp card only works for orders placed with a customer account — guest checkouts cannot be attributed to anyone
 
 = 2.6.0 =
 
