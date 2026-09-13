@@ -405,6 +405,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			if ( $lbite_premium_allowed ) {
 				$lbite_features = get_option( 'lbite_features', array() );
 				$lbite_features['enable_reservations'] = isset( $_POST['lbite_feature_toggle']['enable_reservations'] );
+				$lbite_features['enable_guest_notes']  = isset( $_POST['lbite_feature_toggle']['enable_guest_notes'] );
 				update_option( 'lbite_features', $lbite_features );
 				update_option( 'lbite_reservation_refresh_interval', isset( $_POST['lbite_reservation_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_reservation_refresh_interval'] ) ) : 60 );
 				update_option(

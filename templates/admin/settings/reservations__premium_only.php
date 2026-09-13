@@ -51,6 +51,16 @@ $lbite_res_show_notes = ! isset( $lbite_res_fields['notes']['enabled'] ) || $lbi
 				<p class="description"><?php esc_html_e( 'Both fields are optional for the guest either way — hide them here to keep the form as short as possible.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
+		<tr>
+			<th><?php esc_html_e( 'Guest Notes', 'libre-bite' ); ?></th>
+			<td>
+				<label>
+					<input type="checkbox" name="lbite_feature_toggle[enable_guest_notes]" value="1" <?php checked( lbite_feature_enabled( 'enable_guest_notes' ) ); ?>>
+					<?php esc_html_e( 'Show stored notes and allergies for returning guests', 'libre-bite' ); ?>
+				</label>
+				<p class="description"><?php esc_html_e( 'Notes live on the customer profile and appear on the reservation overview when the phone number matches an existing customer.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
 	</table>
 
 	<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
