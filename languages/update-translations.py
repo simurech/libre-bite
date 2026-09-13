@@ -23,6 +23,23 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Ernährungsformen und Filter (F41)
+    "Vegan": "Vegan",
+    "Vegetarian": "Vegetarisch",
+    "Gluten-free": "Glutenfrei",
+    "Lactose-free": "Laktosefrei",
+    "Spicy": "Scharf",
+    "Alcohol-free": "Alkoholfrei",
+    "Dietary labels:": "Ernährungsformen:",
+    "Dietary Labels & Filter": "Ernährungsformen & Filter",
+    "Show only:": "Nur anzeigen:",
+    "Reset": "Zurücksetzen",
+    "Voluntary labels that guests can filter the menu by. Allergens above describe what a dish contains; these describe what it is suitable for.":
+        "Freiwillige Auszeichnungen, nach denen Gäste die Karte filtern können. Die Allergene oben beschreiben, was ein Gericht enthält; diese hier beschreiben, wofür es geeignet ist.",
+    "Label dishes as vegan, vegetarian, gluten-free and more, and let guests filter the menu by them without reloading the page.":
+        "Zeichnet Gerichte als vegan, vegetarisch, glutenfrei und mehr aus und lässt Gäste die Karte ohne Seitenneuladen danach filtern.",
+    "Label dishes as vegan, vegetarian, gluten-free, lactose-free, spicy or alcohol-free. Guests get a filter bar above the shop grid and can combine several labels at once.":
+        "Zeichnet Gerichte als vegan, vegetarisch, glutenfrei, laktosefrei, scharf oder alkoholfrei aus. Gäste erhalten eine Filterleiste über dem Produktraster und können mehrere Auszeichnungen kombinieren.",
     "Customer": "Kunde",
     "Round %d": "Runde %d",
     # Bon-Vorlagen (F42)

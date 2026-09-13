@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libre Bite 2.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/libre-bite\n"
-"POT-Creation-Date: 2026-09-12T22:48:27+00:00\n"
+"POT-Creation-Date: 2026-09-13T10:41:19+00:00\n"
 "PO-Revision-Date: 2026-06-29\n"
 "Last-Translator: Pulacha Labs <https://pulacha-labs.ch/>\n"
 "Language-Team: French (Switzerland)\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: includes/admin/class-admin.php:192 includes/admin/class-admin.php:2431
 #: libre-bite.php:189 libre-bite.php:203 templates/admin/dashboard.php:15
 #: templates/admin/debug-info.php:19 templates/admin/documentation.php:16
-#: templates/admin/settings-tabbed.php:371 templates/admin/settings.php:86
+#: templates/admin/settings-tabbed.php:373 templates/admin/settings.php:86
 msgid "Libre Bite"
 msgstr "Libre Bite"
 
@@ -67,7 +67,7 @@ msgstr "Aperçu des commandes"
 #: templates/admin/help-partials/settings.php:177
 #: templates/admin/help-staff.php:68 templates/admin/pos.php:15
 #: templates/admin/settings-tabbed.php:25
-#: templates/admin/settings-tabbed.php:882
+#: templates/admin/settings-tabbed.php:884
 #: templates/admin/super-admin-settings.php:29
 msgid "POS System"
 msgstr "Système de caisse"
@@ -153,7 +153,7 @@ msgstr "Tarifs"
 #: templates/admin/dashboard.php:97 templates/admin/help-admin.php:65
 #: templates/admin/help-admin.php:193
 #: templates/admin/help-partials/settings.php:15
-#: templates/admin/settings-tabbed.php:376 templates/admin/settings.php:86
+#: templates/admin/settings-tabbed.php:378 templates/admin/settings.php:86
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -221,27 +221,27 @@ msgstr "Erreur lors de l'enregistrement"
 msgid "No table"
 msgstr "Pas de table"
 
-#: includes/admin/class-admin.php:826 templates/admin/settings-tabbed.php:820
+#: includes/admin/class-admin.php:826 templates/admin/settings-tabbed.php:822
 msgid "Counts as completed"
 msgstr "Compte comme terminé"
 
 #: includes/admin/class-admin.php:872 templates/admin/settings-tabbed.php:200
-#: templates/admin/settings-tabbed.php:858 templates/admin/statistics.php:103
+#: templates/admin/settings-tabbed.php:860 templates/admin/statistics.php:103
 msgid "Cash"
 msgstr "Espèces"
 
 #: includes/admin/class-admin.php:873 templates/admin/settings-tabbed.php:201
-#: templates/admin/settings-tabbed.php:859 templates/admin/statistics.php:104
+#: templates/admin/settings-tabbed.php:861 templates/admin/statistics.php:104
 msgid "Card"
 msgstr "Carte"
 
 #: includes/admin/class-admin.php:874 templates/admin/settings-tabbed.php:202
-#: templates/admin/settings-tabbed.php:860 templates/admin/statistics.php:105
+#: templates/admin/settings-tabbed.php:862 templates/admin/statistics.php:105
 msgid "Twint"
 msgstr "Twint"
 
 #: includes/admin/class-admin.php:875 templates/admin/settings-tabbed.php:203
-#: templates/admin/settings-tabbed.php:861 templates/admin/statistics.php:106
+#: templates/admin/settings-tabbed.php:863 templates/admin/statistics.php:106
 msgid "Other"
 msgstr "Autre"
 
@@ -339,12 +339,12 @@ msgid "Enter customer email address:"
 msgstr "Saisir l'adresse e-mail du client :"
 
 #: includes/admin/class-admin.php:938 includes/modules/pos/class-pos.php:175
-#: templates/admin/pos.php:74 templates/admin/settings-tabbed.php:937
+#: templates/admin/pos.php:74 templates/admin/settings-tabbed.php:939
 msgid "Takeaway"
 msgstr "À emporter"
 
 #: includes/admin/class-admin.php:939 includes/modules/pos/class-pos.php:176
-#: templates/admin/pos.php:78 templates/admin/settings-tabbed.php:941
+#: templates/admin/pos.php:78 templates/admin/settings-tabbed.php:943
 #: templates/thankyou-optimized.php:164 templates/thankyou-optimized.php:168
 msgid "Dine-in"
 msgstr "Sur place"
@@ -536,7 +536,7 @@ msgstr "Paramètres invalides"
 msgid "Invalid data"
 msgstr "Données invalides"
 
-#: includes/admin/class-admin.php:2048 templates/admin/settings-tabbed.php:391
+#: includes/admin/class-admin.php:2048 templates/admin/settings-tabbed.php:393
 msgid "Settings saved"
 msgstr "Paramètres enregistrés"
 
@@ -1381,177 +1381,205 @@ msgstr "Type d'e-mail"
 msgid "Choose the format for this email."
 msgstr "Choisir le format de cet e-mail."
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:54
-#: includes/modules/nutritional-info/class-nutritional-info.php:274
+#: includes/modules/nutritional-info/class-nutritional-info.php:59
+#: includes/modules/nutritional-info/class-nutritional-info.php:429
 #: templates/admin/settings/products.php:54
 #: templates/admin/super-admin-settings.php:131
 msgid "Nutritional Information"
 msgstr "Informations nutritionnelles"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:63
-#: includes/modules/nutritional-info/class-nutritional-info.php:375
+#: includes/modules/nutritional-info/class-nutritional-info.php:68
+#: includes/modules/nutritional-info/class-nutritional-info.php:515
 msgid "Allergens & Ingredients"
 msgstr "Allergènes et ingrédients"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:91
+#: includes/modules/nutritional-info/class-nutritional-info.php:96
 msgid "Serving Size"
 msgstr "Portion"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:94
+#: includes/modules/nutritional-info/class-nutritional-info.php:99
 #, fuzzy
 msgid "E.g. \"100g\" or \"1 serving (250g)\""
 msgstr "P. ex. \\\"100g\\\" ou \\\"1 portion (250g)\\\""
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:98
+#: includes/modules/nutritional-info/class-nutritional-info.php:103
 msgid "Energy (kcal)"
 msgstr "Énergie (kcal)"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:104
+#: includes/modules/nutritional-info/class-nutritional-info.php:109
 msgid "Energy (kJ)"
 msgstr "Énergie (kJ)"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:110
+#: includes/modules/nutritional-info/class-nutritional-info.php:115
 msgid "Fat (g)"
 msgstr "Lipides (g)"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:116
+#: includes/modules/nutritional-info/class-nutritional-info.php:121
 msgid "of which saturated fatty acids (g)"
 msgstr "dont acides gras saturés (g)"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:122
+#: includes/modules/nutritional-info/class-nutritional-info.php:127
 msgid "Carbohydrates (g)"
 msgstr "Glucides (g)"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:128
+#: includes/modules/nutritional-info/class-nutritional-info.php:133
 msgid "of which sugars (g)"
 msgstr "dont sucres (g)"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:134
+#: includes/modules/nutritional-info/class-nutritional-info.php:139
 msgid "Protein (g)"
 msgstr "Protéines (g)"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:140
+#: includes/modules/nutritional-info/class-nutritional-info.php:145
 msgid "Salt (g)"
 msgstr "Sel (g)"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:163
-#: includes/modules/nutritional-info/class-nutritional-info.php:358
+#: includes/modules/nutritional-info/class-nutritional-info.php:202
+msgid "Show only:"
+msgstr "Afficher uniquement :"
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:209
+msgid "Reset"
+msgstr "Réinitialiser"
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:248
 msgid "Gluten"
 msgstr "Gluten"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:164
-#: includes/modules/nutritional-info/class-nutritional-info.php:359
+#: includes/modules/nutritional-info/class-nutritional-info.php:249
 msgid "Crustaceans"
 msgstr "Crustacés"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:165
-#: includes/modules/nutritional-info/class-nutritional-info.php:360
+#: includes/modules/nutritional-info/class-nutritional-info.php:250
 msgid "Eggs"
 msgstr "Œufs"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:166
-#: includes/modules/nutritional-info/class-nutritional-info.php:361
+#: includes/modules/nutritional-info/class-nutritional-info.php:251
 msgid "Fish"
 msgstr "Poisson"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:167
-#: includes/modules/nutritional-info/class-nutritional-info.php:362
+#: includes/modules/nutritional-info/class-nutritional-info.php:252
 msgid "Peanuts"
 msgstr "Arachides"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:168
-#: includes/modules/nutritional-info/class-nutritional-info.php:363
+#: includes/modules/nutritional-info/class-nutritional-info.php:253
 msgid "Soy"
 msgstr "Soja"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:169
-#: includes/modules/nutritional-info/class-nutritional-info.php:364
+#: includes/modules/nutritional-info/class-nutritional-info.php:254
 msgid "Milk/Lactose"
 msgstr "Lait/Lactose"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:170
-#: includes/modules/nutritional-info/class-nutritional-info.php:365
+#: includes/modules/nutritional-info/class-nutritional-info.php:255
 msgid "Tree nuts"
 msgstr "Fruits à coque"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:171
-#: includes/modules/nutritional-info/class-nutritional-info.php:366
+#: includes/modules/nutritional-info/class-nutritional-info.php:256
 msgid "Celery"
 msgstr "Céleri"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:172
-#: includes/modules/nutritional-info/class-nutritional-info.php:367
+#: includes/modules/nutritional-info/class-nutritional-info.php:257
 msgid "Mustard"
 msgstr "Moutarde"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:173
-#: includes/modules/nutritional-info/class-nutritional-info.php:368
+#: includes/modules/nutritional-info/class-nutritional-info.php:258
 msgid "Sesame"
 msgstr "Sésame"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:174
-#: includes/modules/nutritional-info/class-nutritional-info.php:369
+#: includes/modules/nutritional-info/class-nutritional-info.php:259
 msgid "Sulfites"
 msgstr "Sulfites"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:175
-#: includes/modules/nutritional-info/class-nutritional-info.php:370
+#: includes/modules/nutritional-info/class-nutritional-info.php:260
 msgid "Lupins"
 msgstr "Lupin"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:176
-#: includes/modules/nutritional-info/class-nutritional-info.php:371
+#: includes/modules/nutritional-info/class-nutritional-info.php:261
 msgid "Molluscs"
 msgstr "Mollusques"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:180
+#: includes/modules/nutritional-info/class-nutritional-info.php:277
+msgid "Vegan"
+msgstr "Végane"
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:278
+msgid "Vegetarian"
+msgstr "Végétarien"
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:279
+msgid "Gluten-free"
+msgstr "Sans gluten"
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:280
+msgid "Lactose-free"
+msgstr "Sans lactose"
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:281
+msgid "Spicy"
+msgstr "Épicé"
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:282
+msgid "Alcohol-free"
+msgstr "Sans alcool"
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:316
 msgid "Select allergens:"
 msgstr "Sélectionner les allergènes :"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:192
-#: includes/modules/nutritional-info/class-nutritional-info.php:389
+#: includes/modules/nutritional-info/class-nutritional-info.php:328
+msgid "Dietary labels:"
+msgstr "Régimes alimentaires :"
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:337
+msgid ""
+"Voluntary labels that guests can filter the menu by. Allergens above "
+"describe what a dish contains; these describe what it is suitable for."
+msgstr ""
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:341
+#: includes/modules/nutritional-info/class-nutritional-info.php:529
 msgid "Other Ingredients:"
 msgstr "Autres ingrédients :"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:194
+#: includes/modules/nutritional-info/class-nutritional-info.php:343
 msgid "Other ingredients or notes (optional)"
 msgstr "Autres ingrédients ou notes (facultatif)"
 
 #. translators: %s: serving size (e.g., "100g")
-#: includes/modules/nutritional-info/class-nutritional-info.php:279
+#: includes/modules/nutritional-info/class-nutritional-info.php:434
 #, php-format
 msgid "per %s"
 msgstr "par %s"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:287
+#: includes/modules/nutritional-info/class-nutritional-info.php:442
 msgid "Energy"
 msgstr "Énergie"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:300
+#: includes/modules/nutritional-info/class-nutritional-info.php:455
 msgid "Fat"
 msgstr "Lipides"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:306
+#: includes/modules/nutritional-info/class-nutritional-info.php:461
 msgid "of which saturated fatty acids"
 msgstr "dont acides gras saturés"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:312
+#: includes/modules/nutritional-info/class-nutritional-info.php:467
 msgid "Carbohydrates"
 msgstr "Glucides"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:318
+#: includes/modules/nutritional-info/class-nutritional-info.php:473
 msgid "of which sugars"
 msgstr "dont sucres"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:324
+#: includes/modules/nutritional-info/class-nutritional-info.php:479
 msgid "Protein"
 msgstr "Protéines"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:330
+#: includes/modules/nutritional-info/class-nutritional-info.php:485
 msgid "Salt"
 msgstr "Sel"
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:378
+#: includes/modules/nutritional-info/class-nutritional-info.php:518
 msgid "Contains:"
 msgstr "Contient :"
 
@@ -2778,9 +2806,9 @@ msgstr "Adresse de facturation"
 
 #: templates/admin/checkout-fields.php:250
 #: templates/admin/checkout-fields.php:289
-#: templates/admin/settings-tabbed.php:571
-#: templates/admin/settings-tabbed.php:580
-#: templates/admin/settings-tabbed.php:589
+#: templates/admin/settings-tabbed.php:573
+#: templates/admin/settings-tabbed.php:582
+#: templates/admin/settings-tabbed.php:591
 msgid "Custom label (optional)"
 msgstr "Étiquette personnalisée (facultatif)"
 
@@ -4640,7 +4668,7 @@ msgid "Open Holidays"
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:96
-#: templates/admin/settings-tabbed.php:485
+#: templates/admin/settings-tabbed.php:487
 msgid "Tips"
 msgstr ""
 
@@ -4687,7 +4715,7 @@ msgid ""
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:125
-#: templates/admin/settings-tabbed.php:503
+#: templates/admin/settings-tabbed.php:505
 msgid "Checkout Mode"
 msgstr ""
 
@@ -4699,20 +4727,20 @@ msgid ""
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:129
-#: templates/admin/settings-tabbed.php:511
-#: templates/admin/settings-tabbed.php:1031
+#: templates/admin/settings-tabbed.php:513
+#: templates/admin/settings-tabbed.php:1033
 msgid "Important:"
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:129
-#: templates/admin/settings-tabbed.php:511
+#: templates/admin/settings-tabbed.php:513
 msgid ""
 "The optimized checkout only works with the classic WooCommerce shortcode. "
 "Your checkout page must contain the shortcode"
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:129
-#: templates/admin/settings-tabbed.php:511
+#: templates/admin/settings-tabbed.php:513
 msgid ", not the WooCommerce Checkout Block."
 msgstr ""
 
@@ -4742,7 +4770,7 @@ msgid ""
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:162
-#: templates/admin/settings-tabbed.php:762
+#: templates/admin/settings-tabbed.php:764
 msgid "Show Future Pre-orders"
 msgstr ""
 
@@ -5564,14 +5592,14 @@ msgid "Add holiday"
 msgstr ""
 
 #: templates/admin/holidays-settings.php:118
-#: templates/admin/settings-tabbed.php:620
-#: templates/admin/settings-tabbed.php:690
-#: templates/admin/settings-tabbed.php:851
-#: templates/admin/settings-tabbed.php:959
-#: templates/admin/settings-tabbed.php:1037
+#: templates/admin/settings-tabbed.php:622
+#: templates/admin/settings-tabbed.php:692
+#: templates/admin/settings-tabbed.php:853
+#: templates/admin/settings-tabbed.php:961
+#: templates/admin/settings-tabbed.php:1039
 #: templates/admin/settings/locations.php:139
 #: templates/admin/settings/notifications.php:86
-#: templates/admin/settings/products.php:132
+#: templates/admin/settings/products.php:139
 #: templates/admin/settings/reservations__premium_only.php:56
 #: templates/admin/settings/tables__premium_only.php:57
 msgid "Save"
@@ -5744,7 +5772,7 @@ msgid "No reservations for this day."
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:27
-#: templates/admin/settings-tabbed.php:950
+#: templates/admin/settings-tabbed.php:952
 msgid "Prices & Taxes"
 msgstr ""
 
@@ -5761,252 +5789,252 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:381
+#: templates/admin/settings-tabbed.php:383
 msgid "Welcome to Libre Bite!"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:382
+#: templates/admin/settings-tabbed.php:384
 msgid ""
 "Configure each area of the plugin using the tabs below. Core features are "
 "active by default – you can adjust them at any time."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:384
+#: templates/admin/settings-tabbed.php:386
 msgid "Dismiss"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:432
+#: templates/admin/settings-tabbed.php:434
 msgid "Table Management & Ordering"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:433
+#: templates/admin/settings-tabbed.php:435
 msgid ""
 "Create tables, generate QR codes, and allow guests to order directly at the "
 "table. Available with Libre Bite Pro."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:443
+#: templates/admin/settings-tabbed.php:445
 #: templates/admin/settings/reservations__premium_only.php:23
 #: templates/admin/super-admin-settings.php:89
 msgid "Table Reservations"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:444
+#: templates/admin/settings-tabbed.php:446
 msgid ""
 "Let customers reserve tables online via a frontend form. Available with "
 "Libre Bite Pro."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:478
+#: templates/admin/settings-tabbed.php:480
 #: templates/admin/super-admin-settings.php:47
 msgid "Optimized Checkout"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:479
+#: templates/admin/settings-tabbed.php:481
 msgid ""
 "Replace WooCommerce fields with a minimal checkout: name and receipt option "
 "only."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:486
+#: templates/admin/settings-tabbed.php:488
 msgid "Allow customers to add a tip at checkout."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:492
+#: templates/admin/settings-tabbed.php:494
 msgid "Order Type Selection"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:493
+#: templates/admin/settings-tabbed.php:495
 msgid ""
 "Show a Takeaway / Dine-in selector in the checkout. When Multiple Tax Rates "
 "is enabled, the selection also controls the applicable tax rate. With the "
 "Table module active, Dine-in reveals an optional table number field."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:506
+#: templates/admin/settings-tabbed.php:508
 msgid "Standard (all WooCommerce fields)"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:507
+#: templates/admin/settings-tabbed.php:509
 msgid "Optimized (name + receipt option only)"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:509
+#: templates/admin/settings-tabbed.php:511
 msgid ""
 "In optimized mode, only the name is requested and whether a receipt by email "
 "is desired."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:516
+#: templates/admin/settings-tabbed.php:518
 msgid "Email Required For"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:530
+#: templates/admin/settings-tabbed.php:532
 msgid ""
 "No payment methods found. Please configure WooCommerce payment methods first."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:533
+#: templates/admin/settings-tabbed.php:535
 msgid ""
 "The email field is shown in the optimized checkout only for the selected "
 "payment methods."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:538
+#: templates/admin/settings-tabbed.php:540
 msgid "Tip Settings"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:540
+#: templates/admin/settings-tabbed.php:542
 msgid "Tip Title"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:542 templates/checkout-tip.php:14
+#: templates/admin/settings-tabbed.php:544 templates/checkout-tip.php:14
 msgid "Add a tip?"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:543
+#: templates/admin/settings-tabbed.php:545
 msgid "Heading shown above the tip options. Leave empty to use the default."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:547
+#: templates/admin/settings-tabbed.php:549
 msgid "\"No Tip\" Label"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:549 templates/checkout-tip.php:34
+#: templates/admin/settings-tabbed.php:551 templates/checkout-tip.php:34
 msgid "No tip"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:553
+#: templates/admin/settings-tabbed.php:555
 msgid "Tip Mode"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:557
+#: templates/admin/settings-tabbed.php:559
 msgid "Percentage of order total"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:561
+#: templates/admin/settings-tabbed.php:563
 msgid "Fixed amount"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:566
-#: templates/admin/settings-tabbed.php:597
+#: templates/admin/settings-tabbed.php:568
+#: templates/admin/settings-tabbed.php:599
 msgid "Option 1"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:575
-#: templates/admin/settings-tabbed.php:598
+#: templates/admin/settings-tabbed.php:577
+#: templates/admin/settings-tabbed.php:600
 msgid "Option 2"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:584
-#: templates/admin/settings-tabbed.php:599
+#: templates/admin/settings-tabbed.php:586
+#: templates/admin/settings-tabbed.php:601
 msgid "Option 3"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:593
+#: templates/admin/settings-tabbed.php:595
 msgid "Default Selection"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:596
+#: templates/admin/settings-tabbed.php:598
 msgid "No Tip (Default)"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:624
+#: templates/admin/settings-tabbed.php:626
 msgid "Fields in Standard Checkout"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:625
+#: templates/admin/settings-tabbed.php:627
 msgid "Choose which fields and options are displayed at checkout."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:638
+#: templates/admin/settings-tabbed.php:640
 msgid "Price Rounding"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:639
+#: templates/admin/settings-tabbed.php:641
 msgid ""
 "Round total to 5 cents (0.05 CHF). Prevents rounding errors when combining "
 "vouchers and tips. Recommended for Swiss businesses."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:644
+#: templates/admin/settings-tabbed.php:646
 msgid "Multiple Tax Rates"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:645
+#: templates/admin/settings-tabbed.php:647
 msgid ""
 "Apply a different tax class per order type: configure which tax class "
 "applies to Takeaway orders and which applies to Dine-in orders."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:654
-#: templates/admin/settings-tabbed.php:665
-#: templates/admin/settings-tabbed.php:680
+#: templates/admin/settings-tabbed.php:656
+#: templates/admin/settings-tabbed.php:667
+#: templates/admin/settings-tabbed.php:682
 msgid "Standard"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:658
+#: templates/admin/settings-tabbed.php:660
 msgid "Takeaway Tax Class"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:669
+#: templates/admin/settings-tabbed.php:671
 msgid "Tax class applied to takeaway and pickup orders."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:673
+#: templates/admin/settings-tabbed.php:675
 msgid "Dine-in Tax Class"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:684
+#: templates/admin/settings-tabbed.php:686
 msgid "Tax class applied to dine-in and table orders."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:696
+#: templates/admin/settings-tabbed.php:698
 msgid "WooCommerce Tax Settings →"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:715
+#: templates/admin/settings-tabbed.php:717
 msgid "Order Overview (Kanban)"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:716
+#: templates/admin/settings-tabbed.php:718
 msgid "Display incoming orders as a kanban board for quick status management."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:723
+#: templates/admin/settings-tabbed.php:725
 msgid "Order Overview Refresh Interval"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:725
-#: templates/admin/settings-tabbed.php:756
+#: templates/admin/settings-tabbed.php:727
+#: templates/admin/settings-tabbed.php:758
 #: templates/admin/settings/reservations__premium_only.php:35
 msgid "Seconds"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:726
+#: templates/admin/settings-tabbed.php:728
 msgid "How often the order overview checks for new orders."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:730
+#: templates/admin/settings-tabbed.php:732
 msgid "Waiting Time Timer"
 msgstr "Minuteur de temps d'attente"
 
-#: templates/admin/settings-tabbed.php:734
+#: templates/admin/settings-tabbed.php:736
 msgid "Show how long each order has been waiting"
 msgstr "Afficher depuis combien de temps chaque commande attend"
 
-#: templates/admin/settings-tabbed.php:736
+#: templates/admin/settings-tabbed.php:738
 msgid ""
 "Each order card shows the minutes since the order came in, turning amber and "
 "then red as it ages. Future pre-orders are excluded."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:740
+#: templates/admin/settings-tabbed.php:742
 msgid "Amber After"
 msgstr "Orange après"
 
-#: templates/admin/settings-tabbed.php:742
-#: templates/admin/settings-tabbed.php:749 templates/admin/settings.php:124
+#: templates/admin/settings-tabbed.php:744
+#: templates/admin/settings-tabbed.php:751 templates/admin/settings.php:124
 #: templates/admin/settings.php:131 templates/admin/settings.php:138
 #: templates/admin/settings.php:150 templates/admin/settings.php:162
 #: templates/admin/settings/locations.php:76
@@ -6016,48 +6044,48 @@ msgstr "Orange après"
 msgid "Minutes"
 msgstr "Minutes"
 
-#: templates/admin/settings-tabbed.php:743
+#: templates/admin/settings-tabbed.php:745
 msgid "Leave at 0 to use the preparation time configured for each location."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:747
+#: templates/admin/settings-tabbed.php:749
 msgid "Red After"
 msgstr "Rouge après"
 
-#: templates/admin/settings-tabbed.php:750
+#: templates/admin/settings-tabbed.php:752
 msgid "Leave at 0 to use one and a half times the amber threshold."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:754
+#: templates/admin/settings-tabbed.php:756
 msgid "Repeat Alert Sound"
 msgstr "Répéter le signal sonore"
 
-#: templates/admin/settings-tabbed.php:757
+#: templates/admin/settings-tabbed.php:759
 msgid ""
 "Repeat the alert sound while orders are still waiting in the first column. "
 "Moving an order onwards acknowledges it and stops the sound. Set to 0 to "
 "play the sound only once per new order."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:772
+#: templates/admin/settings-tabbed.php:774
 msgid ""
 "Show pre-orders with a pickup time further in the future than the "
 "preparation time in the Kanban board."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:778
+#: templates/admin/settings-tabbed.php:780
 msgid "Dim Future Pre-orders"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:788
+#: templates/admin/settings-tabbed.php:790
 msgid "Display future pre-orders dimmed (greyed out) in the Kanban board."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:794
+#: templates/admin/settings-tabbed.php:796
 msgid "Customizable Kanban Columns"
 msgstr "Colonnes Kanban personnalisables"
 
-#: templates/admin/settings-tabbed.php:804
+#: templates/admin/settings-tabbed.php:806
 msgid ""
 "Rename, add, remove and reorder Kanban board columns; enables a one-step "
 "back action."
@@ -6065,43 +6093,43 @@ msgstr ""
 "Renommez, ajoutez, supprimez et réorganisez les colonnes du tableau Kanban ; "
 "permet une action de retour en une étape."
 
-#: templates/admin/settings-tabbed.php:809
+#: templates/admin/settings-tabbed.php:811
 msgid "Kanban Columns"
 msgstr "Colonnes Kanban"
 
-#: templates/admin/settings-tabbed.php:822
+#: templates/admin/settings-tabbed.php:824
 msgid "Remove column"
 msgstr "Supprimer la colonne"
 
-#: templates/admin/settings-tabbed.php:826
+#: templates/admin/settings-tabbed.php:828
 msgid "Add column"
 msgstr "Ajouter une colonne"
 
-#: templates/admin/settings-tabbed.php:827
+#: templates/admin/settings-tabbed.php:829
 msgid "Drag rows to reorder. Minimum 2, maximum 5 columns."
 msgstr ""
 "Faites glisser les lignes pour les réorganiser. Minimum 2, maximum 5 "
 "colonnes."
 
-#: templates/admin/settings-tabbed.php:832
+#: templates/admin/settings-tabbed.php:834
 msgid "Drag & Drop"
 msgstr "Glisser-déposer"
 
-#: templates/admin/settings-tabbed.php:842
+#: templates/admin/settings-tabbed.php:844
 msgid "Allow dragging order cards between columns on the Kanban board."
 msgstr ""
 "Permet de faire glisser les cartes de commande entre les colonnes du tableau "
 "Kanban."
 
-#: templates/admin/settings-tabbed.php:883
+#: templates/admin/settings-tabbed.php:885
 msgid "Enable the Point of Sale interface for in-person orders."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:888
+#: templates/admin/settings-tabbed.php:890
 msgid "Split Payment"
 msgstr "Paiement partagé"
 
-#: templates/admin/settings-tabbed.php:889
+#: templates/admin/settings-tabbed.php:891
 msgid ""
 "Allow splitting the total across multiple payment methods in the POS payment "
 "modal."
@@ -6109,17 +6137,17 @@ msgstr ""
 "Permet de répartir le montant total sur plusieurs modes de paiement dans la "
 "fenêtre de paiement du point de vente."
 
-#: templates/admin/settings-tabbed.php:895
+#: templates/admin/settings-tabbed.php:897
 msgid "Open Tabs (Table Service)"
 msgstr "Additions ouvertes (service à table)"
 
-#: templates/admin/settings-tabbed.php:897
+#: templates/admin/settings-tabbed.php:899
 msgid "Keep orders open per table and add items until the guests pay."
 msgstr ""
 "Garder les commandes ouvertes par table et ajouter des articles jusqu'à ce "
 "que les clients paient."
 
-#: templates/admin/settings-tabbed.php:898
+#: templates/admin/settings-tabbed.php:900
 msgid ""
 "Keep orders open per table and add items until the guests pay. Requires the "
 "Table Management module to select a table."
@@ -6128,51 +6156,51 @@ msgstr ""
 "que les clients paient. Nécessite le module de gestion des tables pour "
 "sélectionner une table."
 
-#: templates/admin/settings-tabbed.php:906
+#: templates/admin/settings-tabbed.php:908
 msgid "Payment Methods"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:908
+#: templates/admin/settings-tabbed.php:910
 msgid ""
 "Choose which payment methods are displayed in the POS payment modal and "
 "customize the labels."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:912
+#: templates/admin/settings-tabbed.php:914
 msgid "Active"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:913
+#: templates/admin/settings-tabbed.php:915
 msgid "Icon"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:914
+#: templates/admin/settings-tabbed.php:916
 msgid "Label"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:927
+#: templates/admin/settings-tabbed.php:929
 msgid "At least one payment method must be active."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:933
+#: templates/admin/settings-tabbed.php:935
 msgid "Default Order Type"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:943
+#: templates/admin/settings-tabbed.php:945
 msgid "Which order type is pre-selected when the POS is opened or reloaded."
 msgstr ""
 
 #. translators: %s: link to Prices & Taxes settings
-#: templates/admin/settings-tabbed.php:949
+#: templates/admin/settings-tabbed.php:951
 #, php-format
 msgid "The VAT rate per order type is configured under %s."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:964
+#: templates/admin/settings-tabbed.php:966
 msgid "Product Order"
 msgstr "Ordre des produits"
 
-#: templates/admin/settings-tabbed.php:966
+#: templates/admin/settings-tabbed.php:968
 msgid ""
 "Drag products into the desired order. This order applies to the POS and to "
 "the store's catalog (when WooCommerce uses custom ordering)."
@@ -6181,23 +6209,23 @@ msgstr ""
 "POS et au catalogue de la boutique (si WooCommerce utilise l'ordre "
 "personnalisé)."
 
-#: templates/admin/settings-tabbed.php:992
+#: templates/admin/settings-tabbed.php:994
 msgid "Save Order"
 msgstr "Enregistrer l'ordre"
 
-#: templates/admin/settings-tabbed.php:1021
+#: templates/admin/settings-tabbed.php:1023
 msgid "Uninstallation"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1024
+#: templates/admin/settings-tabbed.php:1026
 msgid "Delete Data on Uninstall"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1028
+#: templates/admin/settings-tabbed.php:1030
 msgid "Completely delete all plugin data on uninstall"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1032
+#: templates/admin/settings-tabbed.php:1034
 msgid ""
 "This option will permanently delete all locations, product options, "
 "settings, and order metadata!"
@@ -6542,70 +6570,81 @@ msgid "Display allergen information on product pages."
 msgstr ""
 
 #: templates/admin/settings/products.php:74
+msgid "Dietary Labels & Filter"
+msgstr "Régimes alimentaires et filtre"
+
+#: templates/admin/settings/products.php:75
+msgid ""
+"Label dishes as vegan, vegetarian, gluten-free, lactose-free, spicy or "
+"alcohol-free. Guests get a filter bar above the shop grid and can combine "
+"several labels at once."
+msgstr ""
+
+#: templates/admin/settings/products.php:81
 msgid "Scheduled Availability"
 msgstr "Disponibilité programmée"
 
-#: templates/admin/settings/products.php:75
+#: templates/admin/settings/products.php:82
 msgid ""
 "Limit products or whole categories to certain weekdays, times of day, or "
 "date ranges — a breakfast menu that disappears at 11:30, a seasonal item "
 "that only shows in December. Configured per product and per product category."
 msgstr ""
 
-#: templates/admin/settings/products.php:83
+#: templates/admin/settings/products.php:90
 msgid "Availability Hint & Filter"
 msgstr ""
 
-#: templates/admin/settings/products.php:87
+#: templates/admin/settings/products.php:94
 msgid ""
 "Controls the \"Available at X of Y locations\" hint on category and product "
 "pages, and the \"Show only available products\" filter on the shop page. "
 "Both appear for products that are disabled at at least one location."
 msgstr ""
 
-#: templates/admin/settings/products.php:92
+#: templates/admin/settings/products.php:99
 msgid "Availability Hint on Category Pages"
 msgstr ""
 
-#: templates/admin/settings/products.php:93
+#: templates/admin/settings/products.php:100
 msgid "Show the availability hint on shop and category (archive) pages."
 msgstr ""
 
-#: templates/admin/settings/products.php:99
+#: templates/admin/settings/products.php:106
 msgid "Availability Hint on Product Page"
 msgstr ""
 
-#: templates/admin/settings/products.php:100
+#: templates/admin/settings/products.php:107
 msgid "Show the availability hint on the single product page."
 msgstr ""
 
-#: templates/admin/settings/products.php:106
+#: templates/admin/settings/products.php:113
 msgid "Availability Filter on Shop Page"
 msgstr ""
 
-#: templates/admin/settings/products.php:107
+#: templates/admin/settings/products.php:114
 msgid ""
 "Show a \"Show only available products\" filter bar on the shop and category "
 "pages."
 msgstr ""
 
-#: templates/admin/settings/products.php:116
+#: templates/admin/settings/products.php:123
 msgid "Availability Hint Style"
 msgstr ""
 
-#: templates/admin/settings/products.php:123
+#: templates/admin/settings/products.php:130
 msgid "Popup (icon + hover/click popup)"
 msgstr ""
 
-#: templates/admin/settings/products.php:124
+#: templates/admin/settings/products.php:131
 msgid "List (location list always visible)"
 msgstr ""
 
-#: templates/admin/settings/products.php:125
+#: templates/admin/settings/products.php:132
 msgid "Text only (single line, no popup)"
 msgstr ""
 
-#: templates/admin/settings/products.php:127
+#: templates/admin/settings/products.php:134
 msgid ""
 "Choose how the availability hint is displayed. If the hint looks out of "
 "place with your theme, try \"Text only\" for the simplest, most compatible "

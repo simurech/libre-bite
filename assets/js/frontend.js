@@ -477,6 +477,73 @@
 	/**
 	 * Initialisierung
 	 */
+
+	/**
+	 * Ernährungsform-Filter im Shop (F41)
+	 *
+	 * Bewusst rein clientseitig und ohne Nachladen: die Auszeichnungen hängen
+	 * bereits als Datenattribut an jeder Produktkachel. Mehrere aktive Filter
+	 * werden als UND verknüpft — wer «vegan» und «glutenfrei» wählt, will
+	 * Gerichte, die beides sind.
+	 */
+	const DietaryFilter = {
+		active: [],
+
+		init: function() {
+			if ($('[data-lbite-dietary-filter]').length === 0) {
+				return;
+			}
+			this.bindEvents();
+		},
+
+		bindEvents: function() {
+			const self = this;
+
+			$(document).on('click', '.lbite-dietary-filter__btn', function() {
+				const diet = $(this).data('diet');
+				const idx = self.active.indexOf(diet);
+
+				if (idx === -1) {
+					self.active.push(diet);
+					$(this).addClass('is-active');
+				} else {
+					self.active.splice(idx, 1);
+					$(this).removeClass('is-active');
+				}
+
+				self.apply();
+			});
+
+			$(document).on('click', '.lbite-dietary-filter__reset', function() {
+				self.active = [];
+				$('.lbite-dietary-filter__btn').removeClass('is-active');
+				self.apply();
+			});
+		},
+
+		apply: function() {
+			const self = this;
+			const hasFilter = this.active.length > 0;
+
+			$('.lbite-dietary-filter__reset').prop('hidden', !hasFilter);
+
+			$('.products .product').each(function() {
+				const $item = $(this);
+
+				if (!hasFilter) {
+					$item.show();
+					return;
+				}
+
+				const raw = $item.find('.lbite-dietary-data').data('diet');
+				const diets = String(raw === undefined ? '' : raw).split(' ').filter(Boolean);
+				const matchesAll = self.active.every(d => diets.indexOf(d) !== -1);
+
+				$item.toggle(matchesAll);
+			});
+		}
+	};
+
 	$(document).ready(function() {
 		LocationModal.init();
 		ProductOptions.init();
@@ -484,6 +551,7 @@
 		OpeningHours.init();
 		LocationFilter.init();
 		ProductAvailability.init();
+		DietaryFilter.init();
 	});
 
 })(jQuery);

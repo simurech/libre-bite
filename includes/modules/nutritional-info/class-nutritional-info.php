@@ -43,6 +43,11 @@ class LBite_Nutritional_Info {
 		// damit die Ausgabe unabhängig davon ist, ob das Theme den Meta-Bereich anzeigt.
 		$this->loader->add_action( 'woocommerce_single_product_summary', $this, 'display_nutritional_info', 45 );
 		$this->loader->add_action( 'woocommerce_single_product_summary', $this, 'display_allergens', 46 );
+
+		// Ernährungsform-Filter im Shop (F41, Pro)
+		$this->loader->add_action( 'woocommerce_single_product_summary', $this, 'display_dietary_chips', 44 );
+		$this->loader->add_action( 'woocommerce_before_shop_loop', $this, 'render_dietary_filter_bar', 25 );
+		$this->loader->add_action( 'woocommerce_after_shop_loop_item', $this, 'render_dietary_loop_data', 5 );
 	}
 
 	/**
@@ -147,19 +152,99 @@ class LBite_Nutritional_Info {
 	}
 
 	/**
-	 * Allergene-Meta-Box rendern
+	 * Ernährungsform-Auszeichnungen auf der Produktseite
 	 *
-	 * @param WP_Post $post Post-Objekt
+	 * Bewusst als Chips über den Allergenen: es ist eine positive Auszeichnung
+	 * und gehört nicht in den Warnhinweis-Kasten.
 	 */
-	public function render_allergens_meta_box( $post ) {
-		$allergens           = get_post_meta( $post->ID, '_lbite_allergens', true );
-		$other_ingredients   = get_post_meta( $post->ID, '_lbite_other_ingredients', true );
+	public function display_dietary_chips() {
+		global $product;
 
-		if ( ! is_array( $allergens ) ) {
-			$allergens = array();
+		if ( ! $product || ! lbite_feature_enabled( 'enable_dietary_filter' ) ) {
+			return;
 		}
 
-		$allergen_list = array(
+		$dietary = self::get_product_dietary( $product->get_id() );
+
+		if ( empty( $dietary ) ) {
+			return;
+		}
+
+		$labels = self::get_dietary_list();
+		?>
+		<div class="lbite-dietary-chips">
+			<?php foreach ( $dietary as $lbite_key ) : ?>
+				<?php if ( isset( $labels[ $lbite_key ] ) ) : ?>
+					<span class="lbite-dietary-chip lbite-dietary-chip--<?php echo esc_attr( $lbite_key ); ?>">
+						<?php echo esc_html( $labels[ $lbite_key ] ); ?>
+					</span>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Filterleiste über dem Produktraster
+	 *
+	 * Rein clientseitig wie der bestehende Standort-Filter: kein Reload, keine
+	 * zusätzliche Abfrage. Die Auszeichnungen je Produkt liefert
+	 * render_dietary_loop_data() als Datenattribut mit.
+	 */
+	public function render_dietary_filter_bar() {
+		if ( ! lbite_feature_enabled( 'enable_dietary_filter' ) ) {
+			return;
+		}
+
+		$labels = self::get_dietary_list();
+		?>
+		<div class="lbite-dietary-filter" data-lbite-dietary-filter>
+			<span class="lbite-dietary-filter__label"><?php esc_html_e( 'Show only:', 'libre-bite' ); ?></span>
+			<?php foreach ( $labels as $lbite_key => $lbite_label ) : ?>
+				<button type="button" class="lbite-dietary-filter__btn" data-diet="<?php echo esc_attr( $lbite_key ); ?>">
+					<?php echo esc_html( $lbite_label ); ?>
+				</button>
+			<?php endforeach; ?>
+			<button type="button" class="lbite-dietary-filter__reset" hidden>
+				<?php esc_html_e( 'Reset', 'libre-bite' ); ?>
+			</button>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Auszeichnungen als Datenattribut an die Produktkachel hängen
+	 *
+	 * Der bestehende Standort-Filter liest die Produkt-ID aus der
+	 * WooCommerce-Klasse `post-{id}`. Für die Ernährungsformen ist ein
+	 * eigenes Attribut robuster, weil es ohne die Zuordnung über ein
+	 * separates Datenobjekt auskommt.
+	 */
+	public function render_dietary_loop_data() {
+		global $product;
+
+		if ( ! $product || ! lbite_feature_enabled( 'enable_dietary_filter' ) ) {
+			return;
+		}
+
+		$dietary = self::get_product_dietary( $product->get_id() );
+
+		printf(
+			'<span class="lbite-dietary-data" data-diet="%s" hidden></span>',
+			esc_attr( implode( ' ', $dietary ) )
+		);
+	}
+
+	/**
+	 * Die 14 kennzeichnungspflichtigen Allergene nach EU-Verordnung 1169/2011
+	 *
+	 * Zuvor an zwei Stellen wortgleich dupliziert – eine Änderung hätte
+	 * zwangsläufig auseinanderlaufende Listen erzeugt.
+	 *
+	 * @return array Schlüssel => Bezeichnung.
+	 */
+	public static function get_allergen_list() {
+		return array(
 			'gluten'      => __( 'Gluten', 'libre-bite' ),
 			'crustaceans' => __( 'Crustaceans', 'libre-bite' ),
 			'eggs'        => __( 'Eggs', 'libre-bite' ),
@@ -175,6 +260,57 @@ class LBite_Nutritional_Info {
 			'lupine'      => __( 'Lupins', 'libre-bite' ),
 			'molluscs'    => __( 'Molluscs', 'libre-bite' ),
 		);
+	}
+
+	/**
+	 * Ernährungsformen für den Frontend-Filter (F41)
+	 *
+	 * Bewusst getrennt von den Allergenen: Allergene sind rechtlich
+	 * vorgeschrieben und beschreiben, was enthalten ist; Ernährungsformen
+	 * sind freiwillige Auszeichnungen und beschreiben, wofür ein Gericht
+	 * geeignet ist.
+	 *
+	 * @return array Schlüssel => Bezeichnung.
+	 */
+	public static function get_dietary_list() {
+		return array(
+			'vegan'        => __( 'Vegan', 'libre-bite' ),
+			'vegetarian'   => __( 'Vegetarian', 'libre-bite' ),
+			'gluten_free'  => __( 'Gluten-free', 'libre-bite' ),
+			'lactose_free' => __( 'Lactose-free', 'libre-bite' ),
+			'spicy'        => __( 'Spicy', 'libre-bite' ),
+			'alcohol_free' => __( 'Alcohol-free', 'libre-bite' ),
+		);
+	}
+
+	/**
+	 * Ernährungsform-Auszeichnungen eines Produkts
+	 *
+	 * @param int $product_id Produkt-ID.
+	 * @return string[]
+	 */
+	public static function get_product_dietary( $product_id ) {
+		$value = get_post_meta( (int) $product_id, '_lbite_dietary', true );
+
+		return is_array( $value ) ? array_values( array_filter( array_map( 'sanitize_key', $value ) ) ) : array();
+	}
+
+	/**
+	 * Allergene-Meta-Box rendern
+	 *
+	 * @param WP_Post $post Post-Objekt
+	 */
+	public function render_allergens_meta_box( $post ) {
+		$allergens           = get_post_meta( $post->ID, '_lbite_allergens', true );
+		$other_ingredients   = get_post_meta( $post->ID, '_lbite_other_ingredients', true );
+		$dietary             = self::get_product_dietary( $post->ID );
+
+		if ( ! is_array( $allergens ) ) {
+			$allergens = array();
+		}
+
+		$allergen_list = self::get_allergen_list();
+		$dietary_list  = self::get_dietary_list();
 		?>
 		<div style="padding: 10px;">
 			<p><strong><?php esc_html_e( 'Select allergens:', 'libre-bite' ); ?></strong></p>
@@ -186,6 +322,19 @@ class LBite_Nutritional_Info {
 					</label>
 				<?php endforeach; ?>
 			</div>
+
+			<hr style="margin: 20px 0;">
+
+			<p><strong><?php esc_html_e( 'Dietary labels:', 'libre-bite' ); ?></strong></p>
+			<div style="column-count: 2; column-gap: 20px;">
+				<?php foreach ( $dietary_list as $lbite_diet_key => $lbite_diet_label ) : ?>
+					<label style="display: block; margin-bottom: 8px;">
+						<input type="checkbox" name="lbite_dietary[]" value="<?php echo esc_attr( $lbite_diet_key ); ?>" <?php checked( in_array( $lbite_diet_key, $dietary, true ) ); ?>>
+						<?php echo esc_html( $lbite_diet_label ); ?>
+					</label>
+				<?php endforeach; ?>
+			</div>
+			<p class="description"><?php esc_html_e( 'Voluntary labels that guests can filter the menu by. Allergens above describe what a dish contains; these describe what it is suitable for.', 'libre-bite' ); ?></p>
 
 			<hr style="margin: 20px 0;">
 
@@ -237,6 +386,12 @@ class LBite_Nutritional_Info {
 			? array_map( 'sanitize_text_field', wp_unslash( $_POST['lbite_allergens'] ) )
 			: array();
 		update_post_meta( $post_id, '_lbite_allergens', $allergens );
+
+		// Ernährungsformen speichern (F41).
+		$dietary = isset( $_POST['lbite_dietary'] ) && is_array( $_POST['lbite_dietary'] )
+			? array_values( array_intersect( array_map( 'sanitize_key', wp_unslash( $_POST['lbite_dietary'] ) ), array_keys( self::get_dietary_list() ) ) )
+			: array();
+		update_post_meta( $post_id, '_lbite_dietary', $dietary );
 
 		// Weitere Inhaltsstoffe.
 		if ( isset( $_POST['lbite_other_ingredients'] ) ) {
@@ -354,22 +509,7 @@ class LBite_Nutritional_Info {
 			return;
 		}
 
-		$allergen_labels = array(
-			'gluten'      => __( 'Gluten', 'libre-bite' ),
-			'crustaceans' => __( 'Crustaceans', 'libre-bite' ),
-			'eggs'        => __( 'Eggs', 'libre-bite' ),
-			'fish'        => __( 'Fish', 'libre-bite' ),
-			'peanuts'     => __( 'Peanuts', 'libre-bite' ),
-			'soy'         => __( 'Soy', 'libre-bite' ),
-			'milk'        => __( 'Milk/Lactose', 'libre-bite' ),
-			'nuts'        => __( 'Tree nuts', 'libre-bite' ),
-			'celery'      => __( 'Celery', 'libre-bite' ),
-			'mustard'     => __( 'Mustard', 'libre-bite' ),
-			'sesame'      => __( 'Sesame', 'libre-bite' ),
-			'sulfites'    => __( 'Sulfites', 'libre-bite' ),
-			'lupine'      => __( 'Lupins', 'libre-bite' ),
-			'molluscs'    => __( 'Molluscs', 'libre-bite' ),
-		);
+		$allergen_labels = self::get_allergen_list();
 		?>
 		<div class="lbite-allergens" style="margin: 20px 0; padding: 15px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
 			<h3 style="margin-top: 0; color: #856404;"><?php esc_html_e( 'Allergens & Ingredients', 'libre-bite' ); ?></h3>

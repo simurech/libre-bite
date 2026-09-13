@@ -285,6 +285,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				$lbite_features['enable_availability_hint_product']   = isset( $_POST['lbite_feature_toggle']['enable_availability_hint_product'] );
 				$lbite_features['enable_availability_filter']         = isset( $_POST['lbite_feature_toggle']['enable_availability_filter'] );
 				$lbite_features['enable_menu_schedule']               = isset( $_POST['lbite_feature_toggle']['enable_menu_schedule'] );
+				$lbite_features['enable_dietary_filter']              = isset( $_POST['lbite_feature_toggle']['enable_dietary_filter'] );
 			} else {
 				$lbite_features['enable_nutritional_info']            = false;
 				$lbite_features['enable_allergens']                   = false;
@@ -292,6 +293,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				$lbite_features['enable_availability_hint_product']   = false;
 				$lbite_features['enable_availability_filter']         = false;
 				$lbite_features['enable_menu_schedule']               = false;
+				$lbite_features['enable_dietary_filter']              = false;
 			}
 			update_option( 'lbite_features', $lbite_features );
 

@@ -418,3 +418,90 @@
 	color: #555;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+ * Ernährungsform-Auszeichnungen und -Filter (F41)
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-dietary-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin: 12px 0;
+}
+
+.lbite-dietary-chip {
+	display: inline-flex;
+	align-items: center;
+	padding: 3px 10px;
+	border: 1px solid #b7e0c4;
+	border-radius: 999px;
+	background: #e8f5ec;
+	color: #1a7f37;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+/* Nicht jede Auszeichnung ist «gut/grün» – scharf ist ein Hinweis, kein Siegel. */
+.lbite-dietary-chip--spicy {
+	border-color: #f0d9a0;
+	background: #fff6e0;
+	color: #9a6700;
+}
+
+.lbite-dietary-filter {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 20px;
+	padding: 12px 14px;
+	border: 1px solid #e0e0e0;
+	border-radius: 10px;
+	background: #f8f9fa;
+}
+
+.lbite-dietary-filter__label {
+	font-size: 13px;
+	font-weight: 600;
+	color: #50575e;
+}
+
+.lbite-dietary-filter__btn,
+.lbite-dietary-filter__reset {
+	padding: 5px 12px;
+	border: 1px solid #d0d3d7;
+	border-radius: 999px;
+	background: #fff;
+	color: #1d2327;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.5;
+	cursor: pointer;
+	transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.lbite-dietary-filter__btn:hover,
+.lbite-dietary-filter__reset:hover {
+	border-color: #8c8f94;
+	background: #f0f0f1;
+}
+
+.lbite-dietary-filter__btn.is-active {
+	border-color: var(--lbite-color-primary, #0073aa);
+	background: var(--lbite-color-primary, #0073aa);
+	color: #fff;
+}
+
+.lbite-dietary-filter__btn:focus-visible,
+.lbite-dietary-filter__reset:focus-visible {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(0, 115, 170, .28);
+}
+
+.lbite-dietary-filter__reset {
+	margin-left: auto;
+	border-style: dashed;
+	color: #646970;
+}

@@ -158,6 +158,13 @@ class LBite_Features {
 			'label'       => 'Product Options',
 			'description' => 'Additional options for products (add-ons)',
 		),
+		'enable_dietary_filter'     => array(
+			'group'       => 'products',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Dietary Labels & Filter',
+			'description' => 'Label dishes as vegan, vegetarian, gluten-free and more, and let guests filter the menu by them without reloading the page.',
+		),
 		'enable_menu_schedule'      => array(
 			'group'       => 'products',
 			'default'     => false,
