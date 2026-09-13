@@ -155,6 +155,9 @@ class LBite_Plugin {
 	private function init_admin() {
 		require_once LBITE_PLUGIN_DIR . 'includes/admin/class-admin.php';
 		$this->modules['admin'] = new LBite_Admin( $this->loader );
+
+		require_once LBITE_PLUGIN_DIR . 'includes/admin/class-setup-wizard.php';
+		$this->modules['setup-wizard'] = new LBite_Setup_Wizard( $this->loader );
 	}
 
 	/**

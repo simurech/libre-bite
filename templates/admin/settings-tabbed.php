@@ -400,6 +400,16 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 		<div class="lbite-welcome-notice__content">
 			<h2><?php esc_html_e( 'Welcome to Libre Bite!', 'libre-bite' ); ?></h2>
 			<p><?php esc_html_e( 'Configure each area of the plugin using the tabs below. Core features are active by default – you can adjust them at any time.', 'libre-bite' ); ?></p>
+			<?php if ( class_exists( 'LBite_Setup_Wizard' ) && LBite_Setup_Wizard::is_pending() ) : ?>
+				<p>
+					<a class="button button-primary" href="<?php echo esc_url( LBite_Setup_Wizard::get_url() ); ?>">
+						<?php esc_html_e( 'Run the setup assistant', 'libre-bite' ); ?>
+					</a>
+					<span class="description" style="margin-left:8px;">
+						<?php esc_html_e( 'Two minutes, and it can create a sample menu so you are not starting from an empty shop.', 'libre-bite' ); ?>
+					</span>
+				</p>
+			<?php endif; ?>
 		</div>
 		<button type="button" class="lbite-welcome-notice__dismiss" aria-label="<?php esc_attr_e( 'Dismiss', 'libre-bite' ); ?>">&#x2715;</button>
 	</div>

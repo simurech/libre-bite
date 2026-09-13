@@ -618,6 +618,11 @@ class LBite_Admin {
 			return $classes;
 		}
 
+		// Der Einrichtungsassistent blendet das WordPress-Chrome komplett aus.
+		if ( false !== strpos( $lbite_id, 'lbite-setup' ) ) {
+			return $classes . ' lbite-app lbite-setup-screen ';
+		}
+
 		$lbite_app_screens = array(
 			'lbite-order-board',
 			'lbite-pos',
