@@ -337,3 +337,22 @@
 	padding-top: 10px;
 	border-top: 1px solid var(--lbite-border-subtle, #f0f0f1);
 }
+
+/* ════════════════════════════════════════════════════════════════════
+ * Grundrissbild als Hintergrund
+ *
+ * Das Bild wird eingepasst statt gestreckt, damit die Proportionen des
+ * Raums erhalten bleiben. Die Tischpositionen sind prozentual und passen
+ * sich dadurch automatisch mit an.
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-fp-canvas.has-floor-plan {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+/* Auf dem Bild müssen die Tischmarker deutlich abheben. */
+.lbite-fp-canvas.has-floor-plan .lbite-fp-table {
+	box-shadow: var(--lbite-shadow-md, 0 4px 8px rgba(16, 24, 40, .2));
+}

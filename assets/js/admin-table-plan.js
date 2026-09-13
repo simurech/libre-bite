@@ -87,6 +87,17 @@
 				success: (response) => {
 					this.canvas.innerHTML = '';
 
+					// Grundrissbild des Standorts als Hintergrund setzen. Ohne
+					// hinterlegtes Bild bleibt die Fläche wie bisher leer.
+					const planUrl = (response.data && response.data.floor_plan_url) || '';
+					if (planUrl) {
+						this.canvas.style.backgroundImage = 'url("' + planUrl.replace(/"/g, '%22') + '")';
+						this.canvas.classList.add('has-floor-plan');
+					} else {
+						this.canvas.style.backgroundImage = '';
+						this.canvas.classList.remove('has-floor-plan');
+					}
+
 					if (!response.success || !response.data.tables.length) {
 						document.getElementById('lbite-fp-canvas-wrap').style.display = 'none';
 						document.getElementById('lbite-fp-empty').style.display = '';

@@ -1,25 +1,31 @@
 /**
- * Standort-Bild Upload Handler
+ * Bild-Upload-Handler für den Standort-Editor
  *
- * Verwaltet den Media-Library-Upload für Standort-Bilder im Backend.
- * Wird nur auf der Standort-Bearbeitungsseite geladen.
+ * Verwaltet Media-Library-Uploads im Backend. Bewusst auf mehrere
+ * Instanzen pro Seite ausgelegt: neben dem Standort-Bild nutzt auch der
+ * Grundriss des Tischplans denselben Baustein. Alle Selektoren sind
+ * deshalb auf den jeweiligen Container gescopt.
  */
 jQuery( document ).ready( function ( $ ) {
-	var $container = $( '.lbite-location-image-upload' );
-	if ( ! $container.length ) {
+	var $containers = $( '.lbite-location-image-upload' );
+	if ( ! $containers.length ) {
 		return;
 	}
 
-	var $input     = $container.find( 'input[name="lbite_location_image"]' );
+	if ( typeof wp === 'undefined' || typeof wp.media === 'undefined' ) {
+		$containers.find( '.lbite-upload-image-button' )
+			.prop( 'disabled', true )
+			.text( lbiteLocationImage.errorText );
+		return;
+	}
+
+	$containers.each( function () {
+	var $container = $( this );
+	var $input     = $container.find( 'input[type="hidden"]' ).first();
 	var $preview   = $container.find( '.lbite-image-preview' );
 	var $uploadBtn = $container.find( '.lbite-upload-image-button' );
 	var $removeBtn = $container.find( '.lbite-remove-image-button' );
 	var imageFrame;
-
-	if ( typeof wp === 'undefined' || typeof wp.media === 'undefined' ) {
-		$uploadBtn.prop( 'disabled', true ).text( lbiteLocationImage.errorText );
-		return;
-	}
 
 	$uploadBtn.on( 'click', function ( e ) {
 		e.preventDefault();
@@ -58,5 +64,6 @@ jQuery( document ).ready( function ( $ ) {
 			} ).text( lbiteLocationImage.noImageText )
 		);
 		$( this ).hide();
+	} );
 	} );
 } );

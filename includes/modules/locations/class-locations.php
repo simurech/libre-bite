@@ -199,6 +199,18 @@ class LBite_Locations {
 			'default'
 		);
 
+		// Grundriss für den Tischplan – nur relevant, wenn Tische genutzt werden.
+		if ( lbite_feature_enabled( 'enable_table_ordering' ) ) {
+			add_meta_box(
+				'lbite_floor_plan_image',
+				__( 'Floor Plan', 'libre-bite' ),
+				array( $this, 'render_floor_plan_meta_box' ),
+				self::POST_TYPE,
+				'side',
+				'default'
+			);
+		}
+
 		add_meta_box(
 			'lbite_location_color',
 			__( 'Color', 'libre-bite' ),
@@ -291,6 +303,42 @@ class LBite_Locations {
 			</button>
 			<p class="description" style="margin-top: 10px;">
 				<?php esc_html_e( 'Optional: Displayed as tile image in location selection.', 'libre-bite' ); ?>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Grundriss-Meta-Box rendern
+	 *
+	 * Nutzt denselben Uploader-Baustein wie das Standort-Bild; das JS ist
+	 * dafür auf mehrere Instanzen pro Seite ausgelegt.
+	 *
+	 * @param WP_Post $post Post-Objekt.
+	 */
+	public function render_floor_plan_meta_box( $post ) {
+		$lbite_plan_id  = get_post_meta( $post->ID, '_lbite_floor_plan_image', true );
+		$lbite_plan_url = $lbite_plan_id ? wp_get_attachment_image_url( $lbite_plan_id, 'medium' ) : '';
+		?>
+		<div class="lbite-location-image-upload">
+			<div class="lbite-image-preview" style="margin-bottom: 10px;">
+				<?php if ( $lbite_plan_url ) : ?>
+					<img src="<?php echo esc_url( $lbite_plan_url ); ?>" style="max-width: 100%; height: auto; display: block;">
+				<?php else : ?>
+					<p style="text-align: center; padding: 20px; background: #f5f5f5; border: 2px dashed #ddd;">
+						<?php esc_html_e( 'No floor plan selected', 'libre-bite' ); ?>
+					</p>
+				<?php endif; ?>
+			</div>
+			<input type="hidden" id="lbite_floor_plan_image" name="lbite_floor_plan_image" value="<?php echo esc_attr( $lbite_plan_id ); ?>">
+			<button type="button" class="button button-secondary lbite-upload-image-button" style="width: 100%; margin-bottom: 5px;">
+				<?php esc_html_e( 'Select Floor Plan', 'libre-bite' ); ?>
+			</button>
+			<button type="button" class="button button-secondary lbite-remove-image-button" style="width: 100%; <?php echo $lbite_plan_id ? '' : 'display:none;'; ?>">
+				<?php esc_html_e( 'Remove Floor Plan', 'libre-bite' ); ?>
+			</button>
+			<p class="description" style="margin-top: 10px;">
+				<?php esc_html_e( 'Optional: shown as the background of the table plan, so tables can be placed where they actually stand.', 'libre-bite' ); ?>
 			</p>
 		</div>
 		<?php
@@ -450,6 +498,15 @@ class LBite_Locations {
 		}
 
 		// Bild speichern.
+		if ( isset( $_POST['lbite_floor_plan_image'] ) ) {
+			$lbite_plan_id = intval( wp_unslash( $_POST['lbite_floor_plan_image'] ) );
+			if ( $lbite_plan_id ) {
+				update_post_meta( $post_id, '_lbite_floor_plan_image', $lbite_plan_id );
+			} else {
+				delete_post_meta( $post_id, '_lbite_floor_plan_image' );
+			}
+		}
+
 		if ( isset( $_POST['lbite_location_image'] ) ) {
 			$image_id = intval( wp_unslash( $_POST['lbite_location_image'] ) );
 			if ( $image_id ) {

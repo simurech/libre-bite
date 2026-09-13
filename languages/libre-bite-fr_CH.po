@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libre Bite 2.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/libre-bite\n"
-"POT-Creation-Date: 2026-09-13T10:42:48+00:00\n"
+"POT-Creation-Date: 2026-09-13T10:44:44+00:00\n"
 "PO-Revision-Date: 2026-06-29\n"
 "Last-Translator: Pulacha Labs <https://pulacha-labs.ch/>\n"
 "Language-Team: French (Switzerland)\n"
@@ -75,7 +75,7 @@ msgstr "Système de caisse"
 #: includes/admin/class-admin.php:259 includes/admin/class-admin.php:260
 #: includes/modules/locations/class-locations.php:158
 #: includes/modules/locations/class-locations.php:160
-#: includes/modules/locations/class-locations.php:1036
+#: includes/modules/locations/class-locations.php:1093
 #: templates/admin/dashboard.php:48 templates/admin/debug-info.php:72
 #: templates/admin/help-admin.php:49 templates/admin/help-admin.php:147
 #: templates/admin/help-partials/settings.php:83
@@ -88,8 +88,8 @@ msgid "Locations"
 msgstr "Emplacements"
 
 #: includes/admin/class-admin.php:269 includes/admin/class-admin.php:270
-#: includes/modules/tables/class-tables.php:515
-#: includes/modules/tables/class-tables.php:517
+#: includes/modules/tables/class-tables.php:524
+#: includes/modules/tables/class-tables.php:526
 #: templates/admin/dashboard.php:57 templates/admin/help-admin.php:54
 #: templates/admin/help-admin.php:162 templates/admin/settings-tabbed.php:29
 msgid "Tables"
@@ -369,8 +369,8 @@ msgstr "Tour"
 #: includes/modules/receipts/class-receipts.php:288
 #: includes/modules/reservations/class-reservations.php:221
 #: includes/modules/reservations/class-reservations.php:292
-#: includes/modules/tables/class-tables.php:516
-#: includes/modules/tables/class-tables.php:873
+#: includes/modules/tables/class-tables.php:525
+#: includes/modules/tables/class-tables.php:882
 msgid "Table"
 msgstr "Table"
 
@@ -442,9 +442,9 @@ msgstr "Réservation"
 #: includes/modules/reservations/class-reservation-dashboard.php:197
 #: includes/modules/reservations/class-reservation-dashboard.php:239
 #: includes/modules/tables/class-tables.php:199
-#: includes/modules/tables/class-tables.php:265
-#: includes/modules/tables/class-tables.php:295
-#: includes/modules/tables/class-tables.php:349
+#: includes/modules/tables/class-tables.php:274
+#: includes/modules/tables/class-tables.php:304
+#: includes/modules/tables/class-tables.php:358
 #: templates/admin/debug-info.php:16
 msgid "No permission"
 msgstr "Pas de permission"
@@ -539,7 +539,7 @@ msgid "Invalid parameters"
 msgstr "Paramètres invalides"
 
 #: includes/admin/class-admin.php:2051
-#: includes/modules/tables/class-tables.php:272
+#: includes/modules/tables/class-tables.php:281
 msgid "Invalid data"
 msgstr "Données invalides"
 
@@ -783,7 +783,7 @@ msgid "Use Image"
 msgstr "Utiliser l'image"
 
 #: includes/modules/locations/class-locations.php:112
-#: includes/modules/locations/class-locations.php:281
+#: includes/modules/locations/class-locations.php:293
 msgid "No image selected"
 msgstr "Aucune image sélectionnée"
 
@@ -802,9 +802,9 @@ msgstr "Scannez ici pour commander"
 #: includes/modules/receipts/class-receipts.php:278
 #: includes/modules/reservations/class-reservations.php:225
 #: includes/modules/reservations/class-reservations.php:293
-#: includes/modules/tables/class-tables.php:586
-#: includes/modules/tables/class-tables.php:692
-#: includes/modules/tables/class-tables.php:858
+#: includes/modules/tables/class-tables.php:595
+#: includes/modules/tables/class-tables.php:701
+#: includes/modules/tables/class-tables.php:867
 #: templates/admin/documentation.php:156
 #: templates/admin/help-partials/reservations.php:29
 #: templates/admin/statistics.php:247 templates/admin/statistics.php:476
@@ -847,19 +847,23 @@ msgstr "Aucun emplacement dans la corbeille"
 msgid "Location Image"
 msgstr "Image de l'emplacement"
 
-#: includes/modules/locations/class-locations.php:204
+#: includes/modules/locations/class-locations.php:206
+msgid "Floor Plan"
+msgstr "Plan de salle"
+
+#: includes/modules/locations/class-locations.php:216
 msgid "Color"
 msgstr "Couleur"
 
-#: includes/modules/locations/class-locations.php:213
-#: includes/modules/locations/class-locations.php:1133
+#: includes/modules/locations/class-locations.php:225
+#: includes/modules/locations/class-locations.php:1190
 #: includes/modules/receipts/class-receipts.php:100
 #: includes/modules/receipts/class-receipts.php:310
 #: templates/admin/help-partials/locations.php:23
 msgid "Address"
 msgstr "Adresse"
 
-#: includes/modules/locations/class-locations.php:222
+#: includes/modules/locations/class-locations.php:234
 #: templates/admin/help-partials/locations.php:25
 #: templates/admin/super-admin-settings.php:101
 #: templates/location-selector-banner.php:93
@@ -867,69 +871,87 @@ msgstr "Adresse"
 msgid "Opening Hours"
 msgstr "Heures d'ouverture"
 
-#: includes/modules/locations/class-locations.php:231
+#: includes/modules/locations/class-locations.php:243
 msgid "Time Settings (Override)"
 msgstr "Paramètres horaires (prioritaire)"
 
-#: includes/modules/locations/class-locations.php:240
-#: includes/modules/locations/class-locations.php:1134
+#: includes/modules/locations/class-locations.php:252
+#: includes/modules/locations/class-locations.php:1191
 #: templates/admin/help-partials/support.php:50
 msgid "Availability"
 msgstr "Disponibilité"
 
-#: includes/modules/locations/class-locations.php:249
-#: includes/modules/tables/class-tables.php:560
+#: includes/modules/locations/class-locations.php:261
+#: includes/modules/tables/class-tables.php:569
 #: templates/admin/help-partials/tables.php:50
 msgid "QR Code"
 msgstr "Code QR"
 
-#: includes/modules/locations/class-locations.php:258
+#: includes/modules/locations/class-locations.php:270
 msgid "Products at this location"
 msgstr "Produits à cet emplacement"
 
-#: includes/modules/locations/class-locations.php:287
+#: includes/modules/locations/class-locations.php:299
 msgid "Select Image"
 msgstr "Sélectionner une image"
 
-#: includes/modules/locations/class-locations.php:290
+#: includes/modules/locations/class-locations.php:302
 msgid "Remove Image"
 msgstr "Supprimer l'image"
 
-#: includes/modules/locations/class-locations.php:293
+#: includes/modules/locations/class-locations.php:305
 msgid "Optional: Displayed as tile image in location selection."
 msgstr ""
 "Facultatif : affiché comme image de tuile dans la sélection d'emplacement."
 
-#: includes/modules/locations/class-locations.php:308
+#: includes/modules/locations/class-locations.php:329
+msgid "No floor plan selected"
+msgstr "Aucun plan de salle sélectionné"
+
+#: includes/modules/locations/class-locations.php:335
+msgid "Select Floor Plan"
+msgstr "Sélectionner un plan"
+
+#: includes/modules/locations/class-locations.php:338
+msgid "Remove Floor Plan"
+msgstr "Retirer le plan"
+
+#: includes/modules/locations/class-locations.php:341
+msgid ""
+"Optional: shown as the background of the table plan, so tables can be placed "
+"where they actually stand."
+msgstr ""
+
+#: includes/modules/locations/class-locations.php:356
 msgid "Displayed as accent color in POS and order overview."
 msgstr ""
 "Affiché comme couleur d'accentuation dans le POS et l'aperçu des commandes."
 
-#: includes/modules/locations/class-locations.php:333
+#: includes/modules/locations/class-locations.php:381
 msgid "Street & Number"
 msgstr "Rue et numéro"
 
-#: includes/modules/locations/class-locations.php:339
+#: includes/modules/locations/class-locations.php:387
 msgid "ZIP Code"
 msgstr "Code postal"
 
-#: includes/modules/locations/class-locations.php:345
+#: includes/modules/locations/class-locations.php:393
 #: templates/admin/checkout-fields.php:71
 #: templates/admin/checkout-fields.php:84
 msgid "City"
 msgstr "Ville"
 
-#: includes/modules/locations/class-locations.php:351
+#: includes/modules/locations/class-locations.php:399
 #: templates/admin/checkout-fields.php:73
 #: templates/admin/checkout-fields.php:86
 msgid "Country"
 msgstr "Pays"
 
-#: includes/modules/locations/class-locations.php:357
+#: includes/modules/locations/class-locations.php:405
 msgid "Google Maps Link"
 msgstr "Lien Google Maps"
 
-#: includes/modules/locations/class-locations.php:360
+#: includes/modules/locations/class-locations.php:408
 msgid ""
 "Optional: Link to Google Maps for this location. The address will be linked "
 "on order confirmation and in emails."
@@ -937,37 +959,37 @@ msgstr ""
 "Facultatif : lien Google Maps pour cet emplacement. L'adresse sera liée à la "
 "confirmation de commande et dans les e-mails."
 
-#: includes/modules/locations/class-locations.php:379
+#: includes/modules/locations/class-locations.php:427
 msgid "Monday"
 msgstr "Lundi"
 
-#: includes/modules/locations/class-locations.php:380
+#: includes/modules/locations/class-locations.php:428
 msgid "Tuesday"
 msgstr "Mardi"
 
-#: includes/modules/locations/class-locations.php:381
+#: includes/modules/locations/class-locations.php:429
 msgid "Wednesday"
 msgstr "Mercredi"
 
-#: includes/modules/locations/class-locations.php:382
+#: includes/modules/locations/class-locations.php:430
 msgid "Thursday"
 msgstr "Jeudi"
 
-#: includes/modules/locations/class-locations.php:383
+#: includes/modules/locations/class-locations.php:431
 msgid "Friday"
 msgstr "Vendredi"
 
-#: includes/modules/locations/class-locations.php:384
+#: includes/modules/locations/class-locations.php:432
 msgid "Saturday"
 msgstr "Samedi"
 
-#: includes/modules/locations/class-locations.php:385
+#: includes/modules/locations/class-locations.php:433
 #: templates/admin/help-partials/locations.php:68
 msgid "Sunday"
 msgstr "Dimanche"
 
-#: includes/modules/locations/class-locations.php:402
-#: includes/modules/locations/class-locations.php:1512
+#: includes/modules/locations/class-locations.php:450
+#: includes/modules/locations/class-locations.php:1569
 #: templates/admin/help-partials/locations.php:66
 #: templates/admin/holidays-settings.php:89
 #: templates/admin/holidays-settings.php:148
@@ -976,19 +998,19 @@ msgstr "Dimanche"
 msgid "Closed"
 msgstr "Fermé"
 
-#: includes/modules/locations/class-locations.php:406
-#: includes/modules/locations/class-locations.php:416
+#: includes/modules/locations/class-locations.php:454
+#: includes/modules/locations/class-locations.php:464
 #: includes/modules/menu-schedule/class-menu-schedule.php:524
-#: includes/modules/tables/class-tables.php:880
+#: includes/modules/tables/class-tables.php:889
 #: templates/admin/holidays-settings.php:94
 #: templates/admin/holidays-settings.php:153
 msgid "From"
 msgstr "De"
 
-#: includes/modules/locations/class-locations.php:410
-#: includes/modules/locations/class-locations.php:420
+#: includes/modules/locations/class-locations.php:458
+#: includes/modules/locations/class-locations.php:468
 #: includes/modules/menu-schedule/class-menu-schedule.php:527
-#: includes/modules/tables/class-tables.php:883
+#: includes/modules/tables/class-tables.php:892
 #: templates/admin/holidays-settings.php:96
 #: templates/admin/holidays-settings.php:101
 #: templates/admin/holidays-settings.php:155
@@ -996,33 +1018,33 @@ msgstr "De"
 msgid "To"
 msgstr "À"
 
-#: includes/modules/locations/class-locations.php:414
+#: includes/modules/locations/class-locations.php:462
 msgid "2nd window (optional):"
 msgstr "2e fenêtre (facultatif) :"
 
-#: includes/modules/locations/class-locations.php:593
+#: includes/modules/locations/class-locations.php:650
 msgid ""
 "These settings override the global defaults for this location only. Leave "
 "blank to use the global value."
 msgstr ""
 
-#: includes/modules/locations/class-locations.php:600
+#: includes/modules/locations/class-locations.php:657
 #: templates/admin/debug-info.php:102
 #: templates/admin/help-partials/settings.php:33
 #: templates/admin/settings.php:122 templates/admin/settings/locations.php:74
 msgid "Preparation Time"
 msgstr "Temps de préparation"
 
-#: includes/modules/locations/class-locations.php:606
-#: includes/modules/locations/class-locations.php:626
-#: includes/modules/locations/class-locations.php:648
-#: includes/modules/locations/class-locations.php:670
+#: includes/modules/locations/class-locations.php:663
+#: includes/modules/locations/class-locations.php:683
+#: includes/modules/locations/class-locations.php:705
+#: includes/modules/locations/class-locations.php:727
 #: templates/admin/debug-info.php:103
 msgid "minutes"
 msgstr "minutes"
 
 #. translators: %d = global default in minutes
-#: includes/modules/locations/class-locations.php:611
+#: includes/modules/locations/class-locations.php:668
 #, php-format
 msgid ""
 "Minimum lead time before a pickup slot becomes available. Global default: %d "
@@ -1031,46 +1053,46 @@ msgstr ""
 "Délai minimum avant qu'un créneau de retrait soit disponible. Valeur globale "
 "par défaut : %d min."
 
-#: includes/modules/locations/class-locations.php:620
+#: includes/modules/locations/class-locations.php:677
 msgid "Timeslot Interval"
 msgstr "Intervalle de créneaux"
 
 #. translators: %d = global default in minutes
-#: includes/modules/locations/class-locations.php:631
+#: includes/modules/locations/class-locations.php:688
 #, php-format
 msgid "Interval between pickup slots. Global default: %d min."
 msgstr ""
 "Intervalle entre les créneaux de retrait. Valeur globale par défaut : %d min."
 
-#: includes/modules/locations/class-locations.php:640
+#: includes/modules/locations/class-locations.php:697
 #: templates/admin/help-partials/settings.php:48
 #: templates/admin/settings.php:144 templates/admin/settings/locations.php:89
 msgid "Slot Buffer Start"
 msgstr "Tampon début de créneau"
 
 #. translators: %d = global default in minutes
-#: includes/modules/locations/class-locations.php:653
+#: includes/modules/locations/class-locations.php:710
 #, php-format
 msgid ""
 "Hides the first X minutes of each opening window from the slot picker (e.g. "
 "setup time after opening). Global default: %d min."
 msgstr ""
 
-#: includes/modules/locations/class-locations.php:662
+#: includes/modules/locations/class-locations.php:719
 #: templates/admin/help-partials/settings.php:52
 #: templates/admin/settings.php:156 templates/admin/settings/locations.php:101
 msgid "Slot Buffer End"
 msgstr "Tampon fin de créneau"
 
 #. translators: %d = global default in minutes
-#: includes/modules/locations/class-locations.php:675
+#: includes/modules/locations/class-locations.php:732
 #, php-format
 msgid ""
 "Hides the last X minutes of each opening window from the slot picker (e.g. "
 "to stop accepting orders before closing). Global default: %d min."
 msgstr ""
 
-#: includes/modules/locations/class-locations.php:694
+#: includes/modules/locations/class-locations.php:751
 msgid ""
 "Restrict this location to a specific date range (e.g. for a new location "
 "that opens in the future, or one closing temporarily). Leave both fields "
@@ -1080,82 +1102,82 @@ msgstr ""
 "emplacement qui ouvrira prochainement, ou un emplacement fermé "
 "temporairement). Laissez les deux champs vides pour aucune restriction."
 
-#: includes/modules/locations/class-locations.php:698
+#: includes/modules/locations/class-locations.php:755
 msgid "Active from"
 msgstr "Actif à partir du"
 
-#: includes/modules/locations/class-locations.php:704
+#: includes/modules/locations/class-locations.php:761
 msgid "Active until"
 msgstr "Actif jusqu'au"
 
-#: includes/modules/locations/class-locations.php:719
+#: includes/modules/locations/class-locations.php:776
 msgid "Save the location first to generate the QR code."
 msgstr "Enregistrez d'abord l'emplacement pour générer le code QR."
 
-#: includes/modules/locations/class-locations.php:739
+#: includes/modules/locations/class-locations.php:796
 msgid "Order type for QR code"
 msgstr "Type de commande pour le code QR"
 
-#: includes/modules/locations/class-locations.php:742
+#: includes/modules/locations/class-locations.php:799
 msgid "No pre-selection"
 msgstr "Pas de présélection"
 
-#: includes/modules/locations/class-locations.php:746
+#: includes/modules/locations/class-locations.php:803
 msgid "Now (fastest pickup)"
 msgstr "Maintenant (retrait le plus rapide)"
 
-#: includes/modules/locations/class-locations.php:750
+#: includes/modules/locations/class-locations.php:807
 msgid "Pre-order (customer chooses time)"
 msgstr "Pré-commande (le client choisit l'heure)"
 
-#: includes/modules/locations/class-locations.php:760
+#: includes/modules/locations/class-locations.php:817
 msgid "You can use this link or QR code for the location."
 msgstr "Vous pouvez utiliser ce lien ou ce code QR pour l'emplacement."
 
-#: includes/modules/locations/class-locations.php:761
-#: includes/modules/tables/class-tables.php:645
+#: includes/modules/locations/class-locations.php:818
+#: includes/modules/tables/class-tables.php:654
 msgid "Download QR Code"
 msgstr "Télécharger le code QR"
 
-#: includes/modules/locations/class-locations.php:763
-#: includes/modules/tables/class-tables.php:647
+#: includes/modules/locations/class-locations.php:820
+#: includes/modules/tables/class-tables.php:656
 msgid "Print QR Code"
 msgstr "Imprimer le code QR"
 
-#: includes/modules/locations/class-locations.php:803
+#: includes/modules/locations/class-locations.php:860
 msgid "Save the location first to see available products."
 msgstr "Enregistrez d'abord l'emplacement pour voir les produits disponibles."
 
-#: includes/modules/locations/class-locations.php:825
+#: includes/modules/locations/class-locations.php:882
 msgid "No products available at this location."
 msgstr "Aucun produit disponible à cet emplacement."
 
-#: includes/modules/locations/class-locations.php:836
+#: includes/modules/locations/class-locations.php:893
 msgid "POS only"
 msgstr "Caisse uniquement"
 
-#: includes/modules/locations/class-locations.php:869
+#: includes/modules/locations/class-locations.php:926
 msgid "product not available"
 msgstr "produit non disponible"
 
-#: includes/modules/locations/class-locations.php:870
+#: includes/modules/locations/class-locations.php:927
 msgid "products not available"
 msgstr "produits non disponibles"
 
-#: includes/modules/locations/class-locations.php:871
+#: includes/modules/locations/class-locations.php:928
 msgid "Show only available products"
 msgstr "Afficher uniquement les produits disponibles"
 
-#: includes/modules/locations/class-locations.php:872
+#: includes/modules/locations/class-locations.php:929
 #: templates/admin/allergen-matrix.php:77
 msgid "Show all products"
 msgstr "Afficher tous les produits"
 
-#: includes/modules/locations/class-locations.php:873
+#: includes/modules/locations/class-locations.php:930
 msgid "Choose a location to see what is available"
 msgstr "Choisissez un emplacement pour voir la disponibilité"
 
-#: includes/modules/locations/class-locations.php:874
+#: includes/modules/locations/class-locations.php:931
 #: templates/location-selector-banner.php:361
 #: templates/location-selector-inline.php:26
 #: templates/location-selector-inline.php:149
@@ -1163,18 +1185,18 @@ msgstr "Choisissez un emplacement pour voir la disponibilité"
 msgid "Please choose..."
 msgstr ""
 
-#: includes/modules/locations/class-locations.php:875
+#: includes/modules/locations/class-locations.php:932
 msgid "Change location"
 msgstr "Changer d'emplacement"
 
 #. translators: %1$d: number of locations where the product is available, %2$d: total number of locations
-#: includes/modules/locations/class-locations.php:969
-#: includes/modules/locations/class-locations.php:1000
+#: includes/modules/locations/class-locations.php:1026
+#: includes/modules/locations/class-locations.php:1057
 #, php-format
 msgid "Available at %1$d of %2$d locations"
 msgstr "Disponible dans %1$d emplacement(s) sur %2$d"
 
-#: includes/modules/locations/class-locations.php:1066
+#: includes/modules/locations/class-locations.php:1123
 msgid ""
 "Available at all locations by default. Check a location to disable this "
 "product there."
@@ -1182,81 +1204,81 @@ msgstr ""
 "Disponible dans tous les emplacements par défaut. Cochez un emplacement pour "
 "désactiver ce produit à cet endroit."
 
-#: includes/modules/locations/class-locations.php:1069
+#: includes/modules/locations/class-locations.php:1126
 msgid "No locations available yet."
 msgstr "Aucun emplacement disponible pour l'instant."
 
-#: includes/modules/locations/class-locations.php:1090
+#: includes/modules/locations/class-locations.php:1147
 msgid "POS only (hidden from customers)"
 msgstr "POS uniquement (masqué aux clients)"
 
-#: includes/modules/locations/class-locations.php:1092
+#: includes/modules/locations/class-locations.php:1149
 msgid "Product is visible in POS but not shown on shop pages or product URLs."
 msgstr ""
 "Le produit est visible dans le POS mais n'apparaît pas sur les pages de la "
 "boutique ni sur les URLs de produits."
 
 #. translators: %s: formatted date
-#: includes/modules/locations/class-locations.php:1172
+#: includes/modules/locations/class-locations.php:1229
 #, php-format
 msgid "from %s"
 msgstr "à partir du %s"
 
 #. translators: %s: formatted date
-#: includes/modules/locations/class-locations.php:1176
+#: includes/modules/locations/class-locations.php:1233
 #, php-format
 msgid "until %s"
 msgstr "jusqu'au %s"
 
 #. translators: %s: formatted opening date
-#: includes/modules/locations/class-locations.php:1413
+#: includes/modules/locations/class-locations.php:1470
 #, php-format
 msgid "Opens on %s"
 msgstr "Ouvre le %s"
 
-#: includes/modules/locations/class-locations.php:1420
+#: includes/modules/locations/class-locations.php:1477
 msgid "No longer available"
 msgstr "Plus disponible"
 
 #. translators: %s: closing time
-#: includes/modules/locations/class-locations.php:1476
+#: includes/modules/locations/class-locations.php:1533
 #, php-format
 msgid "Closes at %s"
 msgstr "Ferme à %s"
 
-#: includes/modules/locations/class-locations.php:1482
+#: includes/modules/locations/class-locations.php:1539
 msgid "Open"
 msgstr "Ouvert"
 
 #. translators: %s: opening time
-#: includes/modules/locations/class-locations.php:1493
+#: includes/modules/locations/class-locations.php:1550
 #, php-format
 msgid "Opens at %s"
 msgstr "Ouvre à %s"
 
 #. translators: %s: opening time
-#: includes/modules/locations/class-locations.php:1566
+#: includes/modules/locations/class-locations.php:1623
 #, php-format
 msgid "Opens today %s"
 msgstr "Ouvre aujourd'hui à %s"
 
 #. translators: %s: opening time
-#: includes/modules/locations/class-locations.php:1569
+#: includes/modules/locations/class-locations.php:1626
 #, php-format
 msgid "Opens tomorrow %s"
 msgstr "Ouvre demain à %s"
 
 #. translators: %1$s: day abbreviation, %2$s: opening time
-#: includes/modules/locations/class-locations.php:1573
+#: includes/modules/locations/class-locations.php:1630
 #, php-format
 msgid "Opens %1$s %2$s"
 msgstr "Ouvre %1$s à %2$s"
 
-#: includes/modules/locations/class-locations.php:1659
+#: includes/modules/locations/class-locations.php:1716
 msgid "Location not published – the Free plan is limited to 1 location."
 msgstr "Emplacement non publié – le plan gratuit est limité à 1 emplacement."
 
-#: includes/modules/locations/class-locations.php:1662
+#: includes/modules/locations/class-locations.php:1719
 msgid "Upgrade to Pro for unlimited locations →"
 msgstr "Passez à Pro pour des emplacements illimités →"
 
@@ -1651,7 +1673,7 @@ msgstr "Aller au tableau de bord"
 
 #: includes/modules/order-list/class-order-list.php:158
 #: includes/modules/reservations/class-reservations.php:367
-#: includes/modules/tables/class-tables.php:743
+#: includes/modules/tables/class-tables.php:752
 #: templates/admin/statistics.php:319
 msgid "All Locations"
 msgstr "Tous les emplacements"
@@ -2288,7 +2310,7 @@ msgid "Error loading tables"
 msgstr "Erreur lors du chargement des tables"
 
 #: includes/modules/tables/class-tables.php:177
-#: includes/modules/tables/class-tables.php:520
+#: includes/modules/tables/class-tables.php:529
 msgid "Edit Table"
 msgstr "Modifier la table"
 
@@ -2313,150 +2335,150 @@ msgid "Show in Order Overview"
 msgstr "Afficher dans l'aperçu des commandes"
 
 #: includes/modules/tables/class-tables.php:205
-#: includes/modules/tables/class-tables.php:303
+#: includes/modules/tables/class-tables.php:312
 msgid "No location specified"
 msgstr "Aucun emplacement spécifié"
 
-#: includes/modules/tables/class-tables.php:373
+#: includes/modules/tables/class-tables.php:382
 #: templates/admin/help-partials/tables.php:104
 #: templates/admin/table-plan.php:68
 msgid "Preparing"
 msgstr "En préparation"
 
-#: includes/modules/tables/class-tables.php:374
+#: includes/modules/tables/class-tables.php:383
 msgid "New"
 msgstr "Nouveau"
 
-#: includes/modules/tables/class-tables.php:375
+#: includes/modules/tables/class-tables.php:384
 #: templates/admin/help-partials/reservations.php:67
 msgid "Pending"
 msgstr "En attente"
 
-#: includes/modules/tables/class-tables.php:429
+#: includes/modules/tables/class-tables.php:438
 msgid "Table Order"
 msgstr "Commande à table"
 
 #. translators: %s: table name
-#: includes/modules/tables/class-tables.php:432
+#: includes/modules/tables/class-tables.php:441
 #, php-format
 msgid "You are currently ordering for %s."
 msgstr "Vous commandez actuellement pour %s."
 
 #. translators: %s: name of the table, e.g. "Table 1"
-#: includes/modules/tables/class-tables.php:503
+#: includes/modules/tables/class-tables.php:512
 #, php-format
 msgid "(Table: %s)"
 msgstr "(Table : %s)"
 
-#: includes/modules/tables/class-tables.php:518
-#: includes/modules/tables/class-tables.php:521
+#: includes/modules/tables/class-tables.php:527
+#: includes/modules/tables/class-tables.php:530
 msgid "New Table"
 msgstr "Nouvelle table"
 
-#: includes/modules/tables/class-tables.php:519
+#: includes/modules/tables/class-tables.php:528
 msgid "Add New Table"
 msgstr "Ajouter une table"
 
-#: includes/modules/tables/class-tables.php:522
+#: includes/modules/tables/class-tables.php:531
 msgid "View Table"
 msgstr "Voir la table"
 
-#: includes/modules/tables/class-tables.php:523
+#: includes/modules/tables/class-tables.php:532
 msgid "Search Tables"
 msgstr "Rechercher des tables"
 
-#: includes/modules/tables/class-tables.php:524
+#: includes/modules/tables/class-tables.php:533
 msgid "No Tables Found"
 msgstr "Aucune table trouvée"
 
-#: includes/modules/tables/class-tables.php:525
+#: includes/modules/tables/class-tables.php:534
 msgid "No Tables in Trash"
 msgstr "Aucune table dans la corbeille"
 
-#: includes/modules/tables/class-tables.php:552
+#: includes/modules/tables/class-tables.php:561
 msgid "Table Details"
 msgstr "Détails de la table"
 
-#: includes/modules/tables/class-tables.php:589
-#: includes/modules/tables/class-tables.php:861
+#: includes/modules/tables/class-tables.php:598
+#: includes/modules/tables/class-tables.php:870
 msgid "Please select..."
 msgstr "Veuillez sélectionner..."
 
-#: includes/modules/tables/class-tables.php:596
+#: includes/modules/tables/class-tables.php:605
 msgid "Which location does this table belong to?"
 msgstr "À quel emplacement cette table appartient-elle ?"
 
-#: includes/modules/tables/class-tables.php:600
-#: includes/modules/tables/class-tables.php:693
-#: includes/modules/tables/class-tables.php:889
+#: includes/modules/tables/class-tables.php:609
+#: includes/modules/tables/class-tables.php:702
+#: includes/modules/tables/class-tables.php:898
 msgid "Seats"
 msgstr "Places"
 
-#: includes/modules/tables/class-tables.php:603
+#: includes/modules/tables/class-tables.php:612
 msgid "Number of seats at this table (optional, for reservations)."
 msgstr "Nombre de places à cette table (facultatif, pour les réservations)."
 
-#: includes/modules/tables/class-tables.php:619
+#: includes/modules/tables/class-tables.php:628
 msgid "Please select a location first and save to generate the link."
 msgstr ""
 "Veuillez d'abord sélectionner un emplacement et enregistrer pour générer le "
 "lien."
 
-#: includes/modules/tables/class-tables.php:793
-#: includes/modules/tables/class-tables.php:809
-#: includes/modules/tables/class-tables.php:810
-#: includes/modules/tables/class-tables.php:839
+#: includes/modules/tables/class-tables.php:802
+#: includes/modules/tables/class-tables.php:818
+#: includes/modules/tables/class-tables.php:819
+#: includes/modules/tables/class-tables.php:848
 #: templates/admin/help-partials/tables.php:44
 msgid "Create Multiple Tables"
 msgstr "Créer plusieurs tables"
 
-#: includes/modules/tables/class-tables.php:823
+#: includes/modules/tables/class-tables.php:832
 msgid "You do not have permission for this page."
 msgstr "Vous n'avez pas la permission d'accéder à cette page."
 
 #. translators: %d: Anzahl erstellter Tische
-#: includes/modules/tables/class-tables.php:846
+#: includes/modules/tables/class-tables.php:855
 #, php-format
 msgid "%d tables were successfully created."
 msgstr "%d tables ont été créées avec succès."
 
-#: includes/modules/tables/class-tables.php:871
+#: includes/modules/tables/class-tables.php:880
 msgid "Prefix"
 msgstr "Préfixe"
 
-#: includes/modules/tables/class-tables.php:874
+#: includes/modules/tables/class-tables.php:883
 #, fuzzy
 msgid "Prefix for the table name, e.g. \"Table\" → \"Table 1\", \"Table 2\"…"
 msgstr ""
 "Préfixe pour le nom de la table, p. ex. \\\"Table\\\" → \\\"Table 1\\\", \\"
 "\"Table 2\\\"…"
 
-#: includes/modules/tables/class-tables.php:878
+#: includes/modules/tables/class-tables.php:887
 msgid "Numbering"
 msgstr "Numérotation"
 
-#: includes/modules/tables/class-tables.php:885
+#: includes/modules/tables/class-tables.php:894
 msgid "Create maximum 50 tables at once."
 msgstr "Créer au maximum 50 tables à la fois."
 
-#: includes/modules/tables/class-tables.php:892
+#: includes/modules/tables/class-tables.php:901
 msgid "Optional: Same number of seats for all tables."
 msgstr "Facultatif : même nombre de places pour toutes les tables."
 
-#: includes/modules/tables/class-tables.php:897
+#: includes/modules/tables/class-tables.php:906
 msgid "Create Tables"
 msgstr "Créer des tables"
 
-#: includes/modules/tables/class-tables.php:902
+#: includes/modules/tables/class-tables.php:911
 msgid "Back to Table List"
 msgstr "Retour à la liste des tables"
 
-#: includes/modules/tables/class-tables.php:914
+#: includes/modules/tables/class-tables.php:923
 #: templates/admin/statistics.php:234
 msgid "Security check failed."
 msgstr "Vérification de sécurité échouée."
 
-#: includes/modules/tables/class-tables.php:918
+#: includes/modules/tables/class-tables.php:927
 msgid "You do not have permission for this action."
 msgstr "Vous n'avez pas la permission d'effectuer cette action."
 

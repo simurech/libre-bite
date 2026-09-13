@@ -252,7 +252,16 @@ class LBite_Tables {
 			);
 		}
 
-		wp_send_json_success( array( 'tables' => $tables ) );
+		// Grundrissbild des Standorts (optional) als Hintergrund mitliefern.
+		$lbite_plan_id  = get_post_meta( $location_id, '_lbite_floor_plan_image', true );
+		$lbite_plan_url = $lbite_plan_id ? wp_get_attachment_image_url( (int) $lbite_plan_id, 'full' ) : '';
+
+		wp_send_json_success(
+			array(
+				'tables'         => $tables,
+				'floor_plan_url' => $lbite_plan_url ? $lbite_plan_url : '',
+			)
+		);
 	}
 
 	/**

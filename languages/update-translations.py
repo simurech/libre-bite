@@ -23,6 +23,13 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Grundriss im Tischplan
+    "Floor Plan": "Grundriss",
+    "No floor plan selected": "Kein Grundriss ausgewählt",
+    "Select Floor Plan": "Grundriss auswählen",
+    "Remove Floor Plan": "Grundriss entfernen",
+    "Optional: shown as the background of the table plan, so tables can be placed where they actually stand.":
+        "Optional: wird als Hintergrund des Tischplans angezeigt, damit Tische dort platziert werden können, wo sie tatsächlich stehen.",
     # Allergen-Matrix
     "Allergen Matrix": "Allergen-Matrix",
     "Product": "Produkt",
