@@ -981,20 +981,10 @@ class LBite_Checkout {
 		}
 
 		if ( $tip_amount > 0 ) {
-			// Prüfen ob Rundung aktiviert ist.
-			$enable_rounding = get_option( 'lbite_enable_rounding', false );
-
-			if ( $enable_rounding ) {
-				// Gesamtbetrag MIT Trinkgeld berechnen (brutto).
-				$total_with_tip = $cart_total + $tip_amount;
-
-				// Auf 5 Rappen runden.
-				$rounded_total = round( $total_with_tip / 0.05 ) * 0.05;
-
-				// Trinkgeld anpassen, sodass Gesamtbetrag gerundet ist.
-				$tip_amount = $rounded_total - $cart_total;
-			}
-
+			// Die Rundung übernimmt ausschliesslich apply_rounding_fee() bei Priorität 999.
+			// Früher rundete das Trinkgeld sich selbst auf Basis der blossen
+			// Zwischensumme; Aktionsrabatte und Versand blieben dabei aussen vor und
+			// das Endtotal war dann kein Vielfaches von 5 Rappen mehr.
 			WC()->cart->add_fee( __( 'Tip', 'libre-bite' ), $tip_amount );
 		}
 	}
@@ -1015,29 +1005,19 @@ class LBite_Checkout {
 
 		$cart = WC()->cart;
 
-		// Prüfen ob Trinkgeld vorhanden ist.
-		$has_tip = false;
-		foreach ( $cart->get_fees() as $fee ) {
-			if ( $fee->name === __( 'Tip', 'libre-bite' ) ) {
-				$has_tip = true;
-				break;
-			}
-		}
-
-		// Wenn Trinkgeld vorhanden ist, wird Rundung dort eingerechnet.
-		if ( $has_tip ) {
-			return;
-		}
-
 		// Aktuellen Brutto-Gesamtbetrag berechnen (ohne Rundung).
 		// Use gross subtotal (subtotal + tax) instead of net subtotal.
 		$subtotal   = $cart->get_subtotal() + $cart->get_subtotal_tax();
 		$fees_total = 0;
 
-		// Alle Fees außer Rundung addieren (inkl. deren Steuern).
+		// Alle Fees außer Rundung addieren (inkl. deren Steuern). Das Trinkgeld ist
+		// hier bewusst dabei – es rundet sich nicht mehr selbst, sonst blieben
+		// Aktionsrabatte und Versand bei der Rundung unberücksichtigt.
+		// Der Steueranteil fehlt am Fee-Objekt, solange WooCommerce die Steuern noch
+		// nicht berechnet hat; ohne Prüfung wirft das auf PHP 8 eine Warnung.
 		foreach ( $cart->get_fees() as $fee ) {
 			if ( $fee->name !== __( 'Rounding', 'libre-bite' ) ) {
-				$fees_total += $fee->amount + $fee->tax;
+				$fees_total += $fee->amount + ( isset( $fee->tax ) ? (float) $fee->tax : 0.0 );
 			}
 		}
 
@@ -1045,7 +1025,10 @@ class LBite_Checkout {
 		// Endbetrag gerundet wird und nicht auf den Betrag vor dem Rabatt.
 		$discount_total = $cart->get_discount_total() + $cart->get_discount_tax();
 
-		$current_total = $subtotal + $fees_total - $discount_total;
+		// Versandkosten gehören zum Betrag, den der Gast tatsächlich bezahlt.
+		$shipping_total = $cart->get_shipping_total() + $cart->get_shipping_tax();
+
+		$current_total = $subtotal + $fees_total + $shipping_total - $discount_total;
 
 		// Auf 5 Rappen runden.
 		$rounded_total = round( $current_total / 0.05 ) * 0.05;
