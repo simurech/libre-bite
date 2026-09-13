@@ -290,7 +290,7 @@ class LBite_Stampcard {
 					printf(
 						/* translators: %s: minimum order value */
 						esc_html__( 'Orders from %s count towards a stamp.', 'libre-bite' ),
-						wp_strip_all_tags( wc_price( $settings['min_total'] ) )
+						esc_html( wp_strip_all_tags( wc_price( $settings['min_total'] ) ) )
 					);
 					?>
 				</p>
