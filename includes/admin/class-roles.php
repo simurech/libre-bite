@@ -96,6 +96,13 @@ class LBite_Roles {
 			$shop_manager->add_cap( 'lbite_manage_settings' );
 			$shop_manager->add_cap( 'lbite_view_statistics' );
 		}
+
+		// Die Manager-Rolle gehört zum Pro-Umfang. Ohne diesen Aufruf entsteht sie erst,
+		// wenn jemand die Rollen-Einstellungen öffnet – bis dahin landen zugewiesene
+		// Benutzer ganz ohne Rolle und kommen nicht einmal ins Backend.
+		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) {
+			self::create_manager_role__premium_only();
+		}
 	}
 
 	/**
