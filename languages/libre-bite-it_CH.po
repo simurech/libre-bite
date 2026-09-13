@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libre Bite 2.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/libre-bite\n"
-"POT-Creation-Date: 2026-09-13T10:55:26+00:00\n"
+"POT-Creation-Date: 2026-09-13T11:00:40+00:00\n"
 "PO-Revision-Date: 2026-06-29\n"
 "Last-Translator: Pulacha Labs <https://pulacha-labs.ch/>\n"
 "Language-Team: Italian (Switzerland)\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: includes/admin/class-admin.php:192 includes/admin/class-admin.php:2458
 #: libre-bite.php:189 libre-bite.php:203 templates/admin/dashboard.php:15
 #: templates/admin/debug-info.php:19 templates/admin/documentation.php:16
-#: templates/admin/settings-tabbed.php:391 templates/admin/settings.php:86
+#: templates/admin/settings-tabbed.php:393 templates/admin/settings.php:86
 msgid "Libre Bite"
 msgstr "Libre Bite"
 
@@ -67,7 +67,7 @@ msgstr "Panoramica ordini"
 #: templates/admin/help-partials/settings.php:177
 #: templates/admin/help-staff.php:68 templates/admin/pos.php:15
 #: templates/admin/settings-tabbed.php:25
-#: templates/admin/settings-tabbed.php:984
+#: templates/admin/settings-tabbed.php:986
 #: templates/admin/super-admin-settings.php:29
 msgid "POS System"
 msgstr "Sistema POS"
@@ -159,7 +159,7 @@ msgstr "Prezzi"
 #: templates/admin/dashboard.php:97 templates/admin/help-admin.php:65
 #: templates/admin/help-admin.php:193
 #: templates/admin/help-partials/settings.php:15
-#: templates/admin/settings-tabbed.php:396 templates/admin/settings.php:86
+#: templates/admin/settings-tabbed.php:398 templates/admin/settings.php:86
 msgid "Settings"
 msgstr "Impostazioni"
 
@@ -228,27 +228,27 @@ msgstr "Errore durante il salvataggio"
 msgid "No table"
 msgstr "Nessun tavolo"
 
-#: includes/admin/class-admin.php:853 templates/admin/settings-tabbed.php:922
+#: includes/admin/class-admin.php:853 templates/admin/settings-tabbed.php:924
 msgid "Counts as completed"
 msgstr "Conta come completato"
 
 #: includes/admin/class-admin.php:899 templates/admin/settings-tabbed.php:218
-#: templates/admin/settings-tabbed.php:960 templates/admin/statistics.php:201
+#: templates/admin/settings-tabbed.php:962 templates/admin/statistics.php:201
 msgid "Cash"
 msgstr "Contanti"
 
 #: includes/admin/class-admin.php:900 templates/admin/settings-tabbed.php:219
-#: templates/admin/settings-tabbed.php:961 templates/admin/statistics.php:202
+#: templates/admin/settings-tabbed.php:963 templates/admin/statistics.php:202
 msgid "Card"
 msgstr "Carta"
 
 #: includes/admin/class-admin.php:901 templates/admin/settings-tabbed.php:220
-#: templates/admin/settings-tabbed.php:962 templates/admin/statistics.php:203
+#: templates/admin/settings-tabbed.php:964 templates/admin/statistics.php:203
 msgid "Twint"
 msgstr "Twint"
 
 #: includes/admin/class-admin.php:902 templates/admin/settings-tabbed.php:221
-#: templates/admin/settings-tabbed.php:963 templates/admin/statistics.php:204
+#: templates/admin/settings-tabbed.php:965 templates/admin/statistics.php:204
 msgid "Other"
 msgstr "Altro"
 
@@ -346,12 +346,12 @@ msgid "Enter customer email address:"
 msgstr "Inserire l'indirizzo e-mail del cliente:"
 
 #: includes/admin/class-admin.php:965 includes/modules/pos/class-pos.php:175
-#: templates/admin/pos.php:74 templates/admin/settings-tabbed.php:1039
+#: templates/admin/pos.php:74 templates/admin/settings-tabbed.php:1041
 msgid "Takeaway"
 msgstr "Asporto"
 
 #: includes/admin/class-admin.php:966 includes/modules/pos/class-pos.php:176
-#: templates/admin/pos.php:78 templates/admin/settings-tabbed.php:1043
+#: templates/admin/pos.php:78 templates/admin/settings-tabbed.php:1045
 #: templates/thankyou-optimized.php:164 templates/thankyou-optimized.php:168
 msgid "Dine-in"
 msgstr "Consumazione sul posto"
@@ -547,7 +547,7 @@ msgstr "Parametri non validi"
 msgid "Invalid data"
 msgstr "Dati non validi"
 
-#: includes/admin/class-admin.php:2075 templates/admin/settings-tabbed.php:421
+#: includes/admin/class-admin.php:2075 templates/admin/settings-tabbed.php:423
 msgid "Settings saved"
 msgstr "Impostazioni salvate"
 
@@ -559,7 +559,10 @@ msgstr "Impostazioni di supporto salvate"
 msgid "Help"
 msgstr "Aiuto"
 
-#: includes/admin/class-admin.php:2173 templates/admin/pos.php:311
+#: includes/admin/class-admin.php:2173
+#: includes/modules/menu-view/class-menu-view.php:128
+#: templates/admin/pos.php:311 templates/frontend/menu-view.php:121
+#: templates/frontend/menu-view.php:136
 msgid "Close"
 msgstr "Chiudi"
 
@@ -1500,6 +1503,53 @@ msgstr "e"
 msgid "Optional date range, for seasonal items. Leave empty for no date limit."
 msgstr ""
 
+#: includes/modules/menu-view/class-menu-view.php:121
+msgid "Add to order"
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php:122
+msgid "Adding…"
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php:123
+msgid "Added"
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php:124
+msgid "Could not add the item. Please try again."
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php:125
+#: templates/frontend/menu-view.php:130 templates/frontend/menu-view.php:133
+#: templates/frontend/menu-view.php:135
+msgid "Your order"
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php:126
+msgid "Nothing in your order yet."
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php:127
+#: templates/frontend/menu-view.php:141
+msgid "Go to checkout"
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php:129
+#: includes/modules/menu-view/class-menu-view.php:411
+#: includes/modules/pos/class-pos.php:178
+#: includes/modules/tables/class-tables.php:184
+#: templates/admin/statistics.php:358 templates/thankyou-optimized.php:325
+msgid "Total"
+msgstr "Totale"
+
+#: includes/modules/menu-view/class-menu-view.php:130
+msgid "Please choose an option."
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php:446
+msgid "This product is not available."
+msgstr ""
+
 #: includes/modules/notifications/class-email-pickup-reminder.php:22
 msgid "Libre Bite - Pickup Reminder"
 msgstr "Libre Bite - Promemoria ritiro"
@@ -1979,12 +2029,6 @@ msgstr "Wake Lock non è supportato da questo browser."
 #: includes/modules/pos/class-pos.php:177
 msgid "Assigned"
 msgstr "Assegnato"
-
-#: includes/modules/pos/class-pos.php:178
-#: includes/modules/tables/class-tables.php:184
-#: templates/admin/statistics.php:358 templates/thankyou-optimized.php:325
-msgid "Total"
-msgstr "Totale"
 
 #: includes/modules/pos/class-pos.php:181
 msgid "Add items"
@@ -3035,9 +3079,9 @@ msgstr "Indirizzo di fatturazione"
 
 #: templates/admin/checkout-fields.php:250
 #: templates/admin/checkout-fields.php:289
-#: templates/admin/settings-tabbed.php:601
-#: templates/admin/settings-tabbed.php:610
-#: templates/admin/settings-tabbed.php:619
+#: templates/admin/settings-tabbed.php:603
+#: templates/admin/settings-tabbed.php:612
+#: templates/admin/settings-tabbed.php:621
 msgid "Custom label (optional)"
 msgstr "Etichetta personalizzata (facoltativo)"
 
@@ -4878,7 +4922,7 @@ msgid "Open Holidays"
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:96
-#: templates/admin/settings-tabbed.php:515
+#: templates/admin/settings-tabbed.php:517
 msgid "Tips"
 msgstr ""
 
@@ -4925,7 +4969,7 @@ msgid ""
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:125
-#: templates/admin/settings-tabbed.php:533
+#: templates/admin/settings-tabbed.php:535
 msgid "Checkout Mode"
 msgstr ""
 
@@ -4937,20 +4981,20 @@ msgid ""
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:129
-#: templates/admin/settings-tabbed.php:541
-#: templates/admin/settings-tabbed.php:1133
+#: templates/admin/settings-tabbed.php:543
+#: templates/admin/settings-tabbed.php:1135
 msgid "Important:"
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:129
-#: templates/admin/settings-tabbed.php:541
+#: templates/admin/settings-tabbed.php:543
 msgid ""
 "The optimized checkout only works with the classic WooCommerce shortcode. "
 "Your checkout page must contain the shortcode"
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:129
-#: templates/admin/settings-tabbed.php:541
+#: templates/admin/settings-tabbed.php:543
 msgid ", not the WooCommerce Checkout Block."
 msgstr ""
 
@@ -4980,7 +5024,7 @@ msgid ""
 msgstr ""
 
 #: templates/admin/help-partials/settings.php:162
-#: templates/admin/settings-tabbed.php:864
+#: templates/admin/settings-tabbed.php:866
 msgid "Show Future Pre-orders"
 msgstr ""
 
@@ -5802,14 +5846,14 @@ msgid "Add holiday"
 msgstr ""
 
 #: templates/admin/holidays-settings.php:118
-#: templates/admin/settings-tabbed.php:722
-#: templates/admin/settings-tabbed.php:792
-#: templates/admin/settings-tabbed.php:953
-#: templates/admin/settings-tabbed.php:1061
-#: templates/admin/settings-tabbed.php:1139
+#: templates/admin/settings-tabbed.php:724
+#: templates/admin/settings-tabbed.php:794
+#: templates/admin/settings-tabbed.php:955
+#: templates/admin/settings-tabbed.php:1063
+#: templates/admin/settings-tabbed.php:1141
 #: templates/admin/settings/locations.php:139
 #: templates/admin/settings/notifications.php:86
-#: templates/admin/settings/products.php:139
+#: templates/admin/settings/products.php:146
 #: templates/admin/settings/reservations__premium_only.php:56
 #: templates/admin/settings/tables__premium_only.php:57
 msgid "Save"
@@ -5945,7 +5989,8 @@ msgstr ""
 msgid "Configure Product"
 msgstr ""
 
-#: templates/admin/pos.php:363
+#. translators: %s: product name
+#: templates/admin/pos.php:363 templates/frontend/menu-view.php:105
 msgid "Add"
 msgstr ""
 
@@ -5982,7 +6027,7 @@ msgid "No reservations for this day."
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:27
-#: templates/admin/settings-tabbed.php:1052
+#: templates/admin/settings-tabbed.php:1054
 msgid "Prices & Taxes"
 msgstr ""
 
@@ -5999,171 +6044,171 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:401
+#: templates/admin/settings-tabbed.php:403
 msgid "Welcome to Libre Bite!"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:402
+#: templates/admin/settings-tabbed.php:404
 msgid ""
 "Configure each area of the plugin using the tabs below. Core features are "
 "active by default – you can adjust them at any time."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:406
+#: templates/admin/settings-tabbed.php:408
 msgid "Run the setup assistant"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:409
+#: templates/admin/settings-tabbed.php:411
 msgid ""
 "Two minutes, and it can create a sample menu so you are not starting from an "
 "empty shop."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:414
+#: templates/admin/settings-tabbed.php:416
 msgid "Dismiss"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:462
+#: templates/admin/settings-tabbed.php:464
 msgid "Table Management & Ordering"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:463
+#: templates/admin/settings-tabbed.php:465
 msgid ""
 "Create tables, generate QR codes, and allow guests to order directly at the "
 "table. Available with Libre Bite Pro."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:473
+#: templates/admin/settings-tabbed.php:475
 #: templates/admin/settings/reservations__premium_only.php:23
 #: templates/admin/super-admin-settings.php:89
 msgid "Table Reservations"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:474
+#: templates/admin/settings-tabbed.php:476
 msgid ""
 "Let customers reserve tables online via a frontend form. Available with "
 "Libre Bite Pro."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:508
+#: templates/admin/settings-tabbed.php:510
 #: templates/admin/super-admin-settings.php:47
 msgid "Optimized Checkout"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:509
+#: templates/admin/settings-tabbed.php:511
 msgid ""
 "Replace WooCommerce fields with a minimal checkout: name and receipt option "
 "only."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:516
+#: templates/admin/settings-tabbed.php:518
 msgid "Allow customers to add a tip at checkout."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:522
+#: templates/admin/settings-tabbed.php:524
 msgid "Order Type Selection"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:523
+#: templates/admin/settings-tabbed.php:525
 msgid ""
 "Show a Takeaway / Dine-in selector in the checkout. When Multiple Tax Rates "
 "is enabled, the selection also controls the applicable tax rate. With the "
 "Table module active, Dine-in reveals an optional table number field."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:536
+#: templates/admin/settings-tabbed.php:538
 msgid "Standard (all WooCommerce fields)"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:537
+#: templates/admin/settings-tabbed.php:539
 msgid "Optimized (name + receipt option only)"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:539
+#: templates/admin/settings-tabbed.php:541
 msgid ""
 "In optimized mode, only the name is requested and whether a receipt by email "
 "is desired."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:546
+#: templates/admin/settings-tabbed.php:548
 msgid "Email Required For"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:560
+#: templates/admin/settings-tabbed.php:562
 msgid ""
 "No payment methods found. Please configure WooCommerce payment methods first."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:563
+#: templates/admin/settings-tabbed.php:565
 msgid ""
 "The email field is shown in the optimized checkout only for the selected "
 "payment methods."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:568
+#: templates/admin/settings-tabbed.php:570
 msgid "Tip Settings"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:570
+#: templates/admin/settings-tabbed.php:572
 msgid "Tip Title"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:572 templates/checkout-tip.php:14
+#: templates/admin/settings-tabbed.php:574 templates/checkout-tip.php:14
 msgid "Add a tip?"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:573
+#: templates/admin/settings-tabbed.php:575
 msgid "Heading shown above the tip options. Leave empty to use the default."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:577
+#: templates/admin/settings-tabbed.php:579
 msgid "\"No Tip\" Label"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:579 templates/checkout-tip.php:34
+#: templates/admin/settings-tabbed.php:581 templates/checkout-tip.php:34
 msgid "No tip"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:583
+#: templates/admin/settings-tabbed.php:585
 msgid "Tip Mode"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:587
+#: templates/admin/settings-tabbed.php:589
 msgid "Percentage of order total"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:591
+#: templates/admin/settings-tabbed.php:593
 msgid "Fixed amount"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:596
-#: templates/admin/settings-tabbed.php:627
+#: templates/admin/settings-tabbed.php:598
+#: templates/admin/settings-tabbed.php:629
 msgid "Option 1"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:605
-#: templates/admin/settings-tabbed.php:628
+#: templates/admin/settings-tabbed.php:607
+#: templates/admin/settings-tabbed.php:630
 msgid "Option 2"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:614
-#: templates/admin/settings-tabbed.php:629
+#: templates/admin/settings-tabbed.php:616
+#: templates/admin/settings-tabbed.php:631
 msgid "Option 3"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:623
+#: templates/admin/settings-tabbed.php:625
 msgid "Default Selection"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:626
+#: templates/admin/settings-tabbed.php:628
 msgid "No Tip (Default)"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:654
+#: templates/admin/settings-tabbed.php:656
 msgid "Order Bumps"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:660
+#: templates/admin/settings-tabbed.php:662
 msgid ""
 "Offer up to three matching extras right above the pay button. They are added "
 "as real line items, so they appear on the kitchen ticket and count in the "
@@ -6171,128 +6216,128 @@ msgid ""
 "a selection first."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:665
+#: templates/admin/settings-tabbed.php:667
 msgid "Enable Order Bumps"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:671
+#: templates/admin/settings-tabbed.php:673
 msgid "Show impulse offers in the checkout"
 msgstr ""
 
 #. translators: %d: slot number
-#: templates/admin/settings-tabbed.php:689
+#: templates/admin/settings-tabbed.php:691
 #, php-format
 msgid "Offer %d"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:699
+#: templates/admin/settings-tabbed.php:701
 msgid "Product ID"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:705
+#: templates/admin/settings-tabbed.php:707
 msgid "Optional text, e.g. “Fries with that?”"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:713
+#: templates/admin/settings-tabbed.php:715
 msgid "Product not found."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:726
+#: templates/admin/settings-tabbed.php:728
 msgid "Fields in Standard Checkout"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:727
+#: templates/admin/settings-tabbed.php:729
 msgid "Choose which fields and options are displayed at checkout."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:740
+#: templates/admin/settings-tabbed.php:742
 msgid "Price Rounding"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:741
+#: templates/admin/settings-tabbed.php:743
 msgid ""
 "Round total to 5 cents (0.05 CHF). Prevents rounding errors when combining "
 "vouchers and tips. Recommended for Swiss businesses."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:746
+#: templates/admin/settings-tabbed.php:748
 msgid "Multiple Tax Rates"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:747
+#: templates/admin/settings-tabbed.php:749
 msgid ""
 "Apply a different tax class per order type: configure which tax class "
 "applies to Takeaway orders and which applies to Dine-in orders."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:756
-#: templates/admin/settings-tabbed.php:767
-#: templates/admin/settings-tabbed.php:782
+#: templates/admin/settings-tabbed.php:758
+#: templates/admin/settings-tabbed.php:769
+#: templates/admin/settings-tabbed.php:784
 msgid "Standard"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:760
+#: templates/admin/settings-tabbed.php:762
 msgid "Takeaway Tax Class"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:771
+#: templates/admin/settings-tabbed.php:773
 msgid "Tax class applied to takeaway and pickup orders."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:775
+#: templates/admin/settings-tabbed.php:777
 msgid "Dine-in Tax Class"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:786
+#: templates/admin/settings-tabbed.php:788
 msgid "Tax class applied to dine-in and table orders."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:798
+#: templates/admin/settings-tabbed.php:800
 msgid "WooCommerce Tax Settings →"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:817
+#: templates/admin/settings-tabbed.php:819
 msgid "Order Overview (Kanban)"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:818
+#: templates/admin/settings-tabbed.php:820
 msgid "Display incoming orders as a kanban board for quick status management."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:825
+#: templates/admin/settings-tabbed.php:827
 msgid "Order Overview Refresh Interval"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:827
-#: templates/admin/settings-tabbed.php:858
+#: templates/admin/settings-tabbed.php:829
+#: templates/admin/settings-tabbed.php:860
 #: templates/admin/settings/reservations__premium_only.php:35
 msgid "Seconds"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:828
+#: templates/admin/settings-tabbed.php:830
 msgid "How often the order overview checks for new orders."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:832
+#: templates/admin/settings-tabbed.php:834
 msgid "Waiting Time Timer"
 msgstr "Timer del tempo di attesa"
 
-#: templates/admin/settings-tabbed.php:836
+#: templates/admin/settings-tabbed.php:838
 msgid "Show how long each order has been waiting"
 msgstr "Mostra da quanto tempo ogni ordine è in attesa"
 
-#: templates/admin/settings-tabbed.php:838
+#: templates/admin/settings-tabbed.php:840
 msgid ""
 "Each order card shows the minutes since the order came in, turning amber and "
 "then red as it ages. Future pre-orders are excluded."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:842
+#: templates/admin/settings-tabbed.php:844
 msgid "Amber After"
 msgstr "Giallo dopo"
 
-#: templates/admin/settings-tabbed.php:844
-#: templates/admin/settings-tabbed.php:851 templates/admin/settings.php:124
+#: templates/admin/settings-tabbed.php:846
+#: templates/admin/settings-tabbed.php:853 templates/admin/settings.php:124
 #: templates/admin/settings.php:131 templates/admin/settings.php:138
 #: templates/admin/settings.php:150 templates/admin/settings.php:162
 #: templates/admin/settings/locations.php:76
@@ -6302,48 +6347,48 @@ msgstr "Giallo dopo"
 msgid "Minutes"
 msgstr "Minuti"
 
-#: templates/admin/settings-tabbed.php:845
+#: templates/admin/settings-tabbed.php:847
 msgid "Leave at 0 to use the preparation time configured for each location."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:849
+#: templates/admin/settings-tabbed.php:851
 msgid "Red After"
 msgstr "Rosso dopo"
 
-#: templates/admin/settings-tabbed.php:852
+#: templates/admin/settings-tabbed.php:854
 msgid "Leave at 0 to use one and a half times the amber threshold."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:856
+#: templates/admin/settings-tabbed.php:858
 msgid "Repeat Alert Sound"
 msgstr "Ripeti il segnale acustico"
 
-#: templates/admin/settings-tabbed.php:859
+#: templates/admin/settings-tabbed.php:861
 msgid ""
 "Repeat the alert sound while orders are still waiting in the first column. "
 "Moving an order onwards acknowledges it and stops the sound. Set to 0 to "
 "play the sound only once per new order."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:874
+#: templates/admin/settings-tabbed.php:876
 msgid ""
 "Show pre-orders with a pickup time further in the future than the "
 "preparation time in the Kanban board."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:880
+#: templates/admin/settings-tabbed.php:882
 msgid "Dim Future Pre-orders"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:890
+#: templates/admin/settings-tabbed.php:892
 msgid "Display future pre-orders dimmed (greyed out) in the Kanban board."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:896
+#: templates/admin/settings-tabbed.php:898
 msgid "Customizable Kanban Columns"
 msgstr "Colonne Kanban personalizzabili"
 
-#: templates/admin/settings-tabbed.php:906
+#: templates/admin/settings-tabbed.php:908
 msgid ""
 "Rename, add, remove and reorder Kanban board columns; enables a one-step "
 "back action."
@@ -6351,41 +6396,41 @@ msgstr ""
 "Rinomina, aggiungi, rimuovi e riordina le colonne della bacheca Kanban; "
 "abilita un'azione per tornare indietro di un passo."
 
-#: templates/admin/settings-tabbed.php:911
+#: templates/admin/settings-tabbed.php:913
 msgid "Kanban Columns"
 msgstr "Colonne Kanban"
 
-#: templates/admin/settings-tabbed.php:924
+#: templates/admin/settings-tabbed.php:926
 msgid "Remove column"
 msgstr "Rimuovi colonna"
 
-#: templates/admin/settings-tabbed.php:928
+#: templates/admin/settings-tabbed.php:930
 msgid "Add column"
 msgstr "Aggiungi colonna"
 
-#: templates/admin/settings-tabbed.php:929
+#: templates/admin/settings-tabbed.php:931
 msgid "Drag rows to reorder. Minimum 2, maximum 5 columns."
 msgstr "Trascina le righe per riordinarle. Minimo 2, massimo 5 colonne."
 
-#: templates/admin/settings-tabbed.php:934
+#: templates/admin/settings-tabbed.php:936
 msgid "Drag & Drop"
 msgstr "Trascina e rilascia"
 
-#: templates/admin/settings-tabbed.php:944
+#: templates/admin/settings-tabbed.php:946
 msgid "Allow dragging order cards between columns on the Kanban board."
 msgstr ""
 "Consente di trascinare le schede degli ordini tra le colonne della bacheca "
 "Kanban."
 
-#: templates/admin/settings-tabbed.php:985
+#: templates/admin/settings-tabbed.php:987
 msgid "Enable the Point of Sale interface for in-person orders."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:990
+#: templates/admin/settings-tabbed.php:992
 msgid "Split Payment"
 msgstr "Pagamento diviso"
 
-#: templates/admin/settings-tabbed.php:991
+#: templates/admin/settings-tabbed.php:993
 msgid ""
 "Allow splitting the total across multiple payment methods in the POS payment "
 "modal."
@@ -6393,17 +6438,17 @@ msgstr ""
 "Consente di suddividere il totale su più metodi di pagamento nella finestra "
 "di pagamento del POS."
 
-#: templates/admin/settings-tabbed.php:997
+#: templates/admin/settings-tabbed.php:999
 msgid "Open Tabs (Table Service)"
 msgstr "Conti aperti (servizio al tavolo)"
 
-#: templates/admin/settings-tabbed.php:999
+#: templates/admin/settings-tabbed.php:1001
 msgid "Keep orders open per table and add items until the guests pay."
 msgstr ""
 "Mantenere gli ordini aperti per tavolo e aggiungere articoli finché gli "
 "ospiti non pagano."
 
-#: templates/admin/settings-tabbed.php:1000
+#: templates/admin/settings-tabbed.php:1002
 msgid ""
 "Keep orders open per table and add items until the guests pay. Requires the "
 "Table Management module to select a table."
@@ -6412,51 +6457,51 @@ msgstr ""
 "ospiti non pagano. Richiede il modulo di gestione dei tavoli per selezionare "
 "un tavolo."
 
-#: templates/admin/settings-tabbed.php:1008
+#: templates/admin/settings-tabbed.php:1010
 msgid "Payment Methods"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1010
+#: templates/admin/settings-tabbed.php:1012
 msgid ""
 "Choose which payment methods are displayed in the POS payment modal and "
 "customize the labels."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1014
+#: templates/admin/settings-tabbed.php:1016
 msgid "Active"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1015
+#: templates/admin/settings-tabbed.php:1017
 msgid "Icon"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1016
+#: templates/admin/settings-tabbed.php:1018
 msgid "Label"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1029
+#: templates/admin/settings-tabbed.php:1031
 msgid "At least one payment method must be active."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1035
+#: templates/admin/settings-tabbed.php:1037
 msgid "Default Order Type"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1045
+#: templates/admin/settings-tabbed.php:1047
 msgid "Which order type is pre-selected when the POS is opened or reloaded."
 msgstr ""
 
 #. translators: %s: link to Prices & Taxes settings
-#: templates/admin/settings-tabbed.php:1051
+#: templates/admin/settings-tabbed.php:1053
 #, php-format
 msgid "The VAT rate per order type is configured under %s."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1066
+#: templates/admin/settings-tabbed.php:1068
 msgid "Product Order"
 msgstr "Ordine dei prodotti"
 
-#: templates/admin/settings-tabbed.php:1068
+#: templates/admin/settings-tabbed.php:1070
 msgid ""
 "Drag products into the desired order. This order applies to the POS and to "
 "the store's catalog (when WooCommerce uses custom ordering)."
@@ -6465,23 +6510,23 @@ msgstr ""
 "e al catalogo del negozio (se WooCommerce utilizza l'ordinamento "
 "personalizzato)."
 
-#: templates/admin/settings-tabbed.php:1094
+#: templates/admin/settings-tabbed.php:1096
 msgid "Save Order"
 msgstr "Salva ordine"
 
-#: templates/admin/settings-tabbed.php:1123
+#: templates/admin/settings-tabbed.php:1125
 msgid "Uninstallation"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1126
+#: templates/admin/settings-tabbed.php:1128
 msgid "Delete Data on Uninstall"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1130
+#: templates/admin/settings-tabbed.php:1132
 msgid "Completely delete all plugin data on uninstall"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:1134
+#: templates/admin/settings-tabbed.php:1136
 msgid ""
 "This option will permanently delete all locations, product options, "
 "settings, and order metadata!"
@@ -6826,81 +6871,93 @@ msgid "Display allergen information on product pages."
 msgstr ""
 
 #: templates/admin/settings/products.php:74
+msgid "Theme-independent Menu View"
+msgstr ""
+
+#: templates/admin/settings/products.php:75
+msgid ""
+"Outputs your menu in its own layout — category navigation, product cards, a "
+"dialog for variations and add-ons, and a slide-in order panel. Place the "
+"shortcode [lbite_menu] on any page; add layout=\"list\" for a compact list "
+"instead of cards."
+msgstr ""
+
+#: templates/admin/settings/products.php:81
 msgid "Dietary Labels & Filter"
 msgstr "Regimi alimentari e filtro"
 
-#: templates/admin/settings/products.php:75
+#: templates/admin/settings/products.php:82
 msgid ""
 "Label dishes as vegan, vegetarian, gluten-free, lactose-free, spicy or "
 "alcohol-free. Guests get a filter bar above the shop grid and can combine "
 "several labels at once."
 msgstr ""
 
-#: templates/admin/settings/products.php:81
+#: templates/admin/settings/products.php:88
 msgid "Scheduled Availability"
 msgstr "Disponibilità programmata"
 
-#: templates/admin/settings/products.php:82
+#: templates/admin/settings/products.php:89
 msgid ""
 "Limit products or whole categories to certain weekdays, times of day, or "
 "date ranges — a breakfast menu that disappears at 11:30, a seasonal item "
 "that only shows in December. Configured per product and per product category."
 msgstr ""
 
-#: templates/admin/settings/products.php:90
+#: templates/admin/settings/products.php:97
 msgid "Availability Hint & Filter"
 msgstr ""
 
-#: templates/admin/settings/products.php:94
+#: templates/admin/settings/products.php:101
 msgid ""
 "Controls the \"Available at X of Y locations\" hint on category and product "
 "pages, and the \"Show only available products\" filter on the shop page. "
 "Both appear for products that are disabled at at least one location."
 msgstr ""
 
-#: templates/admin/settings/products.php:99
+#: templates/admin/settings/products.php:106
 msgid "Availability Hint on Category Pages"
 msgstr ""
 
-#: templates/admin/settings/products.php:100
+#: templates/admin/settings/products.php:107
 msgid "Show the availability hint on shop and category (archive) pages."
 msgstr ""
 
-#: templates/admin/settings/products.php:106
+#: templates/admin/settings/products.php:113
 msgid "Availability Hint on Product Page"
 msgstr ""
 
-#: templates/admin/settings/products.php:107
+#: templates/admin/settings/products.php:114
 msgid "Show the availability hint on the single product page."
 msgstr ""
 
-#: templates/admin/settings/products.php:113
+#: templates/admin/settings/products.php:120
 msgid "Availability Filter on Shop Page"
 msgstr ""
 
-#: templates/admin/settings/products.php:114
+#: templates/admin/settings/products.php:121
 msgid ""
 "Show a \"Show only available products\" filter bar on the shop and category "
 "pages."
 msgstr ""
 
-#: templates/admin/settings/products.php:123
+#: templates/admin/settings/products.php:130
 msgid "Availability Hint Style"
 msgstr ""
 
-#: templates/admin/settings/products.php:130
+#: templates/admin/settings/products.php:137
 msgid "Popup (icon + hover/click popup)"
 msgstr ""
 
-#: templates/admin/settings/products.php:131
+#: templates/admin/settings/products.php:138
 msgid "List (location list always visible)"
 msgstr ""
 
-#: templates/admin/settings/products.php:132
+#: templates/admin/settings/products.php:139
 msgid "Text only (single line, no popup)"
 msgstr ""
 
-#: templates/admin/settings/products.php:134
+#: templates/admin/settings/products.php:141
 msgid ""
 "Choose how the availability hint is displayed. If the hint looks out of "
 "place with your theme, try \"Text only\" for the simplest, most compatible "
@@ -7620,6 +7677,29 @@ msgstr ""
 
 #: templates/emails/plain/pickup-reminder.php:56
 msgid "Ordered on:"
+msgstr ""
+
+#: templates/frontend/menu-view.php:20
+msgid "No dishes are available right now. Please check back later."
+msgstr ""
+
+#: templates/frontend/menu-view.php:26
+msgid "Menu sections"
+msgstr ""
+
+#: templates/frontend/menu-view.php:34 templates/frontend/menu-view.php:50
+msgid "More"
+msgstr ""
+
+#. translators: %s: product name
+#: templates/frontend/menu-view.php:104
+#, php-format
+msgid "Add %s"
+msgstr ""
+
+#. translators: %s: product name
+#: templates/frontend/menu-view.php:105
+msgid "Choose"
 msgstr ""
 
 #: templates/frontend/reservation-form.php:30

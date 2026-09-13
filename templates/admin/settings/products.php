@@ -70,6 +70,13 @@ $lbite_availability_hint_style = get_option( 'lbite_availability_hint_style', 'p
 	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 
+	$lbite_toggle_key             = 'enable_menu_view';
+	$lbite_toggle_label           = __( 'Theme-independent Menu View', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Outputs your menu in its own layout — category navigation, product cards, a dialog for variations and add-ons, and a slide-in order panel. Place the shortcode [lbite_menu] on any page; add layout="list" for a compact list instead of cards.', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
 	$lbite_toggle_key             = 'enable_dietary_filter';
 	$lbite_toggle_label           = __( 'Dietary Labels & Filter', 'libre-bite' );
 	$lbite_toggle_description     = __( 'Label dishes as vegan, vegetarian, gluten-free, lactose-free, spicy or alcohol-free. Guests get a filter bar above the shop grid and can combine several labels at once.', 'libre-bite' );

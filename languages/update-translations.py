@@ -23,6 +23,25 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Menü-Ansicht (F33)
+    "Theme-independent Menu View": "Theme-unabhängige Menü-Ansicht",
+    "Add to order": "Zur Bestellung hinzufügen",
+    "Adding…": "Wird hinzugefügt …",
+    "Added": "Hinzugefügt",
+    "Could not add the item. Please try again.": "Der Artikel konnte nicht hinzugefügt werden. Bitte erneut versuchen.",
+    "Your order": "Ihre Bestellung",
+    "Nothing in your order yet.": "Noch nichts in Ihrer Bestellung.",
+    "Go to checkout": "Zur Kasse",
+    "Please choose an option.": "Bitte eine Auswahl treffen.",
+    "Menu sections": "Menü-Abschnitte",
+    "More": "Weitere",
+    "Choose": "Auswählen",
+    "Add": "Hinzufügen",
+    "Add %s": "%s hinzufügen",
+    "No dishes are available right now. Please check back later.": "Zurzeit sind keine Gerichte verfügbar. Bitte schauen Sie später noch einmal vorbei.",
+    "This product is not available.": "Dieses Produkt ist nicht verfügbar.",
+    "Total": "Total",
+    "Close": "Schliessen",
     # Einrichtungsassistent (F37)
     "Setup": "Einrichtung",
     "Welcome to Libre Bite": "Willkommen bei Libre Bite",

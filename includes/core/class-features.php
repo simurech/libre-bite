@@ -133,6 +133,13 @@ class LBite_Features {
 		),
 
 		// Locations
+		'enable_menu_view'          => array(
+			'group'       => 'products',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Theme-independent Menu View',
+			'description' => 'Output your menu in its own layout with a product dialog and a slide-in order panel, instead of relying on the theme product grid. Use the shortcode [lbite_menu].',
+		),
 		'enable_location_selector'  => array(
 			'group'       => 'locations',
 			'default'     => true,
