@@ -49,6 +49,17 @@ class LBite_Promotions {
 	private $loader;
 
 	/**
+	 * Unrabattierter Preis je Warenkorbposition, innerhalb einer Anfrage gemerkt.
+	 *
+	 * WooCommerce ruft `woocommerce_before_calculate_totals` mehrfach je Anfrage auf
+	 * und behält dabei dasselbe Produktobjekt. Ohne diesen Basiswert würde jeder
+	 * weitere Durchlauf den Rabatt erneut auf den bereits rabattierten Preis rechnen.
+	 *
+	 * @var array<string,float>
+	 */
+	private $base_prices = array();
+
+	/**
 	 * Konstruktor
 	 *
 	 * @param LBite_Loader $loader Hook-Loader.
@@ -278,18 +289,26 @@ class LBite_Promotions {
 			return;
 		}
 
-		// WooCommerce ruft diesen Hook mehrfach auf; ohne Schutz würde der
-		// Rabatt bei jedem Durchlauf erneut abgezogen.
-		static $applied = false;
-
-		if ( $applied ) {
-			return;
-		}
-
 		$rules = self::get_active_rules();
 
 		if ( empty( $rules ) ) {
 			return;
+		}
+
+		// Jeden Durchlauf beim Basispreis beginnen. Früher brach ein static-Schalter
+		// alle Folgedurchläufe ab; dadurch bekam eine Position, die erst nach der
+		// ersten Berechnung in den Warenkorb kam – etwa über einen Order Bump –
+		// niemals ihren Rabatt.
+		foreach ( $cart->get_cart() as $cart_key => $cart_item ) {
+			if ( ! isset( $cart_item['data'] ) ) {
+				continue;
+			}
+
+			if ( isset( $this->base_prices[ $cart_key ] ) ) {
+				$cart_item['data']->set_price( $this->base_prices[ $cart_key ] );
+			} else {
+				$this->base_prices[ $cart_key ] = (float) $cart_item['data']->get_price();
+			}
 		}
 
 		foreach ( $rules as $rule ) {
@@ -299,8 +318,6 @@ class LBite_Promotions {
 				$this->apply_bogo( $cart, $rule );
 			}
 		}
-
-		$applied = true;
 	}
 
 	/**
