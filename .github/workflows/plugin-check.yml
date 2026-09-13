@@ -16,5 +16,5 @@ jobs:
       - name: Run Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
-          exclude-directories: .github
-          exclude-files: .gitignore
+          exclude-directories: .github,scripts
+          exclude-files: .gitignore,.distignore
