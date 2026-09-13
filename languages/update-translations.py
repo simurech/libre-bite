@@ -23,6 +23,9 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Statistik-Diagramme
+    "Revenue Over Time": "Umsatzverlauf",
+    "Revenue by Location": "Umsatz nach Standort",
     # Grundriss im Tischplan
     "Floor Plan": "Grundriss",
     "No floor plan selected": "Kein Grundriss ausgewählt",

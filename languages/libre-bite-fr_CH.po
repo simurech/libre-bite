@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libre Bite 2.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/libre-bite\n"
-"POT-Creation-Date: 2026-09-13T10:44:44+00:00\n"
+"POT-Creation-Date: 2026-09-13T10:47:56+00:00\n"
 "PO-Revision-Date: 2026-06-29\n"
 "Last-Translator: Pulacha Labs <https://pulacha-labs.ch/>\n"
 "Language-Team: French (Switzerland)\n"
@@ -141,7 +141,7 @@ msgstr "Aide et support"
 #: includes/admin/class-admin.php:336 includes/admin/class-admin.php:337
 #: templates/admin/dashboard.php:78
 #: templates/admin/help-partials/orders.php:172
-#: templates/admin/statistics.php:304
+#: templates/admin/statistics.php:414
 msgid "Statistics"
 msgstr "Statistiques"
 
@@ -233,22 +233,22 @@ msgid "Counts as completed"
 msgstr "Compte comme terminé"
 
 #: includes/admin/class-admin.php:894 templates/admin/settings-tabbed.php:200
-#: templates/admin/settings-tabbed.php:860 templates/admin/statistics.php:103
+#: templates/admin/settings-tabbed.php:860 templates/admin/statistics.php:201
 msgid "Cash"
 msgstr "Espèces"
 
 #: includes/admin/class-admin.php:895 templates/admin/settings-tabbed.php:201
-#: templates/admin/settings-tabbed.php:861 templates/admin/statistics.php:104
+#: templates/admin/settings-tabbed.php:861 templates/admin/statistics.php:202
 msgid "Card"
 msgstr "Carte"
 
 #: includes/admin/class-admin.php:896 templates/admin/settings-tabbed.php:202
-#: templates/admin/settings-tabbed.php:862 templates/admin/statistics.php:105
+#: templates/admin/settings-tabbed.php:862 templates/admin/statistics.php:203
 msgid "Twint"
 msgstr "Twint"
 
 #: includes/admin/class-admin.php:897 templates/admin/settings-tabbed.php:203
-#: templates/admin/settings-tabbed.php:863 templates/admin/statistics.php:106
+#: templates/admin/settings-tabbed.php:863 templates/admin/statistics.php:204
 msgid "Other"
 msgstr "Autre"
 
@@ -479,7 +479,7 @@ msgstr "Les montants répartis ne correspondent pas au total de la commande"
 msgid "Order created via POS system."
 msgstr "Commande créée via le système de caisse."
 
-#: includes/admin/class-admin.php:1345 templates/admin/statistics.php:439
+#: includes/admin/class-admin.php:1345 templates/admin/statistics.php:613
 msgid "Add-on"
 msgstr "Supplément"
 
@@ -807,7 +807,7 @@ msgstr "Scannez ici pour commander"
 #: includes/modules/tables/class-tables.php:867
 #: templates/admin/documentation.php:156
 #: templates/admin/help-partials/reservations.php:29
-#: templates/admin/statistics.php:247 templates/admin/statistics.php:476
+#: templates/admin/statistics.php:357 templates/admin/statistics.php:650
 #: templates/checkout-location-time.php:163
 #: templates/frontend/reservation-form.php:52
 #: templates/thankyou-optimized.php:133
@@ -1674,7 +1674,7 @@ msgstr "Aller au tableau de bord"
 #: includes/modules/order-list/class-order-list.php:158
 #: includes/modules/reservations/class-reservations.php:367
 #: includes/modules/tables/class-tables.php:752
-#: templates/admin/statistics.php:319
+#: templates/admin/statistics.php:429
 msgid "All Locations"
 msgstr "Tous les emplacements"
 
@@ -1720,7 +1720,7 @@ msgstr "Réessayer"
 msgid "Creating order..."
 msgstr "Création de la commande..."
 
-#: includes/modules/pos/class-pos.php:152 templates/admin/statistics.php:245
+#: includes/modules/pos/class-pos.php:152 templates/admin/statistics.php:355
 msgid "Order #"
 msgstr "Commande n° "
 
@@ -1744,7 +1744,7 @@ msgstr "Chargement des détails du produit..."
 msgid "Error loading product details"
 msgstr "Erreur lors du chargement des détails du produit"
 
-#: includes/modules/pos/class-pos.php:158 templates/admin/statistics.php:435
+#: includes/modules/pos/class-pos.php:158 templates/admin/statistics.php:609
 msgid "Add-ons"
 msgstr "Suppléments"
 
@@ -1815,7 +1815,7 @@ msgstr "Attribué"
 
 #: includes/modules/pos/class-pos.php:178
 #: includes/modules/tables/class-tables.php:184
-#: templates/admin/statistics.php:248 templates/thankyou-optimized.php:325
+#: templates/admin/statistics.php:358 templates/thankyou-optimized.php:325
 msgid "Total"
 msgstr "Total"
 
@@ -2099,7 +2099,7 @@ msgstr "Statut"
 
 #: includes/modules/reservations/class-reservations.php:209
 #: includes/modules/reservations/class-reservations.php:289
-#: templates/admin/holidays-settings.php:44 templates/admin/statistics.php:246
+#: templates/admin/holidays-settings.php:44 templates/admin/statistics.php:356
 #: templates/frontend/reservation-form.php:71
 #: templates/location-selector-banner.php:196
 #: templates/location-selector-inline.php:58
@@ -2474,7 +2474,7 @@ msgid "Back to Table List"
 msgstr "Retour à la liste des tables"
 
 #: includes/modules/tables/class-tables.php:923
-#: templates/admin/statistics.php:234
+#: templates/admin/statistics.php:344
 msgid "Security check failed."
 msgstr "Vérification de sécurité échouée."
 
@@ -2703,8 +2703,8 @@ msgstr "Uniquement les produits avec allergènes"
 msgid "No products found."
 msgstr "Aucun produit trouvé."
 
-#: templates/admin/allergen-matrix.php:102 templates/admin/statistics.php:396
-#: templates/admin/statistics.php:416
+#: templates/admin/allergen-matrix.php:102 templates/admin/statistics.php:570
+#: templates/admin/statistics.php:590
 msgid "Product"
 msgstr "Produit"
 
@@ -3457,13 +3457,13 @@ msgid "Overview"
 msgstr "Aperçu"
 
 #: templates/admin/help-admin.php:41 templates/admin/help-admin.php:119
-#: templates/admin/settings-tabbed.php:24 templates/admin/statistics.php:342
-#: templates/admin/statistics.php:359 templates/admin/statistics.php:477
+#: templates/admin/settings-tabbed.php:24 templates/admin/statistics.php:452
+#: templates/admin/statistics.php:533 templates/admin/statistics.php:651
 msgid "Orders"
 msgstr "Commandes"
 
 #: templates/admin/help-admin.php:45 templates/admin/help-admin.php:133
-#: templates/admin/settings-tabbed.php:28 templates/admin/statistics.php:251
+#: templates/admin/settings-tabbed.php:28 templates/admin/statistics.php:361
 #: templates/admin/super-admin-settings.php:127
 msgid "Products"
 msgstr "Produits"
@@ -5677,7 +5677,7 @@ msgid "e.g. Christmas"
 msgstr ""
 
 #: templates/admin/order-board.php:37 templates/admin/pos.php:45
-#: templates/admin/reservation-board.php:32 templates/admin/statistics.php:316
+#: templates/admin/reservation-board.php:32 templates/admin/statistics.php:426
 #: templates/admin/table-plan.php:33 templates/emails/pickup-reminder.php:36
 #: templates/emails/plain/pickup-reminder.php:38
 #: templates/frontend/reservation-form.php:186
@@ -5822,7 +5822,7 @@ msgstr ""
 msgid "Next Day"
 msgstr ""
 
-#: templates/admin/reservation-board.php:47 templates/admin/statistics.php:35
+#: templates/admin/reservation-board.php:47 templates/admin/statistics.php:133
 msgid "Today"
 msgstr ""
 
@@ -6832,81 +6832,89 @@ msgstr ""
 msgid "7-day free trial · No credit card required"
 msgstr ""
 
-#: templates/admin/statistics.php:36
+#: templates/admin/statistics.php:134
 msgid "Last 7 Days"
 msgstr ""
 
-#: templates/admin/statistics.php:37
+#: templates/admin/statistics.php:135
 msgid "Last 30 Days"
 msgstr ""
 
-#: templates/admin/statistics.php:38
+#: templates/admin/statistics.php:136
 msgid "This Year"
 msgstr ""
 
-#: templates/admin/statistics.php:131
+#: templates/admin/statistics.php:230
 msgid "No location"
 msgstr ""
 
-#: templates/admin/statistics.php:189 templates/admin/statistics.php:273
+#: templates/admin/statistics.php:299 templates/admin/statistics.php:383
 msgid "Split"
 msgstr "Partagé"
 
-#: templates/admin/statistics.php:249 templates/admin/statistics.php:358
+#: templates/admin/statistics.php:359 templates/admin/statistics.php:532
 msgid "Payment Method"
 msgstr ""
 
-#: templates/admin/statistics.php:250 templates/checkout-location-time.php:192
+#: templates/admin/statistics.php:360 templates/checkout-location-time.php:192
 msgid "Order Type"
 msgstr ""
 
-#: templates/admin/statistics.php:330
+#: templates/admin/statistics.php:440
 msgid "Export CSV"
 msgstr ""
 
-#: templates/admin/statistics.php:338 templates/admin/statistics.php:360
-#: templates/admin/statistics.php:417 templates/admin/statistics.php:441
-#: templates/admin/statistics.php:478
+#: templates/admin/statistics.php:448 templates/admin/statistics.php:534
+#: templates/admin/statistics.php:591 templates/admin/statistics.php:615
+#: templates/admin/statistics.php:652
 msgid "Revenue"
 msgstr ""
 
-#: templates/admin/statistics.php:346 templates/admin/statistics.php:479
+#: templates/admin/statistics.php:456 templates/admin/statistics.php:653
 msgid "Avg. Order Value"
 msgstr ""
 
-#: templates/admin/statistics.php:354
+#: templates/admin/statistics.php:475
+msgid "Revenue Over Time"
+msgstr "Évolution du chiffre d'affaires"
+
+#: templates/admin/statistics.php:499
+msgid "Revenue by Location"
+msgstr "Chiffre d'affaires par site"
+
+#: templates/admin/statistics.php:509
 msgid "Payment Methods (POS)"
 msgstr ""
 
-#: templates/admin/statistics.php:361
+#: templates/admin/statistics.php:535
 msgid "Share"
 msgstr ""
 
-#: templates/admin/statistics.php:388
+#: templates/admin/statistics.php:562
 msgid "Top Products"
 msgstr ""
 
-#: templates/admin/statistics.php:392
+#: templates/admin/statistics.php:566
 msgid "By Quantity"
 msgstr ""
 
-#: templates/admin/statistics.php:397 templates/admin/statistics.php:440
+#: templates/admin/statistics.php:571 templates/admin/statistics.php:614
 msgid "Qty"
 msgstr ""
 
-#: templates/admin/statistics.php:412
+#: templates/admin/statistics.php:586
 msgid "By Revenue"
 msgstr ""
 
-#: templates/admin/statistics.php:442
+#: templates/admin/statistics.php:616
 msgid "Combined with"
 msgstr ""
 
-#: templates/admin/statistics.php:472
+#: templates/admin/statistics.php:646
 msgid "By Location"
 msgstr ""
 
-#: templates/admin/statistics.php:496
+#: templates/admin/statistics.php:670
 msgid "No orders found for the selected period."
 msgstr ""
 

@@ -17,6 +17,104 @@ if ( ! current_user_can( 'lbite_view_statistics' ) ) {
 }
 
 // Manager-Filter: null = alle Standorte (Admin), Array = erlaubte Location-IDs (Manager)
+
+/**
+ * Waagrechtes Balkendiagramm
+ *
+ * Bewusst reines HTML/CSS statt SVG: das Plugin hat keinen Build-Step, und
+ * für Balken ist CSS das passendere Werkzeug — Text bleibt echter Text
+ * (auswählbar, vorlesbar, skaliert korrekt), was in einem skalierten SVG
+ * nicht der Fall wäre.
+ *
+ * Die Farbe kommt über eine Modifier-Klasse und nicht als Inline-Style:
+ * wp_kses_post() filtert Inline-CSS durch safecss_filter_attr(), und ob
+ * dort CSS-Variablen durchkommen, hängt von der WordPress-Version ab. Nur
+ * die Prozentbreite bleibt inline, die ist unstrittig erlaubt.
+ *
+ * @param array  $lbite_rows    Liste aus [ 'label', 'value', 'display' ].
+ * @param string $lbite_variant Farbvariante: 'primary' oder 'success'.
+ * @return string
+ */
+function lbite_stat_bar_chart( $lbite_rows, $lbite_variant = 'primary' ) {
+	if ( empty( $lbite_rows ) ) {
+		return '';
+	}
+
+	$lbite_max = 0.0;
+	foreach ( $lbite_rows as $lbite_row ) {
+		$lbite_max = max( $lbite_max, (float) $lbite_row['value'] );
+	}
+	if ( $lbite_max <= 0 ) {
+		return '';
+	}
+
+	$lbite_variant = in_array( $lbite_variant, array( 'primary', 'success' ), true ) ? $lbite_variant : 'primary';
+	$lbite_out     = '<div class="lbite-chart-bars lbite-chart-bars--' . esc_attr( $lbite_variant ) . '">';
+
+	foreach ( $lbite_rows as $lbite_row ) {
+		$lbite_pct = ( (float) $lbite_row['value'] / $lbite_max ) * 100;
+		$lbite_out .= sprintf(
+			'<div class="lbite-chart-bar">'
+				. '<span class="lbite-chart-bar__label">%1$s</span>'
+				. '<span class="lbite-chart-bar__track"><span class="lbite-chart-bar__fill" style="width:%2$F%%;"></span></span>'
+				. '<span class="lbite-chart-bar__value">%3$s</span>'
+			. '</div>',
+			esc_html( $lbite_row['label'] ),
+			max( 0.8, $lbite_pct ),
+			esc_html( $lbite_row['display'] )
+		);
+	}
+
+	$lbite_out .= '</div>';
+
+	return $lbite_out;
+}
+
+/**
+ * Säulendiagramm für den Tagesverlauf
+ *
+ * Ab 15 Datenpunkten werden die Beschriftungen weggelassen — sonst
+ * überlappen sie sich unleserlich. Der Wert bleibt über das title-Attribut
+ * erreichbar.
+ *
+ * @param array $lbite_series Liste aus [ 'label', 'short', 'value', 'display' ].
+ * @return string
+ */
+function lbite_stat_column_chart( $lbite_series ) {
+	if ( count( $lbite_series ) < 2 ) {
+		return '';
+	}
+
+	$lbite_max = 0.0;
+	foreach ( $lbite_series as $lbite_point ) {
+		$lbite_max = max( $lbite_max, (float) $lbite_point['value'] );
+	}
+	if ( $lbite_max <= 0 ) {
+		return '';
+	}
+
+	$lbite_dense = count( $lbite_series ) > 14;
+	$lbite_out   = '<div class="lbite-chart-columns">';
+
+	foreach ( $lbite_series as $lbite_point ) {
+		$lbite_pct = ( (float) $lbite_point['value'] / $lbite_max ) * 100;
+		$lbite_out .= sprintf(
+			'<div class="lbite-chart-column" title="%1$s: %2$s">'
+				. '<span class="lbite-chart-column__bar" style="height:%3$F%%;"></span>'
+				. '<span class="lbite-chart-column__label">%4$s</span>'
+			. '</div>',
+			esc_attr( $lbite_point['label'] ),
+			esc_attr( $lbite_point['display'] ),
+			max( 1.5, $lbite_pct ),
+			esc_html( $lbite_dense ? '' : $lbite_point['short'] )
+		);
+	}
+
+	$lbite_out .= '</div>';
+
+	return $lbite_out;
+}
+
 $lbite_stat_allowed_ids = null;
 if ( ! current_user_can( 'lbite_manage_settings' ) ) {
 	$lbite_stat_allowed_ids = get_user_meta( get_current_user_id(), 'lbite_assigned_locations', true );
@@ -117,6 +215,7 @@ $lbite_payment_totals = array(); // Pro Zahlungsart.
 $lbite_product_totals = array(); // Global: Produkte [name => ['qty', 'revenue']].
 $lbite_addon_totals   = array(); // Global: Add-ons [name => ['qty', 'revenue']].
 $lbite_addon_combos   = array(); // Add-on → Produkt-Kombination [addon => [product => count]].
+$lbite_daily_totals   = array(); // Tagesverlauf [Y-m-d => ['count', 'revenue']].
 
 foreach ( $lbite_stat_orders as $lbite_order ) {
 	$lbite_loc_id = (int) $lbite_order->get_meta( '_lbite_location_id' );
@@ -134,6 +233,17 @@ foreach ( $lbite_stat_orders as $lbite_order ) {
 	}
 	$lbite_totals[ $lbite_loc_name ]['count']++;
 	$lbite_totals[ $lbite_loc_name ]['revenue'] += (float) $lbite_order->get_total();
+
+	// Tagesverlauf für das Diagramm.
+	$lbite_created = $lbite_order->get_date_created();
+	if ( $lbite_created ) {
+		$lbite_day = $lbite_created->date_i18n( 'Y-m-d' );
+		if ( ! isset( $lbite_daily_totals[ $lbite_day ] ) ) {
+			$lbite_daily_totals[ $lbite_day ] = array( 'count' => 0, 'revenue' => 0.0 );
+		}
+		$lbite_daily_totals[ $lbite_day ]['count']++;
+		$lbite_daily_totals[ $lbite_day ]['revenue'] += (float) $lbite_order->get_total();
+	}
 
 	// Produkte auswerten.
 	foreach ( $lbite_order->get_items() as $lbite_item ) {
@@ -347,11 +457,75 @@ $lbite_export_url = wp_nonce_url(
 		</div>
 	</div>
 
+	<!-- Tagesverlauf -->
+	<?php
+	if ( count( $lbite_daily_totals ) >= 2 ) :
+		ksort( $lbite_daily_totals );
+		$lbite_series = array();
+		foreach ( $lbite_daily_totals as $lbite_day_key => $lbite_day_data ) {
+			$lbite_day_ts   = strtotime( $lbite_day_key );
+			$lbite_series[] = array(
+				'label'   => wp_date( 'd.m.Y', $lbite_day_ts ),
+				'short'   => wp_date( 'd.m.', $lbite_day_ts ),
+				'value'   => $lbite_day_data['revenue'],
+				'display' => wp_strip_all_tags( wc_price( $lbite_day_data['revenue'] ) ),
+			);
+		}
+		?>
+		<h2><?php esc_html_e( 'Revenue Over Time', 'libre-bite' ); ?></h2>
+		<div class="lbite-chart-panel">
+			<?php echo wp_kses_post( lbite_stat_column_chart( $lbite_series ) ); ?>
+		</div>
+	<?php endif; ?>
+
+	<!-- Umsatz je Standort als Diagramm -->
+	<?php
+	if ( count( $lbite_totals ) >= 2 ) :
+		$lbite_loc_rows = array();
+		foreach ( $lbite_totals as $lbite_loc_label => $lbite_loc_data ) {
+			$lbite_loc_rows[] = array(
+				'label'   => $lbite_loc_label,
+				'value'   => $lbite_loc_data['revenue'],
+				'display' => wp_strip_all_tags( wc_price( $lbite_loc_data['revenue'] ) ),
+			);
+		}
+		usort(
+			$lbite_loc_rows,
+			function ( $lbite_a, $lbite_b ) {
+				return $lbite_b['value'] <=> $lbite_a['value'];
+			}
+		);
+		?>
+		<h2><?php esc_html_e( 'Revenue by Location', 'libre-bite' ); ?></h2>
+		<div class="lbite-chart-panel">
+			<?php echo wp_kses_post( lbite_stat_bar_chart( $lbite_loc_rows ) ); ?>
+		</div>
+	<?php endif; ?>
+
 	<!-- Zahlungsarten -->
 	<?php if ( ! empty( $lbite_payment_totals ) ) :
 		$lbite_pm_total_rev = array_sum( array_column( $lbite_payment_totals, 'revenue' ) );
 	?>
 	<h2><?php esc_html_e( 'Payment Methods (POS)', 'libre-bite' ); ?></h2>
+	<?php
+	$lbite_pm_rows = array();
+	foreach ( $lbite_payment_totals as $lbite_pm_label => $lbite_pm_data ) {
+		$lbite_pm_rows[] = array(
+			'label'   => $lbite_pm_label,
+			'value'   => $lbite_pm_data['revenue'],
+			'display' => wp_strip_all_tags( wc_price( $lbite_pm_data['revenue'] ) ),
+		);
+	}
+	usort(
+		$lbite_pm_rows,
+		function ( $lbite_a, $lbite_b ) {
+			return $lbite_b['value'] <=> $lbite_a['value'];
+		}
+	);
+	?>
+	<div class="lbite-chart-panel" style="max-width:560px;">
+		<?php echo wp_kses_post( lbite_stat_bar_chart( $lbite_pm_rows, 'success' ) ); ?>
+	</div>
 	<table class="widefat" style="max-width: 560px; margin-bottom: 32px;">
 		<thead>
 			<tr>

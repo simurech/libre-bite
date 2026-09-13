@@ -563,3 +563,124 @@ table.wp-list-table code {
 	color: #3b0764;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+ * Statistik-Diagramme
+ *
+ * Bewusst HTML/CSS statt einer Diagramm-Bibliothek: das Plugin hat keinen
+ * Build-Step, und Balken aus CSS bleiben echter Text — auswählbar,
+ * vorlesbar und korrekt skalierend.
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-chart-panel {
+	margin-bottom: var(--lbite-space-8, 32px);
+	padding: var(--lbite-space-5, 20px);
+	background: var(--lbite-surface, #fff);
+	border: 1px solid var(--lbite-border, #dcdcde);
+	border-radius: var(--lbite-radius-md, 10px);
+}
+
+/* ── Waagrechte Balken ─────────────────────────────────────────────── */
+
+.lbite-chart-bars {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lbite-space-3, 12px);
+}
+
+.lbite-chart-bar {
+	display: grid;
+	grid-template-columns: minmax(90px, 22%) 1fr minmax(80px, auto);
+	align-items: center;
+	gap: var(--lbite-space-3, 12px);
+}
+
+.lbite-chart-bar__label {
+	font-size: var(--lbite-text-base, 13px);
+	font-weight: var(--lbite-weight-semibold, 600);
+	color: var(--lbite-text, #1d2327);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.lbite-chart-bar__track {
+	display: block;
+	height: 16px;
+	border-radius: var(--lbite-radius-pill, 999px);
+	background: var(--lbite-surface-sunken, #eef0f3);
+	overflow: hidden;
+}
+
+.lbite-chart-bar__fill {
+	display: block;
+	height: 100%;
+	border-radius: var(--lbite-radius-pill, 999px);
+	background: var(--lbite-color-primary, #0073aa);
+	transition: width var(--lbite-duration-slow, 260ms) var(--lbite-ease-soft, ease);
+}
+
+.lbite-chart-bars--success .lbite-chart-bar__fill {
+	background: var(--lbite-success, #1a7f37);
+}
+
+.lbite-chart-bar__value {
+	font-size: var(--lbite-text-base, 13px);
+	font-weight: var(--lbite-weight-bold, 700);
+	font-variant-numeric: tabular-nums;
+	text-align: right;
+	color: var(--lbite-text, #1d2327);
+}
+
+/* ── Säulen (Tagesverlauf) ─────────────────────────────────────────── */
+
+.lbite-chart-columns {
+	display: flex;
+	align-items: flex-end;
+	gap: 4px;
+	height: 180px;
+	padding-bottom: 22px;
+	position: relative;
+}
+
+.lbite-chart-column {
+	flex: 1 1 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center;
+	height: 100%;
+	min-width: 0;
+	position: relative;
+}
+
+.lbite-chart-column__bar {
+	display: block;
+	width: 100%;
+	max-width: 44px;
+	border-radius: 3px 3px 0 0;
+	background: var(--lbite-color-primary, #0073aa);
+	transition: opacity var(--lbite-duration-fast, 120ms) ease;
+}
+
+.lbite-chart-column:hover .lbite-chart-column__bar {
+	opacity: .75;
+}
+
+.lbite-chart-column__label {
+	position: absolute;
+	bottom: -20px;
+	font-size: var(--lbite-text-xs, 11px);
+	color: var(--lbite-text-muted, #646970);
+	white-space: nowrap;
+}
+
+@media (max-width: 782px) {
+	.lbite-chart-bar {
+		grid-template-columns: 1fr;
+		gap: 4px;
+	}
+	.lbite-chart-bar__value {
+		text-align: left;
+	}
+}
