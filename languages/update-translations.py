@@ -23,6 +23,17 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Allergen-Matrix
+    "Allergen Matrix": "Allergen-Matrix",
+    "Product": "Produkt",
+    "Dietary": "Ernährung",
+    "Show all products": "Alle Produkte anzeigen",
+    "Only products with allergens": "Nur Produkte mit Allergenen",
+    "No products found.": "Keine Produkte gefunden.",
+    "Overview of all published products and their declared allergens according to EU Regulation 1169/2011. Use the print button for a version suitable for putting up in the kitchen.":
+        "Übersicht aller veröffentlichten Produkte und ihrer deklarierten Allergene gemäss EU-Verordnung 1169/2011. Die Schaltfläche «Drucken» erzeugt eine Fassung zum Aushängen in der Küche.",
+    "%d products listed. Products without any declared allergen show an empty row \u2014 that is not the same as \u201ccontains nothing\u201d, it means nothing has been declared yet.":
+        "%d Produkte aufgeführt. Produkte ohne deklarierte Allergene zeigen eine leere Zeile \u2014 das bedeutet nicht «enthält nichts», sondern dass noch nichts deklariert wurde.",
     # Ernährungsformen und Filter (F41)
     "Vegan": "Vegan",
     "Vegetarian": "Vegetarisch",

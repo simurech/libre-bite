@@ -304,6 +304,18 @@ class LBite_Admin {
 			);
 		}
 
+		// Allergen-Matrix: druckbare Übersicht aller Produkte (nur bei aktivem Allergen-Modul)
+		if ( lbite_feature_enabled( 'enable_allergens' ) ) {
+			add_submenu_page(
+				'edit.php?post_type=product',
+				__( 'Allergen Matrix', 'libre-bite' ),
+				__( 'Allergen Matrix', 'libre-bite' ),
+				'lbite_manage_products',
+				'lbite-allergen-matrix',
+				array( $this, 'render_allergen_matrix_page' )
+			);
+		}
+
 		// ============================================
 		// DOKUMENTATION (rollenbasiert)
 		// ============================================
@@ -404,6 +416,16 @@ class LBite_Admin {
 	/**
 	 * Statistik-Seite rendern
 	 */
+	/**
+	 * Allergen-Matrix rendern
+	 */
+	public function render_allergen_matrix_page() {
+		if ( ! current_user_can( 'lbite_manage_products' ) ) {
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
+		}
+		include LBITE_PLUGIN_DIR . 'templates/admin/allergen-matrix.php';
+	}
+
 	public function render_statistics_page() {
 		if ( ! current_user_can( 'lbite_view_statistics' ) ) {
 			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
