@@ -132,7 +132,11 @@ class LBite_Plugin {
 
 		// Nur in Premium-Version laden (Klassen-Dateien existieren in Free Version nicht).
 		if ( lbite_freemius()->is__premium_only() ) {
-			if ( lbite_feature_enabled( 'enable_nutritional_info' ) || lbite_feature_enabled( 'enable_allergens' ) ) {
+			// Der Ernährungsfilter wohnt in derselben Klasse und muss die Ladebedingung
+			// mit auslösen – sonst speichert der Schalter, ohne dass Code läuft.
+			if ( lbite_feature_enabled( 'enable_nutritional_info' )
+				|| lbite_feature_enabled( 'enable_allergens' )
+				|| lbite_feature_enabled( 'enable_dietary_filter' ) ) {
 				$this->load_module( 'nutritional-info', 'LBite_Nutritional_Info' );
 			}
 		}
