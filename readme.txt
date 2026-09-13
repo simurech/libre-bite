@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,22 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.0.2 =
+
+First release tested on a live WordPress installation. Version 3.0.0 introduced a large amount of code that had never actually run; this release fixes what that testing brought to light.
+
+* Fixed: with a tip and a promotion active at the same time, the final total was no longer rounded to 5 rappen. The tip rounded itself on the subtotal alone, so discounts and shipping were left out of the calculation.
+* Fixed: an item added to the cart after the first price calculation — for example through an order bump — never received its promotional discount and was charged at full price.
+* Fixed: guest notes could not be switched on at all. The feature had no checkbox anywhere in the settings.
+* Fixed: enabling only the dietary filter loaded no code, because the module was tied to the nutritional information and allergen switches.
+* Fixed: the table plan button in the settings pointed at a page that does not exist, and the table plan itself rendered without its app layout.
+* Fixed: order bumps did nothing when the location selector was switched off, because the frontend script was tied to that setting.
+* Fixed: the manager role was not created during activation. Anyone assigned to it ended up with no role at all and lost access to the admin area.
+* Fixed: products marked for point-of-sale use only could still be added to the cart by a prepared request, although they were hidden from the catalogue, search and direct access.
+* Fixed: order bumps were added to the cart without the availability checks that apply everywhere else, so an item blocked at the selected location could still be ordered.
+* Fixed: the welcome notice never appeared after a first installation, and the installation date was reset on every reactivation.
+* Fixed: a PHP warning was written on every cart calculation that involved a fee.
 
 = 3.0.1 =
 
