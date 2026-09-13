@@ -204,7 +204,8 @@ Only the encoded target URL of your own website is transmitted, so that the serv
 1. Upload the plugin folder to the `/wp-content/plugins/libre-bite` directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the **Plugins** screen in WordPress.
 3. Make sure **WooCommerce** is installed and active — Libre Bite requires WooCommerce.
-4. Navigate to **Libre Bite** in the admin menu to configure locations, enable modules, and set up the POS and Kanban board.
+4. Follow the setup assistant — it checks your environment, lets you pick the modules you need, and can create a sample menu so you are not starting from an empty shop.
+5. Alternatively, navigate to **Libre Bite** in the admin menu to configure locations, enable modules, and set up the POS and Kanban board.
 
 == Frequently Asked Questions ==
 

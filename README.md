@@ -30,8 +30,10 @@ libre-bite/
 │   ├── admin/              # Admin-Menüs, Einstellungsseiten, Rollen
 │   └── modules/            # Funktionsmodule (Kanban, POS, Standorte, Checkout …)
 ├── templates/
-│   ├── admin/              # Admin-Views (Kanban, POS, Settings, Help)
-│   └── *.php               # Frontend-Templates (Checkout, Standort-Selector)
+│   ├── admin/              # Admin-Views (Kanban, POS, Wizard, Settings, Help)
+│   ├── frontend/           # Menü-Ansicht, Reservierungsformular
+│   ├── emails/             # E-Mail-Vorlagen
+│   └── *.php               # Checkout- und Standort-Templates
 ├── assets/
 │   ├── css/                # Admin- und Frontend-Stylesheets
 │   └── js/                 # Kanban, POS-Oberfläche, Checkout-Skripte
@@ -64,7 +66,8 @@ libre-bite/
 
 **Nach der Aktivierung:**
 1. Sicherstellen, dass WooCommerce aktiv ist.
-2. Im Admin-Menü zu **Libre Bite** navigieren und Standort(e) konfigurieren.
+2. Dem Einrichtungsassistenten folgen — er prüft die Umgebung, lässt die benötigten Module wählen und kann auf Wunsch eine Beispielkarte anlegen.
+3. Alternativ direkt im Admin-Menü zu **Libre Bite** navigieren und Standort(e) konfigurieren.
 
 ---
 

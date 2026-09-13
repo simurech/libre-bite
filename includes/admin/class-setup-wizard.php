@@ -124,13 +124,19 @@ class LBite_Setup_Wizard {
 			'hint'  => __( 'Libre Bite is a WooCommerce extension and cannot work without it.', 'libre-bite' ),
 		);
 
+		// Die Mindestversion wird aus dem Plugin-Header gelesen statt hier
+		// zweitgeschrieben. Eine fest eingetragene Zahl läuft sonst
+		// zwangsläufig irgendwann gegen den Header und meldet Nutzern
+		// fälschlich, sie erfüllten die Anforderung nicht.
+		$lbite_min_php = self::get_required_php();
+
 		$checks[] = array(
 			'label' => sprintf(
 				/* translators: %s: PHP version */
 				__( 'PHP %s or newer', 'libre-bite' ),
-				'8.1'
+				$lbite_min_php
 			),
-			'ok'    => version_compare( PHP_VERSION, '8.1', '>=' ),
+			'ok'    => version_compare( PHP_VERSION, $lbite_min_php, '>=' ),
 			'hint'  => sprintf(
 				/* translators: %s: current PHP version */
 				__( 'Currently running PHP %s.', 'libre-bite' ),
@@ -157,6 +163,24 @@ class LBite_Setup_Wizard {
 		);
 
 		return $checks;
+	}
+
+	/**
+	 * Vom Plugin-Header geforderte PHP-Mindestversion
+	 *
+	 * Einzige Quelle ist der Header — WordPress wertet ihn ohnehin aus, und
+	 * eine zweite Angabe im Code würde früher oder später abweichen.
+	 *
+	 * @return string
+	 */
+	private static function get_required_php() {
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$lbite_data = get_plugin_data( LBITE_PLUGIN_FILE, false, false );
+
+		return ! empty( $lbite_data['RequiresPHP'] ) ? $lbite_data['RequiresPHP'] : '7.4';
 	}
 
 	/**
