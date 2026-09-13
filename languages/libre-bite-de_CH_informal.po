@@ -666,7 +666,7 @@ msgstr "WooCommerce ist aktiv"
 
 #: includes/admin/class-setup-wizard.php:124
 msgid "Libre Bite is a WooCommerce extension and cannot work without it."
-msgstr ""
+msgstr "Libre Bite ist eine WooCommerce-Erweiterung und kann ohne WooCommerce nicht arbeiten."
 
 #. translators: %s: PHP version
 #: includes/admin/class-setup-wizard.php:130
@@ -686,7 +686,7 @@ msgstr "Eine Währung ist konfiguriert"
 
 #: includes/admin/class-setup-wizard.php:144
 msgid "Set your currency under WooCommerce → Settings → General."
-msgstr ""
+msgstr "Legen Sie Ihre Währung unter WooCommerce → Einstellungen → Allgemein fest."
 
 #: includes/admin/class-setup-wizard.php:148
 msgid "At least one payment method is enabled"
@@ -694,7 +694,7 @@ msgstr "Mindestens eine Zahlungsart ist aktiv"
 
 #: includes/admin/class-setup-wizard.php:150
 msgid "Without a payment method guests cannot complete an order."
-msgstr ""
+msgstr "Ohne Zahlungsart können Gäste keine Bestellung abschliessen."
 
 #: includes/admin/class-setup-wizard.php:154
 msgid "Scheduled tasks are running"
@@ -702,7 +702,7 @@ msgstr "Geplante Aufgaben laufen"
 
 #: includes/admin/class-setup-wizard.php:156
 msgid "Pre-orders and pickup reminders rely on WordPress scheduled tasks."
-msgstr ""
+msgstr "Vorbestellungen und Abhol-Erinnerungen sind auf geplante WordPress-Aufgaben angewiesen."
 
 #: includes/admin/class-setup-wizard.php:190
 msgid "WooCommerce is required."
@@ -746,7 +746,7 @@ msgstr "Classic Burger"
 
 #: includes/admin/class-setup-wizard.php:445
 msgid "Beef patty, salad, tomato, house sauce."
-msgstr ""
+msgstr "Rindfleisch-Patty, Salat, Tomate, Haussauce."
 
 #: includes/admin/class-setup-wizard.php:453
 msgid "Veggie Bowl"
@@ -754,7 +754,7 @@ msgstr "Veggie Bowl"
 
 #: includes/admin/class-setup-wizard.php:454
 msgid "Seasonal vegetables, quinoa, herb dressing."
-msgstr ""
+msgstr "Saisongemüse, Quinoa, Kräuterdressing."
 
 #: includes/admin/class-setup-wizard.php:462
 msgid "Pasta of the Day"
@@ -762,7 +762,7 @@ msgstr "Pasta des Tages"
 
 #: includes/admin/class-setup-wizard.php:463
 msgid "Fresh pasta with a changing sauce."
-msgstr ""
+msgstr "Frische Pasta mit wechselnder Sauce."
 
 #: includes/admin/class-setup-wizard.php:471
 msgid "Soup of the Day"
@@ -770,7 +770,7 @@ msgstr "Suppe des Tages"
 
 #: includes/admin/class-setup-wizard.php:472
 msgid "Ask our staff what is cooking today."
-msgstr ""
+msgstr "Fragen Sie unser Personal, was heute kocht."
 
 #: includes/admin/class-setup-wizard.php:480
 msgid "Fries"
@@ -778,7 +778,7 @@ msgstr "Pommes"
 
 #: includes/admin/class-setup-wizard.php:481
 msgid "Crispy, with sea salt."
-msgstr ""
+msgstr "Knusprig, mit Meersalz."
 
 #: includes/admin/class-setup-wizard.php:489
 msgid "Green Salad"
@@ -786,7 +786,7 @@ msgstr "Grüner Salat"
 
 #: includes/admin/class-setup-wizard.php:490
 msgid "Leaf salad with vinaigrette."
-msgstr ""
+msgstr "Blattsalat mit Vinaigrette."
 
 #: includes/admin/class-setup-wizard.php:498
 msgid "Mineral Water 5dl"
@@ -794,7 +794,7 @@ msgstr "Mineralwasser 5dl"
 
 #: includes/admin/class-setup-wizard.php:499
 msgid "Sparkling or still."
-msgstr ""
+msgstr "Mit oder ohne Kohlensäure."
 
 #: includes/admin/class-setup-wizard.php:507
 msgid "Coffee"
@@ -802,7 +802,7 @@ msgstr "Kaffee"
 
 #: includes/admin/class-setup-wizard.php:508
 msgid "Espresso, or with milk on request."
-msgstr ""
+msgstr "Espresso, auf Wunsch mit Milch."
 
 #: includes/core/class-rest-api.php:207
 msgid "No permission for this location"
@@ -2889,7 +2889,7 @@ msgstr "Übersicht aller veröffentlichten Produkte und ihrer deklarierten Aller
 
 #: templates/admin/allergen-matrix.php:72
 msgid "Print"
-msgstr ""
+msgstr "Drucken"
 
 #: templates/admin/allergen-matrix.php:81
 msgid "Only products with allergens"
@@ -5995,7 +5995,7 @@ msgstr "Einrichtungsassistenten starten"
 msgid ""
 "Two minutes, and it can create a sample menu so you are not starting from an "
 "empty shop."
-msgstr ""
+msgstr "Zwei Minuten, und er kann eine Beispielkarte anlegen, damit Sie nicht vor einem leeren Shop stehen."
 
 #: templates/admin/settings-tabbed.php:447
 msgid "Dismiss"
@@ -6173,7 +6173,7 @@ msgstr "Produkt-ID"
 
 #: templates/admin/settings-tabbed.php:738
 msgid "Optional text, e.g. “Fries with that?”"
-msgstr ""
+msgstr "Optionaler Text, z. B. «Pommes dazu?»"
 
 #: templates/admin/settings-tabbed.php:746
 msgid "Product not found."
@@ -7091,7 +7091,7 @@ msgstr "Einrichtungsschritte"
 
 #: templates/admin/setup-wizard.php:34
 msgid "Welcome"
-msgstr ""
+msgstr "Willkommen"
 
 #: templates/admin/setup-wizard.php:35
 msgid "Check"
@@ -7114,19 +7114,19 @@ msgid ""
 "This short setup gets your restaurant running. It takes about two minutes "
 "and nothing here is permanent — every choice can be changed later under "
 "Settings."
-msgstr ""
+msgstr "Diese kurze Einrichtung bringt Ihren Betrieb zum Laufen. Sie dauert etwa zwei Minuten, und nichts davon ist endgültig — jede Wahl lässt sich später unter Einstellungen ändern."
 
 #: templates/admin/setup-wizard.php:48
 msgid "Check that your shop is ready to take orders"
-msgstr ""
+msgstr "Prüfen, ob Ihr Shop bereit ist, Bestellungen anzunehmen"
 
 #: templates/admin/setup-wizard.php:49
 msgid "Pick the modules your business actually needs"
-msgstr ""
+msgstr "Die Module wählen, die Ihr Betrieb tatsächlich braucht"
 
 #: templates/admin/setup-wizard.php:50
 msgid "Optionally start with a sample menu instead of an empty shop"
-msgstr ""
+msgstr "Auf Wunsch mit einer Beispielkarte statt einem leeren Shop starten"
 
 #: templates/admin/setup-wizard.php:54
 msgid "Skip setup"
@@ -7142,13 +7142,13 @@ msgstr "Systemprüfung"
 
 #: templates/admin/setup-wizard.php:64
 msgid "A quick look at whether everything Libre Bite relies on is in place."
-msgstr ""
+msgstr "Ein kurzer Blick darauf, ob alles vorhanden ist, worauf Libre Bite aufbaut."
 
 #: templates/admin/setup-wizard.php:83
 msgid ""
 "WooCommerce must be installed and active before Libre Bite can do anything. "
 "Please take care of that first."
-msgstr ""
+msgstr "WooCommerce muss installiert und aktiv sein, bevor Libre Bite irgendetwas tun kann. Bitte zuerst darum kümmern."
 
 #: templates/admin/setup-wizard.php:89 templates/admin/setup-wizard.php:116
 msgid "Continue"
@@ -7162,7 +7162,7 @@ msgstr "Welche Module brauchen Sie?"
 msgid ""
 "Only what you switch on appears in the menu. Everything else stays out of "
 "your way and can be enabled any time."
-msgstr ""
+msgstr "Nur was Sie einschalten, erscheint im Menü. Alles andere bleibt Ihnen aus dem Weg und lässt sich jederzeit aktivieren."
 
 #: templates/admin/setup-wizard.php:122
 msgid "Start with a sample menu?"
@@ -7173,13 +7173,13 @@ msgid ""
 "An empty shop is hard to judge. Libre Bite can create one location with "
 "opening hours, three categories, eight dishes and a few add-ons, so you can "
 "click through everything straight away."
-msgstr ""
+msgstr "Ein leerer Shop lässt sich schlecht beurteilen. Libre Bite kann einen Standort mit Öffnungszeiten, drei Kategorien, acht Gerichte und einige Zusatzoptionen anlegen, damit Sie sofort alles durchklicken können."
 
 #: templates/admin/setup-wizard.php:127
 msgid ""
 "Everything created here is marked as sample content and can be deleted like "
 "any other product. Running the import twice does not create duplicates."
-msgstr ""
+msgstr "Alles hier Angelegte ist als Beispielinhalt markiert und lässt sich wie jedes andere Produkt löschen. Ein zweiter Import erzeugt keine Duplikate."
 
 #: templates/admin/setup-wizard.php:135
 msgid "Create sample menu"

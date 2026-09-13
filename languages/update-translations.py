@@ -23,6 +23,44 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Restliche Strings aus Wizard, Matrix und Beispieldaten
+    "Libre Bite is a WooCommerce extension and cannot work without it.":
+        "Libre Bite ist eine WooCommerce-Erweiterung und kann ohne WooCommerce nicht arbeiten.",
+    "Set your currency under WooCommerce \u2192 Settings \u2192 General.":
+        "Legen Sie Ihre Währung unter WooCommerce \u2192 Einstellungen \u2192 Allgemein fest.",
+    "Without a payment method guests cannot complete an order.":
+        "Ohne Zahlungsart können Gäste keine Bestellung abschliessen.",
+    "Pre-orders and pickup reminders rely on WordPress scheduled tasks.":
+        "Vorbestellungen und Abhol-Erinnerungen sind auf geplante WordPress-Aufgaben angewiesen.",
+    "Beef patty, salad, tomato, house sauce.": "Rindfleisch-Patty, Salat, Tomate, Haussauce.",
+    "Seasonal vegetables, quinoa, herb dressing.": "Saisongemüse, Quinoa, Kräuterdressing.",
+    "Fresh pasta with a changing sauce.": "Frische Pasta mit wechselnder Sauce.",
+    "Ask our staff what is cooking today.": "Fragen Sie unser Personal, was heute kocht.",
+    "Crispy, with sea salt.": "Knusprig, mit Meersalz.",
+    "Leaf salad with vinaigrette.": "Blattsalat mit Vinaigrette.",
+    "Sparkling or still.": "Mit oder ohne Kohlensäure.",
+    "Espresso, or with milk on request.": "Espresso, auf Wunsch mit Milch.",
+    "Print": "Drucken",
+    "Optional text, e.g. \u201cFries with that?\u201d": "Optionaler Text, z. B. «Pommes dazu?»",
+    "Welcome": "Willkommen",
+    "Check that your shop is ready to take orders": "Prüfen, ob Ihr Shop bereit ist, Bestellungen anzunehmen",
+    "Pick the modules your business actually needs": "Die Module wählen, die Ihr Betrieb tatsächlich braucht",
+    "Optionally start with a sample menu instead of an empty shop":
+        "Auf Wunsch mit einer Beispielkarte statt einem leeren Shop starten",
+    "A quick look at whether everything Libre Bite relies on is in place.":
+        "Ein kurzer Blick darauf, ob alles vorhanden ist, worauf Libre Bite aufbaut.",
+    "This short setup gets your restaurant running. It takes about two minutes and nothing here is permanent \u2014 every choice can be changed later under Settings.":
+        "Diese kurze Einrichtung bringt Ihren Betrieb zum Laufen. Sie dauert etwa zwei Minuten, und nichts davon ist endgültig \u2014 jede Wahl lässt sich später unter Einstellungen ändern.",
+    "WooCommerce must be installed and active before Libre Bite can do anything. Please take care of that first.":
+        "WooCommerce muss installiert und aktiv sein, bevor Libre Bite irgendetwas tun kann. Bitte zuerst darum kümmern.",
+    "Only what you switch on appears in the menu. Everything else stays out of your way and can be enabled any time.":
+        "Nur was Sie einschalten, erscheint im Menü. Alles andere bleibt Ihnen aus dem Weg und lässt sich jederzeit aktivieren.",
+    "An empty shop is hard to judge. Libre Bite can create one location with opening hours, three categories, eight dishes and a few add-ons, so you can click through everything straight away.":
+        "Ein leerer Shop lässt sich schlecht beurteilen. Libre Bite kann einen Standort mit Öffnungszeiten, drei Kategorien, acht Gerichte und einige Zusatzoptionen anlegen, damit Sie sofort alles durchklicken können.",
+    "Everything created here is marked as sample content and can be deleted like any other product. Running the import twice does not create duplicates.":
+        "Alles hier Angelegte ist als Beispielinhalt markiert und lässt sich wie jedes andere Produkt löschen. Ein zweiter Import erzeugt keine Duplikate.",
+    "Two minutes, and it can create a sample menu so you are not starting from an empty shop.":
+        "Zwei Minuten, und er kann eine Beispielkarte anlegen, damit Sie nicht vor einem leeren Shop stehen.",
     # SMS-Benachrichtigungen
     "SMS Notifications": "SMS-Benachrichtigungen",
     "Enable SMS": "SMS aktivieren",

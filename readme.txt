@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 2.5.0
+Stable tag: 2.6.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,6 +108,27 @@ EU-compliant nutritional values and allergen declarations for every product. Dis
 
 **Advanced Sound Notifications**
 A browser signal tone when a new order arrives on the Kanban board. Custom sound files can be uploaded via the media library (Pro).
+
+**Theme-independent Menu View**
+Output your menu in its own layout — category navigation, product cards, a dialog for variations and add-ons, and a slide-in order panel. Works with any theme, no template editing required.
+
+**Dietary Labels & Filter**
+Label dishes as vegan, vegetarian, gluten-free and more. Guests filter the menu without reloading the page.
+
+**Scheduled Availability**
+Limit products or whole categories to certain weekdays, times of day or date ranges. A breakfast menu that disappears at 11:30, a seasonal item that only shows in December.
+
+**Order Bumps**
+Offer matching extras right above the pay button. Added as real line items, so they appear on the kitchen ticket and count in the statistics.
+
+**Time Slot Capacity**
+Cap how many orders each time slot accepts, so the kitchen is not flooded at peak times.
+
+**Guest Notes**
+Keep allergies and preferences on the customer account and show them to staff when a returning guest reserves a table.
+
+**SMS Notifications**
+Send a short text message when an order is ready. Uses your own Twilio account — no order or customer data passes through us.
 
 **Customizable Kanban Columns**
 Rename, add, remove and reorder the columns of the Kanban order board to match your own workflow — mark any number of columns as "completed", add a one-step back button per order card, and optionally enable drag & drop between columns (Pro).
@@ -238,6 +259,39 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 2.6.0 =
+
+**New: Menu & guest experience**
+* Theme-independent menu view via the `[lbite_menu]` shortcode — category navigation, product cards in a grid or list, a dialog for variations and add-ons, and a slide-in order panel (Pro)
+* Dietary labels (vegan, vegetarian, gluten-free, lactose-free, spicy, alcohol-free) with a filter bar above the shop grid (Pro)
+* Scheduled availability: limit products or whole categories to certain weekdays, times of day or date ranges — a breakfast menu that disappears at 11:30 (Pro)
+* Order bumps: offer matching extras above the pay button, added as real line items so they appear on the kitchen ticket and in the statistics (Pro)
+
+**New: Kitchen & counter**
+* Waiting time timer on every order card, turning amber and then red as an order ages, with an optional repeating alert sound
+* Receipt templates for kitchen, customer and delivery, each with configurable content, on a proper 80 mm layout
+* Time slot capacity: cap how many orders a slot accepts so the kitchen is not flooded at peak times (Pro)
+* Floor plan image as the background of the table plan, so tables can be placed where they actually stand
+
+**New: Setup & operations**
+* Setup assistant with system check, module selection and an optional sample menu, so a fresh installation no longer starts empty
+* Printable allergen matrix covering all products and the 14 EU allergens
+* Guest notes: keep allergies and preferences on the customer account and show them to staff when a returning guest reserves (Pro)
+* SMS notifications via your own Twilio account, with the auth token stored encrypted (Pro)
+* Revenue charts on the statistics page: daily trend, revenue by location and payment method split
+
+**Under the hood**
+* New admin design system with central design tokens; all admin stylesheets migrated
+* Dark colour scheme for the Libre Bite screens, selectable per user — easier on the eyes on kitchen displays that run all day
+* REST API under `lbite/v1` alongside the existing endpoints, authenticated with WordPress application passwords
+* New action hooks at the core transitions for printer bridges, secondary kitchen displays and external notifications
+* Branding colours now apply to the backend as well
+
+**Fixed**
+* Table and ASAP badges on the order board were hard-coded in German and stayed German in other languages
+* The "load more orders" button had the same problem
+* Completed the external services declaration: the QR code service is also used by the free location feature, not only by table management
 
 = 2.5.0 =
 * New: The reservation form is now a clear, guided 3-step process — When & How Many, Your Details, and a final Confirmation summary — instead of one long form (Pro).
