@@ -626,7 +626,7 @@ class LBite_Admin {
 		$lbite_app_screens = array(
 			'lbite-order-board',
 			'lbite-pos',
-			'lbite-table-plan',
+			'lbite-floor-plan',
 			'lbite-reservation-board',
 		);
 

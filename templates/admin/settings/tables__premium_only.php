@@ -66,7 +66,7 @@ $lbite_pages                  = get_pages();
 	<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_table' ) ); ?>" class="button">
 		<?php esc_html_e( 'Manage Tables', 'libre-bite' ); ?>
 	</a>
-	<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-table-plan' ) ); ?>" class="button" style="margin-left: 8px;">
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-floor-plan' ) ); ?>" class="button" style="margin-left: 8px;">
 		<?php esc_html_e( 'Table Plan', 'libre-bite' ); ?>
 	</a>
 </p>
