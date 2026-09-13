@@ -60,9 +60,14 @@ class LBite_Checkout {
 			$this->loader->add_action( 'woocommerce_cart_calculate_fees', $this, 'apply_rounding_fee', 999 );
 		}
 
+		// frontend.js und lbiteData (inkl. Nonce) brauchen mehrere Features, nicht nur
+		// der Standortwähler – etwa die Order Bumps im Checkout. Hing der Hook an
+		// enable_location_selector, rendern die Bumps zwar, reagieren aber auf keinen
+		// Klick. Die Methode begrenzt sich intern bereits auf die relevanten Seiten.
+		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_frontend_assets' );
+
 		// Standort- & Zeitwahl (Feature-abhängig)
 		if ( lbite_feature_enabled( 'enable_location_selector' ) ) {
-			$this->loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_frontend_assets' );
 			// Modal nur anzeigen wenn explizit aktiviert via Filter
 			if ( apply_filters( 'lbite_enable_location_modal', false ) ) {
 				$this->loader->add_action( 'wp_footer', $this, 'render_location_modal' );
