@@ -212,3 +212,44 @@
 		padding: 8px;
 	}
 }
+
+/* ════════════════════════════════════════════════════════════════════
+ * Gästenotizen auf der Reservierungskarte
+ *
+ * Allergien bewusst in Warnfarbe und über den übrigen Notizen: sie sind
+ * betrieblich das Wichtigste an dieser Stelle.
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-res-card__guest {
+	margin-top: var(--lbite-space-2, 8px);
+	padding-top: var(--lbite-space-2, 8px);
+	border-top: 1px dashed var(--lbite-border, #dcdfe3);
+}
+
+.lbite-res-card__guest-badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: var(--lbite-radius-pill, 999px);
+	background: var(--lbite-info-soft, #eaf4fb);
+	border: 1px solid var(--lbite-info-border, #b6d9ee);
+	color: var(--lbite-info, #0b6aa2);
+	font-size: var(--lbite-text-xs, 11px);
+	font-weight: var(--lbite-weight-bold, 700);
+}
+
+.lbite-res-card__allergies {
+	margin-top: var(--lbite-space-2, 8px);
+	padding: 4px 8px;
+	border-radius: var(--lbite-radius-xs, 3px);
+	background: var(--lbite-warning-soft, #fff6e0);
+	color: var(--lbite-warning, #9a6700);
+	font-size: var(--lbite-text-sm, 12px);
+	font-weight: var(--lbite-weight-semibold, 600);
+}
+
+.lbite-res-card__guest-notes {
+	margin-top: 4px;
+	font-size: var(--lbite-text-sm, 12px);
+	color: var(--lbite-text-muted, #646970);
+	line-height: 1.45;
+}

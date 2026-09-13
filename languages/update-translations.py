@@ -23,6 +23,18 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Gästenotizen
+    "Guest Notes": "Gästenotizen",
+    "Guest notes (Libre Bite)": "Gästenotizen (Libre Bite)",
+    "Allergies and intolerances": "Allergien und Unverträglichkeiten",
+    "Notes": "Notizen",
+    "Returning guest": "Stammgast",
+    "Shown to staff when this guest reserves a table. Keep it short and factual.":
+        "Wird dem Personal angezeigt, wenn dieser Gast einen Tisch reserviert. Kurz und sachlich halten.",
+    "Preferences worth remembering, for example a favourite table. Visible to your staff, never to the guest.":
+        "Vorlieben, die man sich merken sollte, etwa ein Lieblingstisch. Nur für Ihr Personal sichtbar, nie für den Gast.",
+    "Keep allergies and preferences on the customer account and show them to staff when a returning guest reserves a table.":
+        "Hält Allergien und Vorlieben am Kundenkonto fest und zeigt sie dem Personal, wenn ein Stammgast einen Tisch reserviert.",
     # Menü-Ansicht (F33)
     "Theme-independent Menu View": "Theme-unabhängige Menü-Ansicht",
     "Add to order": "Zur Bestellung hinzufügen",

@@ -80,6 +80,13 @@ class LBite_Features {
 			'label'       => 'Open Tabs (Table Service)',
 			'description' => 'Keep orders open per table and add items until the guests pay',
 		),
+		'enable_guest_notes'        => array(
+			'group'       => 'order_system',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Guest Notes',
+			'description' => 'Keep allergies and preferences on the customer account and show them to staff when a returning guest reserves a table.',
+		),
 		'enable_reservations'       => array(
 			'group'       => 'order_system',
 			'default'     => false,

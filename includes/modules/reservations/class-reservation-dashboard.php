@@ -100,7 +100,7 @@ class LBite_Reservation_Dashboard {
 			$table_id = intval( get_post_meta( $post->ID, '_lbite_table_id', true ) );
 			$table    = $table_id ? get_post( $table_id ) : null;
 
-			$reservations[] = array(
+			$lbite_res_data = array(
 				'id'       => $post->ID,
 				'time'     => get_post_meta( $post->ID, '_lbite_reservation_time', true ),
 				'guests'   => intval( get_post_meta( $post->ID, '_lbite_reservation_guests', true ) ),
@@ -111,6 +111,16 @@ class LBite_Reservation_Dashboard {
 				'table_id' => $table_id,
 				'table'    => $table ? $table->post_title : '',
 			);
+
+			/**
+			 * Daten einer Reservierungskarte vor der Ausgabe.
+			 *
+			 * Erweiterungspunkt, über den etwa Gästenotizen ergänzt werden.
+			 *
+			 * @param array $lbite_res_data Kartendaten.
+			 * @param int   $reservation_id Reservierungs-ID.
+			 */
+			$reservations[] = apply_filters( 'lbite_reservation_board_data', $lbite_res_data, $post->ID );
 		}
 
 		// Tischliste für Standort einmalig mitliefern (kein separater Request pro Karte nötig)

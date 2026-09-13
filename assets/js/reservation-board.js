@@ -250,6 +250,32 @@
 				$('<div>').addClass('lbite-res-card__notes').text(escapeHtml(res.notes)).appendTo($body);
 			}
 
+			// Gastnotizen aus dem Kundenkonto (nur bei wiedererkanntem Gast)
+			if (res.guest_known) {
+				const $guest = $('<div>').addClass('lbite-res-card__guest');
+
+				$('<span>')
+					.addClass('lbite-res-card__guest-badge')
+					.text(lbiteReservationBoard.strings.knownGuest || 'Returning guest')
+					.appendTo($guest);
+
+				if (res.guest_allergies) {
+					$('<div>')
+						.addClass('lbite-res-card__allergies')
+						.text('⚠ ' + escapeHtml(res.guest_allergies))
+						.appendTo($guest);
+				}
+
+				if (res.guest_notes) {
+					$('<div>')
+						.addClass('lbite-res-card__guest-notes')
+						.text(escapeHtml(res.guest_notes))
+						.appendTo($guest);
+				}
+
+				$body.append($guest);
+			}
+
 			// Tisch-Dropdown
 			const $tableRow    = $('<div>').addClass('lbite-res-card__table-row');
 			const $tableLabel  = $('<label>').text(lbiteReservationBoard.strings.table + ': ');

@@ -1010,6 +1010,7 @@ class LBite_Admin {
 						'reservations' => __( 'Reservations', 'libre-bite' ),
 						'table'        => __( 'Table', 'libre-bite' ),
 						'noTable'      => __( 'No table', 'libre-bite' ),
+						'knownGuest'   => __( 'Returning guest', 'libre-bite' ),
 					),
 				)
 			);
