@@ -23,6 +23,32 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # SMS-Benachrichtigungen
+    "SMS Notifications": "SMS-Benachrichtigungen",
+    "Enable SMS": "SMS aktivieren",
+    "Send text messages via Twilio": "Textnachrichten über Twilio senden",
+    "Credentials are stored.": "Zugangsdaten sind hinterlegt.",
+    "Account SID": "Account SID",
+    "Auth Token": "Auth Token",
+    "Sender number": "Absendernummer",
+    "Default country code": "Standard-Ländervorwahl",
+    "Send when moved to": "Senden beim Verschieben nach",
+    "Message": "Nachricht",
+    "— never —": "— nie —",
+    "One message per order at most.": "Höchstens eine Nachricht pro Bestellung.",
+    "Stored — leave empty to keep": "Hinterlegt — leer lassen zum Beibehalten",
+    "Please note:": "Bitte beachten:",
+    "Added to numbers that guests enter without one.": "Wird Nummern vorangestellt, die Gäste ohne Vorwahl eingeben.",
+    "Placeholders: {order_number}, {first_name}, {site}, {location}, {total}": "Platzhalter: {order_number}, {first_name}, {site}, {location}, {total}",
+    "Your order {order_number} is ready for pickup. Thank you! {site}": "Ihre Bestellung {order_number} ist abholbereit. Vielen Dank! {site}",
+    "Stored encrypted. It is never shown again \u2014 leave the field empty to keep the current token.":
+        "Wird verschlüsselt gespeichert und nie wieder angezeigt \u2014 das Feld leer lassen, um das bestehende Token zu behalten.",
+    "Send a short text message when an order reaches a chosen column. Uses your own Twilio account \u2014 no data passes through us.":
+        "Sendet eine kurze Textnachricht, sobald eine Bestellung in eine gewählte Spalte kommt. Nutzt Ihr eigenes Twilio-Konto \u2014 es fliessen keine Daten über uns.",
+    "Sends a short text message when an order reaches a chosen column. You use your own Twilio account, so no order or customer data passes through us and the cost stays transparent.":
+        "Sendet eine kurze Textnachricht, sobald eine Bestellung in eine gewählte Spalte kommt. Sie nutzen Ihr eigenes Twilio-Konto, es fliessen also weder Bestell- noch Kundendaten über uns und die Kosten bleiben transparent.",
+    "A message can only be sent if the order has a phone number. The phone field is optional in the standard checkout and is removed entirely in table ordering and in the optimised checkout \u2014 in those cases no SMS will go out.":
+        "Eine Nachricht kann nur gesendet werden, wenn die Bestellung eine Telefonnummer enthält. Das Telefonfeld ist im Standard-Checkout optional und wird bei Tischbestellung sowie im optimierten Checkout ganz entfernt \u2014 in diesen Fällen geht keine SMS hinaus.",
     # Gästenotizen
     "Guest Notes": "Gästenotizen",
     "Guest notes (Libre Bite)": "Gästenotizen (Libre Bite)",

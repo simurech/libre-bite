@@ -118,6 +118,10 @@ class LBite_Plugin {
 			$this->load_module( 'guest-notes', 'LBite_Guest_Notes' );
 		}
 
+		if ( lbite_feature_enabled( 'enable_sms_notifications' ) ) {
+			$this->load_module( 'sms', 'LBite_SMS' );
+		}
+
 		// Nur in Premium-Version laden (Klassen-Dateien existieren in Free Version nicht).
 		if ( lbite_freemius()->is__premium_only() ) {
 			if ( lbite_feature_enabled( 'enable_nutritional_info' ) || lbite_feature_enabled( 'enable_allergens' ) ) {

@@ -163,6 +163,13 @@ class LBite_Features {
 			'label'       => 'Pickup Reminders',
 			'description' => 'Send email reminder before pickup time',
 		),
+		'enable_sms_notifications'  => array(
+			'group'       => 'notifications',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'SMS Notifications',
+			'description' => 'Send a short text message when an order reaches a chosen column. Uses your own Twilio account — no data passes through us.',
+		),
 		'enable_sound_notifications' => array(
 			'group'       => 'notifications',
 			'default'     => false,
@@ -437,6 +444,11 @@ class LBite_Features {
 			'lbite_kanban_drag_drop_enabled' => 0,
 			'lbite_max_orders_per_slot'      => 0,
 			'lbite_order_bumps'              => array(),
+			'lbite_sms_account_sid'          => '',
+			'lbite_sms_auth_token'           => '',
+			'lbite_sms_from'                 => '',
+			'lbite_sms_template'             => '',
+			'lbite_sms_trigger_status'       => '',
 		);
 	}
 

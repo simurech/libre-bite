@@ -191,9 +191,11 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		case 'notifications':
 			$lbite_features = get_option( 'lbite_features', array() );
 			if ( $lbite_premium_allowed ) {
-				$lbite_features['enable_pickup_reminders'] = isset( $_POST['lbite_feature_toggle']['enable_pickup_reminders'] );
+				$lbite_features['enable_pickup_reminders']  = isset( $_POST['lbite_feature_toggle']['enable_pickup_reminders'] );
+				$lbite_features['enable_sms_notifications'] = isset( $_POST['lbite_feature_toggle']['enable_sms_notifications'] );
 			} else {
-				$lbite_features['enable_pickup_reminders'] = false;
+				$lbite_features['enable_pickup_reminders']  = false;
+				$lbite_features['enable_sms_notifications'] = false;
 			}
 			// Sound notifications are a free feature.
 			$lbite_features['enable_sound_notifications'] = isset( $_POST['lbite_feature_toggle']['enable_sound_notifications'] );
@@ -204,6 +206,35 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			) );
 			update_option( 'lbite_notification_sound', isset( $_POST['lbite_notification_sound'] ) ? esc_url_raw( wp_unslash( $_POST['lbite_notification_sound'] ) ) : '' );
 			update_option( 'lbite_pickup_reminder_time', $lbite_not_values['lbite_pickup_reminder_time'] );
+
+			// SMS-Zugangsdaten. Das Auth-Token wird verschlüsselt abgelegt und
+			// nur überschrieben, wenn tatsächlich ein neuer Wert eingegeben
+			// wurde — sonst würde das Absenden des Formulars mit leerem Feld
+			// das gespeicherte Token löschen.
+			if ( ! class_exists( 'LBite_SMS' ) ) {
+				require_once LBITE_PLUGIN_DIR . 'includes/modules/sms/class-sms.php';
+			}
+
+			$lbite_sms_values = lbite_enforce_pro_options(
+				array(
+					'lbite_sms_account_sid'    => isset( $_POST['lbite_sms_account_sid'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_sms_account_sid'] ) ) : '',
+					'lbite_sms_from'           => isset( $_POST['lbite_sms_from'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_sms_from'] ) ) : '',
+					'lbite_sms_template'       => isset( $_POST['lbite_sms_template'] ) ? sanitize_textarea_field( wp_unslash( $_POST['lbite_sms_template'] ) ) : '',
+					'lbite_sms_trigger_status' => isset( $_POST['lbite_sms_trigger_status'] ) ? sanitize_key( wp_unslash( $_POST['lbite_sms_trigger_status'] ) ) : '',
+				)
+			);
+			update_option( 'lbite_sms_account_sid', $lbite_sms_values['lbite_sms_account_sid'] );
+			update_option( 'lbite_sms_from', $lbite_sms_values['lbite_sms_from'] );
+			update_option( 'lbite_sms_template', $lbite_sms_values['lbite_sms_template'] );
+			update_option( 'lbite_sms_trigger_status', $lbite_sms_values['lbite_sms_trigger_status'] );
+
+			$lbite_sms_token = isset( $_POST['lbite_sms_auth_token'] ) ? trim( (string) wp_unslash( $_POST['lbite_sms_auth_token'] ) ) : '';
+			if ( '' !== $lbite_sms_token && $lbite_premium_allowed ) {
+				update_option( 'lbite_sms_auth_token', LBite_SMS::encrypt( $lbite_sms_token ) );
+			}
+
+			update_option( 'lbite_sms_country_code', isset( $_POST['lbite_sms_country_code'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_sms_country_code'] ) ) : '+41' );
+
 			$lbite_did_save = true;
 			break;
 
