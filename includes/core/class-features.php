@@ -103,6 +103,13 @@ class LBite_Features {
 			'label'       => 'Tip System',
 			'description' => 'Show tip options at checkout',
 		),
+		'enable_order_bumps'        => array(
+			'group'       => 'checkout',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Order Bumps',
+			'description' => 'Offer matching extras right above the pay button — a side, a drink, a dessert. Added as a real line item, so it appears on the kitchen ticket and in the statistics.',
+		),
 		'enable_rounding'           => array(
 			'group'       => 'checkout',
 			'default'     => true,
@@ -415,6 +422,7 @@ class LBite_Features {
 			'lbite_kanban_columns'           => array(),
 			'lbite_kanban_drag_drop_enabled' => 0,
 			'lbite_max_orders_per_slot'      => 0,
+			'lbite_order_bumps'              => array(),
 		);
 	}
 

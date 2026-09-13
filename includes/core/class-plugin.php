@@ -106,6 +106,10 @@ class LBite_Plugin {
 			$this->load_module( 'menu-schedule', 'LBite_Menu_Schedule' );
 		}
 
+		if ( lbite_feature_enabled( 'enable_order_bumps' ) ) {
+			$this->load_module( 'order-bumps', 'LBite_Order_Bumps' );
+		}
+
 		// Nur in Premium-Version laden (Klassen-Dateien existieren in Free Version nicht).
 		if ( lbite_freemius()->is__premium_only() ) {
 			if ( lbite_feature_enabled( 'enable_nutritional_info' ) || lbite_feature_enabled( 'enable_allergens' ) ) {

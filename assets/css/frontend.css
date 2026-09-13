@@ -505,3 +505,71 @@
 	border-style: dashed;
 	color: #646970;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+ * Order Bumps im Kassenbereich (F46)
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-bumps {
+	margin: 16px 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.lbite-bump {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 14px;
+	border: 2px dashed var(--lbite-color-primary, #0073aa);
+	border-radius: 10px;
+	background: #f7fbfd;
+	cursor: pointer;
+	transition: background-color .15s ease, border-color .15s ease;
+}
+
+.lbite-bump:hover {
+	background: #eef6fb;
+}
+
+.lbite-bump.is-loading {
+	opacity: .6;
+	pointer-events: none;
+}
+
+.lbite-bump__check {
+	flex: 0 0 auto;
+	width: 20px;
+	height: 20px;
+	margin: 0;
+	cursor: pointer;
+}
+
+.lbite-bump__img {
+	flex: 0 0 auto;
+	width: 46px;
+	height: 46px;
+	border-radius: 8px;
+	object-fit: cover;
+}
+
+.lbite-bump__body {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+.lbite-bump__text {
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 1.35;
+}
+
+.lbite-bump__price {
+	font-size: 13px;
+	color: #50575e;
+}
+
+.lbite-bump__price del { opacity: .6; }

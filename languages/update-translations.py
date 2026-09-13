@@ -23,6 +23,21 @@ LANG_DIR = os.path.dirname(os.path.abspath(__file__))
 # (Sie-Form, ss – werden weiter unten per Variante angepasst)
 # ─────────────────────────────────────────────────────────────────
 NEW_STRINGS_FORMAL_SS = {
+    # Order Bumps (F46)
+    "Order Bumps": "Zusatzangebote",
+    "Enable Order Bumps": "Zusatzangebote aktivieren",
+    "Show impulse offers in the checkout": "Impulsangebote im Kassenbereich anzeigen",
+    "Offer %d": "Angebot %d",
+    "Product ID": "Produkt-ID",
+    "Product not found.": "Produkt nicht gefunden.",
+    "Add %s to your order?": "%s dazu bestellen?",
+    "Unknown offer": "Unbekanntes Angebot",
+    "Could not add the item": "Der Artikel konnte nicht hinzugefügt werden",
+    "Not available": "Nicht verfügbar",
+    "Offer matching extras right above the pay button \u2014 a side, a drink, a dessert. Added as a real line item, so it appears on the kitchen ticket and in the statistics.":
+        "Bietet passende Extras direkt über dem Bezahlen-Knopf an \u2014 eine Beilage, ein Getränk, ein Dessert. Wird als echte Bestellposition hinzugefügt und erscheint dadurch auf dem Küchenbon und in der Statistik.",
+    "Offer up to three matching extras right above the pay button. They are added as real line items, so they appear on the kitchen ticket and count in the statistics. Variable products are not offered here, because they would need a selection first.":
+        "Bietet bis zu drei passende Extras direkt über dem Bezahlen-Knopf an. Sie werden als echte Bestellpositionen hinzugefügt, erscheinen dadurch auf dem Küchenbon und zählen in der Statistik. Variable Produkte stehen hier nicht zur Auswahl, da sie zuerst eine Variantenwahl erfordern würden.",
     # Statistik-Diagramme
     "Revenue Over Time": "Umsatzverlauf",
     "Revenue by Location": "Umsatz nach Standort",

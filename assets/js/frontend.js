@@ -544,6 +544,65 @@
 		}
 	};
 
+
+	/**
+	 * Order Bumps im Kassenbereich (F46)
+	 *
+	 * Der Artikel wird als echte Warenkorb-Position hinzugefügt; danach wird
+	 * die WooCommerce-Bestellübersicht neu berechnet, damit Summen, Steuern
+	 * und Rundung stimmen.
+	 */
+	const OrderBumps = {
+		busy: false,
+
+		init: function() {
+			this.bindEvents();
+		},
+
+		bindEvents: function() {
+			const self = this;
+
+			$(document).on('change', '.lbite-bump__check', function() {
+				const $check = $(this);
+
+				if (!$check.is(':checked') || self.busy) {
+					return;
+				}
+
+				const $bump = $check.closest('.lbite-bump');
+				const productId = $bump.data('product-id');
+
+				if (!productId) {
+					return;
+				}
+
+				self.busy = true;
+				$bump.addClass('is-loading');
+				$check.prop('disabled', true);
+
+				$.post(lbiteData.ajaxUrl, {
+					action: 'lbite_add_order_bump',
+					nonce: lbiteData.nonce,
+					product_id: productId
+				}).done(function(response) {
+					if (response && response.success) {
+						// Der Artikel liegt jetzt im Warenkorb – die Übersicht
+						// zeichnet sich neu und das Angebot verschwindet dabei.
+						$(document.body).trigger('update_checkout');
+					} else {
+						$check.prop('checked', false).prop('disabled', false);
+						$bump.removeClass('is-loading');
+					}
+				}).fail(function() {
+					$check.prop('checked', false).prop('disabled', false);
+					$bump.removeClass('is-loading');
+				}).always(function() {
+					self.busy = false;
+				});
+			});
+		}
+	};
+
 	$(document).ready(function() {
 		LocationModal.init();
 		ProductOptions.init();
@@ -552,6 +611,7 @@
 		LocationFilter.init();
 		ProductAvailability.init();
 		DietaryFilter.init();
+		OrderBumps.init();
 	});
 
 })(jQuery);
