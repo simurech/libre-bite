@@ -53,6 +53,7 @@ class LBite_Customizations {
 		$this->loader->add_filter( 'woocommerce_product_is_visible', $this, 'hide_pos_only_from_catalog', 10, 2 );
 		$this->loader->add_action( 'pre_get_posts', $this, 'exclude_pos_only_from_frontend', 20 );
 		$this->loader->add_action( 'template_redirect', $this, 'redirect_pos_only_product' );
+		$this->loader->add_filter( 'woocommerce_add_to_cart_validation', $this, 'block_pos_only_in_cart', 10, 2 );
 	}
 
 	/**
@@ -233,5 +234,31 @@ class LBite_Customizations {
 		$wp_query->set_404();
 		status_header( 404 );
 		nocache_headers();
+	}
+
+	/**
+	 * POS-Only Produkte auch beim Hinzufügen zum Warenkorb abweisen.
+	 *
+	 * Katalog, Suche und Direktaufruf waren bereits dicht, der Warenkorb nicht:
+	 * Wer die Produkt-ID kannte, konnte einen nur für die Kasse gedachten Artikel
+	 * per vorbereitetem Aufruf bestellen. WooCommerce wertet diesen Filter an
+	 * jedem echten Eintrittspunkt aus (Formular, AJAX und Store-API).
+	 *
+	 * @param bool $passed     Bisheriges Prüfergebnis.
+	 * @param int  $product_id Produkt-ID.
+	 * @return bool
+	 */
+	public function block_pos_only_in_cart( $passed, $product_id ) {
+		if ( ! $passed ) {
+			return $passed;
+		}
+
+		if ( '1' !== get_post_meta( $product_id, '_lbite_pos_only', true ) ) {
+			return $passed;
+		}
+
+		wc_add_notice( __( 'This product is not available for online orders.', 'libre-bite' ), 'error' );
+
+		return false;
 	}
 }
