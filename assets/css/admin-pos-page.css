@@ -11,7 +11,9 @@
 	content: attr(data-no-location-text);
 	position: absolute;
 	inset: 0;
-	background: rgba(255, 255, 255, 0.88);
+	/* Schleier ueber dem gesperrten Produktbereich. Fest weiss stand der
+	   Hinweistext im dunklen Schema mit Kontrast 1.86 darauf. */
+	background: var(--lbite-veil, rgba(255, 255, 255, 0.88));
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -292,6 +294,9 @@
 .lbite-modal-header h2 {
 	margin: 0;
 	font-size: 20px;
+	/* Ohne eigene Angabe erbt die Überschrift WordPress' #1d2327 und stand im
+	   dunklen Schema mit einem Kontrast von 1.03 unsichtbar auf der Fläche. */
+	color: var(--lbite-text, #1d2327);
 }
 
 .lbite-modal-close {
@@ -375,8 +380,10 @@
 }
 
 .lbite-option-choice:has(input:checked) {
-	background: #e3f2fd;
-	border-color: #2196F3;
+	/* Der Auswahlzustand war fest hellblau. Im dunklen Schema stand darauf
+	   heller Text – Kontrast 1.06, die Auswahl war nicht erkennbar. */
+	background: var(--lbite-color-primary-soft, #e3f2fd);
+	border-color: var(--lbite-color-primary, #2196F3);
 }
 
 .lbite-option-choice input[type="radio"],
@@ -783,7 +790,9 @@ body.lbite-fullscreen-active #lbite-pos-cart-items {
 
 .lbite-payment-method-option:has(input:checked) {
 	border-color: var(--lbite-color-primary, #0073aa);
-	background: #e3f2fd;
+	/* Siehe oben: an der Kasse muss erkennbar bleiben, welche Zahlungsart
+	   gewaehlt ist. */
+	background: var(--lbite-color-primary-soft, #e3f2fd);
 }
 
 .lbite-payment-method-option input[type="radio"] {
@@ -1089,9 +1098,9 @@ body.lbite-fullscreen-active #lbite-pos-cart-items {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
-	background: #e3f2fd;
-	border: 1px solid #90caf9;
-	color: #1565c0;
+	background: var(--lbite-info-soft, #e3f2fd);
+	border: 1px solid var(--lbite-info-border, #90caf9);
+	color: var(--lbite-info, #1565c0);
 	padding: 4px 10px;
 	border-radius: 12px;
 	font-size: 13px;

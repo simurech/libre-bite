@@ -52,6 +52,7 @@
 	--lbite-accent-red: #b32d2e;
 	--lbite-accent-neutral: #50575e;
 	--lbite-accent-strong: #1d2327;
+	--lbite-veil: rgba(255, 255, 255, 0.88);
 
 	/* ── Rahmen ──────────────────────────────────────────────────────── */
 	--lbite-border: #dcdfe3;
@@ -786,7 +787,12 @@ body.lbite-screen-doc .lbite-app {
 	animation: lbite-fade-in var(--lbite-duration-base) var(--lbite-ease-soft);
 }
 
-.lbite-modal {
+/* Hinweis: Diese Komponente hiess urspruenglich .lbite-modal und kollidierte
+   damit mit der gleichnamigen Klasse, die POS und Standortwahl seit jeher fuer
+   das bildschirmfuellende Overlay verwenden. Die Panel-Eigenschaften (Breite
+   520px, Flex-Spalte, Flaechenfarbe) landeten dadurch auf dem Overlay, das
+   Modal klebte linksbuendig am Rand statt zentriert zu stehen. */
+.lbite-modal-panel {
 	position: relative;
 	z-index: var(--lbite-z-modal);
 	width: 100%;
@@ -800,9 +806,9 @@ body.lbite-screen-doc .lbite-app {
 	animation: lbite-modal-in var(--lbite-duration-slow) var(--lbite-ease-soft);
 }
 
-.lbite-modal--wide { max-width: 800px; }
+.lbite-modal-panel--wide { max-width: 800px; }
 
-.lbite-modal__header {
+.lbite-modal-panel__header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -811,18 +817,18 @@ body.lbite-screen-doc .lbite-app {
 	border-bottom: 1px solid var(--lbite-border-subtle);
 }
 
-.lbite-modal__title {
+.lbite-modal-panel__title {
 	margin: 0;
 	font-size: var(--lbite-text-xl);
 	font-weight: var(--lbite-weight-semibold);
 }
 
-.lbite-modal__body {
+.lbite-modal-panel__body {
 	padding: var(--lbite-space-6);
 	overflow-y: auto;
 }
 
-.lbite-modal__footer {
+.lbite-modal-panel__footer {
 	display: flex;
 	justify-content: flex-end;
 	gap: var(--lbite-space-2);
@@ -968,6 +974,7 @@ body.lbite-theme-dark {
 	--lbite-accent-red: #f07a7b;
 	--lbite-accent-neutral: #a2a9b4;
 	--lbite-accent-strong: #e8eaed;
+	--lbite-veil: rgba(20, 23, 28, 0.88);
 
 	--lbite-border: #333a45;
 	--lbite-border-strong: #454d5a;
@@ -1049,6 +1056,7 @@ body.lbite-app .wrap h2 {
 		--lbite-accent-red: #f07a7b;
 		--lbite-accent-neutral: #a2a9b4;
 		--lbite-accent-strong: #e8eaed;
+		--lbite-veil: rgba(20, 23, 28, 0.88);
 
 		--lbite-border: #333a45;
 		--lbite-border-strong: #454d5a;
