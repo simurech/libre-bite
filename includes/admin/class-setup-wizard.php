@@ -592,12 +592,95 @@ class LBite_Setup_Wizard {
 		}
 
 		update_option( 'lbite_features', $features );
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Jeder Wert wird in save_module_settings() einzeln nach seinem deklarierten Typ geprüft.
+		$posted = isset( $_POST['settings'] ) && is_array( $_POST['settings'] ) ? wp_unslash( $_POST['settings'] ) : array();
+		self::save_module_settings( $selected, $posted );
+
 		update_option( self::OPTION_DONE, true );
 
 		// Die alte Willkommens-Notice hat damit ausgedient.
 		update_option( 'lbite_show_welcome_notice', false );
 
 		wp_send_json_success( array( 'redirect' => admin_url( 'admin.php?page=libre-bite' ) ) );
+	}
+
+	/**
+	 * Einstellungen der Module aus dem Assistenten übernehmen
+	 *
+	 * Zwei Regeln halten den Assistenten unschädlich für bereits
+	 * eingerichtete Shops:
+	 *
+	 * 1. Geschrieben wird nur für Module, die in derselben Übermittlung
+	 *    eingeschaltet sind. Ein ausgeschaltetes Modul fasst seine
+	 *    Einstellungen nicht an.
+	 * 2. Geschrieben wird nur, was tatsächlich übermittelt wurde. Die Felder
+	 *    sind zudem mit dem Ist-Zustand vorbelegt, sodass blosses Durchklicken
+	 *    den bestehenden Wert zurückschreibt statt eines Standardwerts.
+	 *
+	 * @param array $selected Eingeschaltete Feature-Keys.
+	 * @param array $posted   Rohwerte aus dem Formular, Schlüssel = Options-Name.
+	 */
+	private static function save_module_settings( array $selected, array $posted ) {
+		$sammel_arrays = array();
+
+		foreach ( self::get_module_catalogue() as $feature => $modul ) {
+			if ( ! in_array( $feature, $selected, true ) || empty( $modul['settings'] ) ) {
+				continue;
+			}
+
+			foreach ( $modul['settings'] as $setting ) {
+				$name = $setting['option'];
+
+				if ( ! array_key_exists( $name, $posted ) ) {
+					continue;
+				}
+
+				$roh = $posted[ $name ];
+
+				switch ( $setting['type'] ) {
+					case 'checkbox':
+						$wert = ( '1' === (string) $roh ) ? 1 : 0;
+						break;
+					case 'number':
+						$wert = isset( $setting['step'] ) ? (float) $roh : (int) $roh;
+						if ( isset( $setting['min'] ) ) {
+							$wert = max( $setting['min'], $wert );
+						}
+						if ( isset( $setting['max'] ) ) {
+							$wert = min( $setting['max'], $wert );
+						}
+						break;
+					case 'select':
+						$wert = sanitize_key( $roh );
+						if ( ! isset( $setting['choices'][ $wert ] ) ) {
+							$wert = $setting['default'];
+						}
+						break;
+					default:
+						$wert = sanitize_text_field( $roh );
+				}
+
+				// Punktnotation adressiert einen Schlüssel innerhalb einer Array-Option.
+				if ( false !== strpos( $name, '.' ) ) {
+					list( $option, $key ) = explode( '.', $name, 2 );
+
+					if ( ! isset( $sammel_arrays[ $option ] ) ) {
+						$bestand                  = get_option( $option, array() );
+						$sammel_arrays[ $option ] = is_array( $bestand ) ? $bestand : array();
+					}
+
+					$sammel_arrays[ $option ][ $key ] = array( 'enabled' => (bool) $wert );
+					continue;
+				}
+
+				update_option( $name, $wert );
+			}
+		}
+
+		foreach ( $sammel_arrays as $option => $wert ) {
+			update_option( $option, $wert );
+		}
 	}
 
 	/**
@@ -610,12 +693,318 @@ class LBite_Setup_Wizard {
 	 * @return string[]
 	 */
 	public static function get_wizard_features() {
-		return array(
-			'enable_pos',
-			'enable_kanban_board',
-			'enable_scheduled_orders',
-			'enable_location_selector',
-			'enable_product_options',
+		return array_keys( self::get_module_catalogue() );
+	}
+
+	/**
+	 * Ist die Pro-Fassung nutzbar?
+	 *
+	 * @return bool
+	 */
+	private static function premium_available() {
+		return function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+	}
+
+	/**
+	 * Module, die der Assistent zur Auswahl stellt
+	 *
+	 * Ohne gültige Lizenz fallen die Pro-Module heraus: Ein Schalter, der sich
+	 * nicht einschalten lässt, gehört nicht in einen Einrichtungsablauf.
+	 *
+	 * @return array Feature-Key => [ 'settings' => [...], 'link_tab' => string, 'hint' => string ]
+	 */
+	public static function get_module_catalogue() {
+		$premium = self::premium_available();
+
+		$catalogue = array(
+			'enable_pos' => array(
+				'premium'  => false,
+				'settings' => array(),
+				'link_tab' => 'pos',
+				'hint'     => __( 'Payment methods, default order type and the table dropdown are configured under Settings → POS.', 'libre-bite' ),
+			),
+			'enable_kanban_board' => array(
+				'premium'  => false,
+				'link_tab' => 'orders',
+				'settings' => array(
+					array(
+						'option'      => 'lbite_dashboard_refresh_interval',
+						'type'        => 'number',
+						'default'     => 45,
+						'min'         => 10,
+						'label'       => __( 'Refresh interval', 'libre-bite' ),
+						'suffix'      => __( 'seconds', 'libre-bite' ),
+						'description' => __( 'How often the board fetches new orders.', 'libre-bite' ),
+					),
+					array(
+						'option'      => 'lbite_kds_timer_enabled',
+						'type'        => 'checkbox',
+						'default'     => 1,
+						'label'       => __( 'Show waiting time on the cards', 'libre-bite' ),
+						'description' => __( 'Counts up from when the order arrived and turns amber, then red.', 'libre-bite' ),
+					),
+					array(
+						'option'      => 'lbite_kds_warn_minutes',
+						'type'        => 'number',
+						'default'     => 0,
+						'min'         => 0,
+						'label'       => __( 'Amber after', 'libre-bite' ),
+						'suffix'      => __( 'minutes', 'libre-bite' ),
+						'description' => __( '0 uses the preparation time of the location.', 'libre-bite' ),
+					),
+					array(
+						'option'      => 'lbite_kds_late_minutes',
+						'type'        => 'number',
+						'default'     => 0,
+						'min'         => 0,
+						'label'       => __( 'Red after', 'libre-bite' ),
+						'suffix'      => __( 'minutes', 'libre-bite' ),
+						'description' => __( '0 uses one and a half times the amber threshold.', 'libre-bite' ),
+					),
+					array(
+						'option'      => 'lbite_sound_enabled',
+						'type'        => 'checkbox',
+						'default'     => 1,
+						'label'       => __( 'Play a sound for new orders', 'libre-bite' ),
+						'description' => __( 'Useful when nobody is looking at the screen.', 'libre-bite' ),
+					),
+				),
+			),
+			'enable_scheduled_orders' => array(
+				'premium'  => false,
+				'link_tab' => 'locations',
+				'settings' => array(
+					array(
+						'option'      => 'lbite_preparation_time',
+						'type'        => 'number',
+						'default'     => 30,
+						'min'         => 0,
+						'label'       => __( 'Preparation time', 'libre-bite' ),
+						'suffix'      => __( 'minutes', 'libre-bite' ),
+						'description' => __( 'The earliest pickup time offered to guests. Each location can override this.', 'libre-bite' ),
+					),
+					array(
+						'option'      => 'lbite_timeslot_interval',
+						'type'        => 'number',
+						'default'     => 15,
+						'min'         => 5,
+						'label'       => __( 'Time slot interval', 'libre-bite' ),
+						'suffix'      => __( 'minutes', 'libre-bite' ),
+						'description' => __( 'The spacing between selectable pickup times.', 'libre-bite' ),
+					),
+				),
+			),
+			'enable_rounding' => array(
+				'premium'  => false,
+				'link_tab' => 'prices_taxes',
+				'settings' => array(
+					array(
+						'option'      => 'lbite_enable_rounding',
+						'type'        => 'checkbox',
+						'default'     => 0,
+						'label'       => __( 'Round the final amount to 5 cents', 'libre-bite' ),
+						'description' => __( 'Needed for cash payment in Switzerland. The module switch alone does not round yet — this is the setting that does it.', 'libre-bite' ),
+					),
+				),
+			),
+			'enable_location_selector' => array(
+				'premium'  => false,
+				'settings' => array(),
+				'link_tab' => 'locations',
+				'hint'     => __( 'Opening hours, pickup windows and holidays belong to each location and are edited under Locations.', 'libre-bite' ),
+			),
+			'enable_product_options' => array(
+				'premium'  => false,
+				'settings' => array(),
+				'link_tab' => 'products',
+				'hint'     => __( 'Add-ons are managed as their own entries under Products → Product add-ons.', 'libre-bite' ),
+			),
 		);
+
+		if ( $premium ) {
+			$catalogue['enable_tips'] = array(
+				'premium'  => true,
+				'link_tab' => 'checkout',
+				'settings' => array(
+					array(
+						'option'  => 'lbite_tip_mode',
+						'type'    => 'select',
+						'default' => 'percentage',
+						'label'   => __( 'Tip type', 'libre-bite' ),
+						'choices' => array(
+							'percentage' => __( 'Percentage of the order', 'libre-bite' ),
+							'fixed'      => __( 'Fixed amounts', 'libre-bite' ),
+						),
+					),
+					array(
+						'option'  => 'lbite_tip_percentage_1',
+						'type'    => 'number',
+						'default' => 5,
+						'min'     => 0,
+						'label'   => __( 'First suggestion', 'libre-bite' ),
+					),
+					array(
+						'option'  => 'lbite_tip_percentage_2',
+						'type'    => 'number',
+						'default' => 10,
+						'min'     => 0,
+						'label'   => __( 'Second suggestion', 'libre-bite' ),
+					),
+					array(
+						'option'  => 'lbite_tip_percentage_3',
+						'type'    => 'number',
+						'default' => 15,
+						'min'     => 0,
+						'label'   => __( 'Third suggestion', 'libre-bite' ),
+					),
+				),
+			);
+
+			$catalogue['enable_slot_capacity'] = array(
+				'premium'  => true,
+				'link_tab' => 'locations',
+				'settings' => array(
+					array(
+						'option'      => 'lbite_max_orders_per_slot',
+						'type'        => 'number',
+						'default'     => 0,
+						'min'         => 0,
+						'label'       => __( 'Orders per time slot', 'libre-bite' ),
+						'description' => __( '0 means no limit. A full slot disappears from the selection.', 'libre-bite' ),
+					),
+				),
+			);
+
+			$catalogue['enable_pickup_reminders'] = array(
+				'premium'  => true,
+				'link_tab' => 'notifications',
+				'settings' => array(
+					array(
+						'option'      => 'lbite_pickup_reminder_time',
+						'type'        => 'number',
+						'default'     => 15,
+						'min'         => 1,
+						'label'       => __( 'Send reminder before pickup', 'libre-bite' ),
+						'suffix'      => __( 'minutes', 'libre-bite' ),
+					),
+				),
+			);
+
+			$catalogue['enable_reservations'] = array(
+				'premium'  => true,
+				'link_tab' => 'reservations',
+				'settings' => array(
+					array(
+						'option'      => 'lbite_reservation_refresh_interval',
+						'type'        => 'number',
+						'default'     => 60,
+						'min'         => 10,
+						'label'       => __( 'Refresh interval of the reservation board', 'libre-bite' ),
+						'suffix'      => __( 'seconds', 'libre-bite' ),
+					),
+					array(
+						'option'      => 'lbite_reservation_fields.phone',
+						'type'        => 'checkbox',
+						'default'     => 1,
+						'label'       => __( 'Ask for a phone number', 'libre-bite' ),
+					),
+					array(
+						'option'      => 'lbite_reservation_fields.notes',
+						'type'        => 'checkbox',
+						'default'     => 1,
+						'label'       => __( 'Offer a notes field', 'libre-bite' ),
+					),
+				),
+			);
+
+			$catalogue['enable_stampcard'] = array(
+				'premium'  => true,
+				'link_tab' => 'checkout',
+				'settings' => array(
+					array(
+						'option'      => 'lbite_stampcard_target',
+						'type'        => 'number',
+						'default'     => 10,
+						'min'         => 2,
+						'label'       => __( 'Stamps until the reward', 'libre-bite' ),
+					),
+					array(
+						'option'      => 'lbite_stampcard_discount',
+						'type'        => 'number',
+						'default'     => 50,
+						'min'         => 1,
+						'max'         => 100,
+						'label'       => __( 'Discount', 'libre-bite' ),
+						'suffix'      => '%',
+					),
+					array(
+						'option'      => 'lbite_stampcard_min_total',
+						'type'        => 'number',
+						'default'     => 0,
+						'min'         => 0,
+						'step'        => '0.05',
+						'label'       => __( 'Minimum order value for a stamp', 'libre-bite' ),
+						'description' => __( '0 means every order counts.', 'libre-bite' ),
+					),
+					array(
+						'option'      => 'lbite_stampcard_validity_days',
+						'type'        => 'number',
+						'default'     => 90,
+						'min'         => 1,
+						'label'       => __( 'Voucher valid for', 'libre-bite' ),
+						'suffix'      => __( 'days', 'libre-bite' ),
+					),
+				),
+			);
+		}
+
+		return $catalogue;
+	}
+
+	/**
+	 * Module ohne eigenen Schritt, aber mit Einstellungen anderswo
+	 *
+	 * Erscheinen am Ende als Übersicht mit Direktlink, statt je einen
+	 * Schritt zu belegen, in dem es nichts einzustellen gäbe.
+	 *
+	 * @return array
+	 */
+	public static function get_referenced_modules() {
+		if ( ! self::premium_available() ) {
+			return array();
+		}
+
+		return array(
+			'enable_table_ordering'    => 'tables',
+			'enable_menu_view'         => 'products',
+			'enable_menu_schedule'     => 'products',
+			'enable_promotions'        => 'checkout',
+			'enable_order_bumps'       => 'checkout',
+			'enable_sms_notifications' => 'notifications',
+			'enable_optimized_checkout' => 'checkout',
+		);
+	}
+
+	/**
+	 * Gespeicherten Wert einer Assistenten-Einstellung lesen
+	 *
+	 * Punktnotation adressiert einen Schlüssel innerhalb einer Array-Option.
+	 *
+	 * @param array $setting Feld-Definition.
+	 * @return mixed
+	 */
+	public static function get_setting_value( $setting ) {
+		if ( false !== strpos( $setting['option'], '.' ) ) {
+			list( $option, $key ) = explode( '.', $setting['option'], 2 );
+			$stored = get_option( $option, array() );
+
+			if ( isset( $stored[ $key ]['enabled'] ) ) {
+				return $stored[ $key ]['enabled'] ? 1 : 0;
+			}
+
+			return $setting['default'];
+		}
+
+		return get_option( $setting['option'], $setting['default'] );
 	}
 }

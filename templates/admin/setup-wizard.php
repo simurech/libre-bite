@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $lbite_checks     = LBite_Setup_Wizard::get_system_checks();
 $lbite_wiz_feats  = LBite_Setup_Wizard::get_wizard_features();
+$lbite_catalogue  = LBite_Setup_Wizard::get_module_catalogue();
 $lbite_defs       = LBite_Features::get_definitions();
 $lbite_blocking   = false;
 
@@ -117,8 +118,122 @@ foreach ( $lbite_checks as $lbite_check ) {
 			</div>
 		</section>
 
-		<!-- Schritt 4 -->
-		<section class="lbite-wizard__step" data-step="4">
+		<?php
+		// Je eingeschaltetem Modul ein eigener Schritt. Gerendert werden alle
+		// in Frage kommenden Module; welche davon sichtbar sind, entscheidet
+		// das Skript anhand der Auswahl aus Schritt 3.
+		$lbite_step_no = 3;
+		foreach ( $lbite_catalogue as $lbite_mod => $lbite_cfg ) :
+			if ( empty( $lbite_cfg['settings'] ) && empty( $lbite_cfg['hint'] ) ) { continue; }
+			if ( ! isset( $lbite_defs[ $lbite_mod ] ) ) { continue; }
+			$lbite_step_no++;
+			?>
+			<section class="lbite-wizard__step" data-step="<?php echo esc_attr( $lbite_step_no ); ?>" data-module="<?php echo esc_attr( $lbite_mod ); ?>">
+				<h1><?php echo esc_html( $lbite_defs[ $lbite_mod ]['label'] ); ?></h1>
+				<p class="lbite-wizard__lead"><?php echo esc_html( $lbite_defs[ $lbite_mod ]['description'] ); ?></p>
+
+				<?php if ( ! empty( $lbite_cfg['hint'] ) ) : ?>
+					<p class="lbite-wizard__note"><?php echo esc_html( $lbite_cfg['hint'] ); ?></p>
+				<?php endif; ?>
+
+				<?php if ( ! empty( $lbite_cfg['settings'] ) ) : ?>
+					<div class="lbite-wizard__fields">
+						<?php foreach ( $lbite_cfg['settings'] as $lbite_set ) : ?>
+							<?php $lbite_val = LBite_Setup_Wizard::get_setting_value( $lbite_set ); ?>
+							<div class="lbite-wizard__field">
+								<?php if ( 'checkbox' === $lbite_set['type'] ) : ?>
+									<label class="lbite-wizard__module">
+										<input type="hidden" name="lbite_set[<?php echo esc_attr( $lbite_set['option'] ); ?>]" value="0">
+										<input type="checkbox" name="lbite_set[<?php echo esc_attr( $lbite_set['option'] ); ?>]" value="1" <?php checked( (int) $lbite_val, 1 ); ?>>
+										<span>
+											<strong><?php echo esc_html( $lbite_set['label'] ); ?></strong>
+											<?php if ( ! empty( $lbite_set['description'] ) ) : ?>
+												<em><?php echo esc_html( $lbite_set['description'] ); ?></em>
+											<?php endif; ?>
+										</span>
+									</label>
+								<?php elseif ( 'select' === $lbite_set['type'] ) : ?>
+									<label>
+										<strong><?php echo esc_html( $lbite_set['label'] ); ?></strong>
+										<select name="lbite_set[<?php echo esc_attr( $lbite_set['option'] ); ?>]">
+											<?php foreach ( $lbite_set['choices'] as $lbite_ck => $lbite_cl ) : ?>
+												<option value="<?php echo esc_attr( $lbite_ck ); ?>" <?php selected( $lbite_val, $lbite_ck ); ?>><?php echo esc_html( $lbite_cl ); ?></option>
+											<?php endforeach; ?>
+										</select>
+									</label>
+								<?php else : ?>
+									<label>
+										<strong><?php echo esc_html( $lbite_set['label'] ); ?></strong>
+										<span class="lbite-wizard__inline">
+											<input type="number"
+												name="lbite_set[<?php echo esc_attr( $lbite_set['option'] ); ?>]"
+												value="<?php echo esc_attr( $lbite_val ); ?>"
+												<?php echo isset( $lbite_set['min'] ) ? ' min="' . esc_attr( $lbite_set['min'] ) . '"' : ''; ?>
+												<?php echo isset( $lbite_set['max'] ) ? ' max="' . esc_attr( $lbite_set['max'] ) . '"' : ''; ?>
+												<?php echo isset( $lbite_set['step'] ) ? ' step="' . esc_attr( $lbite_set['step'] ) . '"' : ''; ?>>
+											<?php if ( ! empty( $lbite_set['suffix'] ) ) : ?>
+												<em><?php echo esc_html( $lbite_set['suffix'] ); ?></em>
+											<?php endif; ?>
+										</span>
+										<?php if ( ! empty( $lbite_set['description'] ) ) : ?>
+											<em class="lbite-wizard__hint"><?php echo esc_html( $lbite_set['description'] ); ?></em>
+										<?php endif; ?>
+									</label>
+								<?php endif; ?>
+							</div>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if ( ! empty( $lbite_cfg['link_tab'] ) ) : ?>
+					<p class="lbite-wizard__note">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings&tab=' . $lbite_cfg['link_tab'] ) ); ?>" target="_blank" rel="noopener">
+							<?php esc_html_e( 'All settings for this module', 'libre-bite' ); ?>
+						</a>
+					</p>
+				<?php endif; ?>
+
+				<div class="lbite-wizard__actions">
+					<button type="button" class="lbite-wizard__back"><?php esc_html_e( 'Back', 'libre-bite' ); ?></button>
+					<button type="button" class="lbite-wizard__skip"><?php esc_html_e( 'Skip', 'libre-bite' ); ?></button>
+					<button type="button" class="lbite-wizard__btn lbite-wizard__next"><?php esc_html_e( 'Continue', 'libre-bite' ); ?></button>
+				</div>
+			</section>
+		<?php endforeach; ?>
+
+		<?php
+		$lbite_refs = array_filter(
+			LBite_Setup_Wizard::get_referenced_modules(),
+			function ( $tab, $key ) use ( $lbite_defs ) { return isset( $lbite_defs[ $key ] ); },
+			ARRAY_FILTER_USE_BOTH
+		);
+		if ( $lbite_refs ) :
+			$lbite_step_no++;
+			?>
+			<section class="lbite-wizard__step" data-step="<?php echo esc_attr( $lbite_step_no ); ?>">
+				<h1><?php esc_html_e( 'Further modules', 'libre-bite' ); ?></h1>
+				<p class="lbite-wizard__lead">
+					<?php esc_html_e( 'These have more settings than fit into a setup flow. They are listed here so you know where to find them.', 'libre-bite' ); ?>
+				</p>
+				<div class="lbite-wizard__fields">
+					<?php foreach ( $lbite_refs as $lbite_key => $lbite_tab ) : ?>
+						<p class="lbite-wizard__note">
+							<strong><?php echo esc_html( $lbite_defs[ $lbite_key ]['label'] ); ?></strong> —
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings&tab=' . $lbite_tab ) ); ?>" target="_blank" rel="noopener">
+								<?php esc_html_e( 'open settings', 'libre-bite' ); ?>
+							</a>
+						</p>
+					<?php endforeach; ?>
+				</div>
+				<div class="lbite-wizard__actions">
+					<button type="button" class="lbite-wizard__back"><?php esc_html_e( 'Back', 'libre-bite' ); ?></button>
+					<button type="button" class="lbite-wizard__btn lbite-wizard__next"><?php esc_html_e( 'Continue', 'libre-bite' ); ?></button>
+				</div>
+			</section>
+		<?php endif; ?>
+
+		<!-- Letzter Schritt: Beispieldaten -->
+		<section class="lbite-wizard__step" data-step="<?php echo esc_attr( $lbite_step_no + 1 ); ?>">
 			<h1><?php esc_html_e( 'Start with a sample menu?', 'libre-bite' ); ?></h1>
 			<p class="lbite-wizard__lead">
 				<?php esc_html_e( 'An empty shop is hard to judge. Libre Bite can create one location with opening hours, three categories, eight dishes and a few add-ons, so you can click through everything straight away.', 'libre-bite' ); ?>
@@ -172,9 +287,33 @@ foreach ( $lbite_checks as $lbite_check ) {
 		root.scrollIntoView( { behavior: 'smooth', block: 'start' } );
 	}
 
+	// Ein Schritt ist nur dann an der Reihe, wenn sein Modul in Schritt 3
+	// eingeschaltet wurde. Ausgeschaltete Module werden uebersprungen, damit
+	// niemand etwas konfiguriert, das er gar nicht nutzt.
+	function relevant( el ) {
+		var modul = el.dataset.module;
+		if ( ! modul ) { return true; }
+		var box = root.querySelector( 'input[name="lbite_wizard_features[]"][value="' + modul + '"]' );
+		return !! ( box && box.checked );
+	}
+
+	function naechster( von, richtung ) {
+		var ziel = von + richtung;
+		while ( ziel >= 1 && ziel <= steps.length ) {
+			var el = root.querySelector( '.lbite-wizard__step[data-step="' + ziel + '"]' );
+			if ( ! el || relevant( el ) ) { return ziel; }
+			ziel += richtung;
+		}
+		return Math.min( Math.max( von, 1 ), steps.length );
+	}
+
 	root.addEventListener( 'click', function ( e ) {
-		if ( e.target.classList.contains( 'lbite-wizard__next' ) ) { show( current + 1 ); }
-		if ( e.target.classList.contains( 'lbite-wizard__back' ) ) { show( current - 1 ); }
+		if ( e.target.classList.contains( 'lbite-wizard__next' ) || e.target.classList.contains( 'lbite-wizard__skip' ) ) {
+			show( naechster( current, 1 ) );
+		}
+		if ( e.target.classList.contains( 'lbite-wizard__back' ) ) {
+			show( naechster( current, -1 ) );
+		}
 	} );
 
 	function post( action, extra, done ) {
@@ -184,6 +323,11 @@ foreach ( $lbite_checks as $lbite_check ) {
 		Object.keys( extra || {} ).forEach( function ( k ) {
 			if ( Array.isArray( extra[ k ] ) ) {
 				extra[ k ].forEach( function ( v ) { body.append( k + '[]', v ); } );
+			} else if ( extra[ k ] && 'object' === typeof extra[ k ] ) {
+				// Verschachtelt uebergeben, damit PHP daraus ein Array baut.
+				Object.keys( extra[ k ] ).forEach( function ( unter ) {
+					body.append( k + '[' + unter + ']', extra[ k ][ unter ] );
+				} );
 			} else {
 				body.append( k, extra[ k ] );
 			}
@@ -226,7 +370,19 @@ foreach ( $lbite_checks as $lbite_check ) {
 			chosen.push( el.value );
 		} );
 
-		post( 'lbite_setup_finish', { features: chosen }, function ( res ) {
+		// Nur Felder aus Schritten mitsenden, deren Modul eingeschaltet ist –
+		// so fasst der Assistent die Einstellungen abgewaehlter Module nicht an.
+		var settings = {};
+		root.querySelectorAll( '.lbite-wizard__step[data-module]' ).forEach( function ( sec ) {
+			if ( ! relevant( sec ) ) { return; }
+			sec.querySelectorAll( '[name^="lbite_set["]' ).forEach( function ( feld ) {
+				var name = feld.name.slice( 'lbite_set['.length, -1 );
+				if ( 'checkbox' === feld.type && ! feld.checked ) { return; }
+				settings[ name ] = feld.value;
+			} );
+		} );
+
+		post( 'lbite_setup_finish', { features: chosen, settings: settings }, function ( res ) {
 			if ( res && res.success && res.data && res.data.redirect ) {
 				window.location.href = res.data.redirect;
 			} else {

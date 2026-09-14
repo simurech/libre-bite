@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-14T15:02:40+00:00\n"
+"POT-Creation-Date: 2026-09-14T19:48:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: libre-bite\n"
@@ -461,9 +461,11 @@ msgstr ""
 #: includes/admin/class-admin.php:978
 #: templates/admin/pos.php:282
 #: templates/admin/settings/branding.php:149
-#: templates/admin/setup-wizard.php:88
-#: templates/admin/setup-wizard.php:115
-#: templates/admin/setup-wizard.php:133
+#: templates/admin/setup-wizard.php:89
+#: templates/admin/setup-wizard.php:116
+#: templates/admin/setup-wizard.php:197
+#: templates/admin/setup-wizard.php:229
+#: templates/admin/setup-wizard.php:248
 #: templates/frontend/reservation-form.php:172
 #: templates/frontend/reservation-form.php:233
 #: templates/location-selector-banner.php:144
@@ -878,6 +880,176 @@ msgstr ""
 msgid "Espresso, or with milk on request."
 msgstr ""
 
+#: includes/admin/class-setup-wizard.php:724
+msgid "Payment methods, default order type and the table dropdown are configured under Settings → POS."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:735
+msgid "Refresh interval"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:736
+#: includes/admin/class-setup-wizard.php:903
+msgid "seconds"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:737
+msgid "How often the board fetches new orders."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:743
+msgid "Show waiting time on the cards"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:744
+msgid "Counts up from when the order arrived and turns amber, then red."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:751
+msgid "Amber after"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:752
+#: includes/admin/class-setup-wizard.php:761
+#: includes/admin/class-setup-wizard.php:783
+#: includes/admin/class-setup-wizard.php:792
+#: includes/admin/class-setup-wizard.php:888
+#: includes/modules/locations/class-locations.php:663
+#: includes/modules/locations/class-locations.php:683
+#: includes/modules/locations/class-locations.php:705
+#: includes/modules/locations/class-locations.php:727
+#: templates/admin/debug-info.php:103
+msgid "minutes"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:753
+msgid "0 uses the preparation time of the location."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:760
+msgid "Red after"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:762
+msgid "0 uses one and a half times the amber threshold."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:768
+#: includes/core/class-features.php:456
+msgid "Play a sound for new orders"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:769
+msgid "Useful when nobody is looking at the screen."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:782
+msgid "Preparation time"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:784
+msgid "The earliest pickup time offered to guests. Each location can override this."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:791
+msgid "Time slot interval"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:793
+msgid "The spacing between selectable pickup times."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:805
+msgid "Round the final amount to 5 cents"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:806
+msgid "Needed for cash payment in Switzerland. The module switch alone does not round yet — this is the setting that does it."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:814
+msgid "Opening hours, pickup windows and holidays belong to each location and are edited under Locations."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:820
+msgid "Add-ons are managed as their own entries under Products → Product add-ons."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:833
+msgid "Tip type"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:835
+msgid "Percentage of the order"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:836
+msgid "Fixed amounts"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:844
+msgid "First suggestion"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:851
+msgid "Second suggestion"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:858
+msgid "Third suggestion"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:872
+msgid "Orders per time slot"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:873
+msgid "0 means no limit. A full slot disappears from the selection."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:887
+msgid "Send reminder before pickup"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:902
+msgid "Refresh interval of the reservation board"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:909
+msgid "Ask for a phone number"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:915
+msgid "Offer a notes field"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:929
+msgid "Stamps until the reward"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:937
+#: templates/admin/settings/promotions.php:112
+msgid "Discount"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:946
+msgid "Minimum order value for a stamp"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:947
+msgid "0 means every order counts."
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:954
+#: templates/admin/settings/promotions.php:303
+msgid "Voucher valid for"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php:955
+#: templates/admin/settings/promotions.php:307
+msgid "days"
+msgstr ""
+
 #: includes/core/class-features.php:416
 msgid "Enable point-of-sale system for on-site orders"
 msgstr ""
@@ -1066,10 +1238,6 @@ msgstr ""
 #: templates/admin/settings/notifications.php:35
 #: templates/admin/super-admin-settings.php:119
 msgid "Sound Notifications"
-msgstr ""
-
-#: includes/core/class-features.php:456
-msgid "Play a sound for new orders"
 msgstr ""
 
 #: includes/core/class-features.php:458
@@ -1594,14 +1762,6 @@ msgstr ""
 #: templates/admin/settings.php:122
 #: templates/admin/settings/locations.php:74
 msgid "Preparation Time"
-msgstr ""
-
-#: includes/modules/locations/class-locations.php:663
-#: includes/modules/locations/class-locations.php:683
-#: includes/modules/locations/class-locations.php:705
-#: includes/modules/locations/class-locations.php:727
-#: templates/admin/debug-info.php:103
-msgid "minutes"
 msgstr ""
 
 #. translators: %d = global default in minutes
@@ -2949,7 +3109,7 @@ msgid "Orders from %s count towards a stamp."
 msgstr ""
 
 #: includes/modules/tables/class-tables.php:173
-#: templates/admin/setup-wizard.php:157
+#: templates/admin/setup-wizard.php:272
 msgid "Saving…"
 msgstr ""
 
@@ -7051,10 +7211,6 @@ msgstr ""
 msgid "Appears on the guest’s order as the reason for the discount."
 msgstr ""
 
-#: templates/admin/settings/promotions.php:112
-msgid "Discount"
-msgstr ""
-
 #: templates/admin/settings/promotions.php:120
 msgid "as percent"
 msgstr ""
@@ -7170,14 +7326,6 @@ msgstr ""
 msgid "Orders below this value do not earn a stamp. 0 means every order counts."
 msgstr ""
 
-#: templates/admin/settings/promotions.php:303
-msgid "Voucher valid for"
-msgstr ""
-
-#: templates/admin/settings/promotions.php:307
-msgid "days"
-msgstr ""
-
 #: templates/admin/settings/receipts.php:29
 msgid "Receipt Templates"
 msgstr ""
@@ -7286,108 +7434,130 @@ msgstr ""
 msgid "7-day free trial · No credit card required"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:33
+#: templates/admin/setup-wizard.php:34
 msgid "Setup steps"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:34
+#: templates/admin/setup-wizard.php:35
 msgid "Welcome"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:35
+#: templates/admin/setup-wizard.php:36
 msgid "Check"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:36
+#: templates/admin/setup-wizard.php:37
 msgid "Modules"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:37
+#: templates/admin/setup-wizard.php:38
 msgid "Sample data"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:43
+#: templates/admin/setup-wizard.php:44
 msgid "Welcome to Libre Bite"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:45
+#: templates/admin/setup-wizard.php:46
 msgid "This short setup gets your restaurant running. It takes about two minutes and nothing here is permanent — every choice can be changed later under Settings."
 msgstr ""
 
-#: templates/admin/setup-wizard.php:48
+#: templates/admin/setup-wizard.php:49
 msgid "Check that your shop is ready to take orders"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:49
+#: templates/admin/setup-wizard.php:50
 msgid "Pick the modules your business actually needs"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:50
+#: templates/admin/setup-wizard.php:51
 msgid "Optionally start with a sample menu instead of an empty shop"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:54
+#: templates/admin/setup-wizard.php:55
 msgid "Skip setup"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:56
+#: templates/admin/setup-wizard.php:57
 msgid "Get started"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:62
+#: templates/admin/setup-wizard.php:63
 msgid "System check"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:64
+#: templates/admin/setup-wizard.php:65
 msgid "A quick look at whether everything Libre Bite relies on is in place."
 msgstr ""
 
-#: templates/admin/setup-wizard.php:83
+#: templates/admin/setup-wizard.php:84
 msgid "WooCommerce must be installed and active before Libre Bite can do anything. Please take care of that first."
 msgstr ""
 
-#: templates/admin/setup-wizard.php:89
-#: templates/admin/setup-wizard.php:116
+#: templates/admin/setup-wizard.php:90
+#: templates/admin/setup-wizard.php:117
+#: templates/admin/setup-wizard.php:199
+#: templates/admin/setup-wizard.php:230
 msgid "Continue"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:95
+#: templates/admin/setup-wizard.php:96
 msgid "Which modules do you need?"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:97
+#: templates/admin/setup-wizard.php:98
 msgid "Only what you switch on appears in the menu. Everything else stays out of your way and can be enabled any time."
 msgstr ""
 
-#: templates/admin/setup-wizard.php:122
+#: templates/admin/setup-wizard.php:191
+msgid "All settings for this module"
+msgstr ""
+
+#: templates/admin/setup-wizard.php:198
+msgid "Skip"
+msgstr ""
+
+#: templates/admin/setup-wizard.php:214
+msgid "Further modules"
+msgstr ""
+
+#: templates/admin/setup-wizard.php:216
+msgid "These have more settings than fit into a setup flow. They are listed here so you know where to find them."
+msgstr ""
+
+#: templates/admin/setup-wizard.php:223
+msgid "open settings"
+msgstr ""
+
+#: templates/admin/setup-wizard.php:237
 msgid "Start with a sample menu?"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:124
+#: templates/admin/setup-wizard.php:239
 msgid "An empty shop is hard to judge. Libre Bite can create one location with opening hours, three categories, eight dishes and a few add-ons, so you can click through everything straight away."
 msgstr ""
 
-#: templates/admin/setup-wizard.php:127
+#: templates/admin/setup-wizard.php:242
 msgid "Everything created here is marked as sample content and can be deleted like any other product. Running the import twice does not create duplicates."
 msgstr ""
 
-#: templates/admin/setup-wizard.php:135
+#: templates/admin/setup-wizard.php:250
 msgid "Create sample menu"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:138
+#: templates/admin/setup-wizard.php:253
 msgid "Finish setup"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:154
+#: templates/admin/setup-wizard.php:269
 msgid "Creating sample menu…"
 msgstr ""
 
-#: templates/admin/setup-wizard.php:155
+#: templates/admin/setup-wizard.php:270
 msgid "Sample menu created."
 msgstr ""
 
-#: templates/admin/setup-wizard.php:156
+#: templates/admin/setup-wizard.php:271
 msgid "Something went wrong. Please try again."
 msgstr ""
 
