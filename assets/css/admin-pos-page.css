@@ -70,6 +70,9 @@
 	padding: 10px 20px;
 	border: 2px solid var(--lbite-border, #ddd);
 	background: var(--lbite-surface, #fff);
+	/* Ohne eigene Angabe erben die Knöpfe die dunkle Standardschrift des
+	   Browsers. Auf der dunklen Fläche ergab das einen Kontrast von 1.29. */
+	color: var(--lbite-text, #1d2327);
 	border-radius: 4px;
 	cursor: pointer;
 	transition: all 0.3s;
@@ -78,7 +81,7 @@
 .lbite-category-btn.active,
 .lbite-category-btn:hover {
 	border-color: var(--lbite-color-primary, #0073aa);
-	background: #f0f8ff;
+	background: var(--lbite-color-primary-soft, #f0f8ff);
 }
 
 .lbite-pos-product-grid {

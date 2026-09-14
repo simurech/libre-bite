@@ -495,8 +495,14 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 	font-weight: 600;
 }
 
-.lbite-status-button-incoming { background-color: #f39c12; }
-.lbite-status-button-preparing { background-color: #27ae60; }
+/* Feste Werte statt Tokens: Diese Knoepfe tragen in beiden Farbschemata
+   weisse Schrift, ihre Flaeche darf sich also nicht mit dem Schema aufhellen.
+   Die Statusrollen des Design-Systems sind als Schriftfarbe auf dunklem Grund
+   gedacht und werden dort aufgehellt – als Knopfflaeche ergaeben sie 1.94.
+   Die hier gewaehlten Toene liegen mit weisser Schrift bei 4.87 und 5.08,
+   zuvor waren es 2.19 und 2.87. */
+.lbite-status-button-incoming { background-color: #9a6700; }
+.lbite-status-button-preparing { background-color: #1a7f37; }
 
 /* F30: Zurück-Button (Kanban-Spalten-Anpassung) */
 .lbite-status-button--back {
@@ -531,8 +537,8 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 
 .lbite-cancel-button {
 	padding: 8px 12px;
-	border: 1px solid #e74c3c;
-	background: #e74c3c;
+	border: 1px solid #b32d2e;
+	background: #b32d2e;
 	color: white;
 	border-radius: 4px;
 	cursor: pointer;

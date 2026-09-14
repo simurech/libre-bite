@@ -648,7 +648,13 @@ class LBite_Admin {
 
 		$lbite_id = (string) $lbite_screen->id;
 
-		if ( false === strpos( $lbite_id, 'libre-bite' ) && false === strpos( $lbite_id, 'lbite-' ) ) {
+		// Auch die eigenen Inhaltstypen beruecksichtigen: deren Bildschirm-Kennungen
+		// heissen edit-lbite_location und aehnlich – mit Unterstrich. Ohne diesen
+		// Zweig endete das Farbschema an der Standort- und Tischliste, man klickte
+		// also aus einer dunklen Seite in eine helle.
+		if ( false === strpos( $lbite_id, 'libre-bite' )
+			&& false === strpos( $lbite_id, 'lbite-' )
+			&& false === strpos( $lbite_id, 'lbite_' ) ) {
 			return $classes;
 		}
 
@@ -793,7 +799,12 @@ class LBite_Admin {
 	 */
 	public function enqueue_admin_assets( $hook ) {
 		// Nur auf Plugin-Seiten laden
-		if ( empty( $hook ) || ( strpos( $hook, 'libre-bite' ) === false && strpos( $hook, 'lbite-' ) === false ) ) {
+		// Siehe add_admin_body_classes(): die eigenen Inhaltstypen tragen einen
+		// Unterstrich in der Kennung und blieben sonst ohne Design-System-CSS.
+		if ( empty( $hook )
+			|| ( strpos( $hook, 'libre-bite' ) === false
+				&& strpos( $hook, 'lbite-' ) === false
+				&& strpos( $hook, 'lbite_' ) === false ) ) {
 			return;
 		}
 
