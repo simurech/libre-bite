@@ -118,6 +118,20 @@ $lbite_color_presets = array(
 				<p class="description"><?php esc_html_e( 'Attempts to inherit colors from your active theme.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
+		<tr>
+			<th><?php esc_html_e( 'Colour Scheme', 'libre-bite' ); ?></th>
+			<td>
+				<?php $lbite_theme_current = LBite_Admin::get_admin_theme(); ?>
+				<select name="lbite_admin_theme" id="lbite_admin_theme">
+					<option value="auto" <?php selected( $lbite_theme_current, 'auto' ); ?>><?php esc_html_e( 'Follow system setting', 'libre-bite' ); ?></option>
+					<option value="light" <?php selected( $lbite_theme_current, 'light' ); ?>><?php esc_html_e( 'Always light', 'libre-bite' ); ?></option>
+					<option value="dark" <?php selected( $lbite_theme_current, 'dark' ); ?>><?php esc_html_e( 'Always dark', 'libre-bite' ); ?></option>
+				</select>
+				<p class="description">
+					<?php esc_html_e( 'Applies to the Libre Bite screens only. This is a personal setting — it follows your account, so a kitchen tablet and an office computer can differ.', 'libre-bite' ); ?>
+				</p>
+			</td>
+		</tr>
 	</table>
 
 	<?php submit_button( __( 'Save Settings', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
