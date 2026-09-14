@@ -383,7 +383,103 @@ class LBite_Features {
 	 * @return array
 	 */
 	public static function get_definitions() {
-		return self::$feature_definitions;
+		$definitions = self::$feature_definitions;
+
+		// Die Definitionen sind ein statisches Array; dort lässt sich __() nicht
+		// aufrufen. Übersetzt wird deshalb beim Auslesen. Damit die Quelltexte
+		// trotzdem in die .pot-Datei gelangen, stehen sie zusätzlich als
+		// Literale in register_translatable_strings().
+		foreach ( $definitions as $key => $definition ) {
+			if ( isset( $definition['label'] ) ) {
+				// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Quelltexte siehe register_translatable_strings().
+				$definitions[ $key ]['label'] = __( $definition['label'], 'libre-bite' );
+			}
+			if ( isset( $definition['description'] ) ) {
+				// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Quelltexte siehe register_translatable_strings().
+				$definitions[ $key ]['description'] = __( $definition['description'], 'libre-bite' );
+			}
+		}
+
+		return $definitions;
+	}
+
+	/**
+	 * Quelltexte der Feature-Bezeichnungen für die .pot-Erzeugung
+	 *
+	 * Wird nie ausgeführt. Die Methode existiert allein, damit xgettext die
+	 * Zeichenketten findet, die get_definitions() zur Laufzeit übersetzt.
+	 *
+	 * @codeCoverageIgnore
+	 */
+	private static function register_translatable_strings() {
+		__( 'POS System', 'libre-bite' );
+		__( 'Enable point-of-sale system for on-site orders', 'libre-bite' );
+		__( 'Time Slot Capacity', 'libre-bite' );
+		__( 'Cap how many orders each time slot accepts, so the kitchen is not flooded at peak times.', 'libre-bite' );
+		__( 'Pre-orders', 'libre-bite' );
+		__( 'Customers can place orders for a later time', 'libre-bite' );
+		__( 'Split Payment (POS)', 'libre-bite' );
+		__( 'Split the total across multiple payment methods in the POS checkout', 'libre-bite' );
+		__( 'Table Management & Table Ordering', 'libre-bite' );
+		__( 'Create tables, define seats, generate QR codes and allow orders directly at the table', 'libre-bite' );
+		__( 'Open Tabs (Table Service)', 'libre-bite' );
+		__( 'Keep orders open per table and add items until the guests pay', 'libre-bite' );
+		__( 'Guest Notes', 'libre-bite' );
+		__( 'Keep allergies and preferences on the customer account and show them to staff when a returning guest reserves a table.', 'libre-bite' );
+		__( 'Table Reservations', 'libre-bite' );
+		__( 'Customers can reserve tables online – frontend form via shortcode [lbite_reservation_form]', 'libre-bite' );
+		__( 'Optimized Checkout', 'libre-bite' );
+		__( 'Simplified checkout flow', 'libre-bite' );
+		__( 'Tip System', 'libre-bite' );
+		__( 'Show tip options at checkout', 'libre-bite' );
+		__( 'Stamp Card', 'libre-bite' );
+		__( 'One stamp per completed order above a minimum value; after a set number the guest gets a discount voucher. Guests grasp “every tenth order is cheaper” immediately — a points balance with a conversion rate they do not.', 'libre-bite' );
+		__( 'Promotions & Announcements', 'libre-bite' );
+		__( 'Rule-based offers that WooCommerce does not know by itself — buy several pay for fewer, a discount on a category, money off above a cart value — each limited to certain weekdays or times. Plus an announcement bar so the offer gets noticed.', 'libre-bite' );
+		__( 'Order Bumps', 'libre-bite' );
+		__( 'Offer matching extras right above the pay button — a side, a drink, a dessert. Added as a real line item, so it appears on the kitchen ticket and in the statistics.', 'libre-bite' );
+		__( '5-Cent Rounding', 'libre-bite' );
+		__( 'Round amounts to 5 cents (Switzerland)', 'libre-bite' );
+		__( 'Multiple Tax Rates', 'libre-bite' );
+		__( 'Apply a different tax class per order type (Takeaway vs. Dine-in).', 'libre-bite' );
+		__( 'Order Type Selection', 'libre-bite' );
+		__( 'Show a Takeaway / Dine-in selector in the checkout form. When Multiple Tax Rates is active, also controls which tax rate applies.', 'libre-bite' );
+		__( 'Theme-independent Menu View', 'libre-bite' );
+		__( 'Output your menu in its own layout with a product dialog and a slide-in order panel, instead of relying on the theme product grid. Use the shortcode [lbite_menu].', 'libre-bite' );
+		__( 'Location Selection', 'libre-bite' );
+		__( 'Show location selector in the frontend', 'libre-bite' );
+		__( 'Pickup Reminders', 'libre-bite' );
+		__( 'Send email reminder before pickup time', 'libre-bite' );
+		__( 'SMS Notifications', 'libre-bite' );
+		__( 'Send a short text message when an order reaches a chosen column. Uses your own Twilio account — no data passes through us.', 'libre-bite' );
+		__( 'Sound Notifications', 'libre-bite' );
+		__( 'Play a sound for new orders', 'libre-bite' );
+		__( 'Product Options', 'libre-bite' );
+		__( 'Additional options for products (add-ons)', 'libre-bite' );
+		__( 'Dietary Labels & Filter', 'libre-bite' );
+		__( 'Label dishes as vegan, vegetarian, gluten-free and more, and let guests filter the menu by them without reloading the page.', 'libre-bite' );
+		__( 'Scheduled Availability', 'libre-bite' );
+		__( 'Limit products or whole categories to certain weekdays, times of day, or date ranges — for example a breakfast menu that disappears at 11:30.', 'libre-bite' );
+		__( 'Item Notes (POS)', 'libre-bite' );
+		__( 'Allow staff to add notes to individual cart items in POS', 'libre-bite' );
+		__( 'Item Notes (Checkout)', 'libre-bite' );
+		__( 'Allow customers to add notes to individual cart items', 'libre-bite' );
+		__( 'Nutritional Information', 'libre-bite' );
+		__( 'Show nutritional information for products', 'libre-bite' );
+		__( 'Availability Hint (Category Pages)', 'libre-bite' );
+		__( 'Show the "Available at X of Y locations" hint on shop/category pages', 'libre-bite' );
+		__( 'Availability Hint (Product Page)', 'libre-bite' );
+		__( 'Show the "Available at X of Y locations" hint on the single product page', 'libre-bite' );
+		__( 'Availability Filter (Shop)', 'libre-bite' );
+		__( 'Show the "Show only available products" filter bar on shop/category pages', 'libre-bite' );
+		__( 'Allergens', 'libre-bite' );
+		__( 'Show allergen warnings for products', 'libre-bite' );
+		__( 'Kanban Board', 'libre-bite' );
+		__( 'Display orders as a kanban board', 'libre-bite' );
+		__( 'Dim Future Pre-orders', 'libre-bite' );
+		__( 'Grey out pre-orders with pickup time beyond preparation time in the Kanban board', 'libre-bite' );
+		__( 'Customizable Kanban Columns', 'libre-bite' );
+		__( 'Rename, add, remove and reorder Kanban board columns; optional drag & drop and a one-step back action', 'libre-bite' );
 	}
 
 	/**

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-14T08:37:37+00:00\n"
+"POT-Creation-Date: 2026-09-14T15:02:40+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: libre-bite\n"
@@ -69,6 +69,7 @@ msgstr ""
 
 #: includes/admin/class-admin.php:244
 #: includes/admin/class-admin.php:245
+#: includes/core/class-features.php:415
 #: templates/admin/admin-settings.php:192
 #: templates/admin/dashboard.php:37
 #: templates/admin/help-partials/settings.php:177
@@ -136,6 +137,7 @@ msgstr ""
 
 #: includes/admin/class-admin.php:300
 #: includes/admin/class-admin.php:301
+#: includes/core/class-features.php:457
 #: includes/modules/product-options/class-product-options.php:73
 #: includes/modules/product-options/class-product-options.php:75
 #: includes/modules/product-options/class-product-options.php:173
@@ -874,6 +876,314 @@ msgstr ""
 
 #: includes/admin/class-setup-wizard.php:556
 msgid "Espresso, or with milk on request."
+msgstr ""
+
+#: includes/core/class-features.php:416
+msgid "Enable point-of-sale system for on-site orders"
+msgstr ""
+
+#: includes/core/class-features.php:417
+#: templates/admin/settings/locations.php:113
+msgid "Time Slot Capacity"
+msgstr ""
+
+#: includes/core/class-features.php:418
+msgid "Cap how many orders each time slot accepts, so the kitchen is not flooded at peak times."
+msgstr ""
+
+#: includes/core/class-features.php:419
+#: includes/modules/order-dashboard/class-order-dashboard.php:33
+#: templates/admin/help-partials/orders.php:43
+#: templates/admin/super-admin-settings.php:35
+msgid "Pre-orders"
+msgstr ""
+
+#: includes/core/class-features.php:420
+msgid "Customers can place orders for a later time"
+msgstr ""
+
+#: includes/core/class-features.php:421
+msgid "Split Payment (POS)"
+msgstr ""
+
+#: includes/core/class-features.php:422
+msgid "Split the total across multiple payment methods in the POS checkout"
+msgstr ""
+
+#: includes/core/class-features.php:423
+#: templates/admin/super-admin-settings.php:83
+msgid "Table Management & Table Ordering"
+msgstr ""
+
+#: includes/core/class-features.php:424
+msgid "Create tables, define seats, generate QR codes and allow orders directly at the table"
+msgstr ""
+
+#: includes/core/class-features.php:425
+#: templates/admin/settings-tabbed.php:1073
+msgid "Open Tabs (Table Service)"
+msgstr ""
+
+#: includes/core/class-features.php:426
+msgid "Keep orders open per table and add items until the guests pay"
+msgstr ""
+
+#: includes/core/class-features.php:427
+#: templates/admin/settings/reservations__premium_only.php:55
+msgid "Guest Notes"
+msgstr ""
+
+#: includes/core/class-features.php:428
+msgid "Keep allergies and preferences on the customer account and show them to staff when a returning guest reserves a table."
+msgstr ""
+
+#: includes/core/class-features.php:429
+#: templates/admin/settings-tabbed.php:546
+#: templates/admin/settings/reservations__premium_only.php:23
+#: templates/admin/super-admin-settings.php:89
+msgid "Table Reservations"
+msgstr ""
+
+#: includes/core/class-features.php:430
+#: templates/admin/super-admin-settings.php:90
+msgid "Customers can reserve tables online – frontend form via shortcode [lbite_reservation_form]"
+msgstr ""
+
+#: includes/core/class-features.php:431
+#: templates/admin/settings-tabbed.php:581
+#: templates/admin/super-admin-settings.php:47
+msgid "Optimized Checkout"
+msgstr ""
+
+#: includes/core/class-features.php:432
+#: templates/admin/super-admin-settings.php:48
+msgid "Simplified checkout flow"
+msgstr ""
+
+#: includes/core/class-features.php:433
+#: templates/admin/super-admin-settings.php:53
+msgid "Tip System"
+msgstr ""
+
+#: includes/core/class-features.php:434
+msgid "Show tip options at checkout"
+msgstr ""
+
+#: includes/core/class-features.php:435
+#: templates/admin/settings/promotions.php:256
+msgid "Stamp Card"
+msgstr ""
+
+#: includes/core/class-features.php:436
+msgid "One stamp per completed order above a minimum value; after a set number the guest gets a discount voucher. Guests grasp “every tenth order is cheaper” immediately — a points balance with a conversion rate they do not."
+msgstr ""
+
+#: includes/core/class-features.php:437
+msgid "Promotions & Announcements"
+msgstr ""
+
+#: includes/core/class-features.php:438
+msgid "Rule-based offers that WooCommerce does not know by itself — buy several pay for fewer, a discount on a category, money off above a cart value — each limited to certain weekdays or times. Plus an announcement bar so the offer gets noticed."
+msgstr ""
+
+#: includes/core/class-features.php:439
+#: templates/admin/settings-tabbed.php:727
+msgid "Order Bumps"
+msgstr ""
+
+#: includes/core/class-features.php:440
+msgid "Offer matching extras right above the pay button — a side, a drink, a dessert. Added as a real line item, so it appears on the kitchen ticket and in the statistics."
+msgstr ""
+
+#: includes/core/class-features.php:441
+msgid "5-Cent Rounding"
+msgstr ""
+
+#: includes/core/class-features.php:442
+#: templates/admin/super-admin-settings.php:60
+msgid "Round amounts to 5 cents (Switzerland)"
+msgstr ""
+
+#: includes/core/class-features.php:443
+#: templates/admin/settings-tabbed.php:822
+msgid "Multiple Tax Rates"
+msgstr ""
+
+#: includes/core/class-features.php:444
+msgid "Apply a different tax class per order type (Takeaway vs. Dine-in)."
+msgstr ""
+
+#: includes/core/class-features.php:445
+#: templates/admin/settings-tabbed.php:595
+msgid "Order Type Selection"
+msgstr ""
+
+#: includes/core/class-features.php:446
+msgid "Show a Takeaway / Dine-in selector in the checkout form. When Multiple Tax Rates is active, also controls which tax rate applies."
+msgstr ""
+
+#: includes/core/class-features.php:447
+#: templates/admin/settings/products.php:74
+msgid "Theme-independent Menu View"
+msgstr ""
+
+#: includes/core/class-features.php:448
+msgid "Output your menu in its own layout with a product dialog and a slide-in order panel, instead of relying on the theme product grid. Use the shortcode [lbite_menu]."
+msgstr ""
+
+#: includes/core/class-features.php:449
+#: templates/admin/settings/locations.php:27
+#: templates/admin/super-admin-settings.php:95
+msgid "Location Selection"
+msgstr ""
+
+#: includes/core/class-features.php:450
+msgid "Show location selector in the frontend"
+msgstr ""
+
+#: includes/core/class-features.php:451
+#: templates/admin/settings/notifications.php:28
+#: templates/admin/super-admin-settings.php:113
+msgid "Pickup Reminders"
+msgstr ""
+
+#: includes/core/class-features.php:452
+#: templates/admin/super-admin-settings.php:114
+msgid "Send email reminder before pickup time"
+msgstr ""
+
+#: includes/core/class-features.php:453
+#: templates/admin/settings/notifications.php:144
+msgid "SMS Notifications"
+msgstr ""
+
+#: includes/core/class-features.php:454
+msgid "Send a short text message when an order reaches a chosen column. Uses your own Twilio account — no data passes through us."
+msgstr ""
+
+#: includes/core/class-features.php:455
+#: templates/admin/order-board.php:72
+#: templates/admin/settings/notifications.php:35
+#: templates/admin/super-admin-settings.php:119
+msgid "Sound Notifications"
+msgstr ""
+
+#: includes/core/class-features.php:456
+msgid "Play a sound for new orders"
+msgstr ""
+
+#: includes/core/class-features.php:458
+#: templates/admin/super-admin-settings.php:144
+msgid "Additional options for products (add-ons)"
+msgstr ""
+
+#: includes/core/class-features.php:459
+#: templates/admin/settings/products.php:81
+msgid "Dietary Labels & Filter"
+msgstr ""
+
+#: includes/core/class-features.php:460
+msgid "Label dishes as vegan, vegetarian, gluten-free and more, and let guests filter the menu by them without reloading the page."
+msgstr ""
+
+#: includes/core/class-features.php:461
+#: templates/admin/settings/products.php:88
+msgid "Scheduled Availability"
+msgstr ""
+
+#: includes/core/class-features.php:462
+msgid "Limit products or whole categories to certain weekdays, times of day, or date ranges — for example a breakfast menu that disappears at 11:30."
+msgstr ""
+
+#: includes/core/class-features.php:463
+msgid "Item Notes (POS)"
+msgstr ""
+
+#: includes/core/class-features.php:464
+msgid "Allow staff to add notes to individual cart items in POS"
+msgstr ""
+
+#: includes/core/class-features.php:465
+msgid "Item Notes (Checkout)"
+msgstr ""
+
+#: includes/core/class-features.php:466
+msgid "Allow customers to add notes to individual cart items"
+msgstr ""
+
+#: includes/core/class-features.php:467
+#: includes/modules/nutritional-info/class-nutritional-info.php:59
+#: includes/modules/nutritional-info/class-nutritional-info.php:429
+#: templates/admin/settings/products.php:54
+#: templates/admin/super-admin-settings.php:131
+msgid "Nutritional Information"
+msgstr ""
+
+#: includes/core/class-features.php:468
+#: templates/admin/super-admin-settings.php:132
+msgid "Show nutritional information for products"
+msgstr ""
+
+#: includes/core/class-features.php:469
+msgid "Availability Hint (Category Pages)"
+msgstr ""
+
+#: includes/core/class-features.php:470
+msgid "Show the \"Available at X of Y locations\" hint on shop/category pages"
+msgstr ""
+
+#: includes/core/class-features.php:471
+msgid "Availability Hint (Product Page)"
+msgstr ""
+
+#: includes/core/class-features.php:472
+msgid "Show the \"Available at X of Y locations\" hint on the single product page"
+msgstr ""
+
+#: includes/core/class-features.php:473
+msgid "Availability Filter (Shop)"
+msgstr ""
+
+#: includes/core/class-features.php:474
+msgid "Show the \"Show only available products\" filter bar on shop/category pages"
+msgstr ""
+
+#: includes/core/class-features.php:475
+#: includes/modules/receipts/class-receipts.php:112
+#: includes/modules/receipts/class-receipts.php:348
+#: templates/admin/super-admin-settings.php:137
+msgid "Allergens"
+msgstr ""
+
+#: includes/core/class-features.php:476
+#: templates/admin/super-admin-settings.php:138
+msgid "Show allergen warnings for products"
+msgstr ""
+
+#: includes/core/class-features.php:477
+msgid "Kanban Board"
+msgstr ""
+
+#: includes/core/class-features.php:478
+msgid "Display orders as a kanban board"
+msgstr ""
+
+#: includes/core/class-features.php:479
+#: templates/admin/settings-tabbed.php:956
+msgid "Dim Future Pre-orders"
+msgstr ""
+
+#: includes/core/class-features.php:480
+msgid "Grey out pre-orders with pickup time beyond preparation time in the Kanban board"
+msgstr ""
+
+#: includes/core/class-features.php:481
+#: templates/admin/settings-tabbed.php:972
+msgid "Customizable Kanban Columns"
+msgstr ""
+
+#: includes/core/class-features.php:482
+msgid "Rename, add, remove and reorder Kanban board columns; optional drag & drop and a one-step back action"
 msgstr ""
 
 #: includes/core/class-rest-api.php:207
@@ -1697,13 +2007,6 @@ msgstr ""
 msgid "Choose the format for this email."
 msgstr ""
 
-#: includes/modules/nutritional-info/class-nutritional-info.php:59
-#: includes/modules/nutritional-info/class-nutritional-info.php:429
-#: templates/admin/settings/products.php:54
-#: templates/admin/super-admin-settings.php:131
-msgid "Nutritional Information"
-msgstr ""
-
 #: includes/modules/nutritional-info/class-nutritional-info.php:68
 #: includes/modules/nutritional-info/class-nutritional-info.php:515
 msgid "Allergens & Ingredients"
@@ -1916,12 +2219,6 @@ msgstr ""
 
 #: includes/modules/order-bumps/class-order-bumps.php:237
 msgid "Could not add the item"
-msgstr ""
-
-#: includes/modules/order-dashboard/class-order-dashboard.php:33
-#: templates/admin/help-partials/orders.php:43
-#: templates/admin/super-admin-settings.php:35
-msgid "Pre-orders"
 msgstr ""
 
 #: includes/modules/order-dashboard/class-order-dashboard.php:38
@@ -2296,12 +2593,6 @@ msgstr ""
 
 #: includes/modules/receipts/class-receipts.php:108
 msgid "Prices and total"
-msgstr ""
-
-#: includes/modules/receipts/class-receipts.php:112
-#: includes/modules/receipts/class-receipts.php:348
-#: templates/admin/super-admin-settings.php:137
-msgid "Allergens"
 msgstr ""
 
 #: includes/modules/receipts/class-receipts.php:116
@@ -5722,12 +6013,6 @@ msgstr ""
 msgid "Prevent Standby"
 msgstr ""
 
-#: templates/admin/order-board.php:72
-#: templates/admin/settings/notifications.php:35
-#: templates/admin/super-admin-settings.php:119
-msgid "Sound Notifications"
-msgstr ""
-
 #: templates/admin/order-board.php:81
 msgid "The order overview is displayed for the selected location."
 msgstr ""
@@ -5907,19 +6192,8 @@ msgstr ""
 msgid "Create tables, generate QR codes, and allow guests to order directly at the table. Available with Libre Bite Pro."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:546
-#: templates/admin/settings/reservations__premium_only.php:23
-#: templates/admin/super-admin-settings.php:89
-msgid "Table Reservations"
-msgstr ""
-
 #: templates/admin/settings-tabbed.php:547
 msgid "Let customers reserve tables online via a frontend form. Available with Libre Bite Pro."
-msgstr ""
-
-#: templates/admin/settings-tabbed.php:581
-#: templates/admin/super-admin-settings.php:47
-msgid "Optimized Checkout"
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:582
@@ -5928,10 +6202,6 @@ msgstr ""
 
 #: templates/admin/settings-tabbed.php:589
 msgid "Allow customers to add a tip at checkout."
-msgstr ""
-
-#: templates/admin/settings-tabbed.php:595
-msgid "Order Type Selection"
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:596
@@ -6023,10 +6293,6 @@ msgstr ""
 msgid "No Tip (Default)"
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:727
-msgid "Order Bumps"
-msgstr ""
-
 #: templates/admin/settings-tabbed.php:733
 msgid "Offer up to three matching extras right above the pay button. They are added as real line items, so they appear on the kitchen ticket and count in the statistics. Variable products are not offered here, because they would need a selection first."
 msgstr ""
@@ -6071,10 +6337,6 @@ msgstr ""
 
 #: templates/admin/settings-tabbed.php:817
 msgid "Round total to 5 cents (0.05 CHF). Prevents rounding errors when combining vouchers and tips. Recommended for Swiss businesses."
-msgstr ""
-
-#: templates/admin/settings-tabbed.php:822
-msgid "Multiple Tax Rates"
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:823
@@ -6183,16 +6445,8 @@ msgstr ""
 msgid "Show pre-orders with a pickup time further in the future than the preparation time in the Kanban board."
 msgstr ""
 
-#: templates/admin/settings-tabbed.php:956
-msgid "Dim Future Pre-orders"
-msgstr ""
-
 #: templates/admin/settings-tabbed.php:966
 msgid "Display future pre-orders dimmed (greyed out) in the Kanban board."
-msgstr ""
-
-#: templates/admin/settings-tabbed.php:972
-msgid "Customizable Kanban Columns"
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:982
@@ -6233,10 +6487,6 @@ msgstr ""
 
 #: templates/admin/settings-tabbed.php:1067
 msgid "Allow splitting the total across multiple payment methods in the POS payment modal."
-msgstr ""
-
-#: templates/admin/settings-tabbed.php:1073
-msgid "Open Tabs (Table Service)"
 msgstr ""
 
 #: templates/admin/settings-tabbed.php:1075
@@ -6527,11 +6777,6 @@ msgstr ""
 msgid "Error retrieving theme colors."
 msgstr ""
 
-#: templates/admin/settings/locations.php:27
-#: templates/admin/super-admin-settings.php:95
-msgid "Location Selection"
-msgstr ""
-
 #: templates/admin/settings/locations.php:28
 msgid "Show a location selector in the frontend so customers can choose their pickup location."
 msgstr ""
@@ -6544,10 +6789,6 @@ msgstr ""
 msgid "These are global defaults. Individual locations can override preparation time and slot buffers via their location settings."
 msgstr ""
 
-#: templates/admin/settings/locations.php:113
-msgid "Time Slot Capacity"
-msgstr ""
-
 #: templates/admin/settings/locations.php:121
 msgid "Limit how many orders each time slot accepts"
 msgstr ""
@@ -6558,11 +6799,6 @@ msgstr ""
 
 #: templates/admin/settings/locations.php:134
 msgid "Once a time slot has reached this many orders it disappears from the checkout, so the kitchen is not flooded at peak times. Set to 0 for no limit."
-msgstr ""
-
-#: templates/admin/settings/notifications.php:28
-#: templates/admin/super-admin-settings.php:113
-msgid "Pickup Reminders"
 msgstr ""
 
 #: templates/admin/settings/notifications.php:29
@@ -6599,10 +6835,6 @@ msgstr ""
 
 #: templates/admin/settings/notifications.php:98
 msgid "Use Sound"
-msgstr ""
-
-#: templates/admin/settings/notifications.php:144
-msgid "SMS Notifications"
 msgstr ""
 
 #: templates/admin/settings/notifications.php:151
@@ -6721,24 +6953,12 @@ msgstr ""
 msgid "Display allergen information on product pages."
 msgstr ""
 
-#: templates/admin/settings/products.php:74
-msgid "Theme-independent Menu View"
-msgstr ""
-
 #: templates/admin/settings/products.php:75
 msgid "Outputs your menu in its own layout — category navigation, product cards, a dialog for variations and add-ons, and a slide-in order panel. Place the shortcode [lbite_menu] on any page; add layout=\"list\" for a compact list instead of cards."
 msgstr ""
 
-#: templates/admin/settings/products.php:81
-msgid "Dietary Labels & Filter"
-msgstr ""
-
 #: templates/admin/settings/products.php:82
 msgid "Label dishes as vegan, vegetarian, gluten-free, lactose-free, spicy or alcohol-free. Guests get a filter bar above the shop grid and can combine several labels at once."
-msgstr ""
-
-#: templates/admin/settings/products.php:88
-msgid "Scheduled Availability"
 msgstr ""
 
 #: templates/admin/settings/products.php:89
@@ -6918,10 +7138,6 @@ msgstr ""
 msgid "Optional. Leave empty for plain text."
 msgstr ""
 
-#: templates/admin/settings/promotions.php:256
-msgid "Stamp Card"
-msgstr ""
-
 #: templates/admin/settings/promotions.php:263
 msgid "Guests collect a stamp per completed order and get a voucher once the card is full. Only works for orders placed with a customer account — guest checkouts cannot be attributed to anyone."
 msgstr ""
@@ -6996,10 +7212,6 @@ msgstr ""
 
 #: templates/admin/settings/reservations__premium_only.php:51
 msgid "Both fields are optional for the guest either way — hide them here to keep the form as short as possible."
-msgstr ""
-
-#: templates/admin/settings/reservations__premium_only.php:55
-msgid "Guest Notes"
 msgstr ""
 
 #: templates/admin/settings/reservations__premium_only.php:59
@@ -7300,24 +7512,12 @@ msgstr ""
 msgid "Checkout process settings"
 msgstr ""
 
-#: templates/admin/super-admin-settings.php:48
-msgid "Simplified checkout flow"
-msgstr ""
-
-#: templates/admin/super-admin-settings.php:53
-msgid "Tip System"
-msgstr ""
-
 #: templates/admin/super-admin-settings.php:54
 msgid "Show tip options in checkout"
 msgstr ""
 
 #: templates/admin/super-admin-settings.php:59
 msgid "5-cent rounding"
-msgstr ""
-
-#: templates/admin/super-admin-settings.php:60
-msgid "Round amounts to 5 cents (Switzerland)"
 msgstr ""
 
 #: templates/admin/super-admin-settings.php:65
@@ -7340,16 +7540,8 @@ msgstr ""
 msgid "Manage multiple locations"
 msgstr ""
 
-#: templates/admin/super-admin-settings.php:83
-msgid "Table Management & Table Ordering"
-msgstr ""
-
 #: templates/admin/super-admin-settings.php:84
 msgid "Create tables, define seats, generate QR codes and enable orders directly at the table"
-msgstr ""
-
-#: templates/admin/super-admin-settings.php:90
-msgid "Customers can reserve tables online – frontend form via shortcode [lbite_reservation_form]"
 msgstr ""
 
 #: templates/admin/super-admin-settings.php:96
@@ -7364,28 +7556,12 @@ msgstr ""
 msgid "Email and sound notifications"
 msgstr ""
 
-#: templates/admin/super-admin-settings.php:114
-msgid "Send email reminder before pickup time"
-msgstr ""
-
 #: templates/admin/super-admin-settings.php:120
 msgid "Play sound alert for new orders"
 msgstr ""
 
 #: templates/admin/super-admin-settings.php:128
 msgid "Product extensions"
-msgstr ""
-
-#: templates/admin/super-admin-settings.php:132
-msgid "Show nutritional information for products"
-msgstr ""
-
-#: templates/admin/super-admin-settings.php:138
-msgid "Show allergen warnings for products"
-msgstr ""
-
-#: templates/admin/super-admin-settings.php:144
-msgid "Additional options for products (add-ons)"
 msgstr ""
 
 #: templates/admin/super-admin-settings.php:156
