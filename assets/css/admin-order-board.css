@@ -49,7 +49,12 @@
 
 .lbite-kanban-board {
 	display: grid;
-	grid-template-columns: repeat(var(--lbite-kanban-columns, 3), 1fr);
+	/* minmax(0, 1fr) statt 1fr: Ein nacktes 1fr hat als Mindestbreite die
+	   Mindestbreite seines Inhalts. Die Knopfreihe einer Karte sprengte die
+	   Spalte dadurch auf, die Spalten wurden ungleich breit und das Board lief
+	   seitlich aus dem Bild. Mit 0 als Minimum teilen sich die Spalten die
+	   verfügbare Breite gleichmässig. */
+	grid-template-columns: repeat(var(--lbite-kanban-columns, 3), minmax(0, 1fr));
 	gap: 20px;
 	margin-top: 20px;
 }
