@@ -1014,6 +1014,12 @@ body.lbite-theme-dark {
 	--lbite-focus-ring: 0 0 0 2px var(--lbite-surface), 0 0 0 4px rgba(74, 163, 216, 0.55);
 }
 
+/* Der body muss mitgefärbt werden, nicht nur #wpbody-content: dessen Höhe
+   richtet sich nach dem Inhalt. Auf einer kurzen Seite endete die dunkle
+   Fläche deshalb mitten im Bild und darunter stand WordPress' helles
+   #f0f0f1 bis zum unteren Rand. */
+body.lbite-theme-dark,
+body.lbite-theme-dark #wpcontent,
 body.lbite-theme-dark #wpbody-content,
 body.lbite-theme-dark.lbite-screen-app {
 	background: var(--lbite-canvas);
@@ -1041,6 +1047,59 @@ body.lbite-app #wpbody-content p.description,
 body.lbite-app #wpbody-content .howto,
 body.lbite-app .wrap p.description {
 	color: var(--lbite-text-muted);
+}
+
+/* Die Feldbeschriftungen der Einstellungsformulare stehen in einer
+   th-Zelle, die WordPress ebenfalls fest auf #1d2327 setzt – im dunklen
+   Schema ein Kontrast von 1.13. */
+body.lbite-app #wpbody-content .form-table th,
+body.lbite-app #wpbody-content .form-wrap label {
+	color: var(--lbite-text);
+}
+
+/* Sekundäre Schaltflächen tragen die Akzentfarbe des WordPress-Farbschemas
+   auf durchsichtigem Grund. Die ist für helle Flächen gewählt und bleibt auf
+   dunklem Grund zu schwach (gemessen 3.2), deshalb hier der aufgehellte
+   Token des Design-Systems. */
+body.lbite-theme-dark #wpbody-content .button:not(.button-primary):not(.button-link) {
+	color: var(--lbite-color-primary);
+	border-color: var(--lbite-color-primary);
+}
+
+/* Dasselbe gilt fuer gewoehnliche Links. Ausgenommen sind die
+   WordPress-Listentabellen: die behalten eine helle Flaeche, dort waere ein
+   aufgehellter Link schlechter lesbar als der Standard. */
+body.lbite-theme-dark #wpbody-content a:not(.button):not(.nav-tab),
+body.lbite-theme-dark #wpbody-content .wrap a:not(.button):not(.nav-tab) {
+	color: var(--lbite-color-primary);
+}
+
+/* Die WordPress-Listentabellen behielten eine weisse Flaeche, waehrend der
+   Rest der Seite dunkel wurde. Das war nicht nur uneinheitlich: Zellen, die
+   ueber einen Token eingefaerbt sind, standen mit hellem Grau auf Weiss
+   (gemessen 2.37). Deshalb ziehen die Tabellen im dunklen Schema mit. */
+body.lbite-theme-dark #wpbody-content .widefat,
+body.lbite-theme-dark #wpbody-content .wp-list-table {
+	background: var(--lbite-surface);
+	border-color: var(--lbite-border);
+}
+
+body.lbite-theme-dark #wpbody-content .widefat th,
+body.lbite-theme-dark #wpbody-content .widefat td,
+body.lbite-theme-dark #wpbody-content .wp-list-table th,
+body.lbite-theme-dark #wpbody-content .wp-list-table td {
+	color: var(--lbite-text);
+	border-color: var(--lbite-border-subtle);
+}
+
+body.lbite-theme-dark #wpbody-content .widefat thead th,
+body.lbite-theme-dark #wpbody-content .wp-list-table thead th {
+	background: var(--lbite-surface-muted);
+}
+
+body.lbite-theme-dark #wpbody-content .widefat a,
+body.lbite-theme-dark #wpbody-content .wp-list-table a {
+	color: var(--lbite-color-primary);
 }
 
 /* Automatikmodus: dasselbe Token-Set, aber der Systemeinstellung folgend */
@@ -1103,9 +1162,18 @@ body.lbite-app .wrap p.description {
 		--lbite-focus-ring: 0 0 0 2px var(--lbite-surface), 0 0 0 4px rgba(74, 163, 216, 0.55);
 	}
 
+	body.lbite-theme-auto,
+	body.lbite-theme-auto #wpcontent,
 	body.lbite-theme-auto #wpbody-content,
 	body.lbite-theme-auto.lbite-screen-app {
 		background: var(--lbite-canvas);
 		color: var(--lbite-text);
+	}
+
+	/* Gegenstueck zur Schaltflaechen-Regel des dunklen Schemas, hier auf die
+	   Systemeinstellung bezogen. */
+	body.lbite-theme-auto #wpbody-content .button:not(.button-primary):not(.button-link) {
+		color: var(--lbite-color-primary);
+		border-color: var(--lbite-color-primary);
 	}
 }

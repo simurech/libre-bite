@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,16 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.0.3 =
+
+* Fixed: in the dark colour scheme a short page ended its dark area halfway down the screen, leaving a large light block below it. The background is now set on the page itself, not only on the content container.
+* Fixed: the setup wizard could not be opened at all — not even by an administrator. Registering the page and then removing it from the menu also removed the path WordPress uses to authorise it.
+* Fixed: the green tick marks of the wizard's system check were drawn white on white.
+* Added: access to the setup wizard now follows its own capability. Administrators, managers and shop managers have it; point-of-sale staff deliberately do not.
+* Added: the wizard now walks through each enabled module and asks for the settings that matter to get started, with a skip option per step. Existing configurations are left untouched — every field is pre-filled with the current value, so clicking straight through changes nothing.
+* Added: the light, dark and automatic colour scheme can now be chosen under Settings → Branding, not only in the WordPress profile.
+* Fixed: module names and descriptions were shown in English regardless of the site language.
 
 = 3.0.2 =
 

@@ -67,6 +67,15 @@ class LBite_Admin {
 		$this->loader->add_action( 'edit_user_profile_update', $this, 'save_theme_user_option' );
 		$this->loader->add_action( 'admin_init', $this, 'maybe_upgrade' );
 
+		// Während der Entwicklung den Änderungszeitpunkt als Versionsangabe der
+		// Asset-URLs verwenden. Sonst bleibt die Plugin-Version der Cache-Schlüssel,
+		// und jede Korrektur an einer CSS-Datei innerhalb derselben Version
+		// erreicht den Browser erst nach einem harten Neuladen.
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			$this->loader->add_filter( 'style_loader_src', $this, 'bust_asset_cache_during_development' );
+			$this->loader->add_filter( 'script_loader_src', $this, 'bust_asset_cache_during_development' );
+		}
+
 		// WooCommerce leitet Benutzer ohne edit_posts/manage_woocommerce aus dem Backend um.
 		// lbite_staff hat keine dieser Capabilities, braucht aber Zugriff auf POS und Kanban.
 		$this->loader->add_filter( 'woocommerce_prevent_admin_access', $this, 'allow_staff_admin_access' );
@@ -516,6 +525,31 @@ class LBite_Admin {
 	 *
 	 * @return string auto, light oder dark.
 	 */
+	/**
+	 * Asset-URLs während der Entwicklung mit dem Änderungszeitpunkt versehen
+	 *
+	 * Greift nur bei aktivem SCRIPT_DEBUG und nur für Dateien dieses Plugins.
+	 * Im Normalbetrieb bleibt die Plugin-Version die Versionsangabe, damit
+	 * Browser und CDN wie gewohnt zwischenspeichern.
+	 *
+	 * @param string $src Vollständige Asset-URL.
+	 * @return string
+	 */
+	public function bust_asset_cache_during_development( $src ) {
+		if ( ! is_string( $src ) || false === strpos( $src, LBITE_PLUGIN_URL ) ) {
+			return $src;
+		}
+
+		$relativ = ltrim( str_replace( LBITE_PLUGIN_URL, '', strtok( $src, '?' ) ), '/' );
+		$pfad    = LBITE_PLUGIN_DIR . $relativ;
+
+		if ( ! file_exists( $pfad ) ) {
+			return $src;
+		}
+
+		return add_query_arg( 'ver', LBITE_VERSION . '.' . filemtime( $pfad ), $src );
+	}
+
 	public static function get_admin_theme() {
 		$lbite_theme = get_user_meta( get_current_user_id(), 'lbite_admin_theme', true );
 
