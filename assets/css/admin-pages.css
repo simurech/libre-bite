@@ -836,10 +836,22 @@ body.lbite-setup-screen {
 	align-items: center;
 	justify-content: center;
 	border-radius: 50%;
-	background: currentColor;
 	color: var(--lbite-surface, #fff);
 	font-size: 11px;
 	font-weight: 700;
+}
+
+/* Die Fläche muss je Zustand gesetzt werden. Zuvor stand hier
+   `background: currentColor` neben `color: #fff` auf demselben Element –
+   currentColor löst aber auf die eigene Textfarbe auf, nicht auf die des
+   Elternelements. Das Häkchen stand dadurch weiss auf weiss und war
+   unsichtbar. */
+.lbite-wizard__checks li.is-ok .lbite-wizard__check-icon {
+	background: var(--lbite-success, #1a7f37);
+}
+
+.lbite-wizard__checks li.is-warn .lbite-wizard__check-icon {
+	background: var(--lbite-warning, #9a6700);
 }
 
 .lbite-wizard__checks strong { display: block; }

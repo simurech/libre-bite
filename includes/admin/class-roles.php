@@ -40,6 +40,7 @@ class LBite_Roles {
 		// Manager-Capabilities: lbite_manager + administrator (Pro)
 		'lbite_manage_location_settings' => array( 'lbite_manager', 'administrator' ), // Einstellungen der zugewiesenen Standorte bearbeiten
 		'lbite_view_statistics'          => array( 'lbite_manager', 'administrator' ), // Statistik-Seite einsehen
+		'lbite_run_setup'                => array( 'lbite_manager', 'administrator' ), // Einrichtungsassistenten öffnen (Kassenpersonal bewusst nicht)
 
 		// Admin-Capabilities: nur administrator + shop_manager
 		'lbite_manage_locations' => array( 'administrator' ), // Standorte (CPT lbite_location) erstellen und bearbeiten
@@ -95,6 +96,7 @@ class LBite_Roles {
 			$shop_manager->add_cap( 'lbite_manage_checkout' );
 			$shop_manager->add_cap( 'lbite_manage_settings' );
 			$shop_manager->add_cap( 'lbite_view_statistics' );
+			$shop_manager->add_cap( 'lbite_run_setup' );
 		}
 
 		// Die Manager-Rolle gehört zum Pro-Umfang. Ohne diesen Aufruf entsteht sie erst,
@@ -126,6 +128,7 @@ class LBite_Roles {
 				'lbite_use_pos'                  => true,
 				'lbite_manage_location_settings' => true,
 				'lbite_view_statistics'          => true,
+				'lbite_run_setup'                => true,
 			)
 		);
 	}
@@ -294,6 +297,7 @@ class LBite_Roles {
 				'lbite_use_pos'                  => true,
 				'lbite_manage_location_settings' => true,
 				'lbite_view_statistics'          => true,
+				'lbite_run_setup'                => true,
 			);
 			foreach ( $manager_caps as $cap => $grant ) {
 				if ( ! $manager_role->has_cap( $cap ) ) {
@@ -342,6 +346,7 @@ class LBite_Roles {
 				'lbite_manage_options',
 				'lbite_manage_checkout',
 				'lbite_manage_settings',
+				'lbite_run_setup',
 			);
 			foreach ( $sm_caps as $cap ) {
 				if ( ! $shop_manager->has_cap( $cap ) ) {
@@ -350,7 +355,7 @@ class LBite_Roles {
 			}
 		}
 
-		update_option( 'lbite_roles_version', '1.5.0' );
+		update_option( 'lbite_roles_version', '1.6.0' );
 	}
 
 	/**
@@ -360,6 +365,6 @@ class LBite_Roles {
 	 */
 	public static function needs_migration() {
 		$current_version = get_option( 'lbite_roles_version', '0' );
-		return version_compare( $current_version, '1.5.0', '<' );
+		return version_compare( $current_version, '1.6.0', '<' );
 	}
 }

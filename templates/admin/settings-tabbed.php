@@ -426,6 +426,17 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_color_primary', isset( $_POST['lbite_color_primary'] ) ? sanitize_hex_color( wp_unslash( $_POST['lbite_color_primary'] ) ) : '#0073aa' );
 			update_option( 'lbite_color_secondary', isset( $_POST['lbite_color_secondary'] ) ? sanitize_hex_color( wp_unslash( $_POST['lbite_color_secondary'] ) ) : '#23282d' );
 			update_option( 'lbite_color_accent', isset( $_POST['lbite_color_accent'] ) ? sanitize_hex_color( wp_unslash( $_POST['lbite_color_accent'] ) ) : '#00a32a' );
+
+			// Das Farbschema ist bewusst persönlich und landet deshalb in der
+			// Benutzer-Meta, nicht in einer globalen Option – Küchen-Tablet und
+			// Bürorechner sollen sich unterscheiden dürfen.
+			if ( isset( $_POST['lbite_admin_theme'] ) ) {
+				$lbite_theme_choice = sanitize_key( wp_unslash( $_POST['lbite_admin_theme'] ) );
+				if ( in_array( $lbite_theme_choice, array( 'auto', 'light', 'dark' ), true ) ) {
+					update_user_meta( get_current_user_id(), 'lbite_admin_theme', $lbite_theme_choice );
+				}
+			}
+
 			$lbite_did_save = true;
 			break;
 
@@ -462,7 +473,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 		<div class="lbite-welcome-notice__content">
 			<h2><?php esc_html_e( 'Welcome to Libre Bite!', 'libre-bite' ); ?></h2>
 			<p><?php esc_html_e( 'Configure each area of the plugin using the tabs below. Core features are active by default – you can adjust them at any time.', 'libre-bite' ); ?></p>
-			<?php if ( class_exists( 'LBite_Setup_Wizard' ) && LBite_Setup_Wizard::is_pending() ) : ?>
+			<?php if ( class_exists( 'LBite_Setup_Wizard' ) && LBite_Setup_Wizard::is_pending() && LBite_Setup_Wizard::current_user_can_run() ) : ?>
 				<p>
 					<a class="button button-primary" href="<?php echo esc_url( LBite_Setup_Wizard::get_url() ); ?>">
 						<?php esc_html_e( 'Run the setup assistant', 'libre-bite' ); ?>

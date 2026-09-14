@@ -37,6 +37,14 @@ class LBite_Setup_Wizard {
 	const OPTION_DONE = 'lbite_setup_completed';
 
 	/**
+	 * Recht, den Assistenten zu öffnen.
+	 *
+	 * Administrator, Manager und Shop-Manager besitzen es, das
+	 * Kassenpersonal bewusst nicht – siehe LBite_Roles.
+	 */
+	const CAPABILITY = 'lbite_run_setup';
+
+	/**
 	 * Loader-Instanz.
 	 *
 	 * @var LBite_Loader
@@ -57,23 +65,39 @@ class LBite_Setup_Wizard {
 	}
 
 	/**
-	 * Seite registrieren, aber aus dem Menü entfernen
+	 * Seite ohne Menüeintrag registrieren
 	 *
-	 * Die Registrierung ist nötig, sonst verweigert WordPress den direkten
-	 * Aufruf der URL. Dasselbe Muster nutzt bereits die Dashboard-Seite für
-	 * Rollen ohne Einstellungsrecht.
+	 * Ein Elternslug von null ist WordPress' Weg für eine Seite, die nur über
+	 * ihre URL erreichbar sein soll. Zuvor wurde die Seite unter «libre-bite»
+	 * angemeldet und danach per remove_submenu_page() wieder entfernt – das
+	 * nahm ihr aber den Zugang: `user_can_access_admin_page()` ermittelt den
+	 * Hook-Namen über `get_admin_page_parent()`, und das findet das Elternmenü
+	 * nur, solange der Eintrag noch in `$submenu` steht. Der berechnete Name
+	 * wich dadurch vom registrierten ab und WordPress wies jeden Aufruf mit
+	 * «nicht berechtigt» ab – auch für Administratoren.
 	 */
 	public function register_page() {
 		add_submenu_page(
-			'libre-bite',
+			null,
 			__( 'Setup', 'libre-bite' ),
 			__( 'Setup', 'libre-bite' ),
-			'manage_options',
+			self::CAPABILITY,
 			self::PAGE,
 			array( $this, 'render' )
 		);
+	}
 
-		remove_submenu_page( 'libre-bite', self::PAGE );
+	/**
+	 * Darf der aktuelle Benutzer den Assistenten öffnen?
+	 *
+	 * Bewusst nicht an `manage_options` gebunden, sondern an eine eigene
+	 * Capability: Administrator, Manager und Shop-Manager bekommen sie,
+	 * das Kassenpersonal (lbite_staff) ausdrücklich nicht.
+	 *
+	 * @return bool
+	 */
+	public static function current_user_can_run() {
+		return current_user_can( self::CAPABILITY );
 	}
 
 	/**
@@ -98,7 +122,7 @@ class LBite_Setup_Wizard {
 	 * Assistent rendern
 	 */
 	public function render() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! self::current_user_can_run() ) {
 			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
 		}
 
@@ -206,7 +230,7 @@ class LBite_Setup_Wizard {
 	public function ajax_import_demo() {
 		check_ajax_referer( 'lbite_setup_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! self::current_user_can_run() ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
@@ -549,7 +573,7 @@ class LBite_Setup_Wizard {
 	public function ajax_finish() {
 		check_ajax_referer( 'lbite_setup_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! self::current_user_can_run() ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
