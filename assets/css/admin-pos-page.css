@@ -331,6 +331,12 @@
 	gap: 10px;
 	justify-content: flex-end;
 	flex-shrink: 0;
+	/* Umbruch erlauben: Im Zahlungsmodal (500px breit) stehen bis zu drei
+	   Knöpfe nebeneinander. «Zurück», «Tab eröffnen» und der grosse
+	   Bestätigen-Knopf brauchen zusammen 548px. Ohne Umbruch liefen sie nach
+	   links aus dem Modal und wurden von dessen overflow:hidden abgeschnitten –
+	   «Zurück» war nicht mehr erreichbar. */
+	flex-wrap: wrap;
 }
 
 .lbite-option-group {
