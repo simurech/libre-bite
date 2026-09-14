@@ -254,7 +254,7 @@ Libre Bite uses Freemius for license management and delivery of Pro features. Da
 
 = Is Libre Bite available in multiple languages? =
 
-The plugin uses standard WordPress i18n functions and can be translated via .pot files or community translations on translate.wordpress.org. The default language is English.
+Yes. English is the source language, and the plugin ships with complete translations for Swiss, German and Austrian German (de_CH, de_DE, de_AT, plus the formal and informal variants), Swiss French (fr_CH) and Swiss Italian (it_CH). Every string is covered. Other languages can be added from the bundled .pot file or through community translations on translate.wordpress.org.
 
 == Screenshots ==
 
@@ -280,6 +280,8 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 * Fixed: the category buttons in the POS were unreadable in the dark colour scheme.
 * Fixed: the plugin's own list screens (locations, tables, add-ons, reservations) ignored the colour scheme entirely, so you clicked from a dark page into a bright one.
 * Changed: while `SCRIPT_DEBUG` is on, asset URLs carry the file's modification time. Without it a stylesheet fix inside the same plugin version only reached the browser after a hard reload.
+* Fixed: three messages in the location selector were hard-coded in German and appeared that way on every site, whatever its language. They now go through the translation system like everything else.
+* Added: the French (fr_CH) and Italian (it_CH) translations are complete. All seven bundled language files now cover every string.
 
 = 3.0.2 =
 

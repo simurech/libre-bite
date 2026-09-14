@@ -161,7 +161,7 @@ $lbite_location_class     = ( $lbite_is_single_location ? 'lbite-location-select
 		<!-- Loading Overlay -->
 		<div class="lbite-loading-overlay" style="display: none;">
 			<div class="lbite-spinner"></div>
-			<p class="lbite-loading-text"><?php esc_html_e( 'Einen Moment bitte...', 'libre-bite' ); ?></p>
+			<p class="lbite-loading-text"><?php esc_html_e( 'One moment, please...', 'libre-bite' ); ?></p>
 		</div>
 
 		<?php if ( 'yes' === $atts['show_time'] ) : ?>
@@ -434,14 +434,14 @@ jQuery(document).ready(function($) {
 					}, 300);
 				} else {
 					$('.lbite-loading-overlay').fadeOut(200);
-					alert(response.data.message || 'Fehler beim Speichern');
+					alert(response.data.message || '<?php echo esc_js( __( "Error saving", "libre-bite" ) ); ?>');
 					// Loading States zurücksetzen
 					$('.lbite-button, .lbite-time-option').removeClass('loading');
 				}
 			},
 			error: function() {
 				$('.lbite-loading-overlay').fadeOut(200);
-				alert('Ein Fehler ist aufgetreten');
+				alert('<?php echo esc_js( __( "An error occurred.", "libre-bite" ) ); ?>');
 				// Loading States zurücksetzen
 				$('.lbite-button, .lbite-time-option').removeClass('loading');
 			}

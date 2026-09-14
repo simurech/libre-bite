@@ -195,11 +195,11 @@ jQuery(document).ready(function($) {
 					// Seite neu laden um Auswahl anzuzeigen
 					location.reload();
 				} else {
-					alert(response.data.message || 'Fehler beim Speichern');
+					alert(response.data.message || '<?php echo esc_js( __( "Error saving", "libre-bite" ) ); ?>');
 				}
 			},
 			error: function() {
-				alert('Ein Fehler ist aufgetreten');
+				alert('<?php echo esc_js( __( "An error occurred.", "libre-bite" ) ); ?>');
 			}
 		});
 	});

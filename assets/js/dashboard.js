@@ -126,7 +126,7 @@
 							location_id: locationId
 						},
 						error: () => {
-							console.error('Fehler beim Speichern des Standorts');
+							console.error('Error saving location');
 						}
 					});
 				}

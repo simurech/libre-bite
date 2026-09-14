@@ -267,7 +267,7 @@ jQuery(document).ready(function($) {
 				}
 			},
 			error: function() {
-				$status.text('<?php echo esc_js( __( 'Fehler beim Speichern', 'libre-bite' ) ); ?>');
+				$status.text('<?php echo esc_js( __( 'Error saving', 'libre-bite' ) ); ?>');
 			},
 			complete: function() {
 				$button.prop('disabled', false);
