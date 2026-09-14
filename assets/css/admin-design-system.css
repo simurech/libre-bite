@@ -992,6 +992,21 @@ body.lbite-theme-dark.lbite-screen-app {
 	color: var(--lbite-text);
 }
 
+/* WordPress färbt Überschriften über eigene Regeln (.wrap h1 und Verwandte)
+   fest auf #1d2327. Die geerbte Token-Farbe kommt dagegen nicht an, weshalb im
+   dunklen Schema dunkler Text auf dunklem Grund stand: Seitentitel und
+   Spaltenüberschriften des Boards hatten einen Kontrast von 1.1 und waren
+   praktisch unsichtbar. Im hellen Schema trägt --lbite-text denselben Wert wie
+   WordPress, die Regel ändert dort also nichts. */
+body.lbite-app #wpbody-content h1,
+body.lbite-app #wpbody-content h2,
+body.lbite-app #wpbody-content h3,
+body.lbite-app #wpbody-content h4,
+body.lbite-app .wrap h1,
+body.lbite-app .wrap h2 {
+	color: var(--lbite-text);
+}
+
 /* Automatikmodus: dasselbe Token-Set, aber der Systemeinstellung folgend */
 @media (prefers-color-scheme: dark) {
 	body.lbite-theme-auto {
