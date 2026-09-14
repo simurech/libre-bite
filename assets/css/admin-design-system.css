@@ -38,7 +38,7 @@
 	/* ── Text ────────────────────────────────────────────────────────── */
 	--lbite-text: #1d2327;
 	--lbite-text-muted: #646970;
-	--lbite-text-subtle: #8c8f94;
+	--lbite-text-subtle: #6b6f75;
 	--lbite-text-on-primary: #ffffff;
 
 	/* ── Akzente ─────────────────────────────────────────────────────────
@@ -963,7 +963,7 @@ body.lbite-theme-dark {
 
 	--lbite-text: #e8eaed;
 	--lbite-text-muted: #a2a9b4;
-	--lbite-text-subtle: #7b828d;
+	--lbite-text-subtle: #8d95a1;
 	--lbite-text-on-primary: #ffffff;
 
 	/* ── Akzente (aufgehellt für dunklen Grund) ──────────────────────── */
@@ -1035,6 +1035,14 @@ body.lbite-app .wrap h2 {
 	color: var(--lbite-text);
 }
 
+/* Dasselbe gilt für die Hilfstexte: WordPress setzt p.description in edit.css
+   auf #646970, was im dunklen Schema auf einen Kontrast von 3.25 führt. */
+body.lbite-app #wpbody-content p.description,
+body.lbite-app #wpbody-content .howto,
+body.lbite-app .wrap p.description {
+	color: var(--lbite-text-muted);
+}
+
 /* Automatikmodus: dasselbe Token-Set, aber der Systemeinstellung folgend */
 @media (prefers-color-scheme: dark) {
 	body.lbite-theme-auto {
@@ -1045,7 +1053,7 @@ body.lbite-app .wrap h2 {
 
 		--lbite-text: #e8eaed;
 		--lbite-text-muted: #a2a9b4;
-		--lbite-text-subtle: #7b828d;
+		--lbite-text-subtle: #8d95a1;
 		--lbite-text-on-primary: #ffffff;
 
 		/* ── Akzente (aufgehellt für dunklen Grund) ──────────────────────── */

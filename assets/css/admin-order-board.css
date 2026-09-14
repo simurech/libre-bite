@@ -634,6 +634,10 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 }
 
 @media print {
+	/* Das dunkle Farbschema gilt am Bildschirm, nicht auf Papier. Ohne diese
+	   Rueckstellung druckt der helle Text des dunklen Schemas nahezu
+	   unsichtbar auf weissem Papier. */
+	.lbite-receipt, .lbite-receipt *, .lbite-print-area, .lbite-print-area * { color: #000 !important; background: transparent !important; }
 	.lbite-print-body {
 		margin: 0;
 	}

@@ -173,6 +173,10 @@ foreach ( $lbite_products as $lbite_product ) {
 
 /* Druck */
 @media print {
+	/* Das dunkle Farbschema gilt am Bildschirm, nicht auf Papier. Ohne diese
+	   Rueckstellung druckt der helle Text des dunklen Schemas nahezu
+	   unsichtbar auf weissem Papier. */
+	.lbite-allergen-matrix, .lbite-allergen-matrix * { color: #000 !important; background: transparent !important; }
 	#adminmenumain, #wpadminbar, #wpfooter, .lbite-no-print, .notice { display: none !important; }
 	#wpcontent, #wpbody-content { margin: 0 !important; padding: 0 !important; float: none !important; }
 	.lbite-allergen-matrix .lbite-print-header { display: block; margin-bottom: 8mm; font-size: 12pt; }
