@@ -87,6 +87,15 @@
 .lbite-fp-table--circle { border-radius: 50%; }
 
 /* Status */
+/* Die Statusflächen sind bewusst in beiden Farbschemata hell – deshalb braucht
+   ihre Beschriftung hier ausdrücklich dunklen Text. Ohne diese Angabe erbte sie
+   im dunklen Schema die helle Schrift und die Tischnamen standen mit einem
+   Kontrast von 1.17 praktisch unsichtbar auf der Kachel. */
+.lbite-fp-table--free,
+.lbite-fp-table--occupied,
+.lbite-fp-table--preparing,
+.lbite-fp-table--ready { color: #1d2327; }
+
 .lbite-fp-table--free      { border-color: #46b450; background: #f0fff4; }
 .lbite-fp-table--occupied  { border-color: #dc3232; background: #fef2f2; }
 .lbite-fp-table--preparing { border-color: #ffb900; background: #fffbeb; }
