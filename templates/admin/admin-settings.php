@@ -175,7 +175,7 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 						? $lbite_custom_role_names_display[ $lbite_role_key ]
 						: $lbite_role_name;
 					?>
-					<div class="lbite-role-section" style="margin-bottom: 30px; padding: 15px; background: #fff; border: 1px solid #ccd0d4; border-radius: 4px;" data-role="<?php echo esc_attr( $lbite_role_key ); ?>">
+					<div class="lbite-role-section" style="margin-bottom: 30px; padding: 15px; background: var(--lbite-surface, #fff); border: 1px solid #ccd0d4; border-radius: 4px;" data-role="<?php echo esc_attr( $lbite_role_key ); ?>">
 						<h3 style="margin-top: 0;">
 							<?php echo esc_html( $lbite_display_name ); ?>
 							<span style="font-weight: normal; color: #666; font-size: 13px;">

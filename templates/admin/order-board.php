@@ -75,7 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<!-- Platzhalter wenn kein Standort gewählt -->
 	<div class="lbite-no-location-selected" id="lbite-no-location-message" style="<?php echo esc_attr( $lbite_saved_location ? 'display: none;' : '' ); ?>">
-		<div style="background: #fff; padding: 40px; margin: 40px 0; border: 2px dashed #ccc; border-radius: 8px; text-align: center;">
+		<div style="background: var(--lbite-surface, #fff); padding: 40px; margin: 40px 0; border: 2px dashed var(--lbite-border, #ccc); border-radius: 8px; text-align: center;">
 			<span class="dashicons dashicons-location" style="font-size: 48px; color: #999; margin-bottom: 20px;"></span>
 			<h2 style="color: #666; margin: 10px 0;"><?php esc_html_e( 'Please select a location', 'libre-bite' ); ?></h2>
 			<p style="color: #999;"><?php esc_html_e( 'The order overview is displayed for the selected location.', 'libre-bite' ); ?></p>

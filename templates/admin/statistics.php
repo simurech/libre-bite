@@ -423,7 +423,7 @@ $lbite_export_url = wp_nonce_url(
 		<?php endforeach; ?>
 
 		<?php if ( ! empty( $lbite_stat_locations ) ) : ?>
-		<span style="margin-left: 12px; color: #50575e;"><?php esc_html_e( 'Location:', 'libre-bite' ); ?></span>
+		<span style="margin-left: 12px; color: var(--lbite-text-muted, #50575e);"><?php esc_html_e( 'Location:', 'libre-bite' ); ?></span>
 		<select id="lbite-stat-location" onchange="window.location.href=this.value;" style="min-height: 32px; font-size: 13px;">
 			<option value="<?php echo esc_url( add_query_arg( 'lbite_location', '' ) ); ?>" <?php selected( $lbite_filter_loc, 0 ); ?>>
 				<?php esc_html_e( 'All Locations', 'libre-bite' ); ?>
@@ -443,17 +443,17 @@ $lbite_export_url = wp_nonce_url(
 
 	<!-- Kennzahlen-Kacheln -->
 	<div style="display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
-		<div style="background:#fff; border:1px solid #dcdcde; border-radius:6px; padding:20px 24px; min-width:160px; flex:1;">
-			<div style="font-size:28px; font-weight:700; color:#1d2327;"><?php echo wp_kses_post( wc_price( $lbite_total_revenue ) ); ?></div>
-			<div style="color:#50575e; font-size:13px; margin-top:4px;"><?php esc_html_e( 'Revenue', 'libre-bite' ); ?></div>
+		<div style="background:var(--lbite-surface, #fff); border:1px solid var(--lbite-border, #dcdcde); border-radius:6px; padding:20px 24px; min-width:160px; flex:1;">
+			<div style="font-size:28px; font-weight:700; color:var(--lbite-text, #1d2327);"><?php echo wp_kses_post( wc_price( $lbite_total_revenue ) ); ?></div>
+			<div style="color:var(--lbite-text-muted, #50575e); font-size:13px; margin-top:4px;"><?php esc_html_e( 'Revenue', 'libre-bite' ); ?></div>
 		</div>
-		<div style="background:#fff; border:1px solid #dcdcde; border-radius:6px; padding:20px 24px; min-width:160px; flex:1;">
-			<div style="font-size:28px; font-weight:700; color:#1d2327;"><?php echo esc_html( $lbite_total_orders ); ?></div>
-			<div style="color:#50575e; font-size:13px; margin-top:4px;"><?php esc_html_e( 'Orders', 'libre-bite' ); ?></div>
+		<div style="background:var(--lbite-surface, #fff); border:1px solid var(--lbite-border, #dcdcde); border-radius:6px; padding:20px 24px; min-width:160px; flex:1;">
+			<div style="font-size:28px; font-weight:700; color:var(--lbite-text, #1d2327);"><?php echo esc_html( $lbite_total_orders ); ?></div>
+			<div style="color:var(--lbite-text-muted, #50575e); font-size:13px; margin-top:4px;"><?php esc_html_e( 'Orders', 'libre-bite' ); ?></div>
 		</div>
-		<div style="background:#fff; border:1px solid #dcdcde; border-radius:6px; padding:20px 24px; min-width:160px; flex:1;">
-			<div style="font-size:28px; font-weight:700; color:#1d2327;"><?php echo wp_kses_post( wc_price( $lbite_avg_order ) ); ?></div>
-			<div style="color:#50575e; font-size:13px; margin-top:4px;"><?php esc_html_e( 'Avg. Order Value', 'libre-bite' ); ?></div>
+		<div style="background:var(--lbite-surface, #fff); border:1px solid var(--lbite-border, #dcdcde); border-radius:6px; padding:20px 24px; min-width:160px; flex:1;">
+			<div style="font-size:28px; font-weight:700; color:var(--lbite-text, #1d2327);"><?php echo wp_kses_post( wc_price( $lbite_avg_order ) ); ?></div>
+			<div style="color:var(--lbite-text-muted, #50575e); font-size:13px; margin-top:4px;"><?php esc_html_e( 'Avg. Order Value', 'libre-bite' ); ?></div>
 		</div>
 	</div>
 
@@ -563,7 +563,7 @@ $lbite_export_url = wp_nonce_url(
 	<div style="display:flex; gap:24px; flex-wrap:wrap; margin-bottom:32px;">
 		<!-- Nach Menge -->
 		<div style="flex:1; min-width:280px;">
-			<h3 style="margin-top:0; font-size:14px; color:#50575e;"><?php esc_html_e( 'By Quantity', 'libre-bite' ); ?></h3>
+			<h3 style="margin-top:0; font-size:14px; color:var(--lbite-text-muted, #50575e);"><?php esc_html_e( 'By Quantity', 'libre-bite' ); ?></h3>
 			<table class="widefat">
 				<thead>
 					<tr>
@@ -583,7 +583,7 @@ $lbite_export_url = wp_nonce_url(
 		</div>
 		<!-- Nach Umsatz -->
 		<div style="flex:1; min-width:280px;">
-			<h3 style="margin-top:0; font-size:14px; color:#50575e;"><?php esc_html_e( 'By Revenue', 'libre-bite' ); ?></h3>
+			<h3 style="margin-top:0; font-size:14px; color:var(--lbite-text-muted, #50575e);"><?php esc_html_e( 'By Revenue', 'libre-bite' ); ?></h3>
 			<table class="widefat">
 				<thead>
 					<tr>
@@ -626,7 +626,7 @@ $lbite_export_url = wp_nonce_url(
 				<td><strong><?php echo esc_html( $lbite_an ); ?></strong></td>
 				<td style="text-align:right;"><?php echo esc_html( $lbite_ad['qty'] ); ?></td>
 				<td style="text-align:right;"><?php echo wp_kses_post( wc_price( $lbite_ad['revenue'] ) ); ?></td>
-				<td style="font-size:12px; color:#50575e;">
+				<td style="font-size:12px; color:var(--lbite-text-muted, #50575e);">
 					<?php
 					$lbite_combo_parts = array();
 					foreach ( $lbite_combos_top as $lbite_cprod => $lbite_ccnt ) {

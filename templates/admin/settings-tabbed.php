@@ -1147,7 +1147,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 
 				<ul id="lbite-pos-product-order" style="max-width: 600px; margin: 0; padding: 0; list-style: none;">
 					<?php foreach ( $lbite_pos_order_products as $lbite_pos_order_product ) : ?>
-					<li data-id="<?php echo esc_attr( $lbite_pos_order_product->ID ); ?>" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 4px; background: #fff; border: 1px solid #ddd; border-radius: 4px; cursor: grab;">
+					<li data-id="<?php echo esc_attr( $lbite_pos_order_product->ID ); ?>" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 4px; background: var(--lbite-surface, #fff); border: 1px solid #ddd; border-radius: 4px; cursor: grab;">
 						<span class="dashicons dashicons-menu" style="color: #aaa; flex-shrink: 0;"></span>
 						<span><?php echo esc_html( $lbite_pos_order_product->post_title ); ?></span>
 					</li>

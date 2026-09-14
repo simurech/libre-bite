@@ -123,8 +123,8 @@ $lbite_color_presets = array(
 	<?php submit_button( __( 'Save Settings', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 </form>
 
-<div id="lbite-branding-preview" style="margin-top: 24px; border: 1px solid #dcdcde; border-radius: 6px; overflow: hidden; max-width: 480px; background: #fff;">
-	<p style="margin: 0; padding: 8px 16px; font-weight: 600; color: #1d2327; background: #f6f7f7; border-bottom: 1px solid #dcdcde;"><?php esc_html_e( 'Live Preview', 'libre-bite' ); ?></p>
+<div id="lbite-branding-preview" style="margin-top: 24px; border: 1px solid var(--lbite-border, #dcdcde); border-radius: 6px; overflow: hidden; max-width: 480px; background: var(--lbite-surface, #fff);">
+	<p style="margin: 0; padding: 8px 16px; font-weight: 600; color: var(--lbite-text, #1d2327); background: #f6f7f7; border-bottom: 1px solid var(--lbite-border, #dcdcde);"><?php esc_html_e( 'Live Preview', 'libre-bite' ); ?></p>
 	<div id="lbite-preview-header" style="background: <?php echo esc_attr( $lbite_color_primary ); ?>; display: flex; align-items: center; padding: 0 16px; height: 48px;">
 		<span id="lbite-preview-brand-name" style="color: #fff; font-weight: 700; font-size: 16px;"><?php echo esc_html( $lbite_brand_name ?: __( 'Brand Name', 'libre-bite' ) ); ?></span>
 	</div>

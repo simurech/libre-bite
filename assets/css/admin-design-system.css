@@ -41,6 +41,18 @@
 	--lbite-text-subtle: #8c8f94;
 	--lbite-text-on-primary: #ffffff;
 
+	/* ── Akzente ─────────────────────────────────────────────────────────
+	   Kachel- und Bereichsfarben. Sie brauchen je Schema einen eigenen Wert:
+	   die hellen Töne verschwinden auf dunklem Grund (die Kachel
+	   «Einstellungen» kam auf einen Kontrast von 1.03). */
+	--lbite-accent-blue: #2271b1;
+	--lbite-accent-green: #007f26;
+	--lbite-accent-purple: #8c5aa9;
+	--lbite-accent-orange: #c3522e;
+	--lbite-accent-red: #b32d2e;
+	--lbite-accent-neutral: #50575e;
+	--lbite-accent-strong: #1d2327;
+
 	/* ── Rahmen ──────────────────────────────────────────────────────── */
 	--lbite-border: #dcdfe3;
 	--lbite-border-strong: #c3c4c7;
@@ -948,6 +960,15 @@ body.lbite-theme-dark {
 	--lbite-text-subtle: #7b828d;
 	--lbite-text-on-primary: #ffffff;
 
+	/* ── Akzente (aufgehellt für dunklen Grund) ──────────────────────── */
+	--lbite-accent-blue: #5eaee0;
+	--lbite-accent-green: #4fd07a;
+	--lbite-accent-purple: #c09ae0;
+	--lbite-accent-orange: #f0906a;
+	--lbite-accent-red: #f07a7b;
+	--lbite-accent-neutral: #a2a9b4;
+	--lbite-accent-strong: #e8eaed;
+
 	--lbite-border: #333a45;
 	--lbite-border-strong: #454d5a;
 	--lbite-border-subtle: #282e37;
@@ -1019,6 +1040,15 @@ body.lbite-app .wrap h2 {
 		--lbite-text-muted: #a2a9b4;
 		--lbite-text-subtle: #7b828d;
 		--lbite-text-on-primary: #ffffff;
+
+		/* ── Akzente (aufgehellt für dunklen Grund) ──────────────────────── */
+		--lbite-accent-blue: #5eaee0;
+		--lbite-accent-green: #4fd07a;
+		--lbite-accent-purple: #c09ae0;
+		--lbite-accent-orange: #f0906a;
+		--lbite-accent-red: #f07a7b;
+		--lbite-accent-neutral: #a2a9b4;
+		--lbite-accent-strong: #e8eaed;
 
 		--lbite-border: #333a45;
 		--lbite-border-strong: #454d5a;

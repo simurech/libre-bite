@@ -63,7 +63,7 @@ $lbite_promo_days   = array(
 	$lbite_sch  = isset( $lbite_rule['schedule'] ) && is_array( $lbite_rule['schedule'] ) ? $lbite_rule['schedule'] : array();
 	$lbite_name = 'lbite_promotions[' . $lbite_pi . ']';
 	?>
-	<fieldset style="border:1px solid #dcdcde; border-radius:8px; padding:12px 16px; margin-bottom:12px;">
+	<fieldset style="border:1px solid var(--lbite-border, #dcdcde); border-radius:8px; padding:12px 16px; margin-bottom:12px;">
 		<legend style="font-weight:600; padding:0 6px;">
 			<?php
 			printf(

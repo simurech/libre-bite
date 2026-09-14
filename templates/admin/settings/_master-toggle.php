@@ -28,7 +28,7 @@ $lbite_toggle_locked  = $lbite_toggle_is_pro && ! $lbite_toggle_premium_allowed;
 
 $lbite_upgrade_url = function_exists( 'lbite_freemius' ) ? lbite_freemius()->get_upgrade_url() : '#';
 ?>
-<div class="lbite-master-toggle-wrap" style="background: #fff; border: 1px solid #dcdcde; border-radius: 6px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
+<div class="lbite-master-toggle-wrap" style="background: var(--lbite-surface, #fff); border: 1px solid var(--lbite-border, #dcdcde); border-radius: 6px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
 	<div style="flex: 1;">
 		<strong style="font-size: 14px;">
 			<?php echo esc_html( $lbite_toggle_label ); ?>
@@ -55,6 +55,6 @@ $lbite_upgrade_url = function_exists( 'lbite_freemius' ) ? lbite_freemius()->get
 			<?php checked( $lbite_toggle_enabled ); ?>
 			<?php disabled( $lbite_toggle_locked ); ?>
 		>
-		<span style="font-size: 13px; color: #50575e;"><?php esc_html_e( 'Enable', 'libre-bite' ); ?></span>
+		<span style="font-size: 13px; color: var(--lbite-text-muted, #50575e);"><?php esc_html_e( 'Enable', 'libre-bite' ); ?></span>
 	</label>
 </div>
