@@ -276,6 +276,10 @@ The plugin uses standard WordPress i18n functions and can be translated via .pot
 * Added: the wizard now walks through each enabled module and asks for the settings that matter to get started, with a skip option per step. Existing configurations are left untouched — every field is pre-filled with the current value, so clicking straight through changes nothing.
 * Added: the light, dark and automatic colour scheme can now be chosen under Settings → Branding, not only in the WordPress profile.
 * Fixed: module names and descriptions were shown in English regardless of the site language.
+* Fixed: the action buttons on the order board carried white text on colours too light to read it — in both colour schemes, not only the dark one.
+* Fixed: the category buttons in the POS were unreadable in the dark colour scheme.
+* Fixed: the plugin's own list screens (locations, tables, add-ons, reservations) ignored the colour scheme entirely, so you clicked from a dark page into a bright one.
+* Changed: while `SCRIPT_DEBUG` is on, asset URLs carry the file's modification time. Without it a stylesheet fix inside the same plugin version only reached the browser after a hard reload.
 
 = 3.0.2 =
 

@@ -66,8 +66,12 @@ libre-bite/
 
 **Nach der Aktivierung:**
 1. Sicherstellen, dass WooCommerce aktiv ist.
-2. Dem Einrichtungsassistenten folgen — er prüft die Umgebung, lässt die benötigten Module wählen und kann auf Wunsch eine Beispielkarte anlegen.
+2. Dem Einrichtungsassistenten folgen: Er prüft die Umgebung, lässt die benötigten Module wählen und geht anschliessend jedes eingeschaltete Modul einzeln durch, um dessen wichtigste Einstellungen abzufragen. Jeder Schritt lässt sich überspringen, und auf Wunsch legt er eine Beispielkarte an.
 3. Alternativ direkt im Admin-Menü zu **Libre Bite** navigieren und Standort(e) konfigurieren.
+
+> Der Assistent lässt sich jederzeit erneut öffnen, auch auf einem bereits eingerichteten Shop: Alle Felder sind mit den aktuellen Werten vorbelegt, blosses Durchklicken verändert nichts. Zugriff haben Administratoren, Manager und Shop-Manager — Kassenpersonal bewusst nicht.
+
+**Farbschema:** Die Libre-Bite-Seiten folgen wahlweise der Systemeinstellung oder stehen fest auf hell beziehungsweise dunkel. Einstellbar unter **Libre Bite → Einstellungen → Branding** oder im WordPress-Profil. Die Wahl gilt pro Benutzer, damit Küchen-Tablet und Bürorechner sich unterscheiden dürfen.
 
 ---
 
