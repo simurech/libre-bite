@@ -282,6 +282,7 @@ Yes. English is the source language, and the plugin ships with complete translat
 * Changed: while `SCRIPT_DEBUG` is on, asset URLs carry the file's modification time. Without it a stylesheet fix inside the same plugin version only reached the browser after a hard reload.
 * Fixed: three messages in the location selector were hard-coded in German and appeared that way on every site, whatever its language. They now go through the translation system like everything else.
 * Added: the French (fr_CH) and Italian (it_CH) translations are complete. All seven bundled language files now cover every string.
+* Fixed: the plugin's own edit screens (locations, tables, add-ons) carried the colour scheme class but never loaded the stylesheet that defines it, so the dark scheme had no effect there and WordPress logged a notice about an unregistered dependency. Whether a screen belongs to Libre Bite is now decided in one place instead of two.
 
 = 3.0.2 =
 

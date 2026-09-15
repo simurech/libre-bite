@@ -628,6 +628,51 @@ class LBite_Admin {
 	}
 
 	/**
+	 * Gehoert der aktuelle Bildschirm zu Libre Bite?
+	 *
+	 * Einzige Quelle fuer diese Frage. Der Enqueue-Waechter und die Body-Klasse
+	 * beantworteten sie frueher getrennt und auf unterschiedlicher Grundlage: der
+	 * eine ueber den Seiten-Hook, die andere ueber die Bildschirm-Kennung. Bei den
+	 * eigenen Inhaltstypen heisst der Hook aber schlicht post.php beziehungsweise
+	 * edit.php – das Design-System wurde dort also nie geladen, waehrend die
+	 * Theme-Klasse trotzdem am Body stand. Ergebnis: gesetztes Farbschema ohne die
+	 * Tokens, auf denen es beruht, plus eine WordPress-Meldung ueber eine nicht
+	 * registrierte Abhaengigkeit.
+	 *
+	 * @param string $hook Aktuelle Admin-Seite (optional, ergaenzt die Kennung).
+	 * @return bool
+	 */
+	public static function is_lbite_screen( $hook = '' ) {
+		$kennungen = array();
+
+		if ( ! empty( $hook ) ) {
+			$kennungen[] = (string) $hook;
+		}
+
+		if ( function_exists( 'get_current_screen' ) ) {
+			$screen = get_current_screen();
+			if ( $screen ) {
+				if ( ! empty( $screen->id ) ) {
+					$kennungen[] = (string) $screen->id;
+				}
+				if ( ! empty( $screen->post_type ) ) {
+					$kennungen[] = (string) $screen->post_type;
+				}
+			}
+		}
+
+		foreach ( $kennungen as $kennung ) {
+			if ( false !== strpos( $kennung, 'libre-bite' )
+				|| false !== strpos( $kennung, 'lbite-' )
+				|| false !== strpos( $kennung, 'lbite_' ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Screen-Modus als Body-Klasse setzen
 	 *
 	 * Arbeits-Screens (Kanban, POS, Tischplan, Reservierungsboard) laufen im
@@ -648,13 +693,7 @@ class LBite_Admin {
 
 		$lbite_id = (string) $lbite_screen->id;
 
-		// Auch die eigenen Inhaltstypen beruecksichtigen: deren Bildschirm-Kennungen
-		// heissen edit-lbite_location und aehnlich – mit Unterstrich. Ohne diesen
-		// Zweig endete das Farbschema an der Standort- und Tischliste, man klickte
-		// also aus einer dunklen Seite in eine helle.
-		if ( false === strpos( $lbite_id, 'libre-bite' )
-			&& false === strpos( $lbite_id, 'lbite-' )
-			&& false === strpos( $lbite_id, 'lbite_' ) ) {
+		if ( ! self::is_lbite_screen() ) {
 			return $classes;
 		}
 
@@ -798,13 +837,9 @@ class LBite_Admin {
 	 * @param string $hook Aktuelle Admin-Seite
 	 */
 	public function enqueue_admin_assets( $hook ) {
-		// Nur auf Plugin-Seiten laden
-		// Siehe add_admin_body_classes(): die eigenen Inhaltstypen tragen einen
-		// Unterstrich in der Kennung und blieben sonst ohne Design-System-CSS.
-		if ( empty( $hook )
-			|| ( strpos( $hook, 'libre-bite' ) === false
-				&& strpos( $hook, 'lbite-' ) === false
-				&& strpos( $hook, 'lbite_' ) === false ) ) {
+		// Nur auf Plugin-Seiten laden. Die Entscheidung faellt in
+		// is_lbite_screen(), damit sie mit der Body-Klasse nicht auseinanderlaeuft.
+		if ( ! self::is_lbite_screen( $hook ) ) {
 			return;
 		}
 
