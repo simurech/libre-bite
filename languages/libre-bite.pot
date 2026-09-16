@@ -7617,6 +7617,10 @@ msgstr ""
 msgid "Cancelled Orders"
 msgstr ""
 
+#: templates/admin/statistics.php:490
+msgid "Not included in the figures above or elsewhere on this page."
+msgstr ""
+
 #: templates/admin/statistics.php:507
 msgid "Revenue Over Time"
 msgstr ""

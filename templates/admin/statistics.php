@@ -486,6 +486,9 @@ $lbite_export_url = wp_nonce_url(
 					· <?php echo wp_kses_post( wc_price( $lbite_cancelled_revenue ) ); ?>
 				<?php endif; ?>
 			</div>
+			<div style="color:var(--lbite-text-subtle, #8c8f94); font-size:11px; margin-top:6px;">
+				<?php esc_html_e( 'Not included in the figures above or elsewhere on this page.', 'libre-bite' ); ?>
+			</div>
 		</div>
 	</div>
 

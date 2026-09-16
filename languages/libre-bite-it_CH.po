@@ -7450,6 +7450,10 @@ msgstr "Valore medio dell'ordine"
 msgid "Cancelled Orders"
 msgstr "Ordini annullati"
 
+#: templates/admin/statistics.php:490
+msgid "Not included in the figures above or elsewhere on this page."
+msgstr "Non inclusi nei dati sopra o altrove in questa pagina."
+
 #: templates/admin/statistics.php:507
 msgid "Revenue Over Time"
 msgstr "Andamento del fatturato"
