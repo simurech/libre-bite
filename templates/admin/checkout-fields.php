@@ -101,10 +101,10 @@ $default_fields = array(
 	<form method="post" action="">
 		<?php wp_nonce_field( 'lbite_checkout_fields_save' ); ?>
 
-		<!-- Allgemeine Einstellungen -->
+		<!-- Versand -->
 		<div class="postbox" style="margin-top: 20px;">
 			<h2 class="hndle" style="padding: 15px;">
-				<?php esc_html_e( 'General Settings', 'libre-bite' ); ?>
+				<?php esc_html_e( 'Shipping', 'libre-bite' ); ?>
 			</h2>
 			<div class="inside">
 				<table class="form-table">
@@ -136,6 +136,17 @@ $default_fields = array(
 							</p>
 						</td>
 					</tr>
+				</table>
+			</div>
+		</div>
+
+		<!-- Bestellnotiz, Trinkgeld & Abschnittstitel -->
+		<div class="postbox" style="margin-top: 20px;">
+			<h2 class="hndle" style="padding: 15px;">
+				<?php esc_html_e( 'Order Notes, Tips & Section Titles', 'libre-bite' ); ?>
+			</h2>
+			<div class="inside">
+				<table class="form-table">
 					<tr>
 						<td style="padding: 10px;">
 							<label style="display: flex; align-items: center; gap: 10px;">
@@ -146,7 +157,7 @@ $default_fields = array(
 								<strong><?php esc_html_e( 'Show Tip Selection in Checkout', 'libre-bite' ); ?></strong>
 							</label>
 							<p class="description" style="margin-left: 30px; margin-top: 5px;">
-								<?php esc_html_e( 'If disabled, the tip selection will not be shown in checkout.', 'libre-bite' ); ?>
+								<?php esc_html_e( 'A second, more specific switch on top of the "Tips" feature under Checkout — uncheck this to hide tipping here while keeping the feature and its configured amounts turned on. Has no effect if "Tips" is off.', 'libre-bite' ); ?>
 							</p>
 						</td>
 					</tr>

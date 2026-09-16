@@ -648,8 +648,13 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 							</td>
 						</tr>
 						<?php endif; ?>
+						</table>
 						<?php if ( lbite_feature_enabled( 'enable_tips' ) ) : ?>
-						<tr><td colspan="2"><hr style="margin: 8px 0;"><strong><?php esc_html_e( 'Tip Settings', 'libre-bite' ); ?></strong></td></tr>
+						<h3><?php esc_html_e( 'Tip Settings', 'libre-bite' ); ?></h3>
+						<p class="description" style="margin-bottom: 8px;">
+							<?php esc_html_e( 'A further switch to hide tips without turning this feature off entirely is available under "Fields in Standard Checkout" below.', 'libre-bite' ); ?>
+						</p>
+						<table class="form-table">
 						<tr>
 							<th><?php esc_html_e( 'Tip Title', 'libre-bite' ); ?></th>
 							<td>
@@ -714,8 +719,8 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 								</select>
 							</td>
 						</tr>
+						</table>
 						<?php endif; ?>
-					</table>
 					<script>
 					(function() {
 						var radios = document.querySelectorAll('input[name="lbite_tip_mode"]');
