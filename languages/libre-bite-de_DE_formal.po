@@ -359,7 +359,7 @@ msgstr "Tischbestellung"
 
 #: includes/admin/class-admin.php:1047 includes/modules/pos/class-pos.php:179
 msgid "Tab"
-msgstr "Tab"
+msgstr "Rechnung"
 
 #: includes/admin/class-admin.php:1048 includes/modules/pos/class-pos.php:180
 msgid "Round"
@@ -516,7 +516,7 @@ msgstr "Bitte einen Tisch auswählen"
 
 #: includes/admin/class-admin.php:1680
 msgid "Tab opened via POS."
-msgstr "Tab über POS eröffnet."
+msgstr "Rechnung über POS eröffnet."
 
 #: includes/admin/class-admin.php:1713 includes/admin/class-admin.php:1719
 #: includes/core/class-rest-api.php:319
@@ -528,7 +528,7 @@ msgstr "Bestellung nicht gefunden"
 
 #: includes/admin/class-admin.php:1716
 msgid "This tab is no longer open"
-msgstr "Dieser Tab ist nicht mehr offen"
+msgstr "Diese Rechnung ist nicht mehr offen"
 
 #. translators: %d: Rundennummer.
 #: includes/admin/class-admin.php:1763
@@ -538,11 +538,11 @@ msgstr "Runde %d über POS hinzugefügt"
 
 #: includes/admin/class-admin.php:1822
 msgid "Tab closed via POS."
-msgstr "Tab über POS abgeschlossen."
+msgstr "Rechnung über POS abgeschlossen."
 
 #: includes/admin/class-admin.php:1855
 msgid "Tab cancelled via POS."
-msgstr "Tab über POS storniert."
+msgstr "Rechnung über POS storniert."
 
 #: includes/admin/class-admin.php:1988
 msgid "Invalid parameters"
@@ -2301,7 +2301,7 @@ msgstr "Unbekannte Spalte"
 
 #: includes/modules/order-dashboard/class-order-dashboard.php:633
 msgid "Close the tab in the POS first"
-msgstr "Zuerst den Tab im POS abschließen"
+msgstr "Zuerst die Rechnung im POS abschließen"
 
 #: includes/modules/order-dashboard/class-order-dashboard.php:650
 msgid "Order completed via Dashboard"
@@ -2494,11 +2494,11 @@ msgstr "Abbrechen"
 
 #: includes/modules/pos/class-pos.php:184
 msgid "Close tab"
-msgstr "Tab abschließen"
+msgstr "Rechnung abschließen"
 
 #: includes/modules/pos/class-pos.php:186
 msgid "Tab opened"
-msgstr "Tab eröffnet"
+msgstr "Rechnung eröffnet"
 
 #: includes/modules/pos/class-pos.php:187
 msgid "Items added"
@@ -2506,19 +2506,19 @@ msgstr "Positionen hinzugefügt"
 
 #: includes/modules/pos/class-pos.php:188
 msgid "Tab closed"
-msgstr "Tab abgeschlossen"
+msgstr "Rechnung abgeschlossen"
 
 #: includes/modules/pos/class-pos.php:189
 msgid "Tab cancelled"
-msgstr "Tab storniert"
+msgstr "Rechnung storniert"
 
 #: includes/modules/pos/class-pos.php:190
 msgid "Cancel this tab?"
-msgstr "Diesen Tab stornieren?"
+msgstr "Diese Rechnung stornieren?"
 
 #: includes/modules/pos/class-pos.php:191
 msgid "Adding to tab:"
-msgstr "Wird zu Tab hinzugefügt:"
+msgstr "Wird zur Rechnung hinzugefügt:"
 
 #: includes/modules/pos/class-pos.php:192
 msgid "No open tabs"
@@ -6045,7 +6045,7 @@ msgstr "Die Bestellübersicht wird für den gewählten Standort angezeigt."
 
 #: templates/admin/pos.php:18 templates/admin/pos.php:302
 msgid "Open Tabs"
-msgstr "Offene Tabs"
+msgstr "Offene Rechnungen"
 
 #: templates/admin/pos.php:71
 msgid "Order type:"
@@ -6105,7 +6105,7 @@ msgstr "Rest"
 
 #: templates/admin/pos.php:286
 msgid "Open tab"
-msgstr "Tab eröffnen"
+msgstr "Rechnung eröffnen"
 
 #: templates/admin/pos.php:290
 msgid "Payment Confirmed – Create Order"

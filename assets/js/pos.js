@@ -153,7 +153,7 @@
 				$container.show();
 			} else {
 				$container.hide();
-				$('#lbite-pos-table').val('');
+				$('#lbite-pos-table').val('').trigger('change');
 			}
 		},
 
@@ -911,7 +911,7 @@
 			this.renderAppliedCoupons();
 			this.saveCart();
 			$('#lbite-pos-customer-name').val('');
-			$('#lbite-pos-table').val('');
+			$('#lbite-pos-table').val('').trigger('change');
 		},
 
 		/**

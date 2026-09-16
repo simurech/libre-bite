@@ -874,19 +874,8 @@ body.lbite-fullscreen-active #lbite-pos-cart-items {
 	color: var(--lbite-danger, #d63638);
 }
 
-/* Offene Tabs (F_TAB) */
-.lbite-pos-tabs-badge {
-	display: inline-block;
-	min-width: 18px;
-	padding: 0 5px;
-	margin-left: 6px;
-	background: var(--lbite-danger, #d63638);
-	color: var(--lbite-text-on-primary, #fff);
-	border-radius: 9px;
-	font-size: 11px;
-	line-height: 18px;
-	text-align: center;
-}
+/* Offene Tabs (F_TAB): .lbite-pos-tabs-badge Styles siehe Dateiende, zusammen
+   mit den übrigen Touch-Bedienungs-Anpassungen des POS. */
 
 .lbite-pos-active-tab-banner {
 	display: flex;
@@ -1216,4 +1205,121 @@ body.lbite-fullscreen-active #lbite-pos-cart-items {
 	font-weight: var(--lbite-weight-bold);
 	line-height: 1.5;
 	pointer-events: none;
+}
+
+/* Bestellart-Kacheln (Touch) - selbes Muster wie .lbite-payment-method-option */
+.lbite-pos-vat-selector {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.lbite-pos-vat-selector-label {
+	font-weight: 600;
+}
+
+.lbite-pos-vat-options {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.lbite-pos-vat-option {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 44px;
+	padding: 8px 16px;
+	border: 2px solid var(--lbite-border, #e2e4e7);
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 500;
+	touch-action: manipulation;
+	transition: border-color 0.2s, background 0.2s;
+}
+
+.lbite-pos-vat-option:hover {
+	border-color: var(--lbite-color-primary, #0073aa);
+	background: #f0f8ff;
+}
+
+.lbite-pos-vat-option:has(input:checked) {
+	border-color: var(--lbite-color-primary, #0073aa);
+	background: var(--lbite-color-primary-soft, #e3f2fd);
+}
+
+.lbite-pos-vat-option input[type="radio"] {
+	accent-color: var(--lbite-color-primary, #0073aa);
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+}
+
+.lbite-pos-vat-option-icon {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+}
+
+/* Tisch-Auswahl als Button-Grid (Touch) statt <select> - dieses bleibt als
+   unsichtbare Datenquelle bestehen, siehe assets/js/pos-page.js. */
+.lbite-pos-table-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 6px;
+}
+
+.lbite-pos-table-btn {
+	min-height: 44px;
+	min-width: 44px;
+	padding: 8px 14px;
+	border: 2px solid var(--lbite-border, #ddd);
+	border-radius: 4px;
+	background: var(--lbite-surface, #fff);
+	color: var(--lbite-text, #1d2327);
+	cursor: pointer;
+	font-size: 14px;
+	touch-action: manipulation;
+	transition: all 0.2s;
+}
+
+.lbite-pos-table-btn:hover {
+	border-color: var(--lbite-color-primary, #0073aa);
+}
+
+.lbite-pos-table-btn.active {
+	border-color: var(--lbite-color-primary, #0073aa);
+	background: var(--lbite-color-primary-soft, #f0f8ff);
+	font-weight: 600;
+}
+
+.lbite-pos-table-btn-occupied {
+	border-color: var(--lbite-danger-border, #d63638);
+}
+
+/* Offene Rechnungen: eigener Button neben der Bestellart-/Tisch-Auswahl statt
+   im Header neben dem Vollbild-Button - konkurrierte dort um Aufmerksamkeit. */
+.lbite-pos-tabs-btn {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 44px;
+}
+
+.lbite-pos-tabs-badge {
+	min-width: 22px;
+	height: 22px;
+	padding: 0 6px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: var(--lbite-radius-pill, 999px);
+	background: var(--lbite-color-primary, #0073aa);
+	color: #fff;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1;
 }

@@ -13,12 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wrap lbite-pos">
 	<div class="lbite-pos-header">
 		<h1><?php esc_html_e( 'POS System', 'libre-bite' ); ?></h1>
-		<?php if ( lbite_feature_enabled( 'enable_open_tabs' ) ) : ?>
-		<button type="button" id="lbite-pos-tabs-btn" class="button button-large">
-			<?php esc_html_e( 'Open Tabs', 'libre-bite' ); ?>
-			<span id="lbite-pos-tabs-count" class="lbite-pos-tabs-badge" style="display:none;">0</span>
-		</button>
-		<?php endif; ?>
 		<button type="button" id="lbite-pos-fullscreen" class="button button-large" title="Vollbild">
 			<span class="dashicons dashicons-editor-expand"></span>
 		</button>
@@ -67,16 +61,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 
 		<?php if ( $lbite_show_order_type ) : ?>
-		<div id="lbite-pos-vat-selector">
-			<label style="margin-right:6px;font-weight:600;"><?php esc_html_e( 'Order type:', 'libre-bite' ); ?></label>
-			<label class="lbite-pos-vat-option">
-				<input type="radio" name="lbite_pos_vat_type" value="takeaway" <?php checked( $lbite_pos_vat_default, 'takeaway' ); ?>>
-				<?php esc_html_e( 'Takeaway', 'libre-bite' ); ?>
-			</label>
-			<label class="lbite-pos-vat-option" style="margin-left:10px;">
-				<input type="radio" name="lbite_pos_vat_type" value="dine_in" <?php checked( $lbite_pos_vat_default, 'dine_in' ); ?>>
-				<?php esc_html_e( 'Dine-in', 'libre-bite' ); ?>
-			</label>
+		<div id="lbite-pos-vat-selector" class="lbite-pos-vat-selector">
+			<span class="lbite-pos-vat-selector-label"><?php esc_html_e( 'Order type:', 'libre-bite' ); ?></span>
+			<div class="lbite-pos-vat-options">
+				<label class="lbite-pos-vat-option">
+					<input type="radio" name="lbite_pos_vat_type" value="takeaway" <?php checked( $lbite_pos_vat_default, 'takeaway' ); ?>>
+					<span class="dashicons dashicons-store lbite-pos-vat-option-icon"></span>
+					<span><?php esc_html_e( 'Takeaway', 'libre-bite' ); ?></span>
+				</label>
+				<label class="lbite-pos-vat-option">
+					<input type="radio" name="lbite_pos_vat_type" value="dine_in" <?php checked( $lbite_pos_vat_default, 'dine_in' ); ?>>
+					<span class="dashicons dashicons-food lbite-pos-vat-option-icon"></span>
+					<span><?php esc_html_e( 'Dine-in', 'libre-bite' ); ?></span>
+				</label>
+			</div>
 		</div>
 		<?php endif; ?>
 
@@ -85,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<label for="lbite-pos-table">
 				<strong><?php esc_html_e( 'Table (optional):', 'libre-bite' ); ?></strong>
 			</label>
-			<select id="lbite-pos-table" class="lbite-pos-table-select">
+			<select id="lbite-pos-table" class="lbite-pos-table-select" style="display:none;">
 				<option value=""><?php esc_html_e( 'No table', 'libre-bite' ); ?></option>
 				<?php
 				if ( $lbite_selected_location ) {
@@ -110,7 +108,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 				?>
 			</select>
+			<div id="lbite-pos-table-grid" class="lbite-pos-table-grid"></div>
 		</div>
+		<?php endif; ?>
+
+		<?php if ( lbite_feature_enabled( 'enable_open_tabs' ) ) : ?>
+		<button type="button" id="lbite-pos-tabs-btn" class="button button-large lbite-pos-tabs-btn">
+			<span class="dashicons dashicons-media-text"></span>
+			<?php esc_html_e( 'Open Tabs', 'libre-bite' ); ?>
+			<span id="lbite-pos-tabs-count" class="lbite-pos-tabs-badge" style="display:none;">0</span>
+		</button>
 		<?php endif; ?>
 
 		<label class="lbite-wake-lock-toggle" style="margin-left: auto;">

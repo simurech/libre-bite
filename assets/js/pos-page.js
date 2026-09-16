@@ -10,9 +10,50 @@ jQuery(document).ready(function($) {
 		$select.empty().append($('<option>').val('').text(emptyLabel));
 		tables.forEach(function(table) {
 			var label = table.occupied ? '\u{1F534} ' + table.title : '\u{1F7E2} ' + table.title;
-			$select.append($('<option>').val(table.id).text(label));
+			$select.append($('<option>').val(table.id).text(label).attr('data-occupied', table.occupied ? '1' : '0'));
+		});
+		syncTableGrid();
+	}
+
+	/**
+	 * Tisch-Button-Grid aus dem (unsichtbaren) Tisch-Select ableiten.
+	 *
+	 * Das Select bleibt die einzige Datenquelle (server-gerendert und von
+	 * renderTableOptions() befüllt) — das Grid ist nur eine antippbare
+	 * Projektion davon, damit auf dem Tablet kein natives Dropdown nötig ist.
+	 */
+	function syncTableGrid() {
+		var $select = $('#lbite-pos-table');
+		var $grid = $('#lbite-pos-table-grid');
+		if (!$grid.length) {
+			return;
+		}
+		var currentVal = $select.val();
+		$grid.empty();
+		$select.find('option').each(function() {
+			var $opt = $(this);
+			var val = $opt.val();
+			var $btn = $('<button type="button" class="lbite-pos-table-btn"></button>')
+				.attr('data-value', val)
+				.text($opt.text());
+			if ('' === val) {
+				$btn.addClass('lbite-pos-table-btn-none');
+			} else if ('1' === $opt.attr('data-occupied')) {
+				$btn.addClass('lbite-pos-table-btn-occupied');
+			}
+			if (val === currentVal) {
+				$btn.addClass('active');
+			}
+			$grid.append($btn);
 		});
 	}
+
+	$(document).on('click', '.lbite-pos-table-btn', function() {
+		$('#lbite-pos-table').val($(this).attr('data-value')).trigger('change');
+	});
+
+	$('#lbite-pos-table').on('change', syncTableGrid);
+	syncTableGrid();
 
 	// Standort-Auswahl speichern (ohne Seitenneulad)
 	$('#lbite-pos-location').on('change', function() {
