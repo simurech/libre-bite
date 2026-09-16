@@ -184,6 +184,7 @@ switch ( $lbite_period ) {
 }
 
 $lbite_query_args = array(
+	'type'       => 'shop_order',
 	'status'     => array( 'wc-completed', 'wc-processing' ),
 	'date_after' => $lbite_date_after,
 	'limit'      => -1,
@@ -194,6 +195,11 @@ if ( $lbite_date_before ) {
 }
 
 $lbite_stat_orders = wc_get_orders( $lbite_query_args );
+
+// Stornierte Bestellungen separat auswerten (eigene Kennzahl, fliesst NICHT in den Umsatz ein).
+$lbite_cancelled_query_args           = $lbite_query_args;
+$lbite_cancelled_query_args['status'] = array( 'wc-cancelled' );
+$lbite_cancelled_orders               = wc_get_orders( $lbite_cancelled_query_args );
 
 // Zahlungsarten-Label-Map aufbauen.
 $lbite_pm_config    = get_option( 'lbite_pos_payment_methods', array() );
@@ -325,6 +331,23 @@ $lbite_total_revenue = array_sum( array_column( $lbite_totals, 'revenue' ) );
 $lbite_total_orders  = array_sum( array_column( $lbite_totals, 'count' ) );
 $lbite_avg_order     = $lbite_total_orders > 0 ? $lbite_total_revenue / $lbite_total_orders : 0;
 
+// Stornierte Bestellungen: eigene Kennzahl (Anzahl + Betrag), separat vom Umsatz.
+$lbite_cancelled_count   = 0;
+$lbite_cancelled_revenue = 0.0;
+foreach ( $lbite_cancelled_orders as $lbite_c_order ) {
+	$lbite_c_loc_id = (int) $lbite_c_order->get_meta( '_lbite_location_id' );
+
+	if ( null !== $lbite_stat_allowed_ids && ! in_array( $lbite_c_loc_id, $lbite_stat_allowed_ids, true ) ) {
+		continue;
+	}
+	if ( $lbite_filter_loc && $lbite_c_loc_id !== $lbite_filter_loc ) {
+		continue;
+	}
+
+	$lbite_cancelled_count++;
+	$lbite_cancelled_revenue += (float) $lbite_c_order->get_total();
+}
+
 // Top-Produkte sortieren.
 $lbite_top_by_qty     = $lbite_product_totals;
 $lbite_top_by_revenue = $lbite_product_totals;
@@ -454,6 +477,15 @@ $lbite_export_url = wp_nonce_url(
 		<div style="background:var(--lbite-surface, #fff); border:1px solid var(--lbite-border, #dcdcde); border-radius:6px; padding:20px 24px; min-width:160px; flex:1;">
 			<div style="font-size:28px; font-weight:700; color:var(--lbite-text, #1d2327);"><?php echo wp_kses_post( wc_price( $lbite_avg_order ) ); ?></div>
 			<div style="color:var(--lbite-text-muted, #50575e); font-size:13px; margin-top:4px;"><?php esc_html_e( 'Avg. Order Value', 'libre-bite' ); ?></div>
+		</div>
+		<div style="background:var(--lbite-surface, #fff); border:1px solid var(--lbite-border, #dcdcde); border-radius:6px; padding:20px 24px; min-width:160px; flex:1;">
+			<div style="font-size:28px; font-weight:700; color:var(--lbite-text, #1d2327);"><?php echo esc_html( $lbite_cancelled_count ); ?></div>
+			<div style="color:var(--lbite-text-muted, #50575e); font-size:13px; margin-top:4px;">
+				<?php esc_html_e( 'Cancelled Orders', 'libre-bite' ); ?>
+				<?php if ( $lbite_cancelled_count > 0 ) : ?>
+					· <?php echo wp_kses_post( wc_price( $lbite_cancelled_revenue ) ); ?>
+				<?php endif; ?>
+			</div>
 		</div>
 	</div>
 
