@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.0.3
+Stable tag: 3.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,18 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.1.0 =
+
+* Changed: the separate "Help & Support" page is gone. Field explanations and shortcode references now live directly next to the setting they belong to; a much smaller "Support" page still shows the contact details and conditions configured under Settings → Support, for every role.
+* Added: a new "Marketing" settings tab collects Order Bumps, Promotions, the announcement bar and the stamp card — previously bundled into an already overloaded Checkout tab.
+* Changed: the settings tabs are reordered to follow how a new store actually gets set up (Locations → Products → Checkout → Prices & Taxes → Marketing → Orders → POS → Tables → Reservations → Notifications → Branding → Holidays → Advanced → Support).
+* Fixed: the Products tab grouped the theme-independent menu view and scheduled availability under "Nutritional Information", though neither has anything to do with nutrition.
+* Added: turning on the theme-independent menu view now offers a page picker with one-click page creation for the `[lbite_menu]` shortcode, the same convenience the location selector already had. Previously the feature had no next step after the toggle.
+* Fixed: the Kanban column editor on the Orders tab was always visible, even with the "Customizable Kanban Columns" toggle off; saving in that state could silently reset a previously configured column layout back to the three defaults.
+* Changed: the order-type selector and table picker in the POS are now large, tappable tiles and a button grid instead of radio buttons and a dropdown, for easier use on a tablet.
+* Changed: the "Open Tabs" button moved next to the order-type selector, where it stays in view while taking an order, and shows a clearer count badge. In German, "Tab" is now translated as "Rechnung" to avoid clashing with the existing "Tischbestellung" (dine-in) label.
+* Changed: the dashboard now shows disabled modules as greyed-out tiles at the end of the grid instead of hiding them, with a note that they can be enabled under Settings.
 
 = 3.0.3 =
 
