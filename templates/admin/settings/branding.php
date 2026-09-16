@@ -44,7 +44,7 @@ $lbite_color_presets = array(
 		</tr>
 	</table>
 
-	<h2><?php esc_html_e( 'Branding', 'libre-bite' ); ?></h2>
+	<h2><?php esc_html_e( 'Storefront Branding', 'libre-bite' ); ?></h2>
 	<table class="form-table">
 		<tr>
 			<th><?php esc_html_e( 'Brand Name', 'libre-bite' ); ?></th>
@@ -118,6 +118,13 @@ $lbite_color_presets = array(
 				<p class="description"><?php esc_html_e( 'Attempts to inherit colors from your active theme.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
+	</table>
+
+	<h2><?php esc_html_e( 'Your Admin Theme', 'libre-bite' ); ?></h2>
+	<p class="description" style="margin-bottom: 12px;">
+		<?php esc_html_e( 'Only affects your own view of the Libre Bite screens, not the shop your guests see.', 'libre-bite' ); ?>
+	</p>
+	<table class="form-table">
 		<tr>
 			<th><?php esc_html_e( 'Colour Scheme', 'libre-bite' ); ?></th>
 			<td>
@@ -128,7 +135,7 @@ $lbite_color_presets = array(
 					<option value="dark" <?php selected( $lbite_theme_current, 'dark' ); ?>><?php esc_html_e( 'Always dark', 'libre-bite' ); ?></option>
 				</select>
 				<p class="description">
-					<?php esc_html_e( 'Applies to the Libre Bite screens only. This is a personal setting — it follows your account, so a kitchen tablet and an office computer can differ.', 'libre-bite' ); ?>
+					<?php esc_html_e( 'This is a personal setting — it follows your account, so a kitchen tablet and an office computer can differ.', 'libre-bite' ); ?>
 				</p>
 			</td>
 		</tr>

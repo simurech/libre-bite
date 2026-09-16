@@ -40,6 +40,7 @@ $lbite_notification_sound   = get_option( 'lbite_notification_sound', $lbite_def
 	?>
 
 	<?php if ( lbite_feature_enabled( 'enable_sound_notifications' ) ) : ?>
+	<h3><?php esc_html_e( 'Sound File', 'libre-bite' ); ?></h3>
 	<table class="form-table">
 		<tr>
 			<th><?php esc_html_e( 'Notification Sound', 'libre-bite' ); ?></th>

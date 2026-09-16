@@ -34,12 +34,12 @@ $lbite_promo_days   = array(
 
 <hr style="margin: 24px 0;">
 
-<h3>
+<h2>
 	<?php esc_html_e( 'Promotions', 'libre-bite' ); ?>
 	<?php if ( ! $lbite_premium_allowed ) : ?>
 		<span class="lbite-pro-badge">Pro</span>
 	<?php endif; ?>
-</h3>
+</h2>
 
 <table class="form-table">
 	<tr>
@@ -191,7 +191,7 @@ $lbite_promo_days   = array(
 	</fieldset>
 <?php endfor; ?>
 
-<h3><?php esc_html_e( 'Announcement bar', 'libre-bite' ); ?></h3>
+<h2><?php esc_html_e( 'Announcement Bar', 'libre-bite' ); ?></h2>
 
 <table class="form-table">
 	<tr>
@@ -252,12 +252,12 @@ $lbite_promo_days   = array(
 
 <hr style="margin: 24px 0;">
 
-<h3>
+<h2>
 	<?php esc_html_e( 'Stamp Card', 'libre-bite' ); ?>
 	<?php if ( ! $lbite_premium_allowed ) : ?>
 		<span class="lbite-pro-badge">Pro</span>
 	<?php endif; ?>
-</h3>
+</h2>
 
 <p class="description" style="margin-bottom: 12px;">
 	<?php esc_html_e( 'Guests collect a stamp per completed order and get a voucher once the card is full. Only works for orders placed with a customer account — guest checkouts cannot be attributed to anyone.', 'libre-bite' ); ?>
