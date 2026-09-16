@@ -207,7 +207,6 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				'lbite_show_future_orders'       => isset( $_POST['lbite_show_future_orders'] ) ? 1 : 0,
 				'lbite_dim_future_orders'        => isset( $_POST['lbite_dim_future_orders'] ) ? 1 : 0,
 				'lbite_kanban_drag_drop_enabled' => isset( $_POST['lbite_kanban_drag_drop_enabled'] ) ? 1 : 0,
-				'lbite_kanban_columns'           => LBite_Order_Dashboard::sanitize_columns_input( isset( $_POST['columns'] ) && is_array( $_POST['columns'] ) ? wp_unslash( $_POST['columns'] ) : array() ),
 			) );
 			update_option( 'lbite_dashboard_refresh_interval', isset( $_POST['lbite_dashboard_refresh_interval'] ) ? intval( wp_unslash( $_POST['lbite_dashboard_refresh_interval'] ) ) : 30 );
 			update_option( 'lbite_kds_timer_enabled', isset( $_POST['lbite_kds_timer_enabled'] ) ? 1 : 0 );
@@ -223,7 +222,17 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_show_future_orders', $lbite_ord_values['lbite_show_future_orders'] );
 			update_option( 'lbite_dim_future_orders', $lbite_ord_values['lbite_dim_future_orders'] );
 			update_option( 'lbite_kanban_drag_drop_enabled', $lbite_ord_values['lbite_kanban_drag_drop_enabled'] );
-			update_option( 'lbite_kanban_columns', $lbite_ord_values['lbite_kanban_columns'] );
+
+			// Die Spalten-Editor-Zeile wird nur gerendert, wenn enable_kanban_customization an
+			// ist - ohne dieses Gate würde ein Speichern bei ausgeschaltetem Feature (kein
+			// "columns"-POST-Feld vorhanden) die zuvor konfigurierten Spalten stillschweigend
+			// auf die 3 Standard-Spalten zurücksetzen.
+			if ( isset( $_POST['columns'] ) && is_array( $_POST['columns'] ) ) {
+				$lbite_kanban_columns_val = lbite_enforce_pro_options( array(
+					'lbite_kanban_columns' => LBite_Order_Dashboard::sanitize_columns_input( wp_unslash( $_POST['columns'] ) ),
+				) );
+				update_option( 'lbite_kanban_columns', $lbite_kanban_columns_val['lbite_kanban_columns'] );
+			}
 			$lbite_did_save = true;
 			break;
 
@@ -962,6 +971,22 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					</tr>
 					<tr>
 						<th>
+							<?php esc_html_e( 'Drag & Drop', 'libre-bite' ); ?>
+							<?php if ( ! $lbite_premium_allowed ) : ?>
+								<span class="lbite-pro-badge">Pro</span>
+							<?php endif; ?>
+						</th>
+						<td>
+							<label class="<?php echo $lbite_premium_allowed ? '' : 'lbite-locked'; ?>">
+								<input type="checkbox" name="lbite_kanban_drag_drop_enabled" value="1"
+									<?php checked( get_option( 'lbite_kanban_drag_drop_enabled', 0 ), 1 ); ?>
+									<?php disabled( ! $lbite_premium_allowed ); ?>>
+								<?php esc_html_e( 'Allow dragging order cards between columns on the Kanban board.', 'libre-bite' ); ?>
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<th>
 							<?php esc_html_e( 'Show Future Pre-orders', 'libre-bite' ); ?>
 							<?php if ( ! $lbite_premium_allowed ) : ?>
 								<span class="lbite-pro-badge">Pro</span>
@@ -1008,6 +1033,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 							</label>
 						</td>
 					</tr>
+					<?php if ( lbite_feature_enabled( 'enable_kanban_customization' ) ) : ?>
 					<tr>
 						<th><?php esc_html_e( 'Kanban Columns', 'libre-bite' ); ?></th>
 						<td>
@@ -1030,22 +1056,7 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 							<p class="description"><?php esc_html_e( 'Drag rows to reorder. Minimum 2, maximum 5 columns.', 'libre-bite' ); ?></p>
 						</td>
 					</tr>
-					<tr>
-						<th>
-							<?php esc_html_e( 'Drag & Drop', 'libre-bite' ); ?>
-							<?php if ( ! $lbite_premium_allowed ) : ?>
-								<span class="lbite-pro-badge">Pro</span>
-							<?php endif; ?>
-						</th>
-						<td>
-							<label class="<?php echo $lbite_premium_allowed ? '' : 'lbite-locked'; ?>">
-								<input type="checkbox" name="lbite_kanban_drag_drop_enabled" value="1"
-									<?php checked( get_option( 'lbite_kanban_drag_drop_enabled', 0 ), 1 ); ?>
-									<?php disabled( ! $lbite_premium_allowed ); ?>>
-								<?php esc_html_e( 'Allow dragging order cards between columns on the Kanban board.', 'libre-bite' ); ?>
-							</label>
-						</td>
-					</tr>
+					<?php endif; ?>
 				</table>
 
 				<hr style="margin: 24px 0;">
