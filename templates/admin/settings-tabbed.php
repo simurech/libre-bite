@@ -18,14 +18,17 @@ $lbite_premium_allowed   = function_exists( 'lbite_freemius' ) && lbite_freemius
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Anzeigesteuerung.
 $lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'locations';
 
-// Tabs definieren – neue Struktur v1.5.0 (General-Tab entfernt, Inhalte → Locations)
+// Tabs definieren – neue Struktur v3.1.0: an der Reihenfolge orientiert, in der ein
+// Neukunde das Geschäft einrichtet (Standort → Angebot → Bestellfluss → ... ), Hilfe &
+// Support aufgelöst zugunsten kontextnaher Erklärungen direkt an den Feldern.
 $lbite_tabs = array(
 	'locations'     => __( 'Locations', 'libre-bite' ),
-	'orders'        => __( 'Orders', 'libre-bite' ),
-	'pos'           => __( 'POS System', 'libre-bite' ),
+	'products'      => __( 'Products', 'libre-bite' ),
 	'checkout'      => __( 'Checkout', 'libre-bite' ),
 	'prices_taxes'  => __( 'Prices & Taxes', 'libre-bite' ),
-	'products'      => __( 'Products', 'libre-bite' ),
+	'marketing'     => __( 'Marketing', 'libre-bite' ),
+	'orders'        => __( 'Orders', 'libre-bite' ),
+	'pos'           => __( 'POS System', 'libre-bite' ),
 	'tables'        => __( 'Tables', 'libre-bite' ),
 	'reservations'  => __( 'Reservations', 'libre-bite' ),
 	'notifications' => __( 'Notifications', 'libre-bite' ),
@@ -34,9 +37,8 @@ $lbite_tabs = array(
 );
 
 if ( $lbite_is_admin ) {
-	$lbite_tabs['roles']   = __( 'Roles & Menus', 'libre-bite' );
+	$lbite_tabs['roles']   = __( 'Advanced', 'libre-bite' );
 	$lbite_tabs['support'] = __( 'Support', 'libre-bite' );
-	$lbite_tabs['data']    = __( 'Data', 'libre-bite' );
 }
 
 // Aktiven Tab validieren
@@ -45,7 +47,7 @@ if ( ! array_key_exists( $lbite_active_tab, $lbite_tabs ) ) {
 }
 
 // Pro-Tabs-Liste (benötigt für Badge-Anzeige in Navigation)
-$lbite_pro_tabs = array( 'tables', 'reservations' );
+$lbite_pro_tabs = array( 'tables', 'reservations', 'marketing' );
 
 // Save-Logik für alle Tabs (locations, checkout, orders, notifications, pos, branding, data, holidays)
 if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_settings' ) ) {
@@ -59,16 +61,50 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				$lbite_features['enable_optimized_checkout']    = isset( $_POST['lbite_feature_toggle']['enable_optimized_checkout'] );
 				$lbite_features['enable_tips']                  = isset( $_POST['lbite_feature_toggle']['enable_tips'] );
 				$lbite_features['enable_order_type_selection']  = isset( $_POST['lbite_feature_toggle']['enable_order_type_selection'] );
-				$lbite_features['enable_order_bumps']           = isset( $_POST['lbite_feature_toggle']['enable_order_bumps'] );
-				$lbite_features['enable_promotions']            = isset( $_POST['lbite_feature_toggle']['enable_promotions'] );
-				$lbite_features['enable_stampcard']             = isset( $_POST['lbite_feature_toggle']['enable_stampcard'] );
 			} else {
 				$lbite_features['enable_optimized_checkout']   = false;
 				$lbite_features['enable_tips']                 = false;
 				$lbite_features['enable_order_type_selection'] = false;
-				$lbite_features['enable_order_bumps']         = false;
-				$lbite_features['enable_promotions']          = false;
-				$lbite_features['enable_stampcard']           = false;
+			}
+			update_option( 'lbite_features', $lbite_features );
+
+			$lbite_co_values = lbite_enforce_pro_options( array(
+				'lbite_checkout_mode'         => isset( $_POST['lbite_checkout_mode'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_checkout_mode'] ) ) : 'standard',
+				'lbite_tip_percentage_1'      => isset( $_POST['lbite_tip_percentage_1'] ) ? floatval( wp_unslash( $_POST['lbite_tip_percentage_1'] ) ) : 5,
+				'lbite_tip_percentage_2'      => isset( $_POST['lbite_tip_percentage_2'] ) ? floatval( wp_unslash( $_POST['lbite_tip_percentage_2'] ) ) : 10,
+				'lbite_tip_percentage_3'      => isset( $_POST['lbite_tip_percentage_3'] ) ? floatval( wp_unslash( $_POST['lbite_tip_percentage_3'] ) ) : 15,
+				'lbite_tip_default_selection' => isset( $_POST['lbite_tip_default_selection'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_default_selection'] ) ) : 'none',
+				'lbite_tip_mode'              => ( isset( $_POST['lbite_tip_mode'] ) && 'fixed' === $_POST['lbite_tip_mode'] ) ? 'fixed' : 'percentage',
+				'lbite_tip_title'             => isset( $_POST['lbite_tip_title'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_title'] ) ) : '',
+			) );
+			update_option( 'lbite_checkout_mode', $lbite_co_values['lbite_checkout_mode'] );
+			update_option( 'lbite_tip_percentage_1', $lbite_co_values['lbite_tip_percentage_1'] );
+			update_option( 'lbite_tip_percentage_2', $lbite_co_values['lbite_tip_percentage_2'] );
+			update_option( 'lbite_tip_percentage_3', $lbite_co_values['lbite_tip_percentage_3'] );
+			update_option( 'lbite_tip_default_selection', $lbite_co_values['lbite_tip_default_selection'] );
+			update_option( 'lbite_tip_mode', $lbite_co_values['lbite_tip_mode'] );
+			update_option( 'lbite_tip_title', $lbite_co_values['lbite_tip_title'] );
+			update_option( 'lbite_tip_label_none', isset( $_POST['lbite_tip_label_none'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_none'] ) ) : '' );
+			update_option( 'lbite_tip_label_1', isset( $_POST['lbite_tip_label_1'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_1'] ) ) : '' );
+			update_option( 'lbite_tip_label_2', isset( $_POST['lbite_tip_label_2'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_2'] ) ) : '' );
+			update_option( 'lbite_tip_label_3', isset( $_POST['lbite_tip_label_3'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_3'] ) ) : '' );
+			$lbite_email_gateways_raw = isset( $_POST['lbite_email_required_gateways'] )
+				? array_map( 'sanitize_key', wp_unslash( (array) $_POST['lbite_email_required_gateways'] ) )
+				: array();
+			update_option( 'lbite_email_required_gateways', $lbite_email_gateways_raw );
+			$lbite_did_save = true;
+			break;
+
+		case 'marketing':
+			$lbite_features = get_option( 'lbite_features', array() );
+			if ( $lbite_premium_allowed ) {
+				$lbite_features['enable_order_bumps'] = isset( $_POST['lbite_feature_toggle']['enable_order_bumps'] );
+				$lbite_features['enable_promotions']  = isset( $_POST['lbite_feature_toggle']['enable_promotions'] );
+				$lbite_features['enable_stampcard']   = isset( $_POST['lbite_feature_toggle']['enable_stampcard'] );
+			} else {
+				$lbite_features['enable_order_bumps'] = false;
+				$lbite_features['enable_promotions']  = false;
+				$lbite_features['enable_stampcard']   = false;
 			}
 			update_option( 'lbite_features', $lbite_features );
 
@@ -111,31 +147,6 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				);
 				update_option( 'lbite_order_bumps', $lbite_bump_val['lbite_order_bumps'] );
 			}
-
-			$lbite_co_values = lbite_enforce_pro_options( array(
-				'lbite_checkout_mode'         => isset( $_POST['lbite_checkout_mode'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_checkout_mode'] ) ) : 'standard',
-				'lbite_tip_percentage_1'      => isset( $_POST['lbite_tip_percentage_1'] ) ? floatval( wp_unslash( $_POST['lbite_tip_percentage_1'] ) ) : 5,
-				'lbite_tip_percentage_2'      => isset( $_POST['lbite_tip_percentage_2'] ) ? floatval( wp_unslash( $_POST['lbite_tip_percentage_2'] ) ) : 10,
-				'lbite_tip_percentage_3'      => isset( $_POST['lbite_tip_percentage_3'] ) ? floatval( wp_unslash( $_POST['lbite_tip_percentage_3'] ) ) : 15,
-				'lbite_tip_default_selection' => isset( $_POST['lbite_tip_default_selection'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_default_selection'] ) ) : 'none',
-				'lbite_tip_mode'              => ( isset( $_POST['lbite_tip_mode'] ) && 'fixed' === $_POST['lbite_tip_mode'] ) ? 'fixed' : 'percentage',
-				'lbite_tip_title'             => isset( $_POST['lbite_tip_title'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_title'] ) ) : '',
-			) );
-			update_option( 'lbite_checkout_mode', $lbite_co_values['lbite_checkout_mode'] );
-			update_option( 'lbite_tip_percentage_1', $lbite_co_values['lbite_tip_percentage_1'] );
-			update_option( 'lbite_tip_percentage_2', $lbite_co_values['lbite_tip_percentage_2'] );
-			update_option( 'lbite_tip_percentage_3', $lbite_co_values['lbite_tip_percentage_3'] );
-			update_option( 'lbite_tip_default_selection', $lbite_co_values['lbite_tip_default_selection'] );
-			update_option( 'lbite_tip_mode', $lbite_co_values['lbite_tip_mode'] );
-			update_option( 'lbite_tip_title', $lbite_co_values['lbite_tip_title'] );
-			update_option( 'lbite_tip_label_none', isset( $_POST['lbite_tip_label_none'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_none'] ) ) : '' );
-			update_option( 'lbite_tip_label_1', isset( $_POST['lbite_tip_label_1'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_1'] ) ) : '' );
-			update_option( 'lbite_tip_label_2', isset( $_POST['lbite_tip_label_2'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_2'] ) ) : '' );
-			update_option( 'lbite_tip_label_3', isset( $_POST['lbite_tip_label_3'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tip_label_3'] ) ) : '' );
-			$lbite_email_gateways_raw = isset( $_POST['lbite_email_required_gateways'] )
-				? array_map( 'sanitize_key', wp_unslash( (array) $_POST['lbite_email_required_gateways'] ) )
-				: array();
-			update_option( 'lbite_email_required_gateways', $lbite_email_gateways_raw );
 			$lbite_did_save = true;
 			break;
 
@@ -720,81 +731,6 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					</script>
 					<?php endif; ?>
 
-
-				<hr style="margin: 24px 0;">
-
-				<h3>
-					<?php esc_html_e( 'Order Bumps', 'libre-bite' ); ?>
-					<?php if ( ! $lbite_premium_allowed ) : ?>
-						<span class="lbite-pro-badge">Pro</span>
-					<?php endif; ?>
-				</h3>
-				<p class="description" style="margin-bottom: 12px;">
-					<?php esc_html_e( 'Offer up to three matching extras right above the pay button. They are added as real line items, so they appear on the kitchen ticket and count in the statistics. Variable products are not offered here, because they would need a selection first.', 'libre-bite' ); ?>
-				</p>
-
-				<table class="form-table">
-					<tr>
-						<th><?php esc_html_e( 'Enable Order Bumps', 'libre-bite' ); ?></th>
-						<td>
-							<label class="<?php echo $lbite_premium_allowed ? '' : 'lbite-locked'; ?>">
-								<input type="checkbox" name="lbite_feature_toggle[enable_order_bumps]" value="1"
-									<?php checked( lbite_feature_enabled( 'enable_order_bumps' ), true ); ?>
-									<?php disabled( ! $lbite_premium_allowed ); ?>>
-								<?php esc_html_e( 'Show impulse offers in the checkout', 'libre-bite' ); ?>
-							</label>
-						</td>
-					</tr>
-					<?php
-					if ( ! class_exists( 'LBite_Order_Bumps' ) ) {
-						require_once LBITE_PLUGIN_DIR . 'includes/modules/order-bumps/class-order-bumps.php';
-					}
-					$lbite_bumps = LBite_Order_Bumps::get_bumps();
-					for ( $lbite_i = 0; $lbite_i < 3; $lbite_i++ ) :
-						$lbite_bump_pid  = isset( $lbite_bumps[ $lbite_i ]['product_id'] ) ? (int) $lbite_bumps[ $lbite_i ]['product_id'] : 0;
-						$lbite_bump_text = isset( $lbite_bumps[ $lbite_i ]['text'] ) ? $lbite_bumps[ $lbite_i ]['text'] : '';
-						?>
-						<tr>
-							<th>
-								<?php
-								printf(
-									/* translators: %d: slot number */
-									esc_html__( 'Offer %d', 'libre-bite' ),
-									(int) $lbite_i + 1
-								);
-								?>
-							</th>
-							<td>
-								<input type="number" min="0"
-									name="lbite_order_bumps[<?php echo (int) $lbite_i; ?>][product_id]"
-									value="<?php echo $lbite_bump_pid ? esc_attr( $lbite_bump_pid ) : ''; ?>"
-									class="small-text"
-									placeholder="<?php esc_attr_e( 'Product ID', 'libre-bite' ); ?>"
-									<?php disabled( ! $lbite_premium_allowed ); ?>>
-								<input type="text"
-									name="lbite_order_bumps[<?php echo (int) $lbite_i; ?>][text]"
-									value="<?php echo esc_attr( $lbite_bump_text ); ?>"
-									class="regular-text"
-									placeholder="<?php esc_attr_e( 'Optional text, e.g. “Fries with that?”', 'libre-bite' ); ?>"
-									<?php disabled( ! $lbite_premium_allowed ); ?>>
-								<?php if ( $lbite_bump_pid ) : ?>
-									<?php $lbite_bump_obj = wc_get_product( $lbite_bump_pid ); ?>
-									<p class="description">
-										<?php
-										echo $lbite_bump_obj
-											? esc_html( $lbite_bump_obj->get_name() )
-											: esc_html__( 'Product not found.', 'libre-bite' );
-										?>
-									</p>
-								<?php endif; ?>
-							</td>
-						</tr>
-					<?php endfor; ?>
-				</table>
-
-
-				<?php include LBITE_PLUGIN_DIR . 'templates/admin/settings/promotions.php'; ?>
-
 					<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 				</form>
 
@@ -803,6 +739,90 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				<p class="description"><?php esc_html_e( 'Choose which fields and options are displayed at checkout.', 'libre-bite' ); ?></p>
 				<?php
 				include LBITE_PLUGIN_DIR . 'templates/admin/checkout-fields.php';
+				break;
+
+			case 'marketing':
+				?>
+				<form method="post">
+					<?php wp_nonce_field( 'lbite_settings' ); ?>
+					<input type="hidden" name="lbite_save_tab" value="marketing">
+
+					<h2>
+						<?php esc_html_e( 'Order Bumps', 'libre-bite' ); ?>
+						<?php if ( ! $lbite_premium_allowed ) : ?>
+							<span class="lbite-pro-badge">Pro</span>
+						<?php endif; ?>
+					</h2>
+					<p class="description" style="margin-bottom: 12px;">
+						<?php esc_html_e( 'Offer up to three matching extras right above the pay button. They are added as real line items, so they appear on the kitchen ticket and count in the statistics. Variable products are not offered here, because they would need a selection first.', 'libre-bite' ); ?>
+					</p>
+
+					<table class="form-table">
+						<tr>
+							<th><?php esc_html_e( 'Enable Order Bumps', 'libre-bite' ); ?></th>
+							<td>
+								<label class="<?php echo $lbite_premium_allowed ? '' : 'lbite-locked'; ?>">
+									<input type="checkbox" name="lbite_feature_toggle[enable_order_bumps]" value="1"
+										<?php checked( lbite_feature_enabled( 'enable_order_bumps' ), true ); ?>
+										<?php disabled( ! $lbite_premium_allowed ); ?>>
+									<?php esc_html_e( 'Show impulse offers in the checkout', 'libre-bite' ); ?>
+								</label>
+							</td>
+						</tr>
+						<?php
+						if ( ! class_exists( 'LBite_Order_Bumps' ) ) {
+							require_once LBITE_PLUGIN_DIR . 'includes/modules/order-bumps/class-order-bumps.php';
+						}
+						$lbite_bumps = LBite_Order_Bumps::get_bumps();
+						for ( $lbite_i = 0; $lbite_i < 3; $lbite_i++ ) :
+							$lbite_bump_pid  = isset( $lbite_bumps[ $lbite_i ]['product_id'] ) ? (int) $lbite_bumps[ $lbite_i ]['product_id'] : 0;
+							$lbite_bump_text = isset( $lbite_bumps[ $lbite_i ]['text'] ) ? $lbite_bumps[ $lbite_i ]['text'] : '';
+							?>
+							<tr>
+								<th>
+									<?php
+									printf(
+										/* translators: %d: slot number */
+										esc_html__( 'Offer %d', 'libre-bite' ),
+										(int) $lbite_i + 1
+									);
+									?>
+								</th>
+								<td>
+									<input type="number" min="0"
+										name="lbite_order_bumps[<?php echo (int) $lbite_i; ?>][product_id]"
+										value="<?php echo $lbite_bump_pid ? esc_attr( $lbite_bump_pid ) : ''; ?>"
+										class="small-text"
+										placeholder="<?php esc_attr_e( 'Product ID', 'libre-bite' ); ?>"
+										<?php disabled( ! $lbite_premium_allowed ); ?>>
+									<input type="text"
+										name="lbite_order_bumps[<?php echo (int) $lbite_i; ?>][text]"
+										value="<?php echo esc_attr( $lbite_bump_text ); ?>"
+										class="regular-text"
+										placeholder="<?php esc_attr_e( 'Optional text, e.g. “Fries with that?”', 'libre-bite' ); ?>"
+										<?php disabled( ! $lbite_premium_allowed ); ?>>
+									<?php if ( $lbite_bump_pid ) : ?>
+										<?php $lbite_bump_obj = wc_get_product( $lbite_bump_pid ); ?>
+										<p class="description">
+											<?php
+											echo $lbite_bump_obj
+												? esc_html( $lbite_bump_obj->get_name() )
+												: esc_html__( 'Product not found.', 'libre-bite' );
+											?>
+										</p>
+									<?php endif; ?>
+								</td>
+							</tr>
+						<?php endfor; ?>
+					</table>
+
+					<hr style="margin: 24px 0;">
+
+					<?php include LBITE_PLUGIN_DIR . 'templates/admin/settings/promotions.php'; ?>
+
+					<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
+				</form>
+				<?php
 				break;
 
 			case 'prices_taxes':
@@ -1179,6 +1199,36 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 			case 'roles':
 				if ( $lbite_is_admin ) {
 					include LBITE_PLUGIN_DIR . 'templates/admin/admin-settings.php';
+
+					$lbite_delete_data = get_option( 'lbite_delete_data_on_uninstall', false );
+					?>
+					<div class="lbite-settings-card">
+						<h2><?php esc_html_e( 'Uninstallation', 'libre-bite' ); ?></h2>
+						<form method="post">
+							<?php wp_nonce_field( 'lbite_settings' ); ?>
+							<input type="hidden" name="lbite_save_tab" value="data">
+
+							<table class="form-table">
+								<tr>
+									<th><?php esc_html_e( 'Delete Data on Uninstall', 'libre-bite' ); ?></th>
+									<td>
+										<label>
+											<input type="checkbox" name="lbite_delete_data_on_uninstall" value="1" <?php checked( $lbite_delete_data ); ?>>
+											<?php esc_html_e( 'Completely delete all plugin data on uninstall', 'libre-bite' ); ?>
+										</label>
+										<div class="notice notice-warning inline">
+											<p>
+												<strong><?php esc_html_e( 'Important:', 'libre-bite' ); ?></strong>
+												<?php esc_html_e( 'This option will permanently delete all locations, product options, settings, and order metadata!', 'libre-bite' ); ?>
+											</p>
+										</div>
+									</td>
+								</tr>
+							</table>
+							<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
+						</form>
+					</div>
+					<?php
 				}
 				break;
 
@@ -1186,36 +1236,6 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				if ( $lbite_is_admin ) {
 					include LBITE_PLUGIN_DIR . 'templates/admin/support-settings.php';
 				}
-				break;
-
-			case 'data':
-				if ( $lbite_is_admin ) :
-					$lbite_delete_data = get_option( 'lbite_delete_data_on_uninstall', false );
-					?>
-					<form method="post">
-						<?php wp_nonce_field( 'lbite_settings' ); ?>
-						<input type="hidden" name="lbite_save_tab" value="data">
-
-						<h2><?php esc_html_e( 'Uninstallation', 'libre-bite' ); ?></h2>
-						<table class="form-table">
-							<tr>
-								<th><?php esc_html_e( 'Delete Data on Uninstall', 'libre-bite' ); ?></th>
-								<td>
-									<label>
-										<input type="checkbox" name="lbite_delete_data_on_uninstall" value="1" <?php checked( $lbite_delete_data ); ?>>
-										<?php esc_html_e( 'Completely delete all plugin data on uninstall', 'libre-bite' ); ?>
-									</label>
-									<p class="description" style="color: #d63638;">
-										<strong><?php esc_html_e( 'Important:', 'libre-bite' ); ?></strong>
-										<?php esc_html_e( 'This option will permanently delete all locations, product options, settings, and order metadata!', 'libre-bite' ); ?>
-									</p>
-								</td>
-							</tr>
-						</table>
-						<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
-					</form>
-					<?php
-				endif;
 				break;
 		}
 		?>
