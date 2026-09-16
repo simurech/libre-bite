@@ -258,6 +258,19 @@ class LBite_Admin {
 			);
 		}
 
+		// Reservierungen – gehört inhaltlich zu den täglich genutzten Boards (Order Overview,
+		// POS), deshalb hier statt bei der Stammdaten-Verwaltung einsortiert.
+		if ( lbite_feature_enabled( 'enable_reservations' ) ) {
+			add_submenu_page(
+				'libre-bite',
+				__( 'Reservations Overview', 'libre-bite' ),
+				__( 'Reservations', 'libre-bite' ),
+				'lbite_manage_options',
+				'lbite-reservation-board',
+				array( $this, 'render_reservation_board_page' )
+			);
+		}
+
 		// ============================================
 		// ADMIN-BEREICH (administrator)
 		// ============================================
@@ -287,18 +300,6 @@ class LBite_Admin {
 				'lbite_manage_locations',
 				'lbite-floor-plan',
 				array( $this, 'render_floor_plan_page' )
-			);
-		}
-
-		// Reservierungen – unabhängig von Tischbestellung
-		if ( lbite_feature_enabled( 'enable_reservations' ) ) {
-			add_submenu_page(
-				'libre-bite',
-				__( 'Reservations Overview', 'libre-bite' ),
-				__( 'Reservations', 'libre-bite' ),
-				'lbite_manage_options',
-				'lbite-reservation-board',
-				array( $this, 'render_reservation_board_page' )
 			);
 		}
 
