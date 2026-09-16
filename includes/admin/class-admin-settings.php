@@ -515,4 +515,42 @@ class LBite_Admin_Settings {
 
 		return $roles;
 	}
+
+	/**
+	 * Speichert einen Seiten-Picker mit Auto-Erstellung (Sentinel-Wert 'create_new').
+	 *
+	 * Gemeinsame Logik für alle "welche Seite enthält den Shortcode X"-Einstellungen
+	 * (Location Page, Menu Page, Table Order Page), damit die wp_insert_post()-Logik
+	 * nicht mehrfach dupliziert wird.
+	 *
+	 * @param string $option_name WP-Option, in der die Seiten-ID gespeichert wird.
+	 * @param string $post_field  Name des POST-Feldes (das <select>).
+	 * @param string $title       Titel der neu erstellten Seite.
+	 * @param string $shortcode   Shortcode, der als Seiteninhalt eingesetzt wird.
+	 */
+	public static function save_shortcode_page_picker( $option_name, $post_field, $title, $shortcode ) {
+		if ( ! isset( $_POST[ $post_field ] ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce wird vom aufrufenden Save-Handler geprüft.
+		$value = sanitize_text_field( wp_unslash( $_POST[ $post_field ] ) );
+
+		if ( 'create_new' === $value ) {
+			$new_page_id = wp_insert_post(
+				array(
+					'post_title'   => $title,
+					'post_content' => $shortcode,
+					'post_status'  => 'publish',
+					'post_type'    => 'page',
+				)
+			);
+			if ( ! is_wp_error( $new_page_id ) ) {
+				update_option( $option_name, $new_page_id );
+			}
+			return;
+		}
+
+		update_option( $option_name, intval( $value ) );
+	}
 }

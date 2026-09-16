@@ -325,22 +325,12 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_features', $lbite_features );
 
 			// Location page (with create_new option)
-			if ( isset( $_POST['lbite_location_page_id'] ) ) {
-				$lbite_loc_page = sanitize_text_field( wp_unslash( $_POST['lbite_location_page_id'] ) );
-				if ( 'create_new' === $lbite_loc_page ) {
-					$lbite_new_page_id = wp_insert_post( array(
-						'post_title'   => __( 'Locations', 'libre-bite' ),
-						'post_content' => '[lbite_location_selector]',
-						'post_status'  => 'publish',
-						'post_type'    => 'page',
-					) );
-					if ( ! is_wp_error( $lbite_new_page_id ) ) {
-						update_option( 'lbite_location_page_id', $lbite_new_page_id );
-					}
-				} else {
-					update_option( 'lbite_location_page_id', intval( $lbite_loc_page ) );
-				}
-			}
+			LBite_Admin_Settings::save_shortcode_page_picker(
+				'lbite_location_page_id',
+				'lbite_location_page_id',
+				__( 'Locations', 'libre-bite' ),
+				'[lbite_location_selector]'
+			);
 
 			// Kapazitätsmodul (Pro)
 			$lbite_features = get_option( 'lbite_features', array() );
@@ -387,6 +377,16 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			}
 			update_option( 'lbite_features', $lbite_features );
 
+			// Menu-View-Seite (mit create_new-Option) - nur relevant/speicherbar mit Pro-Lizenz.
+			if ( $lbite_premium_allowed ) {
+				LBite_Admin_Settings::save_shortcode_page_picker(
+					'lbite_menu_page_id',
+					'lbite_menu_page_id',
+					__( 'Menu', 'libre-bite' ),
+					'[lbite_menu]'
+				);
+			}
+
 			$lbite_hint_style_values = lbite_enforce_pro_options( array(
 				'lbite_availability_hint_style' => isset( $_POST['lbite_availability_hint_style'] ) && in_array( sanitize_key( wp_unslash( $_POST['lbite_availability_hint_style'] ) ), array( 'popup', 'list', 'text' ), true )
 					? sanitize_key( wp_unslash( $_POST['lbite_availability_hint_style'] ) )
@@ -403,8 +403,8 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				$lbite_features['enable_table_ordering'] = isset( $_POST['lbite_feature_toggle']['enable_table_ordering'] );
 				update_option( 'lbite_features', $lbite_features );
 				$lbite_tbl_values = lbite_enforce_pro_options( array(
-					'lbite_table_order_page_id'   => isset( $_POST['lbite_table_order_page_id'] ) ? intval( wp_unslash( $_POST['lbite_table_order_page_id'] ) ) : 0,
-					'lbite_table_dropdown_sort'   => isset( $_POST['lbite_table_dropdown_sort'] ) && 'menu_order' === $_POST['lbite_table_dropdown_sort'] ? 'menu_order' : 'natural',
+					'lbite_table_order_page_id' => isset( $_POST['lbite_table_order_page_id'] ) ? intval( wp_unslash( $_POST['lbite_table_order_page_id'] ) ) : 0,
+					'lbite_table_dropdown_sort' => isset( $_POST['lbite_table_dropdown_sort'] ) && 'menu_order' === $_POST['lbite_table_dropdown_sort'] ? 'menu_order' : 'natural',
 				) );
 				update_option( 'lbite_table_order_page_id', $lbite_tbl_values['lbite_table_order_page_id'] );
 				update_option( 'lbite_table_dropdown_sort', $lbite_tbl_values['lbite_table_dropdown_sort'] );
@@ -1156,45 +1156,8 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 					</table>
 					<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 				</form>
-
-				<hr style="margin: 32px 0;">
-
-				<h2><?php esc_html_e( 'Product Order', 'libre-bite' ); ?></h2>
-				<p class="description" style="margin-bottom: 16px;">
-					<?php esc_html_e( 'Drag products into the desired order. This order applies to the POS and to the store\'s catalog (when WooCommerce uses custom ordering).', 'libre-bite' ); ?>
-				</p>
-
-				<?php
-				$lbite_pos_order_products = get_posts( array(
-					'post_type'      => 'product',
-					'posts_per_page' => 500,
-					'post_status'    => 'publish',
-					'orderby'        => array(
-						'menu_order' => 'ASC',
-						'title'      => 'ASC',
-					),
-				) );
-				?>
-
-				<ul id="lbite-pos-product-order" style="max-width: 600px; margin: 0; padding: 0; list-style: none;">
-					<?php foreach ( $lbite_pos_order_products as $lbite_pos_order_product ) : ?>
-					<li data-id="<?php echo esc_attr( $lbite_pos_order_product->ID ); ?>" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 4px; background: var(--lbite-surface, #fff); border: 1px solid #ddd; border-radius: 4px; cursor: grab;">
-						<span class="dashicons dashicons-menu" style="color: #aaa; flex-shrink: 0;"></span>
-						<span><?php echo esc_html( $lbite_pos_order_product->post_title ); ?></span>
-					</li>
-					<?php endforeach; ?>
-				</ul>
-
-				<p style="margin-top: 12px;">
-					<button type="button" id="lbite-save-pos-product-order" class="button button-primary">
-						<?php esc_html_e( 'Save Order', 'libre-bite' ); ?>
-					</button>
-					<span id="lbite-pos-product-order-status" style="margin-left: 10px; color: #3c763d;"></span>
-				</p>
-
 				<?php
 				break;
-
 
 			case 'roles':
 				if ( $lbite_is_admin ) {

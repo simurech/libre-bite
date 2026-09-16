@@ -9,8 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+$lbite_premium_allowed         = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
 $lbite_availability_hint_style = get_option( 'lbite_availability_hint_style', 'popup' );
+$lbite_menu_page_id            = get_option( 'lbite_menu_page_id', 0 );
+$lbite_all_pages               = get_pages( array( 'post_status' => 'publish' ) );
 ?>
 <form method="post">
 	<?php wp_nonce_field( 'lbite_settings' ); ?>
@@ -51,7 +53,58 @@ $lbite_availability_hint_style = get_option( 'lbite_availability_hint_style', 'p
 
 	<hr style="margin: 24px 0;">
 	<h3>
-		<?php esc_html_e( 'Nutritional Information', 'libre-bite' ); ?>
+		<?php esc_html_e( 'Menu Display', 'libre-bite' ); ?>
+		<span class="lbite-pro-badge">Pro</span>
+	</h3>
+
+	<?php
+	$lbite_toggle_key             = 'enable_menu_view';
+	$lbite_toggle_label           = __( 'Theme-independent Menu View', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Outputs your menu in its own layout — category navigation, product cards, a dialog for variations and add-ons, and a slide-in order panel. Add layout="list" to the shortcode for a compact list instead of cards.', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+	?>
+
+	<?php if ( lbite_feature_enabled( 'enable_menu_view' ) ) : ?>
+	<table class="form-table">
+		<tr>
+			<th><?php esc_html_e( 'Menu Page', 'libre-bite' ); ?></th>
+			<td>
+				<select name="lbite_menu_page_id">
+					<option value="0"><?php esc_html_e( '-- Please select --', 'libre-bite' ); ?></option>
+					<option value="create_new"><?php esc_html_e( '+ Create New Page', 'libre-bite' ); ?></option>
+					<?php foreach ( $lbite_all_pages as $lbite_page ) : ?>
+						<option value="<?php echo esc_attr( $lbite_page->ID ); ?>" <?php selected( $lbite_menu_page_id, $lbite_page->ID ); ?>>
+							<?php echo esc_html( $lbite_page->post_title ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+				<p class="description">
+					<?php esc_html_e( 'Select the page where the shortcode [lbite_menu] is included, or create a new page. Turning the toggle above on has no visible effect until this shortcode is placed somewhere.', 'libre-bite' ); ?>
+					<?php if ( $lbite_menu_page_id ) : ?>
+						<br><a href="<?php echo esc_url( get_edit_post_link( $lbite_menu_page_id ) ); ?>" target="_blank"><?php esc_html_e( 'Edit Page', 'libre-bite' ); ?></a>
+						|
+						<a href="<?php echo esc_url( get_permalink( $lbite_menu_page_id ) ); ?>" target="_blank"><?php esc_html_e( 'View Page', 'libre-bite' ); ?></a>
+					<?php endif; ?>
+				</p>
+			</td>
+		</tr>
+	</table>
+	<?php endif; ?>
+
+	<?php
+	$lbite_toggle_key             = 'enable_menu_schedule';
+	$lbite_toggle_label           = __( 'Scheduled Availability', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Limit products or whole categories to certain weekdays, times of day, or date ranges — a breakfast menu that disappears at 11:30, a seasonal item that only shows in December. Configured per product and per product category.', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+	?>
+
+	<hr style="margin: 24px 0;">
+	<h3>
+		<?php esc_html_e( 'Nutritional Information & Dietary Labels', 'libre-bite' ); ?>
 		<span class="lbite-pro-badge">Pro</span>
 	</h3>
 
@@ -70,23 +123,9 @@ $lbite_availability_hint_style = get_option( 'lbite_availability_hint_style', 'p
 	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 
-	$lbite_toggle_key             = 'enable_menu_view';
-	$lbite_toggle_label           = __( 'Theme-independent Menu View', 'libre-bite' );
-	$lbite_toggle_description     = __( 'Outputs your menu in its own layout — category navigation, product cards, a dialog for variations and add-ons, and a slide-in order panel. Place the shortcode [lbite_menu] on any page; add layout="list" for a compact list instead of cards.', 'libre-bite' );
-	$lbite_toggle_is_pro          = true;
-	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
-	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
-
 	$lbite_toggle_key             = 'enable_dietary_filter';
 	$lbite_toggle_label           = __( 'Dietary Labels & Filter', 'libre-bite' );
 	$lbite_toggle_description     = __( 'Label dishes as vegan, vegetarian, gluten-free, lactose-free, spicy or alcohol-free. Guests get a filter bar above the shop grid and can combine several labels at once.', 'libre-bite' );
-	$lbite_toggle_is_pro          = true;
-	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
-	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
-
-	$lbite_toggle_key             = 'enable_menu_schedule';
-	$lbite_toggle_label           = __( 'Scheduled Availability', 'libre-bite' );
-	$lbite_toggle_description     = __( 'Limit products or whole categories to certain weekdays, times of day, or date ranges — a breakfast menu that disappears at 11:30, a seasonal item that only shows in December. Configured per product and per product category.', 'libre-bite' );
 	$lbite_toggle_is_pro          = true;
 	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
@@ -145,3 +184,38 @@ $lbite_availability_hint_style = get_option( 'lbite_availability_hint_style', 'p
 
 	<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 </form>
+
+<hr style="margin: 32px 0;">
+
+<h3><?php esc_html_e( 'Product Order', 'libre-bite' ); ?></h3>
+<p class="description" style="margin-bottom: 16px;">
+	<?php esc_html_e( 'Drag products into the desired order. This order applies to the POS and to the store\'s catalog (when WooCommerce uses custom ordering).', 'libre-bite' ); ?>
+</p>
+
+<?php
+$lbite_pos_order_products = get_posts( array(
+	'post_type'      => 'product',
+	'posts_per_page' => 500,
+	'post_status'    => 'publish',
+	'orderby'        => array(
+		'menu_order' => 'ASC',
+		'title'      => 'ASC',
+	),
+) );
+?>
+
+<ul id="lbite-pos-product-order" style="max-width: 600px; margin: 0; padding: 0; list-style: none;">
+	<?php foreach ( $lbite_pos_order_products as $lbite_pos_order_product ) : ?>
+	<li data-id="<?php echo esc_attr( $lbite_pos_order_product->ID ); ?>" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 4px; background: var(--lbite-surface, #fff); border: 1px solid #ddd; border-radius: 4px; cursor: grab;">
+		<span class="dashicons dashicons-menu" style="color: #aaa; flex-shrink: 0;"></span>
+		<span><?php echo esc_html( $lbite_pos_order_product->post_title ); ?></span>
+	</li>
+	<?php endforeach; ?>
+</ul>
+
+<p style="margin-top: 12px;">
+	<button type="button" id="lbite-save-pos-product-order" class="button button-primary">
+		<?php esc_html_e( 'Save Order', 'libre-bite' ); ?>
+	</button>
+	<span id="lbite-pos-product-order-status" style="margin-left: 10px; color: #3c763d;"></span>
+</p>
