@@ -185,12 +185,12 @@ $lbite_plugin_display_name = ! empty( $lbite_custom_plugin_name ) ? $lbite_custo
 
 						<?php if ( 'lbite_staff' === $lbite_role_key ) : ?>
 							<p class="description">
-								<?php esc_html_e( 'Staff users always have access to: Order Overview, POS System, Help & Support. Menu visibility cannot be customized for this role.', 'libre-bite' ); ?>
+								<?php esc_html_e( 'Staff users always have access to: Order Overview, POS System, Support. Menu visibility cannot be customized for this role.', 'libre-bite' ); ?>
 							</p>
 							<ul style="margin: 10px 0 0 10px; color: #2271b1;">
 								<li>&#x2713; <?php esc_html_e( 'Order Overview', 'libre-bite' ); ?></li>
 								<li>&#x2713; <?php esc_html_e( 'POS System', 'libre-bite' ); ?></li>
-								<li>&#x2713; <?php esc_html_e( 'Help & Support', 'libre-bite' ); ?></li>
+								<li>&#x2713; <?php esc_html_e( 'Support', 'libre-bite' ); ?></li>
 							</ul>
 							<p class="description" style="margin-top: 10px; padding: 8px 12px; background: #f0f6fc; border-left: 3px solid #2271b1; border-radius: 0 3px 3px 0;">
 								<strong><?php esc_html_e( 'Tip:', 'libre-bite' ); ?></strong>

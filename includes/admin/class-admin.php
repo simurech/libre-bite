@@ -326,17 +326,17 @@ class LBite_Admin {
 		}
 
 		// ============================================
-		// DOKUMENTATION (rollenbasiert)
+		// SUPPORT
 		// ============================================
 
-		// Hilfe & Support - für alle sichtbar, Inhalt variiert nach Rolle
+		// Support - für alle sichtbar, zeigt die in den Einstellungen hinterlegten Kontaktdaten
 		add_submenu_page(
 			'libre-bite',
-			__( 'Help & Support', 'libre-bite' ),
-			__( 'Help & Support', 'libre-bite' ),
+			__( 'Support', 'libre-bite' ),
+			__( 'Support', 'libre-bite' ),
 			'lbite_view_dashboard',
-			'lbite-help',
-			array( $this, 'render_help_page' )
+			'lbite-support',
+			array( $this, 'render_support_page' )
 		);
 
 		// Statistik – nur für Admin und Manager (lbite_view_statistics)
@@ -412,14 +412,10 @@ class LBite_Admin {
 	}
 
 	/**
-	 * Hilfe-Seite rendern (rollenbasiert)
+	 * Support-Seite rendern (Kontaktdaten aus den Einstellungen, für alle Rollen identisch)
 	 */
-	public function render_help_page() {
-		if ( current_user_can( 'manage_options' ) ) {
-			include LBITE_PLUGIN_DIR . 'templates/admin/help-admin.php';
-		} else {
-			include LBITE_PLUGIN_DIR . 'templates/admin/help-staff.php';
-		}
+	public function render_support_page() {
+		include LBITE_PLUGIN_DIR . 'templates/admin/support-page.php';
 	}
 
 	/**
@@ -868,16 +864,6 @@ class LBite_Admin {
 			array( 'lbite-admin' ),
 			LBITE_VERSION
 		);
-
-		// Hilfe-Seiten CSS
-		if ( strpos( $hook, 'lbite-help' ) !== false || strpos( $hook, 'lbite-documentation' ) !== false ) {
-			wp_enqueue_style(
-				'lbite-admin-help',
-				LBITE_PLUGIN_URL . 'assets/css/admin-help.css',
-				array( 'lbite-admin' ),
-				LBITE_VERSION
-			);
-		}
 
 		// JS
 		wp_enqueue_script(
@@ -2233,8 +2219,8 @@ class LBite_Admin {
 			return;
 		}
 
-		// Auf der Hilfe-Seite nicht anzeigen (Support ist dort bereits integriert)
-		if ( strpos( $screen->id, 'lbite-help' ) !== false ) {
+		// Auf der Support-Seite nicht anzeigen (Kontaktdaten sind dort bereits sichtbar)
+		if ( strpos( $screen->id, 'lbite-support' ) !== false ) {
 			return;
 		}
 
@@ -2248,27 +2234,24 @@ class LBite_Admin {
 			<span class="dashicons dashicons-editor-help"></span>
 			<span><?php esc_html_e( 'Help', 'libre-bite' ); ?></span>
 
-			<div id="lbite-help-panel" role="dialog" aria-label="<?php esc_attr_e( 'Help & Support', 'libre-bite' ); ?>">
+			<div id="lbite-help-panel" role="dialog" aria-label="<?php esc_attr_e( 'Support', 'libre-bite' ); ?>">
 				<div class="lbite-help-panel-head">
-					<strong><?php esc_html_e( 'Help & Support', 'libre-bite' ); ?></strong>
+					<strong><?php esc_html_e( 'Support', 'libre-bite' ); ?></strong>
 					<button type="button" class="lbite-help-panel-close" aria-label="<?php esc_attr_e( 'Close', 'libre-bite' ); ?>">&#x2715;</button>
 				</div>
 
-				<!-- Hilfe-Bereich: primäre Aktion -->
+				<!-- Support-Kontakt: primäre Aktion -->
 				<div class="lbite-help-panel-primary">
 					<p class="lbite-help-panel-primary-text">
-						<?php esc_html_e( 'First check the help area – you\'ll find guides for all features there.', 'libre-bite' ); ?>
+						<?php esc_html_e( 'Need help? Reach out using the contact details below.', 'libre-bite' ); ?>
 					</p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-help' ) ); ?>" class="button button-primary button-large lbite-help-panel-cta">
-						<span class="dashicons dashicons-book-alt"></span>
-						<?php esc_html_e( 'Open Help Area', 'libre-bite' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-support' ) ); ?>" class="button button-primary button-large lbite-help-panel-cta">
+						<span class="dashicons dashicons-sos"></span>
+						<?php esc_html_e( 'Open Support Page', 'libre-bite' ); ?>
 					</a>
 				</div>
 
-				<!-- Support-Kontakt: sekundäre Aktion -->
 				<div class="lbite-help-panel-support">
-					<p class="lbite-help-panel-divider"><?php esc_html_e( 'Didn\'t find what you\'re looking for?', 'libre-bite' ); ?></p>
-
 					<?php if ( $support_hours ) : ?>
 						<p>
 							<span class="dashicons dashicons-clock"></span>

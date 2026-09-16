@@ -17,9 +17,12 @@ $lbite_can_manage      = current_user_can( 'lbite_manage_settings' );
 $lbite_can_locations   = current_user_can( 'lbite_manage_locations' );
 $lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
 
-$lbite_tiles = array();
+$lbite_tiles          = array();
+$lbite_inactive_tiles = array();
 
-// Bestellübersicht — für alle sichtbar wenn Feature aktiv
+$lbite_disabled_desc = __( 'This module is currently disabled. A manager can enable it under Settings.', 'libre-bite' );
+
+// Bestellübersicht
 if ( lbite_feature_enabled( 'enable_kanban_board' ) ) {
 	$lbite_tiles[] = array(
 		'icon'  => 'dashicons-list-view',
@@ -28,9 +31,15 @@ if ( lbite_feature_enabled( 'enable_kanban_board' ) ) {
 		'url'   => admin_url( 'admin.php?page=lbite-order-board' ),
 		'color' => 'var(--lbite-accent-blue, #2271b1)',
 	);
+} else {
+	$lbite_inactive_tiles[] = array(
+		'icon'  => 'dashicons-list-view',
+		'title' => __( 'Order Overview', 'libre-bite' ),
+		'desc'  => $lbite_disabled_desc,
+	);
 }
 
-// Kassensystem — für alle sichtbar wenn Feature aktiv
+// Kassensystem
 if ( lbite_feature_enabled( 'enable_pos' ) ) {
 	$lbite_tiles[] = array(
 		'icon'  => 'dashicons-cart',
@@ -38,6 +47,12 @@ if ( lbite_feature_enabled( 'enable_pos' ) ) {
 		'desc'  => __( 'Process in-person orders with the Point of Sale interface.', 'libre-bite' ),
 		'url'   => admin_url( 'admin.php?page=lbite-pos' ),
 		'color' => 'var(--lbite-accent-green, #007f26)',
+	);
+} else {
+	$lbite_inactive_tiles[] = array(
+		'icon'  => 'dashicons-cart',
+		'title' => __( 'POS System', 'libre-bite' ),
+		'desc'  => $lbite_disabled_desc,
 	);
 }
 
@@ -59,6 +74,12 @@ if ( $lbite_can_locations ) {
 			'url'   => admin_url( 'edit.php?post_type=lbite_table' ),
 			'color' => 'var(--lbite-accent-orange, #c3522e)',
 		);
+	} else {
+		$lbite_inactive_tiles[] = array(
+			'icon'  => 'dashicons-grid-view',
+			'title' => __( 'Tables', 'libre-bite' ),
+			'desc'  => $lbite_disabled_desc,
+		);
 	}
 
 	if ( lbite_feature_enabled( 'enable_reservations' ) ) {
@@ -68,6 +89,12 @@ if ( $lbite_can_locations ) {
 			'desc'  => __( 'View and manage table reservations.', 'libre-bite' ),
 			'url'   => admin_url( 'admin.php?page=lbite-reservation-board' ),
 			'color' => 'var(--lbite-accent-orange, #c3522e)',
+		);
+	} else {
+		$lbite_inactive_tiles[] = array(
+			'icon'  => 'dashicons-calendar-alt',
+			'title' => __( 'Reservations', 'libre-bite' ),
+			'desc'  => $lbite_disabled_desc,
 		);
 	}
 }
@@ -82,12 +109,12 @@ if ( $lbite_can_manage ) {
 	);
 }
 
-// Hilfe — für alle sichtbar
+// Support — für alle sichtbar
 $lbite_tiles[] = array(
-	'icon'  => 'dashicons-editor-help',
-	'title' => __( 'Help & Support', 'libre-bite' ),
-	'desc'  => __( 'Documentation, guides, and support contact.', 'libre-bite' ),
-	'url'   => admin_url( 'admin.php?page=lbite-help' ),
+	'icon'  => 'dashicons-sos',
+	'title' => __( 'Support', 'libre-bite' ),
+	'desc'  => __( 'Contact details and conditions for support requests.', 'libre-bite' ),
+	'url'   => admin_url( 'admin.php?page=lbite-support' ),
 	'color' => 'var(--lbite-accent-neutral, #50575e)',
 );
 
@@ -100,6 +127,9 @@ if ( $lbite_can_manage ) {
 		'color' => 'var(--lbite-accent-strong, #1d2327)',
 	);
 }
+
+// Inaktive Module ans Ende der Übersicht, ausgegraut und ohne Link.
+$lbite_tiles = array_merge( $lbite_tiles, $lbite_inactive_tiles );
 ?>
 
 <div class="wrap lbite-admin-dashboard">
@@ -107,16 +137,29 @@ if ( $lbite_can_manage ) {
 
 	<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 20px; align-items: stretch;">
 		<?php foreach ( $lbite_tiles as $lbite_tile ) : ?>
-		<a href="<?php echo esc_url( $lbite_tile['url'] ); ?>" style="text-decoration: none; color: inherit; display: flex;">
-			<div style="background: var(--lbite-surface, #fff); border: 1px solid var(--lbite-border, #dcdcde); border-radius: 8px; padding: 24px 20px; transition: box-shadow 0.15s; border-top: 4px solid <?php echo esc_attr( $lbite_tile['color'] ); ?>; display: flex; flex-direction: column; width: 100%;" onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='none'">
-				<span class="dashicons <?php echo esc_attr( $lbite_tile['icon'] ); ?>" style="font-size: 28px; width: 28px; height: 28px; color: <?php echo esc_attr( $lbite_tile['color'] ); ?>; margin-bottom: 10px; display: block;"></span>
-				<strong style="font-size: 15px; display: block; margin-bottom: 6px; color: var(--lbite-text, #1d2327);"><?php echo esc_html( $lbite_tile['title'] ); ?></strong>
-				<span style="font-size: 13px; color: var(--lbite-text-muted, #50575e); line-height: 1.5; flex: 1;"><?php echo esc_html( $lbite_tile['desc'] ); ?></span>
-				<span style="display: block; margin-top: 16px; font-size: 13px; color: <?php echo esc_attr( $lbite_tile['color'] ); ?>;">
-					<?php esc_html_e( 'Go to page', 'libre-bite' ); ?> <span class="dashicons dashicons-arrow-right-alt" style="font-size: 16px; width: 16px; height: 16px; vertical-align: middle;"></span>
-				</span>
+			<?php if ( ! empty( $lbite_tile['url'] ) ) : ?>
+			<a href="<?php echo esc_url( $lbite_tile['url'] ); ?>" style="text-decoration: none; color: inherit; display: flex;">
+				<div style="background: var(--lbite-surface, #fff); border: 1px solid var(--lbite-border, #dcdcde); border-radius: 8px; padding: 24px 20px; transition: box-shadow 0.15s; border-top: 4px solid <?php echo esc_attr( $lbite_tile['color'] ); ?>; display: flex; flex-direction: column; width: 100%;" onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='none'">
+					<span class="dashicons <?php echo esc_attr( $lbite_tile['icon'] ); ?>" style="font-size: 28px; width: 28px; height: 28px; color: <?php echo esc_attr( $lbite_tile['color'] ); ?>; margin-bottom: 10px; display: block;"></span>
+					<strong style="font-size: 15px; display: block; margin-bottom: 6px; color: var(--lbite-text, #1d2327);"><?php echo esc_html( $lbite_tile['title'] ); ?></strong>
+					<span style="font-size: 13px; color: var(--lbite-text-muted, #50575e); line-height: 1.5; flex: 1;"><?php echo esc_html( $lbite_tile['desc'] ); ?></span>
+					<span style="display: block; margin-top: 16px; font-size: 13px; color: <?php echo esc_attr( $lbite_tile['color'] ); ?>;">
+						<?php esc_html_e( 'Go to page', 'libre-bite' ); ?> <span class="dashicons dashicons-arrow-right-alt" style="font-size: 16px; width: 16px; height: 16px; vertical-align: middle;"></span>
+					</span>
+				</div>
+			</a>
+			<?php else : ?>
+			<div style="display: flex;" aria-disabled="true">
+				<div style="background: var(--lbite-surface-muted, #f0f0f1); border: 1px dashed var(--lbite-border, #dcdcde); border-radius: 8px; padding: 24px 20px; display: flex; flex-direction: column; width: 100%; opacity: 0.6;">
+					<span class="dashicons <?php echo esc_attr( $lbite_tile['icon'] ); ?>" style="font-size: 28px; width: 28px; height: 28px; color: var(--lbite-text-subtle, #8c8f94); margin-bottom: 10px; display: block;"></span>
+					<strong style="font-size: 15px; display: block; margin-bottom: 6px; color: var(--lbite-text-muted, #50575e);"><?php echo esc_html( $lbite_tile['title'] ); ?></strong>
+					<span style="font-size: 13px; color: var(--lbite-text-subtle, #8c8f94); line-height: 1.5; flex: 1;"><?php echo esc_html( $lbite_tile['desc'] ); ?></span>
+					<span style="display: block; margin-top: 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: var(--lbite-text-subtle, #8c8f94);">
+						<?php esc_html_e( 'Inactive', 'libre-bite' ); ?>
+					</span>
+				</div>
 			</div>
-		</a>
+			<?php endif; ?>
 		<?php endforeach; ?>
 	</div>
 </div>

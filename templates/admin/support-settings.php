@@ -23,7 +23,7 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 <div class="wrap lbite-admin-wrap">
 	<h1><?php esc_html_e( 'Support Settings', 'libre-bite' ); ?></h1>
 <?php endif; ?>
-	<p class="description"><?php esc_html_e( 'Configure the support contact information displayed on the help pages.', 'libre-bite' ); ?></p>
+	<p class="description"><?php esc_html_e( 'Configure the support contact information shown on the Support page — visible to your entire staff, including roles without access to Settings.', 'libre-bite' ); ?></p>
 
 	<form id="lbite-support-settings-form" method="post">
 		<?php wp_nonce_field( 'lbite_admin_nonce', 'lbite_nonce' ); ?>
@@ -87,7 +87,7 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 				<tbody>
 					<tr>
 						<th scope="row">
-							<label for="support_billing_note"><?php esc_html_e( 'Billing Note', 'libre-bite' ); ?></label>
+							<label for="support_billing_note"><?php esc_html_e( 'Support Conditions', 'libre-bite' ); ?></label>
 						</th>
 						<td>
 							<textarea id="support_billing_note"
@@ -95,7 +95,7 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 									  rows="3"
 									  class="large-text"
 									  placeholder="<?php esc_attr_e( 'E.g. Support is billed at hourly rate (CHF 120.-/hour)', 'libre-bite' ); ?>"><?php echo esc_textarea( $support_billing_note ); ?></textarea>
-							<p class="description"><?php esc_html_e( 'Information about support billing (appears on help pages)', 'libre-bite' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Shown on the Support page your staff sees — use it to explain whether and how support requests are billed.', 'libre-bite' ); ?></p>
 						</td>
 					</tr>
 
@@ -118,7 +118,7 @@ $support_custom_text  = isset( $support_settings['support_custom_text'] ) ? $sup
 
 		<div class="lbite-settings-card">
 			<h2><?php esc_html_e( 'Preview', 'libre-bite' ); ?></h2>
-			<p class="description"><?php esc_html_e( 'This is how support information will be displayed on the help pages:', 'libre-bite' ); ?></p>
+			<p class="description"><?php esc_html_e( 'This is how support information will be displayed on the Support page:', 'libre-bite' ); ?></p>
 
 			<div class="lbite-support-preview">
 				<div class="lbite-support-preview-content">

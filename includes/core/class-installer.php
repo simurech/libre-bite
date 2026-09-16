@@ -238,7 +238,7 @@ class LBite_Installer {
 			'support_email'        => get_option( 'admin_email' ),
 			'support_phone'        => '',
 			'support_hours'        => '',
-			'support_billing_note' => '',
+			'support_billing_note' => __( 'CHF 0.00 — support is free of charge.', 'libre-bite' ),
 			'support_custom_text'  => '',
 		);
 
