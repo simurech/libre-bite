@@ -331,6 +331,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		case 'locations':
 			$lbite_features = get_option( 'lbite_features', array() );
 			$lbite_features['enable_location_selector'] = isset( $_POST['lbite_feature_toggle']['enable_location_selector'] );
+			$lbite_features['enable_scheduled_orders']  = isset( $_POST['lbite_feature_toggle']['enable_scheduled_orders'] );
 			update_option( 'lbite_features', $lbite_features );
 
 			// Location page (with create_new option)

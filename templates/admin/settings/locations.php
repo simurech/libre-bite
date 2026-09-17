@@ -66,6 +66,15 @@ $lbite_all_pages         = get_pages( array( 'post_status' => 'publish' ) );
 	</table>
 
 	<h2><?php esc_html_e( 'Time Settings', 'libre-bite' ); ?></h2>
+
+	<?php
+	$lbite_toggle_key         = 'enable_scheduled_orders';
+	$lbite_toggle_label       = __( 'Pre-orders', 'libre-bite' );
+	$lbite_toggle_description = __( 'Allow customers to place an order for a later pickup time instead of right now. Pre-orders get their own column on the Kanban board and move there automatically once the preparation time arrives.', 'libre-bite' );
+	$lbite_toggle_is_pro      = false;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+	?>
+
 	<p class="description" style="margin-bottom: 12px;">
 		<?php esc_html_e( 'These are global defaults. Individual locations can override preparation time and slot buffers via their location settings.', 'libre-bite' ); ?>
 	</p>
