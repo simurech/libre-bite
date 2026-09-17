@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,16 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.1.1 =
+
+* Fixed: new orders always started in whichever column happened to be configured first, regardless of whether they were an immediate or a pre-order; a display-time workaround then silently re-routed "now" orders without ever saving the correct status. Pre-orders and immediate orders now get the right column from the moment the order is created.
+* Fixed: renaming or removing the default Kanban columns silently broke the automatic cron job that moves pre-orders forward as their pickup time approaches — with no error, no log, nothing.
+* Changed: the "Pre-orders" and "Prepare Now" Kanban columns are now fixed — they can be relabelled but not deleted, renamed to a different key, or reordered. The "Pre-orders" column only appears at all while pre-orders are enabled. Custom columns always follow after them.
+* Added: the "Pre-orders" feature, previously only configurable once during the setup wizard, now has a permanent toggle under Settings → Locations.
+* Added: a new "Developer" settings tab documents the REST API (base URL, authentication, routes, extension hooks) that was previously only described in internal notes.
+* Removed: an unused, unreachable order-creation code path in the POS module that still carried the old, ambiguous column logic.
+* Removed: a leftover "Beta" label on the Table Plan page.
 
 = 3.1.0 =
 
