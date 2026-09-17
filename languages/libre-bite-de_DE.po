@@ -8120,3 +8120,200 @@ msgstr "Fehler beim Senden des Belegs."
 
 #~ msgid "https://github.com/simurech/libre-bite"
 #~ msgstr "https://github.com/simurech/libre-bite"
+
+#: templates/admin/settings/developer.php:15
+msgid "Connection test, returns plugin version and server time."
+msgstr "Verbindungstest, liefert Plugin-Version und Serverzeit."
+
+#: templates/admin/settings/developer.php:16
+msgid "Locations the current user may access."
+msgstr "Standorte, auf die der aktuelle Benutzer zugreifen darf."
+
+#: templates/admin/settings/developer.php:17
+msgid "Current Kanban column configuration."
+msgstr "Aktuelle Kanban-Spaltenkonfiguration."
+
+#: templates/admin/settings/developer.php:18
+msgid "Board data for one location."
+msgstr "Board-Daten eines Standorts."
+
+#: templates/admin/settings/developer.php:19
+msgid "Set the Kanban status of an order."
+msgstr "Kanban-Status einer Bestellung setzen."
+
+#: templates/admin/settings/developer.php:23
+msgid "After every Kanban status change (AJAX and REST)."
+msgstr "Nach jedem Kanban-Statuswechsel (AJAX und REST)."
+
+#: templates/admin/settings/developer.php:24
+msgid "Cron moves a pre-order forward automatically."
+msgstr "Cron verschiebt eine Vorbestellung automatisch."
+
+#: templates/admin/settings/developer.php:25
+msgid "An order is created at the POS."
+msgstr "Bestellung an der Kasse angelegt."
+
+#: templates/admin/settings/developer.php:26
+msgid "An open tab is started."
+msgstr "Offene Rechnung eröffnet."
+
+#: templates/admin/settings/developer.php:27
+msgid "Another round is booked onto a tab."
+msgstr "Weitere Runde auf eine offene Rechnung gebucht."
+
+#: templates/admin/settings/developer.php:28
+msgid "An open tab is closed."
+msgstr "Offene Rechnung abgeschlossen."
+
+#: templates/admin/settings/developer.php:29
+msgid "A reservation request comes in."
+msgstr "Reservierungsanfrage eingegangen."
+
+#: templates/admin/settings/developer.php:30
+msgid "Card data on the reservation board before output."
+msgstr "Kartendaten im Reservierungsboard vor der Ausgabe."
+
+#: templates/admin/settings/developer.php:31
+msgid "A stamp card voucher is issued."
+msgstr "Ein Stempelkarten-Gutschein wurde ausgestellt."
+
+#: templates/admin/settings/developer.php:35
+msgid "REST API"
+msgstr "REST-API"
+
+#: templates/admin/settings/developer.php:37
+msgid "A REST namespace exists alongside the AJAX endpoints for external integrations — printer bridges, kitchen displays, or custom notifications. It shares the same core logic as the AJAX endpoints, so behaviour never diverges between the two."
+msgstr "Ein REST-Namensraum steht parallel zu den AJAX-Endpunkten für externe Integrationen zur Verfügung – Kassendrucker-Brücken, Küchenmonitore oder eigene Benachrichtigungen. Er nutzt dieselbe Kernlogik wie die AJAX-Endpunkte, damit sich das Verhalten nie unterscheidet."
+
+#: templates/admin/settings/developer.php:42
+msgid "Base URL"
+msgstr "Basis-URL"
+
+#: templates/admin/settings/developer.php:46
+msgid "Authentication"
+msgstr "Authentifizierung"
+
+#: templates/admin/settings/developer.php:49
+msgid "Uses WordPress's own authentication — no separate API key. Two ways to authenticate:"
+msgstr "Nutzt die Bordmittel von WordPress – kein eigener API-Schlüssel. Zwei Wege zur Authentifizierung:"
+
+#: templates/admin/settings/developer.php:52
+msgid "Cookie session with a nonce — for code running inside wp-admin itself."
+msgstr "Cookie-Sitzung mit Nonce – für Code, der direkt im wp-admin läuft."
+
+#: templates/admin/settings/developer.php:57
+#, php-format
+msgid "Application Passwords — for external tools. Create one under %s."
+msgstr "Application Passwords – für externe Tools. Erstellbar unter %s."
+
+#: templates/admin/settings/developer.php:58
+msgid "your profile"
+msgstr "Ihrem Profil"
+
+#: templates/admin/settings/developer.php:69
+msgid "Routes"
+msgstr "Routen"
+
+#: templates/admin/settings/developer.php:73
+msgid "Method"
+msgstr "Methode"
+
+#: templates/admin/settings/developer.php:74
+msgid "Path"
+msgstr "Pfad"
+
+#: templates/admin/settings/developer.php:93
+msgid "Test /ping"
+msgstr "„/ping\" testen"
+
+#: templates/admin/settings/developer.php:100
+msgid "Extension Hooks"
+msgstr "Erweiterungs-Hooks"
+
+#: templates/admin/settings/developer.php:102
+msgid "Action hooks for building integrations without modifying plugin files."
+msgstr "Action-Hooks für eigene Integrationen, ohne Plugin-Dateien zu verändern."
+
+#: templates/admin/settings/developer.php:107
+msgid "Hook"
+msgstr "Hook"
+
+#: templates/admin/settings/developer.php:132
+msgid "Testing…"
+msgstr "Wird getestet…"
+
+#: templates/admin/settings/developer.php:149
+msgid "Connection error"
+msgstr "Verbindungsfehler"
+
+#: templates/admin/settings/locations.php:73
+msgid "Allow customers to place an order for a later pickup time instead of right now. Pre-orders get their own column on the Kanban board and move there automatically once the preparation time arrives."
+msgstr "Erlaubt Kunden, statt sofort eine Abholzeit in der Zukunft zu wählen. Vorbestellungen erhalten eine eigene Spalte im Kanban-Board und werden automatisch verschoben, sobald die Zubereitungszeit erreicht ist."
+
+#: templates/admin/settings-tabbed.php:1073
+msgid "Fixed Columns"
+msgstr "Fixe Spalten"
+
+#: templates/admin/settings-tabbed.php:1078
+msgid "Pre-orders — only shown because \"Pre-orders\" is enabled under Settings → Locations. Always the first column."
+msgstr "Vorbestellungen – nur sichtbar, weil „Vorbestellungen\" unter Einstellungen → Standorte aktiv ist. Immer die erste Spalte."
+
+#: templates/admin/settings-tabbed.php:1083
+msgid "Always present — every new order that is not a pre-order starts here."
+msgstr "Immer vorhanden – jede neue Bestellung, die keine Vorbestellung ist, startet hier."
+
+#: templates/admin/settings-tabbed.php:1085
+msgid "These two columns cannot be removed, renamed to a different key, or reordered — they carry the automatic pre-order routing. You can still rename their label."
+msgstr "Diese beiden Spalten können nicht entfernt, im Schlüssel umbenannt oder verschoben werden – sie tragen die automatische Vorbestell-Weiterleitung. Die Beschriftung lässt sich weiterhin anpassen."
+
+#: templates/admin/settings-tabbed.php:1089
+msgid "Own Columns"
+msgstr "Eigene Spalten"
+
+#: templates/admin/settings-tabbed.php:1110
+#, php-format
+msgid "Drag rows to reorder. These columns always come after the fixed columns above. At least one column needs \"Counts as completed\" checked, or a default \"Completed\" column is added automatically. Up to %d additional columns."
+msgstr "Zeilen ziehen zum Neuanordnen. Diese Spalten stehen immer nach den fixen Spalten oben. Mindestens eine Spalte braucht „Zählt als abgeschlossen\", sonst wird automatisch eine Standard-Spalte „Abgeschlossen\" ergänzt. Bis zu %d zusätzliche Spalten."
+
+
+#: templates/admin/settings/products.php:74
+msgid "Outputs your menu in its own layout — category navigation, product cards, a dialog for variations and add-ons, and a slide-in order panel. Add layout=\"list\" to the shortcode for a compact list instead of cards."
+msgstr "Gibt Ihr Menü in einem eigenen Layout aus – Kategorie-Navigation, Produktkarten, ein Dialog für Varianten und Zusatzoptionen sowie ein seitlich einblendendes Bestellfeld. Mit layout=\"list\" im Shortcode erscheint stattdessen eine kompakte Liste statt Karten."
+
+#: templates/admin/settings/reservations__premium_only.php
+msgid "Show stored notes and allergies for returning guests. Notes live on the customer profile and appear on the reservation overview when the phone number matches an existing customer."
+msgstr "Zeigt gespeicherte Notizen und Allergien für wiederkehrende Gäste. Notizen hängen am Kundenprofil und erscheinen im Reservierungsboard, wenn die Telefonnummer zu einem bestehenden Kunden passt."
+
+#: templates/admin/support-page.php
+#, php-format
+msgid "You can edit these details under %s."
+msgstr "Diese Angaben lassen sich unter %s bearbeiten."
+
+#: templates/admin/support-page.php
+msgid "Settings → Support"
+msgstr "Einstellungen → Support"
+
+#: templates/admin/dashboard.php
+msgid "This module is currently disabled. A manager can enable it under Settings."
+msgstr "Dieses Modul ist derzeit deaktiviert. Eine Verwaltungsperson kann es unter Einstellungen aktivieren."
+
+#: templates/admin/dashboard.php
+msgid "Contact details and conditions for support requests."
+msgstr "Kontaktdaten und Konditionen für Support-Anfragen."
+
+#: templates/admin/settings-tabbed.php
+msgid "Marketing"
+msgstr "Marketing"
+
+#: templates/admin/settings-tabbed.php
+msgid "Advanced"
+msgstr "Erweitert"
+
+#: templates/admin/settings-tabbed.php
+msgid "Developer"
+msgstr "Entwickler"
+
+#: templates/admin/settings-tabbed.php:416
+msgid "Menu"
+msgstr "Menü"
+

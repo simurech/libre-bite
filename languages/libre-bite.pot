@@ -8286,3 +8286,200 @@ msgstr ""
 #: templates/thankyou-optimized.php:367
 msgid "Error sending receipt."
 msgstr ""
+
+#: templates/admin/settings/developer.php:15
+msgid "Connection test, returns plugin version and server time."
+msgstr ""
+
+#: templates/admin/settings/developer.php:16
+msgid "Locations the current user may access."
+msgstr ""
+
+#: templates/admin/settings/developer.php:17
+msgid "Current Kanban column configuration."
+msgstr ""
+
+#: templates/admin/settings/developer.php:18
+msgid "Board data for one location."
+msgstr ""
+
+#: templates/admin/settings/developer.php:19
+msgid "Set the Kanban status of an order."
+msgstr ""
+
+#: templates/admin/settings/developer.php:23
+msgid "After every Kanban status change (AJAX and REST)."
+msgstr ""
+
+#: templates/admin/settings/developer.php:24
+msgid "Cron moves a pre-order forward automatically."
+msgstr ""
+
+#: templates/admin/settings/developer.php:25
+msgid "An order is created at the POS."
+msgstr ""
+
+#: templates/admin/settings/developer.php:26
+msgid "An open tab is started."
+msgstr ""
+
+#: templates/admin/settings/developer.php:27
+msgid "Another round is booked onto a tab."
+msgstr ""
+
+#: templates/admin/settings/developer.php:28
+msgid "An open tab is closed."
+msgstr ""
+
+#: templates/admin/settings/developer.php:29
+msgid "A reservation request comes in."
+msgstr ""
+
+#: templates/admin/settings/developer.php:30
+msgid "Card data on the reservation board before output."
+msgstr ""
+
+#: templates/admin/settings/developer.php:31
+msgid "A stamp card voucher is issued."
+msgstr ""
+
+#: templates/admin/settings/developer.php:35
+msgid "REST API"
+msgstr ""
+
+#: templates/admin/settings/developer.php:37
+msgid "A REST namespace exists alongside the AJAX endpoints for external integrations — printer bridges, kitchen displays, or custom notifications. It shares the same core logic as the AJAX endpoints, so behaviour never diverges between the two."
+msgstr ""
+
+#: templates/admin/settings/developer.php:42
+msgid "Base URL"
+msgstr ""
+
+#: templates/admin/settings/developer.php:46
+msgid "Authentication"
+msgstr ""
+
+#: templates/admin/settings/developer.php:49
+msgid "Uses WordPress's own authentication — no separate API key. Two ways to authenticate:"
+msgstr ""
+
+#: templates/admin/settings/developer.php:52
+msgid "Cookie session with a nonce — for code running inside wp-admin itself."
+msgstr ""
+
+#: templates/admin/settings/developer.php:57
+#, php-format
+msgid "Application Passwords — for external tools. Create one under %s."
+msgstr ""
+
+#: templates/admin/settings/developer.php:58
+msgid "your profile"
+msgstr ""
+
+#: templates/admin/settings/developer.php:69
+msgid "Routes"
+msgstr ""
+
+#: templates/admin/settings/developer.php:73
+msgid "Method"
+msgstr ""
+
+#: templates/admin/settings/developer.php:74
+msgid "Path"
+msgstr ""
+
+#: templates/admin/settings/developer.php:93
+msgid "Test /ping"
+msgstr ""
+
+#: templates/admin/settings/developer.php:100
+msgid "Extension Hooks"
+msgstr ""
+
+#: templates/admin/settings/developer.php:102
+msgid "Action hooks for building integrations without modifying plugin files."
+msgstr ""
+
+#: templates/admin/settings/developer.php:107
+msgid "Hook"
+msgstr ""
+
+#: templates/admin/settings/developer.php:132
+msgid "Testing…"
+msgstr ""
+
+#: templates/admin/settings/developer.php:149
+msgid "Connection error"
+msgstr ""
+
+#: templates/admin/settings/locations.php:73
+msgid "Allow customers to place an order for a later pickup time instead of right now. Pre-orders get their own column on the Kanban board and move there automatically once the preparation time arrives."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1073
+msgid "Fixed Columns"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1078
+msgid "Pre-orders — only shown because \"Pre-orders\" is enabled under Settings → Locations. Always the first column."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1083
+msgid "Always present — every new order that is not a pre-order starts here."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1085
+msgid "These two columns cannot be removed, renamed to a different key, or reordered — they carry the automatic pre-order routing. You can still rename their label."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1089
+msgid "Own Columns"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1110
+#, php-format
+msgid "Drag rows to reorder. These columns always come after the fixed columns above. At least one column needs \"Counts as completed\" checked, or a default \"Completed\" column is added automatically. Up to %d additional columns."
+msgstr ""
+
+
+#: templates/admin/settings/products.php:74
+msgid "Outputs your menu in its own layout — category navigation, product cards, a dialog for variations and add-ons, and a slide-in order panel. Add layout=\"list\" to the shortcode for a compact list instead of cards."
+msgstr ""
+
+#: templates/admin/settings/reservations__premium_only.php
+msgid "Show stored notes and allergies for returning guests. Notes live on the customer profile and appear on the reservation overview when the phone number matches an existing customer."
+msgstr ""
+
+#: templates/admin/support-page.php
+#, php-format
+msgid "You can edit these details under %s."
+msgstr ""
+
+#: templates/admin/support-page.php
+msgid "Settings → Support"
+msgstr ""
+
+#: templates/admin/dashboard.php
+msgid "This module is currently disabled. A manager can enable it under Settings."
+msgstr ""
+
+#: templates/admin/dashboard.php
+msgid "Contact details and conditions for support requests."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php
+msgid "Marketing"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php
+msgid "Advanced"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php
+msgid "Developer"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:416
+msgid "Menu"
+msgstr ""
+
