@@ -1297,7 +1297,7 @@ class LBite_Admin {
 
 			$order->update_meta_data( '_lbite_order_type', 'now' );
 			$order->delete_meta_data( '_lbite_pickup_time' ); // POS-Bestellungen sind immer sofort.
-			$order->update_meta_data( '_lbite_order_status', 'preparing' );
+			$order->update_meta_data( '_lbite_order_status', LBite_Order_Dashboard::KEY_ACTIVE );
 			$order->update_meta_data( '_lbite_order_source', 'pos' );
 			$order->update_meta_data( '_lbite_payment_method', $payment_method );
 
@@ -1654,7 +1654,7 @@ class LBite_Admin {
 			}
 
 			$order->update_meta_data( '_lbite_order_type', 'now' );
-			$order->update_meta_data( '_lbite_order_status', 'preparing' );
+			$order->update_meta_data( '_lbite_order_status', LBite_Order_Dashboard::KEY_ACTIVE );
 			$order->update_meta_data( '_lbite_order_source', 'pos' );
 			$order->update_meta_data( '_lbite_service_type', 'dine_in' );
 			$order->update_meta_data( '_lbite_tab_open', '1' );

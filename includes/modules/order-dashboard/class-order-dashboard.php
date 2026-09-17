@@ -15,6 +15,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class LBite_Order_Dashboard {
 
 	/**
+	 * Spalten-Schlüssel der Vorbestellungen-Spalte (fix, nur sichtbar wenn
+	 * enable_scheduled_orders aktiv ist).
+	 */
+	const KEY_PREORDER = 'incoming';
+
+	/**
+	 * Spalten-Schlüssel der Sofort/Eingang-Spalte (fix, immer vorhanden).
+	 */
+	const KEY_ACTIVE = 'preparing';
+
+	/**
 	 * Loader-Instanz
 	 *
 	 * @var LBite_Loader
@@ -29,12 +40,12 @@ class LBite_Order_Dashboard {
 	private static function get_default_columns() {
 		return array(
 			array(
-				'key'                 => 'incoming',
+				'key'                 => self::KEY_PREORDER,
 				'label'               => __( 'Pre-orders', 'libre-bite' ),
 				'counts_as_completed' => false,
 			),
 			array(
-				'key'                 => 'preparing',
+				'key'                 => self::KEY_ACTIVE,
 				'label'               => __( 'Prepare Now', 'libre-bite' ),
 				'counts_as_completed' => false,
 			),
@@ -53,13 +64,84 @@ class LBite_Order_Dashboard {
 	 */
 	public static function get_columns() {
 		if ( ! lbite_feature_enabled( 'enable_kanban_customization' ) ) {
-			return self::get_default_columns();
+			$columns = self::get_default_columns();
+		} else {
+			$stored  = get_option( 'lbite_kanban_columns', array() );
+			$columns = self::sanitize_columns_input( is_array( $stored ) ? $stored : array() );
+
+			if ( empty( $columns ) ) {
+				$columns = self::get_default_columns();
+			}
 		}
 
-		$stored  = get_option( 'lbite_kanban_columns', array() );
-		$columns = self::sanitize_columns_input( is_array( $stored ) ? $stored : array() );
+		return self::enforce_fixed_columns( $columns );
+	}
 
-		return empty( $columns ) ? self::get_default_columns() : $columns;
+	/**
+	 * Garantiert die beiden fixen Spalten unabhängig von Kanban-Anpassung oder
+	 * gespeicherter Konfiguration: «Sofort» (KEY_ACTIVE) ist immer vorhanden,
+	 * «Vorbestellungen» (KEY_PREORDER) nur wenn enable_scheduled_orders aktiv ist.
+	 * Beide werden - falls vorhanden - an den Anfang gestellt (Vorbestellungen zuerst),
+	 * mit ihrem zuletzt gespeicherten Label (falls vorhanden), aber nie als
+	 * «abgeschlossen» markiert. Fehlt am Ende eine «abgeschlossen»-Spalte
+	 * (z. B. weil die eigenen Spalten noch keine hatten), wird eine Standard-Spalte
+	 * angehängt statt eine der fixen Spalten umzuflaggen.
+	 *
+	 * @param array $columns Spaltenliste (Standard oder aus sanitize_columns_input()).
+	 * @return array
+	 */
+	private static function enforce_fixed_columns( $columns ) {
+		$by_key = array();
+		foreach ( $columns as $col ) {
+			$by_key[ $col['key'] ] = $col;
+		}
+
+		$fixed = array();
+
+		if ( lbite_feature_enabled( 'enable_scheduled_orders' ) ) {
+			$fixed[] = isset( $by_key[ self::KEY_PREORDER ] )
+				? array_merge( $by_key[ self::KEY_PREORDER ], array( 'counts_as_completed' => false ) )
+				: array(
+					'key'                 => self::KEY_PREORDER,
+					'label'               => __( 'Pre-orders', 'libre-bite' ),
+					'counts_as_completed' => false,
+				);
+		}
+
+		$fixed[] = isset( $by_key[ self::KEY_ACTIVE ] )
+			? array_merge( $by_key[ self::KEY_ACTIVE ], array( 'counts_as_completed' => false ) )
+			: array(
+				'key'                 => self::KEY_ACTIVE,
+				'label'               => __( 'Prepare Now', 'libre-bite' ),
+				'counts_as_completed' => false,
+			);
+
+		$rest = array();
+		foreach ( $columns as $col ) {
+			if ( self::KEY_PREORDER === $col['key'] || self::KEY_ACTIVE === $col['key'] ) {
+				continue;
+			}
+			$rest[] = $col;
+		}
+
+		$result = array_merge( $fixed, $rest );
+
+		$has_completed = false;
+		foreach ( $result as $col ) {
+			if ( ! empty( $col['counts_as_completed'] ) ) {
+				$has_completed = true;
+				break;
+			}
+		}
+		if ( ! $has_completed ) {
+			$result[] = array(
+				'key'                 => 'completed',
+				'label'               => __( 'Completed', 'libre-bite' ),
+				'counts_as_completed' => true,
+			);
+		}
+
+		return $result;
 	}
 
 	/**
@@ -122,6 +204,17 @@ class LBite_Order_Dashboard {
 			return array();
 		}
 
+		// Die beiden fixen Spalten dürfen nie als «abgeschlossen» zählen, auch nicht
+		// über einen manipulierten POST - enforce_fixed_columns() erzwingt das beim
+		// Lesen zwar ohnehin, aber der automatische Fallback unten darf sich nicht
+		// versehentlich an einer fixen Spalte «bedienen».
+		foreach ( $columns as &$c ) {
+			if ( self::KEY_PREORDER === $c['key'] || self::KEY_ACTIVE === $c['key'] ) {
+				$c['counts_as_completed'] = false;
+			}
+		}
+		unset( $c );
+
 		$has_completed = false;
 		foreach ( $columns as $c ) {
 			if ( $c['counts_as_completed'] ) {
@@ -130,7 +223,20 @@ class LBite_Order_Dashboard {
 			}
 		}
 		if ( ! $has_completed ) {
-			$columns[ count( $columns ) - 1 ]['counts_as_completed'] = true;
+			for ( $i = count( $columns ) - 1; $i >= 0; $i-- ) {
+				if ( self::KEY_PREORDER !== $columns[ $i ]['key'] && self::KEY_ACTIVE !== $columns[ $i ]['key'] ) {
+					$columns[ $i ]['counts_as_completed'] = true;
+					$has_completed                        = true;
+					break;
+				}
+			}
+			if ( ! $has_completed ) {
+				$columns[] = array(
+					'key'                 => 'completed',
+					'label'               => __( 'Completed', 'libre-bite' ),
+					'counts_as_completed' => true,
+				);
+			}
 		}
 
 		return $columns;
@@ -147,7 +253,9 @@ class LBite_Order_Dashboard {
 			return (int) $cached;
 		}
 
-		$default_status_key = self::get_columns()[0]['key'];
+		// Zählt Bestellungen, die gerade Aufmerksamkeit brauchen (Sofort/Eingang) - nicht
+		// die Vorbestellungen-Spalte, deren Inhalt bewusst noch nicht dringend ist.
+		$default_status_key = self::KEY_ACTIVE;
 
 		$order_ids = wc_get_orders( array(
 			'limit'  => 500,
@@ -821,10 +929,10 @@ class LBite_Order_Dashboard {
 	 * Geplante Bestellungen prüfen und automatisch verschieben
 	 */
 	public function check_scheduled_orders() {
-		// Auto-Vorbereitung ergibt bei frei umbenannten/entfernten Standard-Spalten keinen Sinn
-		// mehr - bewusste Einschränkung bei aktiver Kanban-Spalten-Anpassung ohne Standard-Keys.
-		$columns_by_key = self::get_columns_by_key();
-		if ( ! isset( $columns_by_key['incoming'], $columns_by_key['preparing'] ) ) {
+		// Die Vorbestellungen-Spalte existiert nur, wenn das Feature aktiv ist -
+		// enforce_fixed_columns() garantiert in diesem Fall beide Schlüssel zuverlässig,
+		// eine Existenzprüfung der Spalten selbst ist darum nicht mehr nötig.
+		if ( ! lbite_feature_enabled( 'enable_scheduled_orders' ) ) {
 			return;
 		}
 
@@ -842,7 +950,7 @@ class LBite_Order_Dashboard {
 					),
 					array(
 						'key'     => '_lbite_order_status',
-						'value'   => 'incoming',
+						'value'   => self::KEY_PREORDER,
 						'compare' => '=',
 					),
 				),
@@ -864,7 +972,7 @@ class LBite_Order_Dashboard {
 
 			// Wenn Vorbereitungszeit erreicht ist
 			if ( $current_time >= $prep_start_time ) {
-				$order->update_meta_data( '_lbite_order_status', 'preparing' );
+				$order->update_meta_data( '_lbite_order_status', self::KEY_ACTIVE );
 				$order->update_meta_data( '_lbite_status_changed', current_time( 'mysql' ) );
 				$order->save();
 
@@ -886,7 +994,20 @@ class LBite_Order_Dashboard {
 
 		$lbite_status = $order->get_meta( '_lbite_order_status', true );
 		if ( ! $lbite_status ) {
-			$order->update_meta_data( '_lbite_order_status', self::get_columns()[0]['key'] );
+			// Der Bestelltyp aus der Checkout-Session lesen, nicht aus der Bestellung selbst:
+			// dieser Hook (woocommerce_new_order) feuert regelmässig, bevor der Checkout-Modul-
+			// Handler _lbite_order_type auf die Bestellung schreibt (woocommerce_checkout_update_
+			// order_meta läuft später). Für POS/Tab-Bestellungen ist _lbite_order_type bereits
+			// vor diesem Hook gesetzt, daher zuerst die Bestellung selbst prüfen.
+			$order_type = $order->get_meta( '_lbite_order_type', true );
+			if ( ! $order_type && function_exists( 'WC' ) && WC()->session ) {
+				$order_type = WC()->session->get( 'lbite_order_type', 'now' );
+			}
+
+			$is_preorder    = ( 'later' === $order_type ) && lbite_feature_enabled( 'enable_scheduled_orders' );
+			$initial_status = $is_preorder ? self::KEY_PREORDER : self::KEY_ACTIVE;
+
+			$order->update_meta_data( '_lbite_order_status', $initial_status );
 			$order->save();
 
 			// Menü-Badge-Cache invalidieren.
@@ -973,7 +1094,7 @@ class LBite_Order_Dashboard {
 		$current_status = $order->get_meta( '_lbite_order_status', true );
 		$status_labels  = self::get_status_labels();
 		if ( ! $current_status || ! isset( $status_labels[ $current_status ] ) ) {
-			$current_status = self::get_columns()[0]['key'];
+			$current_status = self::KEY_ACTIVE;
 		}
 
 		$status_changed = $order->get_meta( '_lbite_status_changed', true );
