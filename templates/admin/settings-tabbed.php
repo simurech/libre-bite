@@ -37,8 +37,9 @@ $lbite_tabs = array(
 );
 
 if ( $lbite_is_admin ) {
-	$lbite_tabs['roles']   = __( 'Advanced', 'libre-bite' );
-	$lbite_tabs['support'] = __( 'Support', 'libre-bite' );
+	$lbite_tabs['roles']     = __( 'Advanced', 'libre-bite' );
+	$lbite_tabs['support']   = __( 'Support', 'libre-bite' );
+	$lbite_tabs['developer'] = __( 'Developer', 'libre-bite' );
 }
 
 // Aktiven Tab validieren
@@ -1271,6 +1272,12 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 			case 'support':
 				if ( $lbite_is_admin ) {
 					include LBITE_PLUGIN_DIR . 'templates/admin/support-settings.php';
+				}
+				break;
+
+			case 'developer':
+				if ( $lbite_is_admin ) {
+					include LBITE_PLUGIN_DIR . 'templates/admin/settings/developer.php';
 				}
 				break;
 		}
