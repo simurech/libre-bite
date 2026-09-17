@@ -228,8 +228,28 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			// "columns"-POST-Feld vorhanden) die zuvor konfigurierten Spalten stillschweigend
 			// auf die 3 Standard-Spalten zurücksetzen.
 			if ( isset( $_POST['columns'] ) && is_array( $_POST['columns'] ) ) {
+				// Die beiden fixen Spalten sind nicht Teil von $_POST['columns'] (eigene Zeilen
+				// im Editor, siehe Render-Seite) - sie werden hier aus ihren eigenen Label-Feldern
+				// wieder vorangestellt, bevor das Gesamtarray validiert wird.
+				$lbite_kanban_full = array();
+				if ( lbite_feature_enabled( 'enable_scheduled_orders' ) ) {
+					$lbite_kanban_full[] = array(
+						'key'                 => LBite_Order_Dashboard::KEY_PREORDER,
+						'label'               => isset( $_POST['lbite_kanban_preorder_label'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_kanban_preorder_label'] ) ) : __( 'Pre-orders', 'libre-bite' ),
+						'counts_as_completed' => false,
+					);
+				}
+				$lbite_kanban_full[] = array(
+					'key'                 => LBite_Order_Dashboard::KEY_ACTIVE,
+					'label'               => isset( $_POST['lbite_kanban_active_label'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_kanban_active_label'] ) ) : __( 'Prepare Now', 'libre-bite' ),
+					'counts_as_completed' => false,
+				);
+				foreach ( wp_unslash( $_POST['columns'] ) as $lbite_custom_col ) {
+					$lbite_kanban_full[] = $lbite_custom_col;
+				}
+
 				$lbite_kanban_columns_val = lbite_enforce_pro_options( array(
-					'lbite_kanban_columns' => LBite_Order_Dashboard::sanitize_columns_input( wp_unslash( $_POST['columns'] ) ),
+					'lbite_kanban_columns' => LBite_Order_Dashboard::sanitize_columns_input( $lbite_kanban_full ),
 				) );
 				update_option( 'lbite_kanban_columns', $lbite_kanban_columns_val['lbite_kanban_columns'] );
 			}
@@ -1035,12 +1055,40 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 						</td>
 					</tr>
 					<?php if ( lbite_feature_enabled( 'enable_kanban_customization' ) ) : ?>
+					<?php
+					$lbite_kanban_cols     = LBite_Order_Dashboard::get_columns();
+					$lbite_kanban_fixed    = array();
+					$lbite_kanban_custom   = array();
+					foreach ( $lbite_kanban_cols as $lbite_col ) {
+						if ( LBite_Order_Dashboard::KEY_PREORDER === $lbite_col['key'] || LBite_Order_Dashboard::KEY_ACTIVE === $lbite_col['key'] ) {
+							$lbite_kanban_fixed[ $lbite_col['key'] ] = $lbite_col;
+						} else {
+							$lbite_kanban_custom[] = $lbite_col;
+						}
+					}
+					$lbite_kanban_custom_max = lbite_feature_enabled( 'enable_scheduled_orders' ) ? 3 : 4;
+					?>
 					<tr>
-						<th><?php esc_html_e( 'Kanban Columns', 'libre-bite' ); ?></th>
+						<th><?php esc_html_e( 'Fixed Columns', 'libre-bite' ); ?></th>
 						<td>
-							<?php $lbite_kanban_cols = LBite_Order_Dashboard::get_columns(); ?>
-							<div id="lbite-kanban-columns-editor" data-next-index="<?php echo (int) count( $lbite_kanban_cols ); ?>">
-								<?php foreach ( $lbite_kanban_cols as $lbite_i => $lbite_col ) : ?>
+							<?php if ( isset( $lbite_kanban_fixed[ LBite_Order_Dashboard::KEY_PREORDER ] ) ) : ?>
+							<p>
+								<input type="text" name="lbite_kanban_preorder_label" value="<?php echo esc_attr( $lbite_kanban_fixed[ LBite_Order_Dashboard::KEY_PREORDER ]['label'] ); ?>" class="regular-text" <?php disabled( ! $lbite_premium_allowed ); ?>>
+								<span class="description"><?php esc_html_e( 'Pre-orders — only shown because "Pre-orders" is enabled under Settings → Locations. Always the first column.', 'libre-bite' ); ?></span>
+							</p>
+							<?php endif; ?>
+							<p>
+								<input type="text" name="lbite_kanban_active_label" value="<?php echo esc_attr( $lbite_kanban_fixed[ LBite_Order_Dashboard::KEY_ACTIVE ]['label'] ); ?>" class="regular-text" <?php disabled( ! $lbite_premium_allowed ); ?>>
+								<span class="description"><?php esc_html_e( 'Always present — every new order that is not a pre-order starts here.', 'libre-bite' ); ?></span>
+							</p>
+							<p class="description"><?php esc_html_e( 'These two columns cannot be removed, renamed to a different key, or reordered — they carry the automatic pre-order routing. You can still rename their label.', 'libre-bite' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'Own Columns', 'libre-bite' ); ?></th>
+						<td>
+							<div id="lbite-kanban-columns-editor" data-next-index="<?php echo (int) count( $lbite_kanban_custom ); ?>" data-max-columns="<?php echo (int) $lbite_kanban_custom_max; ?>">
+								<?php foreach ( $lbite_kanban_custom as $lbite_i => $lbite_col ) : ?>
 								<div class="lbite-kanban-column-row" data-index="<?php echo (int) $lbite_i; ?>">
 									<span class="dashicons dashicons-menu lbite-kanban-drag-handle"></span>
 									<input type="hidden" name="columns[<?php echo (int) $lbite_i; ?>][key]" value="<?php echo esc_attr( $lbite_col['key'] ); ?>">
@@ -1054,7 +1102,15 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 								<?php endforeach; ?>
 							</div>
 							<button type="button" id="lbite-kanban-add-column" class="button" <?php disabled( ! $lbite_premium_allowed ); ?>><?php esc_html_e( 'Add column', 'libre-bite' ); ?></button>
-							<p class="description"><?php esc_html_e( 'Drag rows to reorder. Minimum 2, maximum 5 columns.', 'libre-bite' ); ?></p>
+							<p class="description">
+								<?php
+								printf(
+									/* translators: %d: maximum number of additional columns */
+									esc_html__( 'Drag rows to reorder. These columns always come after the fixed columns above. At least one column needs "Counts as completed" checked, or a default "Completed" column is added automatically. Up to %d additional columns.', 'libre-bite' ),
+									(int) $lbite_kanban_custom_max
+								);
+								?>
+							</p>
 						</td>
 					</tr>
 					<?php endif; ?>

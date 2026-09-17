@@ -121,9 +121,11 @@ jQuery(document).ready(function($) {
 		});
 
 		function updateKanbanButtonsState() {
-			var rows = $('#lbite-kanban-columns-editor .lbite-kanban-column-row').length;
-			$('#lbite-kanban-add-column').prop('disabled', rows >= 5);
-			$('.lbite-kanban-remove-column').prop('disabled', rows <= 2);
+			var $editor  = $('#lbite-kanban-columns-editor');
+			var rows     = $editor.find('.lbite-kanban-column-row').length;
+			var maxRows  = parseInt($editor.data('max-columns'), 10) || 5;
+			$('#lbite-kanban-add-column').prop('disabled', rows >= maxRows);
+			$('.lbite-kanban-remove-column').prop('disabled', rows <= 0);
 		}
 
 		$('#lbite-kanban-add-column').on('click', function() {
