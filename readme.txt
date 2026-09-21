@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.2.1
+Stable tag: 3.2.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.2.2 =
+
+* Fixed: the Statistics page's payment methods breakdown only ever showed orders placed at the POS. Orders placed by guests through a configured WooCommerce payment gateway (Stripe, PayPal, invoice, etc.) were silently missing from both the on-screen table/chart and the CSV export. They now show up under the gateway's own name.
 
 = 3.2.0 =
 

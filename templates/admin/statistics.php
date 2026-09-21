@@ -342,8 +342,16 @@ foreach ( $lbite_stat_orders as $lbite_order ) {
 				$lbite_payment_totals[ $lbite_split_display ]['revenue'] += isset( $lbite_split_row['amount'] ) ? (float) $lbite_split_row['amount'] : 0.0;
 			}
 		}
-	} elseif ( $lbite_pm_key ) {
-		$lbite_pm_display = isset( $lbite_pm_label_map[ $lbite_pm_key ] ) ? $lbite_pm_label_map[ $lbite_pm_key ] : $lbite_pm_key;
+	} else {
+		if ( $lbite_pm_key ) {
+			$lbite_pm_display = isset( $lbite_pm_label_map[ $lbite_pm_key ] ) ? $lbite_pm_label_map[ $lbite_pm_key ] : $lbite_pm_key;
+		} else {
+			// Keine Kassen-Zahlungsart gesetzt: Bestellung kam über den Checkout, Zahlungsart ist das genutzte WooCommerce-Gateway.
+			$lbite_pm_display = $lbite_order->get_payment_method_title();
+			if ( '' === $lbite_pm_display ) {
+				$lbite_pm_display = $lbite_pm_label_map['other'];
+			}
+		}
 		if ( ! isset( $lbite_payment_totals[ $lbite_pm_display ] ) ) {
 			$lbite_payment_totals[ $lbite_pm_display ] = array( 'count' => 0, 'revenue' => 0.0 );
 		}
@@ -433,8 +441,14 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 				}
 			}
 			$lbite_csv_pm = __( 'Split', 'libre-bite' ) . ' (' . implode( ' + ', $lbite_csv_split_parts ) . ')';
-		} else {
+		} elseif ( $lbite_csv_pm_key ) {
 			$lbite_csv_pm = isset( $lbite_pm_label_map[ $lbite_csv_pm_key ] ) ? $lbite_pm_label_map[ $lbite_csv_pm_key ] : $lbite_csv_pm_key;
+		} else {
+			// Keine Kassen-Zahlungsart gesetzt: Bestellung kam über den Checkout, Zahlungsart ist das genutzte WooCommerce-Gateway.
+			$lbite_csv_pm = $lbite_csv_order->get_payment_method_title();
+			if ( '' === $lbite_csv_pm ) {
+				$lbite_csv_pm = $lbite_pm_label_map['other'];
+			}
 		}
 		$lbite_csv_stype   = $lbite_csv_order->get_meta( '_lbite_service_type' );
 		$lbite_csv_items   = array();
@@ -570,7 +584,7 @@ $lbite_export_url = wp_nonce_url(
 	<?php if ( ! empty( $lbite_payment_totals ) ) :
 		$lbite_pm_total_rev = array_sum( array_column( $lbite_payment_totals, 'revenue' ) );
 	?>
-	<h2><?php esc_html_e( 'Payment Methods (POS)', 'libre-bite' ); ?></h2>
+	<h2><?php esc_html_e( 'Payment Methods', 'libre-bite' ); ?></h2>
 	<?php
 	$lbite_pm_rows = array();
 	foreach ( $lbite_payment_totals as $lbite_pm_label => $lbite_pm_data ) {
