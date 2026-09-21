@@ -7471,6 +7471,26 @@ msgstr "Zahlungsarten (Kassensystem)"
 msgid "Share"
 msgstr "Anteil"
 
+#: templates/admin/statistics.php:432 templates/admin/statistics.php:645
+msgid "Source"
+msgstr "Herkunft"
+
+#: templates/admin/statistics.php:466
+msgid "POS"
+msgstr "POS"
+
+#: templates/admin/statistics.php:637
+msgid "POS (in-store)"
+msgstr "Kasse (vor Ort)"
+
+#: templates/admin/statistics.php:638
+msgid "Website (online checkout)"
+msgstr "Website (Online-Checkout)"
+
+#: templates/admin/statistics.php:641
+msgid "Orders by Source"
+msgstr "Bestellungen nach Herkunft"
+
 #: templates/admin/statistics.php:594
 msgid "Top Products"
 msgstr "Top-Produkte"

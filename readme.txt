@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.2.3
+Stable tag: 3.2.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.2.4 =
+
+* Added: the Statistics page now shows how many orders came from the POS versus the website's own checkout, with order count, revenue and share for each — plus a matching "Source" column in the CSV export.
 
 = 3.2.3 =
 

@@ -7637,6 +7637,27 @@ msgstr ""
 msgid "Share"
 msgstr ""
 
+#: templates/admin/statistics.php:432
+#: templates/admin/statistics.php:645
+msgid "Source"
+msgstr ""
+
+#: templates/admin/statistics.php:466
+msgid "POS"
+msgstr ""
+
+#: templates/admin/statistics.php:637
+msgid "POS (in-store)"
+msgstr ""
+
+#: templates/admin/statistics.php:638
+msgid "Website (online checkout)"
+msgstr ""
+
+#: templates/admin/statistics.php:641
+msgid "Orders by Source"
+msgstr ""
+
 #: templates/admin/statistics.php:594
 msgid "Top Products"
 msgstr ""

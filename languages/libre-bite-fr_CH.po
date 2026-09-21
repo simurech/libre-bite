@@ -7470,6 +7470,26 @@ msgstr "Moyens de paiement (caisse)"
 msgid "Share"
 msgstr "Part"
 
+#: templates/admin/statistics.php:432 templates/admin/statistics.php:645
+msgid "Source"
+msgstr "Origine"
+
+#: templates/admin/statistics.php:466
+msgid "POS"
+msgstr "POS"
+
+#: templates/admin/statistics.php:637
+msgid "POS (in-store)"
+msgstr "Caisse (sur place)"
+
+#: templates/admin/statistics.php:638
+msgid "Website (online checkout)"
+msgstr "Site web (commande en ligne)"
+
+#: templates/admin/statistics.php:641
+msgid "Orders by Source"
+msgstr "Commandes par origine"
+
 #: templates/admin/statistics.php:594
 msgid "Top Products"
 msgstr "Produits les plus vendus"

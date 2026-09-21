@@ -223,6 +223,10 @@ $lbite_addon_totals   = array(); // Global: Add-ons [name => ['qty', 'revenue']]
 $lbite_addon_combos   = array(); // Add-on → Produkt-Kombination [addon => [product => count]].
 $lbite_promotion_totals = array(); // Global: Aktionen [Regel-Label => ['uses', 'discount']].
 $lbite_daily_totals   = array(); // Tagesverlauf [Y-m-d => ['count', 'revenue']].
+$lbite_source_totals  = array( // POS vs. Website; feste zwei Schlüssel statt dynamisch, damit die Reihenfolge stabil bleibt.
+	'pos'     => array( 'count' => 0, 'revenue' => 0.0 ),
+	'website' => array( 'count' => 0, 'revenue' => 0.0 ),
+);
 
 foreach ( $lbite_stat_orders as $lbite_order ) {
 	$lbite_loc_id = (int) $lbite_order->get_meta( '_lbite_location_id' );
@@ -240,6 +244,13 @@ foreach ( $lbite_stat_orders as $lbite_order ) {
 	}
 	$lbite_totals[ $lbite_loc_name ]['count']++;
 	$lbite_totals[ $lbite_loc_name ]['revenue'] += (float) $lbite_order->get_total();
+
+	// Herkunft: '_lbite_order_source' wird nur von der Kasse gesetzt (Direktverkauf und
+	// Tab-Eröffnung, siehe LBite_Admin::ajax_pos_create_order()/ajax_pos_open_tab()) –
+	// fehlt es, kam die Bestellung über den Checkout der Website.
+	$lbite_source_key = 'pos' === $lbite_order->get_meta( '_lbite_order_source' ) ? 'pos' : 'website';
+	$lbite_source_totals[ $lbite_source_key ]['count']++;
+	$lbite_source_totals[ $lbite_source_key ]['revenue'] += (float) $lbite_order->get_total();
 
 	// Tagesverlauf für das Diagramm.
 	$lbite_created = $lbite_order->get_date_created();
@@ -418,6 +429,7 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 		__( 'Total', 'libre-bite' ),
 		__( 'Payment Method', 'libre-bite' ),
 		__( 'Order Type', 'libre-bite' ),
+		__( 'Source', 'libre-bite' ),
 		__( 'Products', 'libre-bite' ),
 	), ';' );
 	foreach ( $lbite_stat_orders as $lbite_csv_order ) {
@@ -451,6 +463,7 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 			}
 		}
 		$lbite_csv_stype   = $lbite_csv_order->get_meta( '_lbite_service_type' );
+		$lbite_csv_source  = 'pos' === $lbite_csv_order->get_meta( '_lbite_order_source' ) ? __( 'POS', 'libre-bite' ) : __( 'Website', 'libre-bite' );
 		$lbite_csv_items   = array();
 		foreach ( $lbite_csv_order->get_items() as $lbite_csv_item ) {
 			$lbite_csv_items[] = $lbite_csv_item->get_quantity() . 'x ' . $lbite_csv_item->get_name();
@@ -462,6 +475,7 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 			number_format( (float) $lbite_csv_order->get_total(), 2, '.', '' ),
 			$lbite_csv_pm,
 			$lbite_csv_stype,
+			$lbite_csv_source,
 			implode( ' | ', $lbite_csv_items ),
 		), ';' );
 	}
@@ -609,6 +623,48 @@ $lbite_export_url = wp_nonce_url(
 							<div style="background:#2271b1; border-radius:4px; height:8px; width:<?php echo esc_attr( $lbite_share ); ?>%;"></div>
 						</div>
 						<?php echo esc_html( $lbite_share ); ?>%
+					</div>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+	<?php endif; ?>
+
+	<!-- Bestellungen nach Herkunft -->
+	<?php if ( $lbite_total_orders > 0 ) :
+		$lbite_source_labels = array(
+			'pos'     => __( 'POS (in-store)', 'libre-bite' ),
+			'website' => __( 'Website (online checkout)', 'libre-bite' ),
+		);
+	?>
+	<h2><?php esc_html_e( 'Orders by Source', 'libre-bite' ); ?></h2>
+	<table class="widefat" style="max-width: 560px; margin-bottom: 32px;">
+		<thead>
+			<tr>
+				<th><?php esc_html_e( 'Source', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Orders', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Revenue', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Share', 'libre-bite' ); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ( $lbite_source_totals as $lbite_src_key => $lbite_src_d ) :
+				if ( 0 === $lbite_src_d['count'] ) {
+					continue;
+				}
+				$lbite_src_share = round( $lbite_src_d['count'] / $lbite_total_orders * 100, 1 );
+			?>
+			<tr>
+				<td><strong><?php echo esc_html( $lbite_source_labels[ $lbite_src_key ] ); ?></strong></td>
+				<td><?php echo esc_html( $lbite_src_d['count'] ); ?></td>
+				<td><?php echo wp_kses_post( wc_price( $lbite_src_d['revenue'] ) ); ?></td>
+				<td>
+					<div style="display:flex; align-items:center; gap:8px;">
+						<div style="background:#e1e1e1; border-radius:4px; height:8px; width:80px;">
+							<div style="background:#2271b1; border-radius:4px; height:8px; width:<?php echo esc_attr( $lbite_src_share ); ?>%;"></div>
+						</div>
+						<?php echo esc_html( $lbite_src_share ); ?>%
 					</div>
 				</td>
 			</tr>
