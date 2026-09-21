@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.2.2
+Stable tag: 3.2.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.2.3 =
+
+* Changed: the Statistics page's payment methods breakdown showed the same numbers twice (a bar chart followed directly by an identical table). Now shown once as a table, sorted by revenue, matching how Top Products and Promotions already present their numbers.
 
 = 3.2.2 =
 

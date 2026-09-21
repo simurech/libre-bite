@@ -585,25 +585,7 @@ $lbite_export_url = wp_nonce_url(
 		$lbite_pm_total_rev = array_sum( array_column( $lbite_payment_totals, 'revenue' ) );
 	?>
 	<h2><?php esc_html_e( 'Payment Methods', 'libre-bite' ); ?></h2>
-	<?php
-	$lbite_pm_rows = array();
-	foreach ( $lbite_payment_totals as $lbite_pm_label => $lbite_pm_data ) {
-		$lbite_pm_rows[] = array(
-			'label'   => $lbite_pm_label,
-			'value'   => $lbite_pm_data['revenue'],
-			'display' => wp_strip_all_tags( wc_price( $lbite_pm_data['revenue'] ) ),
-		);
-	}
-	usort(
-		$lbite_pm_rows,
-		function ( $lbite_a, $lbite_b ) {
-			return $lbite_b['value'] <=> $lbite_a['value'];
-		}
-	);
-	?>
-	<div class="lbite-chart-panel" style="max-width:560px;">
-		<?php echo wp_kses_post( lbite_stat_bar_chart( $lbite_pm_rows, 'success' ) ); ?>
-	</div>
+	<?php uasort( $lbite_payment_totals, fn( $lbite_a, $lbite_b ) => $lbite_b['revenue'] <=> $lbite_a['revenue'] ); ?>
 	<table class="widefat" style="max-width: 560px; margin-bottom: 32px;">
 		<thead>
 			<tr>
