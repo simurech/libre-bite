@@ -276,6 +276,16 @@ Yes. English is the source language, and the plugin ships with complete translat
 * Added: the Tips and Stamp Card steps of the setup assistant show the same live preview as the corresponding Settings page.
 * Added: a "Run setup assistant" link at the top of Settings, so the assistant can be revisited any time instead of only right after activation.
 * Fixed: the setup assistant's links to Order Bumps, Promotions and the Stamp Card pointed at the wrong settings tab (a leftover from before these moved to their own Marketing tab in 3.1.0).
+* Added: Order Bumps and Promotions now use a live product search instead of entering raw product IDs by hand; Promotions gained a category picker too.
+* Added: the announcement bar supports more than one time window per day (for example 8:00–12:00 and 14:00–18:00) and an option to open its link in a new tab.
+* Added: the Stamp Card reward can now be a fixed amount instead of only a percentage, a percentage reward can be capped at a maximum amount, and the reward can be limited to specific product categories and/or to a single item of the next order.
+* Added: a "Promotions" section on the Statistics page shows how often each rule was used and the total discount it gave, including product-price discounts that previously left no trace anywhere.
+* Fixed: the SMS section of the Notifications page sat outside the page's `<form>` and could never actually be saved. The page is now grouped into clearly separated Sound, Email and SMS sections in one form; the SMS section also gained the same Pro-badge styling used elsewhere, and the previously invisible "send reminder emails" toggle and lead time are now on the page.
+* Fixed: a mistranslated German label on the Promotions page read "Regel ist scharf" ("rule is spicy") instead of "rule is active".
+* Fixed: the Manager Assignments checkbox grid rendered every checkbox unchecked after saving, even though the assignment was saved correctly — a strict type comparison between a string and the stored integer IDs.
+* Changed: Manager Assignments is now a checkbox grid instead of a multi-select box, and lists every relevant user (administrators, managers, shop managers, staff) for a full overview — not just managers.
+* Changed: the Holidays tab moved from Appearance to Setup, next to Locations.
+* Changed: the "Libre Bite Staff" role is now listed first under Menu Visibility instead of wherever WordPress happens to register it.
 
 = 3.1.1 =
 
