@@ -8483,3 +8483,211 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
+
+#: templates/admin/settings/checkout-tips.php:1
+msgid "A further switch to hide tips without turning this feature off entirely is available under \"Fields in Standard Checkout\"."
+msgstr ""
+
+#: templates/admin/settings/marketing-banner.php:1
+msgid "A text bar at the top of the shop, e.g. for a running promotion or opening hours notice. Requires Promotions to be enabled on the Promotions page."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php:1
+msgid "A theme-independent menu layout and time-limited availability for products or whole categories."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Announcement Bar"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Appearance"
+msgstr ""
+
+#: templates/admin/settings/products-availability.php:1
+msgid "Available at 2 of 3 locations"
+msgstr ""
+
+#: templates/admin/settings/products-availability.php:1
+msgid "Available at: Downtown, Airport"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Configure each area of the plugin using the navigation on the left. Core features are active by default – you can adjust them at any time."
+msgstr ""
+
+#: templates/admin/setup-wizard.php:1
+msgid "Confirms your shop is ready to take orders."
+msgstr ""
+
+#: templates/admin/settings/prices-taxes.php:1
+msgid "Control how totals are rounded and, with Pro, which tax class applies to takeaway versus dine-in orders."
+msgstr ""
+
+#: templates/admin/settings/uninstall.php:1
+msgid "Controls what happens to your data when the plugin is deleted."
+msgstr ""
+
+#: templates/admin/settings/marketing-promotions.php:1
+msgid "Discounts are applied before the tip and the 5-cent rounding, so the tip is never calculated on an amount nobody pays. The Announcement Bar (its own settings page) also depends on this toggle."
+msgstr ""
+
+#: templates/admin/settings/products-availability.php:1
+msgid "Icon — hover or tap opens a small popup"
+msgstr ""
+
+#: templates/admin/settings/checkout-tips.php:1
+msgid "Let customers add a tip at checkout, as a percentage of the order or a fixed amount."
+msgstr ""
+
+#: templates/admin/settings/products-options.php:1
+msgid "Let customers customize products with add-ons, variants, or extras — sizes, toppings, sauces, anything configured per product."
+msgstr ""
+
+#: templates/admin/settings/products-notes.php:1
+msgid "Let staff or customers attach a short note to a single cart item — \"no onions\", \"extra spicy\"."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Marketing & Communication"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Menu Display"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Menu Visibility"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Nutritional & Dietary"
+msgstr ""
+
+#: templates/admin/setup-wizard.php:1
+msgid "Only what you switch on ever appears in the menu."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Operations"
+msgstr ""
+
+#: templates/admin/setup-wizard.php:1
+msgid "Optionally start from a filled shop instead of an empty one."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Order Board"
+msgstr ""
+
+#: templates/admin/settings/roles-access.php:1
+msgid "Overview of access levels. Standard WordPress roles can be granted access to the Order Overview and POS, without needing a Libre Bite-specific role."
+msgstr ""
+
+#: templates/admin/settings/checkout-tips.php:1
+msgid "Percentage of the order total, or a fixed amount in your shop currency — either way, the same three options are offered to the guest."
+msgstr ""
+
+#: templates/admin/setup-wizard.php:1
+msgid "Pick your modules"
+msgstr ""
+
+#: templates/admin/settings/orders-columns.php:1
+msgid "Preview: column order on the board"
+msgstr ""
+
+#: templates/admin/settings/products-availability.php:1
+msgid "Preview: hint shown on category and product pages"
+msgstr ""
+
+#: templates/admin/settings/checkout-tips.php:1
+msgid "Preview: how this looks at checkout"
+msgstr ""
+
+#: templates/admin/settings/marketing-banner.php:1
+msgid "Preview: how this looks at the top of the shop"
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:1
+msgid "Preview: progress card shown to the guest"
+msgstr ""
+
+#: templates/admin/setup-wizard.php:1
+msgid "Preview: tip buttons shown at checkout"
+msgstr ""
+
+#: templates/admin/settings/receipts.php:1
+msgid "Preview: what each receipt will show"
+msgstr ""
+
+#: templates/admin/setup-wizard.php:1
+msgid "Quick check"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Receipts"
+msgstr ""
+
+#: templates/admin/settings/orders-columns.php:1
+msgid "Rename, add, remove and reorder the columns on the Kanban board."
+msgstr ""
+
+#: templates/admin/settings/checkout-mode.php:1
+msgid "Replace the standard WooCommerce checkout with a minimal one, and let customers pick Takeaway or Dine-in up front."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Run setup assistant"
+msgstr ""
+
+#: templates/admin/setup-wizard.php:1
+msgid "Sample menu"
+msgstr ""
+
+#: templates/admin/settings/products-menu.php:1
+msgid "Select the page where the shortcode [lbite_menu] is included, or create a new page. Turning the toggle above on has no visible effect until this shortcode is placed somewhere."
+msgstr ""
+
+#: templates/admin/settings/pos.php:1
+msgid "Set up the till used for orders taken in person: which payment methods staff can choose from, and the default order type when the till is opened."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Settings sections"
+msgstr ""
+
+#: templates/admin/settings/products-nutrition.php:1
+msgid "Show calories and nutritional values, allergen warnings, and dietary labels (vegan, gluten-free, etc.) on product pages."
+msgstr ""
+
+#: templates/admin/settings/roles-menus.php:1
+msgid "Staff users always have access to: Order Overview, POS System, Support. Menu visibility cannot be customized for this role."
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Standard Role Access"
+msgstr ""
+
+#: templates/admin/setup-wizard.php:1
+msgid "Step %1$d of %2$d"
+msgstr ""
+
+#: templates/admin/settings-tabbed.php:1
+msgid "System"
+msgstr ""
+
+#: templates/admin/settings/orders-board.php:1
+msgid "Turn the kitchen order overview on and configure how it refreshes and flags waiting orders."
+msgstr ""
+
+#: templates/admin/settings/marketing-promotions.php:1
+msgid "Up to five rule-based discounts: a percentage or fixed amount off, \"buy several, pay for fewer\", optionally limited to certain products, categories, days or times."
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:1
+msgid "off the next order"
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:1
+msgid "stamps →"
+msgstr ""

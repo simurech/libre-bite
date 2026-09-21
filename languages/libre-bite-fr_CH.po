@@ -8114,12 +8114,6 @@ msgstr "Reçu envoyé"
 msgid "Error sending receipt."
 msgstr "Erreur lors de l'envoi du reçu."
 
-#~ msgid "Fehler beim Speichern"
-#~ msgstr "Erreur lors de l'enregistrement"
-
-#~ msgid "https://github.com/simurech/libre-bite"
-#~ msgstr "https://github.com/simurech/libre-bite"
-
 #: templates/admin/settings/developer.php:15
 msgid "Connection test, returns plugin version and server time."
 msgstr "Test de connexion, renvoie la version du plugin et l'heure du serveur."
@@ -8274,7 +8268,6 @@ msgstr "Colonnes personnalisées"
 msgid "Drag rows to reorder. These columns always come after the fixed columns above. At least one column needs \"Counts as completed\" checked, or a default \"Completed\" column is added automatically. Up to %d additional columns."
 msgstr "Faites glisser les lignes pour réorganiser. Ces colonnes viennent toujours après les colonnes fixes ci-dessus. Au moins une colonne doit avoir « Compte comme terminée » cochée, sinon une colonne « Terminé » par défaut est ajoutée automatiquement. Jusqu'à %d colonnes supplémentaires."
 
-
 #: templates/admin/settings/products.php:74
 msgid "Outputs your menu in its own layout — category navigation, product cards, a dialog for variations and add-ons, and a slide-in order panel. Add layout=\"list\" to the shortcode for a compact list instead of cards."
 msgstr "Affiche votre menu dans sa propre mise en page — navigation par catégories, fiches produits, une fenêtre pour les variantes et suppléments, ainsi qu'un panneau de commande coulissant. Ajoutez layout=\"list\" au shortcode pour une liste compacte au lieu de fiches."
@@ -8316,3 +8309,216 @@ msgstr "Développeur"
 msgid "Menu"
 msgstr "Menu"
 
+#: templates/admin/settings/checkout-tips.php:1
+msgid "A further switch to hide tips without turning this feature off entirely is available under \"Fields in Standard Checkout\"."
+msgstr "Un interrupteur supplémentaire pour masquer les pourboires sans désactiver complètement cette fonctionnalité est disponible sous « Champs du checkout standard »."
+
+#: templates/admin/settings/marketing-banner.php:1
+msgid "A text bar at the top of the shop, e.g. for a running promotion or opening hours notice. Requires Promotions to be enabled on the Promotions page."
+msgstr "Une barre de texte en haut de la boutique, par ex. pour une promotion en cours ou un avis sur les horaires d'ouverture. Nécessite que les promotions soient activées sur la page Promotions."
+
+#: templates/admin/settings/products-menu.php:1
+msgid "A theme-independent menu layout and time-limited availability for products or whole categories."
+msgstr "Un affichage du menu indépendant du thème et une disponibilité limitée dans le temps pour des produits ou des catégories entières."
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Announcement Bar"
+msgstr "Barre d'annonce"
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Appearance"
+msgstr "Apparence"
+
+#: templates/admin/settings/products-availability.php:1
+msgid "Available at 2 of 3 locations"
+msgstr "Disponible dans 2 des 3 établissements"
+
+#: templates/admin/settings/products-availability.php:1
+msgid "Available at: Downtown, Airport"
+msgstr "Disponible à : Centre-ville, Aéroport"
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Configure each area of the plugin using the navigation on the left. Core features are active by default – you can adjust them at any time."
+msgstr "Chaque section du plugin se configure via la navigation à gauche. Les fonctions principales sont actives par défaut et peuvent être ajustées à tout moment."
+
+#: templates/admin/setup-wizard.php:1
+msgid "Confirms your shop is ready to take orders."
+msgstr "Confirme que la boutique est prête à recevoir des commandes."
+
+#: templates/admin/settings/prices-taxes.php:1
+msgid "Control how totals are rounded and, with Pro, which tax class applies to takeaway versus dine-in orders."
+msgstr "Définit comment les montants sont arrondis et, avec Pro, quelle classe de taxe s'applique aux commandes à emporter ou sur place."
+
+#: templates/admin/settings/uninstall.php:1
+msgid "Controls what happens to your data when the plugin is deleted."
+msgstr "Définit ce qu'il advient des données lors de la désinstallation du plugin."
+
+#: templates/admin/settings/marketing-promotions.php:1
+msgid "Discounts are applied before the tip and the 5-cent rounding, so the tip is never calculated on an amount nobody pays. The Announcement Bar (its own settings page) also depends on this toggle."
+msgstr "Les remises sont appliquées avant le pourboire et l'arrondi à 5 centimes, afin que le pourboire ne soit jamais calculé sur un montant que personne ne paie. La barre d'annonce (sa propre page de réglages) dépend également de cet interrupteur."
+
+#: templates/admin/settings/products-availability.php:1
+msgid "Icon — hover or tap opens a small popup"
+msgstr "Icône — le survol ou le toucher ouvre une petite fenêtre"
+
+#: templates/admin/settings/checkout-tips.php:1
+msgid "Let customers add a tip at checkout, as a percentage of the order or a fixed amount."
+msgstr "Les clients peuvent ajouter un pourboire lors du paiement, en pourcentage de la commande ou en montant fixe."
+
+#: templates/admin/settings/products-options.php:1
+msgid "Let customers customize products with add-ons, variants, or extras — sizes, toppings, sauces, anything configured per product."
+msgstr "Les clients peuvent personnaliser les produits avec des suppléments, variantes ou extras — tailles, garnitures, sauces, tout ce qui est configuré par produit."
+
+#: templates/admin/settings/products-notes.php:1
+msgid "Let staff or customers attach a short note to a single cart item — \"no onions\", \"extra spicy\"."
+msgstr "Le personnel ou les clients peuvent ajouter une brève note à un seul article du panier — « sans oignons », « très épicé »."
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Marketing & Communication"
+msgstr "Marketing & Communication"
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Menu Display"
+msgstr "Affichage du menu"
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Menu Visibility"
+msgstr "Visibilité du menu"
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Nutritional & Dietary"
+msgstr "Valeurs nutritionnelles & régimes"
+
+#: templates/admin/setup-wizard.php:1
+msgid "Only what you switch on ever appears in the menu."
+msgstr "Seul ce qui est activé apparaît dans le menu."
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Operations"
+msgstr "Exploitation"
+
+#: templates/admin/setup-wizard.php:1
+msgid "Optionally start from a filled shop instead of an empty one."
+msgstr "Démarrer avec une boutique déjà remplie plutôt que vide (facultatif)."
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Order Board"
+msgstr "Tableau des commandes"
+
+#: templates/admin/settings/roles-access.php:1
+msgid "Overview of access levels. Standard WordPress roles can be granted access to the Order Overview and POS, without needing a Libre Bite-specific role."
+msgstr "Aperçu des niveaux d'accès. Les rôles WordPress standards peuvent recevoir l'accès au tableau des commandes et à la caisse, sans avoir besoin d'un rôle spécifique à Libre Bite."
+
+#: templates/admin/settings/checkout-tips.php:1
+msgid "Percentage of the order total, or a fixed amount in your shop currency — either way, the same three options are offered to the guest."
+msgstr "Pourcentage du total de la commande, ou montant fixe dans la devise de la boutique — dans les deux cas, les trois mêmes options sont proposées au client."
+
+#: templates/admin/setup-wizard.php:1
+msgid "Pick your modules"
+msgstr "Choisir les modules"
+
+#: templates/admin/settings/orders-columns.php:1
+msgid "Preview: column order on the board"
+msgstr "Aperçu : ordre des colonnes du tableau"
+
+#: templates/admin/settings/products-availability.php:1
+msgid "Preview: hint shown on category and product pages"
+msgstr "Aperçu : indication affichée sur les pages catégorie et produit"
+
+#: templates/admin/settings/checkout-tips.php:1
+msgid "Preview: how this looks at checkout"
+msgstr "Aperçu : rendu au moment du paiement"
+
+#: templates/admin/settings/marketing-banner.php:1
+msgid "Preview: how this looks at the top of the shop"
+msgstr "Aperçu : rendu en haut de la boutique"
+
+#: templates/admin/settings/marketing-stampcard.php:1
+msgid "Preview: progress card shown to the guest"
+msgstr "Aperçu : carte de progression affichée au client"
+
+#: templates/admin/setup-wizard.php:1
+msgid "Preview: tip buttons shown at checkout"
+msgstr "Aperçu : boutons de pourboire au moment du paiement"
+
+#: templates/admin/settings/receipts.php:1
+msgid "Preview: what each receipt will show"
+msgstr "Aperçu : contenu de chaque type de reçu"
+
+#: templates/admin/setup-wizard.php:1
+msgid "Quick check"
+msgstr "Vérification rapide"
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Receipts"
+msgstr "Reçus"
+
+#: templates/admin/settings/orders-columns.php:1
+msgid "Rename, add, remove and reorder the columns on the Kanban board."
+msgstr "Renommer, ajouter, supprimer et réorganiser les colonnes du tableau Kanban."
+
+#: templates/admin/settings/checkout-mode.php:1
+msgid "Replace the standard WooCommerce checkout with a minimal one, and let customers pick Takeaway or Dine-in up front."
+msgstr "Remplacer le checkout WooCommerce standard par une version minimale, et laisser les clients choisir à emporter ou sur place dès le départ."
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Run setup assistant"
+msgstr "Lancer l'assistant de configuration"
+
+#: templates/admin/setup-wizard.php:1
+msgid "Sample menu"
+msgstr "Menu d'exemple"
+
+#: templates/admin/settings/products-menu.php:1
+msgid "Select the page where the shortcode [lbite_menu] is included, or create a new page. Turning the toggle above on has no visible effect until this shortcode is placed somewhere."
+msgstr "Choisir la page où le shortcode [lbite_menu] est inséré, ou en créer une nouvelle. Activer l'interrupteur ci-dessus n'a aucun effet visible tant que ce shortcode n'est pas placé quelque part."
+
+#: templates/admin/settings/pos.php:1
+msgid "Set up the till used for orders taken in person: which payment methods staff can choose from, and the default order type when the till is opened."
+msgstr "Configurer la caisse utilisée pour les commandes prises sur place : les moyens de paiement disponibles pour le personnel et le type de commande présélectionné à l'ouverture de la caisse."
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Settings sections"
+msgstr "Sections des réglages"
+
+#: templates/admin/settings/products-nutrition.php:1
+msgid "Show calories and nutritional values, allergen warnings, and dietary labels (vegan, gluten-free, etc.) on product pages."
+msgstr "Afficher les calories et valeurs nutritionnelles, les avertissements d'allergènes et les étiquettes de régime (vegan, sans gluten, etc.) sur les pages produit."
+
+#: templates/admin/settings/roles-menus.php:1
+msgid "Staff users always have access to: Order Overview, POS System, Support. Menu visibility cannot be customized for this role."
+msgstr "Le personnel a toujours accès à : tableau des commandes, caisse, support. La visibilité du menu ne peut pas être personnalisée pour ce rôle."
+
+#: templates/admin/settings-tabbed.php:1
+msgid "Standard Role Access"
+msgstr "Accès des rôles standards"
+
+#: templates/admin/setup-wizard.php:1
+msgid "Step %1$d of %2$d"
+msgstr "Étape %1$d sur %2$d"
+
+#: templates/admin/settings-tabbed.php:1
+msgid "System"
+msgstr "Système"
+
+#: templates/admin/settings/orders-board.php:1
+msgid "Turn the kitchen order overview on and configure how it refreshes and flags waiting orders."
+msgstr "Activer le tableau des commandes et définir la fréquence d'actualisation ainsi que le signalement des commandes en attente."
+
+#: templates/admin/settings/marketing-promotions.php:1
+msgid "Up to five rule-based discounts: a percentage or fixed amount off, \"buy several, pay for fewer\", optionally limited to certain products, categories, days or times."
+msgstr "Jusqu'à cinq remises basées sur des règles : un pourcentage ou montant fixe de remise, « achetez plusieurs, payez-en moins », limitées en option à certains produits, catégories, jours ou horaires."
+
+#: templates/admin/settings/marketing-stampcard.php:1
+msgid "off the next order"
+msgstr "de remise sur la prochaine commande"
+
+#: templates/admin/settings/marketing-stampcard.php:1
+msgid "stamps →"
+msgstr "tampons →"
+
+#~ msgid "Fehler beim Speichern"
+#~ msgstr "Erreur lors de l'enregistrement"
+
+#~ msgid "https://github.com/simurech/libre-bite"
+#~ msgstr "https://github.com/simurech/libre-bite"
