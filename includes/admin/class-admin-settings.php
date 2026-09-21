@@ -273,13 +273,25 @@ class LBite_Admin_Settings {
 			return;
 		}
 
-		$managers  = get_users( array( 'role' => 'lbite_manager' ) );
+		$managers  = get_users( array( 'role__in' => array( 'administrator', 'lbite_manager', 'shop_manager', 'lbite_staff' ) ) );
 		$submitted = isset( $_POST['lbite_manager_locations'] ) && is_array( $_POST['lbite_manager_locations'] )
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nur Post-IDs, werden unten mit array_map( 'intval', ... ) gecastet.
 			? wp_unslash( $_POST['lbite_manager_locations'] )
 			: array();
 
 		foreach ( $managers as $manager ) {
+			// Administratoren haben ohnehin uneingeschränkten Zugriff (siehe
+			// LBite_REST_API::check_location_access()) – eine Zuweisung wäre
+			// wirkungslos, die Oberfläche sperrt ihre Checkboxen deshalb.
+			// Kassenpersonal nutzt ein anderes, einzelnes Meta-Feld
+			// (lbite_assigned_location, per Benutzerprofil) – diese
+			// Mehrfachzuweisung betrifft sie nicht, die Oberfläche zeigt
+			// für sie deshalb keine Checkboxen.
+			if ( in_array( 'administrator', (array) $manager->roles, true )
+				|| in_array( 'lbite_staff', (array) $manager->roles, true ) ) {
+				continue;
+			}
+
 			$location_ids = isset( $submitted[ $manager->ID ] ) && is_array( $submitted[ $manager->ID ] )
 				? array_map( 'intval', $submitted[ $manager->ID ] )
 				: array();
@@ -560,6 +572,13 @@ class LBite_Admin_Settings {
 			if ( $has_lbite_cap ) {
 				$roles[ $role_key ] = $role_data['name'];
 			}
+		}
+
+		// Das eigene Kassenpersonal-Rolle zuoberst — das ist die Rolle, die
+		// hier am häufigsten nachgeschaut wird, WordPress liefert sie sonst
+		// irgendwo mitten in der Registrierungsreihenfolge.
+		if ( isset( $roles['lbite_staff'] ) ) {
+			$roles = array( 'lbite_staff' => $roles['lbite_staff'] ) + $roles;
 		}
 
 		return $roles;

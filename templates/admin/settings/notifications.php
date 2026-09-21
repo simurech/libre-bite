@@ -2,6 +2,11 @@
 /**
  * Tab: Benachrichtigungen
  *
+ * Drei klar getrennte Abschnitte in einem einzigen Formular: Sound, E-Mail,
+ * SMS. Vorher endete das Formular vor dem SMS-Block — die SMS-Felder lagen
+ * ausserhalb jedes <form> und konnten nie gespeichert werden. Jetzt umschliesst
+ * ein durchgehendes Formular alle drei Abschnitte.
+ *
  * @package LibreBite
  */
 
@@ -18,19 +23,22 @@ if ( lbite_feature_enabled( 'enable_sound_notifications' ) && $lbite_premium_all
 $lbite_default_sound_url    = LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3';
 $lbite_default_sound_exists = file_exists( LBITE_PLUGIN_DIR . 'assets/sounds/notification.mp3' );
 $lbite_notification_sound   = get_option( 'lbite_notification_sound', $lbite_default_sound_exists ? $lbite_default_sound_url : '' );
+
+if ( ! class_exists( 'LBite_SMS' ) ) {
+	require_once LBITE_PLUGIN_DIR . 'includes/modules/sms/class-sms.php';
+}
+
+$lbite_sms_configured = LBite_SMS::is_configured();
+$lbite_sms_columns    = class_exists( 'LBite_Order_Dashboard' ) ? LBite_Order_Dashboard::get_columns() : array();
+$lbite_sms_trigger    = (string) get_option( 'lbite_sms_trigger_status', '' );
 ?>
 <form method="post">
 	<?php wp_nonce_field( 'lbite_settings' ); ?>
 	<input type="hidden" name="lbite_save_tab" value="notifications">
 
+	<!-- Sound -->
+	<h2><?php esc_html_e( 'Sound', 'libre-bite' ); ?></h2>
 	<?php
-	$lbite_toggle_key             = 'enable_pickup_reminders';
-	$lbite_toggle_label           = __( 'Pickup Reminders', 'libre-bite' );
-	$lbite_toggle_description     = __( 'Send an automatic email reminder before the scheduled pickup time.', 'libre-bite' );
-	$lbite_toggle_is_pro          = true;
-	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
-	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
-
 	$lbite_toggle_key             = 'enable_sound_notifications';
 	$lbite_toggle_label           = __( 'Sound Notifications', 'libre-bite' );
 	$lbite_toggle_description     = __( 'Play a sound when a new order arrives in the order overview.', 'libre-bite' );
@@ -40,7 +48,6 @@ $lbite_notification_sound   = get_option( 'lbite_notification_sound', $lbite_def
 	?>
 
 	<?php if ( lbite_feature_enabled( 'enable_sound_notifications' ) ) : ?>
-	<h3><?php esc_html_e( 'Sound File', 'libre-bite' ); ?></h3>
 	<table class="form-table">
 		<tr>
 			<th><?php esc_html_e( 'Notification Sound', 'libre-bite' ); ?></th>
@@ -84,6 +91,140 @@ $lbite_notification_sound   = get_option( 'lbite_notification_sound', $lbite_def
 	</table>
 	<?php endif; ?>
 
+	<hr style="margin: 24px 0;">
+
+	<!-- E-Mail -->
+	<h2><?php esc_html_e( 'Email', 'libre-bite' ); ?></h2>
+	<?php
+	$lbite_toggle_key             = 'enable_pickup_reminders';
+	$lbite_toggle_label           = __( 'Pickup Reminders', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Send an automatic email reminder before the scheduled pickup time.', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+	?>
+
+	<?php if ( lbite_feature_enabled( 'enable_pickup_reminders' ) ) : ?>
+	<table class="form-table">
+		<tr>
+			<th><?php esc_html_e( 'Send reminders', 'libre-bite' ); ?></th>
+			<td>
+				<label>
+					<input type="checkbox" name="lbite_email_pickup_reminder" value="1"
+						<?php checked( (bool) get_option( 'lbite_email_pickup_reminder', true ) ); ?>
+						<?php disabled( ! $lbite_premium_allowed ); ?>>
+					<?php esc_html_e( 'Send the reminder email', 'libre-bite' ); ?>
+				</label>
+				<p class="description"><?php esc_html_e( 'Switch off to keep the feature configured but pause the emails, e.g. during a busy period.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="lbite_pickup_reminder_time"><?php esc_html_e( 'Send before pickup', 'libre-bite' ); ?></label></th>
+			<td>
+				<input type="number" min="1" id="lbite_pickup_reminder_time" name="lbite_pickup_reminder_time" class="small-text"
+					value="<?php echo esc_attr( get_option( 'lbite_pickup_reminder_time', 15 ) ); ?>"
+					<?php disabled( ! $lbite_premium_allowed ); ?>>
+				<?php esc_html_e( 'minutes', 'libre-bite' ); ?>
+			</td>
+		</tr>
+	</table>
+	<?php endif; ?>
+
+	<hr style="margin: 24px 0;">
+
+	<!-- SMS -->
+	<h2><?php esc_html_e( 'SMS', 'libre-bite' ); ?></h2>
+	<?php
+	$lbite_toggle_key             = 'enable_sms_notifications';
+	$lbite_toggle_label           = __( 'SMS Notifications', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Sends a short text message when an order reaches a chosen column. You use your own Twilio account, so no order or customer data passes through us and the cost stays transparent.', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+	?>
+
+	<?php if ( lbite_feature_enabled( 'enable_sms_notifications' ) || ! $lbite_premium_allowed ) : ?>
+	<p class="description" style="margin-bottom: 12px;">
+		<strong><?php esc_html_e( 'Please note:', 'libre-bite' ); ?></strong>
+		<?php esc_html_e( 'A message can only be sent if the order has a phone number. The phone field is optional in the standard checkout and is removed entirely in table ordering and in the optimised checkout — in those cases no SMS will go out.', 'libre-bite' ); ?>
+	</p>
+
+	<table class="form-table">
+		<?php if ( $lbite_sms_configured ) : ?>
+		<tr>
+			<th></th>
+			<td><p class="description" style="color:#1a7f37;"><?php esc_html_e( 'Credentials are stored.', 'libre-bite' ); ?></p></td>
+		</tr>
+		<?php endif; ?>
+		<tr>
+			<th><label for="lbite_sms_account_sid"><?php esc_html_e( 'Account SID', 'libre-bite' ); ?></label></th>
+			<td>
+				<input type="text" id="lbite_sms_account_sid" name="lbite_sms_account_sid" class="regular-text"
+					value="<?php echo esc_attr( get_option( 'lbite_sms_account_sid', '' ) ); ?>"
+					<?php disabled( ! $lbite_premium_allowed ); ?>>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="lbite_sms_auth_token"><?php esc_html_e( 'Auth Token', 'libre-bite' ); ?></label></th>
+			<td>
+				<input type="password" id="lbite_sms_auth_token" name="lbite_sms_auth_token" class="regular-text"
+					value="" autocomplete="new-password"
+					placeholder="<?php echo esc_attr( $lbite_sms_configured ? __( 'Stored — leave empty to keep', 'libre-bite' ) : '' ); ?>"
+					<?php disabled( ! $lbite_premium_allowed ); ?>>
+				<p class="description"><?php esc_html_e( 'Stored encrypted. It is never shown again — leave the field empty to keep the current token.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="lbite_sms_from"><?php esc_html_e( 'Sender number', 'libre-bite' ); ?></label></th>
+			<td>
+				<input type="text" id="lbite_sms_from" name="lbite_sms_from" class="regular-text"
+					value="<?php echo esc_attr( get_option( 'lbite_sms_from', '' ) ); ?>"
+					placeholder="+41…" <?php disabled( ! $lbite_premium_allowed ); ?>>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="lbite_sms_country_code"><?php esc_html_e( 'Default country code', 'libre-bite' ); ?></label></th>
+			<td>
+				<input type="text" id="lbite_sms_country_code" name="lbite_sms_country_code" class="small-text"
+					value="<?php echo esc_attr( get_option( 'lbite_sms_country_code', '+41' ) ); ?>"
+					<?php disabled( ! $lbite_premium_allowed ); ?>>
+				<p class="description"><?php esc_html_e( 'Added to numbers that guests enter without one.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="lbite_sms_trigger_status"><?php esc_html_e( 'Send when moved to', 'libre-bite' ); ?></label></th>
+			<td>
+				<select id="lbite_sms_trigger_status" name="lbite_sms_trigger_status" <?php disabled( ! $lbite_premium_allowed ); ?>>
+					<option value=""><?php esc_html_e( '— never —', 'libre-bite' ); ?></option>
+					<?php foreach ( $lbite_sms_columns as $lbite_sms_col ) : ?>
+						<option value="<?php echo esc_attr( $lbite_sms_col['key'] ); ?>" <?php selected( $lbite_sms_trigger, $lbite_sms_col['key'] ); ?>>
+							<?php echo esc_html( $lbite_sms_col['label'] ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+				<p class="description"><?php esc_html_e( 'One message per order at most.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="lbite_sms_template"><?php esc_html_e( 'Message', 'libre-bite' ); ?></label></th>
+			<td>
+				<textarea id="lbite_sms_template" name="lbite_sms_template" rows="3" class="large-text"
+					<?php disabled( ! $lbite_premium_allowed ); ?>><?php
+					echo esc_textarea(
+						get_option(
+							'lbite_sms_template',
+							__( 'Your order {order_number} is ready for pickup. Thank you! {site}', 'libre-bite' )
+						)
+					);
+				?></textarea>
+				<p class="description">
+					<?php esc_html_e( 'Placeholders: {order_number}, {first_name}, {site}, {location}, {total}', 'libre-bite' ); ?>
+				</p>
+			</td>
+		</tr>
+	</table>
+	<?php endif; ?>
+
 	<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 </form>
 
@@ -119,123 +260,3 @@ jQuery(document).ready(function($) {
 });
 </script>
 <?php endif; ?>
-
-<?php
-/**
- * SMS-Benachrichtigungen
- *
- * Die Zugangsdaten gehören dem Betrieb: es gibt keinen Dienst von uns
- * dazwischen. Das Auth-Token wird verschlüsselt gespeichert und nie
- * zurückgelesen — das Feld bleibt darum immer leer und überschreibt nur
- * bei tatsächlicher Eingabe.
- */
-
-if ( ! class_exists( 'LBite_SMS' ) ) {
-	require_once LBITE_PLUGIN_DIR . 'includes/modules/sms/class-sms.php';
-}
-
-$lbite_sms_configured = LBite_SMS::is_configured();
-$lbite_sms_columns    = class_exists( 'LBite_Order_Dashboard' ) ? LBite_Order_Dashboard::get_columns() : array();
-$lbite_sms_trigger    = (string) get_option( 'lbite_sms_trigger_status', '' );
-?>
-
-<hr style="margin: 24px 0;">
-
-<h3>
-	<?php esc_html_e( 'SMS Notifications', 'libre-bite' ); ?>
-	<?php if ( ! $lbite_premium_allowed ) : ?>
-		<span class="lbite-pro-badge">Pro</span>
-	<?php endif; ?>
-</h3>
-
-<p class="description" style="margin-bottom: 12px;">
-	<?php esc_html_e( 'Sends a short text message when an order reaches a chosen column. You use your own Twilio account, so no order or customer data passes through us and the cost stays transparent.', 'libre-bite' ); ?>
-</p>
-
-<p class="description" style="margin-bottom: 12px;">
-	<strong><?php esc_html_e( 'Please note:', 'libre-bite' ); ?></strong>
-	<?php esc_html_e( 'A message can only be sent if the order has a phone number. The phone field is optional in the standard checkout and is removed entirely in table ordering and in the optimised checkout — in those cases no SMS will go out.', 'libre-bite' ); ?>
-</p>
-
-<table class="form-table">
-	<tr>
-		<th><?php esc_html_e( 'Enable SMS', 'libre-bite' ); ?></th>
-		<td>
-			<label class="<?php echo $lbite_premium_allowed ? '' : 'lbite-locked'; ?>">
-				<input type="checkbox" name="lbite_feature_toggle[enable_sms_notifications]" value="1"
-					<?php checked( lbite_feature_enabled( 'enable_sms_notifications' ) ); ?>
-					<?php disabled( ! $lbite_premium_allowed ); ?>>
-				<?php esc_html_e( 'Send text messages via Twilio', 'libre-bite' ); ?>
-			</label>
-			<?php if ( $lbite_sms_configured ) : ?>
-				<p class="description" style="color:#1a7f37;"><?php esc_html_e( 'Credentials are stored.', 'libre-bite' ); ?></p>
-			<?php endif; ?>
-		</td>
-	</tr>
-	<tr>
-		<th><label for="lbite_sms_account_sid"><?php esc_html_e( 'Account SID', 'libre-bite' ); ?></label></th>
-		<td>
-			<input type="text" id="lbite_sms_account_sid" name="lbite_sms_account_sid" class="regular-text"
-				value="<?php echo esc_attr( get_option( 'lbite_sms_account_sid', '' ) ); ?>"
-				<?php disabled( ! $lbite_premium_allowed ); ?>>
-		</td>
-	</tr>
-	<tr>
-		<th><label for="lbite_sms_auth_token"><?php esc_html_e( 'Auth Token', 'libre-bite' ); ?></label></th>
-		<td>
-			<input type="password" id="lbite_sms_auth_token" name="lbite_sms_auth_token" class="regular-text"
-				value="" autocomplete="new-password"
-				placeholder="<?php echo esc_attr( $lbite_sms_configured ? __( 'Stored — leave empty to keep', 'libre-bite' ) : '' ); ?>"
-				<?php disabled( ! $lbite_premium_allowed ); ?>>
-			<p class="description"><?php esc_html_e( 'Stored encrypted. It is never shown again — leave the field empty to keep the current token.', 'libre-bite' ); ?></p>
-		</td>
-	</tr>
-	<tr>
-		<th><label for="lbite_sms_from"><?php esc_html_e( 'Sender number', 'libre-bite' ); ?></label></th>
-		<td>
-			<input type="text" id="lbite_sms_from" name="lbite_sms_from" class="regular-text"
-				value="<?php echo esc_attr( get_option( 'lbite_sms_from', '' ) ); ?>"
-				placeholder="+41…" <?php disabled( ! $lbite_premium_allowed ); ?>>
-		</td>
-	</tr>
-	<tr>
-		<th><label for="lbite_sms_country_code"><?php esc_html_e( 'Default country code', 'libre-bite' ); ?></label></th>
-		<td>
-			<input type="text" id="lbite_sms_country_code" name="lbite_sms_country_code" class="small-text"
-				value="<?php echo esc_attr( get_option( 'lbite_sms_country_code', '+41' ) ); ?>"
-				<?php disabled( ! $lbite_premium_allowed ); ?>>
-			<p class="description"><?php esc_html_e( 'Added to numbers that guests enter without one.', 'libre-bite' ); ?></p>
-		</td>
-	</tr>
-	<tr>
-		<th><label for="lbite_sms_trigger_status"><?php esc_html_e( 'Send when moved to', 'libre-bite' ); ?></label></th>
-		<td>
-			<select id="lbite_sms_trigger_status" name="lbite_sms_trigger_status" <?php disabled( ! $lbite_premium_allowed ); ?>>
-				<option value=""><?php esc_html_e( '— never —', 'libre-bite' ); ?></option>
-				<?php foreach ( $lbite_sms_columns as $lbite_sms_col ) : ?>
-					<option value="<?php echo esc_attr( $lbite_sms_col['key'] ); ?>" <?php selected( $lbite_sms_trigger, $lbite_sms_col['key'] ); ?>>
-						<?php echo esc_html( $lbite_sms_col['label'] ); ?>
-					</option>
-				<?php endforeach; ?>
-			</select>
-			<p class="description"><?php esc_html_e( 'One message per order at most.', 'libre-bite' ); ?></p>
-		</td>
-	</tr>
-	<tr>
-		<th><label for="lbite_sms_template"><?php esc_html_e( 'Message', 'libre-bite' ); ?></label></th>
-		<td>
-			<textarea id="lbite_sms_template" name="lbite_sms_template" rows="3" class="large-text"
-				<?php disabled( ! $lbite_premium_allowed ); ?>><?php
-				echo esc_textarea(
-					get_option(
-						'lbite_sms_template',
-						__( 'Your order {order_number} is ready for pickup. Thank you! {site}', 'libre-bite' )
-					)
-				);
-			?></textarea>
-			<p class="description">
-				<?php esc_html_e( 'Placeholders: {order_number}, {first_name}, {site}, {location}, {total}', 'libre-bite' ); ?>
-			</p>
-		</td>
-	</tr>
-</table>
