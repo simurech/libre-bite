@@ -31,12 +31,12 @@ foreach ( $lbite_checks as $lbite_check ) {
 
 		<header class="lbite-wizard__head">
 			<div class="lbite-wizard__brand"><?php echo esc_html( get_option( 'lbite_brand_name', 'Libre Bite' ) ); ?></div>
-			<nav class="lbite-wizard__steps" aria-label="<?php esc_attr_e( 'Setup steps', 'libre-bite' ); ?>">
-				<span class="is-active" data-step-label="1"><?php esc_html_e( 'Welcome', 'libre-bite' ); ?></span>
-				<span data-step-label="2"><?php esc_html_e( 'Check', 'libre-bite' ); ?></span>
-				<span data-step-label="3"><?php esc_html_e( 'Modules', 'libre-bite' ); ?></span>
-				<span data-step-label="4"><?php esc_html_e( 'Sample data', 'libre-bite' ); ?></span>
-			</nav>
+			<div class="lbite-wizard__progress" aria-live="polite">
+				<div class="lbite-wizard__progress-bar">
+					<div class="lbite-wizard__progress-fill" id="lbite-wizard-progress-fill" style="width: 0%;"></div>
+				</div>
+				<span class="lbite-wizard__progress-label" id="lbite-wizard-progress-label"></span>
+			</div>
 		</header>
 
 		<!-- Schritt 1 -->
@@ -45,11 +45,23 @@ foreach ( $lbite_checks as $lbite_check ) {
 			<p class="lbite-wizard__lead">
 				<?php esc_html_e( 'This short setup gets your restaurant running. It takes about two minutes and nothing here is permanent — every choice can be changed later under Settings.', 'libre-bite' ); ?>
 			</p>
-			<ul class="lbite-wizard__list">
-				<li><?php esc_html_e( 'Check that your shop is ready to take orders', 'libre-bite' ); ?></li>
-				<li><?php esc_html_e( 'Pick the modules your business actually needs', 'libre-bite' ); ?></li>
-				<li><?php esc_html_e( 'Optionally start with a sample menu instead of an empty shop', 'libre-bite' ); ?></li>
-			</ul>
+			<div class="lbite-wizard__highlights">
+				<div class="lbite-card lbite-wizard__highlight">
+					<span class="dashicons dashicons-yes-alt lbite-wizard__highlight-icon" aria-hidden="true"></span>
+					<strong><?php esc_html_e( 'Quick check', 'libre-bite' ); ?></strong>
+					<p><?php esc_html_e( 'Confirms your shop is ready to take orders.', 'libre-bite' ); ?></p>
+				</div>
+				<div class="lbite-card lbite-wizard__highlight">
+					<span class="dashicons dashicons-admin-plugins lbite-wizard__highlight-icon" aria-hidden="true"></span>
+					<strong><?php esc_html_e( 'Pick your modules', 'libre-bite' ); ?></strong>
+					<p><?php esc_html_e( 'Only what you switch on ever appears in the menu.', 'libre-bite' ); ?></p>
+				</div>
+				<div class="lbite-card lbite-wizard__highlight">
+					<span class="dashicons dashicons-carrot lbite-wizard__highlight-icon" aria-hidden="true"></span>
+					<strong><?php esc_html_e( 'Sample menu', 'libre-bite' ); ?></strong>
+					<p><?php esc_html_e( 'Optionally start from a filled shop instead of an empty one.', 'libre-bite' ); ?></p>
+				</div>
+			</div>
 			<div class="lbite-wizard__actions">
 				<a class="lbite-wizard__skip" href="<?php echo esc_url( admin_url( 'admin.php?page=libre-bite' ) ); ?>">
 					<?php esc_html_e( 'Skip setup', 'libre-bite' ); ?>
@@ -144,7 +156,7 @@ foreach ( $lbite_checks as $lbite_check ) {
 								<?php if ( 'checkbox' === $lbite_set['type'] ) : ?>
 									<label class="lbite-wizard__module">
 										<input type="hidden" name="lbite_set[<?php echo esc_attr( $lbite_set['option'] ); ?>]" value="0">
-										<input type="checkbox" name="lbite_set[<?php echo esc_attr( $lbite_set['option'] ); ?>]" value="1" <?php checked( (int) $lbite_val, 1 ); ?>>
+										<input type="checkbox" id="<?php echo esc_attr( $lbite_set['option'] ); ?>" name="lbite_set[<?php echo esc_attr( $lbite_set['option'] ); ?>]" value="1" <?php checked( (int) $lbite_val, 1 ); ?>>
 										<span>
 											<strong><?php echo esc_html( $lbite_set['label'] ); ?></strong>
 											<?php if ( ! empty( $lbite_set['description'] ) ) : ?>
@@ -155,7 +167,7 @@ foreach ( $lbite_checks as $lbite_check ) {
 								<?php elseif ( 'select' === $lbite_set['type'] ) : ?>
 									<label>
 										<strong><?php echo esc_html( $lbite_set['label'] ); ?></strong>
-										<select name="lbite_set[<?php echo esc_attr( $lbite_set['option'] ); ?>]">
+										<select id="<?php echo esc_attr( $lbite_set['option'] ); ?>" name="lbite_set[<?php echo esc_attr( $lbite_set['option'] ); ?>]">
 											<?php foreach ( $lbite_set['choices'] as $lbite_ck => $lbite_cl ) : ?>
 												<option value="<?php echo esc_attr( $lbite_ck ); ?>" <?php selected( $lbite_val, $lbite_ck ); ?>><?php echo esc_html( $lbite_cl ); ?></option>
 											<?php endforeach; ?>
@@ -166,6 +178,7 @@ foreach ( $lbite_checks as $lbite_check ) {
 										<strong><?php echo esc_html( $lbite_set['label'] ); ?></strong>
 										<span class="lbite-wizard__inline">
 											<input type="number"
+												id="<?php echo esc_attr( $lbite_set['option'] ); ?>"
 												name="lbite_set[<?php echo esc_attr( $lbite_set['option'] ); ?>]"
 												value="<?php echo esc_attr( $lbite_val ); ?>"
 												<?php echo isset( $lbite_set['min'] ) ? ' min="' . esc_attr( $lbite_set['min'] ) . '"' : ''; ?>
@@ -183,6 +196,69 @@ foreach ( $lbite_checks as $lbite_check ) {
 							</div>
 						<?php endforeach; ?>
 					</div>
+
+					<?php if ( 'enable_stampcard' === $lbite_mod ) : ?>
+						<div id="lbite-wizard-stampcard-preview" class="lbite-wizard__preview" aria-hidden="true">
+							<p class="lbite-wizard__preview-label"><?php esc_html_e( 'Preview: progress card shown to the guest', 'libre-bite' ); ?></p>
+							<div class="lbite-wizard__stampcard-dots" id="lbite-wizard-stampcard-dots"></div>
+							<p class="lbite-wizard__preview-note" id="lbite-wizard-stampcard-note"></p>
+						</div>
+						<script>
+						(function() {
+							var target   = document.getElementById('lbite_stampcard_target');
+							var discount = document.getElementById('lbite_stampcard_discount');
+							var dotsWrap = document.getElementById('lbite-wizard-stampcard-dots');
+							var noteEl   = document.getElementById('lbite-wizard-stampcard-note');
+							function update() {
+								if ( ! dotsWrap ) { return; }
+								var t = Math.max(2, parseInt(target && target.value, 10) || 10);
+								var d = parseInt(discount && discount.value, 10) || 0;
+								dotsWrap.innerHTML = '';
+								for (var i = 0; i < t; i++) {
+									var dot = document.createElement('span');
+									dot.className = 'lbite-wizard__stampcard-dot' + (i === 0 ? ' is-filled' : '');
+									dotsWrap.appendChild(dot);
+								}
+								noteEl.textContent = t + ' ' + <?php echo wp_json_encode( __( 'stamps →', 'libre-bite' ) ); ?> + ' ' + d + '% ' + <?php echo wp_json_encode( __( 'off the next order', 'libre-bite' ) ); ?>;
+							}
+							if ( target ) { target.addEventListener('input', update); }
+							if ( discount ) { discount.addEventListener('input', update); }
+							update();
+						})();
+						</script>
+					<?php endif; ?>
+
+					<?php if ( 'enable_tips' === $lbite_mod ) : ?>
+						<div id="lbite-wizard-tip-preview" class="lbite-wizard__preview" aria-hidden="true">
+							<p class="lbite-wizard__preview-label"><?php esc_html_e( 'Preview: tip buttons shown at checkout', 'libre-bite' ); ?></p>
+							<div class="lbite-wizard__tip-row" id="lbite-wizard-tip-row"></div>
+						</div>
+						<script>
+						(function() {
+							var mode = document.getElementById('lbite_tip_mode');
+							var p1 = document.getElementById('lbite_tip_percentage_1');
+							var p2 = document.getElementById('lbite_tip_percentage_2');
+							var p3 = document.getElementById('lbite_tip_percentage_3');
+							var row = document.getElementById('lbite-wizard-tip-row');
+							var currency = <?php echo wp_json_encode( function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '%' ); ?>;
+							function update() {
+								if ( ! row ) { return; }
+								var unit = ( mode && 'fixed' === mode.value ) ? currency : '%';
+								row.innerHTML = '';
+								[ p1, p2, p3 ].forEach(function(input) {
+									var pill = document.createElement('span');
+									pill.className = 'lbite-wizard__tip-pill';
+									pill.textContent = (input ? (input.value || '0') : '0') + unit;
+									row.appendChild(pill);
+								});
+							}
+							[ mode, p1, p2, p3 ].forEach(function(el) {
+								if ( el ) { el.addEventListener('input', update); el.addEventListener('change', update); }
+							});
+							update();
+						})();
+						</script>
+					<?php endif; ?>
 				<?php endif; ?>
 
 				<?php if ( ! empty( $lbite_cfg['link_tab'] ) ) : ?>
@@ -270,22 +346,12 @@ foreach ( $lbite_checks as $lbite_check ) {
 		'imported' => __( 'Sample menu created.', 'libre-bite' ),
 		'failed'   => __( 'Something went wrong. Please try again.', 'libre-bite' ),
 		'saving'   => __( 'Saving…', 'libre-bite' ),
+		/* translators: 1: current step number, 2: total number of steps */
+		'stepOf'   => __( 'Step %1$d of %2$d', 'libre-bite' ),
 	) ); ?>;
 
 	var steps = root.querySelectorAll( '.lbite-wizard__step' );
-	var marks = root.querySelectorAll( '.lbite-wizard__steps span' );
 	var current = 1;
-
-	function show( step ) {
-		current = Math.min( Math.max( step, 1 ), steps.length );
-		steps.forEach( function ( el ) {
-			el.classList.toggle( 'is-active', Number( el.dataset.step ) === current );
-		} );
-		marks.forEach( function ( el ) {
-			el.classList.toggle( 'is-active', Number( el.dataset.stepLabel ) <= current );
-		} );
-		root.scrollIntoView( { behavior: 'smooth', block: 'start' } );
-	}
 
 	// Ein Schritt ist nur dann an der Reihe, wenn sein Modul in Schritt 3
 	// eingeschaltet wurde. Ausgeschaltete Module werden uebersprungen, damit
@@ -295,6 +361,32 @@ foreach ( $lbite_checks as $lbite_check ) {
 		if ( ! modul ) { return true; }
 		var box = root.querySelector( 'input[name="lbite_wizard_features[]"][value="' + modul + '"]' );
 		return !! ( box && box.checked );
+	}
+
+	function relevantSteps() {
+		return Array.prototype.filter.call( steps, relevant );
+	}
+
+	function updateProgress() {
+		var rel = relevantSteps();
+		var total = rel.length;
+		var pos = 1;
+		for ( var i = 0; i < rel.length; i++ ) {
+			if ( Number( rel[ i ].dataset.step ) === current ) { pos = i + 1; break; }
+		}
+		var fill = document.getElementById( 'lbite-wizard-progress-fill' );
+		var label = document.getElementById( 'lbite-wizard-progress-label' );
+		if ( fill ) { fill.style.width = Math.round( ( pos / total ) * 100 ) + '%'; }
+		if ( label ) { label.textContent = config.stepOf.replace( '%1$d', pos ).replace( '%2$d', total ); }
+	}
+
+	function show( step ) {
+		current = Math.min( Math.max( step, 1 ), steps.length );
+		steps.forEach( function ( el ) {
+			el.classList.toggle( 'is-active', Number( el.dataset.step ) === current );
+		} );
+		updateProgress();
+		root.scrollIntoView( { behavior: 'smooth', block: 'start' } );
 	}
 
 	function naechster( von, richtung ) {
@@ -315,6 +407,15 @@ foreach ( $lbite_checks as $lbite_check ) {
 			show( naechster( current, -1 ) );
 		}
 	} );
+
+	// Ein Modul-Häkchen in Schritt 3 verändert, wie viele Schritte insgesamt
+	// relevant sind - die Anzeige muss das sofort widerspiegeln, auch bevor
+	// weitergeblättert wird.
+	root.querySelectorAll( 'input[name="lbite_wizard_features[]"]' ).forEach( function ( box ) {
+		box.addEventListener( 'change', updateProgress );
+	} );
+
+	updateProgress();
 
 	function post( action, extra, done ) {
 		var body = new URLSearchParams();

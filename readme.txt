@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.1.1
+Stable tag: 3.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,16 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.2.0 =
+
+* Changed: the Settings page navigation is now a grouped, vertical sidebar (Setup, Operations, Marketing & Communication, Appearance, System) instead of a single row of tabs — easier to scan once a business turns on several modules.
+* Changed: the previously long Products, Checkout, Orders, Marketing and Advanced settings pages are now split into focused, single-purpose pages (for example Tips, Order Bumps and Promotions each have their own page instead of sharing one) — no behavior change, all existing values and save logic are unaffected, and each page saves independently so turning one setting off never resets an unrelated one.
+* Added: live previews on several settings that were previously hard to picture in advance — tip buttons, kanban board columns, receipt templates, the announcement banner, the stamp card, and the availability hint style now show what the guest or staff member will actually see as you change the values.
+* Changed: the setup assistant's progress indicator now reflects the actual number of steps for the modules you selected instead of four fixed labels, and the welcome step leads with three short highlight cards instead of a plain bullet list.
+* Added: the Tips and Stamp Card steps of the setup assistant show the same live preview as the corresponding Settings page.
+* Added: a "Run setup assistant" link at the top of Settings, so the assistant can be revisited any time instead of only right after activation.
+* Fixed: the setup assistant's links to Order Bumps, Promotions and the Stamp Card pointed at the wrong settings tab (a leftover from before these moved to their own Marketing tab in 3.1.0).
 
 = 3.1.1 =
 

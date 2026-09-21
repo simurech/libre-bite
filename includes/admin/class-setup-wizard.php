@@ -725,7 +725,7 @@ class LBite_Setup_Wizard {
 			),
 			'enable_kanban_board' => array(
 				'premium'  => false,
-				'link_tab' => 'orders',
+				'link_tab' => 'orders_board',
 				'settings' => array(
 					array(
 						'option'      => 'lbite_dashboard_refresh_interval',
@@ -816,7 +816,7 @@ class LBite_Setup_Wizard {
 			'enable_product_options' => array(
 				'premium'  => false,
 				'settings' => array(),
-				'link_tab' => 'products',
+				'link_tab' => 'products_options',
 				'hint'     => __( 'Add-ons are managed as their own entries under Products → Product add-ons.', 'libre-bite' ),
 			),
 		);
@@ -824,7 +824,7 @@ class LBite_Setup_Wizard {
 		if ( $premium ) {
 			$catalogue['enable_tips'] = array(
 				'premium'  => true,
-				'link_tab' => 'checkout',
+				'link_tab' => 'checkout_tips',
 				'settings' => array(
 					array(
 						'option'  => 'lbite_tip_mode',
@@ -919,7 +919,7 @@ class LBite_Setup_Wizard {
 
 			$catalogue['enable_stampcard'] = array(
 				'premium'  => true,
-				'link_tab' => 'checkout',
+				'link_tab' => 'marketing_stampcard',
 				'settings' => array(
 					array(
 						'option'      => 'lbite_stampcard_target',
@@ -975,13 +975,13 @@ class LBite_Setup_Wizard {
 		}
 
 		return array(
-			'enable_table_ordering'    => 'tables',
-			'enable_menu_view'         => 'products',
-			'enable_menu_schedule'     => 'products',
-			'enable_promotions'        => 'checkout',
-			'enable_order_bumps'       => 'checkout',
-			'enable_sms_notifications' => 'notifications',
-			'enable_optimized_checkout' => 'checkout',
+			'enable_table_ordering'     => 'tables',
+			'enable_menu_view'          => 'products_menu',
+			'enable_menu_schedule'      => 'products_menu',
+			'enable_promotions'         => 'marketing_promotions',
+			'enable_order_bumps'        => 'marketing_bumps',
+			'enable_sms_notifications'  => 'notifications',
+			'enable_optimized_checkout' => 'checkout_mode',
 		);
 	}
 

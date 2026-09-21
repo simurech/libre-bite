@@ -673,6 +673,248 @@ body.lbite-screen-doc .lbite-app {
 }
 
 /* ════════════════════════════════════════════════════════════════════
+ * Vertikale Settings-Navigation (v3.2.0 - ersetzt die WP-Tabs auf der
+ * Einstellungsseite). Baut ausschliesslich auf bestehenden Tokens auf,
+ * braucht deshalb keine eigenen Hell-/Dunkel-Definitionen.
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-settings-layout {
+	display: grid;
+	grid-template-columns: 220px 1fr;
+	gap: var(--lbite-space-6);
+	align-items: start;
+	margin-top: var(--lbite-space-4);
+}
+
+@media (max-width: 782px) {
+	.lbite-settings-layout {
+		grid-template-columns: 1fr;
+	}
+}
+
+.lbite-settings-nav {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lbite-space-5);
+	position: sticky;
+	top: 32px;
+}
+
+@media (max-width: 782px) {
+	.lbite-settings-nav {
+		position: static;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: var(--lbite-space-4);
+	}
+}
+
+.lbite-settings-nav__group-title {
+	margin: 0 0 var(--lbite-space-1) var(--lbite-space-2);
+	font-size: var(--lbite-text-xs);
+	font-weight: var(--lbite-weight-semibold);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--lbite-text-subtle);
+}
+
+.lbite-settings-nav__item {
+	display: flex;
+	align-items: center;
+	gap: var(--lbite-space-2);
+	padding: var(--lbite-space-2) var(--lbite-space-3);
+	border-radius: var(--lbite-radius-sm);
+	font-size: var(--lbite-text-base);
+	font-weight: var(--lbite-weight-medium, 500);
+	color: var(--lbite-text-muted);
+	text-decoration: none;
+	white-space: nowrap;
+	transition: background-color var(--lbite-duration-fast) var(--lbite-ease-crisp),
+		color var(--lbite-duration-fast) var(--lbite-ease-crisp);
+}
+
+.lbite-settings-nav__item .dashicons {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+}
+
+.lbite-settings-nav__item:hover {
+	background: var(--lbite-surface-sunken);
+	color: var(--lbite-text);
+}
+
+.lbite-settings-nav__item.is-active {
+	background: var(--lbite-color-primary-soft);
+	color: var(--lbite-color-primary);
+	font-weight: var(--lbite-weight-semibold);
+}
+
+.lbite-settings-content {
+	min-width: 0;
+	background: var(--lbite-surface);
+	border: 1px solid var(--lbite-border);
+	border-radius: var(--lbite-radius-lg);
+	box-shadow: var(--lbite-shadow-xs);
+	padding: var(--lbite-space-6);
+}
+
+.lbite-settings-intro {
+	margin-top: 0;
+	margin-bottom: var(--lbite-space-5);
+	max-width: 640px;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * Live-Vorschau-Boxen (v3.2.0). Gemeinsamer Rahmen für alle
+ * Einstellungs-Vorschauen (Tips, Kanban-Spalten, Bon, Banner,
+ * Stempelkarte, Verfügbarkeits-Hinweis) - der Inhalt selbst bleibt
+ * pro Vorschau eigenständiges Markup, siehe jeweiliges Template.
+ * ════════════════════════════════════════════════════════════════════ */
+
+.lbite-preview-box {
+	background: var(--lbite-surface-muted);
+	border: 1px dashed var(--lbite-border-strong);
+	border-radius: var(--lbite-radius-md);
+	padding: var(--lbite-space-4);
+	margin-bottom: var(--lbite-space-5);
+}
+
+.lbite-preview-box__label {
+	margin: 0 0 var(--lbite-space-3);
+	font-size: var(--lbite-text-xs);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--lbite-text-subtle);
+}
+
+.lbite-tip-preview__row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lbite-space-2);
+	margin-top: var(--lbite-space-2);
+}
+
+.lbite-tip-preview__btn {
+	display: inline-block;
+	padding: var(--lbite-space-2) var(--lbite-space-3);
+	border-radius: var(--lbite-radius-pill);
+	border: 1px solid var(--lbite-border-strong);
+	background: var(--lbite-surface);
+	font-size: var(--lbite-text-sm);
+	color: var(--lbite-text);
+}
+
+.lbite-kanban-preview__row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lbite-space-2);
+}
+
+.lbite-kanban-preview__chip {
+	padding: var(--lbite-space-1) var(--lbite-space-3);
+	border-radius: var(--lbite-radius-sm);
+	background: var(--lbite-surface);
+	border: 1px solid var(--lbite-border-strong);
+	font-size: var(--lbite-text-sm);
+	color: var(--lbite-text);
+}
+
+.lbite-kanban-preview__chip--fixed {
+	background: var(--lbite-color-primary-soft);
+	color: var(--lbite-color-primary);
+	border-color: transparent;
+	font-weight: var(--lbite-weight-semibold);
+}
+
+.lbite-promo-banner-preview {
+	background: var(--lbite-color-primary);
+	color: var(--lbite-text-on-primary);
+	padding: var(--lbite-space-3) var(--lbite-space-4);
+	border-radius: var(--lbite-radius-sm);
+	font-size: var(--lbite-text-sm);
+	text-align: center;
+	transition: opacity var(--lbite-duration-fast) var(--lbite-ease-crisp);
+}
+
+.lbite-stampcard-preview__dots {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lbite-space-2);
+	margin-bottom: var(--lbite-space-2);
+}
+
+.lbite-stampcard-preview__dot {
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	border: 2px solid var(--lbite-border-strong);
+	background: var(--lbite-surface);
+}
+
+.lbite-stampcard-preview__dot.is-filled {
+	background: var(--lbite-color-accent, var(--lbite-success));
+	border-color: transparent;
+}
+
+.lbite-stampcard-preview__note {
+	margin: 0;
+	font-size: var(--lbite-text-sm);
+	color: var(--lbite-text-muted);
+}
+
+.lbite-receipt-preview__cols {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lbite-space-5);
+}
+
+.lbite-receipt-preview__col {
+	min-width: 140px;
+	font-size: var(--lbite-text-sm);
+}
+
+.lbite-receipt-preview__col ul {
+	margin: var(--lbite-space-2) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lbite-receipt-preview__col li {
+	padding: 2px 0;
+	color: var(--lbite-text-muted);
+	border-bottom: 1px dotted var(--lbite-border);
+}
+
+.lbite-hint-style-preview__example {
+	display: flex;
+	align-items: center;
+	gap: var(--lbite-space-2);
+	font-size: var(--lbite-text-sm);
+}
+
+.lbite-hint-style-preview__example[hidden] {
+	display: none;
+}
+
+.lbite-hint-style-preview__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: var(--lbite-info-soft);
+	color: var(--lbite-info);
+	font-style: normal;
+}
+
+.lbite-hint-style-preview__caption {
+	color: var(--lbite-text-muted);
+}
+
+/* ════════════════════════════════════════════════════════════════════
  * Leerzustände
  * ════════════════════════════════════════════════════════════════════ */
 

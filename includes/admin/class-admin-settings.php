@@ -37,9 +37,12 @@ class LBite_Admin_Settings {
 	 * Hooks initialisieren
 	 */
 	private function init_hooks() {
-		// Einstellungen speichern
+		// Einstellungen speichern - je eigener Nonce, damit das Absenden einer
+		// der drei Unterseiten die beiden anderen nicht stillschweigend zurücksetzt.
 		$this->loader->add_action( 'admin_init', $this, 'register_settings' );
-		$this->loader->add_action( 'admin_init', $this, 'save_admin_settings' );
+		$this->loader->add_action( 'admin_init', $this, 'save_role_access' );
+		$this->loader->add_action( 'admin_init', $this, 'save_role_names' );
+		$this->loader->add_action( 'admin_init', $this, 'save_menu_visibility' );
 		if ( lbite_freemius()->is__premium_only() ) {
 			$this->loader->add_action( 'admin_init', $this, 'save_manager_assignments__premium_only' );
 		}
@@ -117,14 +120,17 @@ class LBite_Admin_Settings {
 	}
 
 	/**
-	 * Admin-Einstellungen speichern
+	 * Zugriff für Standard-Rollen speichern (Capabilities zuweisen/entziehen).
+	 *
+	 * Eigene Nonce (Seite "Standard Role Access"), rührt keine der beiden
+	 * anderen Rollen-Unterseiten an.
 	 */
-	public function save_admin_settings() {
-		if ( ! isset( $_POST['lbite_admin_settings_nonce'] ) ) {
+	public function save_role_access() {
+		if ( ! isset( $_POST['lbite_role_access_nonce'] ) ) {
 			return;
 		}
 
-		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lbite_admin_settings_nonce'] ) ), 'lbite_save_admin_settings' ) ) {
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lbite_role_access_nonce'] ) ), 'lbite_save_role_access' ) ) {
 			return;
 		}
 
@@ -132,34 +138,7 @@ class LBite_Admin_Settings {
 			return;
 		}
 
-		// Plugin-Name speichern.
-		if ( isset( $_POST['lbite_custom_plugin_name'] ) ) {
-			$custom_name = sanitize_text_field( wp_unslash( $_POST['lbite_custom_plugin_name'] ) );
-			update_option( 'lbite_custom_plugin_name', $custom_name );
-		}
-
-		// Rollennamen speichern.
-		if ( isset( $_POST['lbite_custom_role_names'] ) && is_array( $_POST['lbite_custom_role_names'] ) ) {
-			$custom_role_names = array();
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in loop below.
-			foreach ( wp_unslash( $_POST['lbite_custom_role_names'] ) as $role_key => $role_name ) {
-				$custom_role_names[ sanitize_key( $role_key ) ] = sanitize_text_field( $role_name );
-			}
-			update_option( 'lbite_custom_role_names', $custom_role_names );
-		} else {
-			update_option( 'lbite_custom_role_names', array() );
-		}
-
-		// Deaktivierte Rollen speichern.
-		if ( isset( $_POST['lbite_disabled_roles'] ) && is_array( $_POST['lbite_disabled_roles'] ) ) {
-			$disabled_roles = array_map( 'sanitize_text_field', wp_unslash( $_POST['lbite_disabled_roles'] ) );
-			update_option( 'lbite_disabled_roles', $disabled_roles );
-		} else {
-			update_option( 'lbite_disabled_roles', array() );
-		}
-
-		// Zugriff für Standard-Rollen speichern (Capabilities zuweisen/entziehen).
-		$standard_roles        = self::get_standard_roles();
+		$standard_roles         = self::get_standard_roles();
 		$allowed_standard_roles = isset( $_POST['lbite_allowed_standard_roles'] ) && is_array( $_POST['lbite_allowed_standard_roles'] )
 			? array_map( 'sanitize_key', wp_unslash( $_POST['lbite_allowed_standard_roles'] ) )
 			: array();
@@ -185,7 +164,78 @@ class LBite_Admin_Settings {
 
 		update_option( 'lbite_allowed_standard_roles', $allowed_standard_roles );
 
-		// Menü-Sichtbarkeit speichern.
+		add_settings_error(
+			'lbite_role_access',
+			'lbite_role_access_saved',
+			__( 'Settings saved successfully.', 'libre-bite' ),
+			'success'
+		);
+	}
+
+	/**
+	 * Rollennamen und deaktivierte Rollen speichern.
+	 *
+	 * Eigene Nonce (Seite "Manage User Roles"). Beide Felder werden bei
+	 * fehlendem POST-Wert bewusst auf leer zurückgesetzt (Checkbox-Semantik) -
+	 * sicher, weil beide Felder immer gemeinsam auf derselben Seite stehen.
+	 */
+	public function save_role_names() {
+		if ( ! isset( $_POST['lbite_role_names_nonce'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lbite_role_names_nonce'] ) ), 'lbite_save_role_names' ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		if ( isset( $_POST['lbite_custom_role_names'] ) && is_array( $_POST['lbite_custom_role_names'] ) ) {
+			$custom_role_names = array();
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in loop below.
+			foreach ( wp_unslash( $_POST['lbite_custom_role_names'] ) as $role_key => $role_name ) {
+				$custom_role_names[ sanitize_key( $role_key ) ] = sanitize_text_field( $role_name );
+			}
+			update_option( 'lbite_custom_role_names', $custom_role_names );
+		} else {
+			update_option( 'lbite_custom_role_names', array() );
+		}
+
+		if ( isset( $_POST['lbite_disabled_roles'] ) && is_array( $_POST['lbite_disabled_roles'] ) ) {
+			$disabled_roles = array_map( 'sanitize_text_field', wp_unslash( $_POST['lbite_disabled_roles'] ) );
+			update_option( 'lbite_disabled_roles', $disabled_roles );
+		} else {
+			update_option( 'lbite_disabled_roles', array() );
+		}
+
+		add_settings_error(
+			'lbite_role_names',
+			'lbite_role_names_saved',
+			__( 'Settings saved successfully.', 'libre-bite' ),
+			'success'
+		);
+	}
+
+	/**
+	 * Menü-Sichtbarkeit pro Rolle speichern.
+	 *
+	 * Eigene Nonce (Seite "Menu Visibility by Role").
+	 */
+	public function save_menu_visibility() {
+		if ( ! isset( $_POST['lbite_menu_visibility_nonce'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lbite_menu_visibility_nonce'] ) ), 'lbite_save_menu_visibility' ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
 		if ( isset( $_POST['lbite_menu_visibility'] ) && is_array( $_POST['lbite_menu_visibility'] ) ) {
 			$menu_visibility = array();
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in loop below.
@@ -199,10 +249,9 @@ class LBite_Admin_Settings {
 			update_option( 'lbite_menu_visibility', array() );
 		}
 
-		// Erfolgs-Notice.
 		add_settings_error(
-			'lbite_admin_settings',
-			'lbite_admin_settings_saved',
+			'lbite_menu_visibility',
+			'lbite_menu_visibility_saved',
 			__( 'Settings saved successfully.', 'libre-bite' ),
 			'success'
 		);
@@ -241,7 +290,7 @@ class LBite_Admin_Settings {
 			add_query_arg(
 				array(
 					'page'    => 'lbite-settings',
-					'tab'     => 'roles',
+					'tab'     => 'roles_managers',
 					'updated' => '1',
 				),
 				admin_url( 'admin.php' )
