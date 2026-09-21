@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.2.0
+Stable tag: 3.2.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -276,6 +276,9 @@ Yes. English is the source language, and the plugin ships with complete translat
 * Added: the Tips and Stamp Card steps of the setup assistant show the same live preview as the corresponding Settings page.
 * Added: a "Run setup assistant" link at the top of Settings, so the assistant can be revisited any time instead of only right after activation.
 * Fixed: the setup assistant's links to Order Bumps, Promotions and the Stamp Card pointed at the wrong settings tab (a leftover from before these moved to their own Marketing tab in 3.1.0).
+
+= 3.2.1 =
+
 * Added: Order Bumps and Promotions now use a live product search instead of entering raw product IDs by hand; Promotions gained a category picker too.
 * Added: the announcement bar supports more than one time window per day (for example 8:00–12:00 and 14:00–18:00) and an option to open its link in a new tab.
 * Added: the Stamp Card reward can now be a fixed amount instead of only a percentage, a percentage reward can be capped at a maximum amount, and the reward can be limited to specific product categories and/or to a single item of the next order.
