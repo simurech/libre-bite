@@ -8691,3 +8691,163 @@ msgstr ""
 #: templates/admin/settings/marketing-stampcard.php:1
 msgid "stamps →"
 msgstr ""
+
+#: templates/admin/settings/marketing-banner.php:122
+msgid "+ Add time window"
+msgstr ""
+
+#: templates/admin/settings/marketing-bumps.php:16
+msgid "A bump has no discount of its own: a checked box adds the product at its normal price, and the text below is only the label shown on the checkbox."
+msgstr ""
+
+#: templates/admin/settings/marketing-banner.php:124
+msgid "A window may run past midnight, for example 22:00 to 02:00. Add more than one window for a break, e.g. 8:00–12:00 and 14:00–18:00."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php:39
+msgid "Add the menu to any page with the shortcode %s."
+msgstr ""
+
+#: templates/admin/settings/marketing-promotions.php:155
+msgid "Applies to categories"
+msgstr ""
+
+#: templates/admin/settings/marketing-promotions.php:138
+msgid "Applies to products"
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:129
+msgid "Apply the reward to only 1 item in the next order, not the whole order"
+msgstr ""
+
+#: templates/admin/settings/roles-managers.php:24
+msgid "Assign one or more locations to each manager or shop manager — they can only see and manage orders for checked locations, no checks means unrestricted. Administrators and staff are listed for a full overview but managed differently (see below)."
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:100
+msgid "Caps a percentage reward, e.g. 100% off but never more than 19.00. 0 means no cap."
+msgstr ""
+
+#: templates/admin/statistics.php:679
+msgid "Discount total"
+msgstr ""
+
+#: templates/admin/settings/roles-managers.php:102
+msgid "Edit"
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:86
+msgid "Fixed amount off"
+msgstr ""
+
+#: templates/admin/settings/roles-managers.php:95
+msgid "Fixed to %s (set on the user profile page)"
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:124
+msgid "Item limit"
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:120
+msgid "Leave empty to allow the reward on any product."
+msgstr ""
+
+#: templates/admin/settings/marketing-promotions.php:151
+msgid "Leave empty to apply to everything, or narrow it down further with categories below."
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:104
+msgid "Limit to categories"
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:96
+msgid "Maximum amount"
+msgstr ""
+
+#: includes/admin/class-admin.php:2257
+msgid "Need help? Reach out using the contact details below."
+msgstr ""
+
+#: templates/admin/settings/roles-managers.php:100
+msgid "No fixed location — can work at every location (set on the user profile page)"
+msgstr ""
+
+#: templates/admin/settings/marketing-promotions.php:158
+msgid "No product categories exist yet."
+msgstr ""
+
+#: templates/admin/settings/roles-managers.php:53
+msgid "No users with a Libre Bite role found."
+msgstr ""
+
+#: includes/admin/class-admin.php:2261
+msgid "Open Support Page"
+msgstr ""
+
+#: templates/admin/settings/marketing-banner.php:76
+msgid "Open link in a new tab"
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:81
+msgid "Percentage off"
+msgstr ""
+
+#: templates/admin/statistics.php:677
+msgid "Rule"
+msgstr ""
+
+#: templates/admin/settings/notifications.php:136
+msgid "SMS"
+msgstr ""
+
+#: templates/admin/settings/marketing-bumps.php:68
+msgid "Search products…"
+msgstr ""
+
+#: templates/admin/settings/locations.php:60
+msgid "Select the page where the shortcode %s is included, or create a new page."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php:60
+msgid "Select the page where the shortcode is included, or create a new page. Turning the toggle above on has no visible effect until the shortcode is placed somewhere."
+msgstr ""
+
+#: templates/admin/settings/notifications.php:122
+msgid "Send before pickup"
+msgstr ""
+
+#: templates/admin/settings/notifications.php:110
+msgid "Send reminders"
+msgstr ""
+
+#: templates/admin/settings/notifications.php:116
+msgid "Send the reminder email"
+msgstr ""
+
+#: templates/admin/settings/marketing-stampcard.php:61
+msgid "Show the card anywhere with the shortcode %s. It also appears in the customer account."
+msgstr ""
+
+#: templates/admin/settings/notifications.php:40
+msgid "Sound"
+msgstr ""
+
+#: templates/admin/settings/roles-managers.php:121
+msgid "Staff location is a single fixed location for POS use and is edited on the user profile page, not here — different from the multi-location access below."
+msgstr ""
+
+#: templates/admin/settings/notifications.php:118
+msgid "Switch off to keep the feature configured but pause the emails, e.g. during a busy period."
+msgstr ""
+
+#: templates/admin/settings/roles-managers.php:86
+msgid "Unrestricted access"
+msgstr ""
+
+#: templates/admin/settings/roles-managers.php:66
+msgid "User"
+msgstr ""
+
+#: templates/admin/statistics.php:678
+msgid "Uses"
+msgstr ""
