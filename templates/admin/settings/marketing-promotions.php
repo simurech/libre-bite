@@ -3,7 +3,8 @@
  * Einstellungen: Aktionen (Promotions)
  *
  * Ausgelagert aus promotions.php (weitere Aufteilung nach v3.2.0). Produkte
- * und Kategorien werden als kommagetrennte IDs eingegeben — bewusst schlicht.
+ * werden über den gemeinsamen Produkt-Picker gesucht, Kategorien über eine
+ * Checkbox-Liste — beide liefern serverseitig weiterhin eine ID-Liste.
  *
  * @package LibreBite
  */
@@ -18,6 +19,15 @@ if ( ! class_exists( 'LBite_Promotions' ) ) {
 
 $lbite_promo_rules = LBite_Promotions::get_rules();
 $lbite_promo_types = LBite_Promotions::get_types();
+$lbite_promo_cats  = get_terms(
+	array(
+		'taxonomy'   => 'product_cat',
+		'hide_empty' => false,
+	)
+);
+if ( is_wp_error( $lbite_promo_cats ) ) {
+	$lbite_promo_cats = array();
+}
 $lbite_promo_days  = array(
 	'monday'    => __( 'Mon', 'libre-bite' ),
 	'tuesday'   => __( 'Tue', 'libre-bite' ),
@@ -125,16 +135,40 @@ $lbite_promo_days  = array(
 					</td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Applies to', 'libre-bite' ); ?></th>
+					<th><?php esc_html_e( 'Applies to products', 'libre-bite' ); ?></th>
 					<td>
-						<input type="text" name="<?php echo esc_attr( $lbite_name ); ?>[product_ids]" class="regular-text"
-							value="<?php echo esc_attr( implode( ',', isset( $lbite_rule['product_ids'] ) ? $lbite_rule['product_ids'] : array() ) ); ?>"
-							placeholder="<?php esc_attr_e( 'Product IDs, comma separated', 'libre-bite' ); ?>"
-							<?php disabled( ! $lbite_premium_allowed ); ?>><br>
-						<input type="text" name="<?php echo esc_attr( $lbite_name ); ?>[category_ids]" class="regular-text" style="margin-top:6px;"
-							value="<?php echo esc_attr( implode( ',', isset( $lbite_rule['category_ids'] ) ? $lbite_rule['category_ids'] : array() ) ); ?>"
-							placeholder="<?php esc_attr_e( 'Category IDs, comma separated', 'libre-bite' ); ?>"
-							<?php disabled( ! $lbite_premium_allowed ); ?>>
+						<span class="lbite-product-picker" data-lbite-product-picker data-mode="multi">
+							<input type="hidden" class="lbite-product-picker__value"
+								name="<?php echo esc_attr( $lbite_name ); ?>[product_ids]"
+								value="<?php echo esc_attr( implode( ',', isset( $lbite_rule['product_ids'] ) ? $lbite_rule['product_ids'] : array() ) ); ?>">
+							<span class="lbite-product-picker__selected"></span>
+							<input type="text" class="regular-text lbite-product-picker__search"
+								placeholder="<?php esc_attr_e( 'Search products…', 'libre-bite' ); ?>"
+								autocomplete="off"
+								<?php disabled( ! $lbite_premium_allowed ); ?>>
+							<ul class="lbite-product-picker__suggestions" hidden></ul>
+						</span>
+						<p class="description"><?php esc_html_e( 'Leave empty to apply to everything, or narrow it down further with categories below.', 'libre-bite' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th><?php esc_html_e( 'Applies to categories', 'libre-bite' ); ?></th>
+					<td>
+						<?php if ( empty( $lbite_promo_cats ) ) : ?>
+							<p class="description"><?php esc_html_e( 'No product categories exist yet.', 'libre-bite' ); ?></p>
+						<?php else : ?>
+							<?php $lbite_rule_cats = isset( $lbite_rule['category_ids'] ) ? array_map( 'strval', $lbite_rule['category_ids'] ) : array(); ?>
+							<?php foreach ( $lbite_promo_cats as $lbite_cat ) : ?>
+								<label style="display:inline-block; margin:0 12px 4px 0;">
+									<input type="checkbox"
+										name="<?php echo esc_attr( $lbite_name ); ?>[category_ids][]"
+										value="<?php echo esc_attr( $lbite_cat->term_id ); ?>"
+										<?php checked( in_array( (string) $lbite_cat->term_id, $lbite_rule_cats, true ) ); ?>
+										<?php disabled( ! $lbite_premium_allowed ); ?>>
+									<?php echo esc_html( $lbite_cat->name ); ?>
+								</label>
+							<?php endforeach; ?>
+						<?php endif; ?>
 						<p class="description"><?php esc_html_e( 'Leave both empty to apply to everything.', 'libre-bite' ); ?></p>
 					</td>
 				</tr>

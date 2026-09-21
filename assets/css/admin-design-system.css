@@ -898,6 +898,69 @@ body.lbite-screen-doc .lbite-app {
 	display: none;
 }
 
+.lbite-product-picker {
+	position: relative;
+	display: inline-block;
+	min-width: 280px;
+	vertical-align: top;
+}
+
+.lbite-product-picker__selected {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lbite-space-2);
+	margin-bottom: var(--lbite-space-2);
+}
+
+.lbite-product-picker__chip {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lbite-space-1);
+	padding: var(--lbite-space-1) var(--lbite-space-3);
+	border-radius: var(--lbite-radius-pill);
+	background: var(--lbite-color-primary-soft);
+	color: var(--lbite-color-primary);
+	font-size: var(--lbite-text-sm);
+}
+
+.lbite-product-picker__remove {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: inherit;
+	font-size: var(--lbite-text-md);
+	line-height: 1;
+	padding: 0;
+}
+
+.lbite-product-picker__suggestions {
+	position: absolute;
+	z-index: 10;
+	top: 100%;
+	left: 0;
+	right: 0;
+	margin: 2px 0 0;
+	padding: 0;
+	list-style: none;
+	background: var(--lbite-surface);
+	border: 1px solid var(--lbite-border-strong);
+	border-radius: var(--lbite-radius-md);
+	box-shadow: var(--lbite-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
+	max-height: 220px;
+	overflow-y: auto;
+}
+
+.lbite-product-picker__suggestions li {
+	padding: var(--lbite-space-2) var(--lbite-space-3);
+	font-size: var(--lbite-text-sm);
+	color: var(--lbite-text);
+	cursor: pointer;
+}
+
+.lbite-product-picker__suggestions li:hover {
+	background: var(--lbite-surface-muted);
+}
+
 .lbite-hint-style-preview__icon {
 	display: inline-flex;
 	align-items: center;

@@ -221,6 +221,7 @@ $lbite_payment_totals = array(); // Pro Zahlungsart.
 $lbite_product_totals = array(); // Global: Produkte [name => ['qty', 'revenue']].
 $lbite_addon_totals   = array(); // Global: Add-ons [name => ['qty', 'revenue']].
 $lbite_addon_combos   = array(); // Add-on → Produkt-Kombination [addon => [product => count]].
+$lbite_promotion_totals = array(); // Global: Aktionen [Regel-Label => ['uses', 'discount']].
 $lbite_daily_totals   = array(); // Tagesverlauf [Y-m-d => ['count', 'revenue']].
 
 foreach ( $lbite_stat_orders as $lbite_order ) {
@@ -275,12 +276,38 @@ foreach ( $lbite_stat_orders as $lbite_order ) {
 				$lbite_addon_combos[ $lbite_an ][ $lbite_pname ]++;
 			}
 		}
+
+		// Produkt-Rabatt aus einer Aktion (Positionspreis direkt reduziert,
+		// keine eigene Gebühr) – Meta gesetzt in LBite_Promotions.
+		$lbite_promo_label = $lbite_item->get_meta( '_lbite_promotion_label' );
+		$lbite_promo_disc  = (float) $lbite_item->get_meta( '_lbite_promotion_discount' );
+		if ( $lbite_promo_label && $lbite_promo_disc > 0 ) {
+			if ( ! isset( $lbite_promotion_totals[ $lbite_promo_label ] ) ) {
+				$lbite_promotion_totals[ $lbite_promo_label ] = array( 'uses' => 0, 'discount' => 0.0 );
+			}
+			$lbite_promotion_totals[ $lbite_promo_label ]['uses']++;
+			$lbite_promotion_totals[ $lbite_promo_label ]['discount'] += $lbite_promo_disc;
+		}
 	}
 
 	// Add-on-Gebühren auswerten (WC_Order_Item_Fee, ohne Trinkgeld/Rundung).
 	$lbite_tip_amount = (float) $lbite_order->get_meta( '_lbite_tip_amount' );
 	foreach ( $lbite_order->get_fees() as $lbite_fee ) {
 		$lbite_fee_total = (float) $lbite_fee->get_total();
+		$lbite_fn        = $lbite_fee->get_name();
+
+		// Aktions-Gebühren ("Buy X pay for fewer" / Warenkorb-Rabatt) separat
+		// zählen statt sie unter Add-ons zu verstecken.
+		if ( 0 === strpos( $lbite_fn, 'Promotion: ' ) ) {
+			$lbite_promo_label = substr( $lbite_fn, strlen( 'Promotion: ' ) );
+			if ( ! isset( $lbite_promotion_totals[ $lbite_promo_label ] ) ) {
+				$lbite_promotion_totals[ $lbite_promo_label ] = array( 'uses' => 0, 'discount' => 0.0 );
+			}
+			$lbite_promotion_totals[ $lbite_promo_label ]['uses']++;
+			$lbite_promotion_totals[ $lbite_promo_label ]['discount'] += abs( $lbite_fee_total );
+			continue;
+		}
+
 		// Trinkgeld und Rundungsbeträge ausblenden.
 		if ( $lbite_tip_amount > 0 && abs( $lbite_fee_total - $lbite_tip_amount ) < 0.01 ) {
 			continue;
@@ -288,7 +315,6 @@ foreach ( $lbite_stat_orders as $lbite_order ) {
 		if ( abs( $lbite_fee_total ) <= 0.05 ) {
 			continue;
 		}
-		$lbite_fn = $lbite_fee->get_name();
 		if ( ! isset( $lbite_addon_totals[ $lbite_fn ] ) ) {
 			$lbite_addon_totals[ $lbite_fn ] = array( 'qty' => 0, 'revenue' => 0.0 );
 		}
@@ -358,6 +384,9 @@ $lbite_top_by_revenue = array_slice( $lbite_top_by_revenue, 0, 10, true );
 
 // Add-ons sortieren.
 uasort( $lbite_addon_totals, fn( $a, $b ) => $b['qty'] <=> $a['qty'] );
+
+// Aktionen sortieren.
+uasort( $lbite_promotion_totals, fn( $a, $b ) => $b['discount'] <=> $a['discount'] );
 
 // CSV-Export: WordPress hat zu diesem Zeitpunkt bereits HTML ausgegeben (Admin-Header).
 // ob_end_clean() leert alle Puffer, damit nur sauberes CSV gesendet wird.
@@ -637,6 +666,29 @@ $lbite_export_url = wp_nonce_url(
 			</table>
 		</div>
 	</div>
+	<?php endif; ?>
+
+	<!-- Promotions -->
+	<?php if ( ! empty( $lbite_promotion_totals ) ) : ?>
+	<h2><?php esc_html_e( 'Promotions', 'libre-bite' ); ?></h2>
+	<table class="widefat" style="max-width: 700px; margin-bottom: 32px;">
+		<thead>
+			<tr>
+				<th><?php esc_html_e( 'Rule', 'libre-bite' ); ?></th>
+				<th style="text-align:right;"><?php esc_html_e( 'Uses', 'libre-bite' ); ?></th>
+				<th style="text-align:right;"><?php esc_html_e( 'Discount total', 'libre-bite' ); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ( $lbite_promotion_totals as $lbite_pl => $lbite_pd ) : ?>
+			<tr>
+				<td><strong><?php echo esc_html( $lbite_pl ); ?></strong></td>
+				<td style="text-align:right;"><?php echo esc_html( $lbite_pd['uses'] ); ?></td>
+				<td style="text-align:right;"><?php echo wp_kses_post( wc_price( $lbite_pd['discount'] ) ); ?></td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
 	<?php endif; ?>
 
 	<!-- Add-ons -->

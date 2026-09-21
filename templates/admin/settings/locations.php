@@ -54,7 +54,13 @@ $lbite_all_pages         = get_pages( array( 'post_status' => 'publish' ) );
 					<?php endforeach; ?>
 				</select>
 				<p class="description">
-					<?php esc_html_e( 'Select the page where the shortcode [lbite_location_selector] is included, or create a new page.', 'libre-bite' ); ?>
+					<?php
+					printf(
+						/* translators: %s: shortcode */
+						esc_html__( 'Select the page where the shortcode %s is included, or create a new page.', 'libre-bite' ),
+						'<code>[lbite_location_selector]</code>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed markup, not user input.
+					);
+					?>
 					<?php if ( $lbite_location_page_id ) : ?>
 						<br><a href="<?php echo esc_url( get_edit_post_link( $lbite_location_page_id ) ); ?>" target="_blank"><?php esc_html_e( 'Edit Page', 'libre-bite' ); ?></a>
 						|

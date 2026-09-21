@@ -152,4 +152,133 @@ jQuery(document).ready(function($) {
 
 		updateKanbanButtonsState();
 	}
+
+	// Ankündigungsleiste: weitere Zeitfenster hinzufügen/entfernen (z. B. 8–12 + 14–18 Uhr).
+	$('#lbite-banner-add-window').on('click', function() {
+		var $container = $('#lbite-banner-windows');
+		var nextIndex   = parseInt($container.data('next-index'), 10);
+		var $row = $(
+			'<div class="lbite-banner-window-row" style="margin-bottom:6px;" data-index="' + nextIndex + '">' +
+				'<label>' + (lbiteAdminSettings.strings.scheduleFrom || 'From') + ' <input type="time" name="lbite_promo_banner[schedule][windows][' + nextIndex + '][from]"></label>' +
+				'<label style="margin-left:8px;">' + (lbiteAdminSettings.strings.scheduleTo || 'To') + ' <input type="time" name="lbite_promo_banner[schedule][windows][' + nextIndex + '][to]"></label>' +
+				'<button type="button" class="button lbite-banner-remove-window">&times;</button>' +
+			'</div>'
+		);
+		$container.append($row).data('next-index', nextIndex + 1);
+	});
+
+	$(document).on('click', '.lbite-banner-remove-window', function() {
+		var $container = $('#lbite-banner-windows');
+		if ($container.find('.lbite-banner-window-row').length > 1) {
+			$(this).closest('.lbite-banner-window-row').remove();
+		}
+	});
+
+	// Produkt-Picker (Order Bumps, Promotions): sucht per AJAX statt roher
+	// Produkt-ID-Eingabe. `data-mode="multi"` erlaubt mehrere Produkte.
+	$('[data-lbite-product-picker]').each(function() {
+		var $picker      = $(this);
+		var mode         = $picker.data('mode') || 'single';
+		var $hidden      = $picker.find('.lbite-product-picker__value');
+		var $search      = $picker.find('.lbite-product-picker__search');
+		var $suggestions = $picker.find('.lbite-product-picker__suggestions');
+		var $selected    = $picker.find('.lbite-product-picker__selected');
+		var searchTimer;
+
+		function currentIds() {
+			var raw = $hidden.val();
+			return raw ? String(raw).split(',').filter(function(v) { return v !== ''; }) : [];
+		}
+
+		function renderSelected(products) {
+			$selected.empty();
+			products.forEach(function(p) {
+				var $chip = $('<span class="lbite-product-picker__chip"></span>').text(p.name + ' ');
+				var $remove = $('<button type="button" class="lbite-product-picker__remove" aria-label="Remove">&times;</button>');
+				$remove.on('click', function() {
+					var ids = currentIds().filter(function(id) { return id !== String(p.id); });
+					$hidden.val(ids.join(','));
+					$chip.remove();
+					if (mode === 'single') {
+						$search.prop('hidden', false).trigger('focus');
+					}
+				});
+				$chip.append($remove);
+				$selected.append($chip);
+			});
+		}
+
+		function fetchByIds(ids) {
+			if (!ids.length) {
+				return;
+			}
+			$.post(ajaxurl, {
+				action: 'lbite_admin_search_products',
+				nonce: lbiteAdminSettings.nonce,
+				ids: ids.join(',')
+			}).done(function(response) {
+				if (response.success) {
+					renderSelected(response.data.products);
+					if (mode === 'single' && response.data.products.length) {
+						$search.prop('hidden', true);
+					}
+				}
+			});
+		}
+
+		function addProduct(product) {
+			var ids = currentIds();
+			if (mode === 'single') {
+				ids = [String(product.id)];
+			} else if (ids.indexOf(String(product.id)) === -1) {
+				ids.push(String(product.id));
+			}
+			$hidden.val(ids.join(','));
+			$search.val('');
+			$suggestions.empty().hide();
+			fetchByIds(ids);
+		}
+
+		$search.on('input', function() {
+			clearTimeout(searchTimer);
+			var term = $search.val().trim();
+			if (term.length < 2) {
+				$suggestions.empty().hide();
+				return;
+			}
+			searchTimer = setTimeout(function() {
+				$.post(ajaxurl, {
+					action: 'lbite_admin_search_products',
+					nonce: lbiteAdminSettings.nonce,
+					s: term
+				}).done(function(response) {
+					$suggestions.empty();
+					if (response.success && response.data.products.length) {
+						response.data.products.forEach(function(p) {
+							var label = p.sku ? p.name + ' (' + p.sku + ')' : p.name;
+							var $item = $('<li></li>').text(label);
+							$item.on('click', function() {
+								addProduct(p);
+							});
+							$suggestions.append($item);
+						});
+						$suggestions.show();
+					} else {
+						$suggestions.hide();
+					}
+				});
+			}, 300);
+		});
+
+		$(document).on('click', function(e) {
+			if (!$(e.target).closest($picker).length) {
+				$suggestions.hide();
+			}
+		});
+
+		var initialIds = currentIds();
+		if (initialIds.length) {
+			fetchByIds(initialIds);
+		}
+	});
 });

@@ -32,6 +32,16 @@ $lbite_all_pages       = get_pages( array( 'post_status' => 'publish' ) );
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 	?>
 
+	<p class="description">
+		<?php
+		printf(
+			/* translators: %s: shortcode */
+			esc_html__( 'Add the menu to any page with the shortcode %s.', 'libre-bite' ),
+			'<code>[lbite_menu]</code>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed markup, not user input.
+		);
+		?>
+	</p>
+
 	<?php if ( lbite_feature_enabled( 'enable_menu_view' ) ) : ?>
 	<table class="form-table">
 		<tr>
@@ -47,7 +57,7 @@ $lbite_all_pages       = get_pages( array( 'post_status' => 'publish' ) );
 					<?php endforeach; ?>
 				</select>
 				<p class="description">
-					<?php esc_html_e( 'Select the page where the shortcode [lbite_menu] is included, or create a new page. Turning the toggle above on has no visible effect until this shortcode is placed somewhere.', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Select the page where the shortcode is included, or create a new page. Turning the toggle above on has no visible effect until the shortcode is placed somewhere.', 'libre-bite' ); ?>
 					<?php if ( $lbite_menu_page_id ) : ?>
 						<br><a href="<?php echo esc_url( get_edit_post_link( $lbite_menu_page_id ) ); ?>" target="_blank"><?php esc_html_e( 'Edit Page', 'libre-bite' ); ?></a>
 						|

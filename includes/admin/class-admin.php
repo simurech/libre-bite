@@ -100,6 +100,7 @@ class LBite_Admin {
 		$this->loader->add_action( 'wp_ajax_lbite_get_location_tables', $this, 'ajax_get_location_tables' );
 		$this->loader->add_action( 'wp_ajax_lbite_dismiss_welcome_notice', $this, 'ajax_dismiss_welcome_notice' );
 		$this->loader->add_action( 'wp_ajax_lbite_save_pos_product_order', $this, 'ajax_save_pos_product_order' );
+		$this->loader->add_action( 'wp_ajax_lbite_admin_search_products', $this, 'ajax_admin_search_products' );
 
 		// Offene Tabs (F_TAB).
 		$this->loader->add_action( 'wp_ajax_lbite_pos_get_open_tabs', $this, 'ajax_pos_get_open_tabs' );
@@ -918,6 +919,8 @@ class LBite_Admin {
 					'nonce'   => wp_create_nonce( 'lbite_admin_nonce' ),
 					'strings' => array(
 						'countsAsCompleted' => __( 'Counts as completed', 'libre-bite' ),
+						'scheduleFrom'      => __( 'From', 'libre-bite' ),
+						'scheduleTo'        => __( 'To', 'libre-bite' ),
 					),
 				)
 			);
@@ -2584,6 +2587,62 @@ class LBite_Admin {
 		);
 
 		wp_send_json_success( array( 'message' => __( 'Product order saved.', 'libre-bite' ) ) );
+	}
+
+	/**
+	 * AJAX: Produkte für den Picker in den Einstellungen suchen (Order Bumps, Promotions)
+	 *
+	 * Nimmt entweder `s` (Suchbegriff) oder `ids` (Komma-Liste, für die
+	 * Anzeige bereits gespeicherter Auswahl) entgegen.
+	 */
+	public function ajax_admin_search_products() {
+		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
+		}
+
+		$results = array();
+
+		if ( ! empty( $_POST['ids'] ) ) {
+			$ids = array_filter( array_map( 'absint', explode( ',', sanitize_text_field( wp_unslash( $_POST['ids'] ) ) ) ) );
+
+			foreach ( $ids as $id ) {
+				$product = wc_get_product( $id );
+				if ( $product ) {
+					$results[] = array(
+						'id'   => $product->get_id(),
+						'name' => $product->get_name(),
+						'sku'  => $product->get_sku(),
+					);
+				}
+			}
+		} else {
+			$search = isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : '';
+
+			if ( '' !== $search && class_exists( 'WC_Product_Query' ) ) {
+				$query = new WC_Product_Query(
+					array(
+						's'       => $search,
+						'limit'   => 20,
+						'status'  => 'publish',
+						'type'    => array_diff( array_keys( wc_get_product_types() ), array( 'variation' ) ),
+						'orderby' => 'title',
+						'order'   => 'ASC',
+					)
+				);
+
+				foreach ( $query->get_products() as $product ) {
+					$results[] = array(
+						'id'   => $product->get_id(),
+						'name' => $product->get_name(),
+						'sku'  => $product->get_sku(),
+					);
+				}
+			}
+		}
+
+		wp_send_json_success( array( 'products' => $results ) );
 	}
 
 	/**

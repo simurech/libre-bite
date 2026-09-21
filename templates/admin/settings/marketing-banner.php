@@ -70,12 +70,23 @@ $lbite_promo_days   = array(
 					value="<?php echo esc_attr( $lbite_promo_banner['link'] ); ?>"
 					<?php disabled( ! $lbite_premium_allowed ); ?>>
 				<p class="description"><?php esc_html_e( 'Optional. Leave empty for plain text.', 'libre-bite' ); ?></p>
+				<label>
+					<input type="checkbox" name="lbite_promo_banner[open_in_new_tab]" value="1"
+						<?php checked( ! empty( $lbite_promo_banner['open_in_new_tab'] ) ); ?> <?php disabled( ! $lbite_premium_allowed ); ?>>
+					<?php esc_html_e( 'Open link in a new tab', 'libre-bite' ); ?>
+				</label>
 			</td>
 		</tr>
 		<tr>
 			<th><?php esc_html_e( 'When', 'libre-bite' ); ?></th>
 			<td>
-				<?php $lbite_bs = is_array( $lbite_promo_banner['schedule'] ) ? $lbite_promo_banner['schedule'] : array(); ?>
+				<?php
+				$lbite_bs      = is_array( $lbite_promo_banner['schedule'] ) ? $lbite_promo_banner['schedule'] : array();
+				$lbite_windows = isset( $lbite_bs['windows'] ) && is_array( $lbite_bs['windows'] ) ? array_values( $lbite_bs['windows'] ) : array();
+				if ( empty( $lbite_windows ) ) {
+					$lbite_windows = array( array( 'from' => '', 'to' => '' ) );
+				}
+				?>
 				<label>
 					<input type="checkbox" name="lbite_promo_banner[schedule][enabled]" value="1"
 						<?php checked( ! empty( $lbite_bs['enabled'] ) ); ?> <?php disabled( ! $lbite_premium_allowed ); ?>>
@@ -90,12 +101,27 @@ $lbite_promo_days   = array(
 						</label>
 					<?php endforeach; ?>
 				</p>
-				<label><?php esc_html_e( 'From', 'libre-bite' ); ?>
-					<input type="time" name="lbite_promo_banner[schedule][from]" value="<?php echo esc_attr( isset( $lbite_bs['from'] ) ? $lbite_bs['from'] : '' ); ?>" <?php disabled( ! $lbite_premium_allowed ); ?>>
-				</label>
-				<label style="margin-left:8px;"><?php esc_html_e( 'To', 'libre-bite' ); ?>
-					<input type="time" name="lbite_promo_banner[schedule][to]" value="<?php echo esc_attr( isset( $lbite_bs['to'] ) ? $lbite_bs['to'] : '' ); ?>" <?php disabled( ! $lbite_premium_allowed ); ?>>
-				</label>
+				<div id="lbite-banner-windows" data-next-index="<?php echo (int) count( $lbite_windows ); ?>">
+					<?php foreach ( $lbite_windows as $lbite_wi => $lbite_window ) : ?>
+						<div class="lbite-banner-window-row" data-index="<?php echo (int) $lbite_wi; ?>" style="margin-bottom:6px;">
+							<label><?php esc_html_e( 'From', 'libre-bite' ); ?>
+								<input type="time" name="lbite_promo_banner[schedule][windows][<?php echo (int) $lbite_wi; ?>][from]"
+									value="<?php echo esc_attr( isset( $lbite_window['from'] ) ? $lbite_window['from'] : '' ); ?>"
+									<?php disabled( ! $lbite_premium_allowed ); ?>>
+							</label>
+							<label style="margin-left:8px;"><?php esc_html_e( 'To', 'libre-bite' ); ?>
+								<input type="time" name="lbite_promo_banner[schedule][windows][<?php echo (int) $lbite_wi; ?>][to]"
+									value="<?php echo esc_attr( isset( $lbite_window['to'] ) ? $lbite_window['to'] : '' ); ?>"
+									<?php disabled( ! $lbite_premium_allowed ); ?>>
+							</label>
+							<button type="button" class="button lbite-banner-remove-window" <?php disabled( ! $lbite_premium_allowed ); ?>>&times;</button>
+						</div>
+					<?php endforeach; ?>
+				</div>
+				<button type="button" class="button" id="lbite-banner-add-window" <?php disabled( ! $lbite_premium_allowed ); ?>>
+					<?php esc_html_e( '+ Add time window', 'libre-bite' ); ?>
+				</button>
+				<p class="description"><?php esc_html_e( 'A window may run past midnight, for example 22:00 to 02:00. Add more than one window for a break, e.g. 8:00–12:00 and 14:00–18:00.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 	</table>

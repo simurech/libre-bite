@@ -76,10 +76,14 @@ class LBite_Stampcard {
 	 */
 	public static function get_settings() {
 		return array(
-			'min_total'  => (float) get_option( 'lbite_stampcard_min_total', 0 ),
-			'target'     => max( 2, (int) get_option( 'lbite_stampcard_target', 10 ) ),
-			'discount'   => max( 1, (int) get_option( 'lbite_stampcard_discount', 50 ) ),
-			'valid_days' => max( 1, (int) get_option( 'lbite_stampcard_validity_days', 90 ) ),
+			'min_total'         => (float) get_option( 'lbite_stampcard_min_total', 0 ),
+			'target'            => max( 2, (int) get_option( 'lbite_stampcard_target', 10 ) ),
+			'discount'          => max( 1, (int) get_option( 'lbite_stampcard_discount', 50 ) ),
+			'valid_days'        => max( 1, (int) get_option( 'lbite_stampcard_validity_days', 90 ) ),
+			'discount_type'     => 'fixed' === get_option( 'lbite_stampcard_discount_type', 'percent' ) ? 'fixed' : 'percent',
+			'max_amount'        => max( 0, (float) get_option( 'lbite_stampcard_max_amount', 0 ) ),
+			'limit_categories'  => array_filter( array_map( 'absint', (array) get_option( 'lbite_stampcard_limit_categories', array() ) ) ),
+			'limit_to_one_item' => (bool) get_option( 'lbite_stampcard_limit_to_one_item', 0 ),
 		);
 	}
 
@@ -175,8 +179,28 @@ class LBite_Stampcard {
 		try {
 			$coupon = new WC_Coupon();
 			$coupon->set_code( $code );
-			$coupon->set_discount_type( 'percent' );
-			$coupon->set_amount( $settings['discount'] );
+
+			if ( 'fixed' === $settings['discount_type'] ) {
+				$coupon->set_discount_type( 'fixed_cart' );
+				$coupon->set_amount( $settings['discount'] );
+			} else {
+				$coupon->set_discount_type( 'percent' );
+				$coupon->set_amount( $settings['discount'] );
+				if ( $settings['max_amount'] > 0 ) {
+					$coupon->set_maximum_amount( $settings['max_amount'] );
+				}
+			}
+
+			// Beschränkung auf bestimmte Kategorien und/oder auf 1 Artikel
+			// der Bestellung – beides nativ von WooCommerce unterstützt,
+			// keine eigene Rabattlogik nötig.
+			if ( ! empty( $settings['limit_categories'] ) ) {
+				$coupon->set_product_categories( $settings['limit_categories'] );
+			}
+			if ( ! empty( $settings['limit_to_one_item'] ) ) {
+				$coupon->set_limit_usage_to_x_items( 1 );
+			}
+
 			$coupon->set_individual_use( true );
 			$coupon->set_usage_limit( 1 );
 

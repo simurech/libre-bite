@@ -42,6 +42,10 @@ $lbite_tab_groups = array(
 				'label' => __( 'Locations', 'libre-bite' ),
 				'icon'  => 'dashicons-store',
 			),
+			'holidays'              => array(
+				'label' => __( 'Holidays', 'libre-bite' ),
+				'icon'  => 'dashicons-calendar',
+			),
 			'products_options'      => array(
 				'label' => __( 'Product Options', 'libre-bite' ),
 				'icon'  => 'dashicons-carrot',
@@ -154,10 +158,6 @@ $lbite_tab_groups = array(
 			'branding' => array(
 				'label' => __( 'Branding', 'libre-bite' ),
 				'icon'  => 'dashicons-admin-customizer',
-			),
-			'holidays' => array(
-				'label' => __( 'Holidays', 'libre-bite' ),
-				'icon'  => 'dashicons-calendar',
 			),
 		),
 	),
@@ -476,6 +476,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			) );
 			update_option( 'lbite_notification_sound', isset( $_POST['lbite_notification_sound'] ) ? esc_url_raw( wp_unslash( $_POST['lbite_notification_sound'] ) ) : '' );
 			update_option( 'lbite_pickup_reminder_time', $lbite_not_values['lbite_pickup_reminder_time'] );
+			update_option( 'lbite_email_pickup_reminder', isset( $_POST['lbite_email_pickup_reminder'] ) );
 
 			// SMS-Zugangsdaten. Das Auth-Token wird verschlüsselt abgelegt und
 			// nur überschrieben, wenn tatsächlich ein neuer Wert eingegeben
@@ -557,12 +558,21 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			$lbite_features['enable_stampcard'] = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_stampcard'] );
 			update_option( 'lbite_features', $lbite_features );
 
+			$lbite_stamp_cats = array();
+			if ( isset( $_POST['lbite_stampcard_limit_categories'] ) && is_array( $_POST['lbite_stampcard_limit_categories'] ) ) {
+				$lbite_stamp_cats = array_filter( array_map( 'absint', wp_unslash( $_POST['lbite_stampcard_limit_categories'] ) ) );
+			}
+
 			$lbite_stamp_val = lbite_enforce_pro_options(
 				array(
-					'lbite_stampcard_target'        => isset( $_POST['lbite_stampcard_target'] ) ? max( 2, intval( wp_unslash( $_POST['lbite_stampcard_target'] ) ) ) : 10,
-					'lbite_stampcard_discount'      => isset( $_POST['lbite_stampcard_discount'] ) ? min( 100, max( 1, intval( wp_unslash( $_POST['lbite_stampcard_discount'] ) ) ) ) : 50,
-					'lbite_stampcard_min_total'     => isset( $_POST['lbite_stampcard_min_total'] ) ? max( 0, (float) wp_unslash( $_POST['lbite_stampcard_min_total'] ) ) : 0,
-					'lbite_stampcard_validity_days' => isset( $_POST['lbite_stampcard_validity_days'] ) ? max( 1, intval( wp_unslash( $_POST['lbite_stampcard_validity_days'] ) ) ) : 90,
+					'lbite_stampcard_target'           => isset( $_POST['lbite_stampcard_target'] ) ? max( 2, intval( wp_unslash( $_POST['lbite_stampcard_target'] ) ) ) : 10,
+					'lbite_stampcard_discount'         => isset( $_POST['lbite_stampcard_discount'] ) ? min( 100, max( 1, intval( wp_unslash( $_POST['lbite_stampcard_discount'] ) ) ) ) : 50,
+					'lbite_stampcard_min_total'        => isset( $_POST['lbite_stampcard_min_total'] ) ? max( 0, (float) wp_unslash( $_POST['lbite_stampcard_min_total'] ) ) : 0,
+					'lbite_stampcard_validity_days'    => isset( $_POST['lbite_stampcard_validity_days'] ) ? max( 1, intval( wp_unslash( $_POST['lbite_stampcard_validity_days'] ) ) ) : 90,
+					'lbite_stampcard_discount_type'    => ( isset( $_POST['lbite_stampcard_discount_type'] ) && 'fixed' === $_POST['lbite_stampcard_discount_type'] ) ? 'fixed' : 'percent',
+					'lbite_stampcard_max_amount'       => isset( $_POST['lbite_stampcard_max_amount'] ) ? max( 0, (float) wp_unslash( $_POST['lbite_stampcard_max_amount'] ) ) : 0,
+					'lbite_stampcard_limit_categories' => $lbite_stamp_cats,
+					'lbite_stampcard_limit_to_one_item' => isset( $_POST['lbite_stampcard_limit_to_one_item'] ) ? 1 : 0,
 				)
 			);
 			foreach ( $lbite_stamp_val as $lbite_sk => $lbite_sv ) {

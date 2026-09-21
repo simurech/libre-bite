@@ -76,6 +76,10 @@ class LBite_Promotions {
 		// Trinkgeld.
 		$this->loader->add_action( 'woocommerce_cart_calculate_fees', $this, 'apply_cart_rules', 5 );
 
+		// Produktrabatte hinterlassen sonst keine Spur für die Statistik –
+		// der Positionspreis ist einfach niedriger, ohne erkennbaren Grund.
+		$this->loader->add_action( 'woocommerce_checkout_create_order_line_item', $this, 'add_order_item_promotion_meta', 20, 4 );
+
 		// Ankündigungsleiste
 		$this->loader->add_action( 'wp_body_open', $this, 'render_banner' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_banner_style', 25 );
@@ -318,6 +322,24 @@ class LBite_Promotions {
 				$this->apply_bogo( $cart, $rule );
 			}
 		}
+
+		// Für die Statistik festhalten, um wie viel eine Position gegenüber
+		// ihrem Basispreis rabattiert wurde – reine Laufzeit-Meta auf dem
+		// Warenkorb-Produktobjekt, landet nie in der Datenbank.
+		foreach ( $cart->get_cart() as $cart_key => $cart_item ) {
+			if ( ! isset( $cart_item['data'], $this->base_prices[ $cart_key ] ) ) {
+				continue;
+			}
+
+			$discount_per_unit = round( $this->base_prices[ $cart_key ] - (float) $cart_item['data']->get_price(), wc_get_price_decimals() );
+
+			if ( $discount_per_unit > 0 ) {
+				$cart_item['data']->add_meta_data( '_lbite_promotion_discount_per_unit', $discount_per_unit, true );
+			} else {
+				$cart_item['data']->delete_meta_data( '_lbite_promotion_discount_per_unit' );
+				$cart_item['data']->delete_meta_data( '_lbite_promotion_label' );
+			}
+		}
 	}
 
 	/**
@@ -349,6 +371,7 @@ class LBite_Promotions {
 				: max( 0, $price - $rule['amount'] );
 
 			$cart_item['data']->set_price( round( $new_price, wc_get_price_decimals() ) );
+			$cart_item['data']->add_meta_data( '_lbite_promotion_label', $rule['label'], true );
 		}
 	}
 
@@ -474,6 +497,40 @@ class LBite_Promotions {
 		}
 	}
 
+	/**
+	 * Rabatt-Herkunft einer Position als Order-Item-Meta übernehmen
+	 *
+	 * Rein additiv für die Statistik – ändert nichts an Preis oder
+	 * Checkout-Verhalten, das ist bereits über `apply_product_discount()`
+	 * (Positionspreis) bzw. `apply_bogo()`/`apply_cart_rules()` (Gebühr)
+	 * erledigt.
+	 *
+	 * @param WC_Order_Item_Product $item          Neu erstelltes Bestell-Item.
+	 * @param string                $cart_item_key Warenkorb-Schlüssel.
+	 * @param array                 $values        Warenkorbposition.
+	 * @param WC_Order              $order         Bestellung.
+	 */
+	public function add_order_item_promotion_meta( $item, $cart_item_key, $values, $order ) {
+		if ( ! isset( $values['data'] ) || ! is_a( $values['data'], 'WC_Product' ) ) {
+			return;
+		}
+
+		$label = $values['data']->get_meta( '_lbite_promotion_label', true );
+
+		if ( '' === $label ) {
+			return;
+		}
+
+		$per_unit = (float) $values['data']->get_meta( '_lbite_promotion_discount_per_unit', true );
+
+		if ( $per_unit <= 0 ) {
+			return;
+		}
+
+		$item->add_meta_data( '_lbite_promotion_label', $label, true );
+		$item->add_meta_data( '_lbite_promotion_discount', round( $per_unit * $item->get_quantity(), wc_get_price_decimals() ), true );
+	}
+
 	/* ═════════════════════════════════════════════════════════════════
 	 * Ankündigungsleiste
 	 * ═════════════════════════════════════════════════════════════════ */
@@ -489,10 +546,11 @@ class LBite_Promotions {
 		return wp_parse_args(
 			is_array( $raw ) ? $raw : array(),
 			array(
-				'enabled'  => false,
-				'text'     => '',
-				'link'     => '',
-				'schedule' => array(),
+				'enabled'        => false,
+				'text'           => '',
+				'link'           => '',
+				'open_in_new_tab' => false,
+				'schedule'       => array(),
 			)
 		);
 	}
@@ -507,13 +565,149 @@ class LBite_Promotions {
 		$raw = is_array( $raw ) ? $raw : array();
 
 		return array(
-			'enabled'  => ! empty( $raw['enabled'] ),
-			'text'     => isset( $raw['text'] ) ? sanitize_text_field( $raw['text'] ) : '',
-			'link'     => isset( $raw['link'] ) ? esc_url_raw( $raw['link'] ) : '',
-			'schedule' => class_exists( 'LBite_Menu_Schedule' )
-				? LBite_Menu_Schedule::sanitize_schedule( isset( $raw['schedule'] ) ? $raw['schedule'] : array() )
-				: array(),
+			'enabled'         => ! empty( $raw['enabled'] ),
+			'text'            => isset( $raw['text'] ) ? sanitize_text_field( $raw['text'] ) : '',
+			'link'            => isset( $raw['link'] ) ? esc_url_raw( $raw['link'] ) : '',
+			'open_in_new_tab' => ! empty( $raw['open_in_new_tab'] ),
+			'schedule'        => self::sanitize_banner_schedule( isset( $raw['schedule'] ) ? $raw['schedule'] : array() ),
 		);
+	}
+
+	/**
+	 * Zeitplan der Ankündigungsleiste bereinigen
+	 *
+	 * Bewusst eigene, kleine Implementierung statt `LBite_Menu_Schedule`
+	 * wiederzuverwenden: nur hier sind – auf ausdrücklichen Wunsch –
+	 * mehrere Zeitfenster pro Tag erlaubt (z. B. 8–12 und 14–18 Uhr), das
+	 * gemeinsame Zeitplan-Schema für Produkte/Kategorien/Aktionen bleibt
+	 * bewusst bei einem Fenster (siehe Doc-Kommentar in class-menu-schedule.php).
+	 *
+	 * @param mixed $raw Rohwert.
+	 * @return array
+	 */
+	public static function sanitize_banner_schedule( $raw ) {
+		$raw      = is_array( $raw ) ? $raw : array();
+		$day_keys = class_exists( 'LBite_Menu_Schedule' )
+			? LBite_Menu_Schedule::DAYS
+			: array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
+
+		$days = array();
+		foreach ( $day_keys as $day ) {
+			$days[ $day ] = isset( $raw['days'][ $day ] ) ? ! empty( $raw['days'][ $day ] ) : true;
+		}
+
+		$windows = array();
+		if ( isset( $raw['windows'] ) && is_array( $raw['windows'] ) ) {
+			foreach ( $raw['windows'] as $window ) {
+				$from = isset( $window['from'] ) ? trim( (string) $window['from'] ) : '';
+				$to   = isset( $window['to'] ) ? trim( (string) $window['to'] ) : '';
+				$from = preg_match( '/^([01]\d|2[0-3]):[0-5]\d$/', $from ) ? $from : '';
+				$to   = preg_match( '/^([01]\d|2[0-3]):[0-5]\d$/', $to ) ? $to : '';
+
+				if ( '' !== $from && '' !== $to ) {
+					$windows[] = array(
+						'from' => $from,
+						'to'   => $to,
+					);
+				}
+			}
+		}
+
+		$dates = array();
+		foreach ( array( 'from_date', 'to_date' ) as $key ) {
+			$value        = isset( $raw[ $key ] ) ? trim( (string) $raw[ $key ] ) : '';
+			$dates[ $key ] = preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value ) ? $value : '';
+		}
+
+		return array(
+			'enabled'   => ! empty( $raw['enabled'] ),
+			'days'      => $days,
+			'from_date' => $dates['from_date'],
+			'to_date'   => $dates['to_date'],
+			'windows'   => $windows,
+		);
+	}
+
+	/**
+	 * "HH:MM" in Minuten seit Mitternacht
+	 *
+	 * @param string $value Zeit als "HH:MM".
+	 * @return int
+	 */
+	private static function banner_to_minutes( $value ) {
+		$parts = explode( ':', $value );
+
+		return ( (int) $parts[0] * 60 ) + (int) $parts[1];
+	}
+
+	/**
+	 * Ist der Zeitplan der Ankündigungsleiste zum gegebenen Zeitpunkt aktiv?
+	 *
+	 * Wie `LBite_Menu_Schedule::is_active()`, aber über mehrere Zeitfenster
+	 * statt einem – ein Treffer in irgendeinem Fenster genügt.
+	 *
+	 * @param mixed $schedule  Zeitplan (roh oder bereinigt).
+	 * @param int   $timestamp Zu prüfender Zeitpunkt (lokale Zeit).
+	 * @return bool
+	 */
+	public static function banner_schedule_is_active( $schedule, $timestamp ) {
+		$schedule = self::sanitize_banner_schedule( $schedule );
+
+		if ( empty( $schedule['enabled'] ) ) {
+			return true;
+		}
+
+		$date = gmdate( 'Y-m-d', $timestamp );
+
+		if ( '' !== $schedule['from_date'] && $date < $schedule['from_date'] ) {
+			return false;
+		}
+		if ( '' !== $schedule['to_date'] && $date > $schedule['to_date'] ) {
+			return false;
+		}
+
+		$day_index = (int) gmdate( 'N', $timestamp ) - 1;
+		$day_keys  = class_exists( 'LBite_Menu_Schedule' )
+			? LBite_Menu_Schedule::DAYS
+			: array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
+		$today     = $day_keys[ $day_index ];
+
+		// Ohne Zeitfenster zählt nur der Wochentag.
+		if ( empty( $schedule['windows'] ) ) {
+			return ! empty( $schedule['days'][ $today ] );
+		}
+
+		$minutes_now = ( (int) gmdate( 'H', $timestamp ) * 60 ) + (int) gmdate( 'i', $timestamp );
+		$yesterday   = $day_keys[ ( $day_index + 6 ) % 7 ];
+
+		foreach ( $schedule['windows'] as $window ) {
+			$from = self::banner_to_minutes( $window['from'] );
+			$to   = self::banner_to_minutes( $window['to'] );
+
+			if ( $from === $to ) {
+				if ( ! empty( $schedule['days'][ $today ] ) ) {
+					return true;
+				}
+				continue;
+			}
+
+			if ( $from < $to ) {
+				if ( ! empty( $schedule['days'][ $today ] ) && $minutes_now >= $from && $minutes_now < $to ) {
+					return true;
+				}
+				continue;
+			}
+
+			// Fenster über Mitternacht.
+			if ( ! empty( $schedule['days'][ $today ] ) && $minutes_now >= $from ) {
+				return true;
+			}
+			if ( ! empty( $schedule['days'][ $yesterday ] ) && $minutes_now < $to ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -548,8 +742,8 @@ class LBite_Promotions {
 			return false;
 		}
 
-		if ( ! empty( $banner['schedule'] ) && class_exists( 'LBite_Menu_Schedule' ) ) {
-			return LBite_Menu_Schedule::is_active( $banner['schedule'], (int) current_time( 'timestamp' ) );
+		if ( ! empty( $banner['schedule'] ) ) {
+			return self::banner_schedule_is_active( $banner['schedule'], (int) current_time( 'timestamp' ) );
 		}
 
 		return true;
@@ -567,7 +761,10 @@ class LBite_Promotions {
 		?>
 		<div class="lbite-promo-banner" role="status">
 			<?php if ( '' !== $banner['link'] ) : ?>
-				<a href="<?php echo esc_url( $banner['link'] ); ?>"><?php echo esc_html( $banner['text'] ); ?></a>
+				<a href="<?php echo esc_url( $banner['link'] ); ?>"
+					<?php echo ! empty( $banner['open_in_new_tab'] ) ? ' target="_blank" rel="noopener"' : ''; ?>>
+					<?php echo esc_html( $banner['text'] ); ?>
+				</a>
 			<?php else : ?>
 				<span><?php echo esc_html( $banner['text'] ); ?></span>
 			<?php endif; ?>
