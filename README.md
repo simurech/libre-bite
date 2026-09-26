@@ -6,7 +6,7 @@
 
 **Die WooCommerce-Erweiterung für Restaurants, Take-Aways, Cafés und Bars.**
 
-[![Stable Tag](https://img.shields.io/badge/stable-3.4.7-blue.svg)](https://github.com/simurech/libre-bite/releases)
+[![Stable Tag](https://img.shields.io/badge/stable-3.4.8-blue.svg)](https://github.com/simurech/libre-bite/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.0%2B-96588a.svg)](https://woocommerce.com/)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-8892be.svg)](https://php.net/)
@@ -63,6 +63,12 @@ libre-bite/
 **Manuelle Installation via GitHub:**
 1. Die neueste Release-`.zip` von der [Releases-Seite](https://github.com/simurech/libre-bite/releases) herunterladen.
 2. In WordPress zu **Plugins → Installieren → Plugin hochladen** navigieren.
+
+> **Hinweis:** Dieses GitHub-Release enthält den vollständigen Code der Pro-Version. Pro-Funktionen
+> (Reservierungen, Tischbestellung, Aktionen, Stempelkarte u. a.) lassen sich damit 7 Tage im
+> Trial testen; danach ist für ihre weitere Nutzung eine kostenpflichtige Pro-Lizenz nötig. Ohne
+> Trial/Lizenz verhält sich diese Installation wie die kostenlose Version. Wer nur die kostenlose
+> Version braucht, installiert stattdessen über WordPress.org (siehe oben).
 
 **Nach der Aktivierung:**
 1. Sicherstellen, dass WooCommerce aktiv ist.

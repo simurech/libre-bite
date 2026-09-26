@@ -20,7 +20,25 @@ $lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()
 $lbite_tiles          = array();
 $lbite_inactive_tiles = array();
 
-$lbite_disabled_desc = __( 'This module is currently disabled. A manager can enable it under Settings.', 'libre-bite' );
+$lbite_disabled_desc          = __( 'This module is currently disabled. A manager can enable it under Settings.', 'libre-bite' );
+$lbite_disabled_desc_no_license = __( 'This is a Pro feature. A manager can activate it once a Pro license is active.', 'libre-bite' );
+$lbite_premium_features       = class_exists( 'LBite_Features' ) ? LBite_Features::get_premium_features() : array();
+
+/**
+ * Hinweistext für eine inaktive Kachel: unterscheidet, ob ein blosser
+ * Schalter fehlt oder ob die Funktion Pro ist und keine Lizenz vorliegt –
+ * «Ein Manager kann es aktivieren» war für lizenzpflichtige Funktionen
+ * schlicht falsch (Audit 26.09.2026, AP-17).
+ *
+ * @param string $feature_key Feature-Schlüssel.
+ * @return string
+ */
+$lbite_disabled_tile_desc = function( $feature_key ) use ( $lbite_premium_features, $lbite_premium_allowed, $lbite_disabled_desc, $lbite_disabled_desc_no_license ) {
+	if ( in_array( $feature_key, $lbite_premium_features, true ) && ! $lbite_premium_allowed ) {
+		return $lbite_disabled_desc_no_license;
+	}
+	return $lbite_disabled_desc;
+};
 
 // Bestellübersicht
 if ( lbite_feature_enabled( 'enable_kanban_board' ) ) {
@@ -35,7 +53,7 @@ if ( lbite_feature_enabled( 'enable_kanban_board' ) ) {
 	$lbite_inactive_tiles[] = array(
 		'icon'  => 'dashicons-list-view',
 		'title' => __( 'Order Overview', 'libre-bite' ),
-		'desc'  => $lbite_disabled_desc,
+		'desc'  => $lbite_disabled_tile_desc( 'enable_kanban_board' ),
 	);
 }
 
@@ -52,7 +70,7 @@ if ( lbite_feature_enabled( 'enable_pos' ) ) {
 	$lbite_inactive_tiles[] = array(
 		'icon'  => 'dashicons-cart',
 		'title' => __( 'POS System', 'libre-bite' ),
-		'desc'  => $lbite_disabled_desc,
+		'desc'  => $lbite_disabled_tile_desc( 'enable_pos' ),
 	);
 }
 
@@ -78,7 +96,7 @@ if ( $lbite_can_locations ) {
 		$lbite_inactive_tiles[] = array(
 			'icon'  => 'dashicons-grid-view',
 			'title' => __( 'Tables', 'libre-bite' ),
-			'desc'  => $lbite_disabled_desc,
+			'desc'  => $lbite_disabled_tile_desc( 'enable_table_ordering' ),
 		);
 	}
 
@@ -94,7 +112,7 @@ if ( $lbite_can_locations ) {
 		$lbite_inactive_tiles[] = array(
 			'icon'  => 'dashicons-calendar-alt',
 			'title' => __( 'Reservations', 'libre-bite' ),
-			'desc'  => $lbite_disabled_desc,
+			'desc'  => $lbite_disabled_tile_desc( 'enable_reservations' ),
 		);
 	}
 }

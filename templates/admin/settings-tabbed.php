@@ -140,6 +140,7 @@ $lbite_tab_groups = array(
 			'marketing_banner'     => array(
 				'label' => __( 'Announcement Bar', 'libre-bite' ),
 				'icon'  => 'dashicons-megaphone',
+				'pro'   => true,
 			),
 			'marketing_stampcard'  => array(
 				'label' => __( 'Stamp Card', 'libre-bite' ),

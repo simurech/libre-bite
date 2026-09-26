@@ -8866,6 +8866,18 @@ msgstr "Stempel"
 msgid "Reward Coupon"
 msgstr "Belohnungsgutschein"
 
+#: includes/modules/locations/class-locations.php:1832
+msgid "More than one location is currently published, but no active Pro license or trial was found."
+msgstr "Mehr als ein Standort ist aktuell veröffentlicht, es wurde aber keine aktive Pro-Lizenz oder Testphase gefunden."
+
+#: includes/modules/locations/class-locations.php:1833
+msgid "These locations keep working for now, but new locations cannot be published until only one remains or a Pro license is active."
+msgstr "Diese Standorte funktionieren vorerst weiter, neue Standorte lassen sich aber erst wieder veröffentlichen, wenn nur noch einer übrig ist oder eine Pro-Lizenz aktiv ist."
+
+#: templates/admin/dashboard.php:24
+msgid "This is a Pro feature. A manager can activate it once a Pro license is active."
+msgstr "Das ist eine Pro-Funktion. Ein Manager kann sie aktivieren, sobald eine Pro-Lizenz aktiv ist."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

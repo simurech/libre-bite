@@ -655,15 +655,17 @@
 					.appendTo($menu);
 			}
 
-			$('<button type="button"></button>')
-				.append($('<span class="dashicons dashicons-email-alt"></span>'))
-				.append($('<span></span>').text(lbiteDashboard.strings.sendReceipt || 'Send receipt'))
-				.on('click', (e) => {
-					e.stopPropagation();
-					$menu.remove();
-					this.sendReceipt(order.id, order.has_email);
-				})
-				.appendTo($menu);
+			if (lbiteDashboard.canSendReceipt) {
+				$('<button type="button"></button>')
+					.append($('<span class="dashicons dashicons-email-alt"></span>'))
+					.append($('<span></span>').text(lbiteDashboard.strings.sendReceipt || 'Send receipt'))
+					.on('click', (e) => {
+						e.stopPropagation();
+						$menu.remove();
+						this.sendReceipt(order.id, order.has_email);
+					})
+					.appendTo($menu);
+			}
 
 			$('<button type="button"></button>')
 				.append($('<span class="dashicons dashicons-printer"></span>'))

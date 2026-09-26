@@ -9040,3 +9040,15 @@ msgstr ""
 #: includes/modules/stampcard/class-stampcard.php:410
 msgid "Reward Coupon"
 msgstr ""
+
+#: includes/modules/locations/class-locations.php:1832
+msgid "More than one location is currently published, but no active Pro license or trial was found."
+msgstr ""
+
+#: includes/modules/locations/class-locations.php:1833
+msgid "These locations keep working for now, but new locations cannot be published until only one remains or a Pro license is active."
+msgstr ""
+
+#: templates/admin/dashboard.php:24
+msgid "This is a Pro feature. A manager can activate it once a Pro license is active."
+msgstr ""

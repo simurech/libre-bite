@@ -1094,6 +1094,11 @@ class LBite_Admin {
 					'orderEditUrl'          => admin_url( 'post.php' ),
 					'nonce'                 => wp_create_nonce( 'lbite_dashboard_nonce' ),
 					'receiptNonce'          => wp_create_nonce( 'lbite_admin_nonce' ),
+					// Der AJAX-Handler existiert nur in Pro (siehe init_hooks()) – ohne
+					// dieses Flag zeigte der Beleg-Button auf jedem Build/jeder Lizenz
+					// einen Knopf, der auf Free/ohne Lizenz ins Leere lief (Audit
+					// 26.09.2026, AP-17).
+					'canSendReceipt'        => $lbite_is_premium,
 					'soundUrl'              => $lbite_sound_url,
 					'refreshInterval'       => (int) get_option( 'lbite_dashboard_refresh_interval', 45 ) * 1000,
 					'locationColors'        => $lbite_dashboard_colors,

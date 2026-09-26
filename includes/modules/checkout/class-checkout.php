@@ -1545,10 +1545,14 @@ class LBite_Checkout {
 			return array();
 		}
 
-		// Slot-Buffer (Premium).
+		// Slot-Buffer (Premium). Kein eigener Feature-Schalter, der die
+		// Lizenz separat prüft – `is__premium_only()` allein prüft nur die
+		// Code-Variante, nicht die Lizenz, und liess den Buffer auf dem
+		// GitHub-Pro-Build nach Ablauf eines Trials dauerhaft aktiv
+		// (Audit 26.09.2026, AP-17).
 		$buffer_start = 0;
 		$buffer_end   = 0;
-		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) {
+		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() ) {
 			$buffer_start = LBite_Locations::get_time_setting( $location_id, 'slot_buffer_start', 0 );
 			$buffer_end   = LBite_Locations::get_time_setting( $location_id, 'slot_buffer_end', 0 );
 		}

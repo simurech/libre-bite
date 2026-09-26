@@ -8865,6 +8865,18 @@ msgstr "Timbri"
 msgid "Reward Coupon"
 msgstr "Buono premio"
 
+#: includes/modules/locations/class-locations.php:1832
+msgid "More than one location is currently published, but no active Pro license or trial was found."
+msgstr "Al momento è pubblicata più di una sede, ma non è stata trovata nessuna licenza Pro attiva né un periodo di prova."
+
+#: includes/modules/locations/class-locations.php:1833
+msgid "These locations keep working for now, but new locations cannot be published until only one remains or a Pro license is active."
+msgstr "Queste sedi continuano a funzionare per ora, ma non è possibile pubblicare nuove sedi finché non ne resta solo una o non è attiva una licenza Pro."
+
+#: templates/admin/dashboard.php:24
+msgid "This is a Pro feature. A manager can activate it once a Pro license is active."
+msgstr "Questa è una funzione Pro. Un manager può attivarla non appena è attiva una licenza Pro."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Errore durante il salvataggio"
 

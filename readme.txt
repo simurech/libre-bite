@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.4.7
+Stable tag: 3.4.8
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,14 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.4.8 =
+
+* Fixed: two license checks (the location limit on the Free plan and the pickup time-slot buffer) checked whether the code is running the Pro build rather than whether an actual Pro license or trial is active. On a Pro build without a valid license (for example after a trial ends), both stayed unlocked indefinitely.
+* Fixed: the "Send receipt" button on Kanban cards always appeared, even when the code running underneath it doesn't include that feature; it's now only shown when it will actually work.
+* Fixed: the dashboard tiles for disabled Pro features (Tables, Reservations) said "a manager can enable it under Settings" even without any license — they now clarify that a Pro license is required first. The Announcement Bar settings page was also missing its "Pro" badge.
+* Changed: a note in the README now clarifies that the GitHub release contains the full Pro codebase, which requires a paid license (or the 7-day trial) to use the Pro features.
+* Added: a warning notice when more than one location is published without an active Pro license or trial (for example right after a trial ends) — existing locations keep working, but no further locations can be published until the count is back to one or a license is active.
 
 = 3.4.7 =
 

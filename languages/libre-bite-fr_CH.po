@@ -8865,6 +8865,18 @@ msgstr "Tampons"
 msgid "Reward Coupon"
 msgstr "Bon de récompense"
 
+#: includes/modules/locations/class-locations.php:1832
+msgid "More than one location is currently published, but no active Pro license or trial was found."
+msgstr "Plus d'un emplacement est actuellement publié, mais aucune licence Pro active ni période d'essai n'a été trouvée."
+
+#: includes/modules/locations/class-locations.php:1833
+msgid "These locations keep working for now, but new locations cannot be published until only one remains or a Pro license is active."
+msgstr "Ces emplacements continuent de fonctionner pour l'instant, mais aucun nouvel emplacement ne pourra être publié jusqu'à ce qu'il n'en reste plus qu'un ou qu'une licence Pro soit active."
+
+#: templates/admin/dashboard.php:24
+msgid "This is a Pro feature. A manager can activate it once a Pro license is active."
+msgstr "Il s'agit d'une fonction Pro. Un manager peut l'activer dès qu'une licence Pro est active."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Erreur lors de l'enregistrement"
 

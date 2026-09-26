@@ -63,6 +63,7 @@ class LBite_Locations {
 		// Free-User auf 1 publizierten Standort begrenzen
 		$this->loader->add_action( 'transition_post_status', $this, 'enforce_location_limit', 10, 3 );
 		$this->loader->add_action( 'admin_notices', $this, 'show_location_limit_notice' );
+		$this->loader->add_action( 'admin_notices', $this, 'show_lapsed_license_locations_notice' );
 
 		// Standort-Filter-Hinweisleiste: Platzhalter vor dem Loop (erscheint oben im Grid),
 		// Produkt-Daten nach dem Loop (erst dann sind die Produkt-IDs bekannt).
@@ -1722,8 +1723,12 @@ class LBite_Locations {
 			return;
 		}
 
-		// Premium-User sind nicht eingeschränkt.
-		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is_premium() ) {
+		// Premium-User sind nicht eingeschränkt. `is_premium()` prüft nur die
+		// Code-Variante (im Pro-ZIP immer true, unabhängig von der Lizenz) –
+		// `can_use_premium_code__premium_only()` prüft zusätzlich Lizenz/Trial.
+		// Ohne diese Korrektur blieb das Standort-Limit auf dem GitHub-Pro-Build
+		// nach Ablauf des Trials dauerhaft unwirksam (Audit 26.09.2026, AP-17).
+		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() ) {
 			return;
 		}
 
@@ -1780,6 +1785,52 @@ class LBite_Locations {
 		<div class="notice notice-warning">
 			<p>
 				<strong><?php esc_html_e( 'Location not published – the Free plan is limited to 1 location.', 'libre-bite' ); ?></strong>
+				<?php if ( function_exists( 'lbite_freemius' ) ) : ?>
+					<a href="<?php echo esc_url( lbite_freemius()->get_upgrade_url() ); ?>" style="margin-left: 8px;">
+						<?php esc_html_e( 'Upgrade to Pro for unlimited locations →', 'libre-bite' ); ?>
+					</a>
+				<?php endif; ?>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Hinweis wenn bereits mehrere Standorte publiziert sind, aber keine
+	 * gültige Lizenz mehr vorliegt (z. B. Trial abgelaufen).
+	 *
+	 * `enforce_location_limit()` greift nur bei einer NEUEN Publizierung –
+	 * bereits veröffentlichte Standorte werden bewusst nicht automatisch auf
+	 * Entwurf zurückgesetzt (das könnte den laufenden Betrieb eines
+	 * Restaurants ohne Vorwarnung unterbrechen). Stattdessen ein Hinweis
+	 * statt stiller Weiterbetrieb (Audit 26.09.2026, AP-17).
+	 */
+	public function show_lapsed_license_locations_notice() {
+		if ( ! function_exists( 'lbite_freemius' ) || lbite_freemius()->can_use_premium_code__premium_only() ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$published = get_posts(
+			array(
+				'post_type'      => self::POST_TYPE,
+				'post_status'    => 'publish',
+				'posts_per_page' => 2,
+				'fields'         => 'ids',
+			)
+		);
+
+		if ( count( $published ) < 2 ) {
+			return;
+		}
+		?>
+		<div class="notice notice-warning">
+			<p>
+				<strong><?php esc_html_e( 'More than one location is currently published, but no active Pro license or trial was found.', 'libre-bite' ); ?></strong>
+				<?php esc_html_e( 'These locations keep working for now, but new locations cannot be published until only one remains or a Pro license is active.', 'libre-bite' ); ?>
 				<?php if ( function_exists( 'lbite_freemius' ) ) : ?>
 					<a href="<?php echo esc_url( lbite_freemius()->get_upgrade_url() ); ?>" style="margin-left: 8px;">
 						<?php esc_html_e( 'Upgrade to Pro for unlimited locations →', 'libre-bite' ); ?>
