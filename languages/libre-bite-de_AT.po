@@ -8878,6 +8878,22 @@ msgstr "Diese Standorte funktionieren vorerst weiter, neue Standorte lassen sich
 msgid "This is a Pro feature. A manager can activate it once a Pro license is active."
 msgstr "Das ist eine Pro-Funktion. Ein Manager kann sie aktivieren, sobald eine Pro-Lizenz aktiv ist."
 
+#: includes/admin/class-setup-wizard.php:823
+msgid "Add-ons are managed as their own entries under Products → Product Options."
+msgstr "Add-ons werden als eigene Einträge unter Produkte → Produkt-Optionen verwaltet."
+
+#: includes/core/class-installer.php:250
+msgid "Support is free of charge."
+msgstr "Der Support ist kostenlos."
+
+#: libre-bite.php:218
+msgid "Libre Bite requires WooCommerce. Please install and activate WooCommerce first."
+msgstr "Libre Bite benötigt WooCommerce. Bitte installieren und aktivieren Sie zuerst WooCommerce."
+
+#: libre-bite.php:219
+msgid "Plugin Dependency"
+msgstr "Plugin-Abhängigkeit"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

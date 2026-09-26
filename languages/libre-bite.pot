@@ -9052,3 +9052,19 @@ msgstr ""
 #: templates/admin/dashboard.php:24
 msgid "This is a Pro feature. A manager can activate it once a Pro license is active."
 msgstr ""
+
+#: includes/admin/class-setup-wizard.php:823
+msgid "Add-ons are managed as their own entries under Products → Product Options."
+msgstr ""
+
+#: includes/core/class-installer.php:250
+msgid "Support is free of charge."
+msgstr ""
+
+#: libre-bite.php:218
+msgid "Libre Bite requires WooCommerce. Please install and activate WooCommerce first."
+msgstr ""
+
+#: libre-bite.php:219
+msgid "Plugin Dependency"
+msgstr ""

@@ -59,7 +59,13 @@ $custom_text      = isset( $support_settings['support_custom_text'] ) ? $support
 		</div>
 	</div>
 
-	<?php if ( current_user_can( 'lbite_manage_settings' ) ) : ?>
+	<?php
+	// Der Support-Tab steckt in der «System»-Gruppe von settings-tabbed.php,
+	// die nur für manage_options existiert – lbite_manage_settings allein
+	// (auch von shop_manager erfüllt) führte bisher zu einem Link auf einen
+	// für diese Rolle nicht sichtbaren Tab (Audit 26.09.2026, AP-18).
+	?>
+	<?php if ( current_user_can( 'manage_options' ) ) : ?>
 		<p class="description">
 			<?php
 			printf(

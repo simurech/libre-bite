@@ -6,8 +6,9 @@
  * Standorte, keine Produkte, keine Öffnungszeiten. Wer das Plugin bewerten
  * wollte, musste erst alles von Hand anlegen.
  *
- * Der Assistent führt in vier Schritten durch die Ersteinrichtung und kann
- * auf Wunsch ein vollständiges Beispielsortiment anlegen.
+ * Der Assistent führt durch die Ersteinrichtung – ein Schritt je
+ * eingeschaltetem Modul, ausgeschaltete Module werden übersprungen – und
+ * kann auf Wunsch ein vollständiges Beispielsortiment anlegen.
  *
  * @package LibreBite
  */
@@ -819,7 +820,7 @@ class LBite_Setup_Wizard {
 				'premium'  => false,
 				'settings' => array(),
 				'link_tab' => 'products_options',
-				'hint'     => __( 'Add-ons are managed as their own entries under Products → Product add-ons.', 'libre-bite' ),
+				'hint'     => __( 'Add-ons are managed as their own entries under Products → Product Options.', 'libre-bite' ),
 			),
 		);
 

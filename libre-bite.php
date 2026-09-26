@@ -3,7 +3,7 @@
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://wordpress.org/plugins/libre-bite/
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
- * Version:           3.4.8
+ * Version:           3.4.9
  * Requires at least: 6.0
  * Tested up to:      7.1
  * Requires PHP:      8.1
@@ -79,7 +79,7 @@ if ( function_exists( 'lbite_freemius' ) ) {
 }
 
 // Plugin-Konstanten definieren
-define( 'LBITE_VERSION', '3.4.8' );
+define( 'LBITE_VERSION', '3.4.9' );
 define( 'LBITE_PLUGIN_FILE', __FILE__ );
 define( 'LBITE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LBITE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -215,8 +215,8 @@ function lbite_activate_plugin() {
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		wp_die(
-			'Libre Bite requires WooCommerce. Please install and activate WooCommerce first.',
-			'Plugin Dependency',
+			esc_html__( 'Libre Bite requires WooCommerce. Please install and activate WooCommerce first.', 'libre-bite' ),
+			esc_html__( 'Plugin Dependency', 'libre-bite' ),
 			array( 'back_link' => true )
 		);
 	}

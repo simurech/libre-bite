@@ -8877,6 +8877,22 @@ msgstr "Ces emplacements continuent de fonctionner pour l'instant, mais aucun no
 msgid "This is a Pro feature. A manager can activate it once a Pro license is active."
 msgstr "Il s'agit d'une fonction Pro. Un manager peut l'activer dès qu'une licence Pro est active."
 
+#: includes/admin/class-setup-wizard.php:823
+msgid "Add-ons are managed as their own entries under Products → Product Options."
+msgstr "Les compléments sont gérés comme des entrées propres sous Produits → Options de produit."
+
+#: includes/core/class-installer.php:250
+msgid "Support is free of charge."
+msgstr "Le support est gratuit."
+
+#: libre-bite.php:218
+msgid "Libre Bite requires WooCommerce. Please install and activate WooCommerce first."
+msgstr "Libre Bite nécessite WooCommerce. Veuillez d'abord installer et activer WooCommerce."
+
+#: libre-bite.php:219
+msgid "Plugin Dependency"
+msgstr "Dépendance du plugin"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Erreur lors de l'enregistrement"
 

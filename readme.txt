@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.4.8
+Stable tag: 3.4.9
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,7 +61,7 @@ Only activate the features your business actually needs. Unused modules stay hid
 = Core Features (Free) =
 
 **Live Kanban Order Board (KDS)**
-A real-time kitchen display that visualizes every incoming WooCommerce order as a card. Drag & drop cards between columns (New → Preparing → Ready → Completed) to update order statuses instantly — without reloading the page.
+A real-time kitchen display that visualizes every incoming WooCommerce order as a card. Move an order through Pre-orders → Prepare Now → Completed with a single click — without reloading the page. Renaming, adding, or reordering columns, and dragging cards between them, is available as a Pro add-on.
 
 **Integrated Point of Sale (POS)**
 A clear POS interface for walk-in customers. Add products to the order, accept payments — all without leaving WordPress.
@@ -72,10 +72,10 @@ Create and manage branches, each with its own address, opening hours, and order 
 **Swiss 5-Cent Rounding**
 Built-in support for the Swiss rounding rule (5-cent rounding). Indispensable for restaurants and retail in Switzerland.
 
-**Pickup/Delivery Time Slots**
-Customers choose a time slot for pickup or delivery directly during checkout. Relieve peak hours and better manage kitchen capacity.
+**Pickup Time Slots**
+Customers choose a time slot for pickup directly during checkout. Relieve peak hours and better manage kitchen capacity.
 
-**Product Add-ons & Extras**
+**Product Options**
 Add configurable options to any WooCommerce product — sizes, sauces, toppings, preparation notes — with optional price markups.
 
 **Modular Feature Control**
@@ -83,6 +83,9 @@ Only enable what your business really needs. Each module can be independently to
 
 **WooCommerce HPOS Compatible**
 Fully tested with WooCommerce High-Performance Order Storage (HPOS). Safe for modern, high-traffic setups.
+
+**Sound Notifications**
+A browser signal tone when a new order arrives on the Kanban board, so the kitchen doesn't have to watch the screen. Uploading your own custom sound file via the media library is a Pro feature.
 
 ---
 
@@ -98,16 +101,13 @@ Manage an unlimited number of branches. Each location gets its own Kanban board,
 A conversion-focused checkout process for gastronomy businesses — fewer steps, cleaner layout, mobile-first.
 
 **Advanced Tipping System**
-Customers can select percentage tip suggestions (e.g., 5%, 10%, 15%) or enter a custom amount. Tip amounts are saved per order and displayed in the dashboard.
+Customers can select percentage tip suggestions (e.g., 5%, 10%, 15%) or enter a custom amount. Tip amounts are saved per order and broken out separately in the statistics.
 
 **Automatic Pickup Reminders**
 Automatic email reminders to customers X minutes before the scheduled pickup time. Fewer no-shows, better pickup experience.
 
 **Nutritional Info & Allergen Labeling**
-EU-compliant nutritional values and allergen declarations for every product. Displayed clearly on the product page and during checkout.
-
-**Advanced Sound Notifications**
-A browser signal tone when a new order arrives on the Kanban board. Custom sound files can be uploaded via the media library (Pro).
+Nutritional values and allergen declarations for every product, displayed clearly on the product page. Includes a printable allergen matrix covering the 14 EU-listed allergens, to help you meet allergen labeling requirements.
 
 **Promotions & Announcements**
 Rule-based offers WooCommerce does not know by itself: buy several pay for fewer, a discount on a category, money off above a cart value — each limited to certain weekdays or times. Plus an announcement bar.
@@ -199,6 +199,11 @@ Only the encoded target URL of your own website is transmitted, so that the serv
 * goQR.me API: https://goqr.me/api/
 * goQR.me Privacy Policy: https://goqr.me/privacy-policy/
 
+If you enable the optional SMS Notifications feature (Pro), Libre Bite sends the customer's phone number and a short status message to **Twilio** (https://www.twilio.com/) using your own Twilio account, so Twilio can deliver the text message. This only happens when the SMS feature is switched on and an order reaches the status you configured as the trigger — it never runs otherwise. You provide and control your own Twilio credentials; no order or customer data passes through Libre Bite's own servers.
+
+* Twilio Privacy Policy: https://www.twilio.com/en-us/legal/privacy
+* Twilio Terms of Service: https://www.twilio.com/en-us/legal/tos
+
 == Installation ==
 
 1. Upload the plugin folder to the `/wp-content/plugins/libre-bite` directory, or install the plugin through the WordPress plugins screen directly.
@@ -235,7 +240,7 @@ Multi-location management is included in the Pro version. The free version suppo
 
 = What is Swiss 5-Cent Rounding? =
 
-In Switzerland, cash payments are rounded to the nearest 5 cents as 1- and 2-cent coins are no longer in circulation. Libre Bite automatically applies this rounding rule at checkout — useful for Swiss restaurants, cafés, and take-away businesses.
+In Switzerland, cash payments are rounded to the nearest 5 cents as 1- and 2-cent coins are no longer in circulation. Libre Bite applies this rounding rule at checkout, switched on by default for shops using CHF and off by default for any other currency — either way, it's a single toggle in Settings.
 
 = Does the POS system work offline? =
 
@@ -262,14 +267,23 @@ Yes. English is the source language, and the plugin ships with complete translat
 
 == Screenshots ==
 
-1. **Kanban Order Board** — Real-time order management for kitchen staff. Drag & drop cards to update status.
+1. **Kanban Order Board** — Real-time order management for kitchen staff. Update order status with a click as orders move through the board.
 2. **POS Interface** — Integrated Point of Sale for walk-in customers and counter orders.
 3. **Location Settings** — Configure branch address, opening hours, and order routing.
 4. **Checkout Time Slots** — Customers choose their pickup time slot directly during checkout.
-5. **Product Add-ons** — Configurable extras and options for each menu item.
+5. **Product Options** — Configurable extras and options for each menu item.
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.4.9 =
+
+* Changed: several readme descriptions no longer matched the current plugin — the Kanban board description and screenshot named drag & drop and column names that are actually a Pro add-on, nutritional info claimed a checkout display that doesn't exist, the FAQ said locations are unlimited on the free plan even though it's limited to one, Sound Notifications was listed as fully Pro when the base tone is free, and "Product Add-ons & Extras" and "Product Options" were used interchangeably for the same feature.
+* Fixed: a link on the Support page to "edit these details under Settings" was visible to any role that can save plugin settings, but the Support settings tab itself is only visible to full administrators — non-admin managers saw a link that led nowhere useful.
+* Fixed: the setup assistant's hint text for Product Options pointed at a menu label ("Product add-ons") that doesn't exist; the actual menu item is "Product Options".
+* Fixed: activating the plugin without WooCommerce active showed a hard-coded, untranslatable error message.
+* Added: Twilio is now listed under External Services, since the optional SMS Notifications feature sends the customer's phone number and a status message to Twilio when enabled.
+* Changed: the default "support is free of charge" note on a fresh install no longer hard-codes a Swiss franc amount.
 
 = 3.4.8 =
 
@@ -384,16 +398,6 @@ Yes. English is the source language, and the plugin ships with complete translat
 
 * Fixed: the Statistics page's payment methods breakdown only ever showed orders placed at the POS. Orders placed by guests through a configured WooCommerce payment gateway (Stripe, PayPal, invoice, etc.) were silently missing from both the on-screen table/chart and the CSV export. They now show up under the gateway's own name.
 
-= 3.2.0 =
-
-* Changed: the Settings page navigation is now a grouped, vertical sidebar (Setup, Operations, Marketing & Communication, Appearance, System) instead of a single row of tabs — easier to scan once a business turns on several modules.
-* Changed: the previously long Products, Checkout, Orders, Marketing and Advanced settings pages are now split into focused, single-purpose pages (for example Tips, Order Bumps and Promotions each have their own page instead of sharing one) — no behavior change, all existing values and save logic are unaffected, and each page saves independently so turning one setting off never resets an unrelated one.
-* Added: live previews on several settings that were previously hard to picture in advance — tip buttons, kanban board columns, receipt templates, the announcement banner, the stamp card, and the availability hint style now show what the guest or staff member will actually see as you change the values.
-* Changed: the setup assistant's progress indicator now reflects the actual number of steps for the modules you selected instead of four fixed labels, and the welcome step leads with three short highlight cards instead of a plain bullet list.
-* Added: the Tips and Stamp Card steps of the setup assistant show the same live preview as the corresponding Settings page.
-* Added: a "Run setup assistant" link at the top of Settings, so the assistant can be revisited any time instead of only right after activation.
-* Fixed: the setup assistant's links to Order Bumps, Promotions and the Stamp Card pointed at the wrong settings tab (a leftover from before these moved to their own Marketing tab in 3.1.0).
-
 = 3.2.1 =
 
 * Added: Order Bumps and Promotions now use a live product search instead of entering raw product IDs by hand; Promotions gained a category picker too.
@@ -406,6 +410,16 @@ Yes. English is the source language, and the plugin ships with complete translat
 * Changed: Manager Assignments is now a checkbox grid instead of a multi-select box, and lists every relevant user (administrators, managers, shop managers, staff) for a full overview — not just managers.
 * Changed: the Holidays tab moved from Appearance to Setup, next to Locations.
 * Changed: the "Libre Bite Staff" role is now listed first under Menu Visibility instead of wherever WordPress happens to register it.
+
+= 3.2.0 =
+
+* Changed: the Settings page navigation is now a grouped, vertical sidebar (Setup, Operations, Marketing & Communication, Appearance, System) instead of a single row of tabs — easier to scan once a business turns on several modules.
+* Changed: the previously long Products, Checkout, Orders, Marketing and Advanced settings pages are now split into focused, single-purpose pages (for example Tips, Order Bumps and Promotions each have their own page instead of sharing one) — no behavior change, all existing values and save logic are unaffected, and each page saves independently so turning one setting off never resets an unrelated one.
+* Added: live previews on several settings that were previously hard to picture in advance — tip buttons, kanban board columns, receipt templates, the announcement banner, the stamp card, and the availability hint style now show what the guest or staff member will actually see as you change the values.
+* Changed: the setup assistant's progress indicator now reflects the actual number of steps for the modules you selected instead of four fixed labels, and the welcome step leads with three short highlight cards instead of a plain bullet list.
+* Added: the Tips and Stamp Card steps of the setup assistant show the same live preview as the corresponding Settings page.
+* Added: a "Run setup assistant" link at the top of Settings, so the assistant can be revisited any time instead of only right after activation.
+* Fixed: the setup assistant's links to Order Bumps, Promotions and the Stamp Card pointed at the wrong settings tab (a leftover from before these moved to their own Marketing tab in 3.1.0).
 
 = 3.1.1 =
 
@@ -448,7 +462,7 @@ Yes. English is the source language, and the plugin ships with complete translat
 
 = 3.0.2 =
 
-First release tested on a live WordPress installation. Version 3.0.0 introduced a large amount of code that had never actually run; this release fixes what that testing brought to light.
+First release tested on a live WordPress installation. Version 3.0.0 introduced a large amount of new code that had only been reviewed, not yet tested end-to-end; this release fixes what that testing brought to light.
 
 * Fixed: with a tip and a promotion active at the same time, the final total was no longer rounded to 5 rappen. The tip rounded itself on the subtotal alone, so discounts and shipping were left out of the calculation.
 * Fixed: an item added to the cart after the first price calculation — for example through an order bump — never received its promotional discount and was charged at full price.
@@ -468,7 +482,7 @@ First release tested on a live WordPress installation. Version 3.0.0 introduced 
 
 = 3.0.0 =
 
-This release rounds out the feature set that 2.6.0 started. It is published as a **beta for testing** — please try it on a staging site before using it in production.
+This release rounds out the feature set that 2.6.0 started. As with any major release, testing it on a staging site first is recommended before using it in production.
 
 **New**
 * Promotions engine: buy several and pay for fewer, a discount on products or a whole category, money off above a cart value — each limited to certain weekdays or times of day (Pro)
@@ -704,6 +718,9 @@ This release rounds out the feature set that 2.6.0 started. It is published as a
 * For the full changelog of versions before 2.0.0, see the release history: https://github.com/simurech/libre-bite/releases
 
 == Upgrade Notice ==
+
+= 3.4.7 =
+Uninstalling with data deletion enabled now cleans up considerably more (HPOS order metadata, category schedules, guest notes, stamp card data) than before. If you rely on this option, review it once after updating.
 
 = 3.3.2 =
 Security fix: location access restrictions for managers/staff now apply consistently across all order endpoints, not just the REST API and Statistics. Update promptly if you use multi-location access restrictions.

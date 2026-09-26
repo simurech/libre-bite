@@ -658,12 +658,7 @@ class LBite_Locations {
 		$is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
 		?>
 		<p class="description" style="margin-bottom:12px;">
-			<?php
-			/* translators: %d = global default value in minutes */
-			printf(
-				esc_html__( 'These settings override the global defaults for this location only. Leave blank to use the global value.', 'libre-bite' )
-			);
-			?>
+			<?php esc_html_e( 'These settings override the global defaults for this location only. Leave blank to use the global value.', 'libre-bite' ); ?>
 		</p>
 
 		<p>
