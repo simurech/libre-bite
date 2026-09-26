@@ -1138,6 +1138,17 @@ class LBite_Checkout {
 				$order->update_meta_data( '_lbite_tip_percentage', $percentage );
 			}
 
+			// Tatsächlichen Betrag aus der bereits erstellten Gebühr lesen,
+			// statt ihn hier ein zweites Mal zu berechnen (Drift-Risiko).
+			// _lbite_tip_amount wurde bisher nie geschrieben, die Statistik
+			// zählte Trinkgeld deshalb als Add-on (Audit 26.09.2026, AP-14).
+			foreach ( $order->get_fees() as $lbite_tip_fee ) {
+				if ( __( 'Tip', 'libre-bite' ) === $lbite_tip_fee->get_name() ) {
+					$order->update_meta_data( '_lbite_tip_amount', (float) $lbite_tip_fee->get_total() );
+					break;
+				}
+			}
+
 			$order->save();
 		}
 	}

@@ -180,23 +180,52 @@ switch ( $lbite_period ) {
 		$lbite_date_before = gmdate( 'Y-m-d', strtotime( '+1 day', $lbite_now ) );
 }
 
+// Standort-Einschränkung als meta_query statt PHP-seitigem `continue` in den
+// Auswertungsschleifen weiter unten – sonst würde jede fremde Bestellung
+// erst vollständig geladen und dann verworfen (Audit 26.09.2026, AP-14).
+$lbite_location_meta_query = null;
+if ( $lbite_filter_loc ) {
+	$lbite_location_meta_query = array(
+		array(
+			'key'   => '_lbite_location_id',
+			'value' => $lbite_filter_loc,
+		),
+	);
+} elseif ( null !== $lbite_stat_allowed_ids ) {
+	// Leeres Array = Manager ohne jede Standort-Zuweisung -> bewusst 0
+	// Treffer statt versehentlich aller Bestellungen.
+	$lbite_location_meta_query = array(
+		array(
+			'key'     => '_lbite_location_id',
+			'value'   => ! empty( $lbite_stat_allowed_ids ) ? $lbite_stat_allowed_ids : array( -1 ),
+			'compare' => 'IN',
+		),
+	);
+}
+
 $lbite_query_args = array(
 	'type'       => 'shop_order',
 	'status'     => array( 'wc-completed', 'wc-processing' ),
 	'date_after' => $lbite_date_after,
-	'limit'      => -1,
+	'orderby'    => 'date',
+	'order'      => 'DESC',
 	'return'     => 'objects',
 );
 if ( $lbite_date_before ) {
 	$lbite_query_args['date_before'] = $lbite_date_before;
 }
+if ( null !== $lbite_location_meta_query ) {
+	$lbite_query_args['meta_query'] = $lbite_location_meta_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+}
 
-$lbite_stat_orders = wc_get_orders( $lbite_query_args );
+// In Batches statt in einer Anfrage laden – `limit => -1` konnte bei grossen
+// Shops den kompletten Bestellbestand gleichzeitig in den Speicher laden
+// (Audit 26.09.2026, AP-14).
+$lbite_stat_batch_size = 200;
 
 // Stornierte Bestellungen separat auswerten (eigene Kennzahl, fliesst NICHT in den Umsatz ein).
 $lbite_cancelled_query_args           = $lbite_query_args;
 $lbite_cancelled_query_args['status'] = array( 'wc-cancelled' );
-$lbite_cancelled_orders               = wc_get_orders( $lbite_cancelled_query_args );
 
 // Zahlungsarten-Label-Map aufbauen.
 $lbite_pm_config    = get_option( 'lbite_pos_payment_methods', array() );
@@ -225,15 +254,14 @@ $lbite_source_totals  = array( // POS vs. Website; feste zwei Schlüssel statt d
 	'website' => array( 'count' => 0, 'revenue' => 0.0 ),
 );
 
-foreach ( $lbite_stat_orders as $lbite_order ) {
-	$lbite_loc_id = (int) $lbite_order->get_meta( '_lbite_location_id' );
+$lbite_batch_page = 1;
+do {
+	$lbite_query_args['limit'] = $lbite_stat_batch_size;
+	$lbite_query_args['paged'] = $lbite_batch_page;
+	$lbite_stat_batch          = wc_get_orders( $lbite_query_args );
 
-	if ( null !== $lbite_stat_allowed_ids && ! in_array( $lbite_loc_id, $lbite_stat_allowed_ids, true ) ) {
-		continue;
-	}
-	if ( $lbite_filter_loc && $lbite_loc_id !== $lbite_filter_loc ) {
-		continue;
-	}
+foreach ( $lbite_stat_batch as $lbite_order ) {
+	$lbite_loc_id = (int) $lbite_order->get_meta( '_lbite_location_id' );
 
 	$lbite_loc_name = $lbite_loc_id ? get_the_title( $lbite_loc_id ) : __( 'No location', 'libre-bite' );
 	if ( ! isset( $lbite_totals[ $lbite_loc_name ] ) ) {
@@ -305,9 +333,13 @@ foreach ( $lbite_stat_orders as $lbite_order ) {
 		$lbite_fn        = $lbite_fee->get_name();
 
 		// Aktions-Gebühren ("Buy X pay for fewer" / Warenkorb-Rabatt) separat
-		// zählen statt sie unter Add-ons zu verstecken.
-		if ( 0 === strpos( $lbite_fn, 'Promotion: ' ) ) {
-			$lbite_promo_label = substr( $lbite_fn, strlen( 'Promotion: ' ) );
+		// zählen statt sie unter Add-ons zu verstecken. Meta statt Namens-
+		// Literal ("Promotion: ") - der Gebührenname ist übersetzt und
+		// stimmte in DE/FR/IT nie mit dem englischen Literal überein
+		// (Audit 26.09.2026, AP-14).
+		$lbite_fee_promo_label = $lbite_fee->get_meta( '_lbite_promotion_label' );
+		if ( $lbite_fee_promo_label ) {
+			$lbite_promo_label = $lbite_fee_promo_label;
 			if ( ! isset( $lbite_promotion_totals[ $lbite_promo_label ] ) ) {
 				$lbite_promotion_totals[ $lbite_promo_label ] = array( 'uses' => 0, 'discount' => 0.0 );
 			}
@@ -368,27 +400,31 @@ foreach ( $lbite_stat_orders as $lbite_order ) {
 	}
 }
 
+	$lbite_batch_page++;
+} while ( count( $lbite_stat_batch ) === $lbite_stat_batch_size );
+
 // Gesamtwerte.
 $lbite_total_revenue = array_sum( array_column( $lbite_totals, 'revenue' ) );
 $lbite_total_orders  = array_sum( array_column( $lbite_totals, 'count' ) );
 $lbite_avg_order     = $lbite_total_orders > 0 ? $lbite_total_revenue / $lbite_total_orders : 0;
 
 // Stornierte Bestellungen: eigene Kennzahl (Anzahl + Betrag), separat vom Umsatz.
+// Standortfilter läuft bereits als meta_query in $lbite_cancelled_query_args.
 $lbite_cancelled_count   = 0;
 $lbite_cancelled_revenue = 0.0;
-foreach ( $lbite_cancelled_orders as $lbite_c_order ) {
-	$lbite_c_loc_id = (int) $lbite_c_order->get_meta( '_lbite_location_id' );
+$lbite_c_batch_page      = 1;
+do {
+	$lbite_cancelled_query_args['limit'] = $lbite_stat_batch_size;
+	$lbite_cancelled_query_args['paged'] = $lbite_c_batch_page;
+	$lbite_cancelled_batch               = wc_get_orders( $lbite_cancelled_query_args );
 
-	if ( null !== $lbite_stat_allowed_ids && ! in_array( $lbite_c_loc_id, $lbite_stat_allowed_ids, true ) ) {
-		continue;
-	}
-	if ( $lbite_filter_loc && $lbite_c_loc_id !== $lbite_filter_loc ) {
-		continue;
-	}
-
+foreach ( $lbite_cancelled_batch as $lbite_c_order ) {
 	$lbite_cancelled_count++;
 	$lbite_cancelled_revenue += (float) $lbite_c_order->get_total();
 }
+
+	$lbite_c_batch_page++;
+} while ( count( $lbite_cancelled_batch ) === $lbite_stat_batch_size );
 
 // Top-Produkte sortieren.
 $lbite_top_by_qty     = $lbite_product_totals;
@@ -429,14 +465,18 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 		__( 'Source', 'libre-bite' ),
 		__( 'Products', 'libre-bite' ),
 	), ';' );
-	foreach ( $lbite_stat_orders as $lbite_csv_order ) {
+	// Eigene, von der Aggregation oben unabhängige Batches – der
+	// Standortfilter läuft bereits als meta_query in $lbite_query_args
+	// (Audit 26.09.2026, AP-14).
+	$lbite_csv_query_args = $lbite_query_args;
+	$lbite_csv_batch_page = 1;
+	do {
+		$lbite_csv_query_args['limit'] = $lbite_stat_batch_size;
+		$lbite_csv_query_args['paged'] = $lbite_csv_batch_page;
+		$lbite_csv_batch               = wc_get_orders( $lbite_csv_query_args );
+
+	foreach ( $lbite_csv_batch as $lbite_csv_order ) {
 		$lbite_csv_loc_id  = (int) $lbite_csv_order->get_meta( '_lbite_location_id' );
-		if ( null !== $lbite_stat_allowed_ids && ! in_array( $lbite_csv_loc_id, $lbite_stat_allowed_ids, true ) ) {
-			continue;
-		}
-		if ( $lbite_filter_loc && $lbite_csv_loc_id !== $lbite_filter_loc ) {
-			continue;
-		}
 		$lbite_csv_pm_key  = $lbite_csv_order->get_meta( '_lbite_payment_method' );
 		if ( 'split' === $lbite_csv_pm_key ) {
 			$lbite_csv_split_rows = $lbite_csv_order->get_meta( '_lbite_split_payments', true );
@@ -476,6 +516,10 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 			implode( ' | ', $lbite_csv_items ),
 		), ';' );
 	}
+
+		$lbite_csv_batch_page++;
+	} while ( count( $lbite_csv_batch ) === $lbite_stat_batch_size );
+
 	fclose( $lbite_fp ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- php://output ist ein Direct-Download-Stream (CSV-Export), kein Dateisystem-Zugriff; WP_Filesystem ist hierfür nicht anwendbar.
 	exit;
 }

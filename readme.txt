@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.4.4
+Stable tag: 3.4.5
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,12 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.4.5 =
+
+* Fixed: the tip amount was never saved to the order (only added as a checkout fee), so the statistics page counted every tip as a generic add-on instead of showing it separately.
+* Fixed: cart-wide and "buy N get M free" promotion discounts were recognized in the statistics page by matching the English fee name "Promotion: " — on non-English shops (including all German, French and Italian setups) this never matched, so these discounts were silently counted as regular add-on revenue.
+* Fixed: the statistics page loaded the entire matching order history into memory in one query and only filtered by location afterwards in PHP; large shops with a long order history could hit memory or time limits. Orders are now fetched in batches and filtered by location directly in the database query.
 
 = 3.4.4 =
 

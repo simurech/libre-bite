@@ -60,6 +60,19 @@ class LBite_Promotions {
 	private $base_prices = array();
 
 	/**
+	 * Regel-Label je Warenkorb-Gebühr-ID, innerhalb einer Anfrage gemerkt.
+	 *
+	 * Verbindet apply_cart_rules()/apply_bogo() (setzen den Eintrag beim
+	 * Erzeugen der Gebühr) mit add_fee_promotion_meta() (liest ihn beim
+	 * Umwandeln in ein Bestell-Item) - ohne Namens-Abgleich, der bei
+	 * übersetzten Gebührennamen nicht sprachunabhängig funktioniert
+	 * (Audit 26.09.2026, AP-14).
+	 *
+	 * @var array<string,string>
+	 */
+	private static $fee_promotion_labels = array();
+
+	/**
 	 * Konstruktor
 	 *
 	 * @param LBite_Loader $loader Hook-Loader.
@@ -79,6 +92,12 @@ class LBite_Promotions {
 		// Produktrabatte hinterlassen sonst keine Spur für die Statistik –
 		// der Positionspreis ist einfach niedriger, ohne erkennbaren Grund.
 		$this->loader->add_action( 'woocommerce_checkout_create_order_line_item', $this, 'add_order_item_promotion_meta', 20, 4 );
+
+		// Dasselbe für Warenkorb- und BOGO-Rabatte (als Gebühr statt
+		// Positionspreis): die Statistik erkannte diese bisher am englischen
+		// Gebührennamen "Promotion: " und zählte sie in DE/FR/IT als Add-on
+		// (Audit 26.09.2026, AP-14).
+		$this->loader->add_action( 'woocommerce_checkout_create_order_fee_item', $this, 'add_fee_promotion_meta', 20, 4 );
 
 		// Ankündigungsleiste
 		$this->loader->add_action( 'wp_body_open', $this, 'render_banner' );
@@ -441,16 +460,23 @@ class LBite_Promotions {
 		// Abzug steht. Steuerbar (Audit 26.09.2026, AP-12), analog zu
 		// apply_cart_rules() - ein geschenkter Artikel muss die MWST-Basis
 		// mitreduzieren.
+		$fee_name = sprintf(
+			/* translators: %s: promotion name */
+			__( 'Promotion: %s', 'libre-bite' ),
+			$rule['label']
+		);
+
 		$cart->add_fee(
-			sprintf(
-				/* translators: %s: promotion name */
-				__( 'Promotion: %s', 'libre-bite' ),
-				$rule['label']
-			),
+			$fee_name,
 			-1 * round( $discount, wc_get_price_decimals() ),
 			true,
 			class_exists( 'LBite_Checkout' ) ? LBite_Checkout::get_current_tax_class() : ''
 		);
+
+		// Merkt sich das Regel-Label unter der Gebühr-ID, die WooCommerce
+		// selbst aus $fee_name erzeugt (sanitize_title) - siehe
+		// add_fee_promotion_meta() (Audit 26.09.2026, AP-14).
+		self::$fee_promotion_labels[ sanitize_title( $fee_name ) ] = $rule['label'];
 	}
 
 	/* ═════════════════════════════════════════════════════════════════
@@ -498,17 +524,46 @@ class LBite_Promotions {
 			// sinkt die MWST-Basis nicht mit dem Rabatt (Audit 26.09.2026,
 			// AP-12). Steuerklasse folgt derselben Schweizer-MWST-Logik wie
 			// die Produktpreise (Takeaway/Dine-in).
+			$fee_name = sprintf(
+				/* translators: %s: promotion name */
+				__( 'Promotion: %s', 'libre-bite' ),
+				$rule['label']
+			);
+
 			$cart->add_fee(
-				sprintf(
-					/* translators: %s: promotion name */
-					__( 'Promotion: %s', 'libre-bite' ),
-					$rule['label']
-				),
+				$fee_name,
 				-1 * round( $discount, wc_get_price_decimals() ),
 				true,
 				class_exists( 'LBite_Checkout' ) ? LBite_Checkout::get_current_tax_class() : ''
 			);
+
+			// Siehe apply_bogo() - dieselbe Registry, damit
+			// add_fee_promotion_meta() beide Fälle gleich behandelt.
+			self::$fee_promotion_labels[ sanitize_title( $fee_name ) ] = $rule['label'];
 		}
+	}
+
+	/**
+	 * Rabatt-Herkunft einer Warenkorb-/BOGO-Gebühr als Order-Item-Meta übernehmen
+	 *
+	 * Pendant zu add_order_item_promotion_meta() für Gebühren statt
+	 * Positionen. Liest das Regel-Label aus der Registry, die
+	 * apply_cart_rules()/apply_bogo() beim Erzeugen der Gebühr befüllt haben -
+	 * kein Namensabgleich, der bei übersetzten Gebührennamen nicht
+	 * sprachunabhängig funktioniert (Audit 26.09.2026, AP-14).
+	 *
+	 * @param WC_Order_Item_Fee $item     Neu erstelltes Bestell-Item.
+	 * @param string            $fee_key  Gebühr-Schlüssel (sanitize_title des Namens).
+	 * @param object            $fee      Gebühr-Objekt aus der Fees-API.
+	 * @param WC_Order          $order    Bestellung.
+	 */
+	public function add_fee_promotion_meta( $item, $fee_key, $fee, $order ) {
+		if ( ! isset( self::$fee_promotion_labels[ $fee_key ] ) ) {
+			return;
+		}
+
+		$item->add_meta_data( '_lbite_promotion_label', self::$fee_promotion_labels[ $fee_key ], true );
+		$item->add_meta_data( '_lbite_promotion_discount', abs( (float) $item->get_total() ), true );
 	}
 
 	/**
