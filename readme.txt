@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.4.5
+Stable tag: 3.4.6
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,11 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.4.6 =
+
+* Fixed: a WooCommerce session cookie was set on every single page view (even for visitors who never touched a location link), which prevented full-page caching from working for any first-time visitor. The cookie is now only set when a location or order-type deep link parameter is actually present in the URL.
+* Fixed: a translation filter for the checkout "Billing details" heading compared against a German string that could never match (the filter always receives the original English text), so it silently did nothing; it also ran an expensive page-type check for every single translated string on the site instead of only for the one relevant string.
 
 = 3.4.5 =
 

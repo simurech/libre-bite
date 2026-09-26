@@ -304,22 +304,25 @@ class LBite_Checkout {
 	 * @return string
 	 */
 	public function customize_billing_details_title( $translated, $text, $domain ) {
-		// Nur im Checkout-Kontext und für WooCommerce-Texte
-		if ( ! is_checkout() || 'woocommerce' !== $domain ) {
+		// `$text` ist der unübersetzte Original-String – WooCommerce liefert
+		// hier immer "Billing details", nie eine deutsche Übersetzung. Der
+		// Vergleich mit "Rechnungsdetails" konnte deshalb nie zutreffen
+		// (Audit 26.09.2026, AP-15). Domain- und Text-Check zuerst, da sie
+		// für praktisch jeden Aufruf dieses für JEDEN übersetzten String
+		// laufenden Filters sofort `false` ergeben; `is_checkout()` (teurer
+		// Query-Check) läuft nur noch für den einen tatsächlich passenden String.
+		if ( 'woocommerce' !== $domain || 'Billing details' !== $text ) {
 			return $translated;
 		}
 
-		// Nur den spezifischen String "Rechnungsdetails" überschreiben
-		if ( 'Rechnungsdetails' === $text || 'Billing details' === $text ) {
-			$custom_fields = get_option( 'lbite_checkout_fields', array() );
-			$custom_title = isset( $custom_fields['_billing_details_title'] ) ? $custom_fields['_billing_details_title'] : '';
-
-			if ( ! empty( $custom_title ) ) {
-				return $custom_title;
-			}
+		if ( ! is_checkout() ) {
+			return $translated;
 		}
 
-		return $translated;
+		$custom_fields = get_option( 'lbite_checkout_fields', array() );
+		$custom_title  = isset( $custom_fields['_billing_details_title'] ) ? $custom_fields['_billing_details_title'] : '';
+
+		return ! empty( $custom_title ) ? $custom_title : $translated;
 	}
 
 	/**
@@ -538,6 +541,15 @@ class LBite_Checkout {
 	 * URL-Parameter verarbeiten
 	 */
 	public function process_url_parameters() {
+		// Ohne einen der beiden Parameter gibt es hier nichts zu tun – vorher
+		// wurde bei JEDEM Seitenaufruf ein Session-Cookie gesetzt, sobald noch
+		// keine Session bestand, was den Seiten-Cache für jeden ersten Besuch
+		// wirkungslos machte (Audit 26.09.2026, AP-15).
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher Deep-Link; nur Session-Schreibzugriff, kein DB-Write.
+		if ( ! isset( $_GET['lbite_location'] ) && ! isset( $_GET['location'] ) && ! isset( $_GET['order_type'] ) ) {
+			return;
+		}
+
 		if ( ! WC()->session ) {
 			return;
 		}
