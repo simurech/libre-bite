@@ -284,6 +284,11 @@ class LBite_Installer {
 			self::migrate_rounding_option();
 		}
 
+		// Migration auf 3.4.4: _lbite_pickup_date für bestehende Vorbestellungen nachtragen
+		if ( version_compare( $current_version, '3.4.4', '<' ) ) {
+			self::migrate_pickup_dates();
+		}
+
 		// Version aktualisieren
 		if ( version_compare( $current_version, LBITE_VERSION, '<' ) ) {
 			update_option( 'lbite_version', LBITE_VERSION );
@@ -353,6 +358,55 @@ class LBite_Installer {
 		}
 
 		delete_option( 'lbite_enable_rounding' );
+	}
+
+	/**
+	 * _lbite_pickup_date für bestehende Vorbestellungen nachtragen.
+	 *
+	 * Neu ab AP-13 (Audit 26.09.2026): die Kapazitätszählung filtert jetzt
+	 * nach diesem Feld statt nach dem Erstellungsdatum. Ohne die Migration
+	 * würden bereits aufgegebene, noch nicht abgeholte Vorbestellungen aus
+	 * der Zählung fallen und ihr Zeitfenster liesse sich überbuchen.
+	 */
+	private static function migrate_pickup_dates() {
+		if ( ! function_exists( 'wc_get_orders' ) ) {
+			return;
+		}
+
+		// In Batches statt in einer Abfrage, damit ein grosser Bestellbestand
+		// nicht auf einmal geladen werden muss.
+		for ( $i = 0; $i < 50; $i++ ) {
+			$orders = wc_get_orders(
+				array(
+					'limit'      => 200,
+					'status'     => 'any',
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Einmalige Migration, in Batches von 200.
+					'meta_query' => array(
+						array(
+							'key'     => '_lbite_pickup_time',
+							'compare' => 'EXISTS',
+						),
+						array(
+							'key'     => '_lbite_pickup_date',
+							'compare' => 'NOT EXISTS',
+						),
+					),
+				)
+			);
+
+			if ( empty( $orders ) ) {
+				break;
+			}
+
+			foreach ( $orders as $order ) {
+				$pickup_time = (string) $order->get_meta( '_lbite_pickup_time', true );
+				if ( '' === $pickup_time ) {
+					continue;
+				}
+				$order->update_meta_data( '_lbite_pickup_date', substr( str_replace( 'T', ' ', $pickup_time ), 0, 10 ) );
+				$order->save();
+			}
+		}
 	}
 
 	/**

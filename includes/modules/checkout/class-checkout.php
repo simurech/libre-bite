@@ -797,7 +797,7 @@ class LBite_Checkout {
 		// Sofort-Bestellungen: Standort muss geöffnet sein.
 		if ( 'now' === $order_type && $location_id ) {
 			$lbite_opening_hours = LBite_Locations::get_opening_hours( $location_id );
-			$lbite_status        = LBite_Locations::get_location_status( $lbite_opening_hours );
+			$lbite_status        = LBite_Locations::get_location_status( $lbite_opening_hours, $location_id );
 			if ( $lbite_status && 'open' !== $lbite_status['type'] && 'closing-soon' !== $lbite_status['type'] ) {
 				wc_add_notice( __( 'The selected location is currently closed. Please select a pre-order time.', 'libre-bite' ), 'error' );
 			}
@@ -906,6 +906,10 @@ class LBite_Checkout {
 
 			if ( 'later' === $order_type && $pickup_time ) {
 				$order->update_meta_data( '_lbite_pickup_time', $pickup_time );
+				// Eigenes Datumsfeld für die Kapazitätszählung (Audit
+				// 26.09.2026, AP-13): count_orders_per_slot() filtert damit
+				// gezielt nach Abholdatum statt nach Erstellungsdatum.
+				$order->update_meta_data( '_lbite_pickup_date', substr( $pickup_time, 0, 10 ) );
 			}
 		}
 
@@ -1420,7 +1424,7 @@ class LBite_Checkout {
 		}
 
 		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
-		$status        = LBite_Locations::get_location_status( $opening_hours );
+		$status        = LBite_Locations::get_location_status( $opening_hours, $location_id );
 
 		wp_send_json_success( array( 'status' => $status ) );
 	}
@@ -1469,11 +1473,10 @@ class LBite_Checkout {
 		$lbite_date_dt = new DateTime( $date, $tz );
 		$day_name      = strtolower( $lbite_date_dt->format( 'l' ) );
 
-		if ( ! isset( $opening_hours[ $day_name ] ) || ! empty( $opening_hours[ $day_name ]['closed'] ) ) {
-			return array();
-		}
-
-		// Feiertag prüfen – überschreibt reguläre Öffnungszeiten.
+		// Feiertag VOR der Ruhetags-Prüfung auswerten: ein Feiertag mit
+		// Sonderöffnungszeiten an einem regulären Ruhetag lieferte bisher
+		// keine Slots, weil die Ruhetags-Prüfung schon vorher abbrach
+		// (Audit 26.09.2026, AP-13).
 		$holiday = LBite_Locations::get_holiday_for_date( $location_id, $date );
 		if ( $holiday ) {
 			$holiday_type = isset( $holiday['type'] ) ? $holiday['type'] : 'closed';
@@ -1490,6 +1493,12 @@ class LBite_Checkout {
 					'close2' => isset( $holiday['close2'] ) ? $holiday['close2'] : '',
 				);
 			}
+		}
+
+		// Ruhetag - es sei denn, ein Feiertag mit Sonderzeiten hat die Zeilen
+		// oben soeben überschrieben.
+		if ( ! isset( $opening_hours[ $day_name ] ) || ! empty( $opening_hours[ $day_name ]['closed'] ) ) {
+			return array();
 		}
 
 		// Aktueller Zeitpunkt und frühstmöglicher Slot (Vorbereitungszeit).
@@ -1619,24 +1628,46 @@ class LBite_Checkout {
 			return array();
 		}
 
-		$orders = wc_get_orders(
+		// Nach Abholdatum filtern statt nach Erstellungsdatum (Audit
+		// 26.09.2026, AP-13): eine Vorbestellung mit mehr als 24h Vorlauf
+		// wurde bisher nie mitgezählt, der Slot liess sich überbuchen.
+		$location_query = array(
+			array(
+				'key'   => '_lbite_location_id',
+				'value' => $location_id,
+			),
+			array(
+				'key'     => '_lbite_pickup_date',
+				'value'   => wp_date( 'Y-m-d' ),
+				'compare' => '>=',
+			),
+		);
+
+		// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Standortbezogene Belegungszählung nach Abholdatum, auf 500 Einträge begrenzt.
+		$confirmed = wc_get_orders(
 			array(
 				'limit'      => 500,
 				'status'     => array( 'processing', 'on-hold', 'completed' ),
-				'date_after' => gmdate( 'Y-m-d', current_time( 'timestamp' ) - DAY_IN_SECONDS ),
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Standortbezogene Belegungszählung, auf 500 Einträge begrenzt.
-				'meta_query' => array(
-					array(
-						'key'   => '_lbite_location_id',
-						'value' => $location_id,
-					),
-				),
+				'meta_query' => $location_query,
+			)
+		);
+
+		// Pending-Bestellungen nur innerhalb eines kurzen Zeitfensters
+		// mitzählen: eine abgebrochene Zahlung darf ein Zeitfenster nicht
+		// dauerhaft blockieren.
+		// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Wie oben, auf 500 Einträge begrenzt.
+		$pending = wc_get_orders(
+			array(
+				'limit'      => 500,
+				'status'     => array( 'pending' ),
+				'date_after' => gmdate( 'Y-m-d H:i:s', time() - 15 * MINUTE_IN_SECONDS ),
+				'meta_query' => $location_query,
 			)
 		);
 
 		$counts = array();
 
-		foreach ( $orders as $order ) {
+		foreach ( array_merge( $confirmed, $pending ) as $order ) {
 			$pickup = (string) $order->get_meta( '_lbite_pickup_time', true );
 
 			if ( '' === $pickup ) {

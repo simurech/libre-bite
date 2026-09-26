@@ -33,7 +33,7 @@ $lbite_align_class = ( 'center' !== $atts['align'] ) ? ' lbite-align-' . $atts['
 			}
 
 			$lbite_opening_hours  = LBite_Locations::get_opening_hours( $lbite_location->ID );
-			$lbite_status_data    = LBite_Locations::get_location_status( $lbite_opening_hours );
+			$lbite_status_data    = LBite_Locations::get_location_status( $lbite_opening_hours, $lbite_location->ID );
 			$lbite_activation     = LBite_Locations::get_activation_status( $lbite_location->ID );
 			$lbite_card_is_locked = false;
 			if ( $lbite_activation ) {

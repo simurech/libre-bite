@@ -1386,6 +1386,13 @@ class LBite_Locations {
 			if ( empty( $holiday['date'] ) ) {
 				continue;
 			}
+			// Nur echte Ruhetage, keine Tage mit Sonderöffnungszeiten - sonst
+			// zeigte der Datepicker auch an Feiertagen mit eigenen
+			// Öffnungszeiten "geschlossen" an (Audit 26.09.2026, AP-13).
+			$holiday_type = isset( $holiday['type'] ) ? $holiday['type'] : 'closed';
+			if ( 'closed' !== $holiday_type ) {
+				continue;
+			}
 			$locations = isset( $holiday['locations'] ) ? $holiday['locations'] : 'all';
 			$matches   = ( 'all' === $locations ) || ( is_array( $locations ) && in_array( (int) $location_id, array_map( 'intval', $locations ), true ) );
 			if ( $matches ) {
@@ -1520,9 +1527,10 @@ class LBite_Locations {
 	 * Status eines Standorts berechnen
 	 *
 	 * @param array $opening_hours Öffnungszeiten.
+	 * @param int   $location_id  Standort-ID, für die Feiertagsprüfung (0 = keine).
 	 * @return array|null Status-Daten (type, text) oder null.
 	 */
-	public static function get_location_status( $opening_hours ) {
+	public static function get_location_status( $opening_hours, $location_id = 0 ) {
 		if ( ! $opening_hours || ! is_array( $opening_hours ) ) {
 			return null;
 		}
@@ -1531,6 +1539,35 @@ class LBite_Locations {
 		$lbite_now    = new DateTime( 'now', wp_timezone() );
 		$current_hhmm = $lbite_now->format( 'H:i' );
 		$current_day  = strtolower( $lbite_now->format( 'l' ) );
+		$today        = wp_date( 'Y-m-d' );
+
+		// Feiertag hat Vorrang vor den regulären Öffnungszeiten - bisher
+		// zeigte ein Standort an einem als "geschlossen" markierten Feiertag
+		// weiterhin "Geöffnet" an, Sofortbestellungen wurden angenommen
+		// (Audit 26.09.2026, AP-13).
+		if ( $location_id ) {
+			$holiday = self::get_holiday_for_date( $location_id, $today );
+			if ( $holiday ) {
+				$holiday_type = isset( $holiday['type'] ) ? $holiday['type'] : 'closed';
+				if ( 'closed' === $holiday_type ) {
+					return array(
+						'type' => 'closed',
+						'text' => isset( $holiday['name'] ) && $holiday['name']
+							? $holiday['name']
+							: __( 'Closed', 'libre-bite' ),
+					);
+				}
+				if ( 'custom' === $holiday_type ) {
+					$opening_hours[ $current_day ] = array(
+						'closed' => false,
+						'open'   => isset( $holiday['open'] ) ? $holiday['open'] : '',
+						'close'  => isset( $holiday['close'] ) ? $holiday['close'] : '',
+						'open2'  => isset( $holiday['open2'] ) ? $holiday['open2'] : '',
+						'close2' => isset( $holiday['close2'] ) ? $holiday['close2'] : '',
+					);
+				}
+			}
+		}
 
 		// Prüfen ob heute geöffnet.
 		if ( isset( $opening_hours[ $current_day ] ) && ! $opening_hours[ $current_day ]['closed'] ) {
@@ -1612,16 +1649,7 @@ class LBite_Locations {
 	 * @return string|null Formatierter Text oder null.
 	 */
 	public static function find_next_opening( $opening_hours ) {
-		$day_names    = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
-		$day_names_de = array(
-			'monday'    => 'Mo',
-			'tuesday'   => 'Di',
-			'wednesday' => 'Mi',
-			'thursday'  => 'Do',
-			'friday'    => 'Fr',
-			'saturday'  => 'Sa',
-			'sunday'    => 'So',
-		);
+		$day_names = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
 
 		$lbite_now         = new DateTime( 'now', wp_timezone() );
 		$current_hhmm      = $lbite_now->format( 'H:i' );
@@ -1660,7 +1688,10 @@ class LBite_Locations {
 					/* translators: %s: opening time */
 					return sprintf( __( 'Opens tomorrow %s', 'libre-bite' ), $open_hhmm );
 				} else {
-					$day_abbr = $day_names_de[ $day_name ];
+					// Lokalisiertes Tageskürzel statt hartcodiert deutsch
+					// (Audit 26.09.2026, AP-13).
+					$day_dt   = ( clone $lbite_now )->modify( "+{$i} days" );
+					$day_abbr = wp_date( 'D', $day_dt->getTimestamp(), wp_timezone() );
 					/* translators: %1$s: day abbreviation, %2$s: opening time */
 					return sprintf( __( 'Opens %1$s %2$s', 'libre-bite' ), $day_abbr, $open_hhmm );
 				}

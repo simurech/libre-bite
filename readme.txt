@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.4.3
+Stable tag: 3.4.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,13 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.4.4 =
+
+* Fixed: time slot capacity only counted orders created in the last 24 hours, not by their pickup time. A pre-order placed more than a day in advance was invisible to the capacity check, so a fully-booked slot could still be overbooked. Capacity is now counted by pickup date; existing pre-orders are backfilled automatically on update.
+* Fixed: a location's "Open now" status ignored holidays entirely — closed holidays still showed as open and accepted immediate orders, and a holiday with special hours on an otherwise closed weekday showed no available time slots at checkout.
+* Fixed: the holiday date-picker in Settings also greyed out holidays that have their own special opening hours, not just fully closed ones.
+* Fixed: the "next opening" text (e.g. "Opens Mon 11:00") always showed the day abbreviation in German, regardless of the site's language.
 
 = 3.4.3 =
 
