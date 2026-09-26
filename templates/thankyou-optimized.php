@@ -112,6 +112,7 @@ $lbite_receipt_nonce    = wp_create_nonce( 'lbite_send_receipt_' . $lbite_order_
 		<?php endif; ?>
 		<button type="button" class="lbite-email-receipt-btn" id="lbite-send-receipt-btn"
 			data-order-id="<?php echo esc_attr( $lbite_order_id_for_nonce ); ?>"
+			data-order-key="<?php echo esc_attr( $lbite_order->get_order_key() ); ?>"
 			data-nonce="<?php echo esc_attr( $lbite_receipt_nonce ); ?>"
 			data-has-email="<?php echo $lbite_is_dummy_email ? '0' : '1'; ?>"
 			data-ajaxurl="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
@@ -353,6 +354,7 @@ jQuery(document).ready(function($) {
 		var postData = {
 			action: 'lbite_send_receipt_email',
 			order_id: $btn.data('order-id'),
+			order_key: $btn.data('order-key'),
 			nonce: $btn.data('nonce')
 		};
 		if (email) {

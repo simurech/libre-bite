@@ -1898,6 +1898,16 @@ class LBite_Checkout {
 			wp_send_json_error( __( 'Order not found.', 'libre-bite' ) );
 		}
 
+		// Zusätzlich zur Nonce: der Order-Key bindet die Anfrage an genau
+		// diese Bestellung, sonst könnte jede gültige Nonce für die eigene
+		// Bestellung auch für fremde Bestellungen wiederverwendet werden,
+		// solange deren order_id erraten wird (Audit 26.09.2026, AP-06).
+		// phpcs:ignore WordPress.Security.NonceVerification -- Nonce wurde oben geprüft.
+		$order_key = isset( $_POST['order_key'] ) ? sanitize_text_field( wp_unslash( $_POST['order_key'] ) ) : '';
+		if ( ! hash_equals( $order->get_order_key(), $order_key ) ) {
+			wp_send_json_error( __( 'Invalid order.', 'libre-bite' ) );
+		}
+
 		// Rate-Limit: nur einmal versenden.
 		if ( $order->get_meta( '_lbite_receipt_sent' ) ) {
 			wp_send_json_error( __( 'Receipt already sent.', 'libre-bite' ) );
@@ -1912,13 +1922,18 @@ class LBite_Checkout {
 			if ( ! is_email( $guest_email ) ) {
 				wp_send_json_error( __( 'Please enter a valid email address.', 'libre-bite' ) );
 			}
-			// Nur für diesen Versand setzen – wird nicht gespeichert.
+			// Wird unten über $order->save() dauerhaft gespeichert - der
+			// Gast hat damit ab jetzt eine echte Adresse auf der Bestellung
+			// statt der Platzhalteradresse (Audit 26.09.2026, AP-06).
 			$order->set_billing_email( $guest_email );
 		}
 
+		// $order (nicht $order_id) übergeben: trigger() lädt die Bestellung
+		// sonst frisch aus der Datenbank und verschickt an die alte
+		// Platzhalteradresse, weil $order->save() erst danach läuft.
 		$emails = WC()->mailer()->get_emails();
 		if ( isset( $emails['WC_Email_Customer_Invoice'] ) ) {
-			$emails['WC_Email_Customer_Invoice']->trigger( $order_id );
+			$emails['WC_Email_Customer_Invoice']->trigger( $order_id, $order );
 		}
 
 		$order->update_meta_data( '_lbite_receipt_sent', current_time( 'mysql' ) );
