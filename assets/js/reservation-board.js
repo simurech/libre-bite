@@ -5,18 +5,6 @@
 (function($) {
 	'use strict';
 
-	function escapeHtml(str) {
-		if (str === null || str === undefined) {
-			return '';
-		}
-		return String(str)
-			.replace(/&/g, '&amp;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;')
-			.replace(/"/g, '&quot;')
-			.replace(/'/g, '&#039;');
-	}
-
 	const ReservationBoard = {
 		refreshTimer: null,
 		isLoading: false,
@@ -220,8 +208,11 @@
 			// --- Kopfzeile: Uhrzeit, Personen, Status-Badge ---
 			const $header = $('<div>').addClass('lbite-res-card__header');
 
-			$('<span>').addClass('lbite-res-card__time').text(escapeHtml(res.time)).appendTo($header);
-			$('<span>').addClass('lbite-res-card__guests').text(escapeHtml(res.guests) + ' P').appendTo($header);
+			// .text() escaped bereits selbst - ein zusätzliches escapeHtml() davor
+			// liess HTML-Entities wörtlich sichtbar werden statt sie darzustellen
+			// (Audit 26.09.2026, AP-21).
+			$('<span>').addClass('lbite-res-card__time').text(res.time).appendTo($header);
+			$('<span>').addClass('lbite-res-card__guests').text(res.guests + ' P').appendTo($header);
 
 			const $statusBtn = $('<button>')
 				.addClass('lbite-res-status-badge button')
@@ -237,17 +228,17 @@
 			// --- Rumpf: Name, Telefon, Notiz, Tisch-Dropdown ---
 			const $body = $('<div>').addClass('lbite-res-card__body');
 
-			$('<div>').addClass('lbite-res-card__name').text(escapeHtml(res.name)).appendTo($body);
+			$('<div>').addClass('lbite-res-card__name').text(res.name).appendTo($body);
 
 			if (res.phone) {
 				const $phone = $('<div>').addClass('lbite-res-card__phone');
 				$('<span>').addClass('dashicons dashicons-phone').appendTo($phone);
-				$phone.append(document.createTextNode(' ' + escapeHtml(res.phone)));
+				$phone.append(document.createTextNode(' ' + res.phone));
 				$body.append($phone);
 			}
 
 			if (res.notes) {
-				$('<div>').addClass('lbite-res-card__notes').text(escapeHtml(res.notes)).appendTo($body);
+				$('<div>').addClass('lbite-res-card__notes').text(res.notes).appendTo($body);
 			}
 
 			// Gastnotizen aus dem Kundenkonto (nur bei wiedererkanntem Gast)
@@ -262,14 +253,14 @@
 				if (res.guest_allergies) {
 					$('<div>')
 						.addClass('lbite-res-card__allergies')
-						.text('⚠ ' + escapeHtml(res.guest_allergies))
+						.text('⚠ ' + res.guest_allergies)
 						.appendTo($guest);
 				}
 
 				if (res.guest_notes) {
 					$('<div>')
 						.addClass('lbite-res-card__guest-notes')
-						.text(escapeHtml(res.guest_notes))
+						.text(res.guest_notes)
 						.appendTo($guest);
 				}
 
@@ -372,10 +363,19 @@
 			const interval = lbiteReservationBoard.refreshInterval || 60000;
 
 			this.refreshTimer = setInterval(function() {
+				// Kein Server-Roundtrip für einen Tab, den ohnehin niemand
+				// ansieht (Audit 26.09.2026, AP-21).
+				if (document.hidden) { return; }
 				if (self.currentLocationId && !self.isLoading) {
 					self.loadReservations(true);
 				}
 			}, interval);
+
+			document.addEventListener('visibilitychange', function() {
+				if (!document.hidden && self.currentLocationId && !self.isLoading) {
+					self.loadReservations(true);
+				}
+			});
 		}
 	};
 

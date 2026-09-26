@@ -6858,6 +6858,10 @@ msgstr "En savoir plus"
 msgid "Sample menu created. The sample location was saved as a draft because the Free plan is limited to one published location — publish it manually if you want to use it instead of your existing one."
 msgstr "Exemple de menu créé. L'emplacement d'exemple a été enregistré comme brouillon car le plan gratuit est limité à un emplacement publié – publiez-le manuellement si vous souhaitez l'utiliser à la place de votre emplacement existant."
 
+#: libre-bite.php:325
+msgid "Every Minute"
+msgstr "Chaque minute"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Erreur lors de l'enregistrement"
 

@@ -7028,3 +7028,7 @@ msgstr ""
 #: templates/admin/setup-wizard.php:340
 msgid "Sample menu created. The sample location was saved as a draft because the Free plan is limited to one published location — publish it manually if you want to use it instead of your existing one."
 msgstr ""
+
+#: libre-bite.php:325
+msgid "Every Minute"
+msgstr ""

@@ -2121,6 +2121,23 @@ class LBite_Admin {
 				continue; // Abgelaufene Gutscheine überspringen.
 			}
 
+			// E-Mail-gebundene Gutscheine (u. a. jede Stempelkarten-Belohnung,
+			// siehe LBite_Stampcard::create_reward_coupon()) sind für eine
+			// bestimmte Person gedacht, nicht für die allgemeine Kassen-Liste.
+			// Ohne diesen Filter konnten sie bei einem aktiven Treueprogramm
+			// die 100-Einträge-Grenze füllen und echte Aktionsgutscheine
+			// verdrängen (Audit 26.09.2026, AP-21).
+			if ( ! empty( $coupon->get_email_restrictions() ) ) {
+				continue;
+			}
+
+			// Bereits ausgeschöpfte Gutscheine ebenfalls überspringen - sie
+			// würden bei einem Anwendungsversuch ohnehin abgelehnt.
+			$usage_limit = $coupon->get_usage_limit();
+			if ( $usage_limit > 0 && $coupon->get_usage_count() >= $usage_limit ) {
+				continue;
+			}
+
 			$coupons[] = array(
 				'code'          => $coupon->get_code(),
 				'description'   => $coupon_post->post_excerpt,
@@ -2547,7 +2564,13 @@ class LBite_Admin {
 			<?php esc_html_e( 'Send Receipt by Email', 'libre-bite' ); ?>
 		</button>
 		<p id="lbite-receipt-msg" style="margin-top: 6px; display: none;"></p>
-		<script>
+		<?php
+		// wp_add_inline_script() statt rohem <script>-Tag: diese Metabox
+		// sitzt auf WooCommerce's eigener Bestellansicht, nicht auf einer
+		// lbite-*-Seite mit eigenem enqueuten Handle - jquery ist dort
+		// immer verfügbar (Audit 26.09.2026, AP-21).
+		ob_start();
+		?>
 		jQuery(document).ready(function($) {
 			$('#lbite-admin-send-receipt-btn').on('click', function() {
 				var $btn = $(this);
@@ -2592,8 +2615,8 @@ class LBite_Admin {
 				});
 			});
 		});
-		</script>
 		<?php
+		wp_add_inline_script( 'jquery', ob_get_clean() );
 	}
 
 	/**

@@ -3,7 +3,7 @@
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://wordpress.org/plugins/libre-bite/
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
- * Version:           3.5.0
+ * Version:           3.5.1
  * Requires at least: 6.0
  * Tested up to:      7.1
  * Requires PHP:      8.1
@@ -79,7 +79,7 @@ if ( function_exists( 'lbite_freemius' ) ) {
 }
 
 // Plugin-Konstanten definieren
-define( 'LBITE_VERSION', '3.5.0' );
+define( 'LBITE_VERSION', '3.5.1' );
 define( 'LBITE_PLUGIN_FILE', __FILE__ );
 define( 'LBITE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LBITE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -137,16 +137,26 @@ function lbite_load_textdomain() {
 	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- 'plugin_locale' ist ein WordPress-Core-Hook (Standard-i18n-Pattern), kein eigener Hook.
 	$locale = apply_filters( 'plugin_locale', determine_locale(), 'libre-bite' );
 
-	// Bundled translations first — ensures new strings not yet on translate.wordpress.org are available.
-	$bundled = plugin_dir_path( LBITE_PLUGIN_FILE ) . 'languages/libre-bite-' . $locale . '.mo';
-	if ( is_readable( $bundled ) ) {
-		load_textdomain( 'libre-bite', $bundled );
-	}
-
-	// WP.org language pack on top — community strings win for conflicts, new bundled strings survive.
+	// WP.org language pack first: WordPress' translation loader (seit 6.5,
+	// WP_Translation_Controller) sucht eine Zeichenkette in der Reihenfolge,
+	// in der Dateien geladen wurden, und nimmt den ERSTEN Treffer - nicht
+	// den letzten. Der ursprüngliche Kommentar hier ("community strings win
+	// for conflicts") beschrieb das Gegenteil der tatsächlichen Priorität,
+	// weil die Bundled-Datei zuerst geladen wurde (Audit 26.09.2026, AP-21,
+	// per Quellcode-Prüfung von class-wp-translation-controller.php
+	// bestätigt). Community-Übersetzungen sollen bei Überschneidungen
+	// gewinnen, also zuerst laden.
 	$wporg = WP_LANG_DIR . '/plugins/libre-bite-' . $locale . '.mo';
 	if ( is_readable( $wporg ) ) {
 		load_textdomain( 'libre-bite', $wporg );
+	}
+
+	// Bundled translations second: liefert nur die Strings, die im WP.org-
+	// Sprachpaket (noch) fehlen - typischerweise ganz neue Strings, die die
+	// Community noch nicht übersetzt hat.
+	$bundled = plugin_dir_path( LBITE_PLUGIN_FILE ) . 'languages/libre-bite-' . $locale . '.mo';
+	if ( is_readable( $bundled ) ) {
+		load_textdomain( 'libre-bite', $bundled );
 	}
 }
 add_action( 'plugins_loaded', 'lbite_load_textdomain', 10 );
@@ -305,9 +315,14 @@ function lbite_checkout_uses_blocks() {
  * Custom Cron-Intervalle registrieren
  */
 add_filter( 'cron_schedules', function( $schedules ) {
-	$schedules['every_minute'] = array(
+	// Eigener Präfix statt generischem "every_minute" - kollidiert sonst mit
+	// dem gleichnamigen Intervall eines anderen Plugins, das dann je nach
+	// Ladereihenfolge die Definition des anderen überschreibt (Audit
+	// 26.09.2026, AP-21). cron_schedules feuert erst bei wp_get_schedules(),
+	// also nach plugins_loaded - __() funktioniert hier zuverlässig.
+	$schedules['lbite_every_minute'] = array(
 		'interval' => 60,
-		'display'  => 'Every Minute', // No translation here to avoid early-loading warnings
+		'display'  => __( 'Every Minute', 'libre-bite' ),
 	);
 	return $schedules;
 } );

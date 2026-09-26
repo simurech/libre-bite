@@ -155,7 +155,14 @@ foreach ( $lbite_products as $lbite_product ) {
 	<?php endif; ?>
 </div>
 
-<style>
+<?php
+// wp_add_inline_style() statt rohem <style>-Tag: lbite-admin-pages ist auf
+// jeder lbite-*-Admin-Seite bereits enqueut (is_lbite_screen()), das Regelwerk
+// landet damit weiterhin inline im Kopf derselben Seite - keine zusätzliche
+// Datei, kein zusätzlicher Ladevorgang, nur über den Dependency-Mechanismus
+// statt eines rohen Tags (Audit 26.09.2026, AP-21).
+ob_start();
+?>
 /* Bildschirm */
 .lbite-allergen-matrix .lbite-print-header { display: none; }
 .lbite-matrix-scroll { overflow-x: auto; background: var(--lbite-surface, #fff); border: 1px solid var(--lbite-border, #ddd); border-radius: var(--lbite-radius-md, 10px); }
@@ -188,4 +195,6 @@ foreach ( $lbite_products as $lbite_product ) {
 	.lbite-matrix-table tr { page-break-inside: avoid; }
 	@page { size: A4 landscape; margin: 10mm; }
 }
-</style>
+<?php
+wp_add_inline_style( 'lbite-admin-pages', ob_get_clean() );
+?>

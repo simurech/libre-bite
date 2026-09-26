@@ -36,6 +36,15 @@ class LBite_Guest_Notes {
 	const META_ALLERGIES = '_lbite_guest_allergies';
 
 	/**
+	 * Meta-Schlüssel für die normalisierte Telefonnummer (siehe normalize_phone()).
+	 *
+	 * Immer synchron zu billing_phone gehalten (sync_normalized_phone()) -
+	 * erlaubt find_customer_by_phone() eine exakte statt einer nicht
+	 * indexierbaren LIKE-Suche über alle Benutzer (Audit 26.09.2026, AP-21).
+	 */
+	const META_PHONE_NORMALIZED = '_lbite_phone_normalized';
+
+	/**
 	 * Loader-Instanz.
 	 *
 	 * @var LBite_Loader
@@ -57,6 +66,10 @@ class LBite_Guest_Notes {
 
 		// Reservierungsboard mit Gastnotizen anreichern.
 		$this->loader->add_filter( 'lbite_reservation_board_data', $this, 'add_notes_to_reservation', 10, 2 );
+
+		// Normalisierte Telefonnummer synchron zu billing_phone halten.
+		$this->loader->add_action( 'added_user_meta', $this, 'maybe_sync_normalized_phone', 10, 4 );
+		$this->loader->add_action( 'updated_user_meta', $this, 'maybe_sync_normalized_phone', 10, 4 );
 
 		// Notizen und Allergiehinweise sind personenbezogene (bei
 		// Allergien sogar gesundheitsbezogene) Daten - ohne diese beiden
@@ -101,6 +114,22 @@ class LBite_Guest_Notes {
 	}
 
 	/**
+	 * Normalisierte Telefonnummer synchron zu billing_phone halten.
+	 *
+	 * @param int    $meta_id    Meta-ID (ungenutzt).
+	 * @param int    $user_id    Benutzer-ID.
+	 * @param string $meta_key   Geänderter Meta-Key.
+	 * @param mixed  $meta_value Neuer Wert.
+	 */
+	public function maybe_sync_normalized_phone( $meta_id, $user_id, $meta_key, $meta_value ) {
+		if ( 'billing_phone' !== $meta_key ) {
+			return;
+		}
+
+		update_user_meta( $user_id, self::META_PHONE_NORMALIZED, self::normalize_phone( $meta_value ) );
+	}
+
+	/**
 	 * Kunden über die Telefonnummer finden
 	 *
 	 * @param string $phone Telefonnummer.
@@ -119,34 +148,20 @@ class LBite_Guest_Notes {
 			return (int) $cached;
 		}
 
-		// Über die Billing-Telefonnummer suchen. Ein LIKE auf die letzten
-		// Ziffern ist hier zuverlässiger als ein exakter Vergleich, weil die
-		// Schreibweisen im Datenbestand uneinheitlich sind.
+		// Exakter Abgleich über die normalisierte Nummer statt eines LIKE
+		// über alle billing_phone-Werte - ein LIKE mit Wildcard auf beiden
+		// Seiten kann keinen Index nutzen und wird mit wachsendem
+		// Kundenstamm zunehmend langsamer (Audit 26.09.2026, AP-21).
 		$users = get_users(
 			array(
-				'number'     => 20,
+				'number'     => 5,
 				'fields'     => 'ID',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Einzelabfrage bei Anzeige eines Reservierungs-Boards, auf 20 Treffer begrenzt.
-				'meta_query' => array(
-					array(
-						'key'     => 'billing_phone',
-						'value'   => substr( $normalized, -6 ),
-						'compare' => 'LIKE',
-					),
-				),
+				'meta_key'   => self::META_PHONE_NORMALIZED, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Exakter Abgleich, auf 5 Treffer begrenzt.
+				'meta_value' => $normalized, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- s.o.
 			)
 		);
 
-		$found = 0;
-
-		foreach ( $users as $user_id ) {
-			$candidate = get_user_meta( $user_id, 'billing_phone', true );
-
-			if ( self::normalize_phone( $candidate ) === $normalized ) {
-				$found = (int) $user_id;
-				break;
-			}
-		}
+		$found = ! empty( $users ) ? (int) $users[0] : 0;
 
 		wp_cache_set( 'lbite_guest_' . $normalized, $found, 'lbite', 5 * MINUTE_IN_SECONDS );
 

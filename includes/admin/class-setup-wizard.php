@@ -181,9 +181,16 @@ class LBite_Setup_Wizard {
 			'hint'  => __( 'Without a payment method guests cannot complete an order.', 'libre-bite' ),
 		);
 
+		// Beide Jobs werden seit AP-21 nur eingeplant, wenn das jeweilige
+		// Feature aktiv ist (LBite_Installer::sync_cron_jobs()) - ein
+		// fehlender Job ist deshalb nur ein Problem, wenn er tatsächlich
+		// gebraucht würde.
+		$lbite_relevant_cron_missing = ( lbite_feature_enabled( 'enable_scheduled_orders' ) && ! wp_next_scheduled( 'lbite_check_scheduled_orders' ) )
+			|| ( lbite_feature_enabled( 'enable_pickup_reminders' ) && ! wp_next_scheduled( 'lbite_send_pickup_reminders' ) );
+
 		$checks[] = array(
 			'label' => __( 'Scheduled tasks are running', 'libre-bite' ),
-			'ok'    => ! ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) || (bool) wp_next_scheduled( 'lbite_check_scheduled_orders' ),
+			'ok'    => ! ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) || ! $lbite_relevant_cron_missing,
 			'hint'  => __( 'Pre-orders and pickup reminders rely on WordPress scheduled tasks.', 'libre-bite' ),
 		);
 

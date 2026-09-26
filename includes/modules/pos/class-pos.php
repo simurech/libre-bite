@@ -22,6 +22,14 @@ class LBite_POS {
 	private $loader;
 
 	/**
+	 * Verhindert mehrfaches Erhöhen des Cache-Versionszählers innerhalb
+	 * derselben Anfrage (siehe clear_all_product_caches()).
+	 *
+	 * @var bool
+	 */
+	private static $cache_invalidated_this_request = false;
+
+	/**
 	 * Konstruktor
 	 *
 	 * @param LBite_Loader $loader Loader-Instanz
@@ -42,29 +50,38 @@ class LBite_POS {
 		// Diese bleiben als Fallback erhalten, werden aber normalerweise nicht verwendet.
 		$this->loader->add_action( 'wp_ajax_lbite_pos_get_products', $this, 'ajax_get_products' );
 
-		// POS-Produkt-Cache invalidieren bei Produkt- oder Standort-Änderungen.
+		// POS-Produkt-Cache invalidieren bei Produkt- oder Standort-Änderungen
+		// sowie bei Lagerbestandsänderungen (z. B. automatischer Abverkauf
+		// über WooCommerce, ohne dass save_post_product/woocommerce_update_product
+		// feuert).
 		$this->loader->add_action( 'save_post_product', $this, 'clear_all_product_caches' );
 		$this->loader->add_action( 'woocommerce_update_product', $this, 'clear_all_product_caches' );
 		$this->loader->add_action( 'save_post_lbite_location', $this, 'clear_all_product_caches' );
+		$this->loader->add_action( 'woocommerce_product_set_stock', $this, 'clear_all_product_caches' );
+		$this->loader->add_action( 'woocommerce_variation_set_stock', $this, 'clear_all_product_caches' );
 	}
 
 	/**
-	 * Alle POS-Produkt-Caches löschen (alle Standort-Varianten)
+	 * Alle POS-Produkt-Caches ungültig machen (alle Standort-Varianten)
 	 *
-	 * Nutzt direktes SQL mit LIKE-Pattern, da WordPress keine Wildcard-Suche
-	 * für Transients bietet. Betrifft alle lbite_pos_products_* Transients.
+	 * Versions-Zähler statt SQL-Bulk-Delete: Transients landen bei aktivem
+	 * Object-Cache (Redis/Memcached) nicht in wp_options, ein LIKE-Delete
+	 * dort ging deshalb bisher komplett ins Leere und liess veraltete
+	 * Produktdaten im POS stehen. Der Zähler fliesst als Teil des
+	 * Transient-Schlüssels ein (siehe get_pos_product_data()) - alte
+	 * Einträge veralten einfach über ihre eigene Ablaufzeit, statt aktiv
+	 * gelöscht werden zu müssen (Audit 26.09.2026, AP-21). Innerhalb einer
+	 * Anfrage nur einmal erhöhen, da save_post_product und
+	 * woocommerce_update_product beim Speichern über den Produkt-Editor
+	 * beide für dasselbe Ereignis feuern.
 	 */
 	public function clear_all_product_caches() {
-		global $wpdb;
+		if ( self::$cache_invalidated_this_request ) {
+			return;
+		}
+		self::$cache_invalidated_this_request = true;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Bulk-Löschung von Transients via LIKE, WP-API unterstützt kein Wildcard-Delete.
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
-				$wpdb->esc_like( '_transient_lbite_pos_products_' ) . '%',
-				$wpdb->esc_like( '_transient_timeout_lbite_pos_products_' ) . '%'
-			)
-		);
+		update_option( 'lbite_pos_cache_ver', (int) get_option( 'lbite_pos_cache_ver', 0 ) + 1, false );
 	}
 
 	/**
@@ -218,8 +235,9 @@ class LBite_POS {
 		// Abgelaufene "nur heute"-Sperren vorab zurücksetzen, damit Cache aktuell bleibt.
 		$this->reset_expired_unavailable_products();
 
-		// Cache prüfen (Key enthält Standort-ID für spätere standortspezifische Filterung).
-		$transient_key = 'lbite_pos_products_' . (int) $location_id;
+		// Cache prüfen (Key enthält Standort-ID für standortspezifische Filterung
+		// und den Versionszähler für die Invalidierung - siehe clear_all_product_caches()).
+		$transient_key = 'lbite_pos_products_' . (int) $location_id . '_v' . (int) get_option( 'lbite_pos_cache_ver', 0 );
 		$cached        = get_transient( $transient_key );
 		if ( false !== $cached ) {
 			return $cached;

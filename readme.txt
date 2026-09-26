@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.5.0
+Stable tag: 3.5.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,21 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.5.1 =
+
+* Fixed: the two background tasks (pickup reminders, pre-order status changes) ran every minute on every installation, even on shops that never use pre-orders or reminders; they're now only scheduled while the relevant feature is actually on, and the custom schedule interval was renamed to avoid colliding with another plugin's identically-named one.
+* Fixed: the pickup-reminder and pre-order background checks could have a backlog of old, already-handled orders crowd out the ones that actually need attention right now, since older entries weren't filtered out or prioritized. They're now scoped to the relevant time window and processed soonest-first.
+* Fixed: three read-only endpoints (time slots, opening days, location status) required a security token that had a limited lifetime; if a page-caching plugin or CDN served a cached copy of the page for longer than that, checkout would silently stop working until the visitor reloaded. These endpoints only return public information, so the token requirement was removed.
+* Fixed: the guest-notes phone lookup used a database search pattern that can't use an index and gets slower as the customer list grows; it now compares a pre-normalized number directly instead.
+* Fixed: the POS product cache used a direct database delete to clear itself, which does nothing on sites using a Redis/Memcached object cache — stale product data could persist there indefinitely after a change. It also didn't clear when stock levels changed automatically. Both are fixed with a version-counter approach that works with any caching setup.
+* Fixed: the till's coupon picker could be crowded out by personal, single-use reward coupons (e.g. from the stamp card) or already fully-used coupons, hiding real promotional codes on shops with many loyalty rewards.
+* Fixed: reservation card details (name, phone, notes, guest allergies) were escaped twice, so an apostrophe or ampersand in a reservation showed up as a literal HTML code instead of the actual character.
+* Fixed: a translation-loading order bug meant this plugin's own included translations always overrode community translations from wordpress.org for any string both contained, rather than the other way around as intended.
+* Fixed: a public-facing checkout endpoint compared a security value using a plain string comparison, which is more vulnerable to timing-based attacks than the constant-time comparison already used by a nearly-identical endpoint elsewhere in the plugin.
+* Changed: several inline `<script>`/`<style>` blocks are now delivered through WordPress's script/style system instead of being printed directly, and two CSS rules no longer depend on a WooCommerce stylesheet handle that some themes remove.
+* Changed: the Kanban board, reservation board and table plan now pause their background refresh while their browser tab isn't visible, resuming immediately when it becomes visible again.
+* Removed: an activation step that set up a database table system this plugin has never actually used.
 
 = 3.5.0 =
 
@@ -731,6 +746,9 @@ This release rounds out the feature set that 2.6.0 started. As with any major re
 * For the full changelog of versions before 2.0.0, see the release history: https://github.com/simurech/libre-bite/releases
 
 == Upgrade Notice ==
+
+= 3.5.1 =
+Background tasks now only run while the relevant feature (pre-orders, pickup reminders) is switched on, and three checkout endpoints no longer require a security token that could expire under page caching. No action needed either way.
 
 = 3.4.7 =
 Uninstalling with data deletion enabled now cleans up considerably more (HPOS order metadata, category schedules, guest notes, stamp card data) than before. If you rely on this option, review it once after updating.

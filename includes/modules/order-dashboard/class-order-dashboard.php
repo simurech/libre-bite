@@ -967,11 +967,18 @@ class LBite_Order_Dashboard {
 			return;
 		}
 
-		// Bestellungen mit Pickup-Zeit in der Zukunft
+		// Bestellungen mit Pickup-Zeit in der Zukunft. Nach Abholzeit
+		// sortiert (frühester zuerst), damit ein Rückstand von mehr als
+		// 100 Vorbestellungen zuerst die dringendsten verarbeitet statt
+		// eine beliebige, nicht nach Dringlichkeit geordnete Auswahl
+		// zu verdrängen (Audit 26.09.2026, AP-21).
 		$orders = wc_get_orders(
 			array(
 				'limit'      => 100,
 				'status'     => array( 'processing', 'on-hold' ),
+				'orderby'    => 'meta_value',
+				'meta_key'   => '_lbite_pickup_time', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Sortierung nach Dringlichkeit (frühester Abholtermin zuerst).
+				'order'      => 'ASC',
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- WooCommerce-Bestellfilterung nach Plugin-Metadaten; Abfragen auf max. 200 Einträge begrenzt.
 				'meta_query' => array(
 					array(

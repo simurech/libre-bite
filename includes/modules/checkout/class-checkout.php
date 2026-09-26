@@ -46,14 +46,18 @@ class LBite_Checkout {
 		// Checkout-Felder anpassen
 		$this->loader->add_filter( 'woocommerce_checkout_fields', $this, 'customize_checkout_fields' );
 		$this->loader->add_filter( 'woocommerce_cart_needs_shipping_address', $this, 'maybe_disable_shipping_address' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'maybe_hide_additional_info_section' );
+		// Priorität 20: muss nach enqueue_frontend_assets() (Priorität 10)
+		// laufen, da die Methode ihr CSS an das dort registrierte
+		// lbite-frontend-Handle hängt (Audit 26.09.2026, AP-21).
+		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'maybe_hide_additional_info_section', 20 );
 		$this->loader->add_filter( 'gettext', $this, 'customize_billing_details_title', 10, 3 );
 
 		// Versand-Informationen ausblenden
 		$this->loader->add_filter( 'woocommerce_cart_needs_shipping', $this, 'maybe_hide_shipping' );
 		$this->loader->add_filter( 'woocommerce_order_needs_shipping_address', $this, 'maybe_hide_shipping' );
 		$this->loader->add_filter( 'woocommerce_cart_ready_to_calc_shipping', $this, 'maybe_hide_shipping_calculator' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'maybe_add_hide_shipping_css' );
+		// Selbe Begründung: muss nach enqueue_frontend_assets() laufen.
+		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'maybe_add_hide_shipping_css', 20 );
 
 		// Rundung auf 5 Rappen (Feature-abhängig)
 		if ( lbite_feature_enabled( 'enable_rounding' ) ) {
@@ -286,7 +290,11 @@ class LBite_Checkout {
 
 		// Wenn keine Felder im "Zusätzliche Informationen" Abschnitt aktiv sind, verstecken
 		if ( ! $comments_enabled ) {
-			wp_add_inline_style( 'woocommerce-general', '
+			// An das eigene, immer geladene Handle hängen statt an
+			// woocommerce-general - Themes, die WooCommerce-Kernstyles
+			// bewusst dequeuen, liessen diese Regel bisher mit verschwinden
+			// (Audit 26.09.2026, AP-21).
+			wp_add_inline_style( 'lbite-frontend', '
 				/* "Zusätzliche Informationen" Abschnitt ausblenden wenn leer */
 				.woocommerce-additional-fields {
 					display: none !important;
@@ -372,8 +380,10 @@ class LBite_Checkout {
 
 		// Wenn Versand-Anzeigen NICHT aktiviert ist, CSS zum Ausblenden hinzufügen
 		if ( ! isset( $custom_fields['_show_shipping_info'] ) || ! $custom_fields['_show_shipping_info'] ) {
-			// CSS inline hinzufügen um alle Versand-Elemente zu verstecken
-			wp_add_inline_style( 'woocommerce-general', '
+			// CSS inline hinzufügen um alle Versand-Elemente zu verstecken.
+			// An das eigene Handle statt woocommerce-general (siehe
+			// maybe_hide_additional_info_section() für die Begründung).
+			wp_add_inline_style( 'lbite-frontend', '
 				/* Versand-Informationen ausblenden */
 				.woocommerce-shipping-totals,
 				.shipping,
@@ -1180,7 +1190,12 @@ class LBite_Checkout {
 		}
 
 		$order = wc_get_order( $order_id );
-		if ( ! $order || $order->get_order_key() !== $order_key ) {
+		// hash_equals() statt !== - dieser Endpunkt hat bewusst keine Nonce
+		// und verlässt sich vollständig auf den geheimen Order-Key; ein
+		// zeitbasierter Seitenkanal-Angriff über einen nicht-konstanten
+		// String-Vergleich hätte das Erraten des Keys erleichtert (Audit
+		// 26.09.2026, AP-21).
+		if ( ! $order || ! hash_equals( $order->get_order_key(), $order_key ) ) {
 			wp_send_json_error( 'not_found' );
 		}
 
@@ -1377,9 +1392,14 @@ class LBite_Checkout {
 	 * AJAX: Zeitslots abrufen
 	 */
 	public function ajax_get_timeslots() {
-		check_ajax_referer( 'lbite_frontend_nonce', 'nonce' );
-
+		// Kein Nonce-Zwang: reiner Lesezugriff auf öffentliche Standort-Daten,
+		// keine zustandsändernde Aktion und daher kein CSRF-Risiko. Eine
+		// erzwungene Nonce-Prüfung brach hier bisher zuverlässig, sobald eine
+		// Seiten-Cache-Kopie mit eingebetteter Nonce länger lief als deren
+		// Gültigkeit (Audit 26.09.2026, AP-21).
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- s.o.
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- s.o.
 		$date        = isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : current_time( 'Y-m-d' );
 
 		if ( ! $location_id ) {
@@ -1399,8 +1419,9 @@ class LBite_Checkout {
 	 * AJAX: Geschlossene Tage abrufen
 	 */
 	public function ajax_get_opening_days() {
-		check_ajax_referer( 'lbite_frontend_nonce', 'nonce' );
-
+		// Kein Nonce-Zwang: reiner Lesezugriff auf öffentliche Standort-Daten,
+		// siehe ajax_get_timeslots() für die Begründung (Audit 26.09.2026, AP-21).
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- s.o.
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
 		if ( ! $location_id ) {
@@ -1438,8 +1459,9 @@ class LBite_Checkout {
 	 * AJAX: Aktuellen Öffnungsstatus eines Standorts abrufen
 	 */
 	public function ajax_get_location_status() {
-		check_ajax_referer( 'lbite_frontend_nonce', 'nonce' );
-
+		// Kein Nonce-Zwang: reiner Lesezugriff auf öffentliche Standort-Daten,
+		// siehe ajax_get_timeslots() für die Begründung (Audit 26.09.2026, AP-21).
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- s.o.
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
 		if ( ! $location_id ) {

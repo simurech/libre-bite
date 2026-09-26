@@ -235,8 +235,19 @@
 		 */
 		startAutoRefresh: function() {
 			this.refreshTimer = setInterval(() => {
+				// Kein Server-Roundtrip für einen Tab, den ohnehin niemand
+				// ansieht (Audit 26.09.2026, AP-21).
+				if (document.hidden) { return; }
 				this.loadOrders(true);
 			}, lbiteDashboard.refreshInterval);
+
+			// Sofort nachladen statt auf das nächste Intervall zu warten,
+			// wenn der Tab wieder in den Vordergrund kommt.
+			document.addEventListener('visibilitychange', () => {
+				if (!document.hidden) {
+					this.loadOrders(true);
+				}
+			});
 		},
 
 		/**

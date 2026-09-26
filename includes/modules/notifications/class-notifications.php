@@ -67,11 +67,23 @@ class LBite_Notifications {
 
 		$reminder_time = get_option( 'lbite_pickup_reminder_time', 15 );
 
-		// Bestellungen mit Pickup-Zeit in den nächsten X Minuten
+		// Auf "heute oder morgen" eingrenzen (per _lbite_pickup_date, immer
+		// zuverlässig "Y-m-d" formatiert - anders als _lbite_pickup_time,
+		// das historisch mit und ohne "T"-Trenner vorkommt). Ohne dieses
+		// Fenster konnten alte, längst abgelaufene Vorbestellungen das
+		// limit von 100 komplett füllen und neue, tatsächlich fällige
+		// Bestellungen verdrängen - und zwar in beliebiger, nicht nach
+		// Dringlichkeit sortierter Reihenfolge (Audit 26.09.2026, AP-21).
+		$lbite_today    = current_time( 'Y-m-d' );
+		$lbite_tomorrow = gmdate( 'Y-m-d', strtotime( '+1 day', current_time( 'timestamp' ) ) );
+
 		$orders = wc_get_orders(
 			array(
 				'limit'      => 100,
 				'status'     => array( 'processing', 'on-hold' ),
+				'orderby'    => 'meta_value',
+				'meta_key'   => '_lbite_pickup_time', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Sortierung nach Dringlichkeit (frühester Abholtermin zuerst).
+				'order'      => 'ASC',
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Cron-Abfrage für Abholbenachrichtigungen nach Metadaten; auf 100 Bestellungen begrenzt.
 				'meta_query' => array(
 					array(
@@ -82,6 +94,11 @@ class LBite_Notifications {
 					array(
 						'key'     => '_lbite_reminder_sent',
 						'compare' => 'NOT EXISTS',
+					),
+					array(
+						'key'     => '_lbite_pickup_date',
+						'value'   => array( $lbite_today, $lbite_tomorrow ),
+						'compare' => 'IN',
 					),
 				),
 			)

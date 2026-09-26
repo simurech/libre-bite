@@ -87,7 +87,13 @@ $lbite_logo_url   = $lbite_brand_logo ? wp_get_attachment_image_url( $lbite_bran
 	?>
 </div>
 
-<script>
+<?php
+// wp_add_inline_script() statt rohem <script>-Tag: lbite-checkout-receipt
+// ist auf jeder Checkout-Seite mit aktivem Optimierten Checkout (Pro)
+// bereits enqueut - siehe LBite_Checkout::enqueue_frontend_assets()
+// (Audit 26.09.2026, AP-21).
+ob_start();
+?>
 (function($) {
 	var emailRequiredGateways = <?php echo wp_json_encode( get_option( 'lbite_email_required_gateways', array() ) ); ?>;
 	var $detachedEmail = null;
@@ -127,4 +133,6 @@ $lbite_logo_url   = $lbite_brand_logo ? wp_get_attachment_image_url( $lbite_bran
 		updateEmailStep();
 	});
 }(jQuery));
-</script>
+<?php
+wp_add_inline_script( 'lbite-checkout-receipt', ob_get_clean() );
+?>

@@ -341,7 +341,18 @@
 
 		startStatusRefresh() {
 			this.stopStatusRefresh();
-			this.statusInterval = setInterval(() => this.loadStatuses(), 30000);
+			// Kein Server-Roundtrip für einen Tab, den ohnehin niemand ansieht
+			// (Audit 26.09.2026, AP-21).
+			this.statusInterval = setInterval(() => {
+				if (document.hidden) { return; }
+				this.loadStatuses();
+			}, 30000);
+
+			document.addEventListener('visibilitychange', () => {
+				if (!document.hidden) {
+					this.loadStatuses();
+				}
+			});
 		},
 
 		stopStatusRefresh() {

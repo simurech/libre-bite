@@ -829,7 +829,14 @@ class LBite_Locations {
 				<?php esc_html_e( 'Print QR Code', 'libre-bite' ); ?>
 			</button>
 		</p>
-		<script>
+		<?php
+		// wp_add_inline_script() statt rohem <script>-Tag: hängt am bereits
+		// enqueuten Handle lbite-admin-tables (siehe enqueue_admin_scripts()
+		// oben, wird auf dieser Seite immer vor den Meta-Boxen geladen), damit
+		// das Skript korrekt in der Dependency-Kette landet (Audit 26.09.2026,
+		// AP-21).
+		ob_start();
+		?>
 		(function() {
 			var baseUrl  = <?php echo wp_json_encode( $lbite_base_url ); ?>;
 			var locId    = <?php echo (int) $location_id; ?>;
@@ -855,8 +862,8 @@ class LBite_Locations {
 				} );
 			} );
 		})();
-		</script>
 		<?php
+		wp_add_inline_script( 'lbite-admin-tables', ob_get_clean() );
 	}
 
 	/**
@@ -948,7 +955,11 @@ class LBite_Locations {
 				'name' => $location->post_title,
 			);
 		}
-		echo '<script>window.lbiteLocations = ' . wp_json_encode( $location_list ) . ';</script>';
+		// wp_add_inline_script() statt rohem <script>-Tag: lbite-frontend ist
+		// auf jeder Shop-/Kategorie-/Tag-Seite bereits über
+		// LBite_Checkout::enqueue_frontend_assets() enqueut, bevor der
+		// Shop-Loop rendert (Audit 26.09.2026, AP-21).
+		wp_add_inline_script( 'lbite-frontend', 'window.lbiteLocations = ' . wp_json_encode( $location_list ) . ';' );
 	}
 
 	/**
@@ -974,7 +985,9 @@ class LBite_Locations {
 			$location_map[ $product_id ] = is_array( $excluded ) ? array_map( 'intval', $excluded ) : array();
 		}
 
-		echo '<script>window.lbiteProductLocations = ' . wp_json_encode( $location_map ) . ';</script>';
+		// wp_add_inline_script() statt rohem <script>-Tag, siehe
+		// render_shop_location_notice_placeholder() oben.
+		wp_add_inline_script( 'lbite-frontend', 'window.lbiteProductLocations = ' . wp_json_encode( $location_map ) . ';' );
 
 		// Zurücksetzen für einen evtl. weiteren Loop auf derselben Seite (z. B. verwandte Produkte).
 		self::$collected_product_ids = array();
@@ -1269,15 +1282,26 @@ class LBite_Locations {
 	}
 
 	public static function get_all_locations() {
-		return get_posts(
-			array(
-				'post_type'      => self::POST_TYPE,
-				'posts_per_page' => 100, // Begrenzt für Performance.
-				'orderby'        => 'title',
-				'order'          => 'ASC',
-				'post_status'    => 'publish',
-			)
-		);
+		// Pro Anfrage cachen - wird u. a. einmal pro Produkt im Shop-Loop
+		// aufgerufen und wäre ohne Cache dieselbe Query x-mal (Audit
+		// 26.09.2026, AP-21). Statischer Cache statt Transient, da sich der
+		// Wert innerhalb einer Anfrage nicht ändert und ein Transient hier
+		// nur unnötige Invalidierungslogik bräuchte.
+		static $lbite_cached_locations = null;
+
+		if ( null === $lbite_cached_locations ) {
+			$lbite_cached_locations = get_posts(
+				array(
+					'post_type'      => self::POST_TYPE,
+					'posts_per_page' => 100, // Begrenzt für Performance.
+					'orderby'        => 'title',
+					'order'          => 'ASC',
+					'post_status'    => 'publish',
+				)
+			);
+		}
+
+		return $lbite_cached_locations;
 	}
 
 	/**

@@ -22,9 +22,6 @@ class LBite_Installer {
 		require_once LBITE_PLUGIN_DIR . 'includes/admin/class-roles.php';
 		LBite_Roles::create_roles();
 
-		// Datenbank-Tabellen erstellen
-		self::create_tables();
-
 		// Standard-Optionen setzen
 		self::set_default_options();
 
@@ -34,14 +31,13 @@ class LBite_Installer {
 		// Support-Einstellungen initialisieren
 		self::set_default_support_settings();
 
-		// Cron-Jobs registrieren, falls noch nicht vorhanden.
-		if ( ! wp_next_scheduled( 'lbite_check_scheduled_orders' ) ) {
-			wp_schedule_event( time(), 'every_minute', 'lbite_check_scheduled_orders' );
-		}
-
-		if ( ! wp_next_scheduled( 'lbite_send_pickup_reminders' ) ) {
-			wp_schedule_event( time(), 'every_minute', 'lbite_send_pickup_reminders' );
-		}
+		// Cron-Jobs nur einplanen, wenn das zugehörige Feature aktiv ist -
+		// sonst liefe die Minutenschleife auf jeder Installation permanent,
+		// auch wenn Vorbestellungen/Erinnerungen nie genutzt werden
+		// (Audit 26.09.2026, AP-21). self::set_default_features() oben hat
+		// die Optionen bereits geschrieben, lbite_feature_enabled() ist ab
+		// hier sicher nutzbar.
+		self::sync_cron_jobs();
 
 		// Flush rewrite rules
 		flush_rewrite_rules();
@@ -86,6 +82,51 @@ class LBite_Installer {
 		// Geplante Cron-Jobs entfernen
 		wp_clear_scheduled_hook( 'lbite_check_scheduled_orders' );
 		wp_clear_scheduled_hook( 'lbite_send_pickup_reminders' );
+	}
+
+	/**
+	 * Cron-Jobs mit dem aktuellen Feature-Zustand abgleichen.
+	 *
+	 * Plant den jeweiligen Job ein, wenn das zugehörige Feature aktiv ist und
+	 * der Job noch fehlt, und entfernt ihn wieder, wenn das Feature inzwischen
+	 * deaktiviert wurde - sonst liefe die Minutenschleife auf jeder
+	 * Installation permanent, unabhängig davon, ob Vorbestellungen oder
+	 * Erinnerungen je genutzt werden (Audit 26.09.2026, AP-21). Wird sowohl
+	 * bei der Aktivierung als auch bei jedem admin_init (via maybe_upgrade())
+	 * aufgerufen, damit ein nachträglich umgeschaltetes Feature den Job ohne
+	 * Reaktivierung des Plugins ein- bzw. ausplant.
+	 */
+	public static function sync_cron_jobs() {
+		$jobs = array(
+			'lbite_check_scheduled_orders' => 'enable_scheduled_orders',
+			'lbite_send_pickup_reminders'  => 'enable_pickup_reminders',
+		);
+
+		foreach ( $jobs as $hook => $feature ) {
+			$should_run = lbite_feature_enabled( $feature );
+			$event      = wp_get_scheduled_event( $hook );
+
+			if ( ! $should_run ) {
+				if ( $event ) {
+					wp_clear_scheduled_hook( $hook );
+				}
+				continue;
+			}
+
+			// Auf Installationen, die den Job noch unter dem alten,
+			// generischen Intervallnamen "every_minute" laufen haben (vor
+			// AP-21), einmalig neu einplanen – WP-Cron plant ein
+			// wiederkehrendes Event sonst für immer unter demselben Namen
+			// neu, den es beim ersten Mal erhalten hat.
+			if ( $event && 'lbite_every_minute' !== $event->schedule ) {
+				wp_clear_scheduled_hook( $hook );
+				$event = null;
+			}
+
+			if ( ! $event ) {
+				wp_schedule_event( time(), 'lbite_every_minute', $hook );
+			}
+		}
 	}
 
 	/**
@@ -184,22 +225,6 @@ class LBite_Installer {
 	}
 
 	/**
-	 * Datenbank-Tabellen erstellen
-	 */
-	private static function create_tables() {
-		global $wpdb;
-
-		$charset_collate = $wpdb->get_charset_collate();
-
-		// Tabelle für Standorte (wenn nicht Custom Post Type verwendet wird)
-		// Aktuell verwenden wir Custom Post Types, daher keine separate Tabelle nötig
-
-		// Offiziell dokumentierter Weg fuer dbDelta() – upgrade.php ist explizit fuer Plugin-Nutzung
-		// vorgesehen: https://developer.wordpress.org/reference/functions/dbdelta/
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-	}
-
-	/**
 	 * Standard-Optionen setzen
 	 */
 	private static function set_default_options() {
@@ -293,6 +318,11 @@ class LBite_Installer {
 			self::set_default_features();
 		}
 
+		// Läuft bei jedem admin_init, nicht nur einmal pro Version, damit ein
+		// nachträglich umgeschaltetes Feature den zugehörigen Cron sofort
+		// ein-/ausplant (Audit 26.09.2026, AP-21).
+		self::sync_cron_jobs();
+
 		// Migration auf 1.5.0: veraltete Toggle-Keys entfernen
 		if ( version_compare( $current_version, '1.5.0', '<' ) ) {
 			self::migrate_features_to_1_5();
@@ -322,6 +352,12 @@ class LBite_Installer {
 		// auf leer zurücksetzen, damit sie zur Laufzeit übersetzt werden.
 		if ( version_compare( $current_version, '3.4.10', '<' ) ) {
 			self::migrate_pos_payment_labels();
+		}
+
+		// Migration auf 3.5.1: normalisierte Telefonnummer für bestehende
+		// Benutzer nachtragen (siehe LBite_Guest_Notes::META_PHONE_NORMALIZED).
+		if ( version_compare( $current_version, '3.5.1', '<' ) ) {
+			self::migrate_normalized_phone_numbers();
 		}
 
 		// Version aktualisieren
@@ -479,6 +515,49 @@ class LBite_Installer {
 
 		if ( $changed ) {
 			update_option( 'lbite_pos_payment_methods', $methods );
+		}
+	}
+
+	/**
+	 * Normalisierte Telefonnummer für bestehende Benutzer nachtragen.
+	 *
+	 * Ohne diesen einmaligen Nachtrag würde find_customer_by_phone() für
+	 * jeden vor dieser Version angelegten Benutzer ins Leere laufen, da die
+	 * exakte Suche auf `_lbite_phone_normalized` sonst erst nach der
+	 * nächsten Änderung von `billing_phone` gefüllt wird (Audit 26.09.2026,
+	 * AP-21). In Batches, wie migrate_pickup_dates().
+	 */
+	private static function migrate_normalized_phone_numbers() {
+		if ( ! class_exists( 'LBite_Guest_Notes' ) ) {
+			require_once LBITE_PLUGIN_DIR . 'includes/modules/guest-notes/class-guest-notes.php';
+		}
+
+		$paged = 1;
+
+		while ( true ) {
+			$users = get_users(
+				array(
+					'number'     => 200,
+					'paged'      => $paged,
+					'fields'     => array( 'ID' ),
+					'meta_key'   => 'billing_phone', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Einmalige Migration, in Batches von 200.
+					'meta_value' => '', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- s.o.
+					'meta_compare' => '!=',
+				)
+			);
+			++$paged;
+
+			if ( empty( $users ) ) {
+				break;
+			}
+
+			foreach ( $users as $user ) {
+				$phone = get_user_meta( $user->ID, 'billing_phone', true );
+				if ( '' === $phone ) {
+					continue;
+				}
+				update_user_meta( $user->ID, LBite_Guest_Notes::META_PHONE_NORMALIZED, LBite_Guest_Notes::normalize_phone( $phone ) );
+			}
 		}
 	}
 

@@ -231,8 +231,12 @@ $lbite_sms_trigger    = (string) get_option( 'lbite_sms_trigger_status', '' );
 	<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 </form>
 
-<?php if ( lbite_feature_enabled( 'enable_sound_notifications' ) && $lbite_premium_allowed ) : ?>
-<script>
+<?php
+// wp_add_inline_script() statt rohem <script>-Tag - jquery ist auf jeder
+// wp-admin-Seite garantiert vorhanden (Audit 26.09.2026, AP-21).
+if ( lbite_feature_enabled( 'enable_sound_notifications' ) && $lbite_premium_allowed ) :
+	ob_start();
+?>
 jQuery(document).ready(function($) {
 	var lbiteSoundFrame;
 	$('#lbite_upload_sound_button').on('click', function(e) {
@@ -261,5 +265,7 @@ jQuery(document).ready(function($) {
 		$('#lbite_sound_preview').remove();
 	});
 });
-</script>
-<?php endif; ?>
+<?php
+	wp_add_inline_script( 'jquery', ob_get_clean() );
+endif;
+?>

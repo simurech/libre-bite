@@ -87,7 +87,12 @@ foreach ( array_keys( $lbite_types ) as $lbite_type ) {
 	</table>
 </div>
 
-<script>
+<?php
+// wp_add_inline_script() statt rohem <script>-Tag - jquery ist auf jeder
+// wp-admin-Seite garantiert vorhanden, auch für dieses reine Vanilla-JS
+// (Audit 26.09.2026, AP-21).
+ob_start();
+?>
 (function() {
 	document.querySelectorAll('.lbite-receipt-field-toggle').forEach(function(box) {
 		box.addEventListener('change', function() {
@@ -96,7 +101,9 @@ foreach ( array_keys( $lbite_types ) as $lbite_type ) {
 		});
 	});
 })();
-</script>
+<?php
+wp_add_inline_script( 'jquery', ob_get_clean() );
+?>
 
 <?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 </form>

@@ -334,8 +334,14 @@ $lbite_receipt_nonce    = wp_create_nonce( 'lbite_send_receipt_' . $lbite_order_
 		<p><?php echo esc_html( $brand_name ); ?></p>
 	</div>
 </div>
-<?php if ( $lbite_show_email_btn ) : ?>
-<script>
+<?php
+// wp_add_inline_script() statt rohem <script>-Tag: lbite-checkout-receipt
+// ist auf der Bestätigungsseite bereits enqueut (is_checkout() ist dort
+// laut WooCommerce ebenfalls true - siehe
+// LBite_Checkout::enqueue_frontend_assets()) (Audit 26.09.2026, AP-21).
+if ( $lbite_show_email_btn ) :
+	ob_start();
+?>
 jQuery(document).ready(function($) {
 	$('#lbite-send-receipt-btn').on('click', function() {
 		var $btn = $(this);
@@ -373,5 +379,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 });
-</script>
-<?php endif; ?>
+<?php
+	wp_add_inline_script( 'lbite-checkout-receipt', ob_get_clean() );
+endif;
+?>
