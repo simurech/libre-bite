@@ -421,7 +421,7 @@ class LBite_Admin {
 		}
 
 		// Einstellungen ans Ende (Improvement R)
-		add_submenu_page(
+		$lbite_settings_hook = add_submenu_page(
 			'libre-bite',
 			__( 'Settings', 'libre-bite' ),
 			__( 'Settings', 'libre-bite' ),
@@ -429,6 +429,12 @@ class LBite_Admin {
 			'lbite-settings',
 			array( $this, 'render_settings_page' )
 		);
+
+		// Muss vor admin-header.php laufen, damit ein Redirect nach dem
+		// Speichern tatsächlich greift (siehe settings-save.php).
+		if ( $lbite_settings_hook ) {
+			add_action( "load-{$lbite_settings_hook}", array( $this, 'maybe_save_settings' ) );
+		}
 
 	}
 
@@ -468,6 +474,18 @@ class LBite_Admin {
 	 */
 	public function render_settings_page() {
 		include LBITE_PLUGIN_DIR . 'templates/admin/settings-tabbed.php';
+	}
+
+	/**
+	 * Einstellungen speichern, lange bevor admin-header.php etwas ausgibt.
+	 *
+	 * Läuft auf load-{page_hook} statt im Render-Callback der Seite: WordPress
+	 * sendet admin-header.php, bevor der Menü-Callback aufgerufen wird, ein
+	 * wp_safe_redirect() von dort aus träfe also auf bereits gesendete Header
+	 * (Audit 26.09.2026, AP-05).
+	 */
+	public function maybe_save_settings() {
+		include LBITE_PLUGIN_DIR . 'templates/admin/settings-save.php';
 	}
 
 	/**
@@ -1052,7 +1070,7 @@ class LBite_Admin {
 					'nonce'                 => wp_create_nonce( 'lbite_dashboard_nonce' ),
 					'receiptNonce'          => wp_create_nonce( 'lbite_admin_nonce' ),
 					'soundUrl'              => $lbite_sound_url,
-					'refreshInterval'       => (int) get_option( 'lbite_dashboard_refresh_interval', 30 ) * 1000,
+					'refreshInterval'       => (int) get_option( 'lbite_dashboard_refresh_interval', 45 ) * 1000,
 					'locationColors'        => $lbite_dashboard_colors,
 					'paymentMethods'        => $lbite_pm_labels,
 					'currency'              => html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ),

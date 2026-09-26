@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.2.9
+Stable tag: 3.3.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,12 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.3.0 =
+
+* Fixed: settings that only show a field while their feature is switched on (SMS credentials, pickup reminder settings, tip amounts, checkout mode) reset that field to empty the moment the feature was off when the page was saved. Twilio credentials, for example, were lost simply by saving Notifications while SMS was disabled. Each such field now only changes when it was actually visible on the page you saved.
+* Fixed: saving Settings could trigger a "headers already sent" warning and fail to redirect back to the page with the "Settings saved" notice, because the save logic ran after WordPress had already started sending the page. It now runs earlier, before any output.
+* Fixed: the Kanban board refresh interval had no server-side minimum — entering 0 caused constant requests. It is now capped at 10 seconds; the default for new installations is unchanged.
 
 = 3.2.9 =
 
@@ -625,6 +631,9 @@ This release rounds out the feature set that 2.6.0 started. It is published as a
 * For the full changelog of versions before 2.0.0, see the release history: https://github.com/simurech/libre-bite/releases
 
 == Upgrade Notice ==
+
+= 3.3.0 =
+Settings now save via an earlier hook to fix a "headers already sent" redirect bug, and fields hidden behind a disabled feature no longer reset when you save. If you use the Settings page heavily, worth a quick check after updating.
 
 = 3.2.5 =
 Blog posts and the "Downloads"/"Addresses" sections of My Account are no longer hidden automatically. If you relied on that, enable it under Settings → Content & Account.

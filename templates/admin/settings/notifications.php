@@ -48,6 +48,7 @@ $lbite_sms_trigger    = (string) get_option( 'lbite_sms_trigger_status', '' );
 	?>
 
 	<?php if ( lbite_feature_enabled( 'enable_sound_notifications' ) ) : ?>
+	<input type="hidden" name="lbite_sections[]" value="sound">
 	<table class="form-table">
 		<tr>
 			<th><?php esc_html_e( 'Notification Sound', 'libre-bite' ); ?></th>
@@ -105,6 +106,7 @@ $lbite_sms_trigger    = (string) get_option( 'lbite_sms_trigger_status', '' );
 	?>
 
 	<?php if ( lbite_feature_enabled( 'enable_pickup_reminders' ) ) : ?>
+	<input type="hidden" name="lbite_sections[]" value="email">
 	<table class="form-table">
 		<tr>
 			<th><?php esc_html_e( 'Send reminders', 'libre-bite' ); ?></th>
@@ -144,6 +146,7 @@ $lbite_sms_trigger    = (string) get_option( 'lbite_sms_trigger_status', '' );
 	?>
 
 	<?php if ( lbite_feature_enabled( 'enable_sms_notifications' ) || ! $lbite_premium_allowed ) : ?>
+	<input type="hidden" name="lbite_sections[]" value="sms">
 	<p class="description" style="margin-bottom: 12px;">
 		<strong><?php esc_html_e( 'Please note:', 'libre-bite' ); ?></strong>
 		<?php esc_html_e( 'A message can only be sent if the order has a phone number. The phone field is optional in the standard checkout and is removed entirely in table ordering and in the optimised checkout — in those cases no SMS will go out.', 'libre-bite' ); ?>

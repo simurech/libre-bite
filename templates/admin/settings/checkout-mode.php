@@ -39,6 +39,7 @@ $lbite_email_req_gateways = get_option( 'lbite_email_required_gateways', array()
 	?>
 
 	<?php if ( $lbite_premium_allowed && lbite_feature_enabled( 'enable_optimized_checkout' ) ) : ?>
+	<input type="hidden" name="lbite_sections[]" value="checkout_mode">
 	<table class="form-table">
 		<tr>
 			<th><?php esc_html_e( 'Checkout Mode', 'libre-bite' ); ?></th>

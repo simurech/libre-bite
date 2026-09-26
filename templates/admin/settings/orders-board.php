@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$lbite_refresh      = get_option( 'lbite_dashboard_refresh_interval', 30 );
+$lbite_refresh      = get_option( 'lbite_dashboard_refresh_interval', 45 );
 $lbite_kds_timer    = '0' !== (string) get_option( 'lbite_kds_timer_enabled', 1 );
 $lbite_kds_warn     = (int) get_option( 'lbite_kds_warn_minutes', 0 );
 $lbite_kds_late     = (int) get_option( 'lbite_kds_late_minutes', 0 );

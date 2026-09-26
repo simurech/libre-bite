@@ -41,6 +41,7 @@ $lbite_tip_is_fixed   = 'fixed' === $lbite_tip_mode;
 	?>
 
 	<?php if ( $lbite_premium_allowed && lbite_feature_enabled( 'enable_tips' ) ) : ?>
+	<input type="hidden" name="lbite_sections[]" value="tips">
 	<p class="description" style="margin-bottom: 8px;">
 		<?php esc_html_e( 'A further switch to hide tips without turning this feature off entirely is available under "Fields in Standard Checkout".', 'libre-bite' ); ?>
 	</p>
