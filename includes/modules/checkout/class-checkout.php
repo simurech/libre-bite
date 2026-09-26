@@ -2116,6 +2116,45 @@ class LBite_Checkout {
 	}
 
 	/**
+	 * Aktuell anzuwendende Steuerklasse für eine taxierbare Gebühr (z. B.
+	 * einen Aktionsrabatt) ermitteln - dieselbe Herleitung wie
+	 * filter_swiss_vat_tax_class__premium_only(), aber unabhängig von dessen
+	 * frontend-spezifischen is_cart()/is_checkout()-Wächtern, da Aufrufer
+	 * hier bereits selbst wissen, dass sie im Warenkorb-Kontext laufen.
+	 *
+	 * @param string $default_class Rückfallwert, wenn kein Override greift.
+	 * @return string
+	 */
+	public static function get_current_tax_class( $default_class = '' ) {
+		if ( ! lbite_feature_enabled( 'enable_swiss_vat' ) ) {
+			return $default_class;
+		}
+
+		if ( null !== self::$pos_vat_context ) {
+			$new = get_option( 'lbite_tax_class_' . self::$pos_vat_context, false );
+			return false !== $new ? $new : $default_class;
+		}
+
+		if ( ! WC()->session ) {
+			return $default_class;
+		}
+
+		$service_type = WC()->session->get( 'lbite_service_type' );
+		if ( $service_type ) {
+			$new = get_option( 'lbite_tax_class_' . $service_type, false );
+			return false !== $new ? $new : $default_class;
+		}
+
+		$table_id = WC()->session->get( 'lbite_table_id' );
+		if ( $table_id ) {
+			$new = get_option( 'lbite_tax_class_dine_in', false );
+			return false !== $new ? $new : $default_class;
+		}
+
+		return $default_class;
+	}
+
+	/**
 	 * POS-Bestellart-Kontext für MWST-Filter setzen
 	 *
 	 * @param string $type 'takeaway' oder 'dine_in'

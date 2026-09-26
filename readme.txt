@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.4.2
+Stable tag: 3.4.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,12 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.4.3 =
+
+* Fixed: cart-wide promotion rules ("buy over X, get Y% off" and "buy N, get M free") calculated the discount as a fee that did not reduce the tax base, so VAT stayed at the pre-discount amount. The discount fee is now taxable, using the same tax class as the order (including the Takeaway/Dine-in Swiss VAT switch, if enabled).
+* Fixed: on shops that display prices including tax, a percentage or minimum-order-value promotion was calculated against the tax-excluded subtotal, giving a smaller discount than advertised and applying the minimum-order threshold too late.
+* Fixed: a promotion's day/time schedule was silently discarded when saved while the (unrelated) Scheduled Availability feature was switched off, and any already-saved schedule was ignored at checkout — the promotion ran around the clock regardless of its configured hours.
 
 = 3.4.2 =
 

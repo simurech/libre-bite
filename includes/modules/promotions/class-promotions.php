@@ -438,7 +438,9 @@ class LBite_Promotions {
 
 		// Der Nachlass wird als eigene Warenkorb-Gebühr geführt, damit die
 		// Einzelpreise unverändert bleiben und der Gast sieht, wofür der
-		// Abzug steht.
+		// Abzug steht. Steuerbar (Audit 26.09.2026, AP-12), analog zu
+		// apply_cart_rules() - ein geschenkter Artikel muss die MWST-Basis
+		// mitreduzieren.
 		$cart->add_fee(
 			sprintf(
 				/* translators: %s: promotion name */
@@ -446,7 +448,8 @@ class LBite_Promotions {
 				$rule['label']
 			),
 			-1 * round( $discount, wc_get_price_decimals() ),
-			false
+			true,
+			class_exists( 'LBite_Checkout' ) ? LBite_Checkout::get_current_tax_class() : ''
 		);
 	}
 
@@ -466,7 +469,13 @@ class LBite_Promotions {
 			return;
 		}
 
-		$subtotal = (float) $cart->get_subtotal();
+		// Bei Bruttopreisen (Standard in der Schweiz) muss die Basis die
+		// Steuer einschliessen, sonst ergeben "10%" weniger als 10% des
+		// angezeigten Preises, und ein Mindestbetrag greift zu spät (Audit
+		// 26.09.2026, AP-12).
+		$subtotal = wc_prices_include_tax()
+			? (float) $cart->get_subtotal() + (float) $cart->get_subtotal_tax()
+			: (float) $cart->get_subtotal();
 
 		foreach ( self::get_active_rules() as $rule ) {
 			if ( 'cart' !== $rule['type'] ) {
@@ -485,6 +494,10 @@ class LBite_Promotions {
 				continue;
 			}
 
+			// Steuerbare Gebühr statt einer festen, nicht steuerbaren: sonst
+			// sinkt die MWST-Basis nicht mit dem Rabatt (Audit 26.09.2026,
+			// AP-12). Steuerklasse folgt derselben Schweizer-MWST-Logik wie
+			// die Produktpreise (Takeaway/Dine-in).
 			$cart->add_fee(
 				sprintf(
 					/* translators: %s: promotion name */
@@ -492,7 +505,8 @@ class LBite_Promotions {
 					$rule['label']
 				),
 				-1 * round( $discount, wc_get_price_decimals() ),
-				false
+				true,
+				class_exists( 'LBite_Checkout' ) ? LBite_Checkout::get_current_tax_class() : ''
 			);
 		}
 	}

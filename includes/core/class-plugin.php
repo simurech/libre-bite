@@ -102,6 +102,12 @@ class LBite_Plugin {
 			$this->load_module( 'product-options', 'LBite_Product_Options' );
 		}
 
+		// Klasse immer laden, Hooks nur bei aktivem Feature: LBite_Promotions
+		// braucht sanitize_schedule()/is_active() unabhängig davon, ob die
+		// zeitgesteuerte Verfügbarkeit selbst aktiv ist - sonst gingen die
+		// Zeitfenster einer Aktion beim Speichern verloren und die Aktion
+		// lief rund um die Uhr (Audit 26.09.2026, AP-12).
+		require_once LBITE_PLUGIN_DIR . 'includes/modules/menu-schedule/class-menu-schedule.php';
 		if ( lbite_feature_enabled( 'enable_menu_schedule' ) ) {
 			$this->load_module( 'menu-schedule', 'LBite_Menu_Schedule' );
 		}
