@@ -552,7 +552,7 @@ class LBite_Order_Dashboard {
 		if ( 'later' === $order_type && $pickup_time ) {
 			$location_id_for_prep = (int) $order->get_meta( '_lbite_location_id', true );
 			$prep_time            = LBite_Locations::get_time_setting( $location_id_for_prep, 'preparation_time', 30 );
-			$is_future            = lbite_local_time_to_timestamp( $pickup_time ) > ( current_time( 'timestamp' ) + $prep_time * 60 );
+			$is_future            = lbite_local_time_to_timestamp( $pickup_time ) > ( time() + $prep_time * 60 );
 		}
 
 		$billing_email = $order->get_billing_email();
@@ -957,7 +957,7 @@ class LBite_Order_Dashboard {
 			)
 		);
 
-		$current_time = current_time( 'timestamp' );
+		$current_time = time();
 
 		foreach ( $orders as $order ) {
 			$pickup_time = $order->get_meta( '_lbite_pickup_time', true );

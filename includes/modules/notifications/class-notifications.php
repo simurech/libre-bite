@@ -87,7 +87,7 @@ class LBite_Notifications {
 			)
 		);
 
-		$current_time = current_time( 'timestamp' );
+		$current_time = time();
 
 		foreach ( $orders as $order ) {
 			$pickup_time = $order->get_meta( '_lbite_pickup_time', true );

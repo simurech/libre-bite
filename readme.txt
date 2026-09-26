@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.2.7
+Stable tag: 3.2.8
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.2.8 =
+
+* Fixed: pre-orders could switch to "Preparing" up to 2 hours too early (and pickup reminder emails could go out up to 2 hours too early, or never at all for orders with less than 2 hours of lead time) outside UTC. The comparison mixed a timezone-shifted timestamp with a true UTC one; both now use the same UTC-based clock.
 
 = 3.2.7 =
 
