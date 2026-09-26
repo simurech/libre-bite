@@ -403,13 +403,23 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				$lbite_stamp_cats = array_filter( array_map( 'absint', wp_unslash( $_POST['lbite_stampcard_limit_categories'] ) ) );
 			}
 
+			// discount_type zuerst bestimmen: ein Fixbetrag darf über 100
+			// liegen (z. B. CHF 150) und braucht Nachkommastellen (7.50) -
+			// intval()+min(100,...) galt bisher für beide Typen gleich und
+			// verstümmelte Fixbeträge (Audit 26.09.2026, AP-11).
+			$lbite_stamp_discount_type = ( isset( $_POST['lbite_stampcard_discount_type'] ) && 'fixed' === $_POST['lbite_stampcard_discount_type'] ) ? 'fixed' : 'percent';
+			$lbite_stamp_discount_raw  = isset( $_POST['lbite_stampcard_discount'] ) ? (float) wp_unslash( $_POST['lbite_stampcard_discount'] ) : 50;
+			$lbite_stamp_discount      = 'percent' === $lbite_stamp_discount_type
+				? min( 100, max( 1, $lbite_stamp_discount_raw ) )
+				: max( 0.01, $lbite_stamp_discount_raw );
+
 			$lbite_stamp_val = lbite_enforce_pro_options(
 				array(
 					'lbite_stampcard_target'           => isset( $_POST['lbite_stampcard_target'] ) ? max( 2, intval( wp_unslash( $_POST['lbite_stampcard_target'] ) ) ) : 10,
-					'lbite_stampcard_discount'         => isset( $_POST['lbite_stampcard_discount'] ) ? min( 100, max( 1, intval( wp_unslash( $_POST['lbite_stampcard_discount'] ) ) ) ) : 50,
+					'lbite_stampcard_discount'         => $lbite_stamp_discount,
 					'lbite_stampcard_min_total'        => isset( $_POST['lbite_stampcard_min_total'] ) ? max( 0, (float) wp_unslash( $_POST['lbite_stampcard_min_total'] ) ) : 0,
 					'lbite_stampcard_validity_days'    => isset( $_POST['lbite_stampcard_validity_days'] ) ? max( 1, intval( wp_unslash( $_POST['lbite_stampcard_validity_days'] ) ) ) : 90,
-					'lbite_stampcard_discount_type'    => ( isset( $_POST['lbite_stampcard_discount_type'] ) && 'fixed' === $_POST['lbite_stampcard_discount_type'] ) ? 'fixed' : 'percent',
+					'lbite_stampcard_discount_type'    => $lbite_stamp_discount_type,
 					'lbite_stampcard_max_amount'       => isset( $_POST['lbite_stampcard_max_amount'] ) ? max( 0, (float) wp_unslash( $_POST['lbite_stampcard_max_amount'] ) ) : 0,
 					'lbite_stampcard_limit_categories' => $lbite_stamp_cats,
 					'lbite_stampcard_limit_to_one_item' => isset( $_POST['lbite_stampcard_limit_to_one_item'] ) ? 1 : 0,

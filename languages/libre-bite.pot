@@ -8984,3 +8984,17 @@ msgstr ""
 #: includes/modules/reservations/class-reservations.php:647
 msgid "This table is already reserved at the selected time."
 msgstr ""
+
+#. translators: 1: discount amount or percentage, 2: coupon code
+#: includes/modules/stampcard/class-stampcard.php:416
+#, php-format
+msgid "Your reward is ready: %1$s off with the code %2$s"
+msgstr ""
+
+#. translators: 1: remaining stamps, 2: discount amount or percentage
+#: includes/modules/stampcard/class-stampcard.php:428
+#, php-format
+msgid "%1$d more order and you get %2$s off."
+msgid_plural "%1$d more orders and you get %2$s off."
+msgstr[0] ""
+msgstr[1] ""

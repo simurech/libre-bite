@@ -42,6 +42,14 @@ class LBite_Stampcard {
 	const META_ORDER = '_lbite_stamp_awarded';
 
 	/**
+	 * Bereits gewährter Rabatt je Gutscheincode innerhalb der aktuellen
+	 * Warenkorb-Berechnung - für cap_percent_discount().
+	 *
+	 * @var array
+	 */
+	private static $discount_given = array();
+
+	/**
 	 * Loader-Instanz.
 	 *
 	 * @var LBite_Loader
@@ -61,8 +69,19 @@ class LBite_Stampcard {
 		// entstanden ist.
 		$this->loader->add_action( 'woocommerce_order_status_completed', $this, 'award_stamp' );
 
+		// Storno/Erstattung nach bereits vergebenem Stempel entzog diesen
+		// bisher nicht (Audit 26.09.2026, AP-11).
+		$this->loader->add_action( 'woocommerce_order_status_cancelled', $this, 'revoke_stamp' );
+		$this->loader->add_action( 'woocommerce_order_status_refunded', $this, 'revoke_stamp' );
+
 		$this->loader->add_action( 'init', $this, 'register_shortcode' );
 		$this->loader->add_action( 'woocommerce_account_dashboard', $this, 'render_account_card', 20 );
+
+		// Rabattdeckel für prozentuale Stempelkarten-Gutscheine (Audit
+		// 26.09.2026, AP-11): set_maximum_amount() begrenzte bisher den
+		// zulässigen Bestellwert statt den Rabatt selbst zu deckeln.
+		$this->loader->add_action( 'woocommerce_before_calculate_totals', $this, 'reset_discount_tracking', 5 );
+		$this->loader->add_filter( 'woocommerce_coupon_get_discount_amount', $this, 'cap_percent_discount', 10, 5 );
 	}
 
 	/* ═════════════════════════════════════════════════════════════════
@@ -78,7 +97,7 @@ class LBite_Stampcard {
 		return array(
 			'min_total'         => (float) get_option( 'lbite_stampcard_min_total', 0 ),
 			'target'            => max( 2, (int) get_option( 'lbite_stampcard_target', 10 ) ),
-			'discount'          => max( 1, (int) get_option( 'lbite_stampcard_discount', 50 ) ),
+			'discount'          => max( 0.01, (float) get_option( 'lbite_stampcard_discount', 50 ) ),
 			'valid_days'        => max( 1, (int) get_option( 'lbite_stampcard_validity_days', 90 ) ),
 			'discount_type'     => 'fixed' === get_option( 'lbite_stampcard_discount_type', 'percent' ) ? 'fixed' : 'percent',
 			'max_amount'        => max( 0, (float) get_option( 'lbite_stampcard_max_amount', 0 ) ),
@@ -157,6 +176,33 @@ class LBite_Stampcard {
 	}
 
 	/**
+	 * Stempel einer stornierten/erstatteten Bestellung entziehen.
+	 *
+	 * @param int $order_id Bestell-ID.
+	 */
+	public function revoke_stamp( $order_id ) {
+		if ( ! lbite_feature_enabled( 'enable_stampcard' ) ) {
+			return;
+		}
+
+		$order = wc_get_order( $order_id );
+		if ( ! $order || '1' !== (string) $order->get_meta( self::META_ORDER, true ) ) {
+			return;
+		}
+
+		$user_id = (int) $order->get_customer_id();
+		if ( ! $user_id ) {
+			return;
+		}
+
+		$count = (int) get_user_meta( $user_id, self::META_COUNT, true );
+		update_user_meta( $user_id, self::META_COUNT, max( 0, $count - 1 ) );
+
+		$order->delete_meta_data( self::META_ORDER );
+		$order->save();
+	}
+
+	/**
 	 * Gutschein anlegen
 	 *
 	 * @param int   $user_id  Benutzer-ID.
@@ -187,7 +233,13 @@ class LBite_Stampcard {
 				$coupon->set_discount_type( 'percent' );
 				$coupon->set_amount( $settings['discount'] );
 				if ( $settings['max_amount'] > 0 ) {
-					$coupon->set_maximum_amount( $settings['max_amount'] );
+					// set_maximum_amount() begrenzt den zulässigen Bestellwert,
+					// nicht den Rabatt: der Gutschein wurde bei grösseren
+					// Warenkörben ungültig statt den Rabatt zu deckeln (Audit
+					// 26.09.2026, AP-11). Eigene Meta + Filter
+					// (siehe cap_percent_discount()) deckeln stattdessen den
+					// tatsächlichen Rabattbetrag, anteilig über die Positionen.
+					$coupon->update_meta_data( '_lbite_max_discount', $settings['max_amount'] );
 				}
 			}
 
@@ -221,6 +273,65 @@ class LBite_Stampcard {
 		}
 
 		return $code;
+	}
+
+	/**
+	 * Prüft, ob ein Stempelkarten-Gutschein noch einlösbar ist.
+	 *
+	 * @param string $code Gutscheincode.
+	 * @return bool
+	 */
+	private static function is_coupon_still_redeemable( $code ) {
+		$coupon_id = wc_get_coupon_id_by_code( $code );
+
+		if ( ! $coupon_id ) {
+			return false;
+		}
+
+		$coupon = new WC_Coupon( $coupon_id );
+
+		if ( $coupon->get_usage_count() >= $coupon->get_usage_limit() ) {
+			return false;
+		}
+
+		$expires = $coupon->get_date_expires();
+
+		return ! $expires || $expires->getTimestamp() > time();
+	}
+
+	/**
+	 * Rabattverfolgung vor jeder Neuberechnung zurücksetzen.
+	 */
+	public function reset_discount_tracking() {
+		self::$discount_given = array();
+	}
+
+	/**
+	 * Prozentualen Rabatt eines Stempelkarten-Gutscheins auf den konfigurierten
+	 * Maximalbetrag deckeln, anteilig über die Warenkorb-Positionen verteilt.
+	 *
+	 * @param float     $discount           Berechneter Rabatt für diese Position.
+	 * @param float     $discounting_amount Betrag, auf den sich der Rabatt bezieht.
+	 * @param array     $cart_item          Warenkorb-Position.
+	 * @param bool      $single             Einzelpreis-Berechnung.
+	 * @param WC_Coupon $coupon             Gutschein.
+	 * @return float
+	 */
+	public function cap_percent_discount( $discount, $discounting_amount, $cart_item, $single, $coupon ) {
+		$max_discount = (float) $coupon->get_meta( '_lbite_max_discount' );
+
+		if ( $max_discount <= 0 ) {
+			return $discount;
+		}
+
+		$code           = $coupon->get_code();
+		$given_so_far   = isset( self::$discount_given[ $code ] ) ? self::$discount_given[ $code ] : 0.0;
+		$remaining      = max( 0, $max_discount - $given_so_far );
+		$capped_discount = min( $discount, $remaining );
+
+		self::$discount_given[ $code ] = $given_so_far + $capped_discount;
+
+		return $capped_discount;
 	}
 
 	/* ═════════════════════════════════════════════════════════════════
@@ -266,6 +377,13 @@ class LBite_Stampcard {
 		$count    = min( $settings['target'], (int) get_user_meta( $user_id, self::META_COUNT, true ) );
 		$coupon   = (string) get_user_meta( $user_id, self::META_COUPON, true );
 
+		// Ein bereits eingelöster oder abgelaufener Gutschein wurde bisher
+		// unbegrenzt weiter angezeigt (Audit 26.09.2026, AP-11).
+		if ( '' !== $coupon && ! self::is_coupon_still_redeemable( $coupon ) ) {
+			delete_user_meta( $user_id, self::META_COUPON );
+			$coupon = '';
+		}
+
 		wp_enqueue_style(
 			'lbite-stampcard',
 			LBITE_PLUGIN_URL . 'assets/css/stampcard.css',
@@ -283,13 +401,20 @@ class LBite_Stampcard {
 				<?php endfor; ?>
 			</div>
 
+			<?php
+			// Fixbetrag zeigt bisher immer "% Rabatt", auch wenn discount_type
+			// auf "fixed" stand (Audit 26.09.2026, AP-11).
+			$lbite_discount_display = 'fixed' === $settings['discount_type']
+				? wp_strip_all_tags( wc_price( $settings['discount'] ) )
+				: (int) $settings['discount'] . '%';
+			?>
 			<?php if ( '' !== $coupon ) : ?>
 				<p class="lbite-stampcard__reward">
 					<?php
 					printf(
-						/* translators: 1: discount percentage, 2: coupon code */
-						esc_html__( 'Your reward is ready: %1$d%% off with the code %2$s', 'libre-bite' ),
-						(int) $settings['discount'],
+						/* translators: 1: discount amount or percentage, 2: coupon code */
+						esc_html__( 'Your reward is ready: %1$s off with the code %2$s', 'libre-bite' ),
+						$lbite_discount_display,
 						'<strong>' . esc_html( $coupon ) . '</strong>'
 					);
 					?>
@@ -299,10 +424,10 @@ class LBite_Stampcard {
 					<?php
 					$lbite_left = max( 0, $settings['target'] - $count );
 					printf(
-						/* translators: 1: remaining stamps, 2: discount percentage */
-						esc_html( _n( '%1$d more order and you get %2$d%% off.', '%1$d more orders and you get %2$d%% off.', $lbite_left, 'libre-bite' ) ),
+						/* translators: 1: remaining stamps, 2: discount amount or percentage */
+						esc_html( _n( '%1$d more order and you get %2$s off.', '%1$d more orders and you get %2$s off.', $lbite_left, 'libre-bite' ) ),
 						(int) $lbite_left,
-						(int) $settings['discount']
+						$lbite_discount_display
 					);
 					?>
 				</p>

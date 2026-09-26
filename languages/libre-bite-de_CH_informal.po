@@ -8810,6 +8810,20 @@ msgstr "Der gewählte Standort ist zu dieser Zeit geschlossen."
 msgid "This table is already reserved at the selected time."
 msgstr "Dieser Tisch ist zur gewählten Zeit bereits reserviert."
 
+#. translators: 1: discount amount or percentage, 2: coupon code
+#: includes/modules/stampcard/class-stampcard.php:416
+#, php-format
+msgid "Your reward is ready: %1$s off with the code %2$s"
+msgstr "Deine Belohnung ist bereit: %1$s Rabatt mit dem Code %2$s"
+
+#. translators: 1: remaining stamps, 2: discount amount or percentage
+#: includes/modules/stampcard/class-stampcard.php:428
+#, php-format
+msgid "%1$d more order and you get %2$s off."
+msgid_plural "%1$d more orders and you get %2$s off."
+msgstr[0] "Noch %1$d Bestellung und du erhältst %2$s Rabatt."
+msgstr[1] "Noch %1$d Bestellungen und du erhältst %2$s Rabatt."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

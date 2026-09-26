@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,14 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.4.2 =
+
+* Fixed: the Stamp Card's "Maximum amount" setting made the reward voucher invalid on carts above that amount instead of capping the discount at it. The discount is now genuinely capped, verified against carts both under and over the limit.
+* Fixed: a fixed-amount reward (rather than a percentage) was rounded down to a whole number and could not exceed 100 — a CHF 7.50 reward was silently saved as CHF 7, and anything above CHF 100 was rejected.
+* Fixed: the stamp card display always said "% off" even when the reward was configured as a fixed amount.
+* Fixed: an already-redeemed or expired reward voucher kept showing on the stamp card indefinitely instead of clearing once it could no longer be used.
+* Fixed: cancelling or refunding an order that had already earned a stamp never gave the stamp back.
 
 = 3.4.1 =
 
