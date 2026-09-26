@@ -1190,6 +1190,10 @@ class LBite_Admin {
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( $_POST['location_id'] ) : 0;
 
+		if ( $location_id && ! LBite_Access::can_access_location( $location_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
+		}
+
 		// Standort für aktuellen Benutzer speichern
 		update_user_meta( get_current_user_id(), 'lbite_pos_location', $location_id );
 
@@ -1334,6 +1338,9 @@ class LBite_Admin {
 
 		if ( ! $location_id ) {
 			wp_send_json_error( array( 'message' => __( 'No location selected', 'libre-bite' ) ) );
+		}
+		if ( ! LBite_Access::can_access_location( $location_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
 		}
 
 		// Schweizer MWST: Kontext setzen damit der Tax-Filter die richtige Steuerklasse anwendet.
@@ -1647,6 +1654,10 @@ class LBite_Admin {
 			wp_send_json_success( array( 'tabs' => array() ) );
 		}
 
+		if ( ! LBite_Access::can_access_location( $location_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
+		}
+
 		$orders = wc_get_orders( array(
 			'limit'      => 100,
 			'status'     => array( 'wc-on-hold' ),
@@ -1716,6 +1727,9 @@ class LBite_Admin {
 		}
 		if ( ! $table_id ) {
 			wp_send_json_error( array( 'message' => __( 'Please select a table', 'libre-bite' ) ) );
+		}
+		if ( ! LBite_Access::can_access_location( $location_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
 		}
 
 		if ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) ) {
@@ -1795,6 +1809,12 @@ class LBite_Admin {
 		}
 		if ( 'on-hold' !== $order->get_status() || '1' !== (string) $order->get_meta( '_lbite_tab_open', true ) ) {
 			wp_send_json_error( array( 'message' => __( 'This tab is no longer open', 'libre-bite' ) ) );
+		}
+		// Serverseitig gegen den tatsächlichen Standort der Bestellung prüfen,
+		// nicht nur gegen den vom Client übergebenen $expected_location_id -
+		// der liess sich mit location_id=0 umgehen (Audit 26.09.2026, AP-07).
+		if ( ! LBite_Access::can_access_order( $order ) ) {
+			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
 		}
 		if ( $expected_location_id && (int) $order->get_meta( '_lbite_location_id', true ) !== $expected_location_id ) {
 			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
@@ -2567,6 +2587,10 @@ class LBite_Admin {
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
 			wp_send_json_error( __( 'Order not found.', 'libre-bite' ) );
+		}
+
+		if ( ! LBite_Access::can_access_order( $order ) ) {
+			wp_send_json_error( __( 'No permission for this location', 'libre-bite' ) );
 		}
 
 		$billing_email = $order->get_billing_email();

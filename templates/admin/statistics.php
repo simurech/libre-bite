@@ -115,14 +115,11 @@ function lbite_stat_column_chart( $lbite_series ) {
 	return $lbite_out;
 }
 
-$lbite_stat_allowed_ids = null;
-if ( ! current_user_can( 'lbite_manage_settings' ) ) {
-	$lbite_stat_allowed_ids = get_user_meta( get_current_user_id(), 'lbite_assigned_locations', true );
-	if ( ! is_array( $lbite_stat_allowed_ids ) ) {
-		$lbite_stat_allowed_ids = array();
-	}
-	$lbite_stat_allowed_ids = array_map( 'intval', $lbite_stat_allowed_ids );
-}
+// LBite_Access::get_allowed_location_ids() liefert null für "alle" - vorher
+// bedeutete eine leere Zuweisung hier "keine" statt "alle" wie überall sonst
+// im Plugin, ein Manager ohne explizite Zuweisung sah eine leere Statistik
+// (Audit 26.09.2026, AP-07).
+$lbite_stat_allowed_ids = LBite_Access::get_allowed_location_ids();
 
 // phpcs:disable WordPress.Security.NonceVerification.Recommended
 $lbite_period     = isset( $_GET['lbite_period'] ) ? sanitize_key( wp_unslash( $_GET['lbite_period'] ) ) : '7days';

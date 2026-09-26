@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,11 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.3.2 =
+
+* Fixed: the location restriction for managers and staff (Settings → Manager Assignments) only applied to the REST API and the Statistics page. Over the regular admin-ajax endpoints, staff and managers could view, change, and cancel orders at any location, and retrieve the receipt of any WooCommerce order, not just their own location's. All order-related endpoints now check location access consistently through one shared class.
+* Fixed: on the Statistics page, a manager or staff account with no location explicitly assigned saw an empty report instead of all locations — the opposite of what an empty assignment means everywhere else in the plugin.
 
 = 3.3.1 =
 
@@ -635,6 +640,9 @@ This release rounds out the feature set that 2.6.0 started. It is published as a
 * For the full changelog of versions before 2.0.0, see the release history: https://github.com/simurech/libre-bite/releases
 
 == Upgrade Notice ==
+
+= 3.3.2 =
+Security fix: location access restrictions for managers/staff now apply consistently across all order endpoints, not just the REST API and Statistics. Update promptly if you use multi-location access restrictions.
 
 = 3.3.0 =
 Settings now save via an earlier hook to fix a "headers already sent" redirect bug, and fields hidden behind a disabled feature no longer reset when you save. If you use the Settings page heavily, worth a quick check after updating.

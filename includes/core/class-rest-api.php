@@ -169,24 +169,14 @@ class LBite_REST_API {
 	/**
 	 * Standorte, auf die der aktuelle Benutzer zugreifen darf
 	 *
-	 * Manager können auf einzelne Standorte eingeschränkt sein
-	 * (`lbite_assigned_locations`). Wer die Einschränkung nicht hat oder
-	 * `manage_options` besitzt, sieht alle Standorte.
+	 * Delegiert an LBite_Access, die zentrale, auch von AJAX-Endpunkten und
+	 * der Statistik-Seite genutzte Zugriffsprüfung (Audit 26.09.2026, AP-07)
+	 * - vorher hatte nur diese Klasse eine Standort-Einschränkung.
 	 *
 	 * @return int[]|null Liste erlaubter IDs oder null für «alle».
 	 */
 	private function get_allowed_location_ids() {
-		if ( current_user_can( 'manage_options' ) ) {
-			return null;
-		}
-
-		$assigned = get_user_meta( get_current_user_id(), 'lbite_assigned_locations', true );
-
-		if ( empty( $assigned ) || ! is_array( $assigned ) ) {
-			return null;
-		}
-
-		return array_values( array_filter( array_map( 'absint', $assigned ) ) );
+		return LBite_Access::get_allowed_location_ids();
 	}
 
 	/**
@@ -196,9 +186,7 @@ class LBite_REST_API {
 	 * @return true|WP_Error
 	 */
 	private function check_location_access( $location_id ) {
-		$allowed = $this->get_allowed_location_ids();
-
-		if ( null === $allowed || in_array( (int) $location_id, $allowed, true ) ) {
+		if ( LBite_Access::can_access_location( $location_id ) ) {
 			return true;
 		}
 

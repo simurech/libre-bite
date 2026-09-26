@@ -333,6 +333,10 @@ class LBite_Order_Dashboard {
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
+		if ( ! LBite_Access::can_access_location( $location_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
+		}
+
 		wp_send_json_success( $this->get_board_data( $location_id ) );
 	}
 
@@ -677,6 +681,10 @@ class LBite_Order_Dashboard {
 		$order_id   = isset( $_POST['order_id'] ) ? intval( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$new_status = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : '';
 
+		if ( ! LBite_Access::can_access_order( $order_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
+		}
+
 		$result = $this->apply_order_status( $order_id, $new_status );
 
 		if ( is_wp_error( $result ) ) {
@@ -799,6 +807,10 @@ class LBite_Order_Dashboard {
 
 		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
 
+		if ( $location_id && ! LBite_Access::can_access_location( $location_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
+		}
+
 		// Standort für aktuellen Benutzer speichern
 		update_user_meta( get_current_user_id(), 'lbite_board_location', $location_id );
 
@@ -820,6 +832,10 @@ class LBite_Order_Dashboard {
 
 		if ( ! $order ) {
 			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
+		}
+
+		if ( ! LBite_Access::can_access_order( $order ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
 		}
 
 		// Rückerstattung VOR der Stornierung – nach update_status('cancelled') gibt is_paid() false zurück.
@@ -871,6 +887,10 @@ class LBite_Order_Dashboard {
 
 		if ( ! $location_id ) {
 			wp_send_json_success( array( 'orders' => array() ) );
+		}
+
+		if ( ! LBite_Access::can_access_location( $location_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
 		}
 
 		// Angeforderte Spalte muss existieren und als «abgeschlossen» zählen.

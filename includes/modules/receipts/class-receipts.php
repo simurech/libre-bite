@@ -196,6 +196,10 @@ class LBite_Receipts {
 			wp_send_json_error( array( 'message' => __( 'Order not found', 'libre-bite' ) ) );
 		}
 
+		if ( ! LBite_Access::can_access_order( $order ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
+		}
+
 		wp_send_json_success(
 			array(
 				'html'  => self::render( $order, $type ),
