@@ -66,6 +66,7 @@ class LBite_Admin {
 		$this->loader->add_action( 'personal_options_update', $this, 'save_theme_user_option' );
 		$this->loader->add_action( 'edit_user_profile_update', $this, 'save_theme_user_option' );
 		$this->loader->add_action( 'admin_init', $this, 'maybe_upgrade' );
+		$this->loader->add_action( 'admin_init', $this, 'maybe_redirect_to_setup_wizard' );
 		$this->loader->add_action( 'admin_init', $this, 'add_privacy_policy_content' );
 		$this->loader->add_action( 'admin_notices', $this, 'render_checkout_block_notice' );
 
@@ -97,7 +98,6 @@ class LBite_Admin {
 		$this->loader->add_action( 'wp_ajax_lbite_pos_get_coupons', $this, 'ajax_pos_get_coupons' );
 		$this->loader->add_action( 'wp_ajax_lbite_pos_toggle_stock', $this, 'ajax_pos_toggle_stock' );
 		$this->loader->add_action( 'wp_ajax_lbite_get_theme_colors', $this, 'ajax_get_theme_colors' );
-		$this->loader->add_action( 'wp_ajax_lbite_save_features', $this, 'ajax_save_features' );
 		$this->loader->add_action( 'wp_ajax_lbite_save_support_settings', $this, 'ajax_save_support_settings' );
 		$this->loader->add_action( 'wp_ajax_lbite_get_location_tables', $this, 'ajax_get_location_tables' );
 		$this->loader->add_action( 'wp_ajax_lbite_dismiss_welcome_notice', $this, 'ajax_dismiss_welcome_notice' );
@@ -177,6 +177,33 @@ class LBite_Admin {
 	 */
 	public function maybe_upgrade() {
 		LBite_Installer::maybe_upgrade();
+	}
+
+	/**
+	 * Einmalig zum Einrichtungsassistenten weiterleiten
+	 *
+	 * Transient wird nur bei einer echten Einzel-Aktivierung über das
+	 * Plugins-Screen gesetzt (siehe LBite_Installer::activate()) – hier nur
+	 * noch konsumieren und zusätzlich AJAX/REST ausschliessen, da admin_init
+	 * auch dort feuert (Audit 26.09.2026, AP-20).
+	 */
+	public function maybe_redirect_to_setup_wizard() {
+		if ( ! get_transient( 'lbite_activation_redirect' ) ) {
+			return;
+		}
+
+		delete_transient( 'lbite_activation_redirect' );
+
+		if ( wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+			return;
+		}
+
+		if ( ! class_exists( 'LBite_Setup_Wizard' ) || ! LBite_Setup_Wizard::current_user_can_run() ) {
+			return;
+		}
+
+		wp_safe_redirect( LBite_Setup_Wizard::get_url() );
+		exit;
 	}
 
 	/**
@@ -591,16 +618,6 @@ class LBite_Admin {
 			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
 		}
 		include LBITE_PLUGIN_DIR . 'templates/admin/table-plan.php';
-	}
-
-	/**
-	 * Debug-Seite rendern
-	 */
-	public function render_debug_page() {
-		if ( ! current_user_can( 'lbite_view_debug' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
-		}
-		include LBITE_PLUGIN_DIR . 'templates/admin/debug-info.php';
 	}
 
 	/**
@@ -1104,7 +1121,17 @@ class LBite_Admin {
 					'locationColors'        => $lbite_dashboard_colors,
 					'paymentMethods'        => $lbite_pm_labels,
 					'currency'              => html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ),
-					'futureDimmingEnabled'  => lbite_feature_enabled( 'enable_future_orders_dimmed' ) && '0' !== get_option( 'lbite_dim_future_orders', 1 ),
+					// `enable_future_orders_dimmed` ist ein Feature-Flag ohne jeden
+					// Schalter in der Oberfläche (weder Settings noch Wizard) -
+					// blieb dadurch für jeden Nutzer, auch mit Lizenz, dauerhaft
+					// aus. Die Einstellungsseite gated die beiden Checkboxen
+					// bereits selbst über Pro-Badge + disabled; hier reicht
+					// dieselbe Lizenzprüfung statt des unerreichbaren Flags
+					// (Audit 26.09.2026, AP-20).
+					'futureDimmingEnabled'  => $lbite_is_premium && '0' !== get_option( 'lbite_dim_future_orders', 1 ),
+					// Serverseitiger Default für den Sound-Schalter, siehe
+					// Dashboard.soundEnabled in dashboard.js.
+					'soundEnabledDefault'   => '0' !== (string) get_option( 'lbite_sound_enabled', 1 ),
 					'kanbanColumns'             => LBite_Order_Dashboard::get_columns(),
 					'kanbanCustomizationActive' => lbite_feature_enabled( 'enable_kanban_customization' ),
 					'kanbanDragDropEnabled'     => $lbite_kanban_dragdrop,
@@ -1119,6 +1146,7 @@ class LBite_Admin {
 						'updateError'     => __( 'Error updating', 'libre-bite' ),
 						'soundActive'     => __( 'Sound active', 'libre-bite' ),
 						'soundInactive'   => __( 'Sound off', 'libre-bite' ),
+						'loading'         => __( 'Loading...', 'libre-bite' ),
 						'loadingOrders'   => __( 'Loading orders...', 'libre-bite' ),
 						'loadOrdersError' => __( 'Error loading orders', 'libre-bite' ),
 						'loadMoreError'   => __( 'Error loading more orders', 'libre-bite' ),
@@ -1129,7 +1157,10 @@ class LBite_Admin {
 						'cancelError'     => __( 'Error cancelling', 'libre-bite' ),
 						'cancelOrderError'   => __( 'Error cancelling order', 'libre-bite' ),
 						'unknownError'       => __( 'Unknown error', 'libre-bite' ),
-						'moreOrders'         => __( 'more order(s)', 'libre-bite' ),
+						/* translators: %d: number of remaining orders */
+						'moreOrdersSingular' => __( '%d more order', 'libre-bite' ),
+						/* translators: %d: number of remaining orders */
+						'moreOrdersPlural'   => __( '%d more orders', 'libre-bite' ),
 						'startPreparation'   => __( 'Prepare Now →', 'libre-bite' ),
 						'completed'          => __( '✓ Complete', 'libre-bite' ),
 						'cancelOrder'        => __( 'Cancel order', 'libre-bite' ),
@@ -2253,40 +2284,6 @@ class LBite_Admin {
 	/**
 	 * AJAX: Feature-Toggles speichern
 	 */
-	public function ajax_save_features() {
-		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
-
-		if ( ! current_user_can( 'lbite_manage_features' ) ) {
-			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
-		}
-
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$features_json = isset( $_POST['features'] ) ? wp_unslash( $_POST['features'] ) : '';
-		$features      = json_decode( $features_json, true );
-
-		if ( ! is_array( $features ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid data', 'libre-bite' ) ) );
-		}
-
-		$known_keys = array_keys( LBite_Features::get_definitions() );
-
-		// Alle Feature-Werte als boolean sanitieren; nur bekannte Keys übernehmen.
-		// Die Lizenzprüfung erfolgt ausschliesslich zur Laufzeit via lbite_feature_enabled() –
-		// der gespeicherte Wert hat keinen Effekt wenn der Premium-Code nicht ausführbar ist.
-		$sanitized_features = array();
-		foreach ( $features as $key => $value ) {
-			$clean_key = sanitize_key( $key );
-			if ( ! in_array( $clean_key, $known_keys, true ) ) {
-				continue;
-			}
-			$sanitized_features[ $clean_key ] = (bool) $value;
-		}
-
-		update_option( 'lbite_features', $sanitized_features );
-
-		wp_send_json_success( array( 'message' => __( 'Settings saved', 'libre-bite' ) ) );
-	}
-
 	/**
 	 * AJAX: Support-Einstellungen speichern
 	 */

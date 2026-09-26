@@ -17,13 +17,6 @@ $lbite_checks     = LBite_Setup_Wizard::get_system_checks();
 $lbite_wiz_feats  = LBite_Setup_Wizard::get_wizard_features();
 $lbite_catalogue  = LBite_Setup_Wizard::get_module_catalogue();
 $lbite_defs       = LBite_Features::get_definitions();
-$lbite_blocking   = false;
-
-foreach ( $lbite_checks as $lbite_check ) {
-	if ( ! $lbite_check['ok'] && false !== strpos( $lbite_check['label'], 'WooCommerce' ) ) {
-		$lbite_blocking = true;
-	}
-}
 ?>
 <div class="lbite-wizard" id="lbite-wizard">
 
@@ -91,15 +84,9 @@ foreach ( $lbite_checks as $lbite_check ) {
 				<?php endforeach; ?>
 			</ul>
 
-			<?php if ( $lbite_blocking ) : ?>
-				<p class="lbite-wizard__blocking">
-					<?php esc_html_e( 'WooCommerce must be installed and active before Libre Bite can do anything. Please take care of that first.', 'libre-bite' ); ?>
-				</p>
-			<?php endif; ?>
-
 			<div class="lbite-wizard__actions">
 				<button type="button" class="lbite-wizard__back"><?php esc_html_e( 'Back', 'libre-bite' ); ?></button>
-				<button type="button" class="lbite-wizard__btn lbite-wizard__next" <?php disabled( $lbite_blocking ); ?>><?php esc_html_e( 'Continue', 'libre-bite' ); ?></button>
+				<button type="button" class="lbite-wizard__btn lbite-wizard__next"><?php esc_html_e( 'Continue', 'libre-bite' ); ?></button>
 			</div>
 		</section>
 
@@ -219,7 +206,13 @@ foreach ( $lbite_checks as $lbite_check ) {
 									dot.className = 'lbite-wizard__stampcard-dot' + (i === 0 ? ' is-filled' : '');
 									dotsWrap.appendChild(dot);
 								}
-								noteEl.textContent = t + ' ' + <?php echo wp_json_encode( __( 'stamps →', 'libre-bite' ) ); ?> + ' ' + d + '% ' + <?php echo wp_json_encode( __( 'off the next order', 'libre-bite' ) ); ?>;
+								// Ganzer Satz mit Platzhaltern statt aneinandergehängter Fragmente -
+								// Wortstellung und Grammatik unterscheiden sich je Sprache
+								// (Audit 26.09.2026, AP-19).
+								/* translators: 1: number of stamps, 2: discount percentage */
+								noteEl.textContent = <?php echo wp_json_encode( __( '%1$d stamps → %2$d%% off the next order', 'libre-bite' ) ); ?>
+									.replace('%1$d', t)
+									.replace('%2$d%%', d + '%');
 							}
 							if ( target ) { target.addEventListener('input', update); }
 							if ( discount ) { discount.addEventListener('input', update); }
@@ -344,6 +337,7 @@ foreach ( $lbite_checks as $lbite_check ) {
 		'nonce'    => wp_create_nonce( 'lbite_setup_nonce' ),
 		'importing' => __( 'Creating sample menu…', 'libre-bite' ),
 		'imported' => __( 'Sample menu created.', 'libre-bite' ),
+		'importedLocationDraft' => __( 'Sample menu created. The sample location was saved as a draft because the Free plan is limited to one published location — publish it manually if you want to use it instead of your existing one.', 'libre-bite' ),
 		'failed'   => __( 'Something went wrong. Please try again.', 'libre-bite' ),
 		'saving'   => __( 'Saving…', 'libre-bite' ),
 		/* translators: 1: current step number, 2: total number of steps */
@@ -453,7 +447,9 @@ foreach ( $lbite_checks as $lbite_check ) {
 			btn.disabled = false;
 			if ( res && res.success ) {
 				$result.classList.add( 'is-ok' );
-				$result.textContent = config.imported;
+				$result.textContent = ( res.data && res.data.location_is_draft )
+					? config.importedLocationDraft
+					: config.imported;
 			} else {
 				$result.classList.add( 'is-error' );
 				$result.textContent = ( res && res.data && res.data.message ) || config.failed;

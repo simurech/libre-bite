@@ -246,9 +246,25 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 		<div class="lbite-welcome-notice__content">
 			<h2><?php esc_html_e( 'Welcome to Libre Bite!', 'libre-bite' ); ?></h2>
 			<p><?php esc_html_e( 'Configure each area of the plugin using the navigation on the left. Core features are active by default – you can adjust them at any time.', 'libre-bite' ); ?></p>
+			<?php if ( class_exists( 'LBite_Setup_Wizard' ) && LBite_Setup_Wizard::current_user_can_run() ) : ?>
+				<p>
+					<a href="<?php echo esc_url( LBite_Setup_Wizard::get_url() ); ?>" class="button button-primary">
+						<?php esc_html_e( 'Run setup assistant', 'libre-bite' ); ?>
+					</a>
+				</p>
+			<?php endif; ?>
 		</div>
 		<button type="button" class="lbite-welcome-notice__dismiss" aria-label="<?php esc_attr_e( 'Dismiss', 'libre-bite' ); ?>">&#x2715;</button>
 	</div>
+	<?php endif; ?>
+
+	<?php if ( class_exists( 'LBite_Setup_Wizard' ) && LBite_Setup_Wizard::is_pending() && LBite_Setup_Wizard::current_user_can_run() ) : ?>
+		<div class="notice notice-info">
+			<p>
+				<?php esc_html_e( 'The setup assistant has not been completed yet. It walks through the essentials for each module you turn on.', 'libre-bite' ); ?>
+				<a href="<?php echo esc_url( LBite_Setup_Wizard::get_url() ); ?>"><?php esc_html_e( 'Start setup', 'libre-bite' ); ?></a>
+			</p>
+		</div>
 	<?php endif; ?>
 
 	<?php // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lese-Parameter für Erfolgs-Hinweis nach Speichern; kein DB-Schreibzugriff. ?>

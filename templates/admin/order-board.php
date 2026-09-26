@@ -68,7 +68,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</label>
 
 		<label class="lbite-wake-lock-toggle">
-			<input type="checkbox" id="lbite-sound-enabled" checked>
+			<input type="checkbox" id="lbite-sound-enabled" <?php checked( get_option( 'lbite_sound_enabled', 1 ) ); ?>>
 			<?php esc_html_e( 'Sound Notifications', 'libre-bite' ); ?>
 		</label>
 	</div>

@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.4.9
+Stable tag: 3.5.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,19 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.5.0 =
+
+* Fixed: the default POS payment method names ("Cash", "Card", "Other") were stored in German at installation time, which permanently overrode the translation on every site regardless of its language. Existing installs are migrated automatically; new installs and any site that never customized these labels now show them in the site's own language.
+* Fixed: several hard-coded German or English-only strings ("Loading…", a stamp-card preview sentence, an order-created message, a "no configuration needed" message) now go through the normal translation system.
+* Fixed: Du/Sie address was inconsistent across the German translations — the informal variants (Standard German, informal Swiss German) contained around 90 formal "Sie" strings each, and the formal variants contained a couple of stray informal "du" strings. Both are now consistent within each variant.
+* Added: a one-time redirect to the setup assistant right after the plugin's first activation (skipped for bulk/network activation and WP-CLI), plus a persistent reminder on the dashboard and settings page for as long as setup hasn't been completed.
+* Added: dashboard notices for the states that would otherwise silently prevent any order from completing — no location created yet, no POS payment method enabled, or the checkout page using the WooCommerce Checkout block.
+* Fixed: importing the sample content while already at the Free plan's one-location limit created a second location that was silently saved as a draft; this is now reported clearly instead of looking like nothing happened.
+* Fixed: the setup assistant's "WooCommerce is active" system check could never actually fail (the plugin doesn't load at all without an active, current-enough WooCommerce), so it only added noise — removed. Its "Continue" button had also been permanently disabled by a leftover reference to that check.
+* Fixed: a "Dim Future Pre-orders" setting that could never take effect due to an unrelated internal flag with no way to enable it — even paying customers who turned the checkbox on saw no effect. The Kanban board's sound-notification default was also never read from its own setting, always defaulting to on regardless of what was configured.
+* Removed: three dead/unreachable code paths found during an audit — an unused settings-registration call, an AJAX endpoint with no caller anywhere in the plugin, and a duplicate reservation-tables AJAX endpoint that was never wired to the frontend.
+* Changed: the previously unreachable Debug Information page is now available under Settings → Developer.
 
 = 3.4.9 =
 

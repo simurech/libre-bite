@@ -17,6 +17,25 @@ $lbite_can_manage      = current_user_can( 'lbite_manage_settings' );
 $lbite_can_locations   = current_user_can( 'lbite_manage_locations' );
 $lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
 
+// Leerzustände für neue Installationen: ohne Standort und ohne aktive
+// Zahlungsart kann noch keine einzige Bestellung durchlaufen, das war
+// bisher nirgends auf dem Dashboard erkennbar (Audit 26.09.2026, AP-20).
+$lbite_has_location = $lbite_can_locations && (bool) get_posts(
+	array(
+		'post_type'      => 'lbite_location',
+		'post_status'    => 'publish',
+		'posts_per_page' => 1,
+		'fields'         => 'ids',
+	)
+);
+
+$lbite_has_active_payment_method = (bool) array_filter(
+	get_option( 'lbite_pos_payment_methods', array() ),
+	function( $lbite_pm ) {
+		return ! empty( $lbite_pm['enabled'] );
+	}
+);
+
 $lbite_tiles          = array();
 $lbite_inactive_tiles = array();
 
@@ -152,6 +171,40 @@ $lbite_tiles = array_merge( $lbite_tiles, $lbite_inactive_tiles );
 
 <div class="wrap lbite-admin-dashboard">
 	<h1><?php echo esc_html( $lbite_plugin_name ); ?></h1>
+
+	<?php if ( class_exists( 'LBite_Setup_Wizard' ) && LBite_Setup_Wizard::is_pending() && LBite_Setup_Wizard::current_user_can_run() ) : ?>
+		<div class="notice notice-info">
+			<p>
+				<?php esc_html_e( 'The setup assistant has not been completed yet. It walks through the essentials for each module you turn on.', 'libre-bite' ); ?>
+				<a href="<?php echo esc_url( LBite_Setup_Wizard::get_url() ); ?>"><?php esc_html_e( 'Start setup', 'libre-bite' ); ?></a>
+			</p>
+		</div>
+	<?php endif; ?>
+
+	<?php if ( $lbite_can_locations && ! $lbite_has_location ) : ?>
+		<div class="notice notice-warning">
+			<p>
+				<?php esc_html_e( 'No location has been created yet — orders and the POS need at least one to work.', 'libre-bite' ); ?>
+				<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=lbite_location' ) ); ?>"><?php esc_html_e( 'Create location', 'libre-bite' ); ?></a>
+			</p>
+		</div>
+	<?php elseif ( $lbite_can_manage && ! $lbite_has_active_payment_method ) : ?>
+		<div class="notice notice-warning">
+			<p>
+				<?php esc_html_e( 'No payment method is currently enabled for the POS — staff cannot complete a sale until at least one is turned on.', 'libre-bite' ); ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings&tab=pos' ) ); ?>"><?php esc_html_e( 'Enable a payment method', 'libre-bite' ); ?></a>
+			</p>
+		</div>
+	<?php endif; ?>
+
+	<?php if ( $lbite_can_manage && function_exists( 'lbite_checkout_uses_blocks' ) && lbite_checkout_uses_blocks() ) : ?>
+		<div class="notice notice-warning">
+			<p>
+				<?php esc_html_e( 'Your checkout page uses the WooCommerce Checkout block. Libre Bite currently only works with the classic checkout shortcode.', 'libre-bite' ); ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings&tab=checkout_mode' ) ); ?>"><?php esc_html_e( 'Learn more', 'libre-bite' ); ?></a>
+			</p>
+		</div>
+	<?php endif; ?>
 
 	<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 20px; align-items: stretch;">
 		<?php foreach ( $lbite_tiles as $lbite_tile ) : ?>

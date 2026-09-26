@@ -143,11 +143,11 @@ class LBite_Setup_Wizard {
 	public static function get_system_checks() {
 		$checks = array();
 
-		$checks[] = array(
-			'label' => __( 'WooCommerce is active', 'libre-bite' ),
-			'ok'    => class_exists( 'WooCommerce' ),
-			'hint'  => __( 'Libre Bite is a WooCommerce extension and cannot work without it.', 'libre-bite' ),
-		);
+		// Kein "WooCommerce is active"-Check hier: lbite_init_plugin() bricht
+		// bereits vor dem Laden der Plugin-Hauptklasse ab, wenn WooCommerce
+		// fehlt oder zu alt ist (siehe libre-bite.php) - ohne aktives
+		// WooCommerce 8.0+ existiert weder das Admin-Menü noch diese Seite,
+		// der Check konnte hier also nie rot anzeigen (Audit 26.09.2026, AP-20).
 
 		// Die Mindestversion wird aus dem Plugin-Header gelesen statt hier
 		// zweitgeschrieben. Eine fest eingetragene Zahl läuft sonst
@@ -261,11 +261,12 @@ class LBite_Setup_Wizard {
 	 */
 	public function import_demo_content() {
 		$created = array(
-			'location'   => 0,
-			'categories' => 0,
-			'products'   => 0,
-			'options'    => 0,
-			'skipped'    => 0,
+			'location'           => 0,
+			'categories'         => 0,
+			'products'           => 0,
+			'options'            => 0,
+			'skipped'            => 0,
+			'location_is_draft'  => false,
 		);
 
 		// ── Standort ──────────────────────────────────────────────────
@@ -288,6 +289,16 @@ class LBite_Setup_Wizard {
 				update_post_meta( $location_id, '_lbite_preparation_time', 30 );
 				update_post_meta( $location_id, '_lbite_opening_hours', $this->get_demo_opening_hours() );
 				$created['location'] = 1;
+
+				// Free-Version: LBite_Locations::enforce_location_limit() setzt
+				// diesen neuen Standort synchron während wp_insert_post() auf
+				// Entwurf zurück, wenn bereits ein anderer Standort publiziert
+				// ist. Ohne diese Rückmeldung wirkte der Demo-Import als
+				// funktioniert, obwohl der neue Standort im Frontend gar nicht
+				// wählbar ist (Audit 26.09.2026, AP-20).
+				if ( 'publish' !== get_post_status( $location_id ) ) {
+					$created['location_is_draft'] = true;
+				}
 			}
 		} else {
 			$created['skipped']++;

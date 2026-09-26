@@ -377,7 +377,7 @@
 		/**
 		 * Lade-Overlay anzeigen
 		 */
-		showLoading: function(message = 'Laden...') {
+		showLoading: function(message = lbitePos.strings.loading || 'Loading...') {
 			let $overlay = $('#lbite-pos-loading');
 			if ($overlay.length === 0) {
 				$overlay = $('<div id="lbite-pos-loading"></div>');
@@ -595,7 +595,7 @@
 				return;
 			}
 
-			$('#lbite-modal-product-name').text('Laden...');
+			$('#lbite-modal-product-name').text(lbitePos.strings.loading || 'Loading...');
 			const $loading = $('<div class="lbite-pos-modal-loading"></div>');
 			$loading.append('<div class="lbite-pos-modal-spinner"></div>');
 			$loading.append($('<p></p>').text(lbitePos.strings.loadingProductDetails));
@@ -714,7 +714,7 @@
 		}
 
 		if ($body.is(':empty')) {
-			$body.append($('<p></p>').text('Keine Konfiguration erforderlich.'));
+			$body.append($('<p></p>').text(lbitePos.strings.noConfigNeeded || 'No configuration needed.'));
 		}
 	},
 
@@ -1430,7 +1430,11 @@
 				},
 				success: (response) => {
 					if (response.success) {
-						window.lbiteNotify && window.lbiteNotify.success((lbitePos.strings.orderCreatedPrefix || 'Order #') + response.data.order_number + (lbitePos.strings.orderCreatedSuffix || ' created') + ' (' + response.data.total + ')');
+						window.lbiteNotify && window.lbiteNotify.success(
+						(lbitePos.strings.orderCreatedMessage || 'Order #%1$s created (%2$s)')
+							.replace('%1$s', response.data.order_number)
+							.replace('%2$s', response.data.total)
+					);
 						this.clearCart();
 					} else {
 						window.lbiteNotify && window.lbiteNotify.error(lbitePos.strings.orderError + ': ' + (response.data.message || ''));

@@ -110,8 +110,6 @@ class LBite_Reservations {
 		// AJAX (öffentlich)
 		$this->loader->add_action( 'wp_ajax_lbite_submit_reservation', $this, 'ajax_submit_reservation' );
 		$this->loader->add_action( 'wp_ajax_nopriv_lbite_submit_reservation', $this, 'ajax_submit_reservation' );
-		$this->loader->add_action( 'wp_ajax_lbite_get_reservation_tables', $this, 'ajax_get_reservation_tables' );
-		$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_reservation_tables', $this, 'ajax_get_reservation_tables' );
 	}
 
 	/**
@@ -510,56 +508,6 @@ class LBite_Reservations {
 	/**
 	 * AJAX: Tische für Standort laden
 	 */
-	public function ajax_get_reservation_tables() {
-		check_ajax_referer( 'lbite_reservation_form', 'nonce' );
-
-		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
-
-		if ( ! $location_id ) {
-			wp_send_json_error();
-		}
-
-		$lbite_tables = get_posts(
-			array(
-				'post_type'      => 'lbite_table',
-				'posts_per_page' => 100,
-				'post_status'    => 'publish',
-				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					array(
-						'key'   => '_lbite_location_id',
-						'value' => $location_id,
-					),
-				),
-				'orderby'        => 'title',
-				'order'          => 'ASC',
-			)
-		);
-
-		// Nach Reihenfolge sortieren (meta_key im Query würde Tische ohne Order-Meta ausschliessen).
-		usort(
-			$lbite_tables,
-			function ( $a, $b ) {
-				$order_a = intval( get_post_meta( $a->ID, '_lbite_table_order', true ) );
-				$order_b = intval( get_post_meta( $b->ID, '_lbite_table_order', true ) );
-				$order_a = $order_a > 0 ? $order_a : PHP_INT_MAX;
-				$order_b = $order_b > 0 ? $order_b : PHP_INT_MAX;
-				return $order_a - $order_b;
-			}
-		);
-
-		$lbite_result = array();
-		foreach ( $lbite_tables as $lbite_table ) {
-			$lbite_seats      = intval( get_post_meta( $lbite_table->ID, '_lbite_table_seats', true ) );
-			$lbite_result[] = array(
-				'id'    => $lbite_table->ID,
-				'title' => $lbite_table->post_title,
-				'seats' => $lbite_seats,
-			);
-		}
-
-		wp_send_json_success( array( 'tables' => $lbite_result ) );
-	}
-
 	/**
 	 * AJAX: Reservierungsformular einreichen
 	 */

@@ -59,6 +59,20 @@ class LBite_Installer {
 		// Welcome-Notice bei Erstinstallation anzeigen
 		if ( $is_fresh_install ) {
 			add_option( 'lbite_show_welcome_notice', true );
+
+			// Einmalige Weiterleitung zum Einrichtungsassistenten nach der ersten
+			// Aktivierung – nicht bei Massen- oder Netzwerk-Aktivierung und nicht
+			// per WP-CLI, da es dort keinen sinnvollen Redirect-Ziel-Request gibt
+			// (Audit 26.09.2026, AP-20). Kurze Lebensdauer, damit ein sehr später
+			// nächster Admin-Request (z. B. Cron-getrieben) nicht plötzlich
+			// jemanden umleitet, der die Aktivierung längst nicht mehr vor Augen hat.
+			if ( ! ( defined( 'WP_CLI' ) && WP_CLI )
+				&& ! wp_doing_ajax()
+				&& ! ( function_exists( 'is_network_admin' ) && is_network_admin() )
+				&& ! isset( $_GET['activate-multi'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Lesezugriff zur Erkennung einer Massen-Aktivierung, kein DB-Write.
+			) {
+				set_transient( 'lbite_activation_redirect', true, 30 );
+			}
 		}
 	}
 
@@ -190,12 +204,18 @@ class LBite_Installer {
 	 */
 	private static function set_default_options() {
 		$defaults = array(
-			// POS-Zahlungsarten
+			// POS-Zahlungsarten. Label bewusst leer statt fest codiertem Deutsch
+			// gespeichert – jede Ausgabestelle (class-admin.php, statistics.php,
+			// templates/admin/pos.php, .../settings/pos.php) fällt bei leerem
+			// Label bereits auf einen zur Laufzeit übersetzten Standardnamen
+			// zurück. Ein gespeicherter deutscher Text hätte diese Übersetzung
+			// auf jeder Website dauerhaft überschrieben, unabhängig von deren
+			// Sprache (Audit 26.09.2026, AP-19).
 			'lbite_pos_payment_methods'       => array(
-				array( 'key' => 'cash',  'label' => 'Bar',    'enabled' => true ),
-				array( 'key' => 'card',  'label' => 'Karte',  'enabled' => true ),
-				array( 'key' => 'twint', 'label' => 'Twint',  'enabled' => true ),
-				array( 'key' => 'other', 'label' => 'Andere', 'enabled' => true ),
+				array( 'key' => 'cash',  'label' => '', 'enabled' => true ),
+				array( 'key' => 'card',  'label' => '', 'enabled' => true ),
+				array( 'key' => 'twint', 'label' => '', 'enabled' => true ),
+				array( 'key' => 'other', 'label' => '', 'enabled' => true ),
 			),
 
 			// Checkout-Einstellungen
@@ -296,6 +316,12 @@ class LBite_Installer {
 		// Migration auf 3.4.4: _lbite_pickup_date für bestehende Vorbestellungen nachtragen
 		if ( version_compare( $current_version, '3.4.4', '<' ) ) {
 			self::migrate_pickup_dates();
+		}
+
+		// Migration auf 3.4.10: unveränderte deutsche POS-Zahlungsart-Labels
+		// auf leer zurücksetzen, damit sie zur Laufzeit übersetzt werden.
+		if ( version_compare( $current_version, '3.4.10', '<' ) ) {
+			self::migrate_pos_payment_labels();
 		}
 
 		// Version aktualisieren
@@ -415,6 +441,44 @@ class LBite_Installer {
 				$order->update_meta_data( '_lbite_pickup_date', substr( str_replace( 'T', ' ', $pickup_time ), 0, 10 ) );
 				$order->save();
 			}
+		}
+	}
+
+	/**
+	 * Unveränderte deutsche POS-Zahlungsart-Labels auf leer zurücksetzen.
+	 *
+	 * Nur Labels, die noch exakt dem alten hartcodierten deutschen Default
+	 * entsprechen, werden geleert – ein von Hand angepasstes Label (auch
+	 * wenn es zufällig "Bar" heisst) bleibt unangetastet, da es sich dann
+	 * nicht mehr unterscheiden lässt von einer bewussten Änderung. Ein
+	 * geleertes Label fällt an jeder Ausgabestelle automatisch auf einen
+	 * zur Laufzeit übersetzten Namen zurück (Audit 26.09.2026, AP-19).
+	 */
+	private static function migrate_pos_payment_labels() {
+		$methods = get_option( 'lbite_pos_payment_methods', array() );
+
+		if ( ! is_array( $methods ) || empty( $methods ) ) {
+			return;
+		}
+
+		$old_german_defaults = array(
+			'cash'  => 'Bar',
+			'card'  => 'Karte',
+			'other' => 'Andere',
+		);
+
+		$changed = false;
+
+		foreach ( $methods as $index => $method ) {
+			$key = isset( $method['key'] ) ? $method['key'] : '';
+			if ( isset( $old_german_defaults[ $key ] ) && isset( $method['label'] ) && $old_german_defaults[ $key ] === $method['label'] ) {
+				$methods[ $index ]['label'] = '';
+				$changed                    = true;
+			}
+		}
+
+		if ( $changed ) {
+			update_option( 'lbite_pos_payment_methods', $methods );
 		}
 	}
 

@@ -133,7 +133,7 @@ jQuery(document).ready(function($) {
 			return;
 		}
 
-		$pickupTime.html('<option value="">Laden...</option>').prop('disabled', true);
+		$pickupTime.html('<option value=""><?php echo esc_js( __( 'Loading...', 'libre-bite' ) ); ?></option>').prop('disabled', true);
 
 		$.ajax({
 			url: lbiteData.ajaxUrl,

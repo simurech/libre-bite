@@ -228,14 +228,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<!-- Zahlungsart wählen -->
 				<?php
 				$lbite_default_icons = array( 'cash' => '💵', 'card' => '💳', 'twint' => '📱', 'other' => '💱' );
+				// Übersetzte Default-Labels statt fest codiertem Deutsch – griff bisher
+				// bei jeder Website, auf der die Option je gelöscht/zurückgesetzt wurde,
+				// unabhängig von deren Sprache (Audit 26.09.2026, AP-19).
+				$lbite_default_labels = array(
+					'cash'  => __( 'Cash', 'libre-bite' ),
+					'card'  => __( 'Card', 'libre-bite' ),
+					'twint' => __( 'Twint', 'libre-bite' ),
+					'other' => __( 'Other', 'libre-bite' ),
+				);
 				$lbite_saved_pm = get_option( 'lbite_pos_payment_methods', array() );
 				// Fallback: alle vier aktiv wenn Option leer
 				if ( empty( $lbite_saved_pm ) ) {
 					$lbite_saved_pm = array(
-						array( 'key' => 'cash',  'label' => 'Bar',    'icon' => '💵', 'enabled' => true ),
-						array( 'key' => 'card',  'label' => 'Karte',  'icon' => '💳', 'enabled' => true ),
-						array( 'key' => 'twint', 'label' => 'Twint',  'icon' => '📱', 'enabled' => true ),
-						array( 'key' => 'other', 'label' => 'Andere', 'icon' => '💱', 'enabled' => true ),
+						array( 'key' => 'cash',  'label' => '', 'icon' => '💵', 'enabled' => true ),
+						array( 'key' => 'card',  'label' => '', 'icon' => '💳', 'enabled' => true ),
+						array( 'key' => 'twint', 'label' => '', 'icon' => '📱', 'enabled' => true ),
+						array( 'key' => 'other', 'label' => '', 'icon' => '💱', 'enabled' => true ),
 					);
 				}
 				$lbite_active_pm = array_filter( $lbite_saved_pm, fn( $m ) => ! empty( $m['enabled'] ) );
@@ -255,7 +264,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php echo $lbite_first ? 'checked' : ''; ?>
 							>
 							<span class="lbite-payment-method-icon"><?php echo esc_html( ! empty( $lbite_pm['icon'] ) ? $lbite_pm['icon'] : ( $lbite_default_icons[ $lbite_pm['key'] ] ?? '💱' ) ); ?></span>
-							<span><?php echo esc_html( $lbite_pm['label'] ); ?></span>
+							<span><?php echo esc_html( ! empty( $lbite_pm['label'] ) ? $lbite_pm['label'] : ( $lbite_default_labels[ $lbite_pm['key'] ] ?? $lbite_pm['key'] ) ); ?></span>
 						</label>
 						<?php $lbite_first = false; ?>
 						<?php endforeach; ?>

@@ -149,8 +149,8 @@ class LBite_POS {
 					'loadProductsError'   => __( 'Error loading products', 'libre-bite' ),
 					'tryAgain'            => __( 'Try again', 'libre-bite' ),
 					'creatingOrder'         => __( 'Creating order...', 'libre-bite' ),
-					'orderCreatedPrefix'    => __( 'Order #', 'libre-bite' ),
-					'orderCreatedSuffix'    => __( ' created', 'libre-bite' ),
+					/* translators: 1: order number, 2: order total */
+					'orderCreatedMessage'   => __( 'Order #%1$s created (%2$s)', 'libre-bite' ),
 					'cartClearConfirm'      => __( 'Really empty the cart?', 'libre-bite' ),
 					'loadingProducts'       => __( 'Loading products...', 'libre-bite' ),
 					'loadingProductDetails' => __( 'Loading product details...', 'libre-bite' ),
@@ -190,6 +190,8 @@ class LBite_POS {
 					'confirmCancelTab'      => __( 'Cancel this tab?', 'libre-bite' ),
 					'addingToTab'           => __( 'Adding to tab:', 'libre-bite' ),
 					'noOpenTabs'            => __( 'No open tabs', 'libre-bite' ),
+					'loading'               => __( 'Loading...', 'libre-bite' ),
+					'noConfigNeeded'        => __( 'No configuration needed.', 'libre-bite' ),
 				),
 			)
 		);

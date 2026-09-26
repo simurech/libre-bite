@@ -121,6 +121,16 @@ $lbite_rest_hooks = array(
 	</table>
 </div>
 
+<div class="lbite-settings-card">
+	<?php
+	// Bisher eine eigene, nirgends verlinkte Seite (kein add_submenu_page())
+	// - hier eingebunden, damit der bereits fertige Inhalt tatsächlich
+	// erreichbar ist (Audit 26.09.2026, AP-20). $lbite_is_tab ist bereits
+	// aus settings-tabbed.php im Scope.
+	include LBITE_PLUGIN_DIR . 'templates/admin/debug-info.php';
+	?>
+</div>
+
 <?php
 ob_start();
 ?>

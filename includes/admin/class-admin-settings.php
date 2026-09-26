@@ -39,7 +39,6 @@ class LBite_Admin_Settings {
 	private function init_hooks() {
 		// Einstellungen speichern - je eigener Nonce, damit das Absenden einer
 		// der drei Unterseiten die beiden anderen nicht stillschweigend zurücksetzt.
-		$this->loader->add_action( 'admin_init', $this, 'register_settings' );
 		$this->loader->add_action( 'admin_init', $this, 'save_role_access' );
 		$this->loader->add_action( 'admin_init', $this, 'save_role_names' );
 		$this->loader->add_action( 'admin_init', $this, 'save_menu_visibility' );
@@ -60,63 +59,6 @@ class LBite_Admin_Settings {
 
 		// Menü-Sichtbarkeit filtern
 		$this->loader->add_action( 'admin_menu', $this, 'filter_menu_visibility', 999 );
-	}
-
-	/**
-	 * Einstellungen registrieren
-	 */
-	public function register_settings() {
-		register_setting(
-			'lbite_admin_settings',
-			'lbite_admin_settings',
-			array(
-				'sanitize_callback' => array( $this, 'sanitize_admin_settings' ),
-			)
-		);
-	}
-
-	/**
-	 * Sanitize admin settings.
-	 *
-	 * @param mixed $input Input value.
-	 * @return array Sanitized value.
-	 */
-	public function sanitize_admin_settings( $input ) {
-		if ( ! is_array( $input ) ) {
-			return array();
-		}
-
-		$sanitized = array();
-
-		if ( isset( $input['lbite_custom_plugin_name'] ) ) {
-			$sanitized['lbite_custom_plugin_name'] = sanitize_text_field( $input['lbite_custom_plugin_name'] );
-		}
-
-		if ( isset( $input['lbite_custom_role_names'] ) && is_array( $input['lbite_custom_role_names'] ) ) {
-			$sanitized['lbite_custom_role_names'] = array();
-			foreach ( $input['lbite_custom_role_names'] as $role_key => $role_name ) {
-				$sanitized['lbite_custom_role_names'][ sanitize_key( $role_key ) ] = sanitize_text_field( $role_name );
-			}
-		}
-
-		if ( isset( $input['lbite_disabled_roles'] ) && is_array( $input['lbite_disabled_roles'] ) ) {
-			$sanitized['lbite_disabled_roles'] = array_map( 'sanitize_text_field', $input['lbite_disabled_roles'] );
-		}
-
-		if ( isset( $input['lbite_allowed_standard_roles'] ) && is_array( $input['lbite_allowed_standard_roles'] ) ) {
-			$sanitized['lbite_allowed_standard_roles'] = array_map( 'sanitize_key', $input['lbite_allowed_standard_roles'] );
-		}
-
-		if ( isset( $input['lbite_menu_visibility'] ) && is_array( $input['lbite_menu_visibility'] ) ) {
-			$sanitized['lbite_menu_visibility'] = array();
-			foreach ( $input['lbite_menu_visibility'] as $role => $menus ) {
-				if ( is_array( $menus ) ) {
-					$sanitized['lbite_menu_visibility'][ sanitize_key( $role ) ] = array_map( 'sanitize_text_field', $menus );
-				}
-			}
-		}
-
-		return $sanitized;
 	}
 
 	/**

@@ -953,14 +953,6 @@ body.lbite-setup-screen {
 .lbite-wizard__checks strong { display: block; }
 .lbite-wizard__checks em { display: block; margin-top: 2px; font-style: normal; opacity: .85; }
 
-.lbite-wizard__blocking {
-	padding: var(--lbite-space-3, 12px) var(--lbite-space-4, 16px);
-	border-radius: var(--lbite-radius-sm, 6px);
-	background: var(--lbite-danger-soft, #fdeceb);
-	color: var(--lbite-danger, #b32d2e);
-	font-size: var(--lbite-text-base, 13px);
-}
-
 /* ── Modulwahl ─────────────────────────────────────────────────────── */
 
 .lbite-wizard__modules {

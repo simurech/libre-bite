@@ -20,7 +20,10 @@
 	const Dashboard = {
 		refreshTimer: null,
 		wakeLock: null,
-		soundEnabled: true,
+		// Server-Default (lbite_sound_enabled) statt fest true - wurde bisher
+		// nirgends gelesen, der Schalter im Assistenten/Einstellungen hatte
+		// dadurch nie eine Wirkung (Audit 26.09.2026, AP-20).
+		soundEnabled: typeof lbiteDashboard === 'undefined' || false !== lbiteDashboard.soundEnabledDefault,
 		lastOrderCount: 0,
 		audio: null,
 		completedCounts: {},
@@ -223,8 +226,8 @@
 			const soundSaved = localStorage.getItem('lbite_dashboard_sound');
 			if (soundSaved !== null) {
 				this.soundEnabled = soundSaved === '1';
-				$('#lbite-sound-enabled').prop('checked', this.soundEnabled);
 			}
+			$('#lbite-sound-enabled').prop('checked', this.soundEnabled);
 		},
 
 		/**
@@ -273,7 +276,19 @@
 		/**
 		 * Lade-Overlay anzeigen
 		 */
-		showLoading: function(message = 'Laden...') {
+		/**
+		 * Ganze Singular-/Plural-Vorlage mit Platzhalter statt "%d more order(s)" -
+		 * ein angehängtes "(s)" lässt sich in keiner Sprache korrekt übersetzen
+		 * (Audit 26.09.2026, AP-19).
+		 */
+		formatMoreOrders: function(count) {
+			const template = count === 1
+				? (lbiteDashboard.strings.moreOrdersSingular || '%d more order')
+				: (lbiteDashboard.strings.moreOrdersPlural || '%d more orders');
+			return template.replace('%d', count);
+		},
+
+		showLoading: function(message = lbiteDashboard.strings.loading || 'Loading...') {
 			let $overlay = $('#lbite-loading-overlay');
 			
 			if ($overlay.length === 0) {
@@ -412,7 +427,7 @@
 						const remainingCount = total - offset;
 						const $loadMoreBtn = $('<button class="lbite-load-more-completed"></button>')
 							.attr('data-column', status)
-							.text(`📋 ${remainingCount} ` + (lbiteDashboard.strings.moreOrders || 'more order(s)'))
+							.text(`📋 ${this.formatMoreOrders(remainingCount)}`)
 							.on('click', () => this.loadMoreCompleted(status));
 						$column.append($loadMoreBtn);
 					}
@@ -452,7 +467,7 @@
 				if (status === 'completed' && completedTotal > completedOffset) {
 					const remainingCount = completedTotal - completedOffset;
 					const $loadMoreBtn = $('<button class="lbite-load-more-completed"></button>')
-						.text(`📋 ${remainingCount} ${lbiteDashboard.strings.moreOrders || 'more order(s)'}`)
+						.text(`📋 ${this.formatMoreOrders(remainingCount)}`)
 						.on('click', () => this.loadMoreCompleted());
 					$column.append($loadMoreBtn);
 				}
@@ -891,7 +906,7 @@
 						const remainingCount = response.data.total_count - this.completedOffsets[column];
 						const $loadMoreBtn = $('<button class="lbite-load-more-completed"></button>')
 							.attr('data-column', column)
-							.text(`📋 ${remainingCount} ` + (lbiteDashboard.strings.moreOrders || 'more order(s)'))
+							.text(`📋 ${this.formatMoreOrders(remainingCount)}`)
 							.on('click', () => this.loadMoreCompleted(column));
 						$column.append($loadMoreBtn);
 					}
