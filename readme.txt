@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.2.4
+Stable tag: 3.2.5
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,11 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.2.5 =
+
+* Changed: hiding WordPress blog posts and removing "Downloads"/"Addresses" from My Account are now two separate, optional settings under Settings → Content & Account, both off by default. Previously the plugin always hid blog posts and those two account sections with no way to turn it off, which made existing blogs disappear without the site owner knowing.
+* Fixed: the CSS fallback that hid the Posts admin menu never actually applied (it ran too late to affect an already-registered stylesheet).
 
 = 3.2.4 =
 
@@ -599,3 +604,6 @@ This release rounds out the feature set that 2.6.0 started. It is published as a
 * For the full changelog of versions before 2.0.0, see the release history: https://github.com/simurech/libre-bite/releases
 
 == Upgrade Notice ==
+
+= 3.2.5 =
+Blog posts and the "Downloads"/"Addresses" sections of My Account are no longer hidden automatically. If you relied on that, enable it under Settings → Content & Account.

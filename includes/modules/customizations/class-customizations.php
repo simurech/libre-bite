@@ -35,19 +35,29 @@ class LBite_Customizations {
 	 * Hooks initialisieren
 	 */
 	private function init_hooks() {
-		// WordPress Posts deaktivieren - Mehrere Hooks mit hoher Priorität
-		$this->loader->add_action( 'admin_menu', $this, 'remove_posts_menu', 999 );
-		$this->loader->add_action( 'admin_bar_menu', $this, 'remove_posts_admin_bar', 999 );
-		$this->loader->add_action( 'wp_before_admin_bar_render', $this, 'remove_posts_admin_bar_items' );
-		$this->loader->add_filter( 'register_post_type_args', $this, 'disable_post_type_frontend', 10, 2 );
+		// Beitragstyp ausblenden und "Mein Konto" vereinfachen sind bewusst
+		// optionale, standardmässig deaktivierte Einstellungen (Audit 26.09.2026,
+		// AP-01): vorher liefen diese Hooks immer und blendeten bestehende Blogs
+		// aus, ohne dass der Shopbetreiber das wusste.
+		if ( get_option( 'lbite_disable_blog_posts', false ) ) {
+			// WordPress Posts deaktivieren - Mehrere Hooks mit hoher Priorität
+			$this->loader->add_action( 'admin_menu', $this, 'remove_posts_menu', 999 );
+			$this->loader->add_action( 'admin_bar_menu', $this, 'remove_posts_admin_bar', 999 );
+			$this->loader->add_action( 'wp_before_admin_bar_render', $this, 'remove_posts_admin_bar_items' );
+			$this->loader->add_filter( 'register_post_type_args', $this, 'disable_post_type_frontend', 10, 2 );
 
-		// Zusätzliche Hooks für vollständige Deaktivierung
-		$this->loader->add_action( 'init', $this, 'unregister_post_type', 999 );
-		$this->loader->add_filter( 'post_type_link', $this, 'disable_post_links', 10, 2 );
-		$this->loader->add_action( 'admin_head', $this, 'hide_posts_with_css' );
+			// Zusätzliche Hooks für vollständige Deaktivierung
+			$this->loader->add_action( 'init', $this, 'unregister_post_type', 999 );
+			$this->loader->add_filter( 'post_type_link', $this, 'disable_post_links', 10, 2 );
+			// admin_enqueue_scripts statt admin_head: dort ist das Handle 'wp-admin'
+			// registriert, aber noch nicht ausgegeben, sonst wirkt der Inline-Style nie.
+			$this->loader->add_action( 'admin_enqueue_scripts', $this, 'hide_posts_with_css' );
+		}
 
 		// WooCommerce "Mein Konto" anpassen
-		$this->loader->add_filter( 'woocommerce_account_menu_items', $this, 'customize_my_account_menu' );
+		if ( get_option( 'lbite_simplify_my_account', false ) ) {
+			$this->loader->add_filter( 'woocommerce_account_menu_items', $this, 'customize_my_account_menu' );
+		}
 
 		// POS-Only Produkte im Frontend verstecken
 		$this->loader->add_filter( 'woocommerce_product_is_visible', $this, 'hide_pos_only_from_catalog', 10, 2 );

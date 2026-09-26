@@ -184,6 +184,10 @@ if ( $lbite_is_admin ) {
 				'icon'  => 'dashicons-groups',
 				'pro'   => true,
 			),
+			'content_account' => array(
+				'label' => __( 'Content & Account', 'libre-bite' ),
+				'icon'  => 'dashicons-admin-post',
+			),
 			'data'           => array(
 				'label' => __( 'Uninstallation', 'libre-bite' ),
 				'icon'  => 'dashicons-trash',
@@ -710,6 +714,12 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			$lbite_did_save = true;
 			break;
 
+		case 'content_account':
+			update_option( 'lbite_disable_blog_posts', isset( $_POST['lbite_disable_blog_posts'] ) );
+			update_option( 'lbite_simplify_my_account', isset( $_POST['lbite_simplify_my_account'] ) );
+			$lbite_did_save = true;
+			break;
+
 		case 'data':
 			update_option( 'lbite_delete_data_on_uninstall', isset( $_POST['lbite_delete_data_on_uninstall'] ) );
 			$lbite_did_save = true;
@@ -920,6 +930,12 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 				case 'roles_managers':
 					if ( $lbite_is_admin ) {
 						include LBITE_PLUGIN_DIR . 'templates/admin/settings/roles-managers.php';
+					}
+					break;
+
+				case 'content_account':
+					if ( $lbite_is_admin ) {
+						include LBITE_PLUGIN_DIR . 'templates/admin/settings/content-account.php';
 					}
 					break;
 

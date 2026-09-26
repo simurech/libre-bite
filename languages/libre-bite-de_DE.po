@@ -8698,6 +8698,38 @@ msgstr "Benutzer"
 msgid "Uses"
 msgstr "Verwendungen"
 
+#: templates/admin/settings-tabbed.php:188
+msgid "Content & Account"
+msgstr "Inhalte & Konto"
+
+#: templates/admin/settings/content-account.php:21
+msgid "Optional adjustments for shops that do not use the WordPress blog or certain WooCommerce account features. Both are off by default and do not delete any existing content."
+msgstr "Optionale Anpassungen für Shops, die den WordPress-Blog oder bestimmte WooCommerce-Kontofunktionen nicht nutzen. Beide sind standardmäßig deaktiviert und löschen keine bestehenden Inhalte."
+
+#: templates/admin/settings/content-account.php:30
+msgid "Hide Blog Posts"
+msgstr "Beiträge ausblenden"
+
+#: templates/admin/settings/content-account.php:34
+msgid "Hide WordPress posts in the frontend and in the admin menu."
+msgstr "Blendet WordPress-Beiträge im Frontend und im Admin-Menü aus."
+
+#: templates/admin/settings/content-account.php:37
+msgid "For websites without a blog: hides posts in the frontend and admin. Existing posts are not deleted."
+msgstr "Für Websites ohne Blog: Blendet Beiträge im Frontend und im Admin aus. Bestehende Beiträge werden nicht gelöscht."
+
+#: templates/admin/settings/content-account.php:42
+msgid "Simplify My Account"
+msgstr "„Mein Konto“ vereinfachen"
+
+#: templates/admin/settings/content-account.php:46
+msgid "Remove \"Downloads\" and \"Addresses\" from My Account."
+msgstr "Entfernt „Downloads“ und „Adressen“ aus „Mein Konto“."
+
+#: templates/admin/settings/content-account.php:49
+msgid "Removes \"Downloads\" and \"Addresses\" from My Account if you sell no digital products and offer no shipping."
+msgstr "Entfernt „Downloads“ und „Adressen“ aus „Mein Konto“, wenn du keine digitalen Produkte verkaufst und keinen Versand anbietest."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 
