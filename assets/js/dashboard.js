@@ -564,6 +564,11 @@
 
 			const $btnGroup = $('<span class="lbite-card-footer-btns"></span>');
 
+			// Kann stornieren? Bestimmt Sichtbarkeit des Stornieren-Eintrags im
+			// Overflow-Menü unten - Bedingung unverändert aus der bisherigen
+			// direkten Button-Anzeige übernommen.
+			let canCancel = true;
+
 			if (lbiteDashboard.kanbanCustomizationActive && Array.isArray(lbiteDashboard.kanbanColumns)) {
 				// Feature aktiv: Vorwärts-/Zurück-Button aus den Spalten-Nachbarn ableiten.
 				const columns  = lbiteDashboard.kanbanColumns;
@@ -588,13 +593,7 @@
 					$btnGroup.append($sBtn);
 				}
 
-				if (!col || !col.counts_as_completed) {
-					const $cBtn = $('<button class="lbite-cancel-button"></button>')
-						.attr('title', lbiteDashboard.strings.cancelOrder)
-						.text('✕')
-						.on('click', (e) => { e.stopPropagation(); this.cancelOrder(order.id); });
-					$btnGroup.append($cBtn);
-				}
+				canCancel = ! col || ! col.counts_as_completed;
 			} else {
 				// Feature aus: unverändertes Verhalten wie vor F30.
 				const statusButtons = {
@@ -611,39 +610,77 @@
 					$btnGroup.append($sBtn);
 				}
 
-				// Stornieren-Button
-				if (currentStatus !== 'completed') {
-					const $cBtn = $('<button class="lbite-cancel-button"></button>')
-						.attr('title', lbiteDashboard.strings.cancelOrder)
-						.text('✕')
-						.on('click', (e) => { e.stopPropagation(); this.cancelOrder(order.id); });
-					$btnGroup.append($cBtn);
-				}
+				canCancel = currentStatus !== 'completed';
 			}
 
-			// Beleg-Button
-			const $rBtn = $('<button class="lbite-receipt-button"></button>')
-				.attr('title', lbiteDashboard.strings.sendReceipt || 'Send receipt')
-				.on('click', (e) => { e.stopPropagation(); this.sendReceipt(order.id, order.has_email); });
-			$rBtn.append($('<span class="dashicons dashicons-email-alt"></span>'));
-			$btnGroup.append($rBtn);
-
-			// Druck-Button: Klick druckt das Küchenticket, langer Druck bzw.
-			// Rechtsklick öffnet die Auswahl der drei Bonvorlagen.
-			const $pBtn = $('<button class="lbite-print-button"></button>')
-				.attr('title', lbiteDashboard.strings.printReceipt || 'Print')
-				.on('click', (e) => { e.stopPropagation(); this.printOrder(order.id, 'kitchen'); })
-				.on('contextmenu', (e) => {
-					e.preventDefault();
+			// Sekundäre Aktionen (Stornieren, Beleg, Drucken) hinter einem
+			// Overflow-Menü statt direkt in der Fusszeile: bei mehr als drei
+			// Kanban-Spalten liefen die Karten-Buttons sonst aus der Box heraus
+			// (Nutzer-Fund 2026-09-26, AP-22).
+			const $oBtn = $('<button class="lbite-overflow-button"></button>')
+				.attr('title', lbiteDashboard.strings.moreActions || 'More actions')
+				.on('click', (e) => {
 					e.stopPropagation();
-					this.showPrintMenu(order.id, $pBtn);
+					this.showCardOverflowMenu(order, canCancel, $oBtn);
 				});
-			$pBtn.append($('<span class="dashicons dashicons-printer"></span>'));
-			$btnGroup.append($pBtn);
+			$oBtn.append($('<span class="dashicons dashicons-ellipsis"></span>'));
+			$btnGroup.append($oBtn);
 
 			$footer.append($btnGroup);
 			$card.append($footer);
 			return $card;
+		},
+
+		/**
+		 * Overflow-Menü mit den sekundären Karten-Aktionen einblenden.
+		 *
+		 * @param {Object}  order     Bestelldaten.
+		 * @param {boolean} canCancel Stornieren-Eintrag anzeigen?
+		 * @param {jQuery}  $anchor   Auslösender Knopf.
+		 */
+		showCardOverflowMenu: function(order, canCancel, $anchor) {
+			$('.lbite-card-overflow-menu, .lbite-print-menu').remove();
+
+			const $menu = $('<div class="lbite-card-overflow-menu"></div>');
+
+			if (canCancel) {
+				$('<button type="button"></button>')
+					.append($('<span class="dashicons dashicons-no"></span>'))
+					.append($('<span></span>').text(lbiteDashboard.strings.cancelOrder || 'Cancel order'))
+					.on('click', (e) => {
+						e.stopPropagation();
+						$menu.remove();
+						this.cancelOrder(order.id);
+					})
+					.appendTo($menu);
+			}
+
+			$('<button type="button"></button>')
+				.append($('<span class="dashicons dashicons-email-alt"></span>'))
+				.append($('<span></span>').text(lbiteDashboard.strings.sendReceipt || 'Send receipt'))
+				.on('click', (e) => {
+					e.stopPropagation();
+					$menu.remove();
+					this.sendReceipt(order.id, order.has_email);
+				})
+				.appendTo($menu);
+
+			$('<button type="button"></button>')
+				.append($('<span class="dashicons dashicons-printer"></span>'))
+				.append($('<span></span>').text(lbiteDashboard.strings.printReceipt || 'Print'))
+				.on('click', (e) => {
+					e.stopPropagation();
+					$menu.remove();
+					this.showPrintMenu(order.id, $anchor);
+				})
+				.appendTo($menu);
+
+			$anchor.closest('.lbite-kanban-card').append($menu);
+
+			// Beim nächsten Klick irgendwo schliessen.
+			setTimeout(() => {
+				$(document).one('click', () => $menu.remove());
+			}, 0);
 		},
 
 		/**

@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.2.6
+Stable tag: 3.2.7
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.2.7 =
+
+* Fixed: order card buttons on the Order Board overflowed their box when more than three Kanban columns were configured. Cancel, Send Receipt, and Print are now grouped behind a "More actions" (⋮) menu, keeping only the main workflow button(s) directly visible.
 
 = 3.2.6 =
 

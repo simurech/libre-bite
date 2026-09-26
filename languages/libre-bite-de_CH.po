@@ -8774,6 +8774,10 @@ msgstr "Kasse verwendet den klassischen Shortcode"
 msgid "Your checkout page uses the WooCommerce Checkout block. Libre Bite currently only works with the classic checkout: edit the \"Checkout\" page and switch the block back to the classic shortcode, or replace it with a Shortcode block containing [woocommerce_checkout]."
 msgstr "Ihre Kassenseite verwendet den WooCommerce-Checkout-Block. Libre Bite funktioniert derzeit nur mit dem klassischen Checkout: Bearbeiten Sie die Seite «Kasse» und wechseln Sie den Block zurück zum klassischen Shortcode, oder ersetzen Sie ihn durch einen Shortcode-Block mit [woocommerce_checkout]."
 
+#: includes/admin/class-admin.php:1109
+msgid "More actions"
+msgstr "Weitere Aktionen"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

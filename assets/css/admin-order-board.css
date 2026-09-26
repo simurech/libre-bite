@@ -378,23 +378,6 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 	transform: translateY(0);
 }
 
-.lbite-cancel-button {
-	transition: background-color 0.2s, color 0.2s, transform 0.1s;
-	flex-shrink: 0;
-	min-width: 54px !important;
-	min-height: 54px !important;
-}
-
-.lbite-cancel-button:hover {
-	background: #c0392b !important;
-	color: white !important;
-	transform: translateY(-1px);
-}
-
-.lbite-cancel-button:active {
-	transform: translateY(0);
-}
-
 /* Touch-Optimierung für Buttons und Spalten-Scroll */
 @media (hover: none) and (pointer: coarse) {
 	.lbite-card-footer-btns button,
@@ -533,46 +516,6 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 
 .lbite-kanban-dragging {
 	cursor: grabbing;
-}
-
-.lbite-cancel-button {
-	padding: 8px 12px;
-	border: 1px solid #b32d2e;
-	background: #b32d2e;
-	color: white;
-	border-radius: 4px;
-	cursor: pointer;
-	font-size: 20px;
-	font-weight: bold;
-}
-
-.lbite-receipt-button {
-	padding: 8px 10px;
-	border: 1px solid var(--lbite-border, #ddd);
-	background: var(--lbite-surface-muted, #f8f9fa);
-	border-radius: 4px;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: background-color 0.2s, border-color 0.2s;
-}
-
-.lbite-receipt-button .dashicons {
-	font-size: 20px;
-	width: 20px;
-	height: 20px;
-	color: var(--lbite-text-muted, #666);
-	transition: color 0.2s;
-}
-
-.lbite-receipt-button:hover {
-	background: var(--lbite-color-primary, #0073aa);
-	border-color: var(--lbite-color-primary, #0073aa);
-}
-
-.lbite-receipt-button:hover .dashicons {
-	color: white;
 }
 
 /* Lade-Overlay */
@@ -755,7 +698,8 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
  * Bondruck (F42)
  * ════════════════════════════════════════════════════════════════════ */
 
-.lbite-print-button {
+/* Overflow-Menü für sekundäre Karten-Aktionen (AP-22) */
+.lbite-overflow-button {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -767,22 +711,55 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 	background: var(--lbite-surface);
 	color: var(--lbite-text-muted);
 	cursor: pointer;
-	transition: background-color var(--lbite-duration-fast) var(--lbite-ease-crisp),
-		color var(--lbite-duration-fast) var(--lbite-ease-crisp),
-		border-color var(--lbite-duration-fast) var(--lbite-ease-crisp);
+	flex-shrink: 0;
 }
 
-.lbite-print-button:hover {
+.lbite-overflow-button:hover {
 	background: var(--lbite-surface-sunken);
 	border-color: var(--lbite-border-strong);
 	color: var(--lbite-text);
 }
 
-.lbite-print-button .dashicons {
+.lbite-overflow-button .dashicons {
 	width: 16px;
 	height: 16px;
 	font-size: 16px;
 	line-height: 1;
+}
+
+.lbite-card-overflow-menu {
+	position: absolute;
+	right: var(--lbite-space-2);
+	bottom: var(--lbite-space-8);
+	z-index: var(--lbite-z-dropdown);
+	display: flex;
+	flex-direction: column;
+	min-width: 180px;
+	padding: var(--lbite-space-1);
+	background: var(--lbite-surface);
+	border: 1px solid var(--lbite-border);
+	border-radius: var(--lbite-radius-md);
+	box-shadow: var(--lbite-shadow-lg);
+	animation: lbite-fade-in var(--lbite-duration-fast) var(--lbite-ease-soft);
+}
+
+.lbite-card-overflow-menu button {
+	display: flex;
+	align-items: center;
+	gap: var(--lbite-space-2);
+	padding: var(--lbite-space-2) var(--lbite-space-3);
+	border: none;
+	border-radius: var(--lbite-radius-sm);
+	background: transparent;
+	color: var(--lbite-text);
+	font-size: var(--lbite-text-base);
+	text-align: left;
+	cursor: pointer;
+	min-height: 44px;
+}
+
+.lbite-card-overflow-menu button:hover {
+	background: var(--lbite-surface-sunken);
 }
 
 .lbite-print-menu {
