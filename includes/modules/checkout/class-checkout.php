@@ -998,8 +998,7 @@ class LBite_Checkout {
 		}
 
 		// Prüfen ob Rundung aktiviert ist.
-		$enable_rounding = get_option( 'lbite_enable_rounding', false );
-		if ( ! $enable_rounding ) {
+		if ( ! lbite_feature_enabled( 'enable_rounding' ) ) {
 			return;
 		}
 
@@ -1030,17 +1029,65 @@ class LBite_Checkout {
 
 		$current_total = $subtotal + $fees_total + $shipping_total - $discount_total;
 
-		// Auf 5 Rappen runden.
-		$rounded_total = round( $current_total / 0.05 ) * 0.05;
+		$rounding_amount = self::calculate_rounding_amount( $current_total );
 
-		// Rundungsdifferenz berechnen.
-		$rounding_amount = $rounded_total - $current_total;
-
-		// Nur hinzufügen wenn Differenz nicht 0 ist (mit Toleranz für Floating-Point-Fehler).
 		// Third parameter false = tax-exempt fee.
-		if ( abs( $rounding_amount ) > 0.001 ) {
+		if ( 0.0 !== $rounding_amount ) {
 			$cart->add_fee( __( 'Rounding', 'libre-bite' ), $rounding_amount, false );
 		}
+	}
+
+	/**
+	 * Differenz zum nächsten 5-Rappen-Betrag.
+	 *
+	 * Gemeinsame Rundungslogik für `apply_rounding_fee()` (Warenkorb) und
+	 * `apply_order_rounding()` (POS-Bestellung) - beide dürfen nicht
+	 * unterschiedlich runden (Audit 26.09.2026, AP-04).
+	 *
+	 * @param float $current_total Betrag vor der Rundung.
+	 * @return float Rundungsdifferenz, 0.0 bei Toleranz (Floating-Point-Fehler).
+	 */
+	private static function calculate_rounding_amount( $current_total ) {
+		$rounded_total   = round( $current_total / 0.05 ) * 0.05;
+		$rounding_amount = $rounded_total - $current_total;
+
+		return abs( $rounding_amount ) > 0.001 ? $rounding_amount : 0.0;
+	}
+
+	/**
+	 * Rundung auf 5 Rappen serverseitig auf eine POS-Bestellung anwenden.
+	 *
+	 * Die Kasse zeigt den gerundeten Betrag bisher nur an - gespeichert wurde
+	 * die Bestellung ungerundet (Audit 26.09.2026, AP-04). Anders als
+	 * `apply_rounding_fee()` gibt es hier keinen WC_Cart: `calculate_totals()`
+	 * hat den Gesamtbetrag bereits inklusive aller Positionen, Gebühren,
+	 * Rabatte und Versand aufsummiert, also reicht `get_total()` als Basis.
+	 *
+	 * Muss nach `$order->calculate_totals()` und vor jedem Vergleich mit dem
+	 * Bestelltotal (z. B. Split-Payment-Abgleich) aufgerufen werden.
+	 *
+	 * @param WC_Order $order Bestellung.
+	 */
+	public static function apply_order_rounding( $order ) {
+		if ( ! lbite_feature_enabled( 'enable_rounding' ) ) {
+			return;
+		}
+
+		$rounding_amount = self::calculate_rounding_amount( (float) $order->get_total() );
+
+		if ( 0.0 === $rounding_amount ) {
+			return;
+		}
+
+		$fee_item = new WC_Order_Item_Fee();
+		$fee_item->set_name( __( 'Rounding', 'libre-bite' ) );
+		$fee_item->set_amount( $rounding_amount );
+		$fee_item->set_total( $rounding_amount );
+		$fee_item->set_tax_status( 'none' );
+		$order->add_item( $fee_item );
+
+		// Nur neu aufsummieren, nicht die Steuern der übrigen Positionen anfassen.
+		$order->calculate_totals( false );
 	}
 
 	/**

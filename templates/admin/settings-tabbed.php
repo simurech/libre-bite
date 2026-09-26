@@ -352,7 +352,6 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		case 'prices_taxes':
 			$lbite_features                    = get_option( 'lbite_features', array() );
 			$lbite_features['enable_rounding'] = isset( $_POST['lbite_feature_toggle']['enable_rounding'] );
-			update_option( 'lbite_enable_rounding', $lbite_features['enable_rounding'] );
 			if ( $lbite_premium_allowed ) {
 				$lbite_features['enable_swiss_vat'] = isset( $_POST['lbite_feature_toggle']['enable_swiss_vat'] );
 				update_option( 'lbite_tax_class_takeaway', isset( $_POST['lbite_tax_class_takeaway'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_tax_class_takeaway'] ) ) : '' );

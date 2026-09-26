@@ -133,6 +133,9 @@ class LBite_Features {
 		),
 		'enable_rounding'           => array(
 			'group'       => 'checkout',
+			// 'default' hier ist nur der Fallback ohne WooCommerce-Kontext;
+			// get_default_values() überschreibt ihn abhängig von der Währung
+			// (nur CHF-Shops starten mit Rundung an).
 			'default'     => true,
 			'premium'     => false,
 			'label'       => '5-Cent Rounding',
@@ -312,13 +315,14 @@ class LBite_Features {
 	 */
 	private function load_features() {
 		$saved_features  = get_option( 'lbite_features', array() );
+		$defaults        = self::get_default_values();
 		$premium_allowed = function_exists( 'lbite_freemius' )
 			&& lbite_freemius()->can_use_premium_code__premium_only();
 
 		foreach ( self::$feature_definitions as $key => $definition ) {
 			$value = isset( $saved_features[ $key ] )
 				? (bool) $saved_features[ $key ]
-				: $definition['default'];
+				: $defaults[ $key ];
 
 			// Pro-Features ohne gültige Lizenz immer erzwingen – verhindert Phantom-Defaults.
 			if ( $definition['premium'] && ! $premium_allowed ) {
@@ -523,6 +527,17 @@ class LBite_Features {
 		foreach ( self::$feature_definitions as $key => $definition ) {
 			$defaults[ $key ] = $definition['default'];
 		}
+
+		// Rundung ergibt nur in CHF-Shops einen Sinn - Default deshalb von der
+		// konfigurierten Währung abhängig statt vom statischen Wert oben
+		// (Audit 26.09.2026, AP-04). Greift bei jedem Aufruf ohne gespeicherten
+		// Wert: Plugin-Aktivierung (class-installer.php) und der Laufzeit-
+		// Fallback in load_features(), falls der Options-Key einmal fehlt.
+		if ( array_key_exists( 'enable_rounding', $defaults ) ) {
+			$defaults['enable_rounding'] = function_exists( 'get_woocommerce_currency' )
+				&& 'CHF' === get_woocommerce_currency();
+		}
+
 		return $defaults;
 	}
 

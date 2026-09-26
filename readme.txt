@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.2.8
+Stable tag: 3.2.9
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,11 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.2.9 =
+
+* Fixed: 5-cent rounding used two separate settings that could disagree — the feature toggle (on by default) and a second option that stayed off until Settings were saved once. A fresh CHF installation therefore did not round anything until that first save, and saving once turned rounding on even for EUR shops. There is now a single setting, defaulting to on only for CHF shops.
+* Fixed: the POS only displayed the rounded total; the saved order kept the unrounded amount. POS orders are now rounded server-side too, before any split-payment amounts are checked against the total.
 
 = 3.2.8 =
 

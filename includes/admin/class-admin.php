@@ -1378,6 +1378,14 @@ class LBite_Admin {
 			// Berechnen.
 			$order->calculate_totals();
 
+			// Rundung auf 5 Rappen (Audit 26.09.2026, AP-04): bisher rundete nur die
+			// Anzeige in der Kasse, die gespeicherte Bestellung blieb ungerundet.
+			// Muss vor dem Split-Payment-Abgleich laufen, damit gegen den
+			// tatsächlichen (gerundeten) Endbetrag geprüft wird.
+			if ( class_exists( 'LBite_Checkout' ) ) {
+				LBite_Checkout::apply_order_rounding( $order );
+			}
+
 			// Split-Payment: Summe gegen das Bestelltotal abgleichen (Toleranz wegen Rappenrundung/Coupons).
 			if ( ! empty( $split_payments ) ) {
 				$reconciled_split = $this->reconcile_split_payments( $split_payments, (float) $order->get_total() );

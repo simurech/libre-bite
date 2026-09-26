@@ -108,7 +108,7 @@ $plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'li
 				</tr>
 				<tr>
 					<th><?php esc_html_e( 'Rounding enabled', 'libre-bite' ); ?></th>
-					<td><?php echo get_option( 'lbite_enable_rounding', false ) ? esc_html__( 'Yes', 'libre-bite' ) : esc_html__( 'No', 'libre-bite' ); ?></td>
+					<td><?php echo lbite_feature_enabled( 'enable_rounding' ) ? esc_html__( 'Yes', 'libre-bite' ) : esc_html__( 'No', 'libre-bite' ); ?></td>
 				</tr>
 				<tr>
 					<th><?php esc_html_e( 'Tip Percentages', 'libre-bite' ); ?></th>

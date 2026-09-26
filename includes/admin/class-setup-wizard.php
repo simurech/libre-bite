@@ -800,18 +800,14 @@ class LBite_Setup_Wizard {
 					),
 				),
 			),
+			// Kein eigener Wizard-Schritt mehr: der Modul-Schalter oben ist jetzt
+			// die einzige Quelle der Wahrheit (siehe LBite_Features::is_enabled()),
+			// eine zweite Checkbox für dieselbe Einstellung entfiel deshalb
+			// (Audit 26.09.2026, AP-04).
 			'enable_rounding' => array(
 				'premium'  => false,
 				'link_tab' => 'prices_taxes',
-				'settings' => array(
-					array(
-						'option'      => 'lbite_enable_rounding',
-						'type'        => 'checkbox',
-						'default'     => 0,
-						'label'       => __( 'Round the final amount to 5 cents', 'libre-bite' ),
-						'description' => __( 'Needed for cash payment in Switzerland. The module switch alone does not round yet — this is the setting that does it.', 'libre-bite' ),
-					),
-				),
+				'settings' => array(),
 			),
 			'enable_location_selector' => array(
 				'premium'  => false,

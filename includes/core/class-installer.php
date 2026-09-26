@@ -279,6 +279,11 @@ class LBite_Installer {
 			self::migrate_product_locations_to_opt_out();
 		}
 
+		// Migration auf 3.2.9: lbite_enable_rounding in lbite_features übernehmen
+		if ( version_compare( $current_version, '3.2.9', '<' ) ) {
+			self::migrate_rounding_option();
+		}
+
 		// Version aktualisieren
 		if ( version_compare( $current_version, LBITE_VERSION, '<' ) ) {
 			update_option( 'lbite_version', LBITE_VERSION );
@@ -323,6 +328,31 @@ class LBite_Installer {
 
 			delete_post_meta( $product_id, '_lbite_locations' );
 		}
+	}
+
+	/**
+	 * Migration auf 3.2.9: separate Rundungs-Option in lbite_features übernehmen.
+	 *
+	 * Bisher zwei getrennte Wahrheiten für dieselbe Einstellung (Audit
+	 * 26.09.2026, AP-04): der Feature-Schalter `enable_rounding` (Default an)
+	 * und diese separate Option (Default aus, erst beim ersten Speichern der
+	 * Einstellungen gesetzt) - dadurch rundete eine frische CHF-Installation
+	 * trotz aktivem Feature nicht, bis einmal gespeichert wurde. Übernimmt
+	 * den bisherigen Options-Wert nur, wenn er je gespeichert wurde; sonst
+	 * entscheidet ab jetzt der währungsabhängige Feature-Default
+	 * (`LBite_Features::get_default_values()`).
+	 */
+	private static function migrate_rounding_option() {
+		$sentinel = '__lbite_unset__';
+		$legacy   = get_option( 'lbite_enable_rounding', $sentinel );
+
+		if ( $sentinel !== $legacy ) {
+			$features                    = get_option( 'lbite_features', array() );
+			$features['enable_rounding'] = (bool) $legacy;
+			update_option( 'lbite_features', $features );
+		}
+
+		delete_option( 'lbite_enable_rounding' );
 	}
 
 	/**
