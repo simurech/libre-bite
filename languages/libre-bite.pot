@@ -8956,3 +8956,31 @@ msgstr ""
 #: includes/modules/order-dashboard/class-order-dashboard.php:845
 msgid "This order can no longer be cancelled."
 msgstr ""
+
+#: includes/modules/checkout/class-checkout.php:755
+msgid "Please choose a valid pickup time in the future."
+msgstr ""
+
+#: includes/modules/checkout/class-checkout.php:757
+msgid "The selected pickup time is not available. Please choose another time."
+msgstr ""
+
+#: includes/modules/reservations/class-reservations.php:607
+msgid "Invalid table"
+msgstr ""
+
+#: includes/modules/reservations/class-reservations.php:615
+msgid "Please choose a valid date and time."
+msgstr ""
+
+#: includes/modules/reservations/class-reservations.php:618
+msgid "Please choose a date and time in the future."
+msgstr ""
+
+#: includes/modules/reservations/class-reservations.php:625
+msgid "The selected location is closed at this time."
+msgstr ""
+
+#: includes/modules/reservations/class-reservations.php:647
+msgid "This table is already reserved at the selected time."
+msgstr ""

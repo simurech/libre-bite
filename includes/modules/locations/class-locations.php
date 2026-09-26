@@ -1450,6 +1450,28 @@ class LBite_Locations {
 	}
 
 	/**
+	 * Prüft, ob eine ID ein echter, veröffentlichter Standort ist.
+	 *
+	 * Gemeinsamer Helfer gegen beliebige Post-IDs als "Standort" - vorher
+	 * landete z. B. der Titel eines fremden Beitrags ungeprüft in
+	 * Bestellung, Danke-Seite und Mails (Audit 26.09.2026, AP-09).
+	 *
+	 * @param int $location_id Zu prüfende ID.
+	 * @return bool
+	 */
+	public static function is_valid_location( $location_id ) {
+		$location_id = (int) $location_id;
+
+		if ( ! $location_id ) {
+			return false;
+		}
+
+		$post = get_post( $location_id );
+
+		return $post && self::POST_TYPE === $post->post_type && 'publish' === $post->post_status;
+	}
+
+	/**
 	 * Prüft ob ein Standort ausserhalb seines Verfügbarkeitsfensters liegt (ab/bis-Datum).
 	 *
 	 * Hat Vorrang vor get_location_status(): ein Standort ausserhalb seines Fensters

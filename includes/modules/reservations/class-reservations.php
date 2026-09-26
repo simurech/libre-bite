@@ -595,9 +595,34 @@ class LBite_Reservations {
 			wp_send_json_error( array( 'message' => __( 'Please fill in all required fields.', 'libre-bite' ) ) );
 		}
 
-		// Datum nicht in der Vergangenheit
-		if ( strtotime( $lbite_date ) < strtotime( 'today' ) ) {
-			wp_send_json_error( array( 'message' => __( 'The date cannot be in the past.', 'libre-bite' ) ) );
+		// Standort muss ein echter, veröffentlichter Standort sein - vorher
+		// landete der Titel jeder beliebigen Post-ID ungeprüft in Bestätigungs-
+		// und Admin-Mail (Audit 26.09.2026, AP-09).
+		if ( ! class_exists( 'LBite_Locations' ) || ! LBite_Locations::is_valid_location( $lbite_location_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid location', 'libre-bite' ) ) );
+		}
+
+		// Tisch muss - falls angegeben - ein echter Tisch dieses Standorts sein.
+		if ( $lbite_table_id && ( ! class_exists( 'LBite_Tables' ) || ! LBite_Tables::is_valid_table( $lbite_table_id, $lbite_location_id ) ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid table', 'libre-bite' ) ) );
+		}
+
+		// Datum/Uhrzeit mit wp_timezone() validieren statt nur "heute oder
+		// später" mit dem UTC-basierten strtotime(): akzeptierte bisher auch
+		// bereits vergangene Uhrzeiten am heutigen Tag.
+		$lbite_dt = DateTime::createFromFormat( 'Y-m-d H:i', $lbite_date . ' ' . $lbite_time, wp_timezone() );
+		if ( ! $lbite_dt || $lbite_dt->format( 'Y-m-d' ) !== $lbite_date ) {
+			wp_send_json_error( array( 'message' => __( 'Please choose a valid date and time.', 'libre-bite' ) ) );
+		}
+		if ( $lbite_dt->getTimestamp() <= time() ) {
+			wp_send_json_error( array( 'message' => __( 'Please choose a date and time in the future.', 'libre-bite' ) ) );
+		}
+
+		// Öffnungszeiten und Feiertage: bisher liess sich für jede Uhrzeit an
+		// jedem zukünftigen Tag reservieren, auch ausserhalb der Öffnungszeiten
+		// oder an einem als "geschlossen" markierten Feiertag.
+		if ( ! $this->is_within_opening_hours( $lbite_location_id, $lbite_date, $lbite_time ) ) {
+			wp_send_json_error( array( 'message' => __( 'The selected location is closed at this time.', 'libre-bite' ) ) );
 		}
 
 		// E-Mail prüfen
@@ -615,6 +640,11 @@ class LBite_Reservations {
 						'message' => sprintf( __( 'This table has a maximum of %d seats.', 'libre-bite' ), $lbite_seats ),
 					)
 				);
+			}
+
+			// Doppelbuchung desselben Tisches zur selben Zeit verhindern.
+			if ( $this->is_table_double_booked( $lbite_table_id, $lbite_date, $lbite_time ) ) {
+				wp_send_json_error( array( 'message' => __( 'This table is already reserved at the selected time.', 'libre-bite' ) ) );
 			}
 		}
 
@@ -681,6 +711,131 @@ class LBite_Reservations {
 		wp_send_json_success(
 			array( 'message' => __( 'Reservation request successfully submitted!', 'libre-bite' ) )
 		);
+	}
+
+	/**
+	 * Prüft, ob ein Standort zu Datum+Uhrzeit geöffnet ist.
+	 *
+	 * Ein Feiertag hat Vorrang vor den regulären Öffnungszeiten, analog zu
+	 * LBite_Checkout::get_available_timeslots().
+	 *
+	 * @param int    $location_id Standort-ID.
+	 * @param string $date        Datum (Y-m-d).
+	 * @param string $time        Uhrzeit (H:i).
+	 * @return bool
+	 */
+	private function is_within_opening_hours( $location_id, $date, $time ) {
+		$holiday = LBite_Locations::get_holiday_for_date( $location_id, $date );
+
+		if ( $holiday ) {
+			$holiday_type = isset( $holiday['type'] ) ? $holiday['type'] : 'closed';
+
+			if ( 'closed' === $holiday_type ) {
+				return false;
+			}
+
+			if ( 'custom' === $holiday_type ) {
+				return self::time_in_window(
+					$time,
+					array(
+						'open'   => isset( $holiday['open'] ) ? $holiday['open'] : '',
+						'close'  => isset( $holiday['close'] ) ? $holiday['close'] : '',
+						'open2'  => isset( $holiday['open2'] ) ? $holiday['open2'] : '',
+						'close2' => isset( $holiday['close2'] ) ? $holiday['close2'] : '',
+					)
+				);
+			}
+		}
+
+		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
+		if ( ! is_array( $opening_hours ) ) {
+			return false;
+		}
+
+		$day_name = strtolower( ( new DateTime( $date, wp_timezone() ) )->format( 'l' ) );
+		if ( empty( $opening_hours[ $day_name ] ) || ! empty( $opening_hours[ $day_name ]['closed'] ) ) {
+			return false;
+		}
+
+		return self::time_in_window( $time, $opening_hours[ $day_name ] );
+	}
+
+	/**
+	 * Prüft, ob eine Uhrzeit in einem der beiden Tagesfenster liegt.
+	 *
+	 * @param string $time      Uhrzeit (H:i).
+	 * @param array  $day_hours Tagesdaten mit open/close/open2/close2.
+	 * @return bool
+	 */
+	private static function time_in_window( $time, array $day_hours ) {
+		$minutes = self::time_to_minutes( $time );
+
+		foreach ( array( array( 'open', 'close' ), array( 'open2', 'close2' ) ) as $pair ) {
+			list( $open_key, $close_key ) = $pair;
+			if ( empty( $day_hours[ $open_key ] ) || empty( $day_hours[ $close_key ] ) ) {
+				continue;
+			}
+			$open  = self::time_to_minutes( $day_hours[ $open_key ] );
+			$close = self::time_to_minutes( $day_hours[ $close_key ] );
+			if ( $minutes >= $open && $minutes < $close ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * "H:i" in Minuten seit Mitternacht umrechnen.
+	 *
+	 * @param string $time Uhrzeit (H:i).
+	 * @return int
+	 */
+	private static function time_to_minutes( $time ) {
+		$parts = explode( ':', $time );
+		return ( (int) ( $parts[0] ?? 0 ) * 60 ) + (int) ( $parts[1] ?? 0 );
+	}
+
+	/**
+	 * Prüft, ob derselbe Tisch zur selben Zeit bereits reserviert ist.
+	 *
+	 * @param int    $table_id Tisch-ID.
+	 * @param string $date     Datum (Y-m-d).
+	 * @param string $time     Uhrzeit (H:i).
+	 * @return bool
+	 */
+	private function is_table_double_booked( $table_id, $date, $time ) {
+		$existing = get_posts(
+			array(
+				'post_type'      => self::POST_TYPE,
+				'post_status'    => 'publish',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Doppelbuchungs-Prüfung beim Absenden, auf 1 Treffer begrenzt.
+				'meta_query'     => array(
+					'relation' => 'AND',
+					array(
+						'key'   => '_lbite_table_id',
+						'value' => $table_id,
+					),
+					array(
+						'key'   => '_lbite_reservation_date',
+						'value' => $date,
+					),
+					array(
+						'key'   => '_lbite_reservation_time',
+						'value' => $time,
+					),
+					array(
+						'key'     => '_lbite_reservation_status',
+						'value'   => 'cancelled',
+						'compare' => '!=',
+					),
+				),
+			)
+		);
+
+		return ! empty( $existing );
 	}
 
 	/**

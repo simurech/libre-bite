@@ -448,6 +448,12 @@ class LBite_Tables {
 
 	/**
 	 * URL Parameter verarbeiten (QR-Code Link)
+	 *
+	 * Läuft jetzt über LBite_Checkout::set_location_session() statt die
+	 * Session direkt zu schreiben: vorher landete jede beliebige Post-ID als
+	 * "Standort" ungeprüft in Bestellung, Danke-Seite und Mails, und das
+	 * Verfügbarkeitsfenster eines Standorts liess sich per Direktlink
+	 * umgehen (Audit 26.09.2026, AP-09).
 	 */
 	public function process_table_url_parameters() {
 		if ( is_admin() ) {
@@ -459,24 +465,53 @@ class LBite_Tables {
 		$location_id = isset( $_GET['lbite_location'] ) ? intval( wp_unslash( $_GET['lbite_location'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher QR-Code-Deeplink; nur Session-Schreibzugriff, kein DB-Write.
 		$table_id    = isset( $_GET['lbite_table'] ) ? intval( wp_unslash( $_GET['lbite_table'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Öffentlicher QR-Code-Deeplink; nur Session-Schreibzugriff, kein DB-Write.
 
-		if ( ! $location_id ) {
+		if ( ! $location_id || ! class_exists( 'LBite_Checkout' ) ) {
 			return;
 		}
 
-		// Session initialisieren falls nötig.
-		if ( WC()->session && ! WC()->session->has_session() ) {
-			WC()->session->set_customer_session_cookie( true );
+		// Tisch-QR-Codes sind eine unmittelbare Bestellabsicht ("jetzt, an
+		// diesem Tisch"), reine Standort-Links ohne Tisch nur zum Durchstöbern.
+		$order_type = $table_id ? 'now' : '';
+		$result     = LBite_Checkout::set_location_session( $location_id, $order_type );
+
+		if ( ! $result['success'] ) {
+			return;
 		}
 
-		if ( WC()->session ) {
-			WC()->session->set( 'lbite_location_id', $location_id );
-			
-			if ( $table_id ) {
-				WC()->session->set( 'lbite_table_id', $table_id );
-				WC()->session->set( 'lbite_order_type', 'now' );
-				WC()->session->set( 'lbite_service_type', 'dine_in' );
+		if ( $table_id && self::is_valid_table( $table_id, $location_id ) && WC()->session ) {
+			WC()->session->set( 'lbite_table_id', $table_id );
+			WC()->session->set( 'lbite_service_type', 'dine_in' );
+		}
+	}
+
+	/**
+	 * Prüft, ob eine Tisch-ID ein echter, veröffentlichter Tisch ist - und,
+	 * falls angegeben, zum genannten Standort gehört.
+	 *
+	 * @param int $table_id    Tisch-ID.
+	 * @param int $location_id Standort-ID, 0 = nicht prüfen.
+	 * @return bool
+	 */
+	public static function is_valid_table( $table_id, $location_id = 0 ) {
+		$table_id = (int) $table_id;
+
+		if ( ! $table_id ) {
+			return false;
+		}
+
+		$table = get_post( $table_id );
+		if ( ! $table || self::POST_TYPE !== $table->post_type || 'publish' !== $table->post_status ) {
+			return false;
+		}
+
+		if ( $location_id ) {
+			$stored_location = (int) get_post_meta( $table_id, '_lbite_location_id', true );
+			if ( $stored_location !== (int) $location_id ) {
+				return false;
 			}
 		}
+
+		return true;
 	}
 
 	/**

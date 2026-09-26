@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.3.3
+Stable tag: 3.4.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,13 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.4.0 =
+
+* Fixed: the checkout, the table QR code link, and the reservation form accepted any numeric ID as a "location" or "table" without checking it was actually one — the title of an unrelated post could end up in the order, the thank-you page, and confirmation emails. Table QR codes also bypassed the location's availability window. All three now validate against the real location/table.
+* Fixed: a pre-order pickup time was only checked against remaining capacity, not against its format, whether it was in the past, or whether the location actually offers that time slot at all.
+* Fixed: the reservation form only checked that the date was "today or later" — a time earlier today, a time outside opening hours, a closed holiday, and double-booking the same table at the same time were all accepted.
+* Fixed: a guest who created an account during checkout (turning them from logged-out to logged-in mid-request) could lose their selected location and pickup time, because a redundant nonce check no longer matched after the login state changed.
 
 = 3.3.3 =
 

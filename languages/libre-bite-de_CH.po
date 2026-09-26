@@ -8782,6 +8782,34 @@ msgstr "Weitere Aktionen"
 msgid "This order can no longer be cancelled."
 msgstr "Diese Bestellung kann nicht mehr storniert werden."
 
+#: includes/modules/checkout/class-checkout.php:755
+msgid "Please choose a valid pickup time in the future."
+msgstr "Bitte wählen Sie eine gültige, zukünftige Abholzeit."
+
+#: includes/modules/checkout/class-checkout.php:757
+msgid "The selected pickup time is not available. Please choose another time."
+msgstr "Die gewählte Abholzeit ist nicht verfügbar. Bitte wählen Sie eine andere Zeit."
+
+#: includes/modules/reservations/class-reservations.php:607
+msgid "Invalid table"
+msgstr "Ungültiger Tisch"
+
+#: includes/modules/reservations/class-reservations.php:615
+msgid "Please choose a valid date and time."
+msgstr "Bitte wählen Sie ein gültiges Datum und eine gültige Uhrzeit."
+
+#: includes/modules/reservations/class-reservations.php:618
+msgid "Please choose a date and time in the future."
+msgstr "Bitte wählen Sie ein Datum und eine Uhrzeit in der Zukunft."
+
+#: includes/modules/reservations/class-reservations.php:625
+msgid "The selected location is closed at this time."
+msgstr "Der gewählte Standort ist zu dieser Zeit geschlossen."
+
+#: includes/modules/reservations/class-reservations.php:647
+msgid "This table is already reserved at the selected time."
+msgstr "Dieser Tisch ist zur gewählten Zeit bereits reserviert."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

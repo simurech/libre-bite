@@ -8781,6 +8781,34 @@ msgstr "Altre azioni"
 msgid "This order can no longer be cancelled."
 msgstr "Questo ordine non può più essere annullato."
 
+#: includes/modules/checkout/class-checkout.php:755
+msgid "Please choose a valid pickup time in the future."
+msgstr "Seleziona un orario di ritiro valido nel futuro."
+
+#: includes/modules/checkout/class-checkout.php:757
+msgid "The selected pickup time is not available. Please choose another time."
+msgstr "L'orario di ritiro selezionato non è disponibile. Scegli un altro orario."
+
+#: includes/modules/reservations/class-reservations.php:607
+msgid "Invalid table"
+msgstr "Tavolo non valido"
+
+#: includes/modules/reservations/class-reservations.php:615
+msgid "Please choose a valid date and time."
+msgstr "Seleziona una data e un orario validi."
+
+#: includes/modules/reservations/class-reservations.php:618
+msgid "Please choose a date and time in the future."
+msgstr "Seleziona una data e un orario futuri."
+
+#: includes/modules/reservations/class-reservations.php:625
+msgid "The selected location is closed at this time."
+msgstr "La sede selezionata è chiusa a quest'ora."
+
+#: includes/modules/reservations/class-reservations.php:647
+msgid "This table is already reserved at the selected time."
+msgstr "Questo tavolo è già riservato per l'orario selezionato."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Errore durante il salvataggio"
 

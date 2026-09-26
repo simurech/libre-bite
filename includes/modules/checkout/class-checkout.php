@@ -726,8 +726,9 @@ class LBite_Checkout {
 			$order_type = WC()->session->get( 'lbite_order_type', 'now' );
 		}
 
-		if ( ! $location_id ) {
+		if ( ! $location_id || ! LBite_Locations::is_valid_location( $location_id ) ) {
 			wc_add_notice( __( 'Please select a location.', 'libre-bite' ), 'error' );
+			$location_id = 0;
 		}
 
 		if ( ! in_array( $order_type, array( 'now', 'later' ), true ) ) {
@@ -741,14 +742,27 @@ class LBite_Checkout {
 			wc_add_notice( __( 'Please select a pickup time.', 'libre-bite' ), 'error' );
 		}
 
-		// Kapazität erneut prüfen: zwischen Auswahl und Absenden kann das
-		// Zeitfenster von jemand anderem belegt worden sein.
-		if ( 'later' === $order_type && $pickup_time && $location_id
-			&& ! self::is_slot_available( $location_id, $pickup_time ) ) {
-			wc_add_notice(
-				__( 'This time slot has just been fully booked. Please choose another time.', 'libre-bite' ),
-				'error'
-			);
+		// Abholzeit vollständig validieren, nicht nur gegen die Kapazität:
+		// Format, Vergangenheit und dass die Zeit tatsächlich ein von diesem
+		// Standort angebotener Slot ist (Öffnungszeiten, Feiertage). Vorher
+		// akzeptierte der Checkout jede beliebige Zeichenkette als Abholzeit,
+		// solange die Kapazitätsprüfung bestand (Audit 26.09.2026, AP-09).
+		if ( 'later' === $order_type && $pickup_time && $location_id ) {
+			$lbite_pickup_dt = DateTime::createFromFormat( 'Y-m-d H:i', $pickup_time, wp_timezone() );
+			$lbite_valid_format = $lbite_pickup_dt && $lbite_pickup_dt->format( 'Y-m-d H:i' ) === $pickup_time;
+
+			if ( ! $lbite_valid_format || $lbite_pickup_dt->getTimestamp() <= time() ) {
+				wc_add_notice( __( 'Please choose a valid pickup time in the future.', 'libre-bite' ), 'error' );
+			} elseif ( ! in_array( $pickup_time, wp_list_pluck( $this->get_available_timeslots( $location_id, substr( $pickup_time, 0, 10 ) ), 'value' ), true ) ) {
+				wc_add_notice( __( 'The selected pickup time is not available. Please choose another time.', 'libre-bite' ), 'error' );
+			} elseif ( ! self::is_slot_available( $location_id, $pickup_time ) ) {
+				// Kapazität erneut prüfen: zwischen Auswahl und Absenden kann
+				// das Zeitfenster von jemand anderem belegt worden sein.
+				wc_add_notice(
+					__( 'This time slot has just been fully booked. Please choose another time.', 'libre-bite' ),
+					'error'
+				);
+			}
 		}
 
 		// Verfügbarkeitsfenster prüfen (ab/bis-Datum des Standorts).
@@ -844,12 +858,13 @@ class LBite_Checkout {
 	 * @param int $order_id Bestellungs-ID
 	 */
 	public function save_location_time_meta( $order_id ) {
-		// Nonce wird von WooCommerce beim Checkout verifiziert.
-		if ( ! isset( $_POST['woocommerce-process-checkout-nonce'] )
-			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['woocommerce-process-checkout-nonce'] ) ), 'woocommerce-process_checkout' ) ) {
-			return;
-		}
-
+		// Läuft auf woocommerce_checkout_update_order_meta, das WooCommerce nur
+		// nach erfolgreicher Nonce-Prüfung innerhalb von process_checkout()
+		// feuert - eine zweite Prüfung hier war redundant und brach zudem,
+		// wenn ein Gast während des Checkouts ein Konto anlegt: WordPress
+		// loggt ihn dabei sofort ein, wodurch dieselbe Nonce (an den vorher
+		// abgemeldeten Zustand gebunden) nicht mehr verifiziert (Audit
+		// 26.09.2026, AP-09).
 		$location_id = isset( $_POST['lbite_location_id'] ) ? intval( wp_unslash( $_POST['lbite_location_id'] ) ) : 0;
 
 		// Fallback: Session verwenden wenn POST leer.
@@ -862,7 +877,7 @@ class LBite_Checkout {
 			return;
 		}
 
-		if ( $location_id ) {
+		if ( $location_id && LBite_Locations::is_valid_location( $location_id ) ) {
 			$order->update_meta_data( '_lbite_location_id', $location_id );
 
 			// Standort-Name speichern.
@@ -1258,7 +1273,7 @@ class LBite_Checkout {
 	 * @param string $pickup_time Abholzeit bei order_type 'later'.
 	 * @return array{success: bool, message: string, location_name?: string}
 	 */
-	private function set_location_session( $location_id, $order_type = 'now', $pickup_time = '' ) {
+	public static function set_location_session( $location_id, $order_type = 'now', $pickup_time = '' ) {
 		$location_id = (int) $location_id;
 
 		if ( ! $location_id ) {
@@ -1268,13 +1283,14 @@ class LBite_Checkout {
 			);
 		}
 
-		$location_post = get_post( $location_id );
-		if ( ! $location_post || 'lbite_location' !== $location_post->post_type || 'publish' !== $location_post->post_status ) {
+		if ( ! class_exists( 'LBite_Locations' ) || ! LBite_Locations::is_valid_location( $location_id ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'Invalid location', 'libre-bite' ),
 			);
 		}
+
+		$location_post = get_post( $location_id );
 
 		// Verfügbarkeitsfenster prüfen (Schutz gegen direkte Links auf noch nicht aktive Standorte).
 		// Vorbestellungen ab dem Eröffnungsdatum sind bei einem "upcoming"-Standort erlaubt; ein
