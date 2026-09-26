@@ -323,7 +323,7 @@ class LBite_Admin {
 				'libre-bite',
 				__( 'Reservations Overview', 'libre-bite' ),
 				__( 'Reservations', 'libre-bite' ),
-				'lbite_manage_options',
+				'lbite_manage_reservations',
 				'lbite-reservation-board',
 				array( $this, 'render_reservation_board_page' )
 			);
@@ -456,7 +456,7 @@ class LBite_Admin {
 	 * Reservierungsübersicht-Seite rendern
 	 */
 	public function render_reservation_board_page() {
-		if ( ! current_user_can( 'lbite_manage_options' ) ) {
+		if ( ! current_user_can( 'lbite_manage_reservations' ) ) {
 			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
 		}
 		include LBITE_PLUGIN_DIR . 'templates/admin/reservation-board.php';
@@ -1305,7 +1305,7 @@ class LBite_Admin {
 	public function ajax_pos_create_order() {
 		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lbite_use_pos' ) && ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 

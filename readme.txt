@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.4.0
+Stable tag: 3.4.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,13 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.4.1 =
+
+* Fixed: Locations, Tables, and Product Options used WordPress's generic post-editing rights, so any Author (or other role able to publish posts) could create or publish one directly by URL, bypassing the plugin's own menus entirely. All three now require the same dedicated capability the plugin's own menu already expected.
+* Added: a dedicated permission for managing reservations, separate from the Product Options permission it was previously tied to. Staff and Managers can now open the Reservations board and change a reservation's status or table, as documented — previously only full Administrators could.
+* Fixed: the "Delete Data on Uninstall" setting could be changed by a Shop Manager; it is now restricted to full Administrators, matching how the option is presented in the interface.
+* Fixed: the POS "create order" endpoint accepted the generic `edit_posts` capability as an alternative to the dedicated POS permission, which unintentionally let non-POS roles create orders through it.
 
 = 3.4.0 =
 

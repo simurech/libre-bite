@@ -557,8 +557,13 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			break;
 
 		case 'data':
-			update_option( 'lbite_delete_data_on_uninstall', isset( $_POST['lbite_delete_data_on_uninstall'] ) );
-			$lbite_did_save = true;
+			// Nur echte Administratoren, nicht Shop Manager (Audit 26.09.2026,
+			// AP-10): das UI blendet den Tab für sie zwar aus, das Speichern
+			// selbst prüfte das aber nie unabhängig davon.
+			if ( $lbite_is_admin ) {
+				update_option( 'lbite_delete_data_on_uninstall', isset( $_POST['lbite_delete_data_on_uninstall'] ) );
+				$lbite_did_save = true;
+			}
 			break;
 	}
 

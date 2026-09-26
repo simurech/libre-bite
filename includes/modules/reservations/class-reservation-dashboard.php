@@ -53,7 +53,7 @@ class LBite_Reservation_Dashboard {
 			wp_send_json_error( array( 'message' => __( 'Feature not enabled', 'libre-bite' ) ) );
 		}
 
-		if ( ! current_user_can( 'lbite_manage_options' ) ) {
+		if ( ! current_user_can( 'lbite_manage_reservations' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
@@ -169,7 +169,7 @@ class LBite_Reservation_Dashboard {
 			wp_send_json_error( array( 'message' => __( 'Feature not enabled', 'libre-bite' ) ) );
 		}
 
-		if ( ! current_user_can( 'lbite_manage_options' ) ) {
+		if ( ! current_user_can( 'lbite_manage_reservations' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
@@ -203,7 +203,7 @@ class LBite_Reservation_Dashboard {
 			wp_send_json_error( array( 'message' => __( 'Feature not enabled', 'libre-bite' ) ) );
 		}
 
-		if ( ! current_user_can( 'lbite_manage_options' ) ) {
+		if ( ! current_user_can( 'lbite_manage_reservations' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
@@ -245,7 +245,7 @@ class LBite_Reservation_Dashboard {
 			wp_send_json_error( array( 'message' => __( 'Feature not enabled', 'libre-bite' ) ) );
 		}
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'lbite_manage_reservations' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 

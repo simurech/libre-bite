@@ -177,7 +177,20 @@ class LBite_Locations {
 			'query_var'           => true,
 			'rewrite'             => false,
 			'capability_type'     => 'post',
-			'map_meta_cap'        => true,
+			// Eigene Capability statt der Standard-post-Rechte: sonst konnte
+			// jede Autorin/jeder Autor per Direkt-URL einen Standort anlegen
+			// und veröffentlichen (Audit 26.09.2026, AP-10). Muster: die
+			// Reservierungen-CPT (class-reservations.php).
+			'capabilities'        => array(
+				'edit_post'          => 'lbite_manage_locations',
+				'edit_posts'         => 'lbite_manage_locations',
+				'edit_others_posts'  => 'lbite_manage_locations',
+				'publish_posts'      => 'lbite_manage_locations',
+				'read_post'          => 'lbite_manage_locations',
+				'read_private_posts' => 'lbite_manage_locations',
+				'delete_post'        => 'lbite_manage_locations',
+			),
+			'map_meta_cap'        => false,
 			'has_archive'         => false,
 			'hierarchical'        => false,
 			'supports'            => array( 'title' ),

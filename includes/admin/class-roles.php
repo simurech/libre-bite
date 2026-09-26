@@ -36,6 +36,7 @@ class LBite_Roles {
 		'lbite_view_orders'      => array( 'lbite_staff', 'lbite_manager', 'administrator' ), // Einzelne Bestellungen einsehen
 		'lbite_manage_orders'    => array( 'lbite_staff', 'lbite_manager', 'administrator' ), // Bestellstatus ändern und Bestellungen verwalten
 		'lbite_use_pos'          => array( 'lbite_staff', 'lbite_manager', 'administrator' ), // POS-Terminal (Point of Sale) verwenden
+		'lbite_manage_reservations' => array( 'lbite_staff', 'lbite_manager', 'administrator' ), // Reservierungsboard einsehen und Status/Tisch ändern (Pro)
 
 		// Manager-Capabilities: lbite_manager + administrator (Pro)
 		'lbite_manage_location_settings' => array( 'lbite_manager', 'administrator' ), // Einstellungen der zugewiesenen Standorte bearbeiten
@@ -68,10 +69,11 @@ class LBite_Roles {
 				'delete_posts'         => false,
 				'publish_posts'        => false,
 				'upload_files'         => false,
-				'lbite_view_dashboard' => true,
-				'lbite_view_orders'    => true,
-				'lbite_manage_orders'  => true,
-				'lbite_use_pos'        => true,
+				'lbite_view_dashboard'      => true,
+				'lbite_view_orders'         => true,
+				'lbite_manage_orders'       => true,
+				'lbite_use_pos'             => true,
+				'lbite_manage_reservations' => true,
 			)
 		);
 
@@ -90,6 +92,7 @@ class LBite_Roles {
 			$shop_manager->add_cap( 'lbite_view_orders' );
 			$shop_manager->add_cap( 'lbite_manage_orders' );
 			$shop_manager->add_cap( 'lbite_use_pos' );
+			$shop_manager->add_cap( 'lbite_manage_reservations' );
 			$shop_manager->add_cap( 'lbite_manage_locations' );
 			$shop_manager->add_cap( 'lbite_manage_products' );
 			$shop_manager->add_cap( 'lbite_manage_options' );
@@ -298,6 +301,7 @@ class LBite_Roles {
 				'lbite_manage_location_settings' => true,
 				'lbite_view_statistics'          => true,
 				'lbite_run_setup'                => true,
+				'lbite_manage_reservations'      => true,
 			);
 			foreach ( $manager_caps as $cap => $grant ) {
 				if ( ! $manager_role->has_cap( $cap ) ) {
@@ -310,11 +314,12 @@ class LBite_Roles {
 		$staff_role = get_role( 'lbite_staff' );
 		if ( $staff_role ) {
 			$staff_caps = array(
-				'read'                 => true,
-				'lbite_view_dashboard' => true,
-				'lbite_view_orders'    => true,
-				'lbite_manage_orders'  => true,
-				'lbite_use_pos'        => true,
+				'read'                      => true,
+				'lbite_view_dashboard'      => true,
+				'lbite_view_orders'         => true,
+				'lbite_manage_orders'       => true,
+				'lbite_use_pos'             => true,
+				'lbite_manage_reservations' => true,
 			);
 			foreach ( $staff_caps as $cap => $grant ) {
 				if ( ! $staff_role->has_cap( $cap ) ) {
@@ -341,6 +346,7 @@ class LBite_Roles {
 				'lbite_view_orders',
 				'lbite_manage_orders',
 				'lbite_use_pos',
+				'lbite_manage_reservations',
 				'lbite_manage_locations',
 				'lbite_manage_products',
 				'lbite_manage_options',
@@ -355,7 +361,7 @@ class LBite_Roles {
 			}
 		}
 
-		update_option( 'lbite_roles_version', '1.6.0' );
+		update_option( 'lbite_roles_version', '1.7.0' );
 	}
 
 	/**
@@ -365,6 +371,6 @@ class LBite_Roles {
 	 */
 	public static function needs_migration() {
 		$current_version = get_option( 'lbite_roles_version', '0' );
-		return version_compare( $current_version, '1.6.0', '<' );
+		return version_compare( $current_version, '1.7.0', '<' );
 	}
 }

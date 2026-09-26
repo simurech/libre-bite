@@ -137,13 +137,13 @@ class LBite_Reservations {
 				'supports'     => array( 'title' ),
 				'capability_type' => 'post',
 				'capabilities' => array(
-					'edit_post'          => 'lbite_manage_options',
-					'edit_posts'         => 'lbite_manage_options',
-					'edit_others_posts'  => 'lbite_manage_options',
-					'publish_posts'      => 'lbite_manage_options',
-					'read_post'          => 'lbite_manage_options',
-					'read_private_posts' => 'lbite_manage_options',
-					'delete_post'        => 'lbite_manage_options',
+					'edit_post'          => 'lbite_manage_reservations',
+					'edit_posts'         => 'lbite_manage_reservations',
+					'edit_others_posts'  => 'lbite_manage_reservations',
+					'publish_posts'      => 'lbite_manage_reservations',
+					'read_post'          => 'lbite_manage_reservations',
+					'read_private_posts' => 'lbite_manage_reservations',
+					'delete_post'        => 'lbite_manage_reservations',
 				),
 				'map_meta_cap' => false,
 			)
@@ -262,7 +262,7 @@ class LBite_Reservations {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
-		if ( ! current_user_can( 'lbite_manage_options' ) ) {
+		if ( ! current_user_can( 'lbite_manage_reservations' ) ) {
 			return;
 		}
 

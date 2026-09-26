@@ -92,7 +92,18 @@ class LBite_Product_Options {
 			'query_var'           => true,
 			'rewrite'             => false,
 			'capability_type'     => 'post',
-			'map_meta_cap'        => true,
+			// Eigene Capability statt der Standard-post-Rechte (Audit
+			// 26.09.2026, AP-10).
+			'capabilities'        => array(
+				'edit_post'          => 'lbite_manage_options',
+				'edit_posts'         => 'lbite_manage_options',
+				'edit_others_posts'  => 'lbite_manage_options',
+				'publish_posts'      => 'lbite_manage_options',
+				'read_post'          => 'lbite_manage_options',
+				'read_private_posts' => 'lbite_manage_options',
+				'delete_post'        => 'lbite_manage_options',
+			),
+			'map_meta_cap'        => false,
 			'has_archive'         => false,
 			'hierarchical'        => false,
 			'supports'            => array( 'title', 'editor' ),

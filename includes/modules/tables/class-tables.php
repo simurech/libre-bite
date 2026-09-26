@@ -578,6 +578,19 @@ class LBite_Tables {
 			'query_var'           => true,
 			'rewrite'             => false,
 			'capability_type'     => 'post',
+			// Eigene Capability statt der Standard-post-Rechte (Audit
+			// 26.09.2026, AP-10) - Tische gehören organisatorisch zur
+			// Standort-Verwaltung, daher dieselbe Capability wie Standorte.
+			'capabilities'        => array(
+				'edit_post'          => 'lbite_manage_locations',
+				'edit_posts'         => 'lbite_manage_locations',
+				'edit_others_posts'  => 'lbite_manage_locations',
+				'publish_posts'      => 'lbite_manage_locations',
+				'read_post'          => 'lbite_manage_locations',
+				'read_private_posts' => 'lbite_manage_locations',
+				'delete_post'        => 'lbite_manage_locations',
+			),
+			'map_meta_cap'        => false,
 			'has_archive'         => false,
 			'hierarchical'        => false,
 			'supports'            => array( 'title' ),
