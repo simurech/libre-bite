@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.2.5
+Stable tag: 3.2.6
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -225,6 +225,10 @@ Yes. WooCommerce includes offline payment methods such as "Cash on Delivery" or 
 
 Yes. Libre Bite is fully compatible with WooCommerce High-Performance Order Storage (HPOS). It has been tested with both legacy post-based storage and the new Custom Order Tables.
 
+= Does Libre Bite work with the WooCommerce Checkout block? =
+
+Not yet. Libre Bite's location selection, time slots, order bumps, and tip settings currently rely on the classic WooCommerce checkout. If your checkout page uses the Checkout block, edit that page, select the Checkout block, and use its sidebar option to switch back to the classic shortcode (or replace it with a Shortcode block containing `[woocommerce_checkout]`). Libre Bite shows an admin notice with the same instructions whenever it detects the block on your checkout page. Official Checkout block support is on the roadmap.
+
 = Can I manage multiple restaurant locations? =
 
 Multi-location management is included in the Pro version. The free version supports a single location with full configuration of address, opening hours, and order routing.
@@ -266,6 +270,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.2.6 =
+
+* Added: Libre Bite now detects when the checkout page uses the WooCommerce Checkout block instead of the classic shortcode and shows a persistent admin notice with step-by-step instructions to switch back — Libre Bite's location, time slot, order bump and tip features do not work with the block yet. The same check is part of the setup assistant's system check, and WooCommerce itself flags the incompatibility in the block editor.
 
 = 3.2.5 =
 

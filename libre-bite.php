@@ -3,7 +3,7 @@
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://wordpress.org/plugins/libre-bite/
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
- * Version:           3.2.5
+ * Version:           3.2.6
  * Requires at least: 6.0
  * Tested up to:      7.1
  * Requires PHP:      8.1
@@ -79,7 +79,7 @@ if ( function_exists( 'lbite_freemius' ) ) {
 }
 
 // Plugin-Konstanten definieren
-define( 'LBITE_VERSION', '3.2.5' );
+define( 'LBITE_VERSION', '3.2.6' );
 define( 'LBITE_PLUGIN_FILE', __FILE__ );
 define( 'LBITE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LBITE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -257,7 +257,14 @@ function lbite_local_time_to_timestamp( $time_str ) {
 }
 
 /**
- * HPOS-Kompatibilität deklarieren
+ * HPOS- und Checkout-Block-Kompatibilität deklarieren
+ *
+ * cart_checkout_blocks ist bewusst als inkompatibel deklariert (siehe Audit
+ * 26.09.2026, AP-02): alle Checkout-Erweiterungen (Standort, Zeitslot, Order
+ * Bumps, Trinkgeld) hängen an klassischen WooCommerce-Hooks und laufen mit
+ * dem Checkout-Block nicht. WooCommerce zeigt dafür selbst einen Hinweis im
+ * Block-Editor; zusätzlich gibt es den nicht wegklickbaren Admin-Hinweis aus
+ * LBite_Admin::render_checkout_block_notice().
  */
 add_action( 'before_woocommerce_init', function() {
 	if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
@@ -266,8 +273,33 @@ add_action( 'before_woocommerce_init', function() {
 			__FILE__,
 			true
 		);
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+			'cart_checkout_blocks',
+			__FILE__,
+			false
+		);
 	}
 } );
+
+/**
+ * Prüft, ob die Kasse-Seite den WooCommerce-Checkout-Block statt des
+ * klassischen [woocommerce_checkout]-Shortcodes verwendet.
+ *
+ * @return bool
+ */
+function lbite_checkout_uses_blocks() {
+	if ( ! function_exists( 'wc_get_page_id' ) || ! function_exists( 'has_block' ) ) {
+		return false;
+	}
+
+	$checkout_page_id = wc_get_page_id( 'checkout' );
+
+	if ( $checkout_page_id <= 0 ) {
+		return false;
+	}
+
+	return has_block( 'woocommerce/checkout', $checkout_page_id );
+}
 
 /**
  * Custom Cron-Intervalle registrieren

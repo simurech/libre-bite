@@ -186,6 +186,12 @@ class LBite_Setup_Wizard {
 			'hint'  => __( 'Pre-orders and pickup reminders rely on WordPress scheduled tasks.', 'libre-bite' ),
 		);
 
+		$checks[] = array(
+			'label' => __( 'Checkout uses the classic shortcode', 'libre-bite' ),
+			'ok'    => ! function_exists( 'lbite_checkout_uses_blocks' ) || ! lbite_checkout_uses_blocks(),
+			'hint'  => __( 'Your checkout page uses the WooCommerce Checkout block. Libre Bite currently only works with the classic checkout: edit the "Checkout" page and switch the block back to the classic shortcode, or replace it with a Shortcode block containing [woocommerce_checkout].', 'libre-bite' ),
+		);
+
 		return $checks;
 	}
 

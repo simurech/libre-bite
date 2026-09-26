@@ -49,7 +49,16 @@ $lbite_email_req_gateways = get_option( 'lbite_email_required_gateways', array()
 				</select>
 				<p class="description"><?php esc_html_e( 'In optimized mode, only the name is requested and whether a receipt by email is desired.', 'libre-bite' ); ?></p>
 				<div class="notice notice-warning inline" style="margin: 8px 0 0; padding: 8px 12px;">
-					<p><strong><?php esc_html_e( 'Important:', 'libre-bite' ); ?></strong> <?php esc_html_e( 'The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode', 'libre-bite' ); ?> <code>[woocommerce_checkout]</code><?php esc_html_e( ', not the WooCommerce Checkout Block.', 'libre-bite' ); ?></p>
+					<p>
+						<strong><?php esc_html_e( 'Important:', 'libre-bite' ); ?></strong>
+						<?php
+						printf(
+							/* translators: %s: shortcode placeholder */
+							esc_html__( 'The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode %s, not the WooCommerce Checkout Block.', 'libre-bite' ),
+							'<code>[woocommerce_checkout]</code>'
+						);
+						?>
+					</p>
 				</div>
 			</td>
 		</tr>

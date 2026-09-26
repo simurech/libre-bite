@@ -8729,6 +8729,50 @@ msgstr "Rimuove «Download» e «Indirizzi» da «Il mio account»."
 msgid "Removes \"Downloads\" and \"Addresses\" from My Account if you sell no digital products and offer no shipping."
 msgstr "Rimuove «Download» e «Indirizzi» da «Il mio account» se non vendi prodotti digitali e non offri spedizioni."
 
+#: templates/admin/settings/checkout-mode.php:57
+msgid "The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode %s, not the WooCommerce Checkout Block."
+msgstr "Il checkout ottimizzato funziona solo con lo shortcode WooCommerce classico. La tua pagina di pagamento deve contenere lo shortcode %s, non il blocco Checkout di WooCommerce."
+
+#: includes/admin/class-admin.php:224
+msgid "Libre Bite: your checkout uses the WooCommerce Checkout block."
+msgstr "Libre Bite: la tua cassa utilizza il blocco Checkout di WooCommerce."
+
+#: includes/admin/class-admin.php:225
+msgid "Libre Bite currently only works with the classic checkout. Orders placed through the block do not get a location and will not appear on the Order Board."
+msgstr "Libre Bite attualmente funziona solo con il checkout classico. Gli ordini effettuati tramite il blocco non ricevono una sede e non compaiono nella bacheca ordini."
+
+#: includes/admin/class-admin.php:228
+msgid "Option A (recommended):"
+msgstr "Opzione A (consigliata):"
+
+#: includes/admin/class-admin.php:229
+msgid "Edit the \"Checkout\" page, select the Checkout block, and use its sidebar option to switch back to the classic checkout shortcode. The exact wording depends on your WooCommerce version."
+msgstr "Modifica la pagina «Pagamento», seleziona il blocco Checkout e usa la sua opzione nella barra laterale per tornare allo shortcode di checkout classico. La dicitura esatta dipende dalla tua versione di WooCommerce."
+
+#: includes/admin/class-admin.php:232
+msgid "Option B (alternative):"
+msgstr "Opzione B (alternativa):"
+
+#: includes/admin/class-admin.php:236
+msgid "Clear the content of the \"Checkout\" page, add a Shortcode block, and enter %s."
+msgstr "Svuota il contenuto della pagina «Pagamento», aggiungi un blocco Shortcode e inserisci %s."
+
+#: includes/admin/class-admin.php:243
+msgid "Edit checkout page"
+msgstr "Modifica pagina di pagamento"
+
+#: includes/admin/class-admin.php:245
+msgid "Check again"
+msgstr "Controlla di nuovo"
+
+#: includes/admin/class-setup-wizard.php:190
+msgid "Checkout uses the classic shortcode"
+msgstr "Il checkout usa lo shortcode classico"
+
+#: includes/admin/class-setup-wizard.php:192
+msgid "Your checkout page uses the WooCommerce Checkout block. Libre Bite currently only works with the classic checkout: edit the \"Checkout\" page and switch the block back to the classic shortcode, or replace it with a Shortcode block containing [woocommerce_checkout]."
+msgstr "La tua pagina di pagamento usa il blocco Checkout di WooCommerce. Libre Bite attualmente funziona solo con il checkout classico: modifica la pagina «Pagamento» e riporta il blocco allo shortcode classico, oppure sostituiscilo con un blocco Shortcode contenente [woocommerce_checkout]."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Errore durante il salvataggio"
 

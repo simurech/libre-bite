@@ -66,6 +66,7 @@ class LBite_Admin {
 		$this->loader->add_action( 'personal_options_update', $this, 'save_theme_user_option' );
 		$this->loader->add_action( 'edit_user_profile_update', $this, 'save_theme_user_option' );
 		$this->loader->add_action( 'admin_init', $this, 'maybe_upgrade' );
+		$this->loader->add_action( 'admin_notices', $this, 'render_checkout_block_notice' );
 
 		// Während der Entwicklung den Änderungszeitpunkt als Versionsangabe der
 		// Asset-URLs verwenden. Sonst bleibt die Plugin-Version der Cache-Schlüssel,
@@ -191,6 +192,62 @@ class LBite_Admin {
 	 * SUPER-ADMIN (administrator):
 	 * - Alle Admin-Menüs + Feature-Toggles, Admin-Einstellungen, Support-Einstellungen, Debug
 	 */
+	/**
+	 * Nicht wegklickbaren Hinweis anzeigen, solange die Kasse den
+	 * WooCommerce-Checkout-Block statt des klassischen Shortcodes nutzt.
+	 *
+	 * Alle Checkout-Erweiterungen (Standort, Zeitslot, Order Bumps, Trinkgeld)
+	 * hängen an klassischen Hooks und laufen mit dem Block nicht - Bestellungen
+	 * bekommen dann keinen Standort und erscheinen nicht auf dem Kanban-Board
+	 * (Audit 26.09.2026, AP-02).
+	 */
+	public function render_checkout_block_notice() {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
+
+		$lbite_screen       = get_current_screen();
+		$lbite_on_dashboard = $lbite_screen && 'dashboard' === $lbite_screen->id;
+		if ( ! self::is_lbite_screen() && ! $lbite_on_dashboard ) {
+			return;
+		}
+
+		if ( ! function_exists( 'lbite_checkout_uses_blocks' ) || ! lbite_checkout_uses_blocks() ) {
+			return;
+		}
+
+		$lbite_checkout_edit_url = function_exists( 'wc_get_page_id' ) ? get_edit_post_link( wc_get_page_id( 'checkout' ), 'raw' ) : '';
+		$lbite_recheck_url       = remove_query_arg( array() );
+		?>
+		<div class="notice notice-error">
+			<p>
+				<strong><?php esc_html_e( 'Libre Bite: your checkout uses the WooCommerce Checkout block.', 'libre-bite' ); ?></strong>
+				<?php esc_html_e( 'Libre Bite currently only works with the classic checkout. Orders placed through the block do not get a location and will not appear on the Order Board.', 'libre-bite' ); ?>
+			</p>
+			<p>
+				<strong><?php esc_html_e( 'Option A (recommended):', 'libre-bite' ); ?></strong>
+				<?php esc_html_e( 'Edit the "Checkout" page, select the Checkout block, and use its sidebar option to switch back to the classic checkout shortcode. The exact wording depends on your WooCommerce version.', 'libre-bite' ); ?>
+			</p>
+			<p>
+				<strong><?php esc_html_e( 'Option B (alternative):', 'libre-bite' ); ?></strong>
+				<?php
+				printf(
+					/* translators: %s: shortcode placeholder */
+					esc_html__( 'Clear the content of the "Checkout" page, add a Shortcode block, and enter %s.', 'libre-bite' ),
+					'<code>[woocommerce_checkout]</code>'
+				);
+				?>
+			</p>
+			<p>
+				<?php if ( $lbite_checkout_edit_url ) : ?>
+					<a href="<?php echo esc_url( $lbite_checkout_edit_url ); ?>" class="button button-primary"><?php esc_html_e( 'Edit checkout page', 'libre-bite' ); ?></a>
+				<?php endif; ?>
+				<a href="<?php echo esc_url( $lbite_recheck_url ); ?>" class="button"><?php esc_html_e( 'Check again', 'libre-bite' ); ?></a>
+			</p>
+		</div>
+		<?php
+	}
+
 	public function add_admin_menu() {
 		// Prüfen ob Benutzer mindestens Staff-Zugriff hat
 		if ( ! LBite_Roles::is_staff() ) {
