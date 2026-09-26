@@ -8952,3 +8952,7 @@ msgstr ""
 #: includes/admin/class-admin.php:1109
 msgid "More actions"
 msgstr ""
+
+#: includes/modules/order-dashboard/class-order-dashboard.php:845
+msgid "This order can no longer be cancelled."
+msgstr ""

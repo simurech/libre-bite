@@ -8778,6 +8778,10 @@ msgstr "Ihre Kassenseite verwendet den WooCommerce-Checkout-Block. Libre Bite fu
 msgid "More actions"
 msgstr "Weitere Aktionen"
 
+#: includes/modules/order-dashboard/class-order-dashboard.php:845
+msgid "This order can no longer be cancelled."
+msgstr "Diese Bestellung kann nicht mehr storniert werden."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

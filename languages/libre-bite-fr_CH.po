@@ -8777,6 +8777,10 @@ msgstr "Votre page de paiement utilise le bloc de paiement WooCommerce. Libre Bi
 msgid "More actions"
 msgstr "Autres actions"
 
+#: includes/modules/order-dashboard/class-order-dashboard.php:845
+msgid "This order can no longer be cancelled."
+msgstr "Cette commande ne peut plus être annulée."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Erreur lors de l'enregistrement"
 

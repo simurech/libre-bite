@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.3.2
+Stable tag: 3.3.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.3.3 =
+
+* Fixed: cancelling an order from the dashboard had no status check, so an already-completed or already-refunded order could be cancelled (and refunded again) a second time. Only orders still in Processing, On Hold, or Pending can be cancelled now, and a partially refunded order is refunded for the remaining amount only, not the full total again.
 
 = 3.3.2 =
 

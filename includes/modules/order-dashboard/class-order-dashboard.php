@@ -838,17 +838,28 @@ class LBite_Order_Dashboard {
 			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
 		}
 
+		// Nur laufende Bestellungen dürfen storniert werden - abgeschlossene,
+		// bereits erstattete oder bereits stornierte Bestellungen sonst ein
+		// zweites Mal (Audit 26.09.2026, AP-08).
+		if ( ! in_array( $order->get_status(), array( 'processing', 'on-hold', 'pending' ), true ) ) {
+			wp_send_json_error( array( 'message' => __( 'This order can no longer be cancelled.', 'libre-bite' ) ) );
+		}
+
 		// Rückerstattung VOR der Stornierung – nach update_status('cancelled') gibt is_paid() false zurück.
 		// refund_payment: true versucht die Gateway-Rückerstattung. Offline-Gateways (BACS, COD, Cheque)
 		// geben einen WP_Error zurück und erstellen KEINEN Rückerstattungs-Eintrag in WC – das ist korrekt,
 		// da die Rückerstattung manuell erfolgen muss. Online-Gateways (Stripe, TWINT usw.) verarbeiten
 		// die Rückerstattung automatisch und erstellen einen WC-Eintrag.
-		$refund_triggered = false;
-		if ( $order->get_total() > 0 && $order->is_paid() ) {
+		// get_remaining_refund_amount() statt get_total(): eine teilweise schon
+		// erstattete Bestellung darf nicht ein zweites Mal den vollen Betrag
+		// erstattet bekommen (Audit 26.09.2026, AP-08).
+		$refund_triggered  = false;
+		$remaining_refund  = (float) $order->get_remaining_refund_amount();
+		if ( $remaining_refund > 0 && $order->is_paid() ) {
 			$refund = wc_create_refund(
 				array(
 					'order_id'       => $order_id,
-					'amount'         => $order->get_total(),
+					'amount'         => $remaining_refund,
 					'reason'         => __( 'Order cancelled', 'libre-bite' ),
 					'refund_payment' => true,
 				)

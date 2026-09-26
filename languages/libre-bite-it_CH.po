@@ -8777,6 +8777,10 @@ msgstr "La tua pagina di pagamento usa il blocco Checkout di WooCommerce. Libre 
 msgid "More actions"
 msgstr "Altre azioni"
 
+#: includes/modules/order-dashboard/class-order-dashboard.php:845
+msgid "This order can no longer be cancelled."
+msgstr "Questo ordine non può più essere annullato."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Errore durante il salvataggio"
 
