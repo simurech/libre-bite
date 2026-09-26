@@ -140,12 +140,16 @@ class LBite_Roles {
 	 * Rollen bei Plugin-Deaktivierung entfernen
 	 */
 	public static function remove_roles() {
-		// Custom Roles entfernen (inkl. aller bekannten alten Benennungen)
+		// Custom Roles entfernen (inkl. aller bekannten alten Benennungen,
+		// einschliesslich der ursprünglichen "oos_"-Namensgebung des
+		// Plugins vor der Umbenennung zu Libre Bite).
 		remove_role( 'lbite_staff' );
 		remove_role( 'lbite_manager' );
 		remove_role( 'lbite_admin' );
 		remove_role( 'lb_admin' );
 		remove_role( 'lb_staff' );
+		remove_role( 'oos_staff' );
+		remove_role( 'oos_admin' );
 
 		// Capabilities von bestehenden Rollen entfernen
 		$roles_to_clean = array( 'administrator', 'shop_manager' );

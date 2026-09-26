@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.4.6
+Stable tag: 3.4.7
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,12 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.4.7 =
+
+* Fixed: uninstalling the plugin with data deletion enabled left substantial data behind: order metadata on shops using High-Performance Order Storage (a separate database table the cleanup never touched), category time-schedule data, order-item metadata, and — for the underscore-prefixed keys used by guest notes and stamp cards — customer allergy notes and loyalty stamp counts. The role and capability cleanup also used an outdated, hand-maintained list that predated several current roles and permissions.
+* Fixed: the option cleanup on uninstall used a very generic "oos_" prefix wildcard that could have deleted unrelated options from other plugins; it's now limited to the one legacy option name this plugin actually used.
+* Added: guest notes and stamp card data (notes, allergies, stamp count, reward coupon) can now be exported or erased through Tools → Export/Erase Personal Data, and a short privacy policy suggestion is offered under Settings → Privacy.
 
 = 3.4.6 =
 

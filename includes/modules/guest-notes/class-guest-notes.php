@@ -57,6 +57,13 @@ class LBite_Guest_Notes {
 
 		// Reservierungsboard mit Gastnotizen anreichern.
 		$this->loader->add_filter( 'lbite_reservation_board_data', $this, 'add_notes_to_reservation', 10, 2 );
+
+		// Notizen und Allergiehinweise sind personenbezogene (bei
+		// Allergien sogar gesundheitsbezogene) Daten - ohne diese beiden
+		// Filter tauchten sie in Werkzeuge → Persönliche Daten weder im
+		// Export noch bei der Löschung auf (Audit 26.09.2026, AP-16).
+		$this->loader->add_filter( 'wp_privacy_personal_data_exporters', $this, 'register_privacy_exporter' );
+		$this->loader->add_filter( 'wp_privacy_personal_data_erasers', $this, 'register_privacy_eraser' );
 	}
 
 	/* ═════════════════════════════════════════════════════════════════
@@ -159,6 +166,104 @@ class LBite_Guest_Notes {
 		return array(
 			'notes'     => (string) get_user_meta( (int) $user_id, self::META_NOTES, true ),
 			'allergies' => (string) get_user_meta( (int) $user_id, self::META_ALLERGIES, true ),
+		);
+	}
+
+	/* ═════════════════════════════════════════════════════════════════
+	 * Datenschutz (Persönliche Daten exportieren/löschen)
+	 * ═════════════════════════════════════════════════════════════════ */
+
+	/**
+	 * Exporteur registrieren
+	 *
+	 * @param array $exporters Bestehende Exporteure.
+	 * @return array
+	 */
+	public function register_privacy_exporter( $exporters ) {
+		$exporters['lbite-guest-notes'] = array(
+			'exporter_friendly_name' => __( 'Libre Bite Guest Notes', 'libre-bite' ),
+			'callback'               => array( $this, 'export_data' ),
+		);
+		return $exporters;
+	}
+
+	/**
+	 * Daten für den Export zusammenstellen
+	 *
+	 * @param string $email_address E-Mail-Adresse der betroffenen Person.
+	 * @return array
+	 */
+	public function export_data( $email_address ) {
+		$user        = get_user_by( 'email', $email_address );
+		$export_data = array();
+
+		if ( $user ) {
+			$notes = self::get_notes( $user->ID );
+			$items = array();
+
+			if ( '' !== $notes['notes'] ) {
+				$items[] = array( 'name' => __( 'Notes', 'libre-bite' ), 'value' => $notes['notes'] );
+			}
+			if ( '' !== $notes['allergies'] ) {
+				$items[] = array( 'name' => __( 'Allergies', 'libre-bite' ), 'value' => $notes['allergies'] );
+			}
+
+			if ( ! empty( $items ) ) {
+				$export_data[] = array(
+					'group_id'    => 'lbite-guest-notes',
+					'group_label' => __( 'Guest Notes', 'libre-bite' ),
+					'item_id'     => 'lbite-guest-notes',
+					'data'        => $items,
+				);
+			}
+		}
+
+		return array(
+			'data' => $export_data,
+			'done' => true,
+		);
+	}
+
+	/**
+	 * Eraser registrieren
+	 *
+	 * @param array $erasers Bestehende Eraser.
+	 * @return array
+	 */
+	public function register_privacy_eraser( $erasers ) {
+		$erasers['lbite-guest-notes'] = array(
+			'eraser_friendly_name' => __( 'Libre Bite Guest Notes', 'libre-bite' ),
+			'callback'             => array( $this, 'erase_data' ),
+		);
+		return $erasers;
+	}
+
+	/**
+	 * Notizen und Allergiehinweise löschen
+	 *
+	 * @param string $email_address E-Mail-Adresse der betroffenen Person.
+	 * @return array
+	 */
+	public function erase_data( $email_address ) {
+		$user          = get_user_by( 'email', $email_address );
+		$items_removed = false;
+
+		if ( $user ) {
+			if ( '' !== (string) get_user_meta( $user->ID, self::META_NOTES, true ) ) {
+				delete_user_meta( $user->ID, self::META_NOTES );
+				$items_removed = true;
+			}
+			if ( '' !== (string) get_user_meta( $user->ID, self::META_ALLERGIES, true ) ) {
+				delete_user_meta( $user->ID, self::META_ALLERGIES );
+				$items_removed = true;
+			}
+		}
+
+		return array(
+			'items_removed'  => $items_removed,
+			'items_retained' => false,
+			'messages'       => array(),
+			'done'           => true,
 		);
 	}
 

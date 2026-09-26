@@ -104,49 +104,58 @@ class LBite_Installer {
 			}
 		}
 
-		// 2. Optionen löschen (lbite_ und altes oos_ Präfix).
+		// 2. Optionen löschen. `lbite_` per Wildcard, `oos_` bewusst NICHT als
+		// Wildcard – das Präfix ist zu generisch und hätte fremde
+		// Plugin-Optionen mit demselben Präfix mitgelöscht. Stattdessen nur
+		// der eine tatsächlich bekannte alte Optionsname (Audit 26.09.2026,
+		// AP-16).
 		// Direkte SQL-Abfrage notwendig: DELETE mit LIKE-Wildcard ist in WP-API nicht möglich (delete_option() nur für exakte Keys).
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s", $wpdb->esc_like( 'lbite_' ) . '%', $wpdb->esc_like( 'oos_' ) . '%' ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $wpdb->esc_like( 'lbite_' ) . '%' ) );
+		delete_option( 'oos_delete_data_on_uninstall' );
 
 		// 3. Metadaten löschen.
 		// Direkte SQL-Abfragen notwendig: Bulk-Delete mit LIKE-Pattern, kein WP-API-Äquivalent.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE %s OR meta_key LIKE %s", $wpdb->esc_like( '_lbite_' ) . '%', $wpdb->esc_like( '_oos_' ) . '%' ) );
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE %s OR meta_key LIKE %s", $wpdb->esc_like( 'lbite_' ) . '%', $wpdb->esc_like( 'oos_' ) . '%' ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE %s", $wpdb->esc_like( '_lbite_' ) . '%' ) );
 
-		// 4. Rollen & Capabilities entfernen.
-		remove_role( 'lbite_staff' );
-		remove_role( 'lbite_admin' );
-		remove_role( 'oos_staff' );
-		remove_role( 'oos_admin' );
-
-		$roles = array( 'administrator', 'shop_manager', 'editor' );
-		$caps  = array(
-			'lbite_view_dashboard',
-			'lbite_view_orders',
-			'lbite_manage_orders',
-			'lbite_use_pos',
-			'lbite_manage_locations',
-			'lbite_manage_products',
-			'lbite_manage_options',
-			'lbite_manage_checkout',
-			'lbite_manage_settings',
-			'lbite_manage_features',
-			'lbite_manage_roles',
-			'lbite_manage_support',
-			'lbite_view_debug',
-		);
-
-		foreach ( $roles as $role_name ) {
-			$role = get_role( $role_name );
-			if ( $role ) {
-				foreach ( $caps as $cap ) {
-					$role->remove_cap( $cap );
-				}
-			}
+		// Unter HPOS liegen Bestell-Metadaten NICHT in wp_postmeta, sondern
+		// in einer eigenen Tabelle – ohne diesen Schritt blieben sie bei
+		// aktivem HPOS vollständig zurück (Audit 26.09.2026, AP-16). Tabelle
+		// existiert nur, wenn HPOS je aktiv war/ist.
+		$lbite_orders_meta_table = $wpdb->prefix . 'wc_orders_meta';
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $lbite_orders_meta_table ) ) === $lbite_orders_meta_table ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->query( $wpdb->prepare( "DELETE FROM {$lbite_orders_meta_table} WHERE meta_key LIKE %s", $wpdb->esc_like( '_lbite_' ) . '%' ) );
 		}
+
+		// Bestellpositions-Metadaten (Tab-Runden, Aktionsrabatte) – eigene,
+		// von HPOS unabhängige Tabelle, in der bisherigen Abfrage komplett
+		// vergessen.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key LIKE %s", $wpdb->esc_like( '_lbite_' ) . '%' ) );
+
+		// Kategorie-Zeitplan (`_lbite_menu_schedule`) liegt als Term-Meta vor.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->termmeta} WHERE meta_key LIKE %s", $wpdb->esc_like( '_lbite_' ) . '%' ) );
+
+		// Benutzer-Meta: zwei Präfix-Familien mit UND ohne führenden
+		// Unterstrich (z. B. `lbite_admin_theme` vs. `_lbite_guest_notes`/
+		// `_lbite_stamps`) – die bisherige Abfrage erfasste nur die Variante
+		// ohne Unterstrich und liess Allergiehinweise (Gesundheitsdaten!) und
+		// Stempelkarten-Stände zurück (Audit 26.09.2026, AP-16).
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE %s OR meta_key LIKE %s", $wpdb->esc_like( 'lbite_' ) . '%', $wpdb->esc_like( '_lbite_' ) . '%' ) );
+
+		// 4. Rollen & Capabilities entfernen – dieselbe Methode wie bei der
+		// Deaktivierung, damit beide Stellen nie auseinanderlaufen. Die
+		// bisherige, hier fest kopierte Rollen-/Cap-Liste war veraltet: sie
+		// kannte weder `lbite_manager`/`lbite_staff` noch die seither
+		// ergänzten Capabilities (`lbite_manage_reservations`,
+		// `lbite_view_statistics`, `lbite_run_setup`,
+		// `lbite_manage_location_settings`) (Audit 26.09.2026, AP-16).
+		LBite_Roles::remove_roles();
 
 		// 5. Cron Jobs entfernen.
 		$cron_hooks = array( 'lbite_check_scheduled_orders', 'lbite_send_pickup_reminders' );

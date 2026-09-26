@@ -82,6 +82,12 @@ class LBite_Stampcard {
 		// zulässigen Bestellwert statt den Rabatt selbst zu deckeln.
 		$this->loader->add_action( 'woocommerce_before_calculate_totals', $this, 'reset_discount_tracking', 5 );
 		$this->loader->add_filter( 'woocommerce_coupon_get_discount_amount', $this, 'cap_percent_discount', 10, 5 );
+
+		// Stempelstand und Gutscheincode sind personenbezogene Daten - ohne
+		// diese beiden Filter tauchten sie in Werkzeuge → Persönliche Daten
+		// weder im Export noch bei der Löschung auf (Audit 26.09.2026, AP-16).
+		$this->loader->add_filter( 'wp_privacy_personal_data_exporters', $this, 'register_privacy_exporter' );
+		$this->loader->add_filter( 'wp_privacy_personal_data_erasers', $this, 'register_privacy_eraser' );
 	}
 
 	/* ═════════════════════════════════════════════════════════════════
@@ -362,6 +368,104 @@ class LBite_Stampcard {
 	 */
 	public function render_account_card() {
 		$this->render_card();
+	}
+
+	/* ═════════════════════════════════════════════════════════════════
+	 * Datenschutz (Persönliche Daten exportieren/löschen)
+	 * ═════════════════════════════════════════════════════════════════ */
+
+	/**
+	 * Exporteur registrieren
+	 *
+	 * @param array $exporters Bestehende Exporteure.
+	 * @return array
+	 */
+	public function register_privacy_exporter( $exporters ) {
+		$exporters['lbite-stampcard'] = array(
+			'exporter_friendly_name' => __( 'Libre Bite Stamp Card', 'libre-bite' ),
+			'callback'               => array( $this, 'export_data' ),
+		);
+		return $exporters;
+	}
+
+	/**
+	 * Daten für den Export zusammenstellen
+	 *
+	 * @param string $email_address E-Mail-Adresse der betroffenen Person.
+	 * @return array
+	 */
+	public function export_data( $email_address ) {
+		$user        = get_user_by( 'email', $email_address );
+		$export_data = array();
+
+		if ( $user ) {
+			$count  = (int) get_user_meta( $user->ID, self::META_COUNT, true );
+			$coupon = (string) get_user_meta( $user->ID, self::META_COUPON, true );
+
+			if ( $count > 0 || '' !== $coupon ) {
+				$items = array(
+					array( 'name' => __( 'Stamps', 'libre-bite' ), 'value' => $count ),
+				);
+				if ( '' !== $coupon ) {
+					$items[] = array( 'name' => __( 'Reward Coupon', 'libre-bite' ), 'value' => $coupon );
+				}
+
+				$export_data[] = array(
+					'group_id'    => 'lbite-stampcard',
+					'group_label' => __( 'Stamp Card', 'libre-bite' ),
+					'item_id'     => 'lbite-stampcard',
+					'data'        => $items,
+				);
+			}
+		}
+
+		return array(
+			'data' => $export_data,
+			'done' => true,
+		);
+	}
+
+	/**
+	 * Eraser registrieren
+	 *
+	 * @param array $erasers Bestehende Eraser.
+	 * @return array
+	 */
+	public function register_privacy_eraser( $erasers ) {
+		$erasers['lbite-stampcard'] = array(
+			'eraser_friendly_name' => __( 'Libre Bite Stamp Card', 'libre-bite' ),
+			'callback'             => array( $this, 'erase_data' ),
+		);
+		return $erasers;
+	}
+
+	/**
+	 * Stempelstand und Gutscheincode löschen
+	 *
+	 * @param string $email_address E-Mail-Adresse der betroffenen Person.
+	 * @return array
+	 */
+	public function erase_data( $email_address ) {
+		$user          = get_user_by( 'email', $email_address );
+		$items_removed = false;
+
+		if ( $user ) {
+			if ( '' !== (string) get_user_meta( $user->ID, self::META_COUNT, true ) ) {
+				delete_user_meta( $user->ID, self::META_COUNT );
+				$items_removed = true;
+			}
+			if ( '' !== (string) get_user_meta( $user->ID, self::META_COUPON, true ) ) {
+				delete_user_meta( $user->ID, self::META_COUPON );
+				$items_removed = true;
+			}
+		}
+
+		return array(
+			'items_removed'  => $items_removed,
+			'items_retained' => false,
+			'messages'       => array(),
+			'done'           => true,
+		);
 	}
 
 	/**

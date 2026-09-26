@@ -66,6 +66,7 @@ class LBite_Admin {
 		$this->loader->add_action( 'personal_options_update', $this, 'save_theme_user_option' );
 		$this->loader->add_action( 'edit_user_profile_update', $this, 'save_theme_user_option' );
 		$this->loader->add_action( 'admin_init', $this, 'maybe_upgrade' );
+		$this->loader->add_action( 'admin_init', $this, 'add_privacy_policy_content' );
 		$this->loader->add_action( 'admin_notices', $this, 'render_checkout_block_notice' );
 
 		// Während der Entwicklung den Änderungszeitpunkt als Versionsangabe der
@@ -176,6 +177,30 @@ class LBite_Admin {
 	 */
 	public function maybe_upgrade() {
 		LBite_Installer::maybe_upgrade();
+	}
+
+	/**
+	 * Datenschutzerklärung ergänzen
+	 *
+	 * Kurzer, sachlicher Hinweis auf die Daten, die dieses Plugin über
+	 * Gäste und Kunden speichert – Werkzeuge → Datenschutz → Entwurf
+	 * für Datenschutzerklärung erstellen übernimmt den Text automatisch
+	 * (Audit 26.09.2026, AP-16).
+	 */
+	public function add_privacy_policy_content() {
+		if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
+			return;
+		}
+
+		$content = '<p class="privacy-policy-tutorial">' . esc_html__( 'Libre Bite processes the following data in connection with orders and reservations placed through this site:', 'libre-bite' ) . '</p>'
+			. '<ul>'
+			. '<li>' . esc_html__( 'Order details such as pickup location, pickup time, order type, payment method and (for restaurant tables) the table number.', 'libre-bite' ) . '</li>'
+			. '<li>' . esc_html__( 'For registered customers, optional notes about allergies, dietary preferences and stamp card / loyalty reward progress, stored on the customer account.', 'libre-bite' ) . '</li>'
+			. '<li>' . esc_html__( 'For reservations, the contact details, party size and any notes provided when booking a table.', 'libre-bite' ) . '</li>'
+			. '</ul>'
+			. '<p>' . esc_html__( 'This data can be exported or erased using the Export Personal Data and Erase Personal Data tools.', 'libre-bite' ) . '</p>';
+
+		wp_add_privacy_policy_content( __( 'Libre Bite', 'libre-bite' ), wp_kses_post( $content ) );
 	}
 
 	/**

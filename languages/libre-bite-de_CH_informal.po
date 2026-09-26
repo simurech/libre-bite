@@ -8824,6 +8824,48 @@ msgid_plural "%1$d more orders and you get %2$s off."
 msgstr[0] "Noch %1$d Bestellung und du erhältst %2$s Rabatt."
 msgstr[1] "Noch %1$d Bestellungen und du erhältst %2$s Rabatt."
 
+#: includes/admin/class-admin.php:195
+msgid "Libre Bite processes the following data in connection with orders and reservations placed through this site:"
+msgstr "Libre Bite verarbeitet im Zusammenhang mit über diese Website aufgegebenen Bestellungen und Reservierungen folgende Daten:"
+
+#: includes/admin/class-admin.php:197
+msgid "Order details such as pickup location, pickup time, order type, payment method and (for restaurant tables) the table number."
+msgstr "Bestelldetails wie Abholstandort, Abholzeit, Bestellart, Zahlungsart und (bei Tischbestellungen) die Tischnummer."
+
+#: includes/admin/class-admin.php:198
+msgid "For registered customers, optional notes about allergies, dietary preferences and stamp card / loyalty reward progress, stored on the customer account."
+msgstr "Bei Kunden mit einem Kundenkonto optionale Hinweise zu Allergien, Ernährungsvorlieben und dem Fortschritt der Stempelkarte, gespeichert im Kundenkonto."
+
+#: includes/admin/class-admin.php:199
+msgid "For reservations, the contact details, party size and any notes provided when booking a table."
+msgstr "Bei Reservierungen die Kontaktdaten, die Personenzahl und allfällige Notizen, die bei der Tischbuchung angegeben wurden."
+
+#: includes/admin/class-admin.php:201
+msgid "This data can be exported or erased using the Export Personal Data and Erase Personal Data tools."
+msgstr "Diese Daten können über die Werkzeuge «Persönliche Daten exportieren» und «Persönliche Daten löschen» exportiert oder gelöscht werden."
+
+#: includes/modules/guest-notes/class-guest-notes.php:184
+#: includes/modules/guest-notes/class-guest-notes.php:235
+msgid "Libre Bite Guest Notes"
+msgstr "Libre Bite Gästenotizen"
+
+#: includes/modules/guest-notes/class-guest-notes.php:208
+msgid "Allergies"
+msgstr "Allergien"
+
+#: includes/modules/stampcard/class-stampcard.php:385
+#: includes/modules/stampcard/class-stampcard.php:436
+msgid "Libre Bite Stamp Card"
+msgstr "Libre Bite Stempelkarte"
+
+#: includes/modules/stampcard/class-stampcard.php:407
+msgid "Stamps"
+msgstr "Stempel"
+
+#: includes/modules/stampcard/class-stampcard.php:410
+msgid "Reward Coupon"
+msgstr "Belohnungsgutschein"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 
