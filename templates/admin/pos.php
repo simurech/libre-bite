@@ -8,6 +8,12 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+// WooCommerce liefert Symbole wie CHF als HTML-Entities ("&#67;&#72;&#70;"),
+// für direktes echo gedacht - esc_html() escaped das "&" davon noch einmal
+// und liess die Codes wörtlich statt "CHF" erscheinen (Nutzer-Fund
+// 2026-09-27).
+$lbite_pos_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' );
 ?>
 
 <div class="wrap lbite-pos">
@@ -165,7 +171,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="lbite-pos-totals">
 				<div class="lbite-total-line">
 					<span><?php esc_html_e( 'Subtotal:', 'libre-bite' ); ?></span>
-					<span id="lbite-pos-subtotal">0,00 <?php echo esc_html( get_woocommerce_currency_symbol() ); ?></span>
+					<span id="lbite-pos-subtotal">0,00 <?php echo esc_html( $lbite_pos_currency_symbol ); ?></span>
 				</div>
 				<div class="lbite-total-line lbite-discount-line" id="lbite-pos-discount-line" style="display:none;">
 					<span><?php esc_html_e( 'Discount:', 'libre-bite' ); ?></span>
@@ -173,7 +179,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 				<div class="lbite-total-line lbite-total-grand">
 					<span><?php esc_html_e( 'Total:', 'libre-bite' ); ?></span>
-					<span id="lbite-pos-total">0,00 <?php echo esc_html( get_woocommerce_currency_symbol() ); ?></span>
+					<span id="lbite-pos-total">0,00 <?php echo esc_html( $lbite_pos_currency_symbol ); ?></span>
 				</div>
 			</div>
 

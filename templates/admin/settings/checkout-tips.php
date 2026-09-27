@@ -22,6 +22,11 @@ $lbite_tip_lbl_1      = get_option( 'lbite_tip_label_1', '' );
 $lbite_tip_lbl_2      = get_option( 'lbite_tip_label_2', '' );
 $lbite_tip_lbl_3      = get_option( 'lbite_tip_label_3', '' );
 $lbite_tip_is_fixed   = 'fixed' === $lbite_tip_mode;
+// WooCommerce liefert Symbole wie CHF als HTML-Entities ("&#67;&#72;&#70;"),
+// für direktes echo gedacht - esc_html() bzw. eine JS-textContent-Zuweisung
+// escaped/übernimmt das "&" davon noch einmal und liess die Codes wörtlich
+// statt "CHF" erscheinen (Nutzer-Fund 2026-09-27).
+$lbite_tip_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' );
 ?>
 <p class="description lbite-settings-intro">
 	<?php esc_html_e( 'Let customers add a tip at checkout, as a percentage of the order or a fixed amount.', 'libre-bite' ); ?>
@@ -91,7 +96,7 @@ $lbite_tip_is_fixed   = 'fixed' === $lbite_tip_mode;
 		<th><?php esc_html_e( 'Option 1', 'libre-bite' ); ?></th>
 		<td>
 			<input type="number" step="0.01" min="0" id="lbite_tip_percentage_1" name="lbite_tip_percentage_1" value="<?php echo esc_attr( $lbite_tip_pct_1 ); ?>" class="small-text">
-			<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( get_woocommerce_currency_symbol() ) : '%'; ?></span>
+			<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( $lbite_tip_currency_symbol ) : '%'; ?></span>
 			&nbsp;&nbsp;
 			<input type="text" id="lbite_tip_label_1" name="lbite_tip_label_1" value="<?php echo esc_attr( $lbite_tip_lbl_1 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
 		</td>
@@ -100,7 +105,7 @@ $lbite_tip_is_fixed   = 'fixed' === $lbite_tip_mode;
 		<th><?php esc_html_e( 'Option 2', 'libre-bite' ); ?></th>
 		<td>
 			<input type="number" step="0.01" min="0" id="lbite_tip_percentage_2" name="lbite_tip_percentage_2" value="<?php echo esc_attr( $lbite_tip_pct_2 ); ?>" class="small-text">
-			<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( get_woocommerce_currency_symbol() ) : '%'; ?></span>
+			<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( $lbite_tip_currency_symbol ) : '%'; ?></span>
 			&nbsp;&nbsp;
 			<input type="text" id="lbite_tip_label_2" name="lbite_tip_label_2" value="<?php echo esc_attr( $lbite_tip_lbl_2 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
 		</td>
@@ -109,7 +114,7 @@ $lbite_tip_is_fixed   = 'fixed' === $lbite_tip_mode;
 		<th><?php esc_html_e( 'Option 3', 'libre-bite' ); ?></th>
 		<td>
 			<input type="number" step="0.01" min="0" id="lbite_tip_percentage_3" name="lbite_tip_percentage_3" value="<?php echo esc_attr( $lbite_tip_pct_3 ); ?>" class="small-text">
-			<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( get_woocommerce_currency_symbol() ) : '%'; ?></span>
+			<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( $lbite_tip_currency_symbol ) : '%'; ?></span>
 			&nbsp;&nbsp;
 			<input type="text" id="lbite_tip_label_3" name="lbite_tip_label_3" value="<?php echo esc_attr( $lbite_tip_lbl_3 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
 		</td>
@@ -130,7 +135,7 @@ $lbite_tip_is_fixed   = 'fixed' === $lbite_tip_mode;
 	(function() {
 		var radios = document.querySelectorAll('input[name="lbite_tip_mode"]');
 		var units  = document.querySelectorAll('.lbite-tip-unit');
-		var currency = <?php echo wp_json_encode( get_woocommerce_currency_symbol() ); ?>;
+		var currency = <?php echo wp_json_encode( $lbite_tip_currency_symbol ); ?>;
 
 		function refreshUnits() {
 			var isFixed = document.querySelector('input[name="lbite_tip_mode"]:checked').value === 'fixed';

@@ -137,7 +137,14 @@ class LBite_Product_Options {
 		$price = get_post_meta( $post->ID, '_lbite_price', true );
 		?>
 		<p>
-			<label for="lbite_option_price"><?php esc_html_e( 'Price', 'libre-bite' ); ?> (<?php echo esc_html( get_woocommerce_currency_symbol() ); ?>)</label><br>
+			<?php
+			// WooCommerce liefert Symbole wie CHF als HTML-Entities
+			// ("&#67;&#72;&#70;"), für direktes echo gedacht - esc_html()
+			// escaped das "&" davon noch einmal und liess die Codes wörtlich
+			// statt "CHF" erscheinen (Nutzer-Fund 2026-09-27).
+			$lbite_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' );
+			?>
+			<label for="lbite_option_price"><?php esc_html_e( 'Price', 'libre-bite' ); ?> (<?php echo esc_html( $lbite_currency_symbol ); ?>)</label><br>
 			<input type="number" step="0.01" min="0" id="lbite_option_price" name="lbite_option_price" value="<?php echo esc_attr( $price ); ?>" style="width: 100%;">
 		</p>
 		<p class="description">

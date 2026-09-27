@@ -150,7 +150,12 @@ class LBite_POS {
 				'enableRounding'   => lbite_feature_enabled( 'enable_rounding' ),
 				'enableItemNotes'  => lbite_feature_enabled( 'enable_item_notes_pos' ),
 				'userId'         => get_current_user_id(),
-				'currency'       => get_woocommerce_currency_symbol(),
+				// WooCommerce liefert Symbole wie CHF als HTML-Entities
+				// ("&#67;&#72;&#70;") - für direktes echo in HTML gedacht, nicht
+				// für JS textContent/.text(), das Entities nie dekodiert. Ohne
+				// html_entity_decode() erschienen die Codes wörtlich statt "CHF"
+				// bei jedem Preis im POS (Nutzer-Fund 2026-09-27).
+				'currency'       => html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ),
 				'preloadData'    => $product_data,
 				'locationColors' => $pos_location_colors,
 				'strings'        => array(

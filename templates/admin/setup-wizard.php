@@ -233,7 +233,13 @@ $lbite_defs       = LBite_Features::get_definitions();
 							var p2 = document.getElementById('lbite_tip_percentage_2');
 							var p3 = document.getElementById('lbite_tip_percentage_3');
 							var row = document.getElementById('lbite-wizard-tip-row');
-							var currency = <?php echo wp_json_encode( function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '%' ); ?>;
+							// WooCommerce liefert Symbole wie CHF als HTML-Entities (siehe
+							// get_woocommerce_currency_symbols() im WC-Kern, z. B.
+							// "&#67;&#72;&#70;") - für HTML-Ausgabe per echo gedacht, nicht
+							// für textContent, das Entities nie dekodiert. Ohne
+							// html_entity_decode() erschienen die Codes wörtlich statt
+							// "CHF" (Nutzer-Fund 2026-09-27).
+							var currency = <?php echo wp_json_encode( function_exists( 'get_woocommerce_currency_symbol' ) ? html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ) : '%' ); ?>;
 							function update() {
 								if ( ! row ) { return; }
 								var unit = ( mode && 'fixed' === mode.value ) ? currency : '%';
