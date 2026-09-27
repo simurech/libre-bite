@@ -6863,6 +6863,54 @@ msgstr "Beispielsortiment angelegt. Der Beispielstandort wurde als Entwurf gespe
 msgid "Every Minute"
 msgstr "Jede Minute"
 
+#: templates/admin/checkout-fields.php:146
+msgid "Order Notes, Tips & Section Titles"
+msgstr "Bestellnotizen, Trinkgeld & Abschnittstitel"
+
+#: templates/admin/checkout-fields.php:160
+msgid "A second, more specific switch on top of the \"Tips\" feature under Checkout — uncheck this to hide tipping here while keeping the feature and its configured amounts turned on. Has no effect if \"Tips\" is off."
+msgstr "Ein zweiter, spezifischerer Schalter zusätzlich zur Funktion «Trinkgeld» unter Checkout – deaktivieren Sie ihn, um Trinkgeld hier auszublenden, während die Funktion und ihre konfigurierten Beträge weiterhin aktiv bleiben. Hat keine Wirkung, wenn «Trinkgeld» ausgeschaltet ist."
+
+#: templates/admin/dashboard.php:229
+msgid "Inactive"
+msgstr "Inaktiv"
+
+#: templates/admin/settings/branding.php:47
+msgid "Storefront Branding"
+msgstr "Shop-Branding"
+
+#: templates/admin/settings/branding.php:123
+msgid "Your Admin Theme"
+msgstr "Ihr Admin-Farbschema"
+
+#: templates/admin/settings/branding.php:125
+msgid "Only affects your own view of the Libre Bite screens, not the shop your guests see."
+msgstr "Betrifft nur Ihre eigene Ansicht der Libre-Bite-Seiten, nicht den Shop, den Ihre Gäste sehen."
+
+#: templates/admin/settings/branding.php:138
+msgid "This is a personal setting — it follows your account, so a kitchen tablet and an office computer can differ."
+msgstr "Diese Einstellung ist persönlich und hängt an Ihrem Konto – Küchen-Tablet und Bürorechner dürfen sich also unterscheiden."
+
+#: templates/admin/support-page.php:27
+msgid "Questions or a problem with an order? Get in touch using the details below."
+msgstr "Fragen oder Probleme mit einer Bestellung? Melden Sie sich über die untenstehenden Kontaktdaten."
+
+#: templates/admin/support-settings.php:26
+msgid "Configure the support contact information shown on the Support page — visible to your entire staff, including roles without access to Settings."
+msgstr "Konfigurieren Sie die Support-Kontaktdaten, die auf der Support-Seite angezeigt werden – sichtbar für Ihr gesamtes Personal, auch für Rollen ohne Zugriff auf die Einstellungen."
+
+#: templates/admin/support-settings.php:90
+msgid "Support Conditions"
+msgstr "Support-Konditionen"
+
+#: templates/admin/support-settings.php:98
+msgid "Shown on the Support page your staff sees — use it to explain whether and how support requests are billed."
+msgstr "Wird auf der Support-Seite angezeigt, die Ihr Personal sieht – nutzen Sie es, um zu erklären, ob und wie Support-Anfragen verrechnet werden."
+
+#: templates/admin/support-settings.php:121
+msgid "This is how support information will be displayed on the Support page:"
+msgstr "So werden die Support-Informationen auf der Support-Seite angezeigt:"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

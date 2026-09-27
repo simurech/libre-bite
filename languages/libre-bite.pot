@@ -7032,3 +7032,51 @@ msgstr ""
 #: libre-bite.php:325
 msgid "Every Minute"
 msgstr ""
+
+#: templates/admin/checkout-fields.php:146
+msgid "Order Notes, Tips & Section Titles"
+msgstr ""
+
+#: templates/admin/checkout-fields.php:160
+msgid "A second, more specific switch on top of the \"Tips\" feature under Checkout — uncheck this to hide tipping here while keeping the feature and its configured amounts turned on. Has no effect if \"Tips\" is off."
+msgstr ""
+
+#: templates/admin/dashboard.php:229
+msgid "Inactive"
+msgstr ""
+
+#: templates/admin/settings/branding.php:47
+msgid "Storefront Branding"
+msgstr ""
+
+#: templates/admin/settings/branding.php:123
+msgid "Your Admin Theme"
+msgstr ""
+
+#: templates/admin/settings/branding.php:125
+msgid "Only affects your own view of the Libre Bite screens, not the shop your guests see."
+msgstr ""
+
+#: templates/admin/settings/branding.php:138
+msgid "This is a personal setting — it follows your account, so a kitchen tablet and an office computer can differ."
+msgstr ""
+
+#: templates/admin/support-page.php:27
+msgid "Questions or a problem with an order? Get in touch using the details below."
+msgstr ""
+
+#: templates/admin/support-settings.php:26
+msgid "Configure the support contact information shown on the Support page — visible to your entire staff, including roles without access to Settings."
+msgstr ""
+
+#: templates/admin/support-settings.php:90
+msgid "Support Conditions"
+msgstr ""
+
+#: templates/admin/support-settings.php:98
+msgid "Shown on the Support page your staff sees — use it to explain whether and how support requests are billed."
+msgstr ""
+
+#: templates/admin/support-settings.php:121
+msgid "This is how support information will be displayed on the Support page:"
+msgstr ""
