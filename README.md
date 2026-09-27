@@ -30,7 +30,7 @@ libre-bite/
 │   ├── admin/              # Admin-Menüs, Einstellungsseiten, Rollen
 │   └── modules/            # Funktionsmodule (Kanban, POS, Standorte, Checkout …)
 ├── templates/
-│   ├── admin/              # Admin-Views (Kanban, POS, Wizard, Settings, Help)
+│   ├── admin/              # Admin-Views (Kanban, POS, Wizard, Settings, Support)
 │   ├── frontend/           # Menü-Ansicht, Reservierungsformular
 │   ├── emails/             # E-Mail-Vorlagen
 │   └── *.php               # Checkout- und Standort-Templates
