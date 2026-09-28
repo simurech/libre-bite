@@ -192,7 +192,7 @@ $lbite_defs       = LBite_Features::get_definitions();
 						</div>
 						<?php
 						/* translators: 1: number of stamps, 2: discount percentage */
-						$lbite_stampcard_preview_text = wp_json_encode( __( '%1$d stamps → %2$d%% off the next order', 'libre-bite' ) );
+						$lbite_stampcard_preview_text = __( '%1$d stamps → %2$d%% off the next order', 'libre-bite' );
 						?>
 						<script>
 						(function() {
@@ -213,7 +213,7 @@ $lbite_defs       = LBite_Features::get_definitions();
 								// Ganzer Satz mit Platzhaltern statt aneinandergehängter Fragmente -
 								// Wortstellung und Grammatik unterscheiden sich je Sprache
 								// (Audit 26.09.2026, AP-19).
-								noteEl.textContent = <?php echo $lbite_stampcard_preview_text; ?>
+								noteEl.textContent = <?php echo wp_json_encode( $lbite_stampcard_preview_text ); ?>
 									.replace('%1$d', t)
 									.replace('%2$d%%', d + '%');
 							}

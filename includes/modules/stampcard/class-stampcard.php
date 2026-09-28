@@ -508,11 +508,9 @@ class LBite_Stampcard {
 			<?php
 			// Fixbetrag zeigt bisher immer "% Rabatt", auch wenn discount_type
 			// auf "fixed" stand (Audit 26.09.2026, AP-11).
-			$lbite_discount_display = esc_html(
-				'fixed' === $settings['discount_type']
-					? wp_strip_all_tags( wc_price( $settings['discount'] ) )
-					: (int) $settings['discount'] . '%'
-			);
+			$lbite_discount_display = 'fixed' === $settings['discount_type']
+				? wp_strip_all_tags( wc_price( $settings['discount'] ) )
+				: (int) $settings['discount'] . '%';
 			?>
 			<?php if ( '' !== $coupon ) : ?>
 				<p class="lbite-stampcard__reward">
@@ -520,7 +518,7 @@ class LBite_Stampcard {
 					printf(
 						/* translators: 1: discount amount or percentage, 2: coupon code */
 						esc_html__( 'Your reward is ready: %1$s off with the code %2$s', 'libre-bite' ),
-						$lbite_discount_display,
+						esc_html( $lbite_discount_display ),
 						'<strong>' . esc_html( $coupon ) . '</strong>'
 					);
 					?>
@@ -533,7 +531,7 @@ class LBite_Stampcard {
 						/* translators: 1: remaining stamps, 2: discount amount or percentage */
 						esc_html( _n( '%1$d more order and you get %2$s off.', '%1$d more orders and you get %2$s off.', $lbite_left, 'libre-bite' ) ),
 						(int) $lbite_left,
-						$lbite_discount_display
+						esc_html( $lbite_discount_display )
 					);
 					?>
 				</p>
