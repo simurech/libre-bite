@@ -71,6 +71,18 @@ class LBite_Plugin {
 		// hier und nicht nur im is_admin()-Zweig laden (Nutzer-Fund
 		// 2026-09-28 - Menü-Ansicht bekam ohne dies nie eine Primärfarbe).
 		require_once LBITE_PLUGIN_DIR . 'includes/core/class-branding.php';
+
+		// Während der Entwicklung den Änderungszeitpunkt als Versionsangabe der
+		// Asset-URLs verwenden. Bewusst hier statt in LBite_Admin (nur
+		// is_admin()) registriert, sonst bekommen Frontend-Assets (Menü-Ansicht,
+		// Checkout etc.) nie den Änderungszeitpunkt als Cache-Schlüssel und
+		// jede Korrektur erreicht den Browser erst nach einem harten Neuladen
+		// (Nutzer-Fund 2026-09-28).
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			require_once LBITE_PLUGIN_DIR . 'includes/admin/class-admin.php';
+			$this->loader->add_filter( 'style_loader_src', 'LBite_Admin', 'bust_asset_cache_during_development' );
+			$this->loader->add_filter( 'script_loader_src', 'LBite_Admin', 'bust_asset_cache_during_development' );
+		}
 	}
 
 	/**
@@ -147,6 +159,7 @@ class LBite_Plugin {
 			// mit auslösen – sonst speichert der Schalter, ohne dass Code läuft.
 			if ( lbite_feature_enabled( 'enable_nutritional_info' )
 				|| lbite_feature_enabled( 'enable_allergens' )
+				|| lbite_feature_enabled( 'enable_dietary_labels' )
 				|| lbite_feature_enabled( 'enable_dietary_filter' ) ) {
 				$this->load_module( 'nutritional-info', 'LBite_Nutritional_Info' );
 			}

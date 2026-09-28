@@ -178,6 +178,8 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: 12px;
+	width: 100%;
+	box-sizing: border-box;
 	background: #f8f8f8;
 	border: 1px solid #e5e5e5;
 	border-radius: 4px;
@@ -455,6 +457,8 @@
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 8px;
+	width: 100%;
+	box-sizing: border-box;
 	margin: 0 0 20px;
 	padding: 12px 14px;
 	border: 1px solid #e0e0e0;

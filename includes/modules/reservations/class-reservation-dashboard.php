@@ -154,7 +154,7 @@ class LBite_Reservation_Dashboard {
 			array(
 				'reservations' => $reservations,
 				'tables'       => $tables,
-				'statuses'     => LBite_Reservations::STATUSES,
+				'statuses'     => LBite_Reservations::get_statuses(),
 			)
 		);
 	}
@@ -176,7 +176,7 @@ class LBite_Reservation_Dashboard {
 		$reservation_id = isset( $_POST['reservation_id'] ) ? intval( wp_unslash( $_POST['reservation_id'] ) ) : 0;
 		$status         = isset( $_POST['status'] ) ? sanitize_key( wp_unslash( $_POST['status'] ) ) : '';
 
-		if ( ! $reservation_id || ! array_key_exists( $status, LBite_Reservations::STATUSES ) ) {
+		if ( ! $reservation_id || ! array_key_exists( $status, LBite_Reservations::get_statuses() ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid request', 'libre-bite' ) ) );
 		}
 

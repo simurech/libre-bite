@@ -699,6 +699,25 @@ class LBite_Order_Dashboard {
 	}
 
 	/**
+	 * Startzeitpunkt der Zubereitung einmalig festhalten.
+	 *
+	 * Anders als `_lbite_status_changed` (wird bei jedem Statuswechsel
+	 * überschrieben, hält nur "seit wann im aktuellen Status" für den
+	 * KDS-Live-Timer) bleibt diese Meta nach dem ersten Eintritt in die
+	 * "preparing"-Spalte unverändert bestehen - Grundlage für die
+	 * Ø-Wartezeit im Standort-Dashboard-Widget. Setzt die Meta nur auf dem
+	 * übergebenen Bestellobjekt, speichert nicht selbst: alle drei
+	 * Aufrufstellen speichern die Bestellung im Anschluss ohnehin.
+	 *
+	 * @param WC_Order $order Bestellung.
+	 */
+	private function maybe_record_preparing_started( $order ) {
+		if ( ! $order->get_meta( '_lbite_preparing_started_at', true ) ) {
+			$order->update_meta_data( '_lbite_preparing_started_at', current_time( 'mysql' ) );
+		}
+	}
+
+	/**
 	 * Kanban-Status einer Bestellung setzen
 	 *
 	 * Gemeinsame Grundlage für den AJAX-Endpunkt und die REST-Route
@@ -756,6 +775,9 @@ class LBite_Order_Dashboard {
 
 		$order->update_meta_data( '_lbite_order_status', $new_status );
 		$order->update_meta_data( '_lbite_status_changed', current_time( 'mysql' ) );
+		if ( self::KEY_ACTIVE === $new_status ) {
+			$this->maybe_record_preparing_started( $order );
+		}
 		$order->save();
 
 		// Menü-Badge-Cache invalidieren.
@@ -1012,6 +1034,7 @@ class LBite_Order_Dashboard {
 			if ( $current_time >= $prep_start_time ) {
 				$order->update_meta_data( '_lbite_order_status', self::KEY_ACTIVE );
 				$order->update_meta_data( '_lbite_status_changed', current_time( 'mysql' ) );
+				$this->maybe_record_preparing_started( $order );
 				$order->save();
 
 				do_action( 'lbite_order_auto_moved_to_preparing', $order->get_id() );
@@ -1046,6 +1069,9 @@ class LBite_Order_Dashboard {
 			$initial_status = $is_preorder ? self::KEY_PREORDER : self::KEY_ACTIVE;
 
 			$order->update_meta_data( '_lbite_order_status', $initial_status );
+			if ( self::KEY_ACTIVE === $initial_status ) {
+				$this->maybe_record_preparing_started( $order );
+			}
 			$order->save();
 
 			// Menü-Badge-Cache invalidieren.

@@ -70,14 +70,10 @@ class LBite_Admin {
 		$this->loader->add_action( 'admin_init', $this, 'add_privacy_policy_content' );
 		$this->loader->add_action( 'admin_notices', $this, 'render_checkout_block_notice' );
 
-		// Während der Entwicklung den Änderungszeitpunkt als Versionsangabe der
-		// Asset-URLs verwenden. Sonst bleibt die Plugin-Version der Cache-Schlüssel,
-		// und jede Korrektur an einer CSS-Datei innerhalb derselben Version
-		// erreicht den Browser erst nach einem harten Neuladen.
-		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			$this->loader->add_filter( 'style_loader_src', $this, 'bust_asset_cache_during_development' );
-			$this->loader->add_filter( 'script_loader_src', $this, 'bust_asset_cache_during_development' );
-		}
+		// Cache-Busting während der Entwicklung: siehe class-plugin.php,
+		// unconditional registriert (Nutzer-Fund 2026-09-28 - lief hier nur im
+		// is_admin()-Zweig und erreichte deshalb nie Frontend-Assets wie die
+		// Menü-Ansicht).
 
 		// WooCommerce leitet Benutzer ohne edit_posts/manage_woocommerce aus dem Backend um.
 		// lbite_staff hat keine dieser Capabilities, braucht aber Zugriff auf POS und Kanban.
@@ -122,6 +118,9 @@ class LBite_Admin {
 
 		// Support-Box im Admin-Footer
 		$this->loader->add_action( 'admin_footer', $this, 'render_support_footer' );
+
+		// Dashboard-Widget: Mini-Statistik pro Standort.
+		$this->loader->add_action( 'wp_dashboard_setup', $this, 'register_location_stats_widget' );
 
 		// Beleg-Versand (Premium): AJAX immer registrieren – wird von Kanban-Board und
 		// Bestellansicht benötigt, unabhängig vom aktiven Checkout-Modus.
@@ -568,6 +567,173 @@ class LBite_Admin {
 	}
 
 	/**
+	 * Dashboard-Widget "Mini-Statistik pro Standort" registrieren.
+	 *
+	 * Gleiche Rechteprüfung wie die Statistik-Seite - das Widget zeigt
+	 * dieselbe Art von Zahlen, nur kompakter und für den WordPress-Start-
+	 * bildschirm statt einer eigenen Seite.
+	 */
+	public function register_location_stats_widget() {
+		if ( ! current_user_can( 'lbite_view_statistics' ) ) {
+			return;
+		}
+
+		wp_add_dashboard_widget(
+			'lbite_location_stats',
+			__( 'Libre Bite: Locations Today', 'libre-bite' ),
+			array( $this, 'render_location_stats_widget' )
+		);
+	}
+
+	/**
+	 * Dashboard-Widget "Mini-Statistik pro Standort" ausgeben.
+	 *
+	 * Pro erlaubtem Standort: Bestellzahl + Umsatz des heutigen Tages
+	 * (gleiches Muster wie templates/admin/statistics.php) sowie die
+	 * durchschnittliche Wartezeit "jetzt zubereiten" -> "abgeschlossen"
+	 * der letzten 7 Tage, berechnet aus `_lbite_preparing_started_at`
+	 * (nie überschrieben, siehe LBite_Order_Dashboard::maybe_record_preparing_started())
+	 * und WooCommerce `date_completed`. Bestehende, bereits vor diesem
+	 * Feature abgeschlossene Bestellungen haben nie eine
+	 * `_lbite_preparing_started_at`-Meta erhalten - "No data yet" statt
+	 * einer irreführenden 0-Minuten-Anzeige ist deshalb der korrekte
+	 * Anfangszustand, kein Fehler.
+	 */
+	public function render_location_stats_widget() {
+		if ( ! current_user_can( 'lbite_view_statistics' ) ) {
+			return;
+		}
+
+		$lbite_allowed_ids = LBite_Access::get_allowed_location_ids();
+		$lbite_locations   = LBite_Locations::get_all_locations();
+
+		if ( null !== $lbite_allowed_ids ) {
+			$lbite_locations = array_values(
+				array_filter(
+					$lbite_locations,
+					function( $lbite_loc ) use ( $lbite_allowed_ids ) {
+						return in_array( $lbite_loc->ID, $lbite_allowed_ids, true );
+					}
+				)
+			);
+		}
+
+		if ( empty( $lbite_locations ) ) {
+			echo '<p>' . esc_html__( 'No locations available.', 'libre-bite' ) . '</p>';
+			return;
+		}
+
+		// Zeiträume wie in templates/admin/statistics.php berechnet: current_time('timestamp')
+		// liegt bereits in Standort-/Seitenzeit, gmdate() formatiert ohne erneute Verschiebung.
+		$lbite_now         = current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$lbite_today_start = gmdate( 'Y-m-d 00:00:00', $lbite_now );
+		$lbite_week_start  = gmdate( 'Y-m-d 00:00:00', strtotime( '-7 days', $lbite_now ) );
+
+		echo '<table class="lbite-dashboard-widget-table widefat striped">';
+		echo '<thead><tr>'
+			. '<th>' . esc_html__( 'Location', 'libre-bite' ) . '</th>'
+			. '<th>' . esc_html__( 'Orders Today', 'libre-bite' ) . '</th>'
+			. '<th>' . esc_html__( 'Revenue Today', 'libre-bite' ) . '</th>'
+			. '<th>' . esc_html__( 'Avg. Prep Time (7 Days)', 'libre-bite' ) . '</th>'
+			. '</tr></thead><tbody>';
+
+		foreach ( $lbite_locations as $lbite_loc ) {
+			// Bestellungen + Umsatz heute - gleiches Statusfilter wie die Statistik-Seite.
+			$lbite_today_orders = wc_get_orders(
+				array(
+					'type'       => 'shop_order',
+					'status'     => array( 'wc-completed', 'wc-processing' ),
+					'date_after' => $lbite_today_start,
+					'limit'      => -1,
+					'return'     => 'objects',
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Bestellfilterung nach Standort, auf ein einziges Kalendertag begrenzt.
+					'meta_query' => array(
+						array(
+							'key'   => '_lbite_location_id',
+							'value' => $lbite_loc->ID,
+						),
+					),
+				)
+			);
+
+			$lbite_order_count = count( $lbite_today_orders );
+			$lbite_revenue     = 0.0;
+			foreach ( $lbite_today_orders as $lbite_order ) {
+				$lbite_revenue += (float) $lbite_order->get_total();
+			}
+
+			// Ø Wartezeit "jetzt zubereiten" -> "abgeschlossen", rollierend letzte 7 Tage.
+			// EXISTS-Filter statt Roh-SQL: nur Bestellungen mit gesetzter
+			// _lbite_preparing_started_at-Meta kommen für die Auswertung infrage.
+			$lbite_wait_orders = wc_get_orders(
+				array(
+					'type'       => 'shop_order',
+					'status'     => array( 'completed' ),
+					'date_after' => $lbite_week_start,
+					'limit'      => 200,
+					'return'     => 'objects',
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Bestellfilterung nach Standort, auf 200 Einträge begrenzt.
+					'meta_query' => array(
+						array(
+							'key'   => '_lbite_location_id',
+							'value' => $lbite_loc->ID,
+						),
+						array(
+							'key'     => '_lbite_preparing_started_at',
+							'compare' => 'EXISTS',
+						),
+					),
+				)
+			);
+
+			$lbite_wait_seconds_total = 0;
+			$lbite_wait_sample_count  = 0;
+			foreach ( $lbite_wait_orders as $lbite_order ) {
+				$lbite_started_at = $lbite_order->get_meta( '_lbite_preparing_started_at', true );
+				$lbite_completed  = $lbite_order->get_date_completed();
+
+				if ( ! $lbite_started_at || ! $lbite_completed ) {
+					continue;
+				}
+
+				$lbite_started_ts = lbite_local_time_to_timestamp( $lbite_started_at );
+				$lbite_diff       = $lbite_completed->getTimestamp() - $lbite_started_ts;
+
+				if ( $lbite_started_ts <= 0 || $lbite_diff < 0 ) {
+					continue;
+				}
+
+				$lbite_wait_seconds_total += $lbite_diff;
+				$lbite_wait_sample_count++;
+			}
+
+			$lbite_wait_display = $lbite_wait_sample_count
+				? sprintf(
+					/* translators: %d: average preparation time in minutes. */
+					__( '%d min.', 'libre-bite' ),
+					round( $lbite_wait_seconds_total / $lbite_wait_sample_count / 60 )
+				)
+				: __( 'No data yet', 'libre-bite' );
+
+			printf(
+				'<tr><td>%1$s</td><td>%2$d</td><td>%3$s</td><td>%4$s</td></tr>',
+				esc_html( $lbite_loc->post_title ),
+				(int) $lbite_order_count,
+				wp_kses_post( wc_price( $lbite_revenue ) ),
+				esc_html( $lbite_wait_display )
+			);
+		}
+
+		echo '</tbody></table>';
+
+		printf(
+			'<p style="margin-top:12px;"><a href="%1$s">%2$s &rarr;</a></p>',
+			esc_url( admin_url( 'admin.php?page=lbite-statistics' ) ),
+			esc_html__( 'View full statistics', 'libre-bite' )
+		);
+	}
+
+	/**
 	 * Menü-Highlighting: Hauptmenü für LibreBite-CPTs aktiv halten.
 	 *
 	 * @param string $parent_file Aktueller Parent-File.
@@ -650,7 +816,7 @@ class LBite_Admin {
 	 * @param string $src Vollständige Asset-URL.
 	 * @return string
 	 */
-	public function bust_asset_cache_during_development( $src ) {
+	public static function bust_asset_cache_during_development( $src ) {
 		if ( ! is_string( $src ) || false === strpos( $src, LBITE_PLUGIN_URL ) ) {
 			return $src;
 		}

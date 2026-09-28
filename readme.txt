@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.0
+Stable tag: 3.6.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,20 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.1 =
+* Fix: Branding colors did not reach the announcement banner, since it renders independently of the other frontend shortcodes; also added a readable text color for very light brand colors.
+* Fix: Reservation statuses (Pending/Confirmed/Cancelled/Completed) were hardcoded in English and never translatable.
+* Feature: New "Redirect Standard Archives to Menu" setting - sends the default WooCommerce shop, category and tag pages to your configured menu page instead of leaving duplicate content.
+* Feature: New WordPress dashboard widget showing today's order count and revenue per location, plus the average time from "preparing" to "completed" over the last 7 days.
+* Fix: On pages using WooCommerce's own [products] shortcode without pagination, the dietary and location filter bars never appeared, and the availability hint showed as unstyled full content instead of a compact popup.
+* Feature: The theme-independent menu view ([lbite_menu]) now has a dietary filter bar, a location switcher, and a subtle "View product details" link on each item - none of these existed there before.
+* Fix: The floating "Your order" button in the menu view had unreadable text, since a generic style rule overrode the button's own text color.
+* Fix: The dietary filter's reset button in the menu view kept the browser's native button styling and looked broken; the section navigation also stayed visually highlighted after a click even though it only scrolls the page.
+* Fix: The dietary and location filter bars on the shop page were narrower than the rest of the page content.
+* Feature: Dietary Labels and Dietary Filter are now two independent settings, so a shop can show labels without the filter bar or the other way around. Existing installs keep their current behavior automatically.
+* Feature: The stamp card now has its own tab in My Account, next to Dashboard and Orders, instead of appearing inside the Dashboard tab.
+* Feature: The statistics page and its dashboard widget now also show average order preparation time, overall and per location.
 
 = 3.6.0 =
 * Fix: Adding an item in the theme-independent menu view showed the theme's own "View cart" link next to the button, shifting the product grid; the slide-in cart now opens automatically instead.

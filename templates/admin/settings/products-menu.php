@@ -70,6 +70,15 @@ $lbite_all_pages       = get_pages( array( 'post_status' => 'publish' ) );
 	<?php endif; ?>
 
 	<?php
+	$lbite_toggle_key             = 'enable_menu_redirect_archives';
+	$lbite_toggle_label           = __( 'Redirect Standard Archives to Menu', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Redirects the default WooCommerce shop, category and tag pages (301) to the menu page configured above, avoiding duplicate content between your theme\'s product grid and the menu.', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+	?>
+
+	<?php
 	$lbite_toggle_key             = 'enable_menu_schedule';
 	$lbite_toggle_label           = __( 'Scheduled Availability', 'libre-bite' );
 	$lbite_toggle_description     = __( 'Limit products or whole categories to certain weekdays, times of day, or date ranges — a breakfast menu that disappears at 11:30, a seasonal item that only shows in December. Configured per product and per product category.', 'libre-bite' );

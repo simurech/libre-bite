@@ -36,9 +36,16 @@ $lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()
 	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 
+	$lbite_toggle_key             = 'enable_dietary_labels';
+	$lbite_toggle_label           = __( 'Dietary Labels', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Label dishes as vegan, vegetarian, gluten-free, lactose-free, spicy or alcohol-free on the product page and menu view. Works independently of the filter below.', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
 	$lbite_toggle_key             = 'enable_dietary_filter';
-	$lbite_toggle_label           = __( 'Dietary Labels & Filter', 'libre-bite' );
-	$lbite_toggle_description     = __( 'Label dishes as vegan, vegetarian, gluten-free, lactose-free, spicy or alcohol-free. Guests get a filter bar above the shop grid and can combine several labels at once.', 'libre-bite' );
+	$lbite_toggle_label           = __( 'Dietary Filter', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Add a filter bar above the shop grid and menu view so guests can combine several dietary labels at once, without reloading the page.', 'libre-bite' );
 	$lbite_toggle_is_pro          = true;
 	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';

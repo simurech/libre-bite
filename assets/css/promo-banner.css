@@ -8,7 +8,7 @@
 .lbite-promo-banner {
 	padding: 10px 16px;
 	background: var(--lbite-color-primary, #0073aa);
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 	font-size: 15px;
 	font-weight: 600;
 	line-height: 1.4;
@@ -16,7 +16,7 @@
 }
 
 .lbite-promo-banner a {
-	color: #fff !important;
+	color: var(--lbite-color-primary-contrast, #fff) !important;
 	text-decoration: underline;
 }
 

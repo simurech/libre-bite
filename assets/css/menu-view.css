@@ -117,7 +117,7 @@ body .lbite-menu-view select {
 	padding: 10px 0;
 	margin-bottom: 12px;
 	overflow-x: auto;
-	background: var(--lbite-menu-canvas);
+	background: var(--lbite-menu-surface);
 	scrollbar-width: thin;
 }
 
@@ -134,12 +134,101 @@ body .lbite-menu-view .lbite-menu-nav__item {
 	transition: background-color .15s ease, color .15s ease, border-color .15s ease;
 }
 
-body .lbite-menu-view .lbite-menu-nav__item.is-active,
+/* Bewusst nur :hover statt zusätzlich .is-active: ein Klick scrollt lediglich
+   zum Abschnitt, ist keine dauerhafte Auswahl - der Button soll danach wieder
+   normal aussehen (Nutzer-Fund 2026-09-28). */
 body .lbite-menu-view .lbite-menu-nav__item:hover {
 	background: var(--lbite-menu-primary);
 	border-color: var(--lbite-menu-primary);
 	color: var(--lbite-menu-primary-contrast);
 }
+
+/* ── Standort-Umschalter ───────────────────────────────────────────── */
+
+.lbite-menu-location-banner {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	margin-bottom: 16px;
+	padding: 12px 14px;
+	border-radius: var(--lbite-menu-radius);
+	background: var(--lbite-menu-surface);
+	border: 1px solid var(--lbite-menu-border);
+}
+
+body .lbite-menu-view .lbite-menu-location-banner__text {
+	font-size: 13px;
+	font-weight: 600;
+}
+
+body .lbite-menu-view .lbite-menu-location-banner__picker {
+	padding: 6px 10px;
+	border-radius: 6px;
+	border: 1px solid var(--lbite-menu-border);
+	background: var(--lbite-menu-canvas);
+	font-size: 13px;
+}
+
+/* ── Ernährungsform-Filter ─────────────────────────────────────────── */
+
+.lbite-menu-dietary-filter {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 16px;
+}
+
+body .lbite-menu-view .lbite-menu-dietary-filter__label {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--lbite-menu-muted);
+}
+
+body .lbite-menu-view .lbite-menu-dietary-filter__btn {
+	padding: 6px 14px;
+	border-radius: 999px;
+	background: var(--lbite-menu-surface);
+	border: 1px solid var(--lbite-menu-border);
+	font-size: 13px;
+	font-weight: 600;
+	transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+
+body .lbite-menu-view .lbite-menu-dietary-filter__btn:hover {
+	border-color: var(--lbite-menu-primary);
+	background: var(--lbite-menu-canvas);
+}
+
+body .lbite-menu-view .lbite-menu-dietary-filter__btn.is-active {
+	background: var(--lbite-menu-primary);
+	border-color: var(--lbite-menu-primary);
+	color: var(--lbite-menu-primary-contrast) !important;
+}
+
+/* Explizit background/border zurückgesetzt statt sich auf die generische
+   Theme-Isolation-Regel (appearance:none) zu verlassen - die entfernt die
+   native Button-Optik nicht vollständig, der Reset-Button blieb dadurch
+   eckig und kaum lesbar (Nutzer-Fund 2026-09-28). */
+body .lbite-menu-view .lbite-menu-dietary-filter__reset {
+	padding: 6px 14px;
+	background: none;
+	border: none;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--lbite-menu-text);
+	text-decoration: underline;
+}
+
+body .lbite-menu-view .lbite-menu-dietary-filter__reset:hover {
+	color: var(--lbite-menu-primary);
+}
+
+.lbite-menu-dietary-filter__reset[hidden] { display: none !important; }
+
+.lbite-menu-item[hidden] { display: none !important; }
 
 /* ── Abschnitte und Raster ──────────────────────────────────────────── */
 
@@ -263,6 +352,17 @@ body .lbite-menu-view .lbite-menu-item__price {
 
 body .lbite-menu-view .lbite-menu-item__price del { opacity: .55; font-weight: 400; }
 body .lbite-menu-view .lbite-menu-item__price ins { text-decoration: none; }
+
+body .lbite-menu-view .lbite-menu-item__details {
+	margin-top: 6px;
+	font-size: 11px;
+	color: var(--lbite-menu-muted);
+	text-decoration: none;
+}
+
+body .lbite-menu-view .lbite-menu-item__details:hover {
+	text-decoration: underline;
+}
 
 /*
  * Der add-to-cart-Aufruf feuert bewusst das echte WooCommerce-Event
@@ -417,6 +517,15 @@ body .lbite-menu-view .lbite-menu-modal__add {
 }
 
 .lbite-menu-cart-toggle[hidden] { display: none !important; }
+
+/* Die generische Theme-Isolation-Regel weiter oben (body .lbite-menu-view span)
+   setzt sonst eine feste, dunkle Textfarbe auf jeden Span - auch auf diese beiden,
+   die stattdessen die Kontrastfarbe des Buttons übernehmen müssen (Nutzer-Fund
+   2026-09-28: dunkelblauer Hintergrund mit dunkelgrauer, kaum lesbarer Schrift). */
+.lbite-menu-cart-toggle__label,
+.lbite-menu-cart-toggle__count {
+	color: inherit !important;
+}
 
 .lbite-menu-cart-toggle__count {
 	display: inline-flex;

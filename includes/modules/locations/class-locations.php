@@ -70,6 +70,14 @@ class LBite_Locations {
 		$this->loader->add_action( 'woocommerce_before_shop_loop', $this, 'render_shop_location_notice_placeholder' );
 		$this->loader->add_action( 'woocommerce_after_shop_loop', $this, 'render_shop_location_data' );
 
+		// WooCommerces eigener [products]-Shortcode feuert woocommerce_before_shop_loop/
+		// _after_shop_loop nur bei paginate="true" - ohne diesen Zusatz-Hook blieb die
+		// Filterleiste auf einer reinen [products]-Seite unsichtbar (Nutzer-Fund
+		// 2026-09-28). Die beiden Methoden selbst schützen sich per Guard gegen
+		// doppelte Ausgabe, falls paginate="true" beide Hooks gleichzeitig auslöst.
+		$this->loader->add_action( 'woocommerce_shortcode_before_products_loop', $this, 'render_shop_location_notice_placeholder' );
+		$this->loader->add_action( 'woocommerce_shortcode_after_products_loop', $this, 'render_shop_location_data' );
+
 		// Verfügbarkeits-Hinweis pro Produkt (Grid-Item & Einzelprodukt-Seite)
 		$this->loader->add_action( 'woocommerce_after_shop_loop_item', $this, 'render_product_availability_badge', 15 );
 		$this->loader->add_action( 'woocommerce_single_product_summary', $this, 'render_product_availability_badge', 6 );
@@ -929,6 +937,14 @@ class LBite_Locations {
 	 * auswählen kann (siehe LocationFilter in frontend.js).
 	 */
 	public function render_shop_location_notice_placeholder() {
+		static $lbite_already_rendered = false;
+		if ( $lbite_already_rendered ) {
+			// Verhindert eine doppelte #lbite-location-notice-ID, falls sowohl
+			// woocommerce_before_shop_loop als auch woocommerce_shortcode_before_products_loop
+			// im selben Request feuern (z. B. [products paginate="true"]).
+			return;
+		}
+
 		if ( ! lbite_feature_enabled( 'enable_availability_filter' ) ) {
 			return;
 		}
@@ -937,6 +953,8 @@ class LBite_Locations {
 		if ( empty( $locations ) ) {
 			return;
 		}
+
+		$lbite_already_rendered = true;
 
 		echo '<div id="lbite-location-notice" style="display:none;"'
 			. ' data-unavailable-singular="' . esc_attr__( 'product not available', 'libre-bite' ) . '"'

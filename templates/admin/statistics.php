@@ -253,6 +253,12 @@ $lbite_source_totals  = array( // POS vs. Website; feste zwei Schlüssel statt d
 	'pos'     => array( 'count' => 0, 'revenue' => 0.0 ),
 	'website' => array( 'count' => 0, 'revenue' => 0.0 ),
 );
+// Zubereitungszeit "jetzt zubereiten" -> "abgeschlossen", pro Standort und gesamt.
+// Nur Bestellungen mit beiden Zeitstempeln (_lbite_preparing_started_at +
+// WooCommerce date_completed) fliessen ein, siehe
+// LBite_Order_Dashboard::maybe_record_preparing_started().
+$lbite_prep_totals         = array(); // Pro Standort [name => ['seconds', 'count']].
+$lbite_prep_totals_overall = array( 'seconds' => 0, 'count' => 0 );
 
 $lbite_batch_page = 1;
 do {
@@ -269,6 +275,24 @@ foreach ( $lbite_stat_batch as $lbite_order ) {
 	}
 	$lbite_totals[ $lbite_loc_name ]['count']++;
 	$lbite_totals[ $lbite_loc_name ]['revenue'] += (float) $lbite_order->get_total();
+
+	// Zubereitungszeit: wc-processing-Bestellungen liefern hier automatisch
+	// kein date_completed und werden dadurch von selbst übersprungen.
+	$lbite_prep_started_at = $lbite_order->get_meta( '_lbite_preparing_started_at', true );
+	$lbite_prep_completed  = $lbite_order->get_date_completed();
+	if ( $lbite_prep_started_at && $lbite_prep_completed ) {
+		$lbite_prep_started_ts = lbite_local_time_to_timestamp( $lbite_prep_started_at );
+		$lbite_prep_diff       = $lbite_prep_completed->getTimestamp() - $lbite_prep_started_ts;
+		if ( $lbite_prep_started_ts > 0 && $lbite_prep_diff >= 0 ) {
+			if ( ! isset( $lbite_prep_totals[ $lbite_loc_name ] ) ) {
+				$lbite_prep_totals[ $lbite_loc_name ] = array( 'seconds' => 0, 'count' => 0 );
+			}
+			$lbite_prep_totals[ $lbite_loc_name ]['seconds'] += $lbite_prep_diff;
+			$lbite_prep_totals[ $lbite_loc_name ]['count']++;
+			$lbite_prep_totals_overall['seconds'] += $lbite_prep_diff;
+			$lbite_prep_totals_overall['count']++;
+		}
+	}
 
 	// Herkunft: '_lbite_order_source' wird nur von der Kasse gesetzt (Direktverkauf und
 	// Tab-Eröffnung, siehe LBite_Admin::ajax_pos_create_order()/ajax_pos_open_tab()) –
@@ -577,6 +601,22 @@ $lbite_export_url = wp_nonce_url(
 			<div style="color:var(--lbite-text-muted, #50575e); font-size:13px; margin-top:4px;"><?php esc_html_e( 'Avg. Order Value', 'libre-bite' ); ?></div>
 		</div>
 		<div style="background:var(--lbite-surface, #fff); border:1px solid var(--lbite-border, #dcdcde); border-radius:6px; padding:20px 24px; min-width:160px; flex:1;">
+			<div style="font-size:28px; font-weight:700; color:var(--lbite-text, #1d2327);">
+				<?php
+				if ( $lbite_prep_totals_overall['count'] > 0 ) {
+					printf(
+						/* translators: %d: average preparation time in minutes. */
+						esc_html__( '%d min.', 'libre-bite' ),
+						(int) round( $lbite_prep_totals_overall['seconds'] / $lbite_prep_totals_overall['count'] / 60 )
+					);
+				} else {
+					esc_html_e( 'No data yet', 'libre-bite' );
+				}
+				?>
+			</div>
+			<div style="color:var(--lbite-text-muted, #50575e); font-size:13px; margin-top:4px;"><?php esc_html_e( 'Avg. Prep Time', 'libre-bite' ); ?></div>
+		</div>
+		<div style="background:var(--lbite-surface, #fff); border:1px solid var(--lbite-border, #dcdcde); border-radius:6px; padding:20px 24px; min-width:160px; flex:1;">
 			<div style="font-size:28px; font-weight:700; color:var(--lbite-text, #1d2327);"><?php echo esc_html( $lbite_cancelled_count ); ?></div>
 			<div style="color:var(--lbite-text-muted, #50575e); font-size:13px; margin-top:4px;">
 				<?php esc_html_e( 'Cancelled Orders', 'libre-bite' ); ?>
@@ -632,6 +672,35 @@ $lbite_export_url = wp_nonce_url(
 		<h2><?php esc_html_e( 'Revenue by Location', 'libre-bite' ); ?></h2>
 		<div class="lbite-chart-panel">
 			<?php echo wp_kses_post( lbite_stat_bar_chart( $lbite_loc_rows ) ); ?>
+		</div>
+	<?php endif; ?>
+
+	<!-- Zubereitungszeit je Standort als Diagramm -->
+	<?php
+	if ( count( $lbite_prep_totals ) >= 2 ) :
+		$lbite_prep_rows = array();
+		foreach ( $lbite_prep_totals as $lbite_prep_label => $lbite_prep_data ) {
+			if ( $lbite_prep_data['count'] <= 0 ) {
+				continue;
+			}
+			$lbite_prep_avg_minutes = $lbite_prep_data['seconds'] / $lbite_prep_data['count'] / 60;
+			$lbite_prep_rows[]      = array(
+				'label'   => $lbite_prep_label,
+				'value'   => $lbite_prep_avg_minutes,
+				/* translators: %d: average preparation time in minutes. */
+				'display' => sprintf( esc_html__( '%d min.', 'libre-bite' ), (int) round( $lbite_prep_avg_minutes ) ),
+			);
+		}
+		usort(
+			$lbite_prep_rows,
+			function ( $lbite_a, $lbite_b ) {
+				return $lbite_b['value'] <=> $lbite_a['value'];
+			}
+		);
+		?>
+		<h2><?php esc_html_e( 'Avg. Prep Time by Location', 'libre-bite' ); ?></h2>
+		<div class="lbite-chart-panel">
+			<?php echo wp_kses_post( lbite_stat_bar_chart( $lbite_prep_rows, 'success' ) ); ?>
 		</div>
 	<?php endif; ?>
 

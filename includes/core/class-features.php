@@ -203,12 +203,19 @@ class LBite_Features {
 			'label'       => 'Product Options',
 			'description' => 'Additional options for products (add-ons)',
 		),
+		'enable_dietary_labels'     => array(
+			'group'       => 'products',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Dietary Labels',
+			'description' => 'Show vegan, vegetarian, gluten-free and other dietary labels on the product page and menu view. Independent of the filter bar below.',
+		),
 		'enable_dietary_filter'     => array(
 			'group'       => 'products',
 			'default'     => false,
 			'premium'     => true,
-			'label'       => 'Dietary Labels & Filter',
-			'description' => 'Label dishes as vegan, vegetarian, gluten-free and more, and let guests filter the menu by them without reloading the page.',
+			'label'       => 'Dietary Filter',
+			'description' => 'Let guests filter the shop/menu by dietary labels (vegan, vegetarian, gluten-free and more) without reloading the page.',
 		),
 		'enable_menu_schedule'      => array(
 			'group'       => 'products',
@@ -216,6 +223,13 @@ class LBite_Features {
 			'premium'     => true,
 			'label'       => 'Scheduled Availability',
 			'description' => 'Limit products or whole categories to certain weekdays, times of day, or date ranges — for example a breakfast menu that disappears at 11:30.',
+		),
+		'enable_menu_redirect_archives' => array(
+			'group'       => 'products',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Redirect Standard Archives to Menu',
+			'description' => 'Redirect the default WooCommerce shop, category and tag pages to your configured menu page (301) instead of leaving them as duplicate content.',
 		),
 		'enable_item_notes_pos'     => array(
 			'group'       => 'products',

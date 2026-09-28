@@ -16,6 +16,7 @@
 		$root: null,
 		$modal: null,
 		busy: false,
+		activeDiets: [],
 
 		init: function () {
 			this.$root = $( '[data-lbite-menu]' );
@@ -55,15 +56,16 @@
 				}
 			} );
 
-			// Abschnitts-Navigation
+			// Abschnitts-Navigation: reines Scrollen, keine dauerhafte Auswahl -
+			// der Button zeigt bewusst nur echtes :hover (siehe menu-view.css),
+			// kein anhaltender "aktiv"-Zustand nach dem Klick.
 			this.$root.on( 'click', '.lbite-menu-nav__item', function ( e ) {
 				e.preventDefault();
 				const target = $( $( this ).attr( 'href' ) );
 				if ( target.length ) {
 					$( 'html, body' ).animate( { scrollTop: target.offset().top - 20 }, 300 );
 				}
-				$( '.lbite-menu-nav__item' ).removeClass( 'is-active' );
-				$( this ).addClass( 'is-active' );
+				$( this ).trigger( 'blur' );
 			} );
 
 			// Warenkorb auf/zu
@@ -82,6 +84,92 @@
 			// WooCommerce meldet Warenkorb-Änderungen
 			$( document.body ).on( 'added_to_cart wc_fragments_refreshed wc_fragments_loaded', function () {
 				self.refreshCart();
+			} );
+
+			// Standort-Umschalter: derselbe AJAX-Endpoint wie der reguläre Standort-
+			// Selector (order_type bewusst leer - reine Durchstöber-Auswahl, keine
+			// Bestellabsicht). Danach ein einfacher Reload statt eines eigenen
+			// Client-seitigen Re-Renderns: get_menu() filtert serverseitig bereits
+			// korrekt nach Standort, ein Reload ist robuster als das nachzubauen.
+			this.$root.on( 'change', '.lbite-menu-location-banner__picker', function () {
+				const $picker = $( this );
+				const locationId = $picker.val();
+				if ( ! locationId ) {
+					return;
+				}
+
+				$picker.prop( 'disabled', true );
+
+				$.ajax( {
+					url: lbiteMenu.ajaxUrl,
+					type: 'POST',
+					data: {
+						action: 'lbite_set_location',
+						nonce: lbiteMenu.nonce,
+						location_id: locationId,
+						order_type: ''
+					},
+					success: function ( response ) {
+						if ( response.success ) {
+							window.location.reload();
+						} else {
+							$picker.prop( 'disabled', false );
+						}
+					},
+					error: function () {
+						$picker.prop( 'disabled', false );
+					}
+				} );
+			} );
+
+			// Ernährungsform-Filter (eigenständig statt frontend.js: dessen DietaryFilter
+			// zielt auf die WooCommerce-Loop-Markup .products .product, nicht auf
+			// .lbite-menu-item, und frontend.js wird auf dieser Seite gar nicht geladen).
+			this.$root.on( 'click', '.lbite-menu-dietary-filter__btn', function () {
+				const diet = $( this ).data( 'diet' );
+				const idx = self.activeDiets.indexOf( diet );
+
+				if ( idx === -1 ) {
+					self.activeDiets.push( diet );
+					$( this ).addClass( 'is-active' );
+				} else {
+					self.activeDiets.splice( idx, 1 );
+					$( this ).removeClass( 'is-active' );
+				}
+
+				self.applyDietaryFilter();
+			} );
+
+			this.$root.on( 'click', '.lbite-menu-dietary-filter__reset', function () {
+				self.activeDiets = [];
+				self.$root.find( '.lbite-menu-dietary-filter__btn' ).removeClass( 'is-active' );
+				self.applyDietaryFilter();
+			} );
+		},
+
+		/* ── Ernährungsform-Filter ────────────────────────────────── */
+
+		applyDietaryFilter: function () {
+			const self = this;
+			const hasFilter = this.activeDiets.length > 0;
+
+			this.$root.find( '.lbite-menu-dietary-filter__reset' ).prop( 'hidden', ! hasFilter );
+
+			this.$root.find( '.lbite-menu-item' ).each( function () {
+				const $item = $( this );
+
+				if ( ! hasFilter ) {
+					$item.prop( 'hidden', false );
+					return;
+				}
+
+				const raw = $item.data( 'diet' );
+				const diets = String( raw === undefined ? '' : raw ).split( ' ' ).filter( Boolean );
+				const matchesAll = self.activeDiets.every( function ( d ) {
+					return diets.indexOf( d ) !== -1;
+				} );
+
+				$item.prop( 'hidden', ! matchesAll );
 			} );
 		},
 

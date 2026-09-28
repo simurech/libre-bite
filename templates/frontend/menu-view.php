@@ -14,6 +14,68 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="lbite-menu-view lbite-menu-view--<?php echo esc_attr( $lbite_layout ); ?>" data-lbite-menu>
 
+	<?php
+	// Standort-Umschalter fehlte hier bisher komplett (Nutzer-Fund 2026-09-28):
+	// die Menü-Ansicht liest den Standort nur passiv aus der Session, ohne eigene
+	// Möglichkeit, ihn direkt hier zu wählen/wechseln.
+	if ( lbite_feature_enabled( 'enable_location_selector' ) && class_exists( 'LBite_Locations' ) ) :
+		$lbite_menu_locations = LBite_Locations::get_all_locations();
+		if ( count( $lbite_menu_locations ) > 1 ) :
+			?>
+			<div class="lbite-menu-location-banner" data-lbite-menu-location>
+				<span class="lbite-menu-location-banner__text">
+					📍
+					<?php
+					if ( $lbite_location_id ) {
+						foreach ( $lbite_menu_locations as $lbite_ml ) {
+							if ( (int) $lbite_ml->ID === (int) $lbite_location_id ) {
+								echo esc_html( $lbite_ml->post_title );
+								break;
+							}
+						}
+					} else {
+						esc_html_e( 'Choose a location to see what is available', 'libre-bite' );
+					}
+					?>
+				</span>
+				<select class="lbite-menu-location-banner__picker">
+					<option value=""><?php esc_html_e( 'Please choose...', 'libre-bite' ); ?></option>
+					<?php foreach ( $lbite_menu_locations as $lbite_ml ) : ?>
+						<option value="<?php echo esc_attr( $lbite_ml->ID ); ?>" <?php selected( (int) $lbite_location_id, (int) $lbite_ml->ID ); ?>>
+							<?php echo esc_html( $lbite_ml->post_title ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+			<?php
+		endif;
+	endif;
+	?>
+
+	<?php
+	// Ernährungsform-Filter fehlte hier bisher komplett (Nutzer-Fund 2026-09-28):
+	// die Menü-Ansicht ist ein eigenständiges Template ohne WooCommerce-Loop-Hooks,
+	// über die render_dietary_filter_bar() sonst überall sonst eingehängt wird.
+	if ( ! empty( $lbite_sections ) && lbite_feature_enabled( 'enable_dietary_filter' ) && class_exists( 'LBite_Nutritional_Info' ) ) :
+		$lbite_diet_filter_labels = LBite_Nutritional_Info::get_dietary_list();
+		if ( ! empty( $lbite_diet_filter_labels ) ) :
+			?>
+			<div class="lbite-menu-dietary-filter" data-lbite-menu-dietary-filter>
+				<span class="lbite-menu-dietary-filter__label"><?php esc_html_e( 'Show only:', 'libre-bite' ); ?></span>
+				<?php foreach ( $lbite_diet_filter_labels as $lbite_fkey => $lbite_flabel ) : ?>
+					<button type="button" class="lbite-menu-dietary-filter__btn" data-diet="<?php echo esc_attr( $lbite_fkey ); ?>">
+						<?php echo esc_html( $lbite_flabel ); ?>
+					</button>
+				<?php endforeach; ?>
+				<button type="button" class="lbite-menu-dietary-filter__reset" hidden>
+					<?php esc_html_e( 'Reset', 'libre-bite' ); ?>
+				</button>
+			</div>
+			<?php
+		endif;
+	endif;
+	?>
+
 	<?php if ( empty( $lbite_sections ) ) : ?>
 
 		<p class="lbite-menu-empty">
@@ -25,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( count( $lbite_sections ) > 1 ) : ?>
 			<nav class="lbite-menu-nav" aria-label="<?php esc_attr_e( 'Menu sections', 'libre-bite' ); ?>">
 				<?php foreach ( $lbite_sections as $lbite_i => $lbite_section ) : ?>
-					<a class="lbite-menu-nav__item<?php echo 0 === $lbite_i ? ' is-active' : ''; ?>"
+					<a class="lbite-menu-nav__item"
 						href="#lbite-menu-section-<?php echo (int) $lbite_i; ?>">
 						<?php
 						echo esc_html(
@@ -70,7 +132,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 							: array();
 						?>
 						<article class="lbite-menu-item" data-product-id="<?php echo esc_attr( $lbite_pid ); ?>"
-							data-needs-options="<?php echo $lbite_needs_mod ? '1' : '0'; ?>">
+							data-needs-options="<?php echo $lbite_needs_mod ? '1' : '0'; ?>"
+							data-diet="<?php echo esc_attr( implode( ' ', $lbite_diet ) ); ?>">
 
 							<?php if ( $lbite_img ) : ?>
 								<div class="lbite-menu-item__media">
@@ -87,7 +150,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</p>
 								<?php endif; ?>
 
-								<?php if ( ! empty( $lbite_diet ) && class_exists( 'LBite_Nutritional_Info' ) ) : ?>
+								<?php if ( ! empty( $lbite_diet ) && lbite_feature_enabled( 'enable_dietary_labels' ) && class_exists( 'LBite_Nutritional_Info' ) ) : ?>
 									<?php $lbite_diet_labels = LBite_Nutritional_Info::get_dietary_list(); ?>
 									<div class="lbite-menu-item__tags">
 										<?php foreach ( $lbite_diet as $lbite_dkey ) : ?>
@@ -105,6 +168,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 										<?php echo $lbite_needs_mod ? esc_html__( 'Choose', 'libre-bite' ) : esc_html__( 'Add', 'libre-bite' ); ?>
 									</button>
 								</div>
+
+								<a class="lbite-menu-item__details" href="<?php echo esc_url( get_permalink( $lbite_pid ) ); ?>">
+									<?php esc_html_e( 'View product details', 'libre-bite' ); ?>
+								</a>
 							</div>
 						</article>
 					<?php endforeach; ?>

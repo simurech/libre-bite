@@ -46,11 +46,13 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		case 'products_menu':
 			$lbite_features = get_option( 'lbite_features', array() );
 			if ( $lbite_premium_allowed ) {
-				$lbite_features['enable_menu_view']     = isset( $_POST['lbite_feature_toggle']['enable_menu_view'] );
-				$lbite_features['enable_menu_schedule'] = isset( $_POST['lbite_feature_toggle']['enable_menu_schedule'] );
+				$lbite_features['enable_menu_view']             = isset( $_POST['lbite_feature_toggle']['enable_menu_view'] );
+				$lbite_features['enable_menu_schedule']         = isset( $_POST['lbite_feature_toggle']['enable_menu_schedule'] );
+				$lbite_features['enable_menu_redirect_archives'] = isset( $_POST['lbite_feature_toggle']['enable_menu_redirect_archives'] );
 			} else {
-				$lbite_features['enable_menu_view']     = false;
-				$lbite_features['enable_menu_schedule'] = false;
+				$lbite_features['enable_menu_view']             = false;
+				$lbite_features['enable_menu_schedule']         = false;
+				$lbite_features['enable_menu_redirect_archives'] = false;
 			}
 			update_option( 'lbite_features', $lbite_features );
 
@@ -70,10 +72,12 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			if ( $lbite_premium_allowed ) {
 				$lbite_features['enable_nutritional_info'] = isset( $_POST['lbite_feature_toggle']['enable_nutritional_info'] );
 				$lbite_features['enable_allergens']        = isset( $_POST['lbite_feature_toggle']['enable_allergens'] );
+				$lbite_features['enable_dietary_labels']   = isset( $_POST['lbite_feature_toggle']['enable_dietary_labels'] );
 				$lbite_features['enable_dietary_filter']   = isset( $_POST['lbite_feature_toggle']['enable_dietary_filter'] );
 			} else {
 				$lbite_features['enable_nutritional_info'] = false;
 				$lbite_features['enable_allergens']        = false;
+				$lbite_features['enable_dietary_labels']   = false;
 				$lbite_features['enable_dietary_filter']   = false;
 			}
 			update_option( 'lbite_features', $lbite_features );

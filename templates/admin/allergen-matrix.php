@@ -24,7 +24,7 @@ if ( ! class_exists( 'LBite_Nutritional_Info' ) ) {
 
 $lbite_allergens = LBite_Nutritional_Info::get_allergen_list();
 $lbite_dietary   = LBite_Nutritional_Info::get_dietary_list();
-$lbite_show_diet = lbite_feature_enabled( 'enable_dietary_filter' );
+$lbite_show_diet = lbite_feature_enabled( 'enable_dietary_labels' );
 
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reiner Anzeigefilter ohne Schreibzugriff.
 $lbite_only_flagged = isset( $_GET['only_flagged'] ) && '1' === $_GET['only_flagged'];

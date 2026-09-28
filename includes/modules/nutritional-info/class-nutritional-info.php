@@ -48,6 +48,13 @@ class LBite_Nutritional_Info {
 		$this->loader->add_action( 'woocommerce_single_product_summary', $this, 'display_dietary_chips', 44 );
 		$this->loader->add_action( 'woocommerce_before_shop_loop', $this, 'render_dietary_filter_bar', 25 );
 		$this->loader->add_action( 'woocommerce_after_shop_loop_item', $this, 'render_dietary_loop_data', 5 );
+
+		// WooCommerces eigener [products]-Shortcode feuert woocommerce_before_shop_loop
+		// nur bei paginate="true" - ohne diesen Zusatz-Hook blieb die Filterleiste auf
+		// einer reinen [products]-Seite unsichtbar (Nutzer-Fund 2026-09-28).
+		// render_dietary_filter_bar() schützt sich selbst per Guard gegen doppelte
+		// Ausgabe, falls paginate="true" beide Hooks gleichzeitig auslöst.
+		$this->loader->add_action( 'woocommerce_shortcode_before_products_loop', $this, 'render_dietary_filter_bar', 25 );
 	}
 
 	/**
@@ -160,7 +167,7 @@ class LBite_Nutritional_Info {
 	public function display_dietary_chips() {
 		global $product;
 
-		if ( ! $product || ! lbite_feature_enabled( 'enable_dietary_filter' ) ) {
+		if ( ! $product || ! lbite_feature_enabled( 'enable_dietary_labels' ) ) {
 			return;
 		}
 
@@ -192,9 +199,19 @@ class LBite_Nutritional_Info {
 	 * render_dietary_loop_data() als Datenattribut mit.
 	 */
 	public function render_dietary_filter_bar() {
+		static $lbite_already_rendered = false;
+		if ( $lbite_already_rendered ) {
+			// Verhindert eine doppelte Filterleiste, falls sowohl woocommerce_before_shop_loop
+			// als auch woocommerce_shortcode_before_products_loop im selben Request feuern
+			// (z. B. [products paginate="true"]).
+			return;
+		}
+
 		if ( ! lbite_feature_enabled( 'enable_dietary_filter' ) ) {
 			return;
 		}
+
+		$lbite_already_rendered = true;
 
 		$labels = self::get_dietary_list();
 		?>
@@ -326,6 +343,11 @@ class LBite_Nutritional_Info {
 			<hr style="margin: 20px 0;">
 
 			<p><strong><?php esc_html_e( 'Dietary labels:', 'libre-bite' ); ?></strong></p>
+			<?php if ( ! lbite_feature_enabled( 'enable_dietary_labels' ) && ! lbite_feature_enabled( 'enable_dietary_filter' ) ) : ?>
+				<p class="description" style="color:#b32d2e;">
+					<?php esc_html_e( 'Dietary Labels and Dietary Filter are both turned off in Settings → Products → Nutrition. Anything saved here is kept, but will not show on the frontend until one of them is turned on.', 'libre-bite' ); ?>
+				</p>
+			<?php endif; ?>
 			<div style="column-count: 2; column-gap: 20px;">
 				<?php foreach ( $dietary_list as $lbite_diet_key => $lbite_diet_label ) : ?>
 					<label style="display: block; margin-bottom: 8px;">

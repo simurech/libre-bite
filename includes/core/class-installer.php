@@ -360,6 +360,23 @@ class LBite_Installer {
 			self::migrate_normalized_phone_numbers();
 		}
 
+		// Migration auf 3.6.1: neuer Rewrite-Endpoint für den Stempelkarten-Reiter
+		// im Kundenkonto - ohne einmaligen Flush bleibt die Seite bis zum nächsten
+		// manuellen "Permalinks speichern" auf 404. Ausserdem: die bisher
+		// kombinierte Option "Dietary Labels & Filter" wurde in zwei unabhängige
+		// Schalter aufgeteilt (enable_dietary_labels/enable_dietary_filter) - wer
+		// den Filter bereits aktiv hatte, sah bislang auch die Labels und soll das
+		// nach dem Update nicht stillschweigend verlieren.
+		if ( version_compare( $current_version, '3.6.1', '<' ) ) {
+			flush_rewrite_rules();
+
+			$lbite_features = get_option( 'lbite_features', array() );
+			if ( ! empty( $lbite_features['enable_dietary_filter'] ) ) {
+				$lbite_features['enable_dietary_labels'] = true;
+				update_option( 'lbite_features', $lbite_features );
+			}
+		}
+
 		// Version aktualisieren
 		if ( version_compare( $current_version, LBITE_VERSION, '<' ) ) {
 			update_option( 'lbite_version', LBITE_VERSION );

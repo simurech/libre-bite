@@ -75,7 +75,14 @@ class LBite_Stampcard {
 		$this->loader->add_action( 'woocommerce_order_status_refunded', $this, 'revoke_stamp' );
 
 		$this->loader->add_action( 'init', $this, 'register_shortcode' );
-		$this->loader->add_action( 'woocommerce_account_dashboard', $this, 'render_account_card', 20 );
+
+		// Eigener Reiter im Kundenkonto statt der Karte auf dem Dashboard-Tab
+		// (Nutzer-Fund 2026-09-28: sauberere Trennung). Der Rewrite-Endpoint
+		// braucht nach der Registrierung einmalig flush_rewrite_rules() - siehe
+		// die versionsgebundene Migration auf 3.6.1 in class-installer.php.
+		$this->loader->add_action( 'init', $this, 'register_account_endpoint' );
+		$this->loader->add_filter( 'woocommerce_account_menu_items', $this, 'add_account_menu_item' );
+		$this->loader->add_action( 'woocommerce_account_lbite-stampcard_endpoint', $this, 'render_account_tab' );
 
 		// Rabattdeckel für prozentuale Stempelkarten-Gutscheine (Audit
 		// 26.09.2026, AP-11): set_maximum_amount() begrenzte bisher den
@@ -364,9 +371,38 @@ class LBite_Stampcard {
 	}
 
 	/**
-	 * Karte im Kundenkonto
+	 * Rewrite-Endpoint für den Kundenkonto-Reiter registrieren.
 	 */
-	public function render_account_card() {
+	public function register_account_endpoint() {
+		add_rewrite_endpoint( 'lbite-stampcard', EP_ROOT | EP_PAGES );
+	}
+
+	/**
+	 * Menüpunkt zwischen «Dashboard» und «Bestellungen» einfügen.
+	 *
+	 * @param array $items Bestehende Menüpunkte.
+	 * @return array
+	 */
+	public function add_account_menu_item( $items ) {
+		if ( ! lbite_feature_enabled( 'enable_stampcard' ) ) {
+			return $items;
+		}
+
+		$lbite_new_items = array();
+		foreach ( $items as $lbite_key => $lbite_label ) {
+			$lbite_new_items[ $lbite_key ] = $lbite_label;
+			if ( 'dashboard' === $lbite_key ) {
+				$lbite_new_items['lbite-stampcard'] = __( 'Stamp Card', 'libre-bite' );
+			}
+		}
+
+		return $lbite_new_items;
+	}
+
+	/**
+	 * Inhalt des Kundenkonto-Reiters ausgeben.
+	 */
+	public function render_account_tab() {
 		$this->render_card();
 	}
 

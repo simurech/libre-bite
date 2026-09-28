@@ -6930,6 +6930,76 @@ msgstr "Commande pour : %s"
 msgid "The location is open %s on this day."
 msgstr "Cet établissement est ouvert %s ce jour-là."
 
+#: templates/admin/settings/products-menu.php:74
+msgid "Redirect Standard Archives to Menu"
+msgstr "Rediriger les archives standard vers le menu"
+
+#: templates/admin/settings/products-menu.php:75
+msgid "Redirects the default WooCommerce shop, category and tag pages (301) to the menu page configured above, avoiding duplicate content between your theme's product grid and the menu."
+msgstr "Redirige les pages standard de la boutique, des catégories et des étiquettes WooCommerce (301) vers la page de menu configurée ci-dessus, évitant ainsi le contenu dupliqué entre la grille de produits de votre thème et le menu."
+
+#: includes/admin/class-admin.php:587
+msgid "Libre Bite: Locations Today"
+msgstr "Libre Bite : emplacements aujourd'hui"
+
+#: includes/admin/class-admin.php:639
+msgid "Orders Today"
+msgstr "Commandes aujourd'hui"
+
+#: includes/admin/class-admin.php:640
+msgid "Revenue Today"
+msgstr "Chiffre d'affaires aujourd'hui"
+
+#: includes/admin/class-admin.php:641
+msgid "Avg. Prep Time (7 Days)"
+msgstr "Temps de préparation moyen (7 jours)"
+
+#. translators: %d: average preparation time in minutes.
+#: includes/admin/class-admin.php:717
+#, php-format
+msgid "%d min."
+msgstr "%d min."
+
+#: includes/admin/class-admin.php:720
+msgid "No data yet"
+msgstr "Aucune donnée pour l'instant"
+
+#: includes/admin/class-admin.php:736
+msgid "View full statistics"
+msgstr "Voir les statistiques complètes"
+
+#: templates/frontend/menu-view.php:173
+msgid "View product details"
+msgstr "Voir les détails du produit"
+
+#: templates/admin/settings/products-nutrition.php:40
+msgid "Dietary Labels"
+msgstr "Étiquettes alimentaires"
+
+#: templates/admin/settings/products-nutrition.php:41
+msgid "Label dishes as vegan, vegetarian, gluten-free, lactose-free, spicy or alcohol-free on the product page and menu view. Works independently of the filter below."
+msgstr "Étiquette les plats comme végan, végétarien, sans gluten, sans lactose, épicé ou sans alcool sur la page produit et la vue menu. Fonctionne indépendamment du filtre ci-dessous."
+
+#: templates/admin/settings/products-nutrition.php:47
+msgid "Dietary Filter"
+msgstr "Filtre alimentaire"
+
+#: templates/admin/settings/products-nutrition.php:48
+msgid "Add a filter bar above the shop grid and menu view so guests can combine several dietary labels at once, without reloading the page."
+msgstr "Ajoute une barre de filtre au-dessus de la grille de la boutique et de la vue menu, permettant aux clients de combiner plusieurs étiquettes alimentaires à la fois, sans recharger la page."
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:348
+msgid "Dietary Labels and Dietary Filter are both turned off in Settings → Products → Nutrition. Anything saved here is kept, but will not show on the frontend until one of them is turned on."
+msgstr "« Étiquettes alimentaires » et « Filtre alimentaire » sont tous deux désactivés sous Réglages → Produits → Nutrition. Tout ce qui est enregistré ici est conservé, mais n'apparaîtra sur le site qu'une fois l'un des deux activé."
+
+#: templates/admin/statistics.php:617
+msgid "Avg. Prep Time"
+msgstr "Temps de préparation moyen"
+
+#: templates/admin/statistics.php:701
+msgid "Avg. Prep Time by Location"
+msgstr "Temps de préparation moyen par emplacement"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Erreur lors de l'enregistrement"
 

@@ -6931,6 +6931,76 @@ msgstr "Bestellung für: %s"
 msgid "The location is open %s on this day."
 msgstr "Der Standort ist an diesem Tag %s geöffnet."
 
+#: templates/admin/settings/products-menu.php:74
+msgid "Redirect Standard Archives to Menu"
+msgstr "Standard-Archive zur Menüseite umleiten"
+
+#: templates/admin/settings/products-menu.php:75
+msgid "Redirects the default WooCommerce shop, category and tag pages (301) to the menu page configured above, avoiding duplicate content between your theme's product grid and the menu."
+msgstr "Leitet die Standard-Shop-, Kategorie- und Tag-Seiten von WooCommerce (301) auf die oben konfigurierte Menüseite um und vermeidet so doppelte Inhalte zwischen dem Produktraster Ihres Themes und dem Menü."
+
+#: includes/admin/class-admin.php:587
+msgid "Libre Bite: Locations Today"
+msgstr "Libre Bite: Standorte heute"
+
+#: includes/admin/class-admin.php:639
+msgid "Orders Today"
+msgstr "Bestellungen heute"
+
+#: includes/admin/class-admin.php:640
+msgid "Revenue Today"
+msgstr "Umsatz heute"
+
+#: includes/admin/class-admin.php:641
+msgid "Avg. Prep Time (7 Days)"
+msgstr "Ø Zubereitungszeit (7 Tage)"
+
+#. translators: %d: average preparation time in minutes.
+#: includes/admin/class-admin.php:717
+#, php-format
+msgid "%d min."
+msgstr "%d Min."
+
+#: includes/admin/class-admin.php:720
+msgid "No data yet"
+msgstr "Noch keine Daten"
+
+#: includes/admin/class-admin.php:736
+msgid "View full statistics"
+msgstr "Vollständige Statistik anzeigen"
+
+#: templates/frontend/menu-view.php:173
+msgid "View product details"
+msgstr "Produktdetails anzeigen"
+
+#: templates/admin/settings/products-nutrition.php:40
+msgid "Dietary Labels"
+msgstr "Ernährungsform-Auszeichnungen"
+
+#: templates/admin/settings/products-nutrition.php:41
+msgid "Label dishes as vegan, vegetarian, gluten-free, lactose-free, spicy or alcohol-free on the product page and menu view. Works independently of the filter below."
+msgstr "Kennzeichnet Gerichte auf der Produktseite und in der Menü-Ansicht als vegan, vegetarisch, glutenfrei, laktosefrei, scharf oder alkoholfrei. Funktioniert unabhängig vom Filter weiter unten."
+
+#: templates/admin/settings/products-nutrition.php:47
+msgid "Dietary Filter"
+msgstr "Ernährungsform-Filter"
+
+#: templates/admin/settings/products-nutrition.php:48
+msgid "Add a filter bar above the shop grid and menu view so guests can combine several dietary labels at once, without reloading the page."
+msgstr "Fügt eine Filterleiste über dem Shop-Raster und der Menü-Ansicht hinzu, mit der Gäste mehrere Ernährungsformen gleichzeitig kombinieren können, ohne die Seite neu zu laden."
+
+#: includes/modules/nutritional-info/class-nutritional-info.php:348
+msgid "Dietary Labels and Dietary Filter are both turned off in Settings → Products → Nutrition. Anything saved here is kept, but will not show on the frontend until one of them is turned on."
+msgstr "„Ernährungsform-Auszeichnungen“ und „Ernährungsform-Filter“ sind beide unter Einstellungen → Produkte → Nährwerte ausgeschaltet. Was hier gespeichert wird, bleibt erhalten, erscheint aber erst im Frontend, sobald eines der beiden Features eingeschaltet ist."
+
+#: templates/admin/statistics.php:617
+msgid "Avg. Prep Time"
+msgstr "Ø Zubereitungszeit"
+
+#: templates/admin/statistics.php:701
+msgid "Avg. Prep Time by Location"
+msgstr "Ø Zubereitungszeit nach Standort"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

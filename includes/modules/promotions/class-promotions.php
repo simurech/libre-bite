@@ -793,6 +793,7 @@ class LBite_Promotions {
 			array(),
 			LBITE_VERSION
 		);
+		wp_add_inline_style( 'lbite-promo-banner', LBite_Branding::get_inline_css() );
 	}
 
 	/**

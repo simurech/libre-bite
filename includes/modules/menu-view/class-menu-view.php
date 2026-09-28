@@ -56,6 +56,33 @@ class LBite_Menu_View {
 		$this->loader->add_action( 'wp_ajax_nopriv_lbite_menu_product', $this, 'ajax_get_product' );
 		$this->loader->add_action( 'wp_ajax_lbite_menu_cart', $this, 'ajax_get_cart' );
 		$this->loader->add_action( 'wp_ajax_nopriv_lbite_menu_cart', $this, 'ajax_get_cart' );
+		$this->loader->add_action( 'template_redirect', $this, 'maybe_redirect_archives_to_menu' );
+	}
+
+	/**
+	 * Standard-WooCommerce-Archive (Shop, Kategorien, Tags) auf die konfigurierte
+	 * Menü-Seite umleiten, wenn das Feature aktiv ist (SEO/Duplicate-Content).
+	 */
+	public function maybe_redirect_archives_to_menu() {
+		if ( ! lbite_feature_enabled( 'enable_menu_redirect_archives' ) ) {
+			return;
+		}
+
+		$lbite_menu_page_id = (int) get_option( 'lbite_menu_page_id', 0 );
+		if ( ! $lbite_menu_page_id || 'publish' !== get_post_status( $lbite_menu_page_id ) ) {
+			return;
+		}
+
+		if ( ! is_shop() && ! is_product_category() && ! is_product_tag() && ! is_product_taxonomy() ) {
+			return;
+		}
+
+		if ( is_page( $lbite_menu_page_id ) ) {
+			return;
+		}
+
+		wp_safe_redirect( get_permalink( $lbite_menu_page_id ), 301 );
+		exit;
 	}
 
 	/**

@@ -422,7 +422,12 @@ class LBite_Checkout {
 		// vorhanden ist. Vorher nur lbite_location_selector geprüft, wodurch
 		// z. B. reine Menü-Ansicht-Seiten nie die Branding-Farben bekamen
 		// (Nutzer-Fund 2026-09-28).
-		$lbite_frontend_shortcodes = array( 'lbite_location_selector', 'lbite_menu', 'lbite_reservation_form', 'lbite_stampcard' );
+		// WooCommerces eigener [products]-Shortcode fehlte hier bisher: eine Seite,
+		// die ihn ausserhalb von Shop/Kategorie/Tag einbindet, bekam weder die
+		// Branding-Farben noch die CSS-Regeln für die Verfügbarkeits-/Standort-Filter,
+		// obwohl die zugehörigen PHP-Hooks (siehe unten) dort durchaus feuern
+		// (Nutzer-Fund 2026-09-28).
+		$lbite_frontend_shortcodes = array( 'lbite_location_selector', 'lbite_menu', 'lbite_reservation_form', 'lbite_stampcard', 'products' );
 		$has_shortcode             = is_a( $post, 'WP_Post' ) && (bool) array_filter(
 			$lbite_frontend_shortcodes,
 			function ( $lbite_shortcode ) use ( $post ) {

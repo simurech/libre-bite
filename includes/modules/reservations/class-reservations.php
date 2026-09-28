@@ -24,16 +24,18 @@ class LBite_Reservations {
 	const POST_TYPE = 'lbite_reservation';
 
 	/**
-	 * Mögliche Reservierungs-Status
+	 * Mögliche Reservierungs-Status (übersetzt, daher Methode statt Klassenkonstante)
 	 *
-	 * @var array
+	 * @return array
 	 */
-	const STATUSES = array(
-		'pending'   => 'Pending',
-		'confirmed' => 'Confirmed',
-		'cancelled' => 'Cancelled',
-		'completed' => 'Completed',
-	);
+	public static function get_statuses() {
+		return array(
+			'pending'   => __( 'Pending', 'libre-bite' ),
+			'confirmed' => __( 'Confirmed', 'libre-bite' ),
+			'cancelled' => __( 'Cancelled', 'libre-bite' ),
+			'completed' => __( 'Completed', 'libre-bite' ),
+		);
+	}
 
 	/**
 	 * Anzahl ausstehender Reservierungen für Menü-Badge zurückgeben (gecacht)
@@ -197,7 +199,7 @@ class LBite_Reservations {
 				<th><label for="lbite_reservation_status"><?php esc_html_e( 'Status', 'libre-bite' ); ?></label></th>
 				<td>
 					<select id="lbite_reservation_status" name="lbite_reservation_status">
-						<?php foreach ( self::STATUSES as $lbite_val => $lbite_label ) : ?>
+						<?php foreach ( self::get_statuses() as $lbite_val => $lbite_label ) : ?>
 							<option value="<?php echo esc_attr( $lbite_val ); ?>" <?php selected( $lbite_status, $lbite_val ); ?>>
 								<?php echo esc_html( $lbite_label ); ?>
 							</option>
@@ -268,7 +270,7 @@ class LBite_Reservations {
 
 		if ( isset( $_POST['lbite_reservation_status'] ) ) {
 			$lbite_status = sanitize_key( wp_unslash( $_POST['lbite_reservation_status'] ) );
-			if ( array_key_exists( $lbite_status, self::STATUSES ) ) {
+			if ( array_key_exists( $lbite_status, self::get_statuses() ) ) {
 				update_post_meta( $post_id, '_lbite_reservation_status', $lbite_status );
 				delete_transient( 'lbite_pending_reservations_count' );
 			}
@@ -325,7 +327,7 @@ class LBite_Reservations {
 				break;
 			case 'lbite_res_status':
 				$lbite_status = get_post_meta( $post_id, '_lbite_reservation_status', true ) ?: 'pending';
-				$lbite_label  = self::STATUSES[ $lbite_status ] ?? $lbite_status;
+				$lbite_label  = self::get_statuses()[ $lbite_status ] ?? $lbite_status;
 				$lbite_colors = array(
 					'pending'   => '#f39c12',
 					'confirmed' => '#27ae60',
@@ -380,7 +382,7 @@ class LBite_Reservations {
 		$lbite_sel_status = isset( $_GET['lbite_res_status'] ) ? sanitize_key( $_GET['lbite_res_status'] ) : '';
 		echo '<select name="lbite_res_status">';
 		echo '<option value="">' . esc_html__( 'All Status', 'libre-bite' ) . '</option>';
-		foreach ( self::STATUSES as $lbite_val => $lbite_label ) {
+		foreach ( self::get_statuses() as $lbite_val => $lbite_label ) {
 			printf(
 				'<option value="%s"%s>%s</option>',
 				esc_attr( $lbite_val ),
