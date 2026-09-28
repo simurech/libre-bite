@@ -66,6 +66,11 @@ class LBite_Plugin {
 		// REST-Fundament (lbite/v1). Läuft parallel zu admin-ajax.php und
 		// registriert seine Routen selbst auf rest_api_init.
 		require_once LBITE_PLUGIN_DIR . 'includes/core/class-rest-api.php';
+
+		// Branding-Farbtoken: von Admin/POS UND Frontend gebraucht, deshalb
+		// hier und nicht nur im is_admin()-Zweig laden (Nutzer-Fund
+		// 2026-09-28 - Menü-Ansicht bekam ohne dies nie eine Primärfarbe).
+		require_once LBITE_PLUGIN_DIR . 'includes/core/class-branding.php';
 	}
 
 	/**

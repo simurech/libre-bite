@@ -164,6 +164,12 @@ $lbite_location_class     = ( $lbite_is_single_location ? 'lbite-location-select
 			<p class="lbite-loading-text"><?php esc_html_e( 'One moment, please...', 'libre-bite' ); ?></p>
 		</div>
 
+		<!-- Allgemeine AJAX-Fehlermeldung statt alert() (Nutzer-Fund 2026-09-28) -->
+		<div class="lbite-date-error" id="lbite-location-ajax-error" style="display: none;">
+			<span class="dashicons dashicons-warning"></span>
+			<span class="lbite-error-message"></span>
+		</div>
+
 		<?php if ( 'yes' === $atts['show_time'] ) : ?>
 			<h2 class="lbite-step-title"><?php esc_html_e( 'When would you like to order?', 'libre-bite' ); ?></h2>
 
@@ -348,7 +354,7 @@ jQuery(document).ready(function($) {
 		const pickupTime = $('#lbite-pickup-time').val();
 
 		if (!pickupTime) {
-			alert(lbiteData.strings.selectTime);
+			showLocationError(lbiteData.strings.selectTime);
 			return;
 		}
 
@@ -406,8 +412,21 @@ jQuery(document).ready(function($) {
 			error: function() {
 				$select.html('<option value=""><?php echo esc_js( __( 'Error loading', 'libre-bite' ) ); ?></option>');
 				$select.css('opacity', '1');
+				showLocationError('<?php echo esc_js( __( 'An error occurred.', 'libre-bite' ) ); ?>');
 			}
 		});
+	}
+
+	// Allgemeine AJAX-Fehlermeldung statt alert() (Nutzer-Fund 2026-09-28).
+	let lbiteLocationErrorTimeout = null;
+	function showLocationError(message) {
+		const $error = $('#lbite-location-ajax-error');
+		$error.find('.lbite-error-message').text(message);
+		$error.show();
+		clearTimeout(lbiteLocationErrorTimeout);
+		lbiteLocationErrorTimeout = setTimeout(function() {
+			$error.hide();
+		}, 6000);
 	}
 
 	// Auswahl bestätigen und weiterleiten
@@ -434,14 +453,14 @@ jQuery(document).ready(function($) {
 					}, 300);
 				} else {
 					$('.lbite-loading-overlay').fadeOut(200);
-					alert(response.data.message || '<?php echo esc_js( __( "Error saving", "libre-bite" ) ); ?>');
+					showLocationError(response.data.message || '<?php echo esc_js( __( "Error saving", "libre-bite" ) ); ?>');
 					// Loading States zurücksetzen
 					$('.lbite-button, .lbite-time-option').removeClass('loading');
 				}
 			},
 			error: function() {
 				$('.lbite-loading-overlay').fadeOut(200);
-				alert('<?php echo esc_js( __( "An error occurred.", "libre-bite" ) ); ?>');
+				showLocationError('<?php echo esc_js( __( "An error occurred.", "libre-bite" ) ); ?>');
 				// Loading States zurücksetzen
 				$('.lbite-button, .lbite-time-option').removeClass('loading');
 			}

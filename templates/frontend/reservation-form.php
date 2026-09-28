@@ -90,6 +90,8 @@ $lbite_show_location_step = count( $lbite_locations ) > 1;
 					</div>
 				</div>
 
+				<div class="lbite-res-notice lbite-res-notice--error" id="lbite-res-time-hint" style="display:none;"></div>
+
 				<div class="lbite-res-field">
 					<label class="lbite-res-label lbite-res-required" for="lbite-res-guests">
 						<?php esc_html_e( 'Number of Guests', 'libre-bite' ); ?>

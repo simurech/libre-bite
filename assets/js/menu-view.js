@@ -267,6 +267,10 @@
 				] );
 
 				self.refreshCart();
+				// Slide-in statt dem vom Theme eingeblendeten "Warenkorb
+				// ansehen"-Link öffnen, damit sich nichts im Produktraster
+				// verschiebt (Nutzer-Fund 2026-09-28).
+				self.toggleCart( true );
 			} ).fail( function () {
 				self.busy = false;
 				$button.prop( 'disabled', false ).text( original );

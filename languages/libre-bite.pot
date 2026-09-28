@@ -7080,3 +7080,23 @@ msgstr ""
 #: templates/admin/support-settings.php:121
 msgid "This is how support information will be displayed on the Support page:"
 msgstr ""
+
+#: templates/admin/settings/locations.php:76
+msgid "Default Location"
+msgstr ""
+
+#: templates/admin/settings/locations.php:79
+msgid "-- Automatic --"
+msgstr ""
+
+#: templates/admin/settings/locations.php:87
+msgid "Used whenever a guest cannot pick a location themselves - most importantly if \"Location Selection\" above is turned off. \"Automatic\" picks the location that was created first."
+msgstr ""
+
+#: includes/modules/checkout/class-checkout.php:623
+msgid "Ordering from: %s"
+msgstr ""
+
+#: includes/modules/reservations/class-reservations.php:471
+msgid "The location is open %s on this day."
+msgstr ""

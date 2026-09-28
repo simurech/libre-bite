@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.5.5
+Stable tag: 3.6.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,15 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.0 =
+* Fix: Adding an item in the theme-independent menu view showed the theme's own "View cart" link next to the button, shifting the product grid; the slide-in cart now opens automatically instead.
+* Fix: Branding colors could fail to reach the menu view, the reservation form, and the stamp card, since only pages using the location selector shortcode received them; broadened to all Libre Bite frontend shortcodes and unified with the admin/POS color logic (previously two separate implementations).
+* Feature: Text on branded buttons (e.g. the floating "Your order" button) now automatically switches between light and dark to stay readable against the chosen brand color.
+* Feature: New "Default Location" setting under Settings → Locations, used whenever a guest cannot pick a location themselves - most importantly when "Location Selection" is turned off. Orders, the add-to-cart location check, and the `[lbite_location_selector]` shortcode all fall back to it instead of leaving the order without a location.
+* Fix: With "Location Selection" turned off, the location selector shortcode kept showing the full picker instead of respecting the setting, and could show a raw browser error if a guest still interacted with it.
+* Fix: A location without configured opening hours was treated as always closed for pre-orders and reservations (and as "unknown" for the live status badge) instead of open 24/7; unified across checkout, the status badge, and reservations.
+* Feature: The reservation form now checks opening hours as soon as a date/time is chosen, instead of only rejecting it after all three steps are filled in.
 
 = 3.5.5 =
 * Fix: The 3.5.4 fix for the two Plugin Check errors was incomplete (escaping was applied at variable assignment instead of at the point of output); corrected and verified against the official Plugin Check tool directly, not just by re-reading the code.

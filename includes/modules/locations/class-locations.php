@@ -1305,6 +1305,35 @@ class LBite_Locations {
 	}
 
 	/**
+	 * Standard-Standort auflösen (für den Fall ohne interaktive Auswahl).
+	 *
+	 * Reihenfolge: explizit vom Betreiber gewählte Option, sonst bei genau
+	 * einem Standort dieser eine, sonst bei mehreren die Standort-ID mit der
+	 * niedrigsten Post-ID - stabiler Näherungswert für "der ursprüngliche
+	 * Standort" als die alphabetische Titel-Sortierung von
+	 * get_all_locations() oder das Erstellungsdatum, das bei
+	 * Massenimporten kollidieren kann (Nutzer-Fund 2026-09-28).
+	 *
+	 * @return int Standort-ID oder 0, wenn kein Standort existiert.
+	 */
+	public static function get_default_location_id() {
+		$lbite_configured = (int) get_option( 'lbite_default_location_id', 0 );
+		if ( $lbite_configured && self::is_valid_location( $lbite_configured ) ) {
+			return $lbite_configured;
+		}
+
+		$lbite_locations = self::get_all_locations();
+		if ( empty( $lbite_locations ) ) {
+			return 0;
+		}
+
+		$lbite_ids = wp_list_pluck( $lbite_locations, 'ID' );
+		sort( $lbite_ids, SORT_NUMERIC );
+
+		return (int) $lbite_ids[0];
+	}
+
+	/**
 	 * Prüft ob ein Produkt an einem Standort verfügbar ist.
 	 *
 	 * Leeres Ausschluss-Array = keine Einschränkung = überall verfügbar (Opt-Out).
@@ -1433,6 +1462,96 @@ class LBite_Locations {
 	}
 
 	/**
+	 * Öffnungszeiten mit 24/7-Rückfall für unkonfigurierte Standorte.
+	 *
+	 * Bestätigte Produktentscheidung: ein Standort ohne hinterlegte
+	 * Öffnungszeiten gilt als 24 Stunden geöffnet, nicht als geschlossen
+	 * (Nutzer-Fund 2026-09-28). Schlusszeit bewusst 23:59 statt 24:00:
+	 * normalize_time() weiter unten rundet "24:00" über strtotime() auf
+	 * "00:00" des Folgetags und würde das Tagesfenster damit auf eine
+	 * Länge von 0 kollabieren lassen (geprüft, echter Stolperstein).
+	 *
+	 * @param int $location_id Standort-ID.
+	 * @return array
+	 */
+	public static function get_effective_opening_hours( $location_id ) {
+		$lbite_hours = self::get_opening_hours( $location_id );
+
+		if ( is_array( $lbite_hours ) && ! empty( $lbite_hours ) ) {
+			return $lbite_hours;
+		}
+
+		$lbite_all_day = array(
+			'closed' => false,
+			'open'   => '00:00',
+			'close'  => '23:59',
+			'open2'  => '',
+			'close2' => '',
+		);
+
+		return array_fill_keys(
+			array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ),
+			$lbite_all_day
+		);
+	}
+
+	/**
+	 * Konkrete Öffnungsfenster für ein bestimmtes Datum auflösen.
+	 *
+	 * Bündelt die Feiertag-Override- und Wochentag-Logik, die bisher separat
+	 * in LBite_Checkout::get_available_timeslots() und
+	 * LBite_Reservations::is_within_opening_hours() dupliziert war
+	 * (Nutzer-Fund 2026-09-28).
+	 *
+	 * @param int    $location_id Standort-ID.
+	 * @param string $date        Datum (Y-m-d).
+	 * @return array Liste von ['open' => 'H:i', 'close' => 'H:i'], leer wenn geschlossen.
+	 */
+	public static function get_opening_windows_for_date( $location_id, $date ) {
+		$lbite_hours    = self::get_effective_opening_hours( $location_id );
+		$lbite_day_name = strtolower( ( new DateTime( $date, wp_timezone() ) )->format( 'l' ) );
+
+		$lbite_holiday = self::get_holiday_for_date( $location_id, $date );
+		if ( $lbite_holiday ) {
+			$lbite_holiday_type = isset( $lbite_holiday['type'] ) ? $lbite_holiday['type'] : 'closed';
+			if ( 'closed' === $lbite_holiday_type ) {
+				return array();
+			}
+			if ( 'custom' === $lbite_holiday_type ) {
+				$lbite_hours[ $lbite_day_name ] = array(
+					'closed' => false,
+					'open'   => isset( $lbite_holiday['open'] ) ? $lbite_holiday['open'] : '',
+					'close'  => isset( $lbite_holiday['close'] ) ? $lbite_holiday['close'] : '',
+					'open2'  => isset( $lbite_holiday['open2'] ) ? $lbite_holiday['open2'] : '',
+					'close2' => isset( $lbite_holiday['close2'] ) ? $lbite_holiday['close2'] : '',
+				);
+			}
+		}
+
+		if ( empty( $lbite_hours[ $lbite_day_name ] ) || ! empty( $lbite_hours[ $lbite_day_name ]['closed'] ) ) {
+			return array();
+		}
+
+		$lbite_day_hours = $lbite_hours[ $lbite_day_name ];
+		$lbite_windows   = array();
+
+		if ( ! empty( $lbite_day_hours['open'] ) && ! empty( $lbite_day_hours['close'] ) ) {
+			$lbite_windows[] = array(
+				'open'  => $lbite_day_hours['open'],
+				'close' => $lbite_day_hours['close'],
+			);
+		}
+		if ( ! empty( $lbite_day_hours['open2'] ) && ! empty( $lbite_day_hours['close2'] ) ) {
+			$lbite_windows[] = array(
+				'open'  => $lbite_day_hours['open2'],
+				'close' => $lbite_day_hours['close2'],
+			);
+		}
+
+		return $lbite_windows;
+	}
+
+	/**
 	 * Formatierte Adresse für einen Standort abrufen
 	 *
 	 * @param int $location_id Standort-ID
@@ -1552,7 +1671,16 @@ class LBite_Locations {
 	 */
 	public static function get_location_status( $opening_hours, $location_id = 0 ) {
 		if ( ! $opening_hours || ! is_array( $opening_hours ) ) {
-			return null;
+			// Kein Standort-Kontext zum Nachschlagen eines Rückfalls -
+			// "unbekannt" bleibt das einzig sinnvolle Ergebnis.
+			if ( ! $location_id ) {
+				return null;
+			}
+			// Standort ohne hinterlegte Öffnungszeiten gilt als 24 Stunden
+			// geöffnet, nicht als "unbekannt" (Nutzer-Fund 2026-09-28) - über
+			// get_effective_opening_hours() korrigiert sich das automatisch
+			// an allen Aufrufstellen, die $location_id bereits mitgeben.
+			$opening_hours = self::get_effective_opening_hours( $location_id );
 		}
 
 		// DateTime mit WP-Timezone: format('l') gibt immer englische Tagnamen zurück.

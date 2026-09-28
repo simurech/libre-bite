@@ -6910,6 +6910,26 @@ msgstr "Mostrato nella pagina Supporto vista dal tuo personale — usalo per spi
 msgid "This is how support information will be displayed on the Support page:"
 msgstr "Ecco come appariranno le informazioni di assistenza nella pagina Supporto:"
 
+#: templates/admin/settings/locations.php:76
+msgid "Default Location"
+msgstr "Sede predefinita"
+
+#: templates/admin/settings/locations.php:79
+msgid "-- Automatic --"
+msgstr "-- Automatico --"
+
+#: templates/admin/settings/locations.php:87
+msgid "Used whenever a guest cannot pick a location themselves - most importantly if \"Location Selection\" above is turned off. \"Automatic\" picks the location that was created first."
+msgstr "Usato quando un cliente non può scegliere autonomamente una sede — soprattutto se «Selezione della sede» qui sopra è disattivata. «Automatico» sceglie la sede creata per prima."
+
+#: includes/modules/checkout/class-checkout.php:623
+msgid "Ordering from: %s"
+msgstr "Ordine per: %s"
+
+#: includes/modules/reservations/class-reservations.php:471
+msgid "The location is open %s on this day."
+msgstr "La sede è aperta %s in questo giorno."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Errore durante il salvataggio"
 

@@ -70,29 +70,39 @@ class LBite_Checkout {
 		// Klick. Die Methode begrenzt sich intern bereits auf die relevanten Seiten.
 		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_frontend_assets' );
 
-		// Standort- & Zeitwahl (Feature-abhängig)
+		// Standort- & Zeitwahl-UI (Feature-abhängig - reine Auswahl-Oberfläche)
 		if ( lbite_feature_enabled( 'enable_location_selector' ) ) {
 			// Modal nur anzeigen wenn explizit aktiviert via Filter
 			if ( apply_filters( 'lbite_enable_location_modal', false ) ) {
 				$this->loader->add_action( 'wp_footer', $this, 'render_location_modal' );
 			}
 			$this->loader->add_action( 'woocommerce_checkout_before_customer_details', $this, 'render_location_time_selection' );
-			$this->loader->add_action( 'woocommerce_checkout_process', $this, 'validate_location_time' );
-			$this->loader->add_action( 'woocommerce_checkout_update_order_meta', $this, 'save_location_time_meta' );
 
-			// AJAX-Endpoints
+			// AJAX-Endpoints, die nur mit einer interaktiven Auswahl Sinn ergeben.
 			$this->loader->add_action( 'wp_ajax_lbite_set_location', $this, 'ajax_set_location' );
 			$this->loader->add_action( 'wp_ajax_nopriv_lbite_set_location', $this, 'ajax_set_location' );
-			$this->loader->add_action( 'wp_ajax_lbite_get_timeslots', $this, 'ajax_get_timeslots' );
-			$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_timeslots', $this, 'ajax_get_timeslots' );
-			$this->loader->add_action( 'wp_ajax_lbite_get_opening_days', $this, 'ajax_get_opening_days' );
-			$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_opening_days', $this, 'ajax_get_opening_days' );
 			$this->loader->add_action( 'wp_ajax_lbite_get_location_status', $this, 'ajax_get_location_status' );
 			$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_location_status', $this, 'ajax_get_location_status' );
-
-			// Produkt-Standortverfügbarkeit beim Hinzufügen zum Warenkorb prüfen.
-			$this->loader->add_filter( 'woocommerce_add_to_cart_validation', $this, 'validate_product_location_availability', 10, 3 );
 		}
+
+		// Standort-Zuordnung zur Bestellung: läuft IMMER, unabhängig von der
+		// UI. Vorher hingen diese drei Hooks ebenfalls am Feature-Schalter,
+		// wodurch Bestellungen bei deaktivierter Auswahl und mehreren
+		// Standorten komplett ohne Standort-Meta blieben und für
+		// standortbeschränktes Personal unsichtbar wurden (Nutzer-Fund
+		// 2026-09-28). resolve_effective_location_id() fängt den
+		// deaktivierten Fall über den Standard-Standort ab.
+		$this->loader->add_action( 'woocommerce_checkout_process', $this, 'validate_location_time' );
+		$this->loader->add_action( 'woocommerce_checkout_update_order_meta', $this, 'save_location_time_meta' );
+		$this->loader->add_filter( 'woocommerce_add_to_cart_validation', $this, 'validate_product_location_availability', 10, 3 );
+
+		// Zeitfenster-/Öffnungstage-Endpunkte: werden inzwischen auch von den
+		// Reservierungen gebraucht (nicht nur vom Standort-Umschalter),
+		// deshalb ebenfalls unabhängig vom Feature-Schalter registriert.
+		$this->loader->add_action( 'wp_ajax_lbite_get_timeslots', $this, 'ajax_get_timeslots' );
+		$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_timeslots', $this, 'ajax_get_timeslots' );
+		$this->loader->add_action( 'wp_ajax_lbite_get_opening_days', $this, 'ajax_get_opening_days' );
+		$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_opening_days', $this, 'ajax_get_opening_days' );
 
 		// Trinkgeld & optimierter Checkout: nur in Premium-Version (dieser Block wird in Gratis-Version entfernt).
 		if ( lbite_freemius()->is__premium_only() ) {
@@ -408,8 +418,17 @@ class LBite_Checkout {
 	public function enqueue_frontend_assets() {
 		global $post;
 		
-		// Prüfen ob Shortcode auf der Seite vorhanden ist.
-		$has_shortcode = is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'lbite_location_selector' );
+		// Prüfen ob eines der Libre-Bite-Frontend-Shortcodes auf der Seite
+		// vorhanden ist. Vorher nur lbite_location_selector geprüft, wodurch
+		// z. B. reine Menü-Ansicht-Seiten nie die Branding-Farben bekamen
+		// (Nutzer-Fund 2026-09-28).
+		$lbite_frontend_shortcodes = array( 'lbite_location_selector', 'lbite_menu', 'lbite_reservation_form', 'lbite_stampcard' );
+		$has_shortcode             = is_a( $post, 'WP_Post' ) && (bool) array_filter(
+			$lbite_frontend_shortcodes,
+			function ( $lbite_shortcode ) use ( $post ) {
+				return has_shortcode( $post->post_content, $lbite_shortcode );
+			}
+		);
 
 		// Nur auf relevanten WooCommerce-Seiten oder wenn Shortcode vorhanden ist.
 		if ( ! is_shop() && ! is_product() && ! is_product_category() && ! is_product_tag() && ! is_cart() && ! is_checkout() && ! $has_shortcode ) {
@@ -484,36 +503,10 @@ class LBite_Checkout {
 			}
 		}
 
-		// Branding CSS Custom Properties hinzufügen.
-		$color_primary   = get_option( 'lbite_color_primary', '#0073aa' );
-		$color_secondary = get_option( 'lbite_color_secondary', '#23282d' );
-		$color_accent    = get_option( 'lbite_color_accent', '#00a32a' );
-
-		// Hellen Hintergrund aus Primary berechnen (8 % Primary + 92 % Weiss).
-		$hex              = ltrim( $color_primary, '#' );
-		$r                = (int) round( hexdec( substr( $hex, 0, 2 ) ) * 0.08 + 255 * 0.92 );
-		$g                = (int) round( hexdec( substr( $hex, 2, 2 ) ) * 0.08 + 255 * 0.92 );
-		$b                = (int) round( hexdec( substr( $hex, 4, 2 ) ) * 0.08 + 255 * 0.92 );
-		$color_primary_bg = sprintf( '#%02x%02x%02x', $r, $g, $b );
-
-		$custom_css = sprintf(
-			':root {
-				--lbite-color-primary: %s;
-				--lbite-color-secondary: %s;
-				--lbite-color-accent: %s;
-				--lbite-color-primary-hover: %s;
-				--lbite-color-accent-hover: %s;
-				--lbite-color-primary-bg: %s;
-			}',
-			esc_attr( $color_primary ),
-			esc_attr( $color_secondary ),
-			esc_attr( $color_accent ),
-			esc_attr( $this->adjust_brightness( $color_primary, -20 ) ),
-			esc_attr( $this->adjust_brightness( $color_accent, -20 ) ),
-			esc_attr( $color_primary_bg )
-		);
-
-		wp_add_inline_style( 'lbite-frontend', $custom_css );
+		// Branding CSS Custom Properties hinzufügen. Gemeinsame Quelle mit
+		// dem Admin-/POS-Pfad statt einer zweiten, separat gepflegten
+		// Berechnung (Nutzer-Fund 2026-09-28).
+		wp_add_inline_style( 'lbite-frontend', LBite_Branding::get_inline_css() );
 
 		wp_enqueue_script(
 			'lbite-frontend',
@@ -604,6 +597,35 @@ class LBite_Checkout {
 	 * Shortcode: Standort-Auswahl
 	 */
 	public function shortcode_location_selector( $atts ) {
+		$lbite_locations = LBite_Locations::get_all_locations();
+
+		if ( empty( $lbite_locations ) ) {
+			return '<p>' . esc_html__( 'No locations available.', 'libre-bite' ) . '</p>';
+		}
+
+		// Ohne aktive Standortauswahl keinen Umschalter rendern (galt bisher
+		// nur für den einzelnen Standort-Fall weiter unten, nicht generell) -
+		// stattdessen ein kurzer Hinweis, für welchen Standort bestellt wird,
+		// und kein unnötiges Laden von frontend.css/js (Nutzer-Fund
+		// 2026-09-28).
+		if ( ! lbite_feature_enabled( 'enable_location_selector' ) ) {
+			$lbite_default_id = LBite_Locations::get_default_location_id();
+			if ( ! $lbite_default_id ) {
+				return '';
+			}
+			$lbite_default_post = get_post( $lbite_default_id );
+			if ( ! $lbite_default_post ) {
+				return '';
+			}
+			return '<p class="lbite-location-selector-static">'
+				. sprintf(
+					/* translators: %s: location name */
+					esc_html__( 'Ordering from: %s', 'libre-bite' ),
+					esc_html( $lbite_default_post->post_title )
+				)
+				. '</p>';
+		}
+
 		// CSS laden
 		if ( ! wp_style_is( 'lbite-frontend', 'enqueued' ) ) {
 			wp_enqueue_style( 'dashicons' );
@@ -652,12 +674,6 @@ class LBite_Checkout {
 			$atts,
 			'lbite_location_selector'
 		);
-
-		$lbite_locations = LBite_Locations::get_all_locations();
-
-		if ( empty( $lbite_locations ) ) {
-			return '<p>' . esc_html__( 'No locations available.', 'libre-bite' ) . '</p>';
-		}
 
 		// Single-Location-Modus: gibt es nur einen Standort, entfällt die Auswahl — der Standort
 		// wird serverseitig direkt in der Session vermerkt (ohne order_type, die eigentliche
@@ -711,6 +727,37 @@ class LBite_Checkout {
 	}
 
 	/**
+	 * Effektiven Standort auflösen, unabhängig davon ob eine interaktive
+	 * Auswahl (enable_location_selector) existiert.
+	 *
+	 * Wird bewusst lazy/read-only aufgerufen statt die Session beim
+	 * Seitenaufruf vorab zu befüllen - das würde die bei AP-15 behobene
+	 * Full-Page-Cache-Falle reaktivieren (siehe process_url_parameters()).
+	 * Bei deaktivierter Standortauswahl und mehreren Standorten gab es
+	 * bisher gar keinen Rückfall, wodurch Bestellungen ohne Standort-Meta
+	 * entstanden und für standortbeschränktes Personal unsichtbar wurden
+	 * (Nutzer-Fund 2026-09-28).
+	 *
+	 * @param int $posted_location_id Aus $_POST gelesene Standort-ID, 0 wenn keine.
+	 * @return int Standort-ID oder 0.
+	 */
+	private function resolve_effective_location_id( $posted_location_id ) {
+		if ( $posted_location_id && LBite_Locations::is_valid_location( $posted_location_id ) ) {
+			return $posted_location_id;
+		}
+
+		if ( WC()->session && WC()->session->get( 'lbite_location_id' ) ) {
+			return (int) WC()->session->get( 'lbite_location_id' );
+		}
+
+		if ( ! lbite_feature_enabled( 'enable_location_selector' ) ) {
+			return LBite_Locations::get_default_location_id();
+		}
+
+		return 0;
+	}
+
+	/**
 	 * Standort- & Zeitwahl im Checkout anzeigen
 	 */
 	public function render_location_time_selection() {
@@ -735,26 +782,38 @@ class LBite_Checkout {
 	 * Standort & Zeit validieren
 	 */
 	public function validate_location_time() {
+		$lbite_selector_enabled = lbite_feature_enabled( 'enable_location_selector' );
+
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
 		$location_id = isset( $_POST['lbite_location_id'] ) ? intval( wp_unslash( $_POST['lbite_location_id'] ) ) : 0;
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
 		$order_type  = isset( $_POST['lbite_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_type'] ) ) : '';
 
-		// Fallback auf Session – konsistent mit save_location_time_meta().
-		if ( ! $location_id && WC()->session ) {
-			$location_id = (int) WC()->session->get( 'lbite_location_id' );
-		}
-		if ( ! $order_type && WC()->session ) {
-			$order_type = WC()->session->get( 'lbite_order_type', 'now' );
-		}
+		if ( $lbite_selector_enabled ) {
+			// Fallback auf Session – konsistent mit save_location_time_meta().
+			if ( ! $location_id && WC()->session ) {
+				$location_id = (int) WC()->session->get( 'lbite_location_id' );
+			}
+			if ( ! $order_type && WC()->session ) {
+				$order_type = WC()->session->get( 'lbite_order_type', 'now' );
+			}
 
-		if ( ! $location_id || ! LBite_Locations::is_valid_location( $location_id ) ) {
-			wc_add_notice( __( 'Please select a location.', 'libre-bite' ), 'error' );
-			$location_id = 0;
-		}
+			if ( ! $location_id || ! LBite_Locations::is_valid_location( $location_id ) ) {
+				wc_add_notice( __( 'Please select a location.', 'libre-bite' ), 'error' );
+				$location_id = 0;
+			}
 
-		if ( ! in_array( $order_type, array( 'now', 'later' ), true ) ) {
-			wc_add_notice( __( 'Please select an order type.', 'libre-bite' ), 'error' );
+			if ( ! in_array( $order_type, array( 'now', 'later' ), true ) ) {
+				wc_add_notice( __( 'Please select an order type.', 'libre-bite' ), 'error' );
+			}
+		} else {
+			// Ohne Standortauswahl gibt es keine UI, über die ein Gast
+			// "später" oder einen anderen Standort wählen könnte - Standard-
+			// Standort und "jetzt" gelten hier als Geschäftsregel, nicht als
+			// unvollständige Nutzereingabe, deshalb keine "bitte wählen"-
+			// Hinweise (Nutzer-Fund 2026-09-28).
+			$location_id = $this->resolve_effective_location_id( $location_id );
+			$order_type  = 'now';
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
@@ -855,7 +914,10 @@ class LBite_Checkout {
 		if ( ! $passed ) {
 			return $passed;
 		}
-		$location_id = WC()->session ? (int) WC()->session->get( 'lbite_location_id' ) : 0;
+		// Fällt bei deaktivierter Standortauswahl auf den Standard-Standort
+		// zurück, statt die Prüfung stillschweigend zu überspringen
+		// (Nutzer-Fund 2026-09-28).
+		$location_id = $this->resolve_effective_location_id( 0 );
 		if ( ! $location_id ) {
 			return $passed;
 		}
@@ -887,12 +949,8 @@ class LBite_Checkout {
 		// loggt ihn dabei sofort ein, wodurch dieselbe Nonce (an den vorher
 		// abgemeldeten Zustand gebunden) nicht mehr verifiziert (Audit
 		// 26.09.2026, AP-09).
-		$location_id = isset( $_POST['lbite_location_id'] ) ? intval( wp_unslash( $_POST['lbite_location_id'] ) ) : 0;
-
-		// Fallback: Session verwenden wenn POST leer.
-		if ( ! $location_id && WC()->session ) {
-			$location_id = WC()->session->get( 'lbite_location_id' );
-		}
+		$lbite_posted_location_id = isset( $_POST['lbite_location_id'] ) ? intval( wp_unslash( $_POST['lbite_location_id'] ) ) : 0;
+		$location_id              = $this->resolve_effective_location_id( $lbite_posted_location_id );
 
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
@@ -909,11 +967,17 @@ class LBite_Checkout {
 			}
 		}
 
-		$order_type = isset( $_POST['lbite_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_type'] ) ) : '';
+		// Ohne Standortauswahl gibt es keine UI für "später" - Bestelltyp
+		// steht fest auf "jetzt" (Nutzer-Fund 2026-09-28).
+		if ( ! lbite_feature_enabled( 'enable_location_selector' ) ) {
+			$order_type = 'now';
+		} else {
+			$order_type = isset( $_POST['lbite_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_type'] ) ) : '';
 
-		// Fallback: Session verwenden wenn POST leer.
-		if ( ! $order_type && WC()->session ) {
-			$order_type = WC()->session->get( 'lbite_order_type', 'now' );
+			// Fallback: Session verwenden wenn POST leer.
+			if ( ! $order_type && WC()->session ) {
+				$order_type = WC()->session->get( 'lbite_order_type', 'now' );
+			}
 		}
 
 		if ( $order_type ) {
@@ -1428,16 +1492,18 @@ class LBite_Checkout {
 			wp_send_json_error( array( 'message' => __( 'Invalid location', 'libre-bite' ) ) );
 		}
 
-		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
+		// get_effective_opening_hours() statt get_opening_hours(): ein
+		// unkonfigurierter Standort galt hier zufällig bereits korrekt als
+		// "kein Tag geschlossen" (leeres Array => die if-Bedingung griff nie),
+		// aber über den gemeinsamen Rückfall ausgedrückt statt sich auf einen
+		// Zufall zu verlassen (Nutzer-Fund 2026-09-28).
+		$opening_hours = LBite_Locations::get_effective_opening_hours( $location_id );
 		$closed_days   = array();
+		$weekdays      = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
 
-		if ( $opening_hours && is_array( $opening_hours ) ) {
-			$weekdays = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
-
-			foreach ( $weekdays as $day ) {
-				if ( ! isset( $opening_hours[ $day ] ) || $opening_hours[ $day ]['closed'] ) {
-					$closed_days[] = $day;
-				}
+		foreach ( $weekdays as $day ) {
+			if ( ! isset( $opening_hours[ $day ] ) || $opening_hours[ $day ]['closed'] ) {
+				$closed_days[] = $day;
 			}
 		}
 
@@ -1504,45 +1570,15 @@ class LBite_Checkout {
 			return array();
 		}
 
-		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
-		$interval      = LBite_Locations::get_time_setting( $location_id, 'timeslot_interval', 15 );
+		$interval = LBite_Locations::get_time_setting( $location_id, 'timeslot_interval', 15 );
 
-		if ( ! $opening_hours || ! is_array( $opening_hours ) ) {
-			return array();
-		}
+		// Holt Feiertag-Override, Wochentag-Zeitfenster und den 24/7-Rückfall
+		// für unkonfigurierte Standorte gebündelt aus einer gemeinsamen
+		// Quelle statt sie hier ein zweites Mal nachzubauen (Nutzer-Fund
+		// 2026-09-28).
+		$windows = LBite_Locations::get_opening_windows_for_date( $location_id, $date );
 
-		// WP-Timezone explizit verwenden, damit alle Zeitberechnungen konsistent sind.
-		// ($tz bereits oben gesetzt)
-
-		// Wochentag des gewählten Datums in der WP-Timezone ermitteln (englische Namen).
-		$lbite_date_dt = new DateTime( $date, $tz );
-		$day_name      = strtolower( $lbite_date_dt->format( 'l' ) );
-
-		// Feiertag VOR der Ruhetags-Prüfung auswerten: ein Feiertag mit
-		// Sonderöffnungszeiten an einem regulären Ruhetag lieferte bisher
-		// keine Slots, weil die Ruhetags-Prüfung schon vorher abbrach
-		// (Audit 26.09.2026, AP-13).
-		$holiday = LBite_Locations::get_holiday_for_date( $location_id, $date );
-		if ( $holiday ) {
-			$holiday_type = isset( $holiday['type'] ) ? $holiday['type'] : 'closed';
-			if ( 'closed' === $holiday_type ) {
-				return array();
-			}
-			if ( 'custom' === $holiday_type ) {
-				// Custom-Feiertag-Zeiten als Tagesöffnungszeiten verwenden.
-				$opening_hours[ $day_name ] = array(
-					'closed' => false,
-					'open'   => isset( $holiday['open'] ) ? $holiday['open'] : '',
-					'close'  => isset( $holiday['close'] ) ? $holiday['close'] : '',
-					'open2'  => isset( $holiday['open2'] ) ? $holiday['open2'] : '',
-					'close2' => isset( $holiday['close2'] ) ? $holiday['close2'] : '',
-				);
-			}
-		}
-
-		// Ruhetag - es sei denn, ein Feiertag mit Sonderzeiten hat die Zeilen
-		// oben soeben überschrieben.
-		if ( ! isset( $opening_hours[ $day_name ] ) || ! empty( $opening_hours[ $day_name ]['closed'] ) ) {
+		if ( empty( $windows ) ) {
 			return array();
 		}
 
@@ -1552,20 +1588,6 @@ class LBite_Checkout {
 		$now_ts        = $now_dt->getTimestamp();
 		$earliest_slot = $now_ts + ( $prep_time * 60 );
 		// $is_today ist bereits oben für den Cache-Check gesetzt.
-
-		// Zeitfenster für diesen Tag zusammenstellen (Fenster 1 + optional Fenster 2).
-		$windows   = array();
-		$day_hours = $opening_hours[ $day_name ];
-		if ( ! empty( $day_hours['open'] ) && ! empty( $day_hours['close'] ) ) {
-			$windows[] = array( 'open' => $day_hours['open'], 'close' => $day_hours['close'] );
-		}
-		if ( ! empty( $day_hours['open2'] ) && ! empty( $day_hours['close2'] ) ) {
-			$windows[] = array( 'open' => $day_hours['open2'], 'close' => $day_hours['close2'] );
-		}
-
-		if ( empty( $windows ) ) {
-			return array();
-		}
 
 		// Slot-Buffer (Premium). Kein eigener Feature-Schalter, der die
 		// Lizenz separat prüft – `is__premium_only()` allein prüft nur die
@@ -1782,28 +1804,6 @@ class LBite_Checkout {
 		$taken  = isset( $counts[ $key ] ) ? $counts[ $key ] : 0;
 
 		return $taken < $capacity;
-	}
-
-	/**
-	 * Hex-Farbe in Helligkeit anpassen
-	 *
-	 * @param string $hex    Hex-Farbwert.
-	 * @param int    $amount Anpassungswert (-255 bis 255).
-	 * @return string
-	 */
-	private function adjust_brightness( $hex, $amount ) {
-		$hex = ltrim( $hex, '#' );
-
-		// Kurze Hex-Notation erweitern.
-		if ( strlen( $hex ) === 3 ) {
-			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
-		}
-
-		$r = max( 0, min( 255, hexdec( substr( $hex, 0, 2 ) ) + $amount ) );
-		$g = max( 0, min( 255, hexdec( substr( $hex, 2, 2 ) ) + $amount ) );
-		$b = max( 0, min( 255, hexdec( substr( $hex, 4, 2 ) ) + $amount ) );
-
-		return sprintf( '#%02x%02x%02x', $r, $g, $b );
 	}
 
 	/**

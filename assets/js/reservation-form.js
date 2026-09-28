@@ -11,10 +11,96 @@
 	var $success    = $( '#lbite-res-success' );
 	var $steps      = $form.find( '.lbite-res-step' );
 	var $dots       = $container.find( '.lbite-res-step-dot' );
+	var $timeHint   = $( '#lbite-res-time-hint' );
 
 	if ( ! $form.length ) {
 		return;
 	}
+
+	// Öffnungsfenster für den zuletzt geprüften Standort/Datum - null solange
+	// noch nichts geladen wurde oder der letzte Ladeversuch fehlschlug (in
+	// dem Fall wird nichts blockiert, die serverseitige Prüfung bei der
+	// finalen Übermittlung bleibt ohnehin massgeblich).
+	var openingWindows = null;
+
+	function timeToMinutes( time ) {
+		var parts = ( time || '' ).split( ':' );
+		return ( parseInt( parts[ 0 ], 10 ) || 0 ) * 60 + ( parseInt( parts[ 1 ], 10 ) || 0 );
+	}
+
+	/**
+	 * Prüft die aktuell eingegebene Uhrzeit gegen die zuletzt geladenen
+	 * Öffnungsfenster und zeigt/versteckt den Hinweis entsprechend.
+	 *
+	 * @return {boolean} true, wenn kein Hinweis blockiert (unbekannt zählt als "ok" - die
+	 *                    serverseitige Prüfung bleibt die eigentliche Absicherung).
+	 */
+	function validateOpeningWindow() {
+		var time = $( '#lbite-res-time' ).val();
+
+		if ( null === openingWindows || ! time ) {
+			$timeHint.hide();
+			return true;
+		}
+
+		if ( ! openingWindows.length ) {
+			$timeHint.text( cfg.strings.closedOnDay ).show();
+			return false;
+		}
+
+		var minutes = timeToMinutes( time );
+		var inWindow = openingWindows.some( function ( w ) {
+			return minutes >= timeToMinutes( w.open ) && minutes < timeToMinutes( w.close );
+		} );
+
+		if ( ! inWindow ) {
+			var ranges = openingWindows.map( function ( w ) {
+				return w.open + '–' + w.close;
+			} ).join( ', ' );
+			$timeHint.text( cfg.strings.openWindow.replace( '%s', ranges ) ).show();
+			return false;
+		}
+
+		$timeHint.hide();
+		return true;
+	}
+
+	/**
+	 * Lädt die Öffnungsfenster für den gewählten Standort/Datum neu und
+	 * validiert danach die aktuell eingegebene Zeit erneut.
+	 */
+	function loadOpeningWindows() {
+		var $locationSelect = $( '#lbite-res-location' );
+		var locationId = $locationSelect.length ? $locationSelect.val() : $( 'input[name="location_id"]' ).val();
+		var date = $( '#lbite-res-date' ).val();
+
+		if ( ! locationId || ! date ) {
+			openingWindows = null;
+			$timeHint.hide();
+			return;
+		}
+
+		$.ajax( {
+			url    : cfg.ajaxUrl,
+			method : 'POST',
+			data   : {
+				action     : 'lbite_get_opening_windows',
+				location_id: locationId,
+				date       : date
+			},
+			success: function ( response ) {
+				openingWindows = ( response.success && response.data && response.data.windows ) ? response.data.windows : [];
+				validateOpeningWindow();
+			},
+			error: function () {
+				openingWindows = null;
+				$timeHint.hide();
+			}
+		} );
+	}
+
+	$form.on( 'change', '#lbite-res-date, #lbite-res-location', loadOpeningWindows );
+	$form.on( 'change blur', '#lbite-res-time', validateOpeningWindow );
 
 	/**
 	 * Prüft alle Pflichtfelder innerhalb eines Schritts (native HTML5-Validierung).
@@ -102,6 +188,14 @@
 		var $currentStep = $( this ).closest( '.lbite-res-step' );
 
 		if ( ! stepIsValid( $currentStep ) ) {
+			return;
+		}
+
+		// Schritt 1: bereits hier abbrechen, wenn die gewählte Zeit laut den
+		// zuletzt geladenen Öffnungsfenstern ungültig ist, statt die
+		// Ablehnung erst bei der finalen Übermittlung zu zeigen
+		// (Nutzer-Fund 2026-09-28).
+		if ( 1 === parseInt( $currentStep.data( 'step' ), 10 ) && ! validateOpeningWindow() ) {
 			return;
 		}
 

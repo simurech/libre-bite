@@ -9,7 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$lbite_location_page_id  = get_option( 'lbite_location_page_id', 0 );
+$lbite_location_page_id   = get_option( 'lbite_location_page_id', 0 );
+$lbite_default_location   = get_option( 'lbite_default_location_id', 0 );
+$lbite_all_locations      = LBite_Locations::get_all_locations();
 $lbite_preparation_time  = get_option( 'lbite_preparation_time', 30 );
 $lbite_timeslot_int      = get_option( 'lbite_timeslot_interval', 15 );
 $lbite_slot_buffer_start = get_option( 'lbite_slot_buffer_start', 0 );
@@ -69,6 +71,24 @@ $lbite_all_pages         = get_pages( array( 'post_status' => 'publish' ) );
 				</p>
 			</td>
 		</tr>
+		<?php if ( count( $lbite_all_locations ) > 1 ) : ?>
+		<tr>
+			<th><?php esc_html_e( 'Default Location', 'libre-bite' ); ?></th>
+			<td>
+				<select name="lbite_default_location_id">
+					<option value="0"><?php esc_html_e( '-- Automatic --', 'libre-bite' ); ?></option>
+					<?php foreach ( $lbite_all_locations as $lbite_loc ) : ?>
+						<option value="<?php echo esc_attr( $lbite_loc->ID ); ?>" <?php selected( $lbite_default_location, $lbite_loc->ID ); ?>>
+							<?php echo esc_html( $lbite_loc->post_title ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+				<p class="description">
+					<?php esc_html_e( 'Used whenever a guest cannot pick a location themselves - most importantly if "Location Selection" above is turned off. "Automatic" picks the location that was created first.', 'libre-bite' ); ?>
+				</p>
+			</td>
+		</tr>
+		<?php endif; ?>
 	</table>
 
 	<h2><?php esc_html_e( 'Time Settings', 'libre-bite' ); ?></h2>

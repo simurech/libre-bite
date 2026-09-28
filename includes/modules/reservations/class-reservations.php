@@ -110,6 +110,8 @@ class LBite_Reservations {
 		// AJAX (öffentlich)
 		$this->loader->add_action( 'wp_ajax_lbite_submit_reservation', $this, 'ajax_submit_reservation' );
 		$this->loader->add_action( 'wp_ajax_nopriv_lbite_submit_reservation', $this, 'ajax_submit_reservation' );
+		$this->loader->add_action( 'wp_ajax_lbite_get_opening_windows', $this, 'ajax_get_opening_windows' );
+		$this->loader->add_action( 'wp_ajax_nopriv_lbite_get_opening_windows', $this, 'ajax_get_opening_windows' );
 	}
 
 	/**
@@ -458,12 +460,15 @@ class LBite_Reservations {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'lbite_reservation_form' ),
 				'strings' => array(
-					'sending'     => __( 'Sending…', 'libre-bite' ),
-					'success'     => __( 'Your reservation request has been submitted successfully. We will contact you soon.', 'libre-bite' ),
-					'error'       => __( 'Error sending. Please try again.', 'libre-bite' ),
-					'loadTables'  => __( 'Loading tables…', 'libre-bite' ),
-					'noTables'    => __( 'No tables available for this location.', 'libre-bite' ),
-					'selectTable' => __( '— Select Table —', 'libre-bite' ),
+					'sending'      => __( 'Sending…', 'libre-bite' ),
+					'success'      => __( 'Your reservation request has been submitted successfully. We will contact you soon.', 'libre-bite' ),
+					'error'        => __( 'Error sending. Please try again.', 'libre-bite' ),
+					'loadTables'   => __( 'Loading tables…', 'libre-bite' ),
+					'noTables'     => __( 'No tables available for this location.', 'libre-bite' ),
+					'selectTable'  => __( '— Select Table —', 'libre-bite' ),
+					'closedOnDay'  => __( 'The location is closed on this day.', 'libre-bite' ),
+					/* translators: %s: opening hours, e.g. "11:00–14:00, 18:00–22:00" */
+					'openWindow'   => __( 'The location is open %s on this day.', 'libre-bite' ),
 				),
 			)
 		);
@@ -503,6 +508,32 @@ class LBite_Reservations {
 		ob_start();
 		include LBITE_PLUGIN_DIR . 'templates/frontend/reservation-form.php';
 		return ob_get_clean();
+	}
+
+	/**
+	 * AJAX: Öffnungsfenster für Standort & Datum abrufen
+	 *
+	 * Reine Lesezugriff auf öffentliche Standort-Daten, kein Nonce-Zwang
+	 * nötig (analog zu LBite_Checkout::ajax_get_timeslots()). Lässt Schritt 1
+	 * des Reservierungsformulars ungültige Zeiten schon vor dem letzten
+	 * Schritt erkennen, statt die Ablehnung erst bei ajax_submit_reservation()
+	 * zu zeigen (Nutzer-Fund 2026-09-28).
+	 */
+	public function ajax_get_opening_windows() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- s.o.
+		$lbite_location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- s.o.
+		$lbite_date        = isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
+
+		if ( ! $lbite_location_id || ! $lbite_date ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid request', 'libre-bite' ) ) );
+		}
+
+		wp_send_json_success(
+			array(
+				'windows' => LBite_Locations::get_opening_windows_for_date( $lbite_location_id, $lbite_date ),
+			)
+		);
 	}
 
 	/**
@@ -673,59 +704,24 @@ class LBite_Reservations {
 	 * @return bool
 	 */
 	private function is_within_opening_hours( $location_id, $date, $time ) {
-		$holiday = LBite_Locations::get_holiday_for_date( $location_id, $date );
+		// Feiertag-Override, Wochentag-Zeitfenster und der 24/7-Rückfall für
+		// unkonfigurierte Standorte kommen jetzt aus einer gemeinsamen
+		// Quelle, die auch der Checkout nutzt, statt hier ein zweites Mal
+		// nachgebaut zu werden - vorher hatte "keine Öffnungszeiten
+		// hinterlegt" hier "geschlossen" bedeutet statt "24 Stunden offen"
+		// (Nutzer-Fund 2026-09-28).
+		$lbite_windows = LBite_Locations::get_opening_windows_for_date( $location_id, $date );
 
-		if ( $holiday ) {
-			$holiday_type = isset( $holiday['type'] ) ? $holiday['type'] : 'closed';
-
-			if ( 'closed' === $holiday_type ) {
-				return false;
-			}
-
-			if ( 'custom' === $holiday_type ) {
-				return self::time_in_window(
-					$time,
-					array(
-						'open'   => isset( $holiday['open'] ) ? $holiday['open'] : '',
-						'close'  => isset( $holiday['close'] ) ? $holiday['close'] : '',
-						'open2'  => isset( $holiday['open2'] ) ? $holiday['open2'] : '',
-						'close2' => isset( $holiday['close2'] ) ? $holiday['close2'] : '',
-					)
-				);
-			}
-		}
-
-		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
-		if ( ! is_array( $opening_hours ) ) {
+		if ( empty( $lbite_windows ) ) {
 			return false;
 		}
 
-		$day_name = strtolower( ( new DateTime( $date, wp_timezone() ) )->format( 'l' ) );
-		if ( empty( $opening_hours[ $day_name ] ) || ! empty( $opening_hours[ $day_name ]['closed'] ) ) {
-			return false;
-		}
+		$lbite_minutes = self::time_to_minutes( $time );
 
-		return self::time_in_window( $time, $opening_hours[ $day_name ] );
-	}
-
-	/**
-	 * Prüft, ob eine Uhrzeit in einem der beiden Tagesfenster liegt.
-	 *
-	 * @param string $time      Uhrzeit (H:i).
-	 * @param array  $day_hours Tagesdaten mit open/close/open2/close2.
-	 * @return bool
-	 */
-	private static function time_in_window( $time, array $day_hours ) {
-		$minutes = self::time_to_minutes( $time );
-
-		foreach ( array( array( 'open', 'close' ), array( 'open2', 'close2' ) ) as $pair ) {
-			list( $open_key, $close_key ) = $pair;
-			if ( empty( $day_hours[ $open_key ] ) || empty( $day_hours[ $close_key ] ) ) {
-				continue;
-			}
-			$open  = self::time_to_minutes( $day_hours[ $open_key ] );
-			$close = self::time_to_minutes( $day_hours[ $close_key ] );
-			if ( $minutes >= $open && $minutes < $close ) {
+		foreach ( $lbite_windows as $lbite_window ) {
+			$lbite_open  = self::time_to_minutes( $lbite_window['open'] );
+			$lbite_close = self::time_to_minutes( $lbite_window['close'] );
+			if ( $lbite_minutes >= $lbite_open && $lbite_minutes < $lbite_close ) {
 				return true;
 			}
 		}

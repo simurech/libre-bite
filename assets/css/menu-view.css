@@ -14,6 +14,7 @@
 .lbite-menu-view {
 	--lbite-menu-primary: var(--lbite-color-primary, #0073aa);
 	--lbite-menu-primary-hover: var(--lbite-color-primary-hover, #005a87);
+	--lbite-menu-primary-contrast: var(--lbite-color-primary-contrast, #fff);
 	--lbite-menu-surface: #ffffff;
 	--lbite-menu-canvas: #f6f7f9;
 	--lbite-menu-border: #e3e6ea;
@@ -137,7 +138,7 @@ body .lbite-menu-view .lbite-menu-nav__item.is-active,
 body .lbite-menu-view .lbite-menu-nav__item:hover {
 	background: var(--lbite-menu-primary);
 	border-color: var(--lbite-menu-primary);
-	color: #fff;
+	color: var(--lbite-menu-primary-contrast);
 }
 
 /* ── Abschnitte und Raster ──────────────────────────────────────────── */
@@ -263,13 +264,25 @@ body .lbite-menu-view .lbite-menu-item__price {
 body .lbite-menu-view .lbite-menu-item__price del { opacity: .55; font-weight: 400; }
 body .lbite-menu-view .lbite-menu-item__price ins { text-decoration: none; }
 
+/*
+ * Der add-to-cart-Aufruf feuert bewusst das echte WooCommerce-Event
+ * "added_to_cart" (siehe menu-view.js), damit Mini-Warenkorb-Fragmente
+ * andernorts auf der Seite aktualisieren. Theme/WooCommerce hängen daran
+ * aber oft einen "Warenkorb ansehen"-Link, der das Produktraster verschiebt
+ * - der Slide-in-Warenkorb übernimmt diese Funktion bereits, der Link wird
+ * hier unterdrückt (Nutzer-Fund 2026-09-28).
+ */
+body .lbite-menu-view .added_to_cart.wc-forward {
+	display: none !important;
+}
+
 body .lbite-menu-view .lbite-menu-item__add {
 	min-height: 40px;
 	padding: 0 18px;
 	border: none;
 	border-radius: 999px;
 	background: var(--lbite-menu-primary);
-	color: #fff !important;
+	color: var(--lbite-menu-primary-contrast) !important;
 	font-size: 14px;
 	font-weight: 600;
 	transition: background-color .15s ease, transform .1s ease;
@@ -368,7 +381,7 @@ body .lbite-menu-view .lbite-menu-modal__add {
 	border: none;
 	border-radius: 10px;
 	background: var(--lbite-menu-primary);
-	color: #fff !important;
+	color: var(--lbite-menu-primary-contrast) !important;
 	font-size: 15px;
 	font-weight: 700;
 }
@@ -397,7 +410,7 @@ body .lbite-menu-view .lbite-menu-modal__add {
 	border: none;
 	border-radius: 999px;
 	background: var(--lbite-menu-primary, #0073aa);
-	color: #fff !important;
+	color: var(--lbite-menu-primary-contrast) !important;
 	font-size: 15px;
 	font-weight: 700;
 	box-shadow: 0 8px 24px rgba(16, 24, 40, .25);
@@ -498,7 +511,7 @@ body .lbite-menu-view .lbite-menu-cart__head h2 { font-size: 18px; font-weight: 
 	line-height: 48px;
 	border-radius: 10px;
 	background: var(--lbite-menu-primary, #0073aa);
-	color: #fff !important;
+	color: var(--lbite-menu-primary-contrast) !important;
 	font-weight: 700;
 	text-decoration: none !important;
 }

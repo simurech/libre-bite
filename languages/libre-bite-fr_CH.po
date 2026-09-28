@@ -6910,6 +6910,26 @@ msgstr "Affiché sur la page Support que voit votre personnel — utilisez-le po
 msgid "This is how support information will be displayed on the Support page:"
 msgstr "Voici comment les informations d'assistance apparaîtront sur la page Support :"
 
+#: templates/admin/settings/locations.php:76
+msgid "Default Location"
+msgstr "Emplacement par défaut"
+
+#: templates/admin/settings/locations.php:79
+msgid "-- Automatic --"
+msgstr "-- Automatique --"
+
+#: templates/admin/settings/locations.php:87
+msgid "Used whenever a guest cannot pick a location themselves - most importantly if \"Location Selection\" above is turned off. \"Automatic\" picks the location that was created first."
+msgstr "Utilisé lorsqu'un client ne peut pas choisir lui-même un établissement — notamment si « Sélection de l'établissement » ci-dessus est désactivée. « Automatique » choisit l'établissement créé en premier."
+
+#: includes/modules/checkout/class-checkout.php:623
+msgid "Ordering from: %s"
+msgstr "Commande pour : %s"
+
+#: includes/modules/reservations/class-reservations.php:471
+msgid "The location is open %s on this day."
+msgstr "Cet établissement est ouvert %s ce jour-là."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Erreur lors de l'enregistrement"
 

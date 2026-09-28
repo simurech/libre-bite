@@ -100,6 +100,11 @@ class LBite_Menu_View {
 			array(),
 			LBITE_VERSION
 		);
+		// Eigenständig statt sich auf enqueue_frontend_assets() zu
+		// verlassen, damit die Menü-Ansicht die Branding-Farben unabhängig
+		// von Hook-Reihenfolge/Bedingung dort bekommt (Nutzer-Fund
+		// 2026-09-28).
+		wp_add_inline_style( 'lbite-menu-view', LBite_Branding::get_inline_css() );
 
 		wp_enqueue_script(
 			'lbite-menu-view',

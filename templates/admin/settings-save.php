@@ -487,6 +487,11 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				'[lbite_location_selector]'
 			);
 
+			// Standard-Standort: greift, sobald die Auswahl oben
+			// deaktiviert ist oder mehrere Standorte ohne Nutzerwahl
+			// bedient werden müssen (Nutzer-Fund 2026-09-28).
+			update_option( 'lbite_default_location_id', isset( $_POST['lbite_default_location_id'] ) ? intval( wp_unslash( $_POST['lbite_default_location_id'] ) ) : 0 );
+
 			// Kapazitätsmodul (Pro)
 			$lbite_features = get_option( 'lbite_features', array() );
 			$lbite_features['enable_slot_capacity'] = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_slot_capacity'] );
@@ -555,6 +560,25 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				if ( in_array( $lbite_theme_choice, array( 'auto', 'light', 'dark' ), true ) ) {
 					update_user_meta( get_current_user_id(), 'lbite_admin_theme', $lbite_theme_choice );
 				}
+			}
+
+			// Die Branding-Farben selbst werden nirgends im Plugin gecacht
+			// (jeder Aufruf liest die Optionen frisch, siehe LBite_Branding) -
+			// das hier ist rein defensiv für den Fall, dass ein Cache-Plugin
+			// die HTML-Ausgabe selbst zwischenspeichert (Nutzer-Fund
+			// 2026-09-28). Jeder Aufruf ist bedingt und wirkungslos, wenn das
+			// jeweilige Plugin nicht installiert ist.
+			if ( has_action( 'litespeed_purge_all' ) ) {
+				do_action( 'litespeed_purge_all' );
+			}
+			if ( has_action( 'w3tc_flush_all' ) ) {
+				do_action( 'w3tc_flush_all' );
+			}
+			if ( has_action( 'wp_rocket_clean_domain' ) ) {
+				do_action( 'wp_rocket_clean_domain' );
+			}
+			if ( function_exists( 'wp_cache_clear_cache' ) ) {
+				wp_cache_clear_cache();
 			}
 
 			$lbite_did_save = true;

@@ -70,6 +70,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		<?php endif; ?>
 
+		<!-- Allgemeine AJAX-Fehlermeldung statt alert() (Nutzer-Fund 2026-09-28) -->
+		<div class="lbite-date-error" id="lbite-location-ajax-error" style="display: none;">
+			<span class="dashicons dashicons-warning"></span>
+			<span class="lbite-error-message"></span>
+		</div>
+
 		<!-- Submit Button -->
 		<div class="lbite-form-group">
 			<button type="submit" class="lbite-button lbite-button-primary">
@@ -157,9 +163,22 @@ jQuery(document).ready(function($) {
 			},
 			error: function() {
 				$pickupTime.html('<option value=""><?php echo esc_js( __( 'Error loading', 'libre-bite' ) ); ?></option>');
+				showLocationError('<?php echo esc_js( __( 'An error occurred.', 'libre-bite' ) ); ?>');
 			}
 		});
 	});
+
+	// Allgemeine AJAX-Fehlermeldung statt alert() (Nutzer-Fund 2026-09-28).
+	let lbiteLocationErrorTimeout = null;
+	function showLocationError(message) {
+		const $error = $('#lbite-location-ajax-error');
+		$error.find('.lbite-error-message').text(message);
+		$error.show();
+		clearTimeout(lbiteLocationErrorTimeout);
+		lbiteLocationErrorTimeout = setTimeout(function() {
+			$error.hide();
+		}, 6000);
+	}
 
 	// Form-Submit
 	$form.on('submit', function(e) {
@@ -170,12 +189,12 @@ jQuery(document).ready(function($) {
 		const pickupTime = orderType === 'later' ? $pickupTime.val() : '';
 
 		if (!locationId) {
-			alert(lbiteData.strings.selectLocation);
+			showLocationError(lbiteData.strings.selectLocation);
 			return;
 		}
 
 		if (orderType === 'later' && !pickupTime) {
-			alert(lbiteData.strings.selectTime);
+			showLocationError(lbiteData.strings.selectTime);
 			return;
 		}
 
@@ -195,11 +214,11 @@ jQuery(document).ready(function($) {
 					// Seite neu laden um Auswahl anzuzeigen
 					location.reload();
 				} else {
-					alert(response.data.message || '<?php echo esc_js( __( "Error saving", "libre-bite" ) ); ?>');
+					showLocationError(response.data.message || '<?php echo esc_js( __( "Error saving", "libre-bite" ) ); ?>');
 				}
 			},
 			error: function() {
-				alert('<?php echo esc_js( __( "An error occurred.", "libre-bite" ) ); ?>');
+				showLocationError('<?php echo esc_js( __( "An error occurred.", "libre-bite" ) ); ?>');
 			}
 		});
 	});
