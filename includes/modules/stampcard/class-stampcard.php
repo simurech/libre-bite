@@ -508,9 +508,11 @@ class LBite_Stampcard {
 			<?php
 			// Fixbetrag zeigt bisher immer "% Rabatt", auch wenn discount_type
 			// auf "fixed" stand (Audit 26.09.2026, AP-11).
-			$lbite_discount_display = 'fixed' === $settings['discount_type']
-				? wp_strip_all_tags( wc_price( $settings['discount'] ) )
-				: (int) $settings['discount'] . '%';
+			$lbite_discount_display = esc_html(
+				'fixed' === $settings['discount_type']
+					? wp_strip_all_tags( wc_price( $settings['discount'] ) )
+					: (int) $settings['discount'] . '%'
+			);
 			?>
 			<?php if ( '' !== $coupon ) : ?>
 				<p class="lbite-stampcard__reward">

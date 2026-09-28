@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.5.3
+Stable tag: 3.5.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,9 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.5.4 =
+* Fix: Two WordPress Plugin Check errors (missing translators comment in the setup wizard's stamp card preview; an unescaped variable in the stamp card frontend display) that were failing the automated code-quality check.
 
 = 3.5.3 =
 * Fix: Currency symbols without a dedicated Unicode character (e.g. CHF) appeared as literal HTML entity codes instead of the actual symbol in the Setup Wizard tip preview, the Checkout Tips settings preview, the POS cart/payment screen, and the Product Options price label.

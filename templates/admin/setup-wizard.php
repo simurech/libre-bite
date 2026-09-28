@@ -190,6 +190,10 @@ $lbite_defs       = LBite_Features::get_definitions();
 							<div class="lbite-wizard__stampcard-dots" id="lbite-wizard-stampcard-dots"></div>
 							<p class="lbite-wizard__preview-note" id="lbite-wizard-stampcard-note"></p>
 						</div>
+						<?php
+						/* translators: 1: number of stamps, 2: discount percentage */
+						$lbite_stampcard_preview_text = wp_json_encode( __( '%1$d stamps → %2$d%% off the next order', 'libre-bite' ) );
+						?>
 						<script>
 						(function() {
 							var target   = document.getElementById('lbite_stampcard_target');
@@ -209,8 +213,7 @@ $lbite_defs       = LBite_Features::get_definitions();
 								// Ganzer Satz mit Platzhaltern statt aneinandergehängter Fragmente -
 								// Wortstellung und Grammatik unterscheiden sich je Sprache
 								// (Audit 26.09.2026, AP-19).
-								/* translators: 1: number of stamps, 2: discount percentage */
-								noteEl.textContent = <?php echo wp_json_encode( __( '%1$d stamps → %2$d%% off the next order', 'libre-bite' ) ); ?>
+								noteEl.textContent = <?php echo $lbite_stampcard_preview_text; ?>
 									.replace('%1$d', t)
 									.replace('%2$d%%', d + '%');
 							}
