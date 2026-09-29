@@ -18,6 +18,34 @@
 
 ---
 
+## Funktionen
+
+**Kostenlos:**
+- Live-Kanban-Bestellboard (Küchenanzeige) mit Statuswechsel per Klick
+- Integrierte Kasse (POS) für Laufkundschaft
+- Standortverwaltung mit Adresse, Öffnungszeiten und Bestellrouting
+- Zeitslot-Bestellungen für die Abholung
+- Konfigurierbare Produktoptionen (Grössen, Saucen, Extras)
+- Schweizer 5-Rappen-Rundung
+- Sound-Benachrichtigung bei neuer Bestellung
+
+**Pro:**
+- Reservierungen — 3-Schritte-Formular, automatische Freigabe, Tischzuweisung, eigenes Dashboard
+- Tischbestellung per QR-Code
+- Mehrere Standorte zentral aus einer WordPress-Installation
+- Stempelkarte mit automatisch generiertem Rabattgutschein
+- Aktionen (Mengenrabatt, BOGO, Warenkorbschwelle) & Ankündigungsleiste
+- Theme-unabhängige Menü-Ansicht (`[lbite_menu]`)
+- Ernährungsform-Kennzeichnung, Filter sowie Nährwert- und Allergenangaben
+- Split-Payment und offene Tische/Tabs an der Kasse
+- SMS-Benachrichtigung bei Abholbereitschaft
+- Anpassbares Kanban-Board (eigene Spalten, Drag & Drop)
+- Trinkgeld-Auswahl und optimierter Checkout-Flow
+
+→ Vollständige Feature-Liste mit Beschreibungen: [WordPress.org](https://wordpress.org/plugins/libre-bite/)
+
+---
+
 ## Architektur
 
 Libre Bite verwendet eine modulare, klassenbasierte Architektur. Jeder Funktionsbereich ist ein eigenes Modul, das basierend auf den Admin-Einstellungen bedingt geladen wird.
