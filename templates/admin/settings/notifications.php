@@ -107,6 +107,15 @@ $lbite_sms_trigger    = (string) get_option( 'lbite_sms_trigger_status', '' );
 
 	<?php if ( lbite_feature_enabled( 'enable_pickup_reminders' ) ) : ?>
 	<input type="hidden" name="lbite_sections[]" value="email">
+	<p class="description">
+		<?php
+		printf(
+			/* translators: %s: link to the WooCommerce email settings screen for this email */
+			esc_html__( 'Sender, subject, heading and message text for this email are configured on WooCommerce\'s own email settings screen: %s', 'libre-bite' ),
+			'<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=email&section=lbite_pickup_reminder' ) ) . '">' . esc_html__( 'Libre Bite - Pickup Reminder', 'libre-bite' ) . '</a>'
+		);
+		?>
+	</p>
 	<table class="form-table">
 		<tr>
 			<th><?php esc_html_e( 'Send reminders', 'libre-bite' ); ?></th>

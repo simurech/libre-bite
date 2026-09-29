@@ -114,7 +114,7 @@ body .lbite-menu-view select {
 	z-index: 5;
 	display: flex;
 	gap: 6px;
-	padding: 10px 0;
+	padding: 10px 16px;
 	margin-bottom: 12px;
 	overflow-x: auto;
 	background: var(--lbite-menu-surface);
@@ -716,7 +716,25 @@ body.lbite-menu-cart-open { overflow: hidden; }
 	.lbite-menu-item:hover { transform: none; }
 }
 
+/* Auf Mobile nimmt ein volles Bild oben zu viel Platz weg (Nutzer-Fund
+   2026-09-29) - stattdessen ein kleines Vorschaubild rechts neben dem Text,
+   für Raster- wie Listenansicht gleichermassen. Im Popup bleibt das grosse
+   Bild oben unverändert, dort war die Darstellung bereits gut. */
 @media (max-width: 600px) {
-	.lbite-menu-view--list .lbite-menu-item { flex-direction: column; }
-	.lbite-menu-view--list .lbite-menu-item__media { flex: none; aspect-ratio: 1; }
+	.lbite-menu-item {
+		flex-direction: row;
+		align-items: stretch;
+	}
+
+	.lbite-menu-item__media,
+	.lbite-menu-view--list .lbite-menu-item__media {
+		order: 2;
+		flex: 0 0 92px;
+		aspect-ratio: 1;
+	}
+
+	.lbite-menu-item__body {
+		min-width: 0;
+		padding: 12px;
+	}
 }

@@ -228,24 +228,32 @@
 			const $form = $( '<div class="lbite-menu-modal__form"></div>' ).attr( 'data-product-id', data.id );
 
 			// Varianten: Buttons statt Dropdown (Nutzer-Fund 2026-09-29), damit der
-			// Preis pro Option sichtbar ist. Feldnamen wie auf der normalen
-			// Produktseite, damit WooCommerce sie versteht (attribute_<slug>).
+			// Preis pro Option sichtbar ist. Feldname (attribute_<slug>) NICHT selbst
+			// aus dem Anzeigenamen nachbauen (Nutzer-Fund 2026-09-29 - führte bei
+			// Umlauten/Sonderzeichen im Attributnamen zu "Bitte eine Auswahl treffen",
+			// weil WordPress' eigenes sanitize_title() Akzente entfernt, ein simples
+			// JS-Lowercase aber nicht) - stattdessen den von WooCommerce selbst
+			// gelieferten Feldnamen aus den Variationsdaten übernehmen, der ist
+			// garantiert korrekt.
 			const attrNames = data.attributes ? Object.keys( data.attributes ) : [];
+			const fieldNames = ( data.variations && data.variations.length )
+				? Object.keys( data.variations[ 0 ].attributes )
+				: [];
 
-			if ( data.type === 'variable' && attrNames.length === 1 && data.variations && data.variations.length ) {
+			if ( data.type === 'variable' && attrNames.length === 1 && fieldNames.length === 1 ) {
 				// Genau ein variationsbildendes Attribut (Regelfall: eine Grösse) -
 				// Preis direkt am Button, aus den Variationsdaten selbst gebaut statt
 				// aus der Attribut-Werteliste, damit Button-Wert und Variation
 				// garantiert zusammenpassen.
 				const attrName = attrNames[ 0 ];
+				const fieldName = fieldNames[ 0 ];
 				const $group = $( '<div class="lbite-menu-modal__group"></div>' );
 				$group.append( $( '<span class="lbite-menu-modal__label"></span>' ).text( attrName ) );
 
-				const fieldName = 'attribute_' + self.slugify( attrName );
 				const $btnGroup = $( '<div class="lbite-menu-modal__variation-group"></div>' ).attr( 'data-attribute', fieldName );
 
 				data.variations.forEach( function ( variation ) {
-					const value = variation.attributes[ Object.keys( variation.attributes )[ 0 ] ] || '';
+					const value = variation.attributes[ fieldName ] || '';
 					const $vbtn = $( '<button type="button" class="lbite-menu-modal__variation-btn"></button>' )
 						.attr( 'data-value', value )
 						.attr( 'data-variation-id', variation.id );
@@ -260,9 +268,12 @@
 				// Mehrere variationsbildende Attribute (Randfall, z. B. Grösse +
 				// Sorte): Preis erst nach vollständiger Auswahl bekannt, deshalb
 				// Button-Gruppen ohne Preis am Button plus einer Live-Preiszeile.
-				attrNames.forEach( function ( attrName ) {
+				// Reihenfolge von data.attributes und data.variations[0].attributes
+				// stammt aus demselben WooCommerce-Attribut-Durchlauf, daher per
+				// Index zuordenbar.
+				attrNames.forEach( function ( attrName, idx ) {
 					const values = data.attributes[ attrName ];
-					const fieldName = 'attribute_' + self.slugify( attrName );
+					const fieldName = fieldNames[ idx ] || ( 'attribute_' + self.slugify( attrName ) );
 
 					const $group = $( '<div class="lbite-menu-modal__group"></div>' );
 					$group.append( $( '<span class="lbite-menu-modal__label"></span>' ).text( attrName ) );

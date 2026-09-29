@@ -7006,6 +7006,11 @@ msgstr "Ø Zubereitungszeit nach Standort"
 msgid "From %s"
 msgstr "Ab %s"
 
+#. translators: %s: link to the WooCommerce email settings screen for this email
+#: templates/admin/settings/notifications.php:114
+msgid "Sender, subject, heading and message text for this email are configured on WooCommerce's own email settings screen: %s"
+msgstr "Absender, Betreff, Titel und Nachrichtentext dieser E-Mail werden auf der eigenen E-Mail-Einstellungsseite von WooCommerce konfiguriert: %s"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

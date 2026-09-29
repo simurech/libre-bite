@@ -543,7 +543,11 @@ class LBite_Menu_View {
 					'id'         => (int) $variation['variation_id'],
 					'attributes' => $variation['attributes'],
 					'label'      => implode( ', ', $lbite_variation_labels ),
-					'price'      => wp_strip_all_tags( $variation['price_html'] ? $variation['price_html'] : wc_price( $variation['display_price'] ) ),
+					// html_entity_decode() nötig, da Preise ohne eigenes Unicode-Zeichen
+					// (z.B. CHF) als HTML-Entity kommen; JS-textContent dekodiert
+					// Entities nie (Nutzer-Fund 2026-09-29, gleiches Muster wie in
+					// class-admin.php/class-pos.php/class-tables.php).
+					'price'      => html_entity_decode( wp_strip_all_tags( $variation['price_html'] ? $variation['price_html'] : wc_price( $variation['display_price'] ) ), ENT_QUOTES, 'UTF-8' ),
 				);
 			}
 		}
@@ -573,7 +577,7 @@ class LBite_Menu_View {
 				'name'        => $product->get_name(),
 				'description' => wpautop( wp_kses_post( $product->get_short_description() ) ),
 				'image'       => (string) wp_get_attachment_image_url( $product->get_image_id(), 'large' ),
-				'price'       => wp_strip_all_tags( $product->get_price_html() ),
+				'price'       => html_entity_decode( wp_strip_all_tags( $product->get_price_html() ), ENT_QUOTES, 'UTF-8' ),
 				'type'        => $product->get_type(),
 				'attributes'  => $product->is_type( 'variable' ) ? $product->get_variation_attributes() : array(),
 				'variations'  => $variations,

@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.2
+Stable tag: 3.6.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,13 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.3 =
+* Fix: In the theme-independent menu view's popup, variation prices without their own currency symbol (e.g. CHF) showed as raw HTML entities instead of the actual text.
+* Fix: Adding a product with variations to the cart from the menu view's popup always failed with "please choose an option", even after selecting a size - the field name sent to WooCommerce could mismatch for attribute names with special characters.
+* Fix: The sticky category bar in the menu view had no horizontal spacing, so the buttons touched its edges directly.
+* Feature: On narrow screens, the menu view now shows a small thumbnail to the right of the text instead of a full-width photo above it, matching common food-delivery app layouts.
+* Feature: The Notifications settings tab now links directly to WooCommerce's own email settings screen for the pickup reminder email, where its sender, subject, heading and message text are configured.
 
 = 3.6.2 =
 * Fix: In the theme-independent menu view ([lbite_menu]), the dietary filter appeared above the sticky category bar instead of below it.

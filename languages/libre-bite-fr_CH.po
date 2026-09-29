@@ -7005,6 +7005,11 @@ msgstr "Temps de préparation moyen par emplacement"
 msgid "From %s"
 msgstr "Dès %s"
 
+#. translators: %s: link to the WooCommerce email settings screen for this email
+#: templates/admin/settings/notifications.php:114
+msgid "Sender, subject, heading and message text for this email are configured on WooCommerce's own email settings screen: %s"
+msgstr "L'expéditeur, l'objet, le titre et le texte de cet e-mail se configurent sur l'écran des réglages e-mail propre à WooCommerce : %s"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Erreur lors de l'enregistrement"
 

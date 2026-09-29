@@ -7175,3 +7175,8 @@ msgstr ""
 #: includes/modules/menu-view/class-menu-view.php:354
 msgid "From %s"
 msgstr ""
+
+#. translators: %s: link to the WooCommerce email settings screen for this email
+#: templates/admin/settings/notifications.php:114
+msgid "Sender, subject, heading and message text for this email are configured on WooCommerce's own email settings screen: %s"
+msgstr ""
