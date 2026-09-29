@@ -239,13 +239,19 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			update_option( 'lbite_features', $lbite_features );
 
 			$lbite_ord_values = lbite_enforce_pro_options( array(
-				'lbite_show_future_orders'       => isset( $_POST['lbite_show_future_orders'] ) ? 1 : 0,
-				'lbite_dim_future_orders'        => isset( $_POST['lbite_dim_future_orders'] ) ? 1 : 0,
-				'lbite_kanban_drag_drop_enabled' => isset( $_POST['lbite_kanban_drag_drop_enabled'] ) ? 1 : 0,
+				'lbite_show_future_orders'         => isset( $_POST['lbite_show_future_orders'] ) ? 1 : 0,
+				'lbite_dim_future_orders'          => isset( $_POST['lbite_dim_future_orders'] ) ? 1 : 0,
+				'lbite_kanban_drag_drop_enabled'   => isset( $_POST['lbite_kanban_drag_drop_enabled'] ) ? 1 : 0,
+				'lbite_kanban_back_button_enabled' => isset( $_POST['lbite_kanban_back_button_enabled'] ) ? 1 : 0,
 			) );
 			update_option( 'lbite_show_future_orders', $lbite_ord_values['lbite_show_future_orders'] );
 			update_option( 'lbite_dim_future_orders', $lbite_ord_values['lbite_dim_future_orders'] );
 			update_option( 'lbite_kanban_drag_drop_enabled', $lbite_ord_values['lbite_kanban_drag_drop_enabled'] );
+			update_option( 'lbite_kanban_back_button_enabled', $lbite_ord_values['lbite_kanban_back_button_enabled'] );
+
+			// Frei verfügbar (nicht Pro) - Stornieren existiert unabhängig von der
+			// Spalten-Anpassung auch auf dem einfachen 3-Spalten-Board.
+			update_option( 'lbite_kanban_allow_cancel', isset( $_POST['lbite_kanban_allow_cancel'] ) ? 1 : 0 );
 
 			// Ohne dieses Gate würde ein Speichern bei ausgeschaltetem Feature
 			// (kein "columns"-POST-Feld vorhanden) die zuvor konfigurierten

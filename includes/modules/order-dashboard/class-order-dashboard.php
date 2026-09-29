@@ -849,6 +849,13 @@ class LBite_Order_Dashboard {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
+		// Serverseitig durchsetzen statt sich auf das Ausblenden des Buttons zu
+		// verlassen - Küchenpersonal ohne Stornier-Berechtigung könnte den
+		// Endpunkt sonst direkt aufrufen (Nutzer-Fund 2026-09-29).
+		if ( '0' === (string) get_option( 'lbite_kanban_allow_cancel', 1 ) ) {
+			wp_send_json_error( array( 'message' => __( 'Cancelling orders is disabled.', 'libre-bite' ) ) );
+		}
+
 		$order_id = isset( $_POST['order_id'] ) ? intval( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = wc_get_order( $order_id );
 

@@ -7023,6 +7023,34 @@ msgstr "Nessun prodotto in questa categoria corrisponde al filtro selezionato: %
 msgid "Continue shopping"
 msgstr "Continua lo shopping"
 
+#: templates/admin/settings/orders-columns.php:27
+msgid "Rename, add, remove and reorder Kanban board columns; also enables an optional one-step back action below."
+msgstr "Rinomina, aggiungi, rimuovi e riordina le colonne della bacheca Kanban; abilita anche un'azione opzionale \"indietro\" in un passaggio qui sotto."
+
+#: templates/admin/settings/orders-columns.php:83
+msgid "Cancelling Orders"
+msgstr "Annullamento ordini"
+
+#: templates/admin/settings/orders-columns.php:88
+msgid "Allow cancelling orders from the Kanban board."
+msgstr "Consenti l'annullamento degli ordini dalla bacheca Kanban."
+
+#: templates/admin/settings/orders-columns.php:90
+msgid "Turn off if kitchen staff should not be able to cancel orders themselves. Removes the button and blocks the action on the server."
+msgstr "Disattiva se il personale di cucina non deve poter annullare autonomamente gli ordini. Rimuove il pulsante e blocca l'azione lato server."
+
+#: templates/admin/settings/orders-columns.php:96
+msgid "Back Button"
+msgstr "Pulsante Indietro"
+
+#: templates/admin/settings/orders-columns.php:106
+msgid "Show a button on each card to move it back to the previous column."
+msgstr "Mostra su ogni scheda un pulsante per spostarla nella colonna precedente."
+
+#: includes/modules/order-dashboard/class-order-dashboard.php:856
+msgid "Cancelling orders is disabled."
+msgstr "L'annullamento degli ordini è disattivato."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Errore durante il salvataggio"
 

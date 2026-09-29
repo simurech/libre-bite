@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	$lbite_toggle_key         = 'enable_kanban_customization';
 	$lbite_toggle_label       = __( 'Customizable Kanban Columns', 'libre-bite' );
-	$lbite_toggle_description = __( 'Rename, add, remove and reorder Kanban board columns; enables a one-step back action.', 'libre-bite' );
+	$lbite_toggle_description = __( 'Rename, add, remove and reorder Kanban board columns; also enables an optional one-step back action below.', 'libre-bite' );
 	$lbite_toggle_is_pro      = true;
 	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
@@ -79,6 +79,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</label>
 			</td>
 		</tr>
+		<tr>
+			<th><?php esc_html_e( 'Cancelling Orders', 'libre-bite' ); ?></th>
+			<td>
+				<label>
+					<input type="checkbox" name="lbite_kanban_allow_cancel" value="1"
+						<?php checked( get_option( 'lbite_kanban_allow_cancel', 1 ), 1 ); ?>>
+					<?php esc_html_e( 'Allow cancelling orders from the Kanban board.', 'libre-bite' ); ?>
+				</label>
+				<p class="description"><?php esc_html_e( 'Turn off if kitchen staff should not be able to cancel orders themselves. Removes the button and blocks the action on the server.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<?php if ( lbite_feature_enabled( 'enable_kanban_customization' ) ) : ?>
+		<tr>
+			<th>
+				<?php esc_html_e( 'Back Button', 'libre-bite' ); ?>
+				<?php if ( ! $lbite_premium_allowed ) : ?>
+					<span class="lbite-pro-badge">Pro</span>
+				<?php endif; ?>
+			</th>
+			<td>
+				<label class="<?php echo $lbite_premium_allowed ? '' : 'lbite-locked'; ?>">
+					<input type="checkbox" name="lbite_kanban_back_button_enabled" value="1"
+						<?php checked( get_option( 'lbite_kanban_back_button_enabled', 1 ), 1 ); ?>
+						<?php disabled( ! $lbite_premium_allowed ); ?>>
+					<?php esc_html_e( 'Show a button on each card to move it back to the previous column.', 'libre-bite' ); ?>
+				</label>
+			</td>
+		</tr>
+		<?php endif; ?>
 		<?php if ( lbite_feature_enabled( 'enable_kanban_customization' ) ) : ?>
 		<?php
 		$lbite_kanban_cols       = LBite_Order_Dashboard::get_columns();

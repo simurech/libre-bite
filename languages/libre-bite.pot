@@ -7193,3 +7193,31 @@ msgstr ""
 #: templates/frontend/menu-view.php:240
 msgid "Continue shopping"
 msgstr ""
+
+#: templates/admin/settings/orders-columns.php:27
+msgid "Rename, add, remove and reorder Kanban board columns; also enables an optional one-step back action below."
+msgstr ""
+
+#: templates/admin/settings/orders-columns.php:83
+msgid "Cancelling Orders"
+msgstr ""
+
+#: templates/admin/settings/orders-columns.php:88
+msgid "Allow cancelling orders from the Kanban board."
+msgstr ""
+
+#: templates/admin/settings/orders-columns.php:90
+msgid "Turn off if kitchen staff should not be able to cancel orders themselves. Removes the button and blocks the action on the server."
+msgstr ""
+
+#: templates/admin/settings/orders-columns.php:96
+msgid "Back Button"
+msgstr ""
+
+#: templates/admin/settings/orders-columns.php:106
+msgid "Show a button on each card to move it back to the previous column."
+msgstr ""
+
+#: includes/modules/order-dashboard/class-order-dashboard.php:856
+msgid "Cancelling orders is disabled."
+msgstr ""

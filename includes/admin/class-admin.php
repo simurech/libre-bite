@@ -1127,6 +1127,11 @@ class LBite_Admin {
 
 			$lbite_kanban_dragdrop = lbite_feature_enabled( 'enable_kanban_customization' )
 				&& '1' === (string) get_option( 'lbite_kanban_drag_drop_enabled', 0 );
+			// Zurück-Button war bisher untrennbar an enable_kanban_customization
+			// gekoppelt - eigener Schalter, da nicht jeder Betrieb ihn will
+			// (Nutzer-Fund 2026-09-29).
+			$lbite_kanban_back_button = lbite_feature_enabled( 'enable_kanban_customization' )
+				&& '0' !== (string) get_option( 'lbite_kanban_back_button_enabled', 1 );
 			$lbite_dashboard_deps = array( 'jquery' );
 			if ( $lbite_kanban_dragdrop ) {
 				if ( ! wp_script_is( 'sortablejs', 'registered' ) ) {
@@ -1208,6 +1213,10 @@ class LBite_Admin {
 					'kanbanColumns'             => LBite_Order_Dashboard::get_columns(),
 					'kanbanCustomizationActive' => lbite_feature_enabled( 'enable_kanban_customization' ),
 					'kanbanDragDropEnabled'     => $lbite_kanban_dragdrop,
+					'kanbanBackButtonEnabled'   => $lbite_kanban_back_button,
+					// Frei verfügbar (nicht Pro) - Stornieren existiert unabhängig von der
+					// Spalten-Anpassung auch auf dem einfachen 3-Spalten-Board.
+					'kanbanAllowCancel'         => '0' !== (string) get_option( 'lbite_kanban_allow_cancel', 1 ),
 					'kdsTimerEnabled'           => '0' !== (string) get_option( 'lbite_kds_timer_enabled', 1 ),
 					'kdsWarnMinutes'            => (int) get_option( 'lbite_kds_warn_minutes', 0 ),
 					'kdsLateMinutes'            => (int) get_option( 'lbite_kds_late_minutes', 0 ),

@@ -7024,6 +7024,34 @@ msgstr "Keine Produkte in dieser Kategorie mit dem gewählten Filter vorhanden: 
 msgid "Continue shopping"
 msgstr "Weiter einkaufen"
 
+#: templates/admin/settings/orders-columns.php:27
+msgid "Rename, add, remove and reorder Kanban board columns; also enables an optional one-step back action below."
+msgstr "Kanban-Board-Spalten umbenennen, hinzufügen, entfernen und neu anordnen; aktiviert ausserdem eine optionale Ein-Schritt-Zurück-Aktion weiter unten."
+
+#: templates/admin/settings/orders-columns.php:83
+msgid "Cancelling Orders"
+msgstr "Bestellungen stornieren"
+
+#: templates/admin/settings/orders-columns.php:88
+msgid "Allow cancelling orders from the Kanban board."
+msgstr "Stornieren von Bestellungen im Kanban-Board erlauben."
+
+#: templates/admin/settings/orders-columns.php:90
+msgid "Turn off if kitchen staff should not be able to cancel orders themselves. Removes the button and blocks the action on the server."
+msgstr "Ausschalten, wenn das Küchenpersonal Bestellungen nicht selbst stornieren können soll. Entfernt den Button und blockiert die Aktion serverseitig."
+
+#: templates/admin/settings/orders-columns.php:96
+msgid "Back Button"
+msgstr "Zurück-Button"
+
+#: templates/admin/settings/orders-columns.php:106
+msgid "Show a button on each card to move it back to the previous column."
+msgstr "Zeigt auf jeder Karte einen Button, um sie zurück in die vorherige Spalte zu verschieben."
+
+#: includes/modules/order-dashboard/class-order-dashboard.php:856
+msgid "Cancelling orders is disabled."
+msgstr "Das Stornieren von Bestellungen ist deaktiviert."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

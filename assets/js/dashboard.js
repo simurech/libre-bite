@@ -603,7 +603,7 @@
 				const prevCol  = colIndex > 0 ? columns[colIndex - 1] : null;
 				const nextCol  = (colIndex >= 0 && colIndex < columns.length - 1) ? columns[colIndex + 1] : null;
 
-				if (prevCol) {
+				if (prevCol && lbiteDashboard.kanbanBackButtonEnabled) {
 					const $bBtn = $('<button class="lbite-status-button lbite-status-button--back"></button>')
 						.text('← ' + (lbiteDashboard.strings.back || 'Back'))
 						.on('click', (e) => { e.stopPropagation(); this.moveToNextStatus(order.id, prevCol.key); });
@@ -619,7 +619,7 @@
 					$btnGroup.append($sBtn);
 				}
 
-				canCancel = ! col || ! col.counts_as_completed;
+				canCancel = lbiteDashboard.kanbanAllowCancel && ( ! col || ! col.counts_as_completed );
 			} else {
 				// Feature aus: unverändertes Verhalten wie vor F30.
 				const statusButtons = {
@@ -636,7 +636,7 @@
 					$btnGroup.append($sBtn);
 				}
 
-				canCancel = currentStatus !== 'completed';
+				canCancel = lbiteDashboard.kanbanAllowCancel && currentStatus !== 'completed';
 			}
 
 			// Sekundäre Aktionen (Stornieren, Beleg, Drucken) hinter einem

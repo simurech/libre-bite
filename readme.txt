@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.8
+Stable tag: 3.6.9
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.9 =
+* Feature: New "Back Button" setting under Settings → Orders → Columns lets you turn off the one-step-back button on Kanban cards, for kitchens that don't need it.
+* Feature: New "Cancelling Orders" setting lets you block cancelling orders from the Kanban board entirely, e.g. when kitchen staff shouldn't have that permission. Also enforced on the server, not just hidden in the interface.
 
 = 3.6.8 =
 * Fix: The location filter bar on standard shop pages and the location step in the reservation form still appeared even with "Location Selection" turned off; both now respect that setting and fall back to the configured Default Location.
