@@ -642,6 +642,22 @@ body .lbite-menu-view .lbite-menu-modal__variation-group.is-invalid .lbite-menu-
 	margin: -4px 0 14px;
 }
 
+/* Bleibt beim Scrollen langer Popup-Inhalte sichtbar, statt nur am Ende des
+   Formulars zu stehen (Nutzer-Fund 2026-09-29). Die negativen Ränder heben
+   exakt das Padding von .lbite-menu-modal__body (20px) auf, damit die
+   Fusszeile bündig mit der unteren/seitlichen Kante des Dialogs abschliesst,
+   statt mit sichtbarem Rand daneben zu kleben. */
+.lbite-menu-modal__footer {
+	position: sticky;
+	bottom: 0;
+	z-index: 2;
+	margin: 16px -20px -20px;
+	padding: 14px 20px 20px;
+	background: var(--lbite-menu-surface, #fff);
+	border-top: 1px solid var(--lbite-menu-border);
+	box-shadow: 0 -6px 16px rgba(16, 24, 40, .08);
+}
+
 body .lbite-menu-view .lbite-menu-modal__add {
 	width: 100%;
 	min-height: 46px;

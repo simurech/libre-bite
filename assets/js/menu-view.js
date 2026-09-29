@@ -566,9 +566,17 @@
 
 			$body.append( $form );
 
-			$body.append(
+			// Eigener, sticky positionierter Fusszeilen-Container statt den Button
+			// direkt in den scrollenden Body zu hängen (Nutzer-Fund 2026-09-29):
+			// bei langem Inhalt (Beschreibung + mehrere Varianten/Optionen) war der
+			// "Hinzufügen"-Button sonst nur nach Scrollen bis ganz nach unten
+			// sichtbar. Die negativen Ränder heben genau das Body-Padding auf,
+			// damit die Fusszeile bündig an der unteren Kante des Dialogs andockt.
+			const $footer = $( '<div class="lbite-menu-modal__footer"></div>' );
+			$footer.append(
 				$( '<button type="button" class="lbite-menu-modal__add"></button>' ).text( lbiteMenu.strings.add )
 			);
+			$body.append( $footer );
 		},
 
 		/**
