@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.10
+Stable tag: 3.6.11
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.11 =
+* Fix: Adding a product with variations to the cart from the theme-independent menu view's popup still failed with "please choose an option" after the previous fix. Root cause found and verified directly against WooCommerce core: its add-to-cart endpoint never reads a separately submitted variation ID or attribute fields at all - it only checks whether the submitted product ID is itself a variation post, and resolves everything else from that. The popup now submits the variation's own ID instead of the parent product's ID together with separate fields.
+* Fix: The sticky category bar in the theme-independent menu view now keeps a 16px gap from the top of the window while docked, matching its left/right spacing.
 
 = 3.6.10 =
 * Fix: Adding a product with variations to the cart from the theme-independent menu view's popup still failed with "please choose an option" - WooCommerce's add-to-cart endpoint needs the variation ID sent explicitly, it does not reliably resolve it from the selected attributes on its own.

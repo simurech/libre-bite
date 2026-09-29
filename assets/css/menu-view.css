@@ -121,7 +121,7 @@ body .lbite-menu-view select {
    abzusetzen - Buttons darauf sind deshalb helle "Chips", nicht umgekehrt. */
 .lbite-menu-nav {
 	position: sticky;
-	top: 0;
+	top: 16px;
 	z-index: 5;
 	display: flex;
 	gap: 6px;

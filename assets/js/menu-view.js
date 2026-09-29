@@ -549,7 +549,7 @@
 		submitModal: function ( $button ) {
 			const self = this;
 			const $form = $( '#lbite-menu-modal-body .lbite-menu-modal__form' );
-			const productId = $form.data( 'product-id' );
+			let productId = $form.data( 'product-id' );
 			const extra = {};
 			const selections = {};
 			let missing = false;
@@ -565,7 +565,6 @@
 					$group.removeClass( 'is-invalid' );
 					const field = $group.data( 'attribute' );
 					const value = $active.data( 'value' );
-					extra[ field ] = value;
 					selections[ field ] = self.slugify( value );
 				}
 			} );
@@ -574,15 +573,17 @@
 				return;
 			}
 
-			// Variable Artikel: WooCommerce löst variation_id beim AJAX-Add-to-Cart
-			// entgegen der ursprünglichen Annahme NICHT zuverlässig aus den
-			// attribute_*-Feldern auf - "Bitte eine Auswahl treffen" kam dadurch
-			// trotz korrekter Auswahl (Nutzer-Fund 2026-09-29). Explizit aus den
-			// bereits geladenen Variationsdaten ermittelt und mitgeschickt.
+			// Kern des Bugs (Nutzer-Fund 2026-09-29, im WooCommerce-Kern verifiziert):
+			// WC_AJAX::add_to_cart() liest variation_id/attribute_* NIE aus $_POST.
+			// Es prüft stattdessen nur, ob die gesendete product_id selbst ein
+			// Variations-Post ist, und leitet Eltern-ID + Attribute serverseitig
+			// selbst daraus ab. Weder das ursprüngliche Senden der Attribute noch
+			// das spätere zusätzliche Senden einer separaten variation_id wurden
+			// je gelesen - die product_id muss die Variations-ID selbst sein.
 			if ( self.currentModalData && self.currentModalData.type === 'variable' && Object.keys( selections ).length ) {
 				const match = self.findMatchingVariation( self.currentModalData, selections );
 				if ( match ) {
-					extra.variation_id = match.id;
+					productId = match.id;
 				}
 			}
 
