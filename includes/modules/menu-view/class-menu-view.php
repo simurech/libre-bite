@@ -121,10 +121,25 @@ class LBite_Menu_View {
 			return;
 		}
 
+		// Nur die Styles aus frontend.css (für .lbite-availability, den
+		// Verfügbarkeits-Hinweis) - bewusst nicht frontend.js dazu, das bindet
+		// mehrere reine Checkout-/Shop-Loop-Objekte (Checkout, ProductOptions,
+		// LocationFilter…), die auf dieser Seite ohnehin ins Leere liefen,
+		// zusätzliche lbiteData-Lokalisierung bräuchten und unnötiges Risiko
+		// für Seiteneffekte wären (Nutzer-Fund 2026-09-29). Das Popup-Verhalten
+		// selbst ist stattdessen direkt in menu-view.js nachgebaut.
+		wp_enqueue_style( 'dashicons' );
+		wp_enqueue_style(
+			'lbite-frontend',
+			LBITE_PLUGIN_URL . 'assets/css/frontend.css',
+			array( 'dashicons' ),
+			LBITE_VERSION
+		);
+
 		wp_enqueue_style(
 			'lbite-menu-view',
 			LBITE_PLUGIN_URL . 'assets/css/menu-view.css',
-			array(),
+			array( 'lbite-frontend' ),
 			LBITE_VERSION
 		);
 		// Eigenständig statt sich auf enqueue_frontend_assets() zu
@@ -162,6 +177,8 @@ class LBite_Menu_View {
 					'chooseOption' => __( 'Please choose an option.', 'libre-bite' ),
 					/* translators: %s: comma-separated list of active dietary filter labels */
 					'noMatch'      => __( 'No products in this category match the selected filter: %s', 'libre-bite' ),
+					'showOnly'     => __( 'Show only available products', 'libre-bite' ),
+					'showAll'      => __( 'Show all products', 'libre-bite' ),
 				),
 			)
 		);
@@ -178,11 +195,19 @@ class LBite_Menu_View {
 	 * Bewusst als eigene Methode und nicht verteilt: eine vergessene Regel
 	 * hiesse, dass Gäste etwas bestellen können, das gar nicht verfügbar ist.
 	 *
-	 * @param WC_Product $product     Produkt.
-	 * @param int        $location_id Gewählter Standort, 0 für keiner.
+	 * Standort-Ausschluss ist bewusst NICHT Teil dieser Prüfung (Nutzer-Fund
+	 * 2026-09-29): am gewählten Standort ausgeschlossene Artikel sollen wie im
+	 * Shop weiterhin sichtbar bleiben, nur mit Verfügbarkeits-Hinweis
+	 * (LBite_Locations::render_availability_hint()) statt komplett zu
+	 * verschwinden. Das eigentliche Hinzufügen zum Warenkorb bleibt trotzdem
+	 * abgesichert - LBite_Checkout::validate_product_location_availability()
+	 * hängt am globalen woocommerce_add_to_cart_validation-Hook und greift
+	 * über jeden Bestellweg, nicht nur über diese Methode hier.
+	 *
+	 * @param WC_Product $product Produkt.
 	 * @return bool
 	 */
-	public static function is_visible( $product, $location_id = 0 ) {
+	public static function is_visible( $product ) {
 		if ( ! $product ) {
 			return false;
 		}
@@ -194,25 +219,19 @@ class LBite_Menu_View {
 			return false;
 		}
 
-		// 2. Am gewählten Standort ausgeschlossen?
-		if ( $location_id && class_exists( 'LBite_Locations' )
-			&& ! LBite_Locations::is_product_available_at_location( $product_id, $location_id ) ) {
-			return false;
-		}
-
-		// 3. Ausserhalb des Verfügbarkeits-Zeitplans?
+		// 2. Ausserhalb des Verfügbarkeits-Zeitplans?
 		if ( class_exists( 'LBite_Menu_Schedule' )
 			&& ! LBite_Menu_Schedule::is_product_available( $product_id ) ) {
 			return false;
 		}
 
-		// 4. Vorübergehend als nicht verfügbar markiert? Dafür greift im
+		// 3. Vorübergehend als nicht verfügbar markiert? Dafür greift im
 		//    normalen Shop kein Hook, das muss hier selbst geprüft werden.
 		if ( self::is_temporarily_unavailable( $product_id ) ) {
 			return false;
 		}
 
-		// 5. Nativer WooCommerce-Status.
+		// 4. Nativer WooCommerce-Status.
 		if ( ! $product->is_purchasable() ) {
 			return false;
 		}
@@ -255,10 +274,9 @@ class LBite_Menu_View {
 	/**
 	 * Menü-Daten zusammenstellen
 	 *
-	 * @param int $location_id Gewählter Standort.
 	 * @return array Liste aus [ 'term' => WP_Term|null, 'products' => WC_Product[] ].
 	 */
-	public static function get_menu( $location_id = 0 ) {
+	public static function get_menu() {
 		$product_ids = get_posts(
 			array(
 				'post_type'      => 'product',
@@ -278,7 +296,7 @@ class LBite_Menu_View {
 		foreach ( $product_ids as $product_id ) {
 			$product = wc_get_product( $product_id );
 
-			if ( ! self::is_visible( $product, $location_id ) ) {
+			if ( ! self::is_visible( $product ) ) {
 				continue;
 			}
 
@@ -395,7 +413,23 @@ class LBite_Menu_View {
 			? (int) WC()->session->get( 'lbite_location_id' )
 			: 0;
 
-		$lbite_sections = self::get_menu( $lbite_location_id );
+		$lbite_sections = self::get_menu();
+
+		// Wie viele Artikel am gewählten Standort ausgeschlossen sind, wird hier
+		// einmal vorab gezählt (statt erst im Template pro Karte) - der Filter-
+		// Button "Nur verfügbare Produkte anzeigen" erscheint nur, wenn es
+		// überhaupt etwas zu filtern gibt (Nutzer-Fund 2026-09-29, analog zum
+		// gleichnamigen Filter auf den Standard-Shop-Seiten).
+		$lbite_unavailable_count = 0;
+		if ( $lbite_location_id && class_exists( 'LBite_Locations' ) ) {
+			foreach ( $lbite_sections as $lbite_count_section ) {
+				foreach ( $lbite_count_section['products'] as $lbite_count_product ) {
+					if ( ! LBite_Locations::is_product_available_at_location( $lbite_count_product->get_id(), $lbite_location_id ) ) {
+						++$lbite_unavailable_count;
+					}
+				}
+			}
+		}
 
 		ob_start();
 		include LBITE_PLUGIN_DIR . 'templates/frontend/menu-view.php';
@@ -506,13 +540,12 @@ class LBite_Menu_View {
 		$product_id = isset( $_POST['product_id'] ) ? absint( wp_unslash( $_POST['product_id'] ) ) : 0;
 		$product    = $product_id ? wc_get_product( $product_id ) : false;
 
-		$location_id = ( function_exists( 'WC' ) && WC()->session )
-			? (int) WC()->session->get( 'lbite_location_id' )
-			: 0;
-
-		// Auch hier gegen dieselben Regeln prüfen: sonst liesse sich über
-		// den Endpunkt ein gesperrter Artikel in den Warenkorb bringen.
-		if ( ! $product || ! self::is_visible( $product, $location_id ) ) {
+		// Auch hier gegen dieselben Regeln prüfen: sonst liesse sich über den
+		// Endpunkt ein gesperrter Artikel öffnen. Standort-Ausschluss ist
+		// bewusst nicht Teil davon (siehe is_visible()) - das eigentliche
+		// Hinzufügen zum Warenkorb bleibt trotzdem über den globalen
+		// woocommerce_add_to_cart_validation-Hook abgesichert.
+		if ( ! $product || ! self::is_visible( $product ) ) {
 			wp_send_json_error( array( 'message' => __( 'This product is not available.', 'libre-bite' ) ) );
 		}
 

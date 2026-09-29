@@ -168,6 +168,44 @@ body .lbite-menu-view .lbite-menu-location-banner__text {
 	font-weight: 600;
 }
 
+.lbite-menu-location-banner__actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+body .lbite-menu-view .lbite-menu-location-banner__filter {
+	padding: 6px 14px;
+	border-radius: 999px;
+	border: 1px solid var(--lbite-menu-border);
+	background: var(--lbite-menu-surface);
+	font-size: 13px;
+	font-weight: 600;
+	white-space: nowrap;
+	transition: background-color .15s ease, border-color .15s ease;
+}
+
+body .lbite-menu-view .lbite-menu-location-banner__filter:hover {
+	border-color: var(--lbite-menu-primary);
+	background: var(--lbite-menu-canvas);
+}
+
+body .lbite-menu-view .lbite-menu-location-banner__change {
+	padding: 6px 0;
+	background: none;
+	border: none;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--lbite-menu-muted);
+	text-decoration: underline;
+	white-space: nowrap;
+}
+
+body .lbite-menu-view .lbite-menu-location-banner__change:hover {
+	color: var(--lbite-menu-primary);
+}
+
 body .lbite-menu-view .lbite-menu-location-banner__picker {
 	padding: 6px 14px;
 	border-radius: 999px;
@@ -380,6 +418,16 @@ body .lbite-menu-view .lbite-menu-item__price {
 
 body .lbite-menu-view .lbite-menu-item__price del { opacity: .55; font-weight: 400; }
 body .lbite-menu-view .lbite-menu-item__price ins { text-decoration: none; }
+
+/* frontend.css definiert .lbite-availability für den WooCommerce-Shop-Loop
+   (erzwingt volle Flex-Basis als Geschwister-Umgehung dort) - in der
+   Spalten-Flexbox von .lbite-menu-item__body reicht normaler Block-Fluss,
+   sonst bläht die 100%-Flex-Basis die Karte auf (Nutzer-Fund 2026-09-29,
+   Wiederverwendung von LBite_Locations::render_availability_hint()). */
+.lbite-menu-item__body .lbite-availability {
+	flex: 0 0 auto;
+	width: auto;
+}
 
 body .lbite-menu-view .lbite-menu-item__details {
 	margin-top: 6px;

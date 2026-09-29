@@ -1030,6 +1030,23 @@ class LBite_Locations {
 			self::$collected_product_ids[] = $product->get_id();
 		}
 
+		self::render_availability_hint( $product, $lbite_is_grid );
+	}
+
+	/**
+	 * Eigentliches Markup des Verfügbarkeits-Hinweises
+	 *
+	 * Aus render_product_availability_badge() herausgelöst (Nutzer-Fund 2026-09-29):
+	 * die Menü-Ansicht ist kein WooCommerce-Loop und braucht denselben Hinweis
+	 * ohne global $product/current_action() - direkt mit dem Produktobjekt aufrufbar,
+	 * damit dort nicht dieselbe Markup-Logik zweimal gepflegt werden muss.
+	 *
+	 * @param WC_Product $product Produkt.
+	 * @param bool       $is_grid true für Raster-/Karten-Kontext, false für die Einzelprodukt-Seite.
+	 */
+	public static function render_availability_hint( $product, $is_grid = true ) {
+		$lbite_is_grid = $is_grid;
+
 		$lbite_hint_enabled = $lbite_is_grid
 			? lbite_feature_enabled( 'enable_availability_hint_category' )
 			: lbite_feature_enabled( 'enable_availability_hint_product' );

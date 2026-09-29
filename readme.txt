@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.6
+Stable tag: 3.6.7
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.7 =
+* Feature: The theme-independent menu view now matches the standard shop pages: products excluded at the chosen location stay visible with the same availability hint/tooltip instead of disappearing entirely, and a "Show only available products" toggle appears once a location is chosen.
+* Fix: The location banner in the theme-independent menu view showed the chosen location's name twice (once as text, once as the still-visible dropdown's selected option); it now switches to a "Change location" link once a location is chosen, matching the standard shop pages.
 
 = 3.6.6 =
 * Fix: The small mobile thumbnail in the theme-independent menu view stretched to the full card height instead of staying a compact square, and had square corners.

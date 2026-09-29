@@ -17,6 +17,9 @@
 		$modal: null,
 		busy: false,
 		activeDiets: [],
+		onlyAvailable: false,
+		$availabilityPopup: null,
+		$openAvailabilityToggle: null,
 
 		init: function () {
 			this.$root = $( '[data-lbite-menu]' );
@@ -26,6 +29,7 @@
 
 			this.$modal = $( '#lbite-menu-modal' );
 			this.bindEvents();
+			this.initAvailabilityPopup();
 			this.refreshCart();
 		},
 
@@ -147,39 +151,63 @@
 					$( this ).removeClass( 'is-active' );
 				}
 
-				self.applyDietaryFilter();
+				self.applyItemVisibility();
 			} );
 
 			this.$root.on( 'click', '.lbite-menu-dietary-filter__reset', function () {
 				self.activeDiets = [];
 				self.$root.find( '.lbite-menu-dietary-filter__btn' ).removeClass( 'is-active' );
-				self.applyDietaryFilter();
+				self.applyItemVisibility();
+			} );
+
+			// "Nur verfügbare Produkte anzeigen" - analog zum gleichnamigen Filter
+			// auf den Standard-Shop-Seiten (LocationFilter.toggle() in frontend.js),
+			// hier aber eigenständig, weil frontend.js auf dieser Seite bewusst
+			// nicht geladen wird (siehe enqueue_assets() in class-menu-view.php).
+			this.$root.on( 'click', '[data-lbite-availability-toggle]', function () {
+				const $btn = $( this );
+				self.onlyAvailable = ! self.onlyAvailable;
+				$btn.text( self.onlyAvailable ? lbiteMenu.strings.showAll : lbiteMenu.strings.showOnly );
+				self.applyItemVisibility();
+			} );
+
+			// "Standort ändern": zurück zum Auswahl-Dropdown, keine eigene AJAX-
+			// Aktion nötig - die bestehende change-Bindung auf .lbite-menu-
+			// location-banner__picker übernimmt das Setzen des neuen Standorts.
+			this.$root.on( 'click', '[data-lbite-location-change]', function () {
+				self.$root.find( '[data-lbite-location-current]' ).prop( 'hidden', true );
+				self.$root.find( '[data-lbite-location-picker]' ).prop( 'hidden', false );
 			} );
 		},
 
-		/* ── Ernährungsform-Filter ────────────────────────────────── */
+		/* ── Ernährungsform-/Verfügbarkeits-Filter ───────────────────── */
 
-		applyDietaryFilter: function () {
+		applyItemVisibility: function () {
 			const self = this;
-			const hasFilter = this.activeDiets.length > 0;
+			const hasDietFilter = this.activeDiets.length > 0;
 
-			this.$root.find( '.lbite-menu-dietary-filter__reset' ).prop( 'hidden', ! hasFilter );
+			this.$root.find( '.lbite-menu-dietary-filter__reset' ).prop( 'hidden', ! hasDietFilter );
 
 			this.$root.find( '.lbite-menu-item' ).each( function () {
 				const $item = $( this );
+				let hidden = false;
 
-				if ( ! hasFilter ) {
-					$item.prop( 'hidden', false );
-					return;
+				if ( hasDietFilter ) {
+					const raw = $item.data( 'diet' );
+					const diets = String( raw === undefined ? '' : raw ).split( ' ' ).filter( Boolean );
+					const matchesAll = self.activeDiets.every( function ( d ) {
+						return diets.indexOf( d ) !== -1;
+					} );
+					if ( ! matchesAll ) {
+						hidden = true;
+					}
 				}
 
-				const raw = $item.data( 'diet' );
-				const diets = String( raw === undefined ? '' : raw ).split( ' ' ).filter( Boolean );
-				const matchesAll = self.activeDiets.every( function ( d ) {
-					return diets.indexOf( d ) !== -1;
-				} );
+				if ( self.onlyAvailable && $item.hasClass( 'lbite-unavailable' ) ) {
+					hidden = true;
+				}
 
-				$item.prop( 'hidden', ! matchesAll );
+				$item.prop( 'hidden', hidden );
 			} );
 
 			// Ein Abschnitt kann durch die Filterung komplett leer werden - ohne
@@ -200,7 +228,7 @@
 
 				let $empty = $section.find( '.lbite-menu-section__empty' );
 
-				if ( hasFilter && ! anyVisible ) {
+				if ( hasDietFilter && ! anyVisible ) {
 					if ( ! $empty.length ) {
 						$empty = $( '<p class="lbite-menu-section__empty"></p>' );
 						$grid.after( $empty );
@@ -209,6 +237,93 @@
 				} else if ( $empty.length ) {
 					$empty.prop( 'hidden', true );
 				}
+			} );
+		},
+
+		/* ── Verfügbarkeits-Hinweis ───────────────────────────────────
+		 * Nachgebaut aus ProductAvailability in frontend.js (dasselbe Markup,
+		 * über LBite_Locations::render_availability_hint() wiederverwendet) -
+		 * hier eigenständig statt frontend.js zu laden, das mehrere reine
+		 * Checkout-/Shop-Loop-Objekte enthält, die auf dieser Seite ohnehin
+		 * ins Leere liefen und zusätzliche lbiteData-Lokalisierung bräuchten
+		 * (Nutzer-Fund 2026-09-29). */
+
+		initAvailabilityPopup: function () {
+			const self = this;
+
+			if ( ! this.$root.find( '.lbite-availability-toggle' ).length ) {
+				return;
+			}
+
+			this.$availabilityPopup = $( '<div class="lbite-availability-floating-popup"></div>' ).appendTo( 'body' );
+
+			const isHoverCapable = window.matchMedia && window.matchMedia( '(hover: hover) and (pointer: fine)' ).matches;
+
+			this.$root.on( 'click', '.lbite-availability-toggle', function ( e ) {
+				e.stopPropagation();
+				const $toggle = $( this );
+				const wasOpen = self.$openAvailabilityToggle && self.$openAvailabilityToggle.is( $toggle );
+				self.closeAvailabilityPopup();
+				if ( ! wasOpen ) {
+					self.openAvailabilityPopup( $toggle );
+				}
+			} );
+
+			if ( isHoverCapable ) {
+				this.$root.on( 'mouseenter', '.lbite-availability', function () {
+					self.openAvailabilityPopup( $( this ).find( '.lbite-availability-toggle' ) );
+				} );
+				this.$root.on( 'mouseleave', '.lbite-availability', function () {
+					self.closeAvailabilityPopup();
+				} );
+			}
+
+			$( document ).on( 'click', function () {
+				self.closeAvailabilityPopup();
+			} );
+
+			$( window ).on( 'scroll resize', function () {
+				if ( self.$openAvailabilityToggle ) {
+					self.repositionAvailabilityPopup();
+				}
+			} );
+		},
+
+		openAvailabilityPopup: function ( $toggle ) {
+			const $source = $toggle.siblings( '.lbite-availability-popup' ).find( '.lbite-availability-table' );
+			if ( ! $source.length ) {
+				return;
+			}
+			this.$availabilityPopup.html( $source.prop( 'outerHTML' ) ).addClass( 'lbite-visible' );
+			this.$openAvailabilityToggle = $toggle;
+			this.repositionAvailabilityPopup();
+			$toggle.attr( 'aria-expanded', 'true' );
+		},
+
+		closeAvailabilityPopup: function () {
+			if ( ! this.$availabilityPopup ) {
+				return;
+			}
+			this.$availabilityPopup.removeClass( 'lbite-visible' );
+			if ( this.$openAvailabilityToggle ) {
+				this.$openAvailabilityToggle.attr( 'aria-expanded', 'false' );
+				this.$openAvailabilityToggle = null;
+			}
+		},
+
+		repositionAvailabilityPopup: function () {
+			const rect = this.$openAvailabilityToggle[ 0 ].getBoundingClientRect();
+			const popupWidth = this.$availabilityPopup.outerWidth();
+			let left = rect.left;
+			const maxLeft = window.innerWidth - popupWidth - 8;
+
+			if ( left > maxLeft ) {
+				left = Math.max( 8, maxLeft );
+			}
+
+			this.$availabilityPopup.css( {
+				top: ( rect.bottom + 4 ) + 'px',
+				left: left + 'px'
 			} );
 		},
 

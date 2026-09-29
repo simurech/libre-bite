@@ -18,27 +18,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 	// Standort-Umschalter fehlte hier bisher komplett (Nutzer-Fund 2026-09-28):
 	// die Menü-Ansicht liest den Standort nur passiv aus der Session, ohne eigene
 	// Möglichkeit, ihn direkt hier zu wählen/wechseln.
+	//
+	// Zwei Zustände statt einem gemeinsamen Block (Nutzer-Fund 2026-09-29): Name
+	// und Auswahl-Dropdown standen bisher gleichzeitig da und zeigten denselben
+	// Standort doppelt an, sobald einer gewählt war - wie auf den Standard-Shop-
+	// Seiten (LBite_Locations::render_shop_location_notice_placeholder()) zeigt
+	// der Picker jetzt nur, solange noch kein Standort gewählt ist.
 	if ( lbite_feature_enabled( 'enable_location_selector' ) && class_exists( 'LBite_Locations' ) ) :
-		$lbite_menu_locations = LBite_Locations::get_all_locations();
+		$lbite_menu_locations     = LBite_Locations::get_all_locations();
+		$lbite_menu_location_name = '';
+
+		if ( $lbite_location_id ) {
+			foreach ( $lbite_menu_locations as $lbite_ml ) {
+				if ( (int) $lbite_ml->ID === (int) $lbite_location_id ) {
+					$lbite_menu_location_name = $lbite_ml->post_title;
+					break;
+				}
+			}
+		}
+
 		if ( count( $lbite_menu_locations ) > 1 ) :
 			?>
 			<div class="lbite-menu-location-banner" data-lbite-menu-location>
-				<span class="lbite-menu-location-banner__text">
-					📍
-					<?php
-					if ( $lbite_location_id ) {
-						foreach ( $lbite_menu_locations as $lbite_ml ) {
-							if ( (int) $lbite_ml->ID === (int) $lbite_location_id ) {
-								echo esc_html( $lbite_ml->post_title );
-								break;
-							}
-						}
-					} else {
-						esc_html_e( 'Choose a location to see what is available', 'libre-bite' );
-					}
-					?>
-				</span>
-				<select class="lbite-menu-location-banner__picker">
+				<?php if ( '' !== $lbite_menu_location_name ) : ?>
+					<span class="lbite-menu-location-banner__text" data-lbite-location-current>
+						📍 <?php echo esc_html( $lbite_menu_location_name ); ?>
+					</span>
+					<div class="lbite-menu-location-banner__actions" data-lbite-location-current>
+						<?php if ( $lbite_unavailable_count > 0 ) : ?>
+							<button type="button" class="lbite-menu-location-banner__filter" data-lbite-availability-toggle>
+								<?php esc_html_e( 'Show only available products', 'libre-bite' ); ?>
+							</button>
+						<?php endif; ?>
+						<button type="button" class="lbite-menu-location-banner__change" data-lbite-location-change>
+							<?php esc_html_e( 'Change location', 'libre-bite' ); ?>
+						</button>
+					</div>
+				<?php else : ?>
+					<span class="lbite-menu-location-banner__text">
+						📍 <?php esc_html_e( 'Choose a location to see what is available', 'libre-bite' ); ?>
+					</span>
+				<?php endif; ?>
+				<select class="lbite-menu-location-banner__picker" data-lbite-location-picker <?php echo '' !== $lbite_menu_location_name ? 'hidden' : ''; ?>>
 					<option value=""><?php esc_html_e( 'Please choose...', 'libre-bite' ); ?></option>
 					<?php foreach ( $lbite_menu_locations as $lbite_ml ) : ?>
 						<option value="<?php echo esc_attr( $lbite_ml->ID ); ?>" <?php selected( (int) $lbite_location_id, (int) $lbite_ml->ID ); ?>>
@@ -132,8 +153,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$lbite_diet      = class_exists( 'LBite_Nutritional_Info' )
 							? LBite_Nutritional_Info::get_product_dietary( $lbite_pid )
 							: array();
+						// Am gewählten Standort ausgeschlossene Artikel bleiben sichtbar,
+						// statt komplett zu verschwinden (Nutzer-Fund 2026-09-29) - wie im
+						// Shop markiert nur eine Klasse + ein Hinweis-Badge sie.
+						$lbite_available = ! $lbite_location_id || ! class_exists( 'LBite_Locations' )
+							|| LBite_Locations::is_product_available_at_location( $lbite_pid, $lbite_location_id );
 						?>
-						<article class="lbite-menu-item" data-product-id="<?php echo esc_attr( $lbite_pid ); ?>"
+						<article class="lbite-menu-item<?php echo $lbite_available ? '' : ' lbite-unavailable'; ?>" data-product-id="<?php echo esc_attr( $lbite_pid ); ?>"
 							data-needs-options="<?php echo $lbite_needs_mod ? '1' : '0'; ?>"
 							data-diet="<?php echo esc_attr( implode( ' ', $lbite_diet ) ); ?>">
 
@@ -170,6 +196,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 										<?php echo $lbite_needs_mod ? esc_html__( 'Choose', 'libre-bite' ) : esc_html__( 'Add', 'libre-bite' ); ?>
 									</button>
 								</div>
+
+								<?php if ( class_exists( 'LBite_Locations' ) ) : ?>
+									<?php LBite_Locations::render_availability_hint( $lbite_product, true ); ?>
+								<?php endif; ?>
 
 								<a class="lbite-menu-item__details" href="<?php echo esc_url( get_permalink( $lbite_pid ) ); ?>">
 									<?php esc_html_e( 'View product details', 'libre-bite' ); ?>
