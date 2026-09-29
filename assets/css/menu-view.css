@@ -764,7 +764,7 @@ body.lbite-menu-cart-open { overflow: hidden; }
 @media (max-width: 600px) {
 	.lbite-menu-item {
 		flex-direction: row;
-		align-items: stretch;
+		align-items: flex-start;
 	}
 
 	.lbite-menu-item__media,
@@ -772,6 +772,7 @@ body.lbite-menu-cart-open { overflow: hidden; }
 		order: 2;
 		flex: 0 0 92px;
 		aspect-ratio: 1;
+		border-radius: var(--lbite-menu-radius);
 	}
 
 	.lbite-menu-item__body {

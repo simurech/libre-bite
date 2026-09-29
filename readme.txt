@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.5
+Stable tag: 3.6.6
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,9 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.6 =
+* Fix: The small mobile thumbnail in the theme-independent menu view stretched to the full card height instead of staying a compact square, and had square corners.
 
 = 3.6.5 =
 * Fix: The floating "Your order" button and the "Go to checkout" button in the theme-independent menu view's slide-in cart had no hover color, or briefly flashed an unrelated blue instead of the brand color.
