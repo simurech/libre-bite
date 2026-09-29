@@ -278,250 +278,55 @@ Yes. English is the source language, and the plugin ships with complete translat
 == Changelog ==
 
 = 3.6.16 =
-* Changed: Updated readme, GitHub description and WordPress.org listing assets (banner, screenshots). No functional changes.
+* Changed: Updated readme, GitHub description and WordPress.org listing assets (banner, screenshots).
 
 = 3.6.15 =
-* Fix: In the theme-independent menu view, opening a product's detail popup could hide the "Add" button below the visible screen area on longer content (description plus several variants or options) until scrolling all the way down. The button now stays fixed at the bottom of the popup while its content scrolls.
+* Fix: The "Add" button in the menu view's product popup could be hidden below the screen on longer content until scrolling all the way down.
 
 = 3.6.14 =
-* Fix: On the checkout page, clicking "Change" on the location/order type summary made the edit form appear below "How would you like your order?" instead of in the same place as the summary it replaced, and it jumped back to its usual position after saving - confusing since the layout order changed depending on state. The edit form now always sits in the same place.
-* Fix: The location photo on the checkout page didn't match the one shown in the location picker - both use the same uploaded image, but the checkout page requested WordPress' hard-cropped "thumbnail" size instead of a proportional one, making it look like a different picture.
+* Fix: Inconsistent checkout layout when changing location/time, and a mismatched location photo size.
 
 = 3.6.13 =
-* Feature: The sticky category bar in the theme-independent menu view now highlights the currently visible section while scrolling, as if you had clicked it, and keeps that entry scrolled into view within the bar.
-* Fix: A product card without an image showed its text aligned to the top instead of matching the height of cards with an image. All cards in the grid now reserve the same image slot, shown as a plain placeholder when a product has no photo.
-* Feature: New "Product Images" setting under Settings → Products → Menu Display lets you turn off images in the menu grid entirely, for a text-only menu.
+* Feature: Sticky category bar highlights the visible section while scrolling; new setting to hide images in the menu grid.
 
 = 3.6.12 =
-* Fix: Clicking a category in the theme-independent menu view's sticky navigation scrolled to a position where the section title and its first row of products were hidden behind the sticky bar. The scroll offset is now calculated from the bar's actual height instead of a fixed number.
-* Fix: The theme-independent menu view was capped at 1100px wide, narrower than the surrounding page content on many themes. It now fills its container like the rest of the page.
+* Fix: Category navigation scroll offset and the menu view's overly narrow max width.
 
 = 3.6.11 =
-* Fix: Adding a product with variations to the cart from the theme-independent menu view's popup still failed with "please choose an option" after the previous fix. Root cause found and verified directly against WooCommerce core: its add-to-cart endpoint never reads a separately submitted variation ID or attribute fields at all - it only checks whether the submitted product ID is itself a variation post, and resolves everything else from that. The popup now submits the variation's own ID instead of the parent product's ID together with separate fields.
-* Fix: The sticky category bar in the theme-independent menu view now keeps a 16px gap from the top of the window while docked, matching its left/right spacing.
+* Fix: Adding a variable product to the cart from the menu view still failed in some cases; root cause resolved in WooCommerce's add-to-cart handling.
 
 = 3.6.10 =
-* Fix: Adding a product with variations to the cart from the theme-independent menu view's popup still failed with "please choose an option" - WooCommerce's add-to-cart endpoint needs the variation ID sent explicitly, it does not reliably resolve it from the selected attributes on its own.
-* Fix: The selected variation's name stayed in dark text instead of turning white together with the price and the button background.
-* Fix: The availability hint's icon showed as stray lines instead of the usual circled "i", since a generic style rule overrode the icon font.
-* Fix: Clicking "Change location" in the menu view only revealed the dropdown, still showing the previously chosen location - a second click was needed before anything visibly changed. It now also shows the "Choose a location" text and resets the dropdown to its placeholder, matching the standard shop pages.
-* Fix: The "Continue shopping" button in the slide-in cart was slightly taller than "Go to checkout" due to the browser's default button sizing; both are the same height now.
-* Fix: The modal's close button showed a stray blue focus ring on hover.
-* Feature: The mobile thumbnail in the menu view is about 30% larger.
-* Feature: The Options/Add-ons section in the product popup now has a heading, matching the Variations section.
+* Fix: Variable products couldn't be added to the cart from the menu view popup, plus several smaller visual polish fixes.
 
 = 3.6.9 =
-* Feature: New "Back Button" setting under Settings → Orders → Columns lets you turn off the one-step-back button on Kanban cards, for kitchens that don't need it.
-* Feature: New "Cancelling Orders" setting lets you block cancelling orders from the Kanban board entirely, e.g. when kitchen staff shouldn't have that permission. Also enforced on the server, not just hidden in the interface.
+* Feature: New settings to hide the Kanban back button and to block cancelling orders from the board.
 
 = 3.6.8 =
-* Fix: The location filter bar on standard shop pages and the location step in the reservation form still appeared even with "Location Selection" turned off; both now respect that setting and fall back to the configured Default Location.
-* Fix: The availability hint/tooltip in the theme-independent menu view showed the wrong icon colors, since a generic style rule overrode them.
-* Fix: After clicking "Change location" in the theme-independent menu view, the "Show only available products" button incorrectly stayed visible instead of hiding along with the rest of the chosen-location controls.
-* Fix: The small mobile thumbnail in the theme-independent menu view had all four corners rounded; the two corners that should run flush to the card edge are square again.
-* Feature: The slide-in cart in the theme-independent menu view now has a "Continue shopping" button to close it and add more items without going to checkout.
+* Fix: The location filter bar ignored the "Location Selection" setting; several menu view visual fixes.
 
 = 3.6.7 =
-* Feature: The theme-independent menu view now matches the standard shop pages: products excluded at the chosen location stay visible with the same availability hint/tooltip instead of disappearing entirely, and a "Show only available products" toggle appears once a location is chosen.
-* Fix: The location banner in the theme-independent menu view showed the chosen location's name twice (once as text, once as the still-visible dropdown's selected option); it now switches to a "Change location" link once a location is chosen, matching the standard shop pages.
+* Feature: Menu view now matches shop-page availability behaviour instead of hiding location-excluded products.
 
 = 3.6.6 =
-* Fix: The small mobile thumbnail in the theme-independent menu view stretched to the full card height instead of staying a compact square, and had square corners.
+* Fix: Menu view's mobile thumbnail sizing.
 
 = 3.6.5 =
-* Fix: The floating "Your order" button and the "Go to checkout" button in the theme-independent menu view's slide-in cart had no hover color, or briefly flashed an unrelated blue instead of the brand color.
-* Fix: The Branding settings page previewed the Accent Color as the background of an "Order Now" button, which was misleading - that button actually uses the Primary Color. The Accent Color's description now explains its real, narrow use (success icon and discount amount on the optimized checkout's confirmation page, a Pro feature).
-* Fix: On standard WooCommerce/theme pages, the location filter bar and the dietary filter bar looked visually inconsistent; the location filter now uses the same rounded pill style.
-* Fix: Same inconsistency in the theme-independent menu view: the location switcher's dropdown now matches the dietary filter's pill style.
-* Feature: The sticky category bar in the theme-independent menu view now uses the brand's primary color as background with light pill buttons, so it stands out more while scrolling.
-* Feature: When a dietary filter leaves a category with no matching products in the theme-independent menu view, that category now shows a short explanatory message instead of an empty gap under its title.
+* Fix: Missing hover colors and inconsistent filter pill styling across the menu view and branding preview.
 
 = 3.6.4 =
-* Fix: Buttons using the chosen brand color as background kept white text everywhere except the theme-independent menu view and the announcement banner, which already computed readable text automatically; with a light brand color this made checkout, thank-you page, location picker and reservation form buttons unreadable. All of them now use the same automatic light/dark text logic.
-* Fix: The reservation form and the stamp card never received the chosen brand color at all and always fell back to the default blue, regardless of the Branding settings.
-* Fix: A PHP 8.1+ deprecation notice fired on every checkout page load while no pickup time was selected yet.
+* Fix: Branded buttons became unreadable with light brand colors; reservation form and stamp card ignored branding.
 
 = 3.6.3 =
-* Fix: In the theme-independent menu view's popup, variation prices without their own currency symbol (e.g. CHF) showed as raw HTML entities instead of the actual text.
-* Fix: Adding a product with variations to the cart from the menu view's popup always failed with "please choose an option", even after selecting a size - the field name sent to WooCommerce could mismatch for attribute names with special characters.
-* Fix: The sticky category bar in the menu view had no horizontal spacing, so the buttons touched its edges directly.
-* Feature: On narrow screens, the menu view now shows a small thumbnail to the right of the text instead of a full-width photo above it, matching common food-delivery app layouts.
-* Feature: The Notifications settings tab now links directly to WooCommerce's own email settings screen for the pickup reminder email, where its sender, subject, heading and message text are configured.
+* Fix: Currency symbol display and variant add-to-cart in the menu view popup; new compact mobile layout.
 
 = 3.6.2 =
-* Fix: In the theme-independent menu view ([lbite_menu]), the dietary filter appeared above the sticky category bar instead of below it.
-* Fix: The sticky category bar in the menu view had no visible edge once docked at the top while scrolling, blending into the content behind it.
-* Fix: Products with variations (e.g. sizes) showed a plain dropdown without prices in the menu view's popup, plus an unnecessary quantity field; replaced with buttons showing the price for each option, and removed the quantity field everywhere in the popup (one click now always adds one item).
-* Fix: The menu view showed a price range for products with variations instead of the lowest price; now shows "From [price]" when prices differ, or a single price when they don't.
-* Fix: Product photos in the menu view's grid, list, and popup were cropped at a wide aspect ratio that didn't match square uploads; switched to a square crop throughout.
+* Fix: Dietary filter placement, sticky bar styling, and variant price display in the menu view.
 
 = 3.6.1 =
-* Fix: Branding colors did not reach the announcement banner, since it renders independently of the other frontend shortcodes; also added a readable text color for very light brand colors.
-* Fix: Reservation statuses (Pending/Confirmed/Cancelled/Completed) were hardcoded in English and never translatable.
-* Feature: New "Redirect Standard Archives to Menu" setting - sends the default WooCommerce shop, category and tag pages to your configured menu page instead of leaving duplicate content.
-* Feature: New WordPress dashboard widget showing today's order count and revenue per location, plus the average time from "preparing" to "completed" over the last 7 days.
-* Fix: On pages using WooCommerce's own [products] shortcode without pagination, the dietary and location filter bars never appeared, and the availability hint showed as unstyled full content instead of a compact popup.
-* Feature: The theme-independent menu view ([lbite_menu]) now has a dietary filter bar, a location switcher, and a subtle "View product details" link on each item - none of these existed there before.
-* Fix: The floating "Your order" button in the menu view had unreadable text, since a generic style rule overrode the button's own text color.
-* Fix: The dietary filter's reset button in the menu view kept the browser's native button styling and looked broken; the section navigation also stayed visually highlighted after a click even though it only scrolls the page.
-* Fix: The dietary and location filter bars on the shop page were narrower than the rest of the page content.
-* Feature: Dietary Labels and Dietary Filter are now two independent settings, so a shop can show labels without the filter bar or the other way around. Existing installs keep their current behavior automatically.
-* Feature: The stamp card now has its own tab in My Account, next to Dashboard and Orders, instead of appearing inside the Dashboard tab.
-* Feature: The statistics page and its dashboard widget now also show average order preparation time, overall and per location.
+* Feature: Dietary filter, location switcher and shop-archive redirect added to the menu view; several fixes.
 
 = 3.6.0 =
-* Fix: Adding an item in the theme-independent menu view showed the theme's own "View cart" link next to the button, shifting the product grid; the slide-in cart now opens automatically instead.
-* Fix: Branding colors could fail to reach the menu view, the reservation form, and the stamp card, since only pages using the location selector shortcode received them; broadened to all Libre Bite frontend shortcodes and unified with the admin/POS color logic (previously two separate implementations).
-* Feature: Text on branded buttons (e.g. the floating "Your order" button) now automatically switches between light and dark to stay readable against the chosen brand color.
-* Feature: New "Default Location" setting under Settings → Locations, used whenever a guest cannot pick a location themselves - most importantly when "Location Selection" is turned off. Orders, the add-to-cart location check, and the `[lbite_location_selector]` shortcode all fall back to it instead of leaving the order without a location.
-* Fix: With "Location Selection" turned off, the location selector shortcode kept showing the full picker instead of respecting the setting, and could show a raw browser error if a guest still interacted with it.
-* Fix: A location without configured opening hours was treated as always closed for pre-orders and reservations (and as "unknown" for the live status badge) instead of open 24/7; unified across checkout, the status badge, and reservations.
-* Feature: The reservation form now checks opening hours as soon as a date/time is chosen, instead of only rejecting it after all three steps are filled in.
-
-= 3.5.5 =
-* Fix: The 3.5.4 fix for the two Plugin Check errors was incomplete (escaping was applied at variable assignment instead of at the point of output); corrected and verified against the official Plugin Check tool directly, not just by re-reading the code.
-
-= 3.5.4 =
-* Fix: Two WordPress Plugin Check errors (missing translators comment in the setup wizard's stamp card preview; an unescaped variable in the stamp card frontend display) that were failing the automated code-quality check.
-
-= 3.5.3 =
-* Fix: Currency symbols without a dedicated Unicode character (e.g. CHF) appeared as literal HTML entity codes instead of the actual symbol in the Setup Wizard tip preview, the Checkout Tips settings preview, the POS cart/payment screen, and the Product Options price label.
-
-= 3.5.2 =
-* Fix: On the Kanban order board, the order info text in the card footer could be squeezed out of view by the action buttons.
-
-= 3.5.1 =
-
-* Fixed: the two background tasks (pickup reminders, pre-order status changes) ran every minute on every installation, even on shops that never use pre-orders or reminders; they're now only scheduled while the relevant feature is actually on, and the custom schedule interval was renamed to avoid colliding with another plugin's identically-named one.
-* Fixed: the pickup-reminder and pre-order background checks could have a backlog of old, already-handled orders crowd out the ones that actually need attention right now, since older entries weren't filtered out or prioritized. They're now scoped to the relevant time window and processed soonest-first.
-* Fixed: three read-only endpoints (time slots, opening days, location status) required a security token that had a limited lifetime; if a page-caching plugin or CDN served a cached copy of the page for longer than that, checkout would silently stop working until the visitor reloaded. These endpoints only return public information, so the token requirement was removed.
-* Fixed: the guest-notes phone lookup used a database search pattern that can't use an index and gets slower as the customer list grows; it now compares a pre-normalized number directly instead.
-* Fixed: the POS product cache used a direct database delete to clear itself, which does nothing on sites using a Redis/Memcached object cache — stale product data could persist there indefinitely after a change. It also didn't clear when stock levels changed automatically. Both are fixed with a version-counter approach that works with any caching setup.
-* Fixed: the till's coupon picker could be crowded out by personal, single-use reward coupons (e.g. from the stamp card) or already fully-used coupons, hiding real promotional codes on shops with many loyalty rewards.
-* Fixed: reservation card details (name, phone, notes, guest allergies) were escaped twice, so an apostrophe or ampersand in a reservation showed up as a literal HTML code instead of the actual character.
-* Fixed: a translation-loading order bug meant this plugin's own included translations always overrode community translations from wordpress.org for any string both contained, rather than the other way around as intended.
-* Fixed: a public-facing checkout endpoint compared a security value using a plain string comparison, which is more vulnerable to timing-based attacks than the constant-time comparison already used by a nearly-identical endpoint elsewhere in the plugin.
-* Changed: several inline `<script>`/`<style>` blocks are now delivered through WordPress's script/style system instead of being printed directly, and two CSS rules no longer depend on a WooCommerce stylesheet handle that some themes remove.
-* Changed: the Kanban board, reservation board and table plan now pause their background refresh while their browser tab isn't visible, resuming immediately when it becomes visible again.
-* Removed: an activation step that set up a database table system this plugin has never actually used.
-
-= 3.5.0 =
-
-* Fixed: the default POS payment method names ("Cash", "Card", "Other") were stored in German at installation time, which permanently overrode the translation on every site regardless of its language. Existing installs are migrated automatically; new installs and any site that never customized these labels now show them in the site's own language.
-* Fixed: several hard-coded German or English-only strings ("Loading…", a stamp-card preview sentence, an order-created message, a "no configuration needed" message) now go through the normal translation system.
-* Fixed: Du/Sie address was inconsistent across the German translations — the informal variants (Standard German, informal Swiss German) contained around 90 formal "Sie" strings each, and the formal variants contained a couple of stray informal "du" strings. Both are now consistent within each variant.
-* Added: a one-time redirect to the setup assistant right after the plugin's first activation (skipped for bulk/network activation and WP-CLI), plus a persistent reminder on the dashboard and settings page for as long as setup hasn't been completed.
-* Added: dashboard notices for the states that would otherwise silently prevent any order from completing — no location created yet, no POS payment method enabled, or the checkout page using the WooCommerce Checkout block.
-* Fixed: importing the sample content while already at the Free plan's one-location limit created a second location that was silently saved as a draft; this is now reported clearly instead of looking like nothing happened.
-* Fixed: the setup assistant's "WooCommerce is active" system check could never actually fail (the plugin doesn't load at all without an active, current-enough WooCommerce), so it only added noise — removed. Its "Continue" button had also been permanently disabled by a leftover reference to that check.
-* Fixed: a "Dim Future Pre-orders" setting that could never take effect due to an unrelated internal flag with no way to enable it — even paying customers who turned the checkbox on saw no effect. The Kanban board's sound-notification default was also never read from its own setting, always defaulting to on regardless of what was configured.
-* Removed: three dead/unreachable code paths found during an audit — an unused settings-registration call, an AJAX endpoint with no caller anywhere in the plugin, and a duplicate reservation-tables AJAX endpoint that was never wired to the frontend.
-* Changed: the previously unreachable Debug Information page is now available under Settings → Developer.
-
-= 3.4.9 =
-
-* Changed: several readme descriptions no longer matched the current plugin — the Kanban board description and screenshot named drag & drop and column names that are actually a Pro add-on, nutritional info claimed a checkout display that doesn't exist, the FAQ said locations are unlimited on the free plan even though it's limited to one, Sound Notifications was listed as fully Pro when the base tone is free, and "Product Add-ons & Extras" and "Product Options" were used interchangeably for the same feature.
-* Fixed: a link on the Support page to "edit these details under Settings" was visible to any role that can save plugin settings, but the Support settings tab itself is only visible to full administrators — non-admin managers saw a link that led nowhere useful.
-* Fixed: the setup assistant's hint text for Product Options pointed at a menu label ("Product add-ons") that doesn't exist; the actual menu item is "Product Options".
-* Fixed: activating the plugin without WooCommerce active showed a hard-coded, untranslatable error message.
-* Added: Twilio is now listed under External Services, since the optional SMS Notifications feature sends the customer's phone number and a status message to Twilio when enabled.
-* Changed: the default "support is free of charge" note on a fresh install no longer hard-codes a Swiss franc amount.
-
-= 3.4.8 =
-
-* Fixed: two license checks (the location limit on the Free plan and the pickup time-slot buffer) checked whether the code is running the Pro build rather than whether an actual Pro license or trial is active. On a Pro build without a valid license (for example after a trial ends), both stayed unlocked indefinitely.
-* Fixed: the "Send receipt" button on Kanban cards always appeared, even when the code running underneath it doesn't include that feature; it's now only shown when it will actually work.
-* Fixed: the dashboard tiles for disabled Pro features (Tables, Reservations) said "a manager can enable it under Settings" even without any license — they now clarify that a Pro license is required first. The Announcement Bar settings page was also missing its "Pro" badge.
-* Changed: a note in the README now clarifies that the GitHub release contains the full Pro codebase, which requires a paid license (or the 7-day trial) to use the Pro features.
-* Added: a warning notice when more than one location is published without an active Pro license or trial (for example right after a trial ends) — existing locations keep working, but no further locations can be published until the count is back to one or a license is active.
-
-= 3.4.7 =
-
-* Fixed: uninstalling the plugin with data deletion enabled left substantial data behind: order metadata on shops using High-Performance Order Storage (a separate database table the cleanup never touched), category time-schedule data, order-item metadata, and — for the underscore-prefixed keys used by guest notes and stamp cards — customer allergy notes and loyalty stamp counts. The role and capability cleanup also used an outdated, hand-maintained list that predated several current roles and permissions.
-* Fixed: the option cleanup on uninstall used a very generic "oos_" prefix wildcard that could have deleted unrelated options from other plugins; it's now limited to the one legacy option name this plugin actually used.
-* Added: guest notes and stamp card data (notes, allergies, stamp count, reward coupon) can now be exported or erased through Tools → Export/Erase Personal Data, and a short privacy policy suggestion is offered under Settings → Privacy.
-
-= 3.4.6 =
-
-* Fixed: a WooCommerce session cookie was set on every single page view (even for visitors who never touched a location link), which prevented full-page caching from working for any first-time visitor. The cookie is now only set when a location or order-type deep link parameter is actually present in the URL.
-* Fixed: a translation filter for the checkout "Billing details" heading compared against a German string that could never match (the filter always receives the original English text), so it silently did nothing; it also ran an expensive page-type check for every single translated string on the site instead of only for the one relevant string.
-
-= 3.4.5 =
-
-* Fixed: the tip amount was never saved to the order (only added as a checkout fee), so the statistics page counted every tip as a generic add-on instead of showing it separately.
-* Fixed: cart-wide and "buy N get M free" promotion discounts were recognized in the statistics page by matching the English fee name "Promotion: " — on non-English shops (including all German, French and Italian setups) this never matched, so these discounts were silently counted as regular add-on revenue.
-* Fixed: the statistics page loaded the entire matching order history into memory in one query and only filtered by location afterwards in PHP; large shops with a long order history could hit memory or time limits. Orders are now fetched in batches and filtered by location directly in the database query.
-
-= 3.4.4 =
-
-* Fixed: time slot capacity only counted orders created in the last 24 hours, not by their pickup time. A pre-order placed more than a day in advance was invisible to the capacity check, so a fully-booked slot could still be overbooked. Capacity is now counted by pickup date; existing pre-orders are backfilled automatically on update.
-* Fixed: a location's "Open now" status ignored holidays entirely — closed holidays still showed as open and accepted immediate orders, and a holiday with special hours on an otherwise closed weekday showed no available time slots at checkout.
-* Fixed: the holiday date-picker in Settings also greyed out holidays that have their own special opening hours, not just fully closed ones.
-* Fixed: the "next opening" text (e.g. "Opens Mon 11:00") always showed the day abbreviation in German, regardless of the site's language.
-
-= 3.4.3 =
-
-* Fixed: cart-wide promotion rules ("buy over X, get Y% off" and "buy N, get M free") calculated the discount as a fee that did not reduce the tax base, so VAT stayed at the pre-discount amount. The discount fee is now taxable, using the same tax class as the order (including the Takeaway/Dine-in Swiss VAT switch, if enabled).
-* Fixed: on shops that display prices including tax, a percentage or minimum-order-value promotion was calculated against the tax-excluded subtotal, giving a smaller discount than advertised and applying the minimum-order threshold too late.
-* Fixed: a promotion's day/time schedule was silently discarded when saved while the (unrelated) Scheduled Availability feature was switched off, and any already-saved schedule was ignored at checkout — the promotion ran around the clock regardless of its configured hours.
-
-= 3.4.2 =
-
-* Fixed: the Stamp Card's "Maximum amount" setting made the reward voucher invalid on carts above that amount instead of capping the discount at it. The discount is now genuinely capped, verified against carts both under and over the limit.
-* Fixed: a fixed-amount reward (rather than a percentage) was rounded down to a whole number and could not exceed 100 — a CHF 7.50 reward was silently saved as CHF 7, and anything above CHF 100 was rejected.
-* Fixed: the stamp card display always said "% off" even when the reward was configured as a fixed amount.
-* Fixed: an already-redeemed or expired reward voucher kept showing on the stamp card indefinitely instead of clearing once it could no longer be used.
-* Fixed: cancelling or refunding an order that had already earned a stamp never gave the stamp back.
-
-= 3.4.1 =
-
-* Fixed: Locations, Tables, and Product Options used WordPress's generic post-editing rights, so any Author (or other role able to publish posts) could create or publish one directly by URL, bypassing the plugin's own menus entirely. All three now require the same dedicated capability the plugin's own menu already expected.
-* Added: a dedicated permission for managing reservations, separate from the Product Options permission it was previously tied to. Staff and Managers can now open the Reservations board and change a reservation's status or table, as documented — previously only full Administrators could.
-* Fixed: the "Delete Data on Uninstall" setting could be changed by a Shop Manager; it is now restricted to full Administrators, matching how the option is presented in the interface.
-* Fixed: the POS "create order" endpoint accepted the generic `edit_posts` capability as an alternative to the dedicated POS permission, which unintentionally let non-POS roles create orders through it.
-
-= 3.4.0 =
-
-* Fixed: the checkout, the table QR code link, and the reservation form accepted any numeric ID as a "location" or "table" without checking it was actually one — the title of an unrelated post could end up in the order, the thank-you page, and confirmation emails. Table QR codes also bypassed the location's availability window. All three now validate against the real location/table.
-* Fixed: a pre-order pickup time was only checked against remaining capacity, not against its format, whether it was in the past, or whether the location actually offers that time slot at all.
-* Fixed: the reservation form only checked that the date was "today or later" — a time earlier today, a time outside opening hours, a closed holiday, and double-booking the same table at the same time were all accepted.
-* Fixed: a guest who created an account during checkout (turning them from logged-out to logged-in mid-request) could lose their selected location and pickup time, because a redundant nonce check no longer matched after the login state changed.
-
-= 3.3.3 =
-
-* Fixed: cancelling an order from the dashboard had no status check, so an already-completed or already-refunded order could be cancelled (and refunded again) a second time. Only orders still in Processing, On Hold, or Pending can be cancelled now, and a partially refunded order is refunded for the remaining amount only, not the full total again.
-
-= 3.3.2 =
-
-* Fixed: the location restriction for managers and staff (Settings → Manager Assignments) only applied to the REST API and the Statistics page. Over the regular admin-ajax endpoints, staff and managers could view, change, and cancel orders at any location, and retrieve the receipt of any WooCommerce order, not just their own location's. All order-related endpoints now check location access consistently through one shared class.
-* Fixed: on the Statistics page, a manager or staff account with no location explicitly assigned saw an empty report instead of all locations — the opposite of what an empty assignment means everywhere else in the plugin.
-
-= 3.3.1 =
-
-* Fixed: on the optimized checkout's thank-you page, a guest without an email on file who requested their receipt had it sent to an internal placeholder address instead of the address they just typed in — because the email was triggered before that address was saved. The address is now saved first, and the request is also checked against the order's key, not just a nonce, so it cannot be replayed against a different order.
-
-= 3.3.0 =
-
-* Fixed: settings that only show a field while their feature is switched on (SMS credentials, pickup reminder settings, tip amounts, checkout mode) reset that field to empty the moment the feature was off when the page was saved. Twilio credentials, for example, were lost simply by saving Notifications while SMS was disabled. Each such field now only changes when it was actually visible on the page you saved.
-* Fixed: saving Settings could trigger a "headers already sent" warning and fail to redirect back to the page with the "Settings saved" notice, because the save logic ran after WordPress had already started sending the page. It now runs earlier, before any output.
-* Fixed: the Kanban board refresh interval had no server-side minimum — entering 0 caused constant requests. It is now capped at 10 seconds; the default for new installations is unchanged.
+* Feature: Menu view slide-in cart, branding now reaches all frontend shortcodes, new Default Location setting.
 
 = Older versions =
-* For the full changelog of versions before 3.3.0, see the release history: https://github.com/simurech/libre-bite/releases
-
-== Upgrade Notice ==
-
-= 3.5.1 =
-Background tasks now only run while the relevant feature (pre-orders, pickup reminders) is switched on, and three checkout endpoints no longer require a security token that could expire under page caching. No action needed either way.
-
-= 3.4.7 =
-Uninstalling with data deletion enabled now cleans up considerably more (HPOS order metadata, category schedules, guest notes, stamp card data) than before. If you rely on this option, review it once after updating.
-
-= 3.3.2 =
-Security fix: location access restrictions for managers/staff now apply consistently across all order endpoints, not just the REST API and Statistics. Update promptly if you use multi-location access restrictions.
-
-= 3.3.0 =
-Settings now save via an earlier hook to fix a "headers already sent" redirect bug, and fields hidden behind a disabled feature no longer reset when you save. If you use the Settings page heavily, worth a quick check after updating.
-
-= 3.2.5 =
-Blog posts and the "Downloads"/"Addresses" sections of My Account are no longer hidden automatically. If you relied on that, enable it under Settings → Content & Account.
+* For the full changelog of versions before 3.6.0, see the release history: https://github.com/simurech/libre-bite/releases
