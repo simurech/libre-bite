@@ -160,6 +160,8 @@ class LBite_Menu_View {
 					'close'        => __( 'Close', 'libre-bite' ),
 					'total'        => __( 'Total', 'libre-bite' ),
 					'chooseOption' => __( 'Please choose an option.', 'libre-bite' ),
+					/* translators: %s: comma-separated list of active dietary filter labels */
+					'noMatch'      => __( 'No products in this category match the selected filter: %s', 'libre-bite' ),
 				),
 			)
 		);

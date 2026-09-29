@@ -108,6 +108,9 @@ body .lbite-menu-view select {
 
 /* ── Abschnitts-Navigation ──────────────────────────────────────────── */
 
+/* Farbig statt neutral (Nutzer-Fund 2026-09-29): die Leiste soll als eigenes,
+   auffälliges Element hervorstechen statt sich nur dezent vom Inhalt
+   abzusetzen - Buttons darauf sind deshalb helle "Chips", nicht umgekehrt. */
 .lbite-menu-nav {
 	position: sticky;
 	top: 0;
@@ -117,8 +120,8 @@ body .lbite-menu-view select {
 	padding: 10px 16px;
 	margin-bottom: 12px;
 	overflow-x: auto;
-	background: var(--lbite-menu-surface);
-	border-bottom: 1px solid var(--lbite-menu-border);
+	background: var(--lbite-menu-primary);
+	border-radius: var(--lbite-menu-radius);
 	box-shadow: var(--lbite-menu-shadow);
 	scrollbar-width: thin;
 }
@@ -128,7 +131,8 @@ body .lbite-menu-view .lbite-menu-nav__item {
 	padding: 8px 16px;
 	border-radius: 999px;
 	background: var(--lbite-menu-surface);
-	border: 1px solid var(--lbite-menu-border);
+	border: 1px solid transparent;
+	color: var(--lbite-menu-text);
 	font-size: 14px;
 	font-weight: 600;
 	text-decoration: none;
@@ -140,8 +144,7 @@ body .lbite-menu-view .lbite-menu-nav__item {
    zum Abschnitt, ist keine dauerhafte Auswahl - der Button soll danach wieder
    normal aussehen (Nutzer-Fund 2026-09-28). */
 body .lbite-menu-view .lbite-menu-nav__item:hover {
-	background: var(--lbite-menu-primary);
-	border-color: var(--lbite-menu-primary);
+	background: var(--lbite-menu-primary-hover);
 	color: var(--lbite-menu-primary-contrast);
 }
 
@@ -166,11 +169,18 @@ body .lbite-menu-view .lbite-menu-location-banner__text {
 }
 
 body .lbite-menu-view .lbite-menu-location-banner__picker {
-	padding: 6px 10px;
-	border-radius: 6px;
+	padding: 6px 14px;
+	border-radius: 999px;
 	border: 1px solid var(--lbite-menu-border);
-	background: var(--lbite-menu-canvas);
+	background: var(--lbite-menu-surface);
 	font-size: 13px;
+	font-weight: 600;
+	transition: background-color .15s ease, border-color .15s ease;
+}
+
+body .lbite-menu-view .lbite-menu-location-banner__picker:hover {
+	border-color: var(--lbite-menu-primary);
+	background: var(--lbite-menu-canvas);
 }
 
 /* ── Ernährungsform-Filter ─────────────────────────────────────────── */
@@ -251,6 +261,22 @@ body .lbite-menu-view .lbite-menu-section__desc {
 	font-size: 15px;
 	line-height: 1.55;
 }
+
+/* Wird per JS ein-/ausgeblendet, wenn eine Ernährungsform-Filterung
+   innerhalb eines Abschnitts null Treffer ergibt (Nutzer-Fund 2026-09-29) -
+   ohne diesen Hinweis blieb dort nur der Abschnittstitel über einer leeren
+   Fläche stehen. */
+.lbite-menu-section__empty {
+	margin: 0 !important;
+	padding: 16px;
+	border-radius: var(--lbite-menu-radius);
+	background: var(--lbite-menu-canvas);
+	color: var(--lbite-menu-muted);
+	font-size: 14px;
+	text-align: center;
+}
+
+.lbite-menu-section__empty[hidden] { display: none !important; }
 
 .lbite-menu-grid {
 	display: grid;
@@ -553,12 +579,21 @@ body .lbite-menu-view .lbite-menu-modal__add {
 	border-radius: 999px;
 	background: var(--lbite-menu-primary, #0073aa);
 	color: var(--lbite-menu-primary-contrast) !important;
+	transition: background-color .15s ease;
 	font-size: 15px;
 	font-weight: 700;
 	box-shadow: 0 8px 24px rgba(16, 24, 40, .25);
 }
 
 .lbite-menu-cart-toggle[hidden] { display: none !important; }
+
+/* Ohne eigene :hover-Regel griff hier ein fremdes Theme-Default für Buttons/
+   Links (blauer Hintergrund statt der Markenfarbe) - derselbe Fund wie beim
+   fehlenden Hover auf .lbite-menu-cart__checkout weiter unten (Nutzer-Fund
+   2026-09-29). */
+.lbite-menu-cart-toggle:hover {
+	background: var(--lbite-menu-primary-hover, #005a87);
+}
 
 /* Die generische Theme-Isolation-Regel weiter oben (body .lbite-menu-view span)
    setzt sonst eine feste, dunkle Textfarbe auf jeden Span - auch auf diese beiden,
@@ -665,6 +700,12 @@ body .lbite-menu-view .lbite-menu-cart__head h2 { font-size: 18px; font-weight: 
 	color: var(--lbite-menu-primary-contrast) !important;
 	font-weight: 700;
 	text-decoration: none !important;
+	transition: background-color .15s ease;
+}
+
+body .lbite-menu-view .lbite-menu-cart__checkout:hover {
+	background: var(--lbite-menu-primary-hover, #005a87);
+	color: var(--lbite-menu-primary-contrast) !important;
 }
 
 body.lbite-menu-cart-open { overflow: hidden; }

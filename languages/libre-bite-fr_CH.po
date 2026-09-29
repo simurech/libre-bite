@@ -7010,6 +7010,15 @@ msgstr "Dès %s"
 msgid "Sender, subject, heading and message text for this email are configured on WooCommerce's own email settings screen: %s"
 msgstr "L'expéditeur, l'objet, le titre et le texte de cet e-mail se configurent sur l'écran des réglages e-mail propre à WooCommerce : %s"
 
+#: templates/admin/settings/branding.php:108
+msgid "Used only for the success icon and discount amount on the optimized checkout's order confirmation page (Pro feature). Most buttons use the Primary Color instead."
+msgstr "Utilisée uniquement pour l'icône de succès et le montant de la remise sur la page de confirmation du checkout optimisé (fonction Pro). La plupart des boutons utilisent la couleur primaire."
+
+#. translators: %s: comma-separated list of active dietary filter labels
+#: includes/modules/menu-view/class-menu-view.php:164
+msgid "No products in this category match the selected filter: %s"
+msgstr "Aucun produit dans cette catégorie ne correspond au filtre sélectionné : %s"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Erreur lors de l'enregistrement"
 

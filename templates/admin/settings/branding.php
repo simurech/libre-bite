@@ -105,7 +105,7 @@ $lbite_color_presets = array(
 			<th><?php esc_html_e( 'Accent Color', 'libre-bite' ); ?></th>
 			<td>
 				<input type="text" name="lbite_color_accent" value="<?php echo esc_attr( $lbite_color_accent ); ?>" class="lbite-color-picker" data-default-color="#00a32a">
-				<p class="description"><?php esc_html_e( 'For success and confirmation elements.', 'libre-bite' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Used only for the success icon and discount amount on the optimized checkout\'s order confirmation page (Pro feature). Most buttons use the Primary Color instead.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -152,7 +152,7 @@ $lbite_color_presets = array(
 	<div id="lbite-preview-secondary-bar" style="background: <?php echo esc_attr( $lbite_color_secondary ); ?>; height: 6px;"></div>
 	<div style="padding: 16px;">
 		<div style="display: flex; gap: 8px; margin-bottom: 12px;">
-			<button type="button" id="lbite-preview-btn-main" style="flex: 1; padding: 10px; background: <?php echo esc_attr( $lbite_color_accent ); ?>; color: #fff; border: none; border-radius: 4px; cursor: default; font-weight: 600;"><?php esc_html_e( 'Order Now', 'libre-bite' ); ?></button>
+			<button type="button" id="lbite-preview-btn-main" style="flex: 1; padding: 10px; background: <?php echo esc_attr( $lbite_color_primary ); ?>; color: #fff; border: none; border-radius: 4px; cursor: default; font-weight: 600;"><?php esc_html_e( 'Order Now', 'libre-bite' ); ?></button>
 			<button type="button" id="lbite-preview-btn-secondary" style="flex: 1; padding: 10px; background: <?php echo esc_attr( $lbite_color_secondary ); ?>; color: #fff; border: none; border-radius: 4px; cursor: default;"><?php esc_html_e( 'Back', 'libre-bite' ); ?></button>
 		</div>
 		<p id="lbite-preview-secondary-text" style="color: <?php echo esc_attr( $lbite_color_secondary ); ?>; margin: 0; font-size: 13px;"><?php esc_html_e( 'Secondary text and links', 'libre-bite' ); ?></p>
@@ -168,7 +168,7 @@ jQuery(document).ready(function($) {
 	function lbiteUpdatePreview(primary, secondary, accent) {
 		$('#lbite-preview-header').css('background', primary);
 		$('#lbite-preview-secondary-bar').css('background', secondary);
-		$('#lbite-preview-btn-main').css('background', accent);
+		$('#lbite-preview-btn-main').css('background', primary);
 		$('#lbite-preview-btn-secondary').css('background', secondary);
 		$('#lbite-preview-secondary-text').css('color', secondary);
 	}

@@ -181,6 +181,35 @@
 
 				$item.prop( 'hidden', ! matchesAll );
 			} );
+
+			// Ein Abschnitt kann durch die Filterung komplett leer werden - ohne
+			// Hinweis bliebe dort nur der Titel über einer leeren Fläche stehen
+			// (Nutzer-Fund 2026-09-29).
+			const activeLabels = this.$root.find( '.lbite-menu-dietary-filter__btn.is-active' )
+				.map( function () {
+					return $( this ).text().trim();
+				} )
+				.get();
+
+			this.$root.find( '.lbite-menu-section' ).each( function () {
+				const $section = $( this );
+				const $grid    = $section.find( '.lbite-menu-grid' );
+				const anyVisible = $grid.find( '.lbite-menu-item' ).filter( function () {
+					return ! $( this ).prop( 'hidden' );
+				} ).length > 0;
+
+				let $empty = $section.find( '.lbite-menu-section__empty' );
+
+				if ( hasFilter && ! anyVisible ) {
+					if ( ! $empty.length ) {
+						$empty = $( '<p class="lbite-menu-section__empty"></p>' );
+						$grid.after( $empty );
+					}
+					$empty.text( lbiteMenu.strings.noMatch.replace( '%s', activeLabels.join( ', ' ) ) ).prop( 'hidden', false );
+				} else if ( $empty.length ) {
+					$empty.prop( 'hidden', true );
+				}
+			} );
 		},
 
 		/* ── Modal ────────────────────────────────────────────────── */

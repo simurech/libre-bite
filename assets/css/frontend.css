@@ -172,7 +172,10 @@
 	max-width: 280px;
 }
 
-/* Standort-Filterung im Shop */
+/* Standort-Filterung im Shop - dasselbe Box- und Button-Aussehen wie
+   .lbite-dietary-filter weiter unten übernommen (Nutzer-Fund 2026-09-29:
+   beide Leisten sassen direkt übereinander, sahen aber sichtbar
+   unterschiedlich aus). */
 #lbite-location-notice {
 	display: flex;
 	align-items: center;
@@ -180,10 +183,10 @@
 	gap: 12px;
 	width: 100%;
 	box-sizing: border-box;
-	background: #f8f8f8;
-	border: 1px solid #e5e5e5;
-	border-radius: 4px;
-	padding: 10px 14px;
+	background: #f8f9fa;
+	border: 1px solid #e0e0e0;
+	border-radius: 10px;
+	padding: 12px 14px;
 	margin-bottom: 20px;
 	font-size: 0.88em;
 	color: #555;
@@ -196,11 +199,24 @@
 
 .lbite-filter-btn.button {
 	white-space: nowrap;
-	font-size: 0.85em !important;
-	padding: 4px 12px !important;
+	font-size: 13px !important;
+	font-weight: 600 !important;
+	padding: 5px 12px !important;
 	height: auto !important;
-	line-height: 1.6 !important;
+	line-height: 1.5 !important;
 	flex-shrink: 0;
+	border: 1px solid #d0d3d7 !important;
+	border-radius: 999px !important;
+	background: #fff !important;
+	color: #1d2327 !important;
+	box-shadow: none !important;
+	text-shadow: none !important;
+	transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.lbite-filter-btn.button:hover {
+	border-color: #8c8f94 !important;
+	background: #f0f0f1 !important;
 }
 
 .lbite-location-picker {

@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.4
+Stable tag: 3.6.5
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,14 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.5 =
+* Fix: The floating "Your order" button and the "Go to checkout" button in the theme-independent menu view's slide-in cart had no hover color, or briefly flashed an unrelated blue instead of the brand color.
+* Fix: The Branding settings page previewed the Accent Color as the background of an "Order Now" button, which was misleading - that button actually uses the Primary Color. The Accent Color's description now explains its real, narrow use (success icon and discount amount on the optimized checkout's confirmation page, a Pro feature).
+* Fix: On standard WooCommerce/theme pages, the location filter bar and the dietary filter bar looked visually inconsistent; the location filter now uses the same rounded pill style.
+* Fix: Same inconsistency in the theme-independent menu view: the location switcher's dropdown now matches the dietary filter's pill style.
+* Feature: The sticky category bar in the theme-independent menu view now uses the brand's primary color as background with light pill buttons, so it stands out more while scrolling.
+* Feature: When a dietary filter leaves a category with no matching products in the theme-independent menu view, that category now shows a short explanatory message instead of an empty gap under its title.
 
 = 3.6.4 =
 * Fix: Buttons using the chosen brand color as background kept white text everywhere except the theme-independent menu view and the announcement banner, which already computed readable text automatically; with a light brand color this made checkout, thank-you page, location picker and reservation form buttons unreadable. All of them now use the same automatic light/dark text logic.
