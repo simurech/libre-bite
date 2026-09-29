@@ -7001,6 +7001,11 @@ msgstr "Ø Zubereitungszeit"
 msgid "Avg. Prep Time by Location"
 msgstr "Ø Zubereitungszeit nach Standort"
 
+#. translators: %s: formatted price, e.g. "CHF 10.00"
+#: includes/modules/menu-view/class-menu-view.php:354
+msgid "From %s"
+msgstr "Ab %s"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

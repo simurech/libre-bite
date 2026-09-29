@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.1
+Stable tag: 3.6.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,13 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.2 =
+* Fix: In the theme-independent menu view ([lbite_menu]), the dietary filter appeared above the sticky category bar instead of below it.
+* Fix: The sticky category bar in the menu view had no visible edge once docked at the top while scrolling, blending into the content behind it.
+* Fix: Products with variations (e.g. sizes) showed a plain dropdown without prices in the menu view's popup, plus an unnecessary quantity field; replaced with buttons showing the price for each option, and removed the quantity field everywhere in the popup (one click now always adds one item).
+* Fix: The menu view showed a price range for products with variations instead of the lowest price; now shows "From [price]" when prices differ, or a single price when they don't.
+* Fix: Product photos in the menu view's grid, list, and popup were cropped at a wide aspect ratio that didn't match square uploads; switched to a square crop throughout.
 
 = 3.6.1 =
 * Fix: Branding colors did not reach the announcement banner, since it renders independently of the other frontend shortcodes; also added a readable text color for very light brand colors.

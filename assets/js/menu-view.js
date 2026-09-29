@@ -81,6 +81,16 @@
 				self.submitModal( $( this ) );
 			} );
 
+			// Variantenauswahl im Modal: Buttons statt Dropdown (Nutzer-Fund
+			// 2026-09-29) - Einfachauswahl innerhalb der eigenen Attribut-Gruppe.
+			this.$root.on( 'click', '.lbite-menu-modal__variation-btn', function () {
+				const $btn = $( this );
+				const $group = $btn.closest( '.lbite-menu-modal__variation-group' );
+				$group.removeClass( 'is-invalid' ).find( '.lbite-menu-modal__variation-btn' ).removeClass( 'is-active' );
+				$btn.addClass( 'is-active' );
+				self.updateVariationPrice();
+			} );
+
 			// WooCommerce meldet Warenkorb-Änderungen
 			$( document.body ).on( 'added_to_cart wc_fragments_refreshed wc_fragments_loaded', function () {
 				self.refreshCart();
@@ -200,7 +210,10 @@
 		},
 
 		renderModal: function ( data ) {
+			const self = this;
 			const $body = $( '#lbite-menu-modal-body' ).empty();
+
+			this.currentModalData = data;
 
 			if ( data.image ) {
 				$body.append( $( '<img class="lbite-menu-modal__img">' ).attr( { src: data.image, alt: '' } ) );
@@ -214,27 +227,63 @@
 
 			const $form = $( '<div class="lbite-menu-modal__form"></div>' ).attr( 'data-product-id', data.id );
 
-			// Varianten: je Attribut eine Auswahl. Feldnamen wie auf der
-			// normalen Produktseite, damit WooCommerce sie versteht.
-			if ( data.type === 'variable' && data.attributes ) {
-				Object.keys( data.attributes ).forEach( function ( attrName ) {
+			// Varianten: Buttons statt Dropdown (Nutzer-Fund 2026-09-29), damit der
+			// Preis pro Option sichtbar ist. Feldnamen wie auf der normalen
+			// Produktseite, damit WooCommerce sie versteht (attribute_<slug>).
+			const attrNames = data.attributes ? Object.keys( data.attributes ) : [];
+
+			if ( data.type === 'variable' && attrNames.length === 1 && data.variations && data.variations.length ) {
+				// Genau ein variationsbildendes Attribut (Regelfall: eine Grösse) -
+				// Preis direkt am Button, aus den Variationsdaten selbst gebaut statt
+				// aus der Attribut-Werteliste, damit Button-Wert und Variation
+				// garantiert zusammenpassen.
+				const attrName = attrNames[ 0 ];
+				const $group = $( '<div class="lbite-menu-modal__group"></div>' );
+				$group.append( $( '<span class="lbite-menu-modal__label"></span>' ).text( attrName ) );
+
+				const fieldName = 'attribute_' + self.slugify( attrName );
+				const $btnGroup = $( '<div class="lbite-menu-modal__variation-group"></div>' ).attr( 'data-attribute', fieldName );
+
+				data.variations.forEach( function ( variation ) {
+					const value = variation.attributes[ Object.keys( variation.attributes )[ 0 ] ] || '';
+					const $vbtn = $( '<button type="button" class="lbite-menu-modal__variation-btn"></button>' )
+						.attr( 'data-value', value )
+						.attr( 'data-variation-id', variation.id );
+					$vbtn.append( $( '<span></span>' ).text( variation.label || value ) );
+					$vbtn.append( $( '<span class="lbite-menu-modal__variation-btn-price"></span>' ).text( variation.price ) );
+					$btnGroup.append( $vbtn );
+				} );
+
+				$group.append( $btnGroup );
+				$form.append( $group );
+			} else if ( data.type === 'variable' && attrNames.length > 1 ) {
+				// Mehrere variationsbildende Attribute (Randfall, z. B. Grösse +
+				// Sorte): Preis erst nach vollständiger Auswahl bekannt, deshalb
+				// Button-Gruppen ohne Preis am Button plus einer Live-Preiszeile.
+				attrNames.forEach( function ( attrName ) {
 					const values = data.attributes[ attrName ];
-					const fieldName = 'attribute_' + attrName.toLowerCase().replace( /\s+/g, '-' );
+					const fieldName = 'attribute_' + self.slugify( attrName );
 
 					const $group = $( '<div class="lbite-menu-modal__group"></div>' );
 					$group.append( $( '<span class="lbite-menu-modal__label"></span>' ).text( attrName ) );
 
-					const $select = $( '<select class="lbite-menu-modal__select"></select>' )
-						.attr( 'data-attribute', fieldName );
-					$select.append( $( '<option value=""></option>' ).text( lbiteMenu.strings.chooseOption ) );
+					const $btnGroup = $( '<div class="lbite-menu-modal__variation-group"></div>' ).attr( 'data-attribute', fieldName );
 
 					values.forEach( function ( value ) {
-						$select.append( $( '<option></option>' ).attr( 'value', value ).text( value ) );
+						$btnGroup.append(
+							$( '<button type="button" class="lbite-menu-modal__variation-btn"></button>' )
+								.attr( 'data-value', value )
+								.text( value )
+						);
 					} );
 
-					$group.append( $select );
+					$group.append( $btnGroup );
 					$form.append( $group );
 				} );
+
+				$form.append(
+					$( '<p class="lbite-menu-modal__variation-price" data-lbite-variation-price></p>' ).text( lbiteMenu.strings.chooseOption )
+				);
 			}
 
 			// Zusatzoptionen
@@ -254,16 +303,86 @@
 				$form.append( $group );
 			}
 
-			// Menge
-			const $qty = $( '<div class="lbite-menu-modal__group lbite-menu-modal__qty"></div>' );
-			$qty.append( $( '<input type="number" min="1" step="1" value="1" class="lbite-menu-modal__qty-input">' ) );
-			$form.append( $qty );
-
 			$body.append( $form );
 
 			$body.append(
 				$( '<button type="button" class="lbite-menu-modal__add"></button>' ).text( lbiteMenu.strings.add )
 			);
+		},
+
+		/**
+		 * Grobe clientseitige Entsprechung zu sanitize_title(): dient nur dazu,
+		 * Attributnamen konsistent mit dem serverseitigen Feldnamen-Schema
+		 * (attribute_<slug>) zu bilden bzw. Button-Werte mit den Variationsdaten
+		 * abzugleichen - kein Ersatz für die serverseitige Validierung.
+		 */
+		slugify: function ( value ) {
+			return String( value === undefined || value === null ? '' : value )
+				.toLowerCase()
+				.trim()
+				.replace( /[^a-z0-9]+/g, '-' )
+				.replace( /^-+|-+$/g, '' );
+		},
+
+		/**
+		 * Zu einer Attribut-Auswahl passende Variation suchen (nur für den
+		 * Mehrattribut-Fall relevant, siehe renderModal()).
+		 */
+		findMatchingVariation: function ( data, selections ) {
+			const self = this;
+			const variations = ( data && data.variations ) || [];
+
+			for ( let i = 0; i < variations.length; i++ ) {
+				const variation = variations[ i ];
+				const matches = Object.keys( selections ).every( function ( field ) {
+					const raw = variation.attributes[ field ];
+					// Ein leerer Wert bedeutet in WooCommerce "beliebig" (Any).
+					return raw === '' || raw === undefined || self.slugify( raw ) === selections[ field ];
+				} );
+
+				if ( matches ) {
+					return variation;
+				}
+			}
+
+			return null;
+		},
+
+		/**
+		 * Live-Preisanzeige für den Mehrattribut-Fall aktualisieren, sobald alle
+		 * Attribut-Gruppen eine aktive Auswahl haben.
+		 */
+		updateVariationPrice: function () {
+			const self = this;
+			const $priceLine = $( '#lbite-menu-modal-body [data-lbite-variation-price]' );
+
+			if ( ! $priceLine.length || ! this.currentModalData ) {
+				return;
+			}
+
+			const $form = $( '#lbite-menu-modal-body .lbite-menu-modal__form' );
+			const selections = {};
+			let complete = true;
+
+			$form.find( '.lbite-menu-modal__variation-group' ).each( function () {
+				const field = $( this ).data( 'attribute' );
+				const $active = $( this ).find( '.lbite-menu-modal__variation-btn.is-active' );
+
+				if ( ! $active.length ) {
+					complete = false;
+					return;
+				}
+
+				selections[ field ] = self.slugify( $active.data( 'value' ) );
+			} );
+
+			if ( ! complete ) {
+				$priceLine.text( lbiteMenu.strings.chooseOption );
+				return;
+			}
+
+			const match = self.findMatchingVariation( self.currentModalData, selections );
+			$priceLine.text( match ? match.price : lbiteMenu.strings.chooseOption );
 		},
 
 		submitModal: function ( $button ) {
@@ -272,14 +391,16 @@
 			const extra = {};
 			let missing = false;
 
-			$form.find( '.lbite-menu-modal__select' ).each( function () {
-				const $select = $( this );
-				if ( ! $select.val() ) {
+			$form.find( '.lbite-menu-modal__variation-group' ).each( function () {
+				const $group = $( this );
+				const $active = $group.find( '.lbite-menu-modal__variation-btn.is-active' );
+
+				if ( ! $active.length ) {
 					missing = true;
-					$select.addClass( 'is-invalid' );
+					$group.addClass( 'is-invalid' );
 				} else {
-					$select.removeClass( 'is-invalid' );
-					extra[ $select.data( 'attribute' ) ] = $select.val();
+					$group.removeClass( 'is-invalid' );
+					extra[ $group.data( 'attribute' ) ] = $active.data( 'value' );
 				}
 			} );
 
@@ -295,9 +416,10 @@
 				extra[ 'lbite_options' ] = options;
 			}
 
-			const qty = parseInt( $form.find( '.lbite-menu-modal__qty-input' ).val(), 10 ) || 1;
-
-			this.addToCart( productId, qty, extra, $button, true );
+			// Kein Mengenfeld mehr im Popup (Nutzer-Fund 2026-09-29): ein Klick
+			// fügt immer 1 Stück hinzu, konsistent zum Verhalten einfacher
+			// Artikel ohne Popup - für mehr erneut klicken.
+			this.addToCart( productId, 1, extra, $button, true );
 		},
 
 		/* ── Warenkorb ────────────────────────────────────────────── */

@@ -320,6 +320,42 @@ class LBite_Menu_View {
 		return $sections;
 	}
 
+	/**
+	 * Preis für die Kartenübersicht
+	 *
+	 * Bei variablen Artikeln liefert `get_price_html()` nativ eine Preisspanne
+	 * («CHF 10.00 – CHF 20.00»). In der Kartenübersicht ist das zu unruhig –
+	 * gewünscht ist stattdessen immer der günstigste Preis, mit „Ab“-Zusatz nur
+	 * dann, wenn die Preise tatsächlich auseinanderlaufen (Nutzer-Fund 2026-09-29).
+	 *
+	 * @param WC_Product $product Produkt.
+	 * @return string HTML.
+	 */
+	public static function get_display_price_html( $product ) {
+		if ( ! $product->is_type( 'variable' ) ) {
+			return $product->get_price_html();
+		}
+
+		$prices = $product->get_variation_prices( true );
+
+		if ( empty( $prices['price'] ) ) {
+			return $product->get_price_html();
+		}
+
+		$min = reset( $prices['price'] );
+		$max = end( $prices['price'] );
+
+		if ( (float) $min === (float) $max ) {
+			return wc_price( $min );
+		}
+
+		return sprintf(
+			/* translators: %s: laid-out price, e.g. "CHF 10.00" */
+			esc_html__( 'From %s', 'libre-bite' ),
+			wc_price( $min )
+		);
+	}
+
 	/* ═════════════════════════════════════════════════════════════════
 	 * Shortcode
 	 * ═════════════════════════════════════════════════════════════════ */
@@ -482,9 +518,31 @@ class LBite_Menu_View {
 
 		if ( $product->is_type( 'variable' ) ) {
 			foreach ( $product->get_available_variations() as $variation ) {
+				// Menschlich lesbarer Wert statt des rohen (bei Taxonomie-Attributen
+				// slugifizierten) Attribute-Werts fürs Button-Label im Popup
+				// (Nutzer-Fund 2026-09-29): bei Taxonomie-Attributen steht in
+				// $variation['attributes'] nur der Term-Slug, nicht der Anzeigename.
+				$lbite_variation_labels = array();
+
+				foreach ( $variation['attributes'] as $lbite_attr_key => $lbite_attr_value ) {
+					if ( '' === $lbite_attr_value ) {
+						continue; // WooCommerce "Any" – nichts Sinnvolles zum Anzeigen.
+					}
+
+					$lbite_taxonomy = str_replace( 'attribute_', '', $lbite_attr_key );
+
+					if ( taxonomy_exists( $lbite_taxonomy ) ) {
+						$lbite_term               = get_term_by( 'slug', $lbite_attr_value, $lbite_taxonomy );
+						$lbite_variation_labels[] = $lbite_term ? $lbite_term->name : $lbite_attr_value;
+					} else {
+						$lbite_variation_labels[] = $lbite_attr_value;
+					}
+				}
+
 				$variations[] = array(
 					'id'         => (int) $variation['variation_id'],
 					'attributes' => $variation['attributes'],
+					'label'      => implode( ', ', $lbite_variation_labels ),
 					'price'      => wp_strip_all_tags( $variation['price_html'] ? $variation['price_html'] : wc_price( $variation['display_price'] ) ),
 				);
 			}

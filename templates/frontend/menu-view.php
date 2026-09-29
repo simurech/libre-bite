@@ -52,30 +52,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	endif;
 	?>
 
-	<?php
-	// Ernährungsform-Filter fehlte hier bisher komplett (Nutzer-Fund 2026-09-28):
-	// die Menü-Ansicht ist ein eigenständiges Template ohne WooCommerce-Loop-Hooks,
-	// über die render_dietary_filter_bar() sonst überall sonst eingehängt wird.
-	if ( ! empty( $lbite_sections ) && lbite_feature_enabled( 'enable_dietary_filter' ) && class_exists( 'LBite_Nutritional_Info' ) ) :
-		$lbite_diet_filter_labels = LBite_Nutritional_Info::get_dietary_list();
-		if ( ! empty( $lbite_diet_filter_labels ) ) :
-			?>
-			<div class="lbite-menu-dietary-filter" data-lbite-menu-dietary-filter>
-				<span class="lbite-menu-dietary-filter__label"><?php esc_html_e( 'Show only:', 'libre-bite' ); ?></span>
-				<?php foreach ( $lbite_diet_filter_labels as $lbite_fkey => $lbite_flabel ) : ?>
-					<button type="button" class="lbite-menu-dietary-filter__btn" data-diet="<?php echo esc_attr( $lbite_fkey ); ?>">
-						<?php echo esc_html( $lbite_flabel ); ?>
-					</button>
-				<?php endforeach; ?>
-				<button type="button" class="lbite-menu-dietary-filter__reset" hidden>
-					<?php esc_html_e( 'Reset', 'libre-bite' ); ?>
-				</button>
-			</div>
-			<?php
-		endif;
-	endif;
-	?>
-
 	<?php if ( empty( $lbite_sections ) ) : ?>
 
 		<p class="lbite-menu-empty">
@@ -100,6 +76,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php endforeach; ?>
 			</nav>
 		<?php endif; ?>
+
+		<?php
+		// Ernährungsform-Filter fehlte hier bisher komplett (Nutzer-Fund 2026-09-28):
+		// die Menü-Ansicht ist ein eigenständiges Template ohne WooCommerce-Loop-Hooks,
+		// über die render_dietary_filter_bar() sonst überall sonst eingehängt wird.
+		// Bewusst nach der Kategorien-Navigation (Nutzer-Fund 2026-09-29): die Kategorien
+		// sind die primäre Navigation, die Ernährungsform-Filter sind ein Zusatzwerkzeug.
+		if ( lbite_feature_enabled( 'enable_dietary_filter' ) && class_exists( 'LBite_Nutritional_Info' ) ) :
+			$lbite_diet_filter_labels = LBite_Nutritional_Info::get_dietary_list();
+			if ( ! empty( $lbite_diet_filter_labels ) ) :
+				?>
+				<div class="lbite-menu-dietary-filter" data-lbite-menu-dietary-filter>
+					<span class="lbite-menu-dietary-filter__label"><?php esc_html_e( 'Show only:', 'libre-bite' ); ?></span>
+					<?php foreach ( $lbite_diet_filter_labels as $lbite_fkey => $lbite_flabel ) : ?>
+						<button type="button" class="lbite-menu-dietary-filter__btn" data-diet="<?php echo esc_attr( $lbite_fkey ); ?>">
+							<?php echo esc_html( $lbite_flabel ); ?>
+						</button>
+					<?php endforeach; ?>
+					<button type="button" class="lbite-menu-dietary-filter__reset" hidden>
+						<?php esc_html_e( 'Reset', 'libre-bite' ); ?>
+					</button>
+				</div>
+				<?php
+			endif;
+		endif;
+		?>
 
 		<?php foreach ( $lbite_sections as $lbite_i => $lbite_section ) : ?>
 			<section class="lbite-menu-section" id="lbite-menu-section-<?php echo (int) $lbite_i; ?>">
@@ -162,7 +164,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php endif; ?>
 
 								<div class="lbite-menu-item__foot">
-									<span class="lbite-menu-item__price"><?php echo wp_kses_post( $lbite_product->get_price_html() ); ?></span>
+									<span class="lbite-menu-item__price"><?php echo wp_kses_post( LBite_Menu_View::get_display_price_html( $lbite_product ) ); ?></span>
 									<button type="button" class="lbite-menu-item__add"
 										aria-label="<?php echo esc_attr( sprintf( /* translators: %s: product name */ __( 'Add %s', 'libre-bite' ), $lbite_product->get_name() ) ); ?>">
 										<?php echo $lbite_needs_mod ? esc_html__( 'Choose', 'libre-bite' ) : esc_html__( 'Add', 'libre-bite' ); ?>

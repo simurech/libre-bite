@@ -7000,6 +7000,11 @@ msgstr "Tempo medio di preparazione"
 msgid "Avg. Prep Time by Location"
 msgstr "Tempo medio di preparazione per sede"
 
+#. translators: %s: formatted price, e.g. "CHF 10.00"
+#: includes/modules/menu-view/class-menu-view.php:354
+msgid "From %s"
+msgstr "Da %s"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Errore durante il salvataggio"
 
