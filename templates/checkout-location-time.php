@@ -13,7 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $lbite_location = $lbite_location_id ? get_post( $lbite_location_id ) : null;
 $lbite_location_image_id = $lbite_location_id ? get_post_meta( $lbite_location_id, '_lbite_location_image', true ) : '';
-$lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_url( $lbite_location_image_id, 'thumbnail' ) : '';
+// 'medium' statt 'thumbnail' (Nutzer-Fund 2026-09-29): WordPress' Standard-
+// "thumbnail"-Grösse ist ein harter 1:1-Zuschnitt, während die Standort-
+// Auswahl (location-selector-banner.php/-tiles.php) dieselbe Meta mit
+// 'large' (proportional, unbeschnitten) ausgibt - dasselbe Foto wirkte
+// dadurch wie ein anderes. 'medium' bleibt proportional, ohne für diese
+// kleine 60×60px-Kachel unnötig viel Bilddaten zu laden.
+$lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_url( $lbite_location_image_id, 'medium' ) : '';
 ?>
 
 <div class="lbite-checkout-selection">
@@ -96,70 +102,12 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 		</div>
 	<?php endif; ?>
 
-	<?php if ( lbite_feature_enabled( 'enable_order_type_selection' ) && $lbite_location ) :
-		$GLOBALS['lbite_order_type_rendered'] = true;
-		$lbite_sel_service_type = WC()->session ? WC()->session->get( 'lbite_service_type', '' ) : '';
-		if ( ! $lbite_sel_service_type && WC()->session && WC()->session->get( 'lbite_table_id' ) ) {
-			$lbite_sel_service_type = 'dine_in';
-		}
-		$lbite_sel_is_dine_in = 'dine_in' === $lbite_sel_service_type;
-		$lbite_sel_show_table = lbite_feature_enabled( 'enable_table_ordering' );
-		$lbite_sel_table_nr   = WC()->session ? WC()->session->get( 'lbite_checkout_table_number', '' ) : '';
-		if ( ! $lbite_sel_table_nr && WC()->session && WC()->session->get( 'lbite_table_id' ) ) {
-			$lbite_sel_table_post = get_post( WC()->session->get( 'lbite_table_id' ) );
-			if ( $lbite_sel_table_post ) {
-				$lbite_sel_table_nr = $lbite_sel_table_post->post_title;
-			}
-		}
-		$lbite_sel_tables     = array();
-		$lbite_table_sort_opt = get_option( 'lbite_table_dropdown_sort', 'natural' );
-		if ( $lbite_sel_show_table && $lbite_location_id ) {
-			$lbite_sel_tables = get_posts( array(
-				'post_type'      => 'lbite_table',
-				'posts_per_page' => 50,
-				'orderby'        => 'menu_order' === $lbite_table_sort_opt ? 'menu_order' : 'title',
-				'order'          => 'ASC',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Tischabfrage auf max. 50 Einträge begrenzt.
-				'meta_query'     => array( array( 'key' => '_lbite_location_id', 'value' => $lbite_location_id ) ),
-			) );
-			if ( 'natural' === $lbite_table_sort_opt ) {
-				usort( $lbite_sel_tables, function( $a, $b ) {
-					return strnatcasecmp( $a->post_title, $b->post_title );
-				} );
-			}
-		}
-	?>
-	<div class="lbite-service-type-selector">
-		<p class="lbite-service-type-label"><?php esc_html_e( 'How would you like your order?', 'libre-bite' ); ?> <span class="required">*</span></p>
-		<div class="lbite-order-type-options" id="lbite-order-type-selector">
-			<label class="lbite-order-type-option">
-				<input type="radio" name="lbite_service_type" value="takeaway" <?php echo ( 'takeaway' === $lbite_sel_service_type ) ? 'checked' : ''; ?>>
-				<span><?php esc_html_e( 'To take away', 'libre-bite' ); ?></span>
-			</label>
-			<label class="lbite-order-type-option">
-				<input type="radio" name="lbite_service_type" value="dine_in" <?php echo ( 'dine_in' === $lbite_sel_service_type ) ? 'checked' : ''; ?>>
-				<span><?php esc_html_e( 'Eat here', 'libre-bite' ); ?></span>
-			</label>
-		</div>
-		<?php if ( $lbite_sel_show_table ) : ?>
-		<div id="lbite-table-number-wrap" class="lbite-table-number-wrap" style="<?php echo $lbite_sel_is_dine_in ? '' : 'display:none;'; ?>">
-			<label for="lbite-table-number"><?php esc_html_e( 'Table (optional):', 'libre-bite' ); ?></label>
-			<?php if ( ! empty( $lbite_sel_tables ) ) : ?>
-			<select id="lbite-table-number" name="lbite_checkout_table_number" class="input-text lbite-select">
-				<option value=""><?php esc_html_e( 'Select table (optional)', 'libre-bite' ); ?></option>
-				<?php foreach ( $lbite_sel_tables as $lbite_ct ) : ?>
-				<option value="<?php echo esc_attr( $lbite_ct->post_title ); ?>" <?php selected( $lbite_sel_table_nr, $lbite_ct->post_title ); ?>><?php echo esc_html( $lbite_ct->post_title ); ?></option>
-				<?php endforeach; ?>
-			</select>
-			<?php else : ?>
-			<input type="text" id="lbite-table-number" name="lbite_checkout_table_number" class="input-text" value="<?php echo esc_attr( $lbite_sel_table_nr ); ?>" placeholder="<?php esc_attr_e( 'e.g. 5', 'libre-bite' ); ?>">
-			<?php endif; ?>
-		</div>
-		<?php endif; ?>
-	</div>
-	<?php endif; ?>
-
-	<!-- Bearbeitungsformular (zunächst versteckt) -->
+	<!-- Bearbeitungsformular (zunächst versteckt) - direkt nach der aktuellen
+	     Auswahl statt nach der Bestellart-Auswahl weiter unten (Nutzer-Fund
+	     2026-09-29): stand es danach, sprang das Formular beim Klick auf
+	     "Ändern" unterhalb von "Wie möchtest du bestellen?" auf, obwohl die
+	     Zusammenfassung normalerweise darüber steht - verwirrend, weil sich
+	     die Reihenfolge der Elemente je nach Zustand änderte. -->
 	<div class="lbite-edit-form" style="<?php echo esc_attr( $lbite_location ? 'display: none;' : '' ); ?>">
 		<div class="lbite-form-group">
 			<label>
@@ -249,6 +197,69 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 			<?php endif; ?>
 		</div>
 	</div>
+
+	<?php if ( lbite_feature_enabled( 'enable_order_type_selection' ) && $lbite_location ) :
+		$GLOBALS['lbite_order_type_rendered'] = true;
+		$lbite_sel_service_type = WC()->session ? WC()->session->get( 'lbite_service_type', '' ) : '';
+		if ( ! $lbite_sel_service_type && WC()->session && WC()->session->get( 'lbite_table_id' ) ) {
+			$lbite_sel_service_type = 'dine_in';
+		}
+		$lbite_sel_is_dine_in = 'dine_in' === $lbite_sel_service_type;
+		$lbite_sel_show_table = lbite_feature_enabled( 'enable_table_ordering' );
+		$lbite_sel_table_nr   = WC()->session ? WC()->session->get( 'lbite_checkout_table_number', '' ) : '';
+		if ( ! $lbite_sel_table_nr && WC()->session && WC()->session->get( 'lbite_table_id' ) ) {
+			$lbite_sel_table_post = get_post( WC()->session->get( 'lbite_table_id' ) );
+			if ( $lbite_sel_table_post ) {
+				$lbite_sel_table_nr = $lbite_sel_table_post->post_title;
+			}
+		}
+		$lbite_sel_tables     = array();
+		$lbite_table_sort_opt = get_option( 'lbite_table_dropdown_sort', 'natural' );
+		if ( $lbite_sel_show_table && $lbite_location_id ) {
+			$lbite_sel_tables = get_posts( array(
+				'post_type'      => 'lbite_table',
+				'posts_per_page' => 50,
+				'orderby'        => 'menu_order' === $lbite_table_sort_opt ? 'menu_order' : 'title',
+				'order'          => 'ASC',
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Tischabfrage auf max. 50 Einträge begrenzt.
+				'meta_query'     => array( array( 'key' => '_lbite_location_id', 'value' => $lbite_location_id ) ),
+			) );
+			if ( 'natural' === $lbite_table_sort_opt ) {
+				usort( $lbite_sel_tables, function( $a, $b ) {
+					return strnatcasecmp( $a->post_title, $b->post_title );
+				} );
+			}
+		}
+	?>
+	<div class="lbite-service-type-selector">
+		<p class="lbite-service-type-label"><?php esc_html_e( 'How would you like your order?', 'libre-bite' ); ?> <span class="required">*</span></p>
+		<div class="lbite-order-type-options" id="lbite-order-type-selector">
+			<label class="lbite-order-type-option">
+				<input type="radio" name="lbite_service_type" value="takeaway" <?php echo ( 'takeaway' === $lbite_sel_service_type ) ? 'checked' : ''; ?>>
+				<span><?php esc_html_e( 'To take away', 'libre-bite' ); ?></span>
+			</label>
+			<label class="lbite-order-type-option">
+				<input type="radio" name="lbite_service_type" value="dine_in" <?php echo ( 'dine_in' === $lbite_sel_service_type ) ? 'checked' : ''; ?>>
+				<span><?php esc_html_e( 'Eat here', 'libre-bite' ); ?></span>
+			</label>
+		</div>
+		<?php if ( $lbite_sel_show_table ) : ?>
+		<div id="lbite-table-number-wrap" class="lbite-table-number-wrap" style="<?php echo $lbite_sel_is_dine_in ? '' : 'display:none;'; ?>">
+			<label for="lbite-table-number"><?php esc_html_e( 'Table (optional):', 'libre-bite' ); ?></label>
+			<?php if ( ! empty( $lbite_sel_tables ) ) : ?>
+			<select id="lbite-table-number" name="lbite_checkout_table_number" class="input-text lbite-select">
+				<option value=""><?php esc_html_e( 'Select table (optional)', 'libre-bite' ); ?></option>
+				<?php foreach ( $lbite_sel_tables as $lbite_ct ) : ?>
+				<option value="<?php echo esc_attr( $lbite_ct->post_title ); ?>" <?php selected( $lbite_sel_table_nr, $lbite_ct->post_title ); ?>><?php echo esc_html( $lbite_ct->post_title ); ?></option>
+				<?php endforeach; ?>
+			</select>
+			<?php else : ?>
+			<input type="text" id="lbite-table-number" name="lbite_checkout_table_number" class="input-text" value="<?php echo esc_attr( $lbite_sel_table_nr ); ?>" placeholder="<?php esc_attr_e( 'e.g. 5', 'libre-bite' ); ?>">
+			<?php endif; ?>
+		</div>
+		<?php endif; ?>
+	</div>
+	<?php endif; ?>
 </div>
 
 <?php ob_start(); ?>

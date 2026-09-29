@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.13
+Stable tag: 3.6.14
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.14 =
+* Fix: On the checkout page, clicking "Change" on the location/order type summary made the edit form appear below "How would you like your order?" instead of in the same place as the summary it replaced, and it jumped back to its usual position after saving - confusing since the layout order changed depending on state. The edit form now always sits in the same place.
+* Fix: The location photo on the checkout page didn't match the one shown in the location picker - both use the same uploaded image, but the checkout page requested WordPress' hard-cropped "thumbnail" size instead of a proportional one, making it look like a different picture.
 
 = 3.6.13 =
 * Feature: The sticky category bar in the theme-independent menu view now highlights the currently visible section while scrolling, as if you had clicked it, and keeps that entry scrolled into view within the bar.
