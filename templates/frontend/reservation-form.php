@@ -19,7 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$lbite_show_location_step = count( $lbite_locations ) > 1;
+// Bei deaktivierter Standortauswahl übernimmt shortcode_reservation_form()
+// bereits einen Standard-Standort (Nutzer-Fund 2026-09-29) - der Auswahlschritt
+// selbst muss dann trotz mehrerer Standorte nicht mehr angezeigt werden.
+$lbite_show_location_step = count( $lbite_locations ) > 1 && lbite_feature_enabled( 'enable_location_selector' );
 ?>
 <div class="lbite-reservation-wrap">
 	<div class="lbite-reservation-form-container" id="lbite-reservation-form-container">

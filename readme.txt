@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.7
+Stable tag: 3.6.8
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,13 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.8 =
+* Fix: The location filter bar on standard shop pages and the location step in the reservation form still appeared even with "Location Selection" turned off; both now respect that setting and fall back to the configured Default Location.
+* Fix: The availability hint/tooltip in the theme-independent menu view showed the wrong icon colors, since a generic style rule overrode them.
+* Fix: After clicking "Change location" in the theme-independent menu view, the "Show only available products" button incorrectly stayed visible instead of hiding along with the rest of the chosen-location controls.
+* Fix: The small mobile thumbnail in the theme-independent menu view had all four corners rounded; the two corners that should run flush to the card edge are square again.
+* Feature: The slide-in cart in the theme-independent menu view now has a "Continue shopping" button to close it and add more items without going to checkout.
 
 = 3.6.7 =
 * Feature: The theme-independent menu view now matches the standard shop pages: products excluded at the chosen location stay visible with the same availability hint/tooltip instead of disappearing entirely, and a "Show only available products" toggle appears once a location is chosen.

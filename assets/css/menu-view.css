@@ -175,6 +175,12 @@ body .lbite-menu-view .lbite-menu-location-banner__text {
 	gap: 8px;
 }
 
+/* Eigene display:flex-Regel oben schlägt sonst das native [hidden]-Verhalten
+   (Autor- vor User-Agent-Regel) - der Filter-Button blieb dadurch nach
+   "Standort ändern" sichtbar, obwohl kein Standort mehr gewählt war
+   (Nutzer-Fund 2026-09-29). */
+.lbite-menu-location-banner__actions[hidden] { display: none; }
+
 body .lbite-menu-view .lbite-menu-location-banner__filter {
 	padding: 6px 14px;
 	border-radius: 999px;
@@ -427,6 +433,19 @@ body .lbite-menu-view .lbite-menu-item__price ins { text-decoration: none; }
 .lbite-menu-item__body .lbite-availability {
 	flex: 0 0 auto;
 	width: auto;
+}
+
+/* Die generische Theme-Isolation weiter oben (jeder <span> bekommt die
+   Kartentextfarbe erzwungen) überschrieb sonst die eigenen Statusfarben
+   (rot/grün) des wiederverwendeten Verfügbarkeits-Hinweises - der Hinweis
+   sah dadurch komplett anders aus als auf den restlichen Seiten (Nutzer-Fund
+   2026-09-29). Das schwebende Popup selbst ist davon nicht betroffen, es
+   hängt als Geschwister von .lbite-menu-view direkt unter <body>. */
+body .lbite-menu-view .lbite-availability-toggle,
+body .lbite-menu-view .lbite-availability-text,
+body .lbite-menu-view .lbite-availability-toggle .dashicons,
+body .lbite-menu-view .lbite-availability-text .dashicons {
+	color: #d63638;
 }
 
 body .lbite-menu-view .lbite-menu-item__details {
@@ -736,7 +755,34 @@ body .lbite-menu-view .lbite-menu-cart__head h2 { font-size: 18px; font-weight: 
 
 .lbite-menu-cart__empty { color: #646970; text-align: center; padding: 40px 0; }
 
-.lbite-menu-cart__foot { padding: 16px 20px; border-top: 1px solid var(--lbite-menu-border, #e3e6ea); }
+.lbite-menu-cart__foot {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 16px 20px;
+	border-top: 1px solid var(--lbite-menu-border, #e3e6ea);
+}
+
+/* Dezenter Sekundär-Button, um das Slide-In zu schliessen und weitere
+   Artikel zu ergänzen, statt direkt zur Kasse zu müssen (Nutzer-Fund
+   2026-09-29). */
+body .lbite-menu-view .lbite-menu-cart__continue {
+	display: block;
+	text-align: center;
+	min-height: 46px;
+	line-height: 44px;
+	border-radius: 10px;
+	background: none;
+	border: 1px solid var(--lbite-menu-border);
+	color: var(--lbite-menu-text);
+	font-weight: 600;
+	transition: border-color .15s ease, background-color .15s ease;
+}
+
+body .lbite-menu-view .lbite-menu-cart__continue:hover {
+	border-color: var(--lbite-menu-primary);
+	background: var(--lbite-menu-canvas);
+}
 
 .lbite-menu-cart__checkout {
 	display: block;
@@ -820,7 +866,10 @@ body.lbite-menu-cart-open { overflow: hidden; }
 		order: 2;
 		flex: 0 0 92px;
 		aspect-ratio: 1;
-		border-radius: var(--lbite-menu-radius);
+		border-top-left-radius: 0;
+		border-bottom-right-radius: 0;
+		border-top-right-radius: var(--lbite-menu-radius);
+		border-bottom-left-radius: var(--lbite-menu-radius);
 	}
 
 	.lbite-menu-item__body {

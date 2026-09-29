@@ -236,6 +236,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</header>
 			<div class="lbite-menu-cart__body" id="lbite-menu-cart-body"></div>
 			<footer class="lbite-menu-cart__foot">
+				<button type="button" class="lbite-menu-cart__continue" data-lbite-cart-close>
+					<?php esc_html_e( 'Continue shopping', 'libre-bite' ); ?>
+				</button>
 				<a class="lbite-menu-cart__checkout" href="<?php echo esc_url( function_exists( 'wc_get_checkout_url' ) ? wc_get_checkout_url() : '#' ); ?>">
 					<?php esc_html_e( 'Go to checkout', 'libre-bite' ); ?>
 				</a>

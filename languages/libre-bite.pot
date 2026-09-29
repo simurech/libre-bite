@@ -7189,3 +7189,7 @@ msgstr ""
 #: includes/modules/menu-view/class-menu-view.php:164
 msgid "No products in this category match the selected filter: %s"
 msgstr ""
+
+#: templates/frontend/menu-view.php:240
+msgid "Continue shopping"
+msgstr ""

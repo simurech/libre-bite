@@ -504,6 +504,12 @@ class LBite_Reservations {
 		// LBite_Checkout::shortcode_location_selector()).
 		if ( 1 === count( $lbite_locations ) ) {
 			$lbite_preselected_location = $lbite_locations[0]->ID;
+		} elseif ( ! $lbite_preselected_location && ! lbite_feature_enabled( 'enable_location_selector' ) ) {
+			// Bei deaktivierter Standortauswahl UND mehreren Standorten stand hier
+			// bisher trotzdem ein Auswahlschritt (Nutzer-Fund 2026-09-29) - analog zu
+			// LBite_Checkout::resolve_effective_location_id() greift stattdessen der
+			// konfigurierte Standard-Standort.
+			$lbite_preselected_location = LBite_Locations::get_default_location_id();
 		}
 
 		// Feld-Sichtbarkeit Telefon/Notizen (Default: beide sichtbar, analog zu lbite_checkout_fields).

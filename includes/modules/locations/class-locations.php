@@ -949,8 +949,16 @@ class LBite_Locations {
 			return;
 		}
 
+		// Ohne interaktive Standortauswahl gibt es kein "dein Standort" im
+		// Gästekontext, das gefiltert werden könnte (Nutzer-Fund 2026-09-29) -
+		// betrifft nur diese Hinweisleiste, nicht die Verfügbarkeits-Badges an
+		// den einzelnen Produkten (eigene Feature-Flags).
+		if ( ! lbite_feature_enabled( 'enable_location_selector' ) ) {
+			return;
+		}
+
 		$locations = self::get_all_locations();
-		if ( empty( $locations ) ) {
+		if ( count( $locations ) < 2 ) {
 			return;
 		}
 

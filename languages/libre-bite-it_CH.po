@@ -7019,6 +7019,10 @@ msgstr "Usato solo per l'icona di successo e l'importo dello sconto nella pagina
 msgid "No products in this category match the selected filter: %s"
 msgstr "Nessun prodotto in questa categoria corrisponde al filtro selezionato: %s"
 
+#: templates/frontend/menu-view.php:240
+msgid "Continue shopping"
+msgstr "Continua lo shopping"
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Errore durante il salvataggio"
 
