@@ -174,7 +174,7 @@ input[type="date"].lbite-input {
 
 .lbite-button-primary {
 	background: var(--lbite-color-primary, #0073aa);
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 	width: 100%;
 }
 
@@ -536,7 +536,7 @@ a.lbite-location-address.lbite-maps-link:hover {
 	font-size: 24px;
 	width: 24px;
 	height: 24px;
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 }
 
 .lbite-time-content h4 {
@@ -603,7 +603,7 @@ a.lbite-location-address.lbite-maps-link:hover {
 
 .lbite-button-primary {
 	background: var(--lbite-color-primary, #0073aa);
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 }
 
 .lbite-button-primary:hover {

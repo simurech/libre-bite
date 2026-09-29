@@ -446,6 +446,10 @@ class LBite_Reservations {
 			array(),
 			LBITE_VERSION
 		);
+		// Fehlte bisher komplett (Nutzer-Fund 2026-09-29): das Reservierungsformular
+		// bekam die Branding-Farben nie, seine Buttons blieben immer auf dem
+		// CSS-Fallback-Blau statt der tatsächlich gewählten Markenfarbe.
+		wp_add_inline_style( 'lbite-reservation-form', LBite_Branding::get_inline_css() );
 
 		wp_enqueue_script(
 			'lbite-reservation-form',

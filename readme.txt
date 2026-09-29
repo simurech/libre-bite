@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.3
+Stable tag: 3.6.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,11 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.4 =
+* Fix: Buttons using the chosen brand color as background kept white text everywhere except the theme-independent menu view and the announcement banner, which already computed readable text automatically; with a light brand color this made checkout, thank-you page, location picker and reservation form buttons unreadable. All of them now use the same automatic light/dark text logic.
+* Fix: The reservation form and the stamp card never received the chosen brand color at all and always fell back to the default blue, regardless of the Branding settings.
+* Fix: A PHP 8.1+ deprecation notice fired on every checkout page load while no pickup time was selected yet.
 
 = 3.6.3 =
 * Fix: In the theme-independent menu view's popup, variation prices without their own currency symbol (e.g. CHF) showed as raw HTML entities instead of the actual text.

@@ -473,7 +473,7 @@ body .lbite-checkout-optimized #order_review {
 	padding: 15px 30px;
 	font-size: 18px;
 	background: var(--lbite-color-primary);
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 	border: none;
 	border-radius: var(--lbite-border-radius);
 	cursor: pointer;

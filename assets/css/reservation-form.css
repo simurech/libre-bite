@@ -65,7 +65,7 @@
 
 .lbite-res-step-dot.active .lbite-res-step-dot-number {
 	background: var(--lbite-color-primary, #007cba);
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 }
 
 .lbite-res-step-dot.active .lbite-res-step-dot-label {
@@ -237,7 +237,7 @@ input[type="date"].lbite-res-input {
 	display: inline-block;
 	padding: 12px 28px;
 	background: var(--lbite-color-primary, #007cba);
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 	border: none;
 	border-radius: 8px;
 	font-size: 15px;

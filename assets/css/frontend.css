@@ -495,7 +495,7 @@
 .lbite-dietary-filter__btn.is-active {
 	border-color: var(--lbite-color-primary, #0073aa);
 	background: var(--lbite-color-primary, #0073aa);
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 }
 
 .lbite-dietary-filter__btn:focus-visible,

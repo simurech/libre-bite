@@ -530,6 +530,10 @@ class LBite_Stampcard {
 			array(),
 			LBITE_VERSION
 		);
+		// Fehlte bisher komplett (Nutzer-Fund 2026-09-29, gleicher Fund wie beim
+		// Reservierungsformular): ohne diesen Aufruf blieben die gefüllten Stempel
+		// immer auf dem CSS-Fallback-Blau statt der gewählten Markenfarbe.
+		wp_add_inline_style( 'lbite-stampcard', LBite_Branding::get_inline_css() );
 		?>
 		<div class="lbite-stampcard">
 			<h3 class="lbite-stampcard__title"><?php esc_html_e( 'Your stamp card', 'libre-bite' ); ?></h3>

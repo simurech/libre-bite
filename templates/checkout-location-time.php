@@ -69,8 +69,11 @@ $lbite_location_image_url = $lbite_location_image_id ? wp_get_attachment_image_u
 									<line x1="3" y1="10" x2="21" y2="10"></line>
 								</svg>
 								<?php
-								// Datum und Zeit formatieren
-								$datetime = DateTimeImmutable::createFromFormat( 'Y-m-d H:i', $lbite_pickup_time, wp_timezone() );
+								// Datum und Zeit formatieren. $lbite_pickup_time ist leer, solange
+								// "Später" gewählt aber noch kein Zeitfenster bestätigt ist (JS
+								// füllt das Feld erst danach) - createFromFormat() mit null als
+								// zweitem Parameter ist seit PHP 8.1 deprecated.
+								$datetime       = $lbite_pickup_time ? DateTimeImmutable::createFromFormat( 'Y-m-d H:i', $lbite_pickup_time, wp_timezone() ) : false;
 								$formatted_date = $datetime ? $datetime->format( 'd.m.Y' ) : '';
 								$formatted_time = $datetime ? $datetime->format( 'H:i' ) : $lbite_pickup_time;
 								?>

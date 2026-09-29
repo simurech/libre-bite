@@ -93,7 +93,7 @@ section.woocommerce-customer-details,
 /* Pickup Number */
 .lbite-thankyou-pickup-number {
 	background: var(--lbite-color-primary, #0073aa);
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 	padding: 25px 30px;
 	border-radius: calc(var(--lbite-border-radius, 8px) + 4px);
 	margin-bottom: 30px;
@@ -351,7 +351,7 @@ a.lbite-maps-link:hover {
 .lbite-print-btn:hover {
 	background-color: var(--lbite-color-primary, #0073aa);
 	border-color: var(--lbite-color-primary, #0073aa);
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 }
 
 .lbite-email-receipt-btn {
@@ -371,7 +371,7 @@ a.lbite-maps-link:hover {
 .lbite-email-receipt-btn:hover:not(:disabled) {
 	background-color: var(--lbite-color-primary, #0073aa);
 	border-color: var(--lbite-color-primary, #0073aa);
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 }
 
 .lbite-email-receipt-btn:disabled {

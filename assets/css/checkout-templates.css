@@ -93,7 +93,7 @@
 .lbite-change-btn {
 	padding: 8px 20px;
 	background: var(--lbite-color-primary, #0073aa) !important;
-	color: #fff !important;
+	color: var(--lbite-color-primary-contrast, #fff) !important;
 	border: none !important;
 	border-radius: 6px;
 	cursor: pointer;
@@ -249,7 +249,7 @@ input[type="date"].lbite-select {
 
 .lbite-save-btn {
 	background: var(--lbite-color-primary, #0073aa);
-	color: #fff;
+	color: var(--lbite-color-primary-contrast, #fff);
 }
 
 .lbite-save-btn:hover {
