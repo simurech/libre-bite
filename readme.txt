@@ -273,11 +273,7 @@ Yes. English is the source language, and the plugin ships with complete translat
 1. **Kanban Order Board** — Real-time order management for kitchen staff. Update order status with a click as orders move through the board.
 2. **POS Interface** — Integrated Point of Sale for walk-in customers and counter orders.
 3. **Theme-independent Menu View** — Category navigation, product cards, and a popup for variations and add-ons, rendered without touching your theme (Pro).
-4. **Checkout Time Slots** — Customers choose their pickup time slot directly during checkout.
-5. **Reservation Form** — The guided 3-step booking flow guests use to reserve a table (Pro).
-6. **Reservation Dashboard** — Manage incoming reservations, confirm or decline, and assign tables (Pro).
-7. **Location Settings** — Configure branch address, opening hours, and order routing.
-8. **Module Settings** — Toggle individual features on or off depending on business needs.
+4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
 
