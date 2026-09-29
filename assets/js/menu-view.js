@@ -174,9 +174,14 @@
 			// "Standort ändern": zurück zum Auswahl-Dropdown, keine eigene AJAX-
 			// Aktion nötig - die bestehende change-Bindung auf .lbite-menu-
 			// location-banner__picker übernimmt das Setzen des neuen Standorts.
+			// Wert auf "Bitte wählen" zurücksetzen (Nutzer-Fund 2026-09-29):
+			// blieb der bisherige Standort vorausgewählt, feuerte ein erneuter
+			// Klick auf dieselbe Option kein change-Event - wirkte wie "passiert
+			// nichts", analog zum frischen Picker auf den Standard-Shop-Seiten.
 			this.$root.on( 'click', '[data-lbite-location-change]', function () {
 				self.$root.find( '[data-lbite-location-current]' ).prop( 'hidden', true );
 				self.$root.find( '[data-lbite-location-picker]' ).prop( 'hidden', false );
+				self.$root.find( '.lbite-menu-location-banner__picker' ).val( '' );
 			} );
 		},
 
@@ -401,7 +406,7 @@
 					const $vbtn = $( '<button type="button" class="lbite-menu-modal__variation-btn"></button>' )
 						.attr( 'data-value', value )
 						.attr( 'data-variation-id', variation.id );
-					$vbtn.append( $( '<span></span>' ).text( variation.label || value ) );
+					$vbtn.append( $( '<span class="lbite-menu-modal__variation-btn-label"></span>' ).text( variation.label || value ) );
 					$vbtn.append( $( '<span class="lbite-menu-modal__variation-btn-price"></span>' ).text( variation.price ) );
 					$btnGroup.append( $vbtn );
 				} );
@@ -444,6 +449,7 @@
 			// Zusatzoptionen
 			if ( data.options && data.options.length ) {
 				const $group = $( '<div class="lbite-menu-modal__group"></div>' );
+				$group.append( $( '<span class="lbite-menu-modal__label"></span>' ).text( lbiteMenu.strings.options ) );
 				data.options.forEach( function ( option ) {
 					const $label = $( '<label class="lbite-menu-modal__option"></label>' );
 					$label.append(
@@ -541,9 +547,11 @@
 		},
 
 		submitModal: function ( $button ) {
+			const self = this;
 			const $form = $( '#lbite-menu-modal-body .lbite-menu-modal__form' );
 			const productId = $form.data( 'product-id' );
 			const extra = {};
+			const selections = {};
 			let missing = false;
 
 			$form.find( '.lbite-menu-modal__variation-group' ).each( function () {
@@ -555,12 +563,27 @@
 					$group.addClass( 'is-invalid' );
 				} else {
 					$group.removeClass( 'is-invalid' );
-					extra[ $group.data( 'attribute' ) ] = $active.data( 'value' );
+					const field = $group.data( 'attribute' );
+					const value = $active.data( 'value' );
+					extra[ field ] = value;
+					selections[ field ] = self.slugify( value );
 				}
 			} );
 
 			if ( missing ) {
 				return;
+			}
+
+			// Variable Artikel: WooCommerce löst variation_id beim AJAX-Add-to-Cart
+			// entgegen der ursprünglichen Annahme NICHT zuverlässig aus den
+			// attribute_*-Feldern auf - "Bitte eine Auswahl treffen" kam dadurch
+			// trotz korrekter Auswahl (Nutzer-Fund 2026-09-29). Explizit aus den
+			// bereits geladenen Variationsdaten ermittelt und mitgeschickt.
+			if ( self.currentModalData && self.currentModalData.type === 'variable' && Object.keys( selections ).length ) {
+				const match = self.findMatchingVariation( self.currentModalData, selections );
+				if ( match ) {
+					extra.variation_id = match.id;
+				}
 			}
 
 			const options = [];

@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.9
+Stable tag: 3.6.10
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,16 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.10 =
+* Fix: Adding a product with variations to the cart from the theme-independent menu view's popup still failed with "please choose an option" - WooCommerce's add-to-cart endpoint needs the variation ID sent explicitly, it does not reliably resolve it from the selected attributes on its own.
+* Fix: The selected variation's name stayed in dark text instead of turning white together with the price and the button background.
+* Fix: The availability hint's icon showed as stray lines instead of the usual circled "i", since a generic style rule overrode the icon font.
+* Fix: Clicking "Change location" in the menu view only revealed the dropdown, still showing the previously chosen location - a second click was needed before anything visibly changed. It now also shows the "Choose a location" text and resets the dropdown to its placeholder, matching the standard shop pages.
+* Fix: The "Continue shopping" button in the slide-in cart was slightly taller than "Go to checkout" due to the browser's default button sizing; both are the same height now.
+* Fix: The modal's close button showed a stray blue focus ring on hover.
+* Feature: The mobile thumbnail in the menu view is about 30% larger.
+* Feature: The Options/Add-ons section in the product popup now has a heading, matching the Variations section.
 
 = 3.6.9 =
 * Feature: New "Back Button" setting under Settings → Orders → Columns lets you turn off the one-step-back button on Kanban cards, for kitchens that don't need it.

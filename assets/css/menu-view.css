@@ -46,6 +46,14 @@ body .lbite-menu-view strong {
 	color: var(--lbite-menu-text);
 }
 
+/* font-family: inherit weiter oben überschrieb sonst die Dashicons-Icon-
+   Schriftart auf jedem <span> - das "i"-im-Kreis-Symbol des Verfügbarkeits-
+   Hinweises zeigte dadurch nur Linien statt des Icons (Nutzer-Fund
+   2026-09-29). */
+body .lbite-menu-view .dashicons {
+	font-family: dashicons !important;
+}
+
 body .lbite-menu-view h2,
 body .lbite-menu-view h3 {
 	border: none;
@@ -539,6 +547,18 @@ body .lbite-menu-view .lbite-menu-item__add:disabled { opacity: .6; }
 	font-size: 22px;
 	line-height: 1;
 	color: #1d2327 !important;
+	outline: none;
+}
+
+/* Browser-Standard-Fokusring (blaue Ellipse) auf dem runden Button ist
+   bewusst unterdrückt - der Button bleibt optisch unverändert, wie
+   gewünscht (Nutzer-Fund 2026-09-29). */
+.lbite-menu-modal__close:hover,
+.lbite-menu-modal__close:focus,
+.lbite-menu-modal__close:active {
+	outline: none;
+	box-shadow: none;
+	background: rgba(255, 255, 255, .9);
 }
 
 .lbite-menu-modal__img { width: 100%; aspect-ratio: 1; object-fit: cover; }
@@ -595,7 +615,8 @@ body .lbite-menu-view .lbite-menu-modal__variation-btn.is-active {
 	color: var(--lbite-menu-primary-contrast) !important;
 }
 
-body .lbite-menu-view .lbite-menu-modal__variation-btn.is-active .lbite-menu-modal__variation-btn-price {
+body .lbite-menu-view .lbite-menu-modal__variation-btn.is-active .lbite-menu-modal__variation-btn-price,
+body .lbite-menu-view .lbite-menu-modal__variation-btn.is-active .lbite-menu-modal__variation-btn-label {
 	color: var(--lbite-menu-primary-contrast);
 }
 
@@ -768,9 +789,13 @@ body .lbite-menu-view .lbite-menu-cart__head h2 { font-size: 18px; font-weight: 
    2026-09-29). */
 body .lbite-menu-view .lbite-menu-cart__continue {
 	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	margin: 0;
+	padding: 0;
 	text-align: center;
-	min-height: 46px;
-	line-height: 44px;
+	min-height: 48px;
+	line-height: 46px;
 	border-radius: 10px;
 	background: none;
 	border: 1px solid var(--lbite-menu-border);
@@ -864,7 +889,7 @@ body.lbite-menu-cart-open { overflow: hidden; }
 	.lbite-menu-item__media,
 	.lbite-menu-view--list .lbite-menu-item__media {
 		order: 2;
-		flex: 0 0 92px;
+		flex: 0 0 120px;
 		aspect-ratio: 1;
 		border-top-left-radius: 0;
 		border-bottom-right-radius: 0;

@@ -54,11 +54,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php esc_html_e( 'Change location', 'libre-bite' ); ?>
 						</button>
 					</div>
-				<?php else : ?>
-					<span class="lbite-menu-location-banner__text">
-						📍 <?php esc_html_e( 'Choose a location to see what is available', 'libre-bite' ); ?>
-					</span>
 				<?php endif; ?>
+				<span class="lbite-menu-location-banner__text" data-lbite-location-picker <?php echo '' !== $lbite_menu_location_name ? 'hidden' : ''; ?>>
+					📍 <?php esc_html_e( 'Choose a location to see what is available', 'libre-bite' ); ?>
+				</span>
 				<select class="lbite-menu-location-banner__picker" data-lbite-location-picker <?php echo '' !== $lbite_menu_location_name ? 'hidden' : ''; ?>>
 					<option value=""><?php esc_html_e( 'Please choose...', 'libre-bite' ); ?></option>
 					<?php foreach ( $lbite_menu_locations as $lbite_ml ) : ?>
