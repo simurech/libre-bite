@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.15
+Stable tag: 3.6.16
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -276,6 +276,9 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.16 =
+* Changed: Updated readme, GitHub description and WordPress.org listing assets (banner, screenshots). No functional changes.
 
 = 3.6.15 =
 * Fix: In the theme-independent menu view, opening a product's detail popup could hide the "Add" button below the visible screen area on longer content (description plus several variants or options) until scrolling all the way down. The button now stays fixed at the bottom of the popup while its content scrolls.
