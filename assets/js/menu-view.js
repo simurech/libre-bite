@@ -67,7 +67,15 @@
 				e.preventDefault();
 				const target = $( $( this ).attr( 'href' ) );
 				if ( target.length ) {
-					$( 'html, body' ).animate( { scrollTop: target.offset().top - 20 }, 300 );
+					// Fester Versatz von 20px reichte nicht mehr, sobald die
+					// Kategorien-Leiste eine eigene Höhe/einen oberen Abstand bekam
+					// (Nutzer-Fund 2026-09-29) - Titel und oberste Karten des
+					// Abschnitts lagen dann unter der sticky Leiste. Höhe + ihr
+					// eigener "top"-Versatz werden deshalb hier direkt gemessen
+					// statt eine feste Zahl nachzupflegen.
+					const $nav = self.$root.find( '.lbite-menu-nav' );
+					const navOffset = $nav.length ? ( $nav.outerHeight() + parseFloat( $nav.css( 'top' ) || 0 ) ) : 0;
+					$( 'html, body' ).animate( { scrollTop: target.offset().top - navOffset - 16 }, 300 );
 				}
 				$( this ).trigger( 'blur' );
 			} );

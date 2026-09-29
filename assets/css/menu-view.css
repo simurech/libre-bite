@@ -24,8 +24,11 @@
 	--lbite-menu-shadow: 0 1px 3px rgba(16, 24, 40, .08), 0 1px 2px rgba(16, 24, 40, .04);
 	--lbite-menu-shadow-lg: 0 16px 40px rgba(16, 24, 40, .16);
 
-	max-width: 1100px;
-	margin: 0 auto;
+	/* Kein fester max-width mehr (Nutzer-Fund 2026-09-29): 1100px war schmaler
+	   als die Inhaltsbreite vieler Themes (z. B. Astra-Standard), das Menü
+	   wirkte dadurch schmaler als der Text darüber. Füllt jetzt einfach den
+	   umgebenden Container. */
+	max-width: 100%;
 }
 
 /* ── Theme-Isolation ────────────────────────────────────────────────── */
@@ -298,7 +301,12 @@ body .lbite-menu-view .lbite-menu-dietary-filter__reset:hover {
 
 .lbite-menu-section {
 	margin-bottom: 40px;
-	scroll-margin-top: 70px;
+	/* Ergänzung zum dynamisch berechneten Versatz beim Klick auf die
+	   Kategorien-Navigation (siehe menu-view.js) - greift bei direkter
+	   Hash-Navigation (Browser-Vor/Zurück, geteilter Link), wo kein Klick-
+	   Handler läuft. Grob an die sticky Leistenhöhe (Padding + Buttons) plus
+	   ihren 16px-Abstand zum Fensterrand angepasst (Nutzer-Fund 2026-09-29). */
+	scroll-margin-top: 90px;
 }
 
 body .lbite-menu-view .lbite-menu-section__title {

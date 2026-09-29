@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.11
+Stable tag: 3.6.12
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.12 =
+* Fix: Clicking a category in the theme-independent menu view's sticky navigation scrolled to a position where the section title and its first row of products were hidden behind the sticky bar. The scroll offset is now calculated from the bar's actual height instead of a fixed number.
+* Fix: The theme-independent menu view was capped at 1100px wide, narrower than the surrounding page content on many themes. It now fills its container like the rest of the page.
 
 = 3.6.11 =
 * Fix: Adding a product with variations to the cart from the theme-independent menu view's popup still failed with "please choose an option" after the previous fix. Root cause found and verified directly against WooCommerce core: its add-to-cart endpoint never reads a separately submitted variation ID or attribute fields at all - it only checks whether the submitted product ID is itself a variation post, and resolves everything else from that. The popup now submits the variation's own ID instead of the parent product's ID together with separate fields.
