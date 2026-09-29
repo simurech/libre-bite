@@ -63,6 +63,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 					__( 'Menu', 'libre-bite' ),
 					'[lbite_menu]'
 				);
+				update_option( 'lbite_menu_show_images', isset( $_POST['lbite_menu_show_images'] ) ? 1 : 0 );
 			}
 			$lbite_did_save = true;
 			break;

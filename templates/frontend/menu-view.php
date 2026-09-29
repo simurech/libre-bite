@@ -123,6 +123,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		endif;
 		?>
 
+		<?php
+		// Einmal vorab statt pro Produkt gelesen (WP-Options-Cache macht das
+		// zwar günstig, aber unnötig in der Schleife) - siehe auch das
+		// Platzhalter-Fund unten (Nutzer-Fund 2026-09-29).
+		$lbite_menu_show_images = '0' !== (string) get_option( 'lbite_menu_show_images', 1 );
+		?>
+
 		<?php foreach ( $lbite_sections as $lbite_i => $lbite_section ) : ?>
 			<section class="lbite-menu-section" id="lbite-menu-section-<?php echo (int) $lbite_i; ?>">
 
@@ -162,9 +169,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 							data-needs-options="<?php echo $lbite_needs_mod ? '1' : '0'; ?>"
 							data-diet="<?php echo esc_attr( implode( ' ', $lbite_diet ) ); ?>">
 
-							<?php if ( $lbite_img ) : ?>
+							<?php if ( $lbite_menu_show_images ) : ?>
 								<div class="lbite-menu-item__media">
-									<img src="<?php echo esc_url( $lbite_img ); ?>" alt="" loading="lazy">
+									<?php if ( $lbite_img ) : ?>
+										<img src="<?php echo esc_url( $lbite_img ); ?>" alt="" loading="lazy">
+									<?php endif; ?>
 								</div>
 							<?php endif; ?>
 

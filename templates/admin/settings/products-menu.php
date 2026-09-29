@@ -45,6 +45,17 @@ $lbite_all_pages       = get_pages( array( 'post_status' => 'publish' ) );
 	<?php if ( lbite_feature_enabled( 'enable_menu_view' ) ) : ?>
 	<table class="form-table">
 		<tr>
+			<th><?php esc_html_e( 'Product Images', 'libre-bite' ); ?></th>
+			<td>
+				<label>
+					<input type="checkbox" name="lbite_menu_show_images" value="1"
+						<?php checked( get_option( 'lbite_menu_show_images', 1 ), 1 ); ?>>
+					<?php esc_html_e( 'Show product images in the menu grid.', 'libre-bite' ); ?>
+				</label>
+				<p class="description"><?php esc_html_e( 'Turn off for a text-only menu without photos.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
 			<th><?php esc_html_e( 'Menu Page', 'libre-bite' ); ?></th>
 			<td>
 				<select name="lbite_menu_page_id">

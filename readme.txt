@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.12
+Stable tag: 3.6.13
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,11 @@ Yes. English is the source language, and the plugin ships with complete translat
 6. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.13 =
+* Feature: The sticky category bar in the theme-independent menu view now highlights the currently visible section while scrolling, as if you had clicked it, and keeps that entry scrolled into view within the bar.
+* Fix: A product card without an image showed its text aligned to the top instead of matching the height of cards with an image. All cards in the grid now reserve the same image slot, shown as a plain placeholder when a product has no photo.
+* Feature: New "Product Images" setting under Settings → Products → Menu Display lets you turn off images in the menu grid entirely, for a text-only menu.
 
 = 3.6.12 =
 * Fix: Clicking a category in the theme-independent menu view's sticky navigation scrolled to a position where the section title and its first row of products were hidden behind the sticky bar. The scroll offset is now calculated from the bar's actual height instead of a fixed number.

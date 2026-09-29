@@ -151,10 +151,13 @@ body .lbite-menu-view .lbite-menu-nav__item {
 	transition: background-color .15s ease, color .15s ease, border-color .15s ease;
 }
 
-/* Bewusst nur :hover statt zusätzlich .is-active: ein Klick scrollt lediglich
-   zum Abschnitt, ist keine dauerhafte Auswahl - der Button soll danach wieder
-   normal aussehen (Nutzer-Fund 2026-09-28). */
-body .lbite-menu-view .lbite-menu-nav__item:hover {
+/* Ursprünglich bewusst nur :hover ohne .is-active (ein Klick scrollt nur,
+   ist keine dauerhafte Auswahl, Nutzer-Fund 2026-09-28) - .is-active kam mit
+   dem Scroll-Spy in menu-view.js dazu (initScrollSpy()): markiert jetzt den
+   gerade sichtbaren Abschnitt automatisch, unabhängig von einem Klick
+   (Nutzer-Fund 2026-09-29). */
+body .lbite-menu-view .lbite-menu-nav__item:hover,
+body .lbite-menu-view .lbite-menu-nav__item.is-active {
 	background: var(--lbite-menu-primary-hover);
 	color: var(--lbite-menu-primary-contrast);
 }

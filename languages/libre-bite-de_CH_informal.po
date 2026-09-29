@@ -7052,6 +7052,18 @@ msgstr "Zeigt auf jeder Karte einen Button, um sie zurück in die vorherige Spal
 msgid "Cancelling orders is disabled."
 msgstr "Das Stornieren von Bestellungen ist deaktiviert."
 
+#: templates/admin/settings/products-menu.php:48
+msgid "Product Images"
+msgstr "Produktbilder"
+
+#: templates/admin/settings/products-menu.php:53
+msgid "Show product images in the menu grid."
+msgstr "Produktbilder im Menü-Raster anzeigen."
+
+#: templates/admin/settings/products-menu.php:55
+msgid "Turn off for a text-only menu without photos."
+msgstr "Ausschalten für ein reines Textmenü ohne Fotos."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Fehler beim Speichern"
 

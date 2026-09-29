@@ -7221,3 +7221,15 @@ msgstr ""
 #: includes/modules/order-dashboard/class-order-dashboard.php:856
 msgid "Cancelling orders is disabled."
 msgstr ""
+
+#: templates/admin/settings/products-menu.php:48
+msgid "Product Images"
+msgstr ""
+
+#: templates/admin/settings/products-menu.php:53
+msgid "Show product images in the menu grid."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php:55
+msgid "Turn off for a text-only menu without photos."
+msgstr ""

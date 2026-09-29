@@ -7051,6 +7051,18 @@ msgstr "Mostra su ogni scheda un pulsante per spostarla nella colonna precedente
 msgid "Cancelling orders is disabled."
 msgstr "L'annullamento degli ordini è disattivato."
 
+#: templates/admin/settings/products-menu.php:48
+msgid "Product Images"
+msgstr "Immagini prodotto"
+
+#: templates/admin/settings/products-menu.php:53
+msgid "Show product images in the menu grid."
+msgstr "Mostra le immagini dei prodotti nella griglia del menu."
+
+#: templates/admin/settings/products-menu.php:55
+msgid "Turn off for a text-only menu without photos."
+msgstr "Disattiva per un menu solo testuale, senza foto."
+
 #~ msgid "Fehler beim Speichern"
 #~ msgstr "Errore durante il salvataggio"
 

@@ -30,6 +30,7 @@
 			this.$modal = $( '#lbite-menu-modal' );
 			this.bindEvents();
 			this.initAvailabilityPopup();
+			this.initScrollSpy();
 			this.refreshCart();
 		},
 
@@ -191,6 +192,97 @@
 				self.$root.find( '[data-lbite-location-picker]' ).prop( 'hidden', false );
 				self.$root.find( '.lbite-menu-location-banner__picker' ).val( '' );
 			} );
+		},
+
+		/* ── Kategorien-Navigation: Scroll-Spy ────────────────────────
+		 * Markiert beim Scrollen automatisch den Eintrag des gerade
+		 * sichtbaren Abschnitts, als hätte man ihn angeklickt, und hält ihn
+		 * in der horizontal scrollbaren Leiste sichtbar (Nutzer-Fund
+		 * 2026-09-29). IntersectionObserver mit einem dünnen Erkennungs-
+		 * band knapp unterhalb der sticky Leiste statt eines Scroll-Event-
+		 * Listeners mit manueller Positionsberechnung - günstiger und robuster
+		 * gegenüber Layoutänderungen. */
+
+		initScrollSpy: function () {
+			const self = this;
+			const $nav = this.$root.find( '.lbite-menu-nav' );
+			const $sections = this.$root.find( '.lbite-menu-section' );
+
+			if ( ! $nav.length || $sections.length < 2 || ! window.IntersectionObserver ) {
+				return;
+			}
+
+			const sectionIds = $sections.map( function () {
+				return this.id;
+			} ).get();
+			const visible = new Set();
+
+			const setActive = function () {
+				if ( ! visible.size ) {
+					return;
+				}
+				const currentId = sectionIds.find( function ( id ) {
+					return visible.has( id );
+				} );
+				if ( ! currentId ) {
+					return;
+				}
+				self.$root.find( '.lbite-menu-nav__item' ).each( function () {
+					const $link = $( this );
+					const isActive = $link.attr( 'href' ) === '#' + currentId;
+					$link.toggleClass( 'is-active', isActive );
+					if ( isActive ) {
+						self.scrollNavToActive( $link );
+					}
+				} );
+			};
+
+			const navHeight = $nav.outerHeight() || 0;
+			const navTop = parseFloat( $nav.css( 'top' ) ) || 0;
+			const topOffset = navHeight + navTop + 20;
+
+			const observer = new IntersectionObserver( function ( entries ) {
+				entries.forEach( function ( entry ) {
+					if ( entry.isIntersecting ) {
+						visible.add( entry.target.id );
+					} else {
+						visible.delete( entry.target.id );
+					}
+				} );
+				setActive();
+			}, {
+				rootMargin: '-' + topOffset + 'px 0px -70% 0px',
+				threshold: 0
+			} );
+
+			$sections.each( function () {
+				observer.observe( this );
+			} );
+		},
+
+		/**
+		 * Aktiven Eintrag in der horizontal scrollbaren Kategorien-Leiste in
+		 * den sichtbaren Bereich schieben, falls er (teilweise) ausserhalb
+		 * liegt - reine Horizontalberechnung statt scrollIntoView(), damit
+		 * die Seite selbst dabei nicht vertikal mitspringt.
+		 *
+		 * @param {jQuery} $item Aktiver Navigations-Eintrag.
+		 */
+		scrollNavToActive: function ( $item ) {
+			const $nav = this.$root.find( '.lbite-menu-nav' );
+			if ( ! $nav.length || ! $item.length ) {
+				return;
+			}
+
+			const navEl = $nav[ 0 ];
+			const itemEl = $item[ 0 ];
+			const navRect = navEl.getBoundingClientRect();
+			const itemRect = itemEl.getBoundingClientRect();
+
+			if ( itemRect.left < navRect.left || itemRect.right > navRect.right ) {
+				const targetScroll = navEl.scrollLeft + ( itemRect.left - navRect.left ) - ( navRect.width / 2 - itemRect.width / 2 );
+				navEl.scrollTo( { left: targetScroll, behavior: 'smooth' } );
+			}
 		},
 
 		/* ── Ernährungsform-/Verfügbarkeits-Filter ───────────────────── */
