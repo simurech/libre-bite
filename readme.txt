@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.17
+Stable tag: 3.6.18
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -276,6 +276,9 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.18 =
+* Fix: Headings in the optimized checkout were unreadable when the secondary brand colour is very light.
 
 = 3.6.17 =
 * Fix: The email field in the optimized checkout could disappear after WooCommerce refreshed the payment area; the email is now also checked on the server for the selected payment methods.

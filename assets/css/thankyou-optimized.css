@@ -79,7 +79,7 @@ section.woocommerce-customer-details,
 .lbite-thankyou-success h1 {
 	margin: 0 0 10px 0;
 	font-size: 28px;
-	color: var(--lbite-color-secondary, #23282d);
+	color: var(--lbite-color-secondary-text, #23282d);
 	text-align: center;
 }
 
@@ -161,7 +161,7 @@ section.woocommerce-customer-details,
 	display: block;
 	font-size: 15px;
 	font-weight: 600;
-	color: var(--lbite-color-secondary, #23282d);
+	color: var(--lbite-color-secondary-text, #23282d);
 }
 
 .lbite-detail-sub {
@@ -204,7 +204,7 @@ a.lbite-maps-link:hover {
 	margin: 0 0 15px 0;
 	font-size: 16px;
 	font-weight: 600;
-	color: var(--lbite-color-secondary, #23282d);
+	color: var(--lbite-color-secondary-text, #23282d);
 	text-align: left;
 }
 
@@ -237,7 +237,7 @@ a.lbite-maps-link:hover {
 
 .lbite-item-name {
 	text-align: left;
-	color: var(--lbite-color-secondary, #23282d);
+	color: var(--lbite-color-secondary-text, #23282d);
 }
 
 .lbite-item-meta {
@@ -252,7 +252,7 @@ a.lbite-maps-link:hover {
 	text-align: right;
 	white-space: nowrap;
 	font-weight: 500;
-	color: var(--lbite-color-secondary, #23282d);
+	color: var(--lbite-color-secondary-text, #23282d);
 }
 
 .lbite-order-items tfoot tr {

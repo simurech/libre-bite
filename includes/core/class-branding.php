@@ -48,6 +48,10 @@ class LBite_Branding {
 
 		if ( $lbite_secondary ) {
 			$lbite_tokens['--lbite-color-secondary'] = $lbite_secondary;
+			// Die Sekundärfarbe dient auch als Flächen-/Linienfarbe und darf hell
+			// sein (z. B. #fefefe). Als Schriftfarbe auf hellem Grund braucht es
+			// deshalb eine garantiert lesbare Variante.
+			$lbite_tokens['--lbite-color-secondary-text'] = ( '#1d2327' === self::contrast_color( $lbite_secondary ) ) ? '#1d2327' : $lbite_secondary;
 		}
 
 		if ( $lbite_accent ) {

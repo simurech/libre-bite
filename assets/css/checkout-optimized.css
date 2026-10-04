@@ -19,6 +19,7 @@
 	--lbite-color-primary: #0073aa;
 	--lbite-color-primary-hover: #005a87;
 	--lbite-color-secondary: #23282d;
+	--lbite-color-secondary-text: #23282d;
 	--lbite-color-background: #f8f9fa;
 	--lbite-color-border: #e0e0e0;
 	--lbite-color-success: #46b450;
@@ -58,7 +59,7 @@ body .lbite-checkout-optimized h4 {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 	font-weight: 600;
 	line-height: 1.3;
-	color: var(--lbite-color-secondary);
+	color: var(--lbite-color-secondary-text);
 	text-transform: none;
 	letter-spacing: normal;
 	border: none;
@@ -249,7 +250,7 @@ body .lbite-checkout-optimized .lbite-checkout-info {
 .lbite-checkout-title {
 	text-align: center;
 	margin-bottom: 20px;
-	color: var(--lbite-color-secondary);
+	color: var(--lbite-color-secondary-text);
 }
 
 /* Info-Box */
@@ -276,7 +277,7 @@ body .lbite-checkout-optimized .lbite-checkout-info {
 .lbite-checkout-step h3 {
 	margin: 0 0 15px 0;
 	font-size: 18px;
-	color: var(--lbite-color-secondary);
+	color: var(--lbite-color-secondary-text);
 }
 
 /* Input-Felder – Basisstyles vom Theme-Isolation-Reset übernommen */

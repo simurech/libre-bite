@@ -449,7 +449,7 @@ select.lbite-select option {
 .lbite-tip-selection h3 {
 	margin: 0 0 5px 0;
 	font-size: 18px;
-	color: var(--lbite-color-secondary, #23282d);
+	color: var(--lbite-color-secondary-text, #23282d);
 }
 
 .lbite-tip-selection > p {
@@ -491,7 +491,7 @@ select.lbite-select option {
 .lbite-tip-option > span {
 	font-weight: 600;
 	font-size: 15px;
-	color: var(--lbite-color-secondary, #23282d);
+	color: var(--lbite-color-secondary-text, #23282d);
 }
 
 /* Individuell-Option über volle Breite */
