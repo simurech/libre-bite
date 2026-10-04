@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="lbite-menu-view lbite-menu-view--<?php echo esc_attr( $lbite_layout ); ?>" data-lbite-menu>
+<div class="lbite-menu-view lbite-menu-view--<?php echo esc_attr( $lbite_layout ); ?>" data-lbite-menu<?php echo '' !== $lbite_sticky_offset ? ' data-sticky-offset="' . esc_attr( $lbite_sticky_offset ) . '"' : ''; ?>>
 
 	<?php
 	// Standort-Umschalter fehlte hier bisher komplett (Nutzer-Fund 2026-09-28):

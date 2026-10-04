@@ -608,6 +608,10 @@ msgstr "Invia scontrino per e-mail"
 msgid "Please enter a valid email address."
 msgstr "Inserire un indirizzo e-mail valido."
 
+#: includes/modules/checkout/class-checkout.php
+msgid "Please enter your email address for this payment method."
+msgstr "Inserire il proprio indirizzo e-mail per questo metodo di pagamento."
+
 #: includes/admin/class-admin.php:2463
 msgid "Error"
 msgstr "Errore"

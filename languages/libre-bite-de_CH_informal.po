@@ -609,6 +609,10 @@ msgstr "Beleg per E-Mail senden"
 msgid "Please enter a valid email address."
 msgstr "Bitte gib eine gültige E-Mail-Adresse ein."
 
+#: includes/modules/checkout/class-checkout.php
+msgid "Please enter your email address for this payment method."
+msgstr "Bitte gib für diese Zahlungsart deine E-Mail-Adresse an."
+
 #: includes/admin/class-admin.php:2463
 msgid "Error"
 msgstr "Fehler"

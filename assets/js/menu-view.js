@@ -30,6 +30,7 @@
 			this.$modal = $( '#lbite-menu-modal' );
 			this.bindEvents();
 			this.initAvailabilityPopup();
+			this.initStickyOffset();
 			this.initScrollSpy();
 			this.refreshCart();
 		},
@@ -194,6 +195,96 @@
 			} );
 		},
 
+		/* ── Sticky-Header der Seite ──────────────────────────────────
+		 * Die Kategorien-Leiste klebt sonst bei 16px am Fensterrand und
+		 * verschwindet unter einem fixierten Theme-Header oder der Admin-Bar.
+		 * Der Abstand wird deshalb gemessen und als CSS-Variable gesetzt;
+		 * ein fester Wert (Shortcode sticky_offset) hat Vorrang. */
+
+		detectStickyTop: function () {
+			if ( ! document.elementsFromPoint ) {
+				return 0;
+			}
+			const vw = window.innerWidth;
+			const vh = window.innerHeight;
+			let bottom = 0;
+
+			// Gestapelt von oben nach unten abtasten: Bei eingeloggten Admins
+			// liegt die Admin-Bar am Rand und der Theme-Header direkt darunter
+			// (top: 32px) - nur beide zusammen ergeben den freizuhaltenden Abstand.
+			for ( let round = 0; round < 4; round++ ) {
+				const y = bottom + 2;
+				let next = bottom;
+
+				[ 0.1, 0.5, 0.9 ].forEach( function ( fraction ) {
+					document.elementsFromPoint( vw * fraction, y ).forEach( function ( el ) {
+						let node = el;
+						while ( node && node !== document.body && node !== document.documentElement ) {
+							// Eigene Elemente (Leiste, Modal, Warenkorb) nie mitzählen.
+							// Nur unterhalb von <body> prüfen: body trägt selbst Plugin-Klassen.
+							if ( node.hasAttribute( 'data-lbite-menu' ) || String( node.className ).indexOf( 'lbite-' ) !== -1 ) {
+								return;
+							}
+							const pos = window.getComputedStyle( node ).position;
+							if ( 'fixed' === pos || 'sticky' === pos ) {
+								const rect = node.getBoundingClientRect();
+								if ( rect.top <= bottom + 4 && rect.bottom > bottom && rect.width >= vw * 0.8 && rect.height < vh * 0.5 ) {
+									next = Math.max( next, rect.bottom );
+								}
+								return;
+							}
+							node = node.parentElement;
+						}
+					} );
+				} );
+
+				if ( next <= bottom ) {
+					break;
+				}
+				bottom = next;
+			}
+
+			return Math.max( 0, Math.round( bottom ) );
+		},
+
+		initStickyOffset: function () {
+			const self = this;
+			const fixed = this.$root.attr( 'data-sticky-offset' );
+			const root = this.$root.get( 0 );
+
+			if ( undefined !== fixed && '' !== fixed ) {
+				root.style.setProperty( '--lbite-menu-sticky-top', parseInt( fixed, 10 ) + 'px' );
+				return;
+			}
+
+			let current = null;
+			let ticking = false;
+			const update = function () {
+				ticking = false;
+				const next = self.detectStickyTop() + 16;
+				if ( null !== current && Math.abs( next - current ) < 2 ) {
+					return;
+				}
+				const first = null === current;
+				current = next;
+				root.style.setProperty( '--lbite-menu-sticky-top', next + 'px' );
+				// Der Scroll-Spy rechnet mit der Leistenposition - nach einer
+				// Änderung neu aufsetzen.
+				if ( ! first ) {
+					self.initScrollSpy();
+				}
+			};
+			const schedule = function () {
+				if ( ! ticking ) {
+					ticking = true;
+					window.setTimeout( update, 50 );
+				}
+			};
+
+			update();
+			$( window ).on( 'scroll resize', schedule );
+		},
+
 		/* ── Kategorien-Navigation: Scroll-Spy ────────────────────────
 		 * Markiert beim Scrollen automatisch den Eintrag des gerade
 		 * sichtbaren Abschnitts, als hätte man ihn angeklickt, und hält ihn
@@ -207,6 +298,11 @@
 			const self = this;
 			const $nav = this.$root.find( '.lbite-menu-nav' );
 			const $sections = this.$root.find( '.lbite-menu-section' );
+
+			if ( this.spyObserver ) {
+				this.spyObserver.disconnect();
+				this.spyObserver = null;
+			}
 
 			if ( ! $nav.length || $sections.length < 2 || ! window.IntersectionObserver ) {
 				return;
@@ -255,6 +351,7 @@
 				threshold: 0
 			} );
 
+			this.spyObserver = observer;
 			$sections.each( function () {
 				observer.observe( this );
 			} );

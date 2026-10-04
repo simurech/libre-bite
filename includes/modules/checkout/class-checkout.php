@@ -120,6 +120,7 @@ class LBite_Checkout {
 				$this->loader->add_action( 'wp', $this, 'maybe_remove_thankyou_actions__premium_only' );
 				$this->loader->add_filter( 'woocommerce_checkout_fields', $this, 'maybe_make_email_optional__premium_only', 999 );
 				$this->loader->add_action( 'woocommerce_checkout_process', $this, 'maybe_set_placeholder_email__premium_only', 5 );
+				$this->loader->add_action( 'woocommerce_checkout_process', $this, 'validate_required_email__premium_only', 6 );
 				$this->loader->add_filter( 'woocommerce_payment_successful_result', $this, 'wrap_plain_text_payment_messages__premium_only', 10, 2 );
 				$this->loader->add_action( 'wp_ajax_lbite_send_receipt_email', $this, 'ajax_send_receipt_email__premium_only' );
 				$this->loader->add_action( 'wp_ajax_nopriv_lbite_send_receipt_email', $this, 'ajax_send_receipt_email__premium_only' );
@@ -1539,8 +1540,15 @@ class LBite_Checkout {
 			wp_send_json_error();
 		}
 
-		$opening_hours = LBite_Locations::get_opening_hours( $location_id );
-		$status        = LBite_Locations::get_location_status( $opening_hours, $location_id );
+		// Das Verfügbarkeitsfenster (ab/bis-Datum) hat Vorrang vor den
+		// Öffnungszeiten: ein noch nicht eröffneter Standort ist nicht
+		// «morgen um 09:00» offen, sondern erst ab seinem Eröffnungsdatum.
+		$status = LBite_Locations::get_activation_status( $location_id );
+
+		if ( ! $status ) {
+			$opening_hours = LBite_Locations::get_opening_hours( $location_id );
+			$status        = LBite_Locations::get_location_status( $opening_hours, $location_id );
+		}
 
 		wp_send_json_success( array( 'status' => $status ) );
 	}
@@ -1922,6 +1930,40 @@ class LBite_Checkout {
 	}
 
 	/**
+	 * Gateways, bei denen der optimierte Checkout eine echte E-Mail verlangt
+	 * (Einstellung «Email Required For»).
+	 *
+	 * @return string[]
+	 */
+	private function get_email_required_gateways() {
+		return array_map( 'sanitize_key', (array) get_option( 'lbite_email_required_gateways', array() ) );
+	}
+
+	/**
+	 * Serverseitige Pflichtprüfung der E-Mail für die konfigurierten Gateways (nur Premium)
+	 *
+	 * Bisher hing die Pflicht allein am JavaScript: fehlte das Feld im Browser,
+	 * lief die Bestellung ohne Adresse durch.
+	 */
+	public function validate_required_email__premium_only() {
+		if ( 'optimized' !== get_option( 'lbite_checkout_mode', 'standard' ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification.
+		$payment_method = isset( $_POST['payment_method'] ) ? sanitize_key( wp_unslash( $_POST['payment_method'] ) ) : '';
+		if ( '' === $payment_method || ! in_array( $payment_method, $this->get_email_required_gateways(), true ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification.
+		$billing_email = isset( $_POST['billing_email'] ) ? sanitize_email( wp_unslash( $_POST['billing_email'] ) ) : '';
+		if ( '' === $billing_email || false !== strpos( $billing_email, '@nomail.local' ) ) {
+			wc_add_notice( __( 'Please enter your email address for this payment method.', 'libre-bite' ), 'error' );
+		}
+	}
+
+	/**
 	 * E-Mail-Feld im optimierten Modus als optional markieren (nur Premium)
 	 *
 	 * @param array $fields Checkout-Felder.
@@ -1937,7 +1979,7 @@ class LBite_Checkout {
 		// Bei AJAX-Checkout: E-Mail nur für Offline-Gateways als optional markieren.
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification.
 		$payment_method    = isset( $_POST['payment_method'] ) ? sanitize_text_field( wp_unslash( $_POST['payment_method'] ) ) : '';
-		$no_email_gateways = array( 'cod', 'bacs', 'cheque' );
+		$no_email_gateways = array_diff( array( 'cod', 'bacs', 'cheque' ), $this->get_email_required_gateways() );
 
 		if ( ! empty( $payment_method ) && ! in_array( $payment_method, $no_email_gateways, true ) ) {
 			// Online-Gateway (z.B. TWINT): E-Mail bleibt Pflichtfeld.
@@ -1966,7 +2008,7 @@ class LBite_Checkout {
 		$payment_method    = isset( $_POST['payment_method'] ) ? sanitize_text_field( wp_unslash( $_POST['payment_method'] ) ) : '';
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification.
 		$billing_email     = isset( $_POST['billing_email'] ) ? sanitize_email( wp_unslash( $_POST['billing_email'] ) ) : '';
-		$no_email_gateways = array( 'cod', 'bacs', 'cheque' );
+		$no_email_gateways = array_diff( array( 'cod', 'bacs', 'cheque' ), $this->get_email_required_gateways() );
 		$is_no_email_gateway = in_array( $payment_method, $no_email_gateways, true );
 
 		// Platzhalter-E-Mail nur für Offline-Gateways setzen. Externe Zahlungsanbieter

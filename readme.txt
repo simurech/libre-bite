@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.16
+Stable tag: 3.6.17
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -276,6 +276,12 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.17 =
+* Fix: The email field in the optimized checkout could disappear after WooCommerce refreshed the payment area; the email is now also checked on the server for the selected payment methods.
+* Fix: The immediate-order notice showed "Opens tomorrow" for a location that has not opened yet; it now shows the opening date.
+* Fix: Brand colours were overridden by the default blue in the optimized checkout.
+* Fix: The menu category bar slid under a sticky site header; it now keeps clear of it (optional `sticky_offset` shortcode attribute).
 
 = 3.6.16 =
 * Changed: Updated readme, GitHub description and WordPress.org listing assets (banner, screenshots).

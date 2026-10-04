@@ -7233,3 +7233,7 @@ msgstr ""
 #: templates/admin/settings/products-menu.php:55
 msgid "Turn off for a text-only menu without photos."
 msgstr ""
+
+#: includes/modules/checkout/class-checkout.php
+msgid "Please enter your email address for this payment method."
+msgstr ""

@@ -1818,7 +1818,7 @@ class LBite_Locations {
 		}
 
 		// Geschlossen - nächste Öffnungszeit finden.
-		$next_opening = self::find_next_opening( $opening_hours );
+		$next_opening = self::find_next_opening( $opening_hours, $location_id );
 
 		if ( $next_opening ) {
 			return array(
@@ -1837,9 +1837,10 @@ class LBite_Locations {
 	 * Nächste Öffnungszeit finden
 	 *
 	 * @param array $opening_hours Öffnungszeiten.
+	 * @param int   $location_id   Standort-ID für Feiertage und Aktivierungsfenster (0 = ignorieren).
 	 * @return string|null Formatierter Text oder null.
 	 */
-	public static function find_next_opening( $opening_hours ) {
+	public static function find_next_opening( $opening_hours, $location_id = 0 ) {
 		$day_names = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
 
 		$lbite_now         = new DateTime( 'now', wp_timezone() );
@@ -1850,6 +1851,20 @@ class LBite_Locations {
 		for ( $i = 0; $i <= 7; $i++ ) {
 			$check_day_index = ( $current_day_index + $i ) % 7;
 			$day_name        = $day_names[ $check_day_index ];
+
+			// Tage, an denen der Standort gar nicht aktiv ist oder wegen eines
+			// Feiertags geschlossen bleibt, kommen als nächste Öffnung nicht in Frage.
+			if ( $location_id ) {
+				$check_date  = ( clone $lbite_now )->modify( "+{$i} days" )->format( 'Y-m-d' );
+				$active_from = get_post_meta( $location_id, '_lbite_active_from', true );
+				if ( $active_from && $check_date < $active_from ) {
+					continue;
+				}
+				$holiday = self::get_holiday_for_date( $location_id, $check_date );
+				if ( $holiday && 'closed' === ( isset( $holiday['type'] ) ? $holiday['type'] : 'closed' ) ) {
+					continue;
+				}
+			}
 
 			if ( isset( $opening_hours[ $day_name ] ) && ! $opening_hours[ $day_name ]['closed'] ) {
 				// Frühestes Fenster des Tages ermitteln.

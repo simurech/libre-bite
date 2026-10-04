@@ -12,8 +12,10 @@
  * @package OpenOrderSystem
  */
 
-/* CSS-Variablen mit Fallback-Werten */
-:root {
+/* CSS-Variablen mit Fallback-Werten.
+   :where() = Spezifität 0: die Branding-Token aus LBite_Branding (:root, inline an
+   lbite-frontend) gewinnen unabhängig von der Ladereihenfolge. */
+:where(:root) {
 	--lbite-color-primary: #0073aa;
 	--lbite-color-primary-hover: #005a87;
 	--lbite-color-secondary: #23282d;
@@ -126,6 +128,7 @@ body .lbite-checkout-optimized input[type="checkbox"] {
 	-webkit-appearance: auto;
 	-moz-appearance: auto;
 	appearance: auto;
+	accent-color: var(--lbite-color-primary);
 	width: auto;
 	padding: 0;
 	border: none;

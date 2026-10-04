@@ -69,12 +69,14 @@ $lbite_logo_url   = $lbite_brand_logo ? wp_get_attachment_image_url( $lbite_bran
 			do_action( 'woocommerce_checkout_after_order_review' ); ?>
 		</div>
 
-		<div class="lbite-checkout-step" id="lbite-step-email" style="display:none">
-			<h3><?php esc_html_e( 'Your Email', 'libre-bite' ); ?></h3>
-			<p class="form-row form-row-wide">
-				<label for="billing_email"><?php esc_html_e( 'Email address', 'libre-bite' ); ?> <span class="required">*</span></label>
-				<input type="email" class="input-text" name="billing_email" id="billing_email" value="<?php echo esc_attr( WC()->checkout->get_value( 'billing_email' ) ); ?>">
-			</p>
+		<div id="lbite-email-home">
+			<div class="lbite-checkout-step" id="lbite-step-email" style="display:none">
+				<h3><?php esc_html_e( 'Your Email', 'libre-bite' ); ?></h3>
+				<p class="form-row form-row-wide">
+					<label for="billing_email"><?php esc_html_e( 'Email address', 'libre-bite' ); ?> <span class="required">*</span></label>
+					<input type="email" class="input-text" name="billing_email" id="billing_email" value="<?php echo esc_attr( WC()->checkout->get_value( 'billing_email' ) ); ?>">
+				</p>
+			</div>
 		</div>
 
 		<?php wp_nonce_field( 'woocommerce-process_checkout', 'woocommerce-process-checkout-nonce' ); ?>
@@ -95,21 +97,32 @@ $lbite_logo_url   = $lbite_brand_logo ? wp_get_attachment_image_url( $lbite_bran
 ob_start();
 ?>
 (function($) {
-	var emailRequiredGateways = <?php echo wp_json_encode( get_option( 'lbite_email_required_gateways', array() ) ); ?>;
-	var $detachedEmail = null;
+	var emailRequiredGateways = <?php echo wp_json_encode( array_values( (array) get_option( 'lbite_email_required_gateways', array() ) ) ); ?>;
+	var $home = $('#lbite-email-home');
 
-	function repositionEmailStep() {
-		var $email = $detachedEmail || $('#lbite-step-email');
+	// Das Feld darf nie in #payment "wohnen", wenn WooCommerce dessen Inhalt
+	// ersetzt: der erste update_order_review-Aufruf läuft schon, bevor dieses
+	// Skript gebunden ist, und die Antwort löschte das Feld samt Eltern aus
+	// dem DOM. Deshalb: vor jedem Update zurück in den festen Parkplatz im
+	// Formular, nach jedem Update wieder vor den Bestellbutton.
+	function parkEmailStep() {
+		var $email = $('#lbite-step-email');
+		if ($email.length && !$home.find($email).length) {
+			$home.append($email);
+		}
+	}
+
+	function placeEmailStep() {
+		var $email = $('#lbite-step-email');
 		var $placeOrder = $('#payment .place-order');
 		if ($placeOrder.length && $email.length) {
 			$placeOrder.before($email);
-			$detachedEmail = null;
 		}
 	}
 
 	function updateEmailStep() {
 		var selected = $('input[name="payment_method"]:checked').val();
-		var needsEmail = selected && emailRequiredGateways.indexOf(selected) !== -1;
+		var needsEmail = !!selected && emailRequiredGateways.indexOf(selected) !== -1;
 		$('#lbite-step-email').toggle(needsEmail);
 		$('#billing_email').prop('required', needsEmail);
 	}
@@ -117,19 +130,11 @@ ob_start();
 	$(function() {
 		$('body')
 			.on('change', 'input[name="payment_method"]', updateEmailStep)
-			.on('update_checkout', function() {
-				// Vor dem WC-AJAX-Update retten: #payment wird ersetzt und
-				// alles darin (inkl. unserem Div) wird aus dem DOM entfernt.
-				var $email = $('#lbite-step-email');
-				if ($email.length) {
-					$detachedEmail = $email.detach();
-				}
-			})
+			.on('update_checkout', parkEmailStep)
 			.on('updated_checkout', function() {
-				repositionEmailStep();
+				placeEmailStep();
 				updateEmailStep();
 			});
-		repositionEmailStep();
 		updateEmailStep();
 	});
 }(jQuery));

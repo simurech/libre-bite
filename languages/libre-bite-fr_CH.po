@@ -608,6 +608,10 @@ msgstr "Envoyer le reçu par e-mail"
 msgid "Please enter a valid email address."
 msgstr "Veuillez saisir une adresse e-mail valide."
 
+#: includes/modules/checkout/class-checkout.php
+msgid "Please enter your email address for this payment method."
+msgstr "Veuillez saisir votre adresse e-mail pour ce mode de paiement."
+
 #: includes/admin/class-admin.php:2463
 msgid "Error"
 msgstr "Erreur"

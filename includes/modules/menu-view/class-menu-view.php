@@ -398,8 +398,9 @@ class LBite_Menu_View {
 
 		$atts = shortcode_atts(
 			array(
-				'layout' => 'grid',
-				'cart'   => 'yes',
+				'layout'        => 'grid',
+				'cart'          => 'yes',
+				'sticky_offset' => '',
 			),
 			$atts,
 			self::SHORTCODE
@@ -407,6 +408,12 @@ class LBite_Menu_View {
 
 		$lbite_layout = in_array( $atts['layout'], array( 'grid', 'list' ), true ) ? $atts['layout'] : 'grid';
 		$lbite_cart   = 'no' !== $atts['cart'];
+
+		// Fester Abstand der Kategorien-Leiste zum Fensterrand (px). Leer =
+		// automatische Erkennung eines Sticky-Headers der Seite im Browser
+		// (menu-view.js). Der Filter erlaubt eine Vorgabe ohne Shortcode-Attribut.
+		$lbite_sticky_offset = apply_filters( 'lbite_menu_sticky_offset', $atts['sticky_offset'] );
+		$lbite_sticky_offset = ( '' === (string) $lbite_sticky_offset ) ? '' : max( 0, (int) $lbite_sticky_offset );
 
 		$this->enqueue_assets();
 

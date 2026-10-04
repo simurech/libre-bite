@@ -124,7 +124,7 @@ body .lbite-menu-view select {
    abzusetzen - Buttons darauf sind deshalb helle "Chips", nicht umgekehrt. */
 .lbite-menu-nav {
 	position: sticky;
-	top: 16px;
+	top: var(--lbite-menu-sticky-top, 16px);
 	z-index: 5;
 	display: flex;
 	gap: 6px;
@@ -309,7 +309,7 @@ body .lbite-menu-view .lbite-menu-dietary-filter__reset:hover {
 	   Hash-Navigation (Browser-Vor/Zurück, geteilter Link), wo kein Klick-
 	   Handler läuft. Grob an die sticky Leistenhöhe (Padding + Buttons) plus
 	   ihren 16px-Abstand zum Fensterrand angepasst (Nutzer-Fund 2026-09-29). */
-	scroll-margin-top: 90px;
+	scroll-margin-top: calc(var(--lbite-menu-sticky-top, 16px) + 74px);
 }
 
 body .lbite-menu-view .lbite-menu-section__title {
