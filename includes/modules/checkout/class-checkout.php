@@ -1958,7 +1958,17 @@ class LBite_Checkout {
 
 		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification.
 		$billing_email = isset( $_POST['billing_email'] ) ? sanitize_email( wp_unslash( $_POST['billing_email'] ) ) : '';
-		if ( '' === $billing_email || false !== strpos( $billing_email, '@nomail.local' ) ) {
+		$is_placeholder = false !== strpos( $billing_email, '@nomail.local' );
+		if ( '' === $billing_email && ! $is_placeholder ) {
+			// Ist das Feld für dieses Gateway ohnehin Pflicht, meldet WooCommerce
+			// die leere Eingabe selbst - eine zweite Meldung wäre doppelt.
+			$billing_fields = WC()->checkout()->get_checkout_fields( 'billing' );
+			if ( ! empty( $billing_fields['billing_email']['required'] ) ) {
+				return;
+			}
+		}
+
+		if ( '' === $billing_email || $is_placeholder ) {
 			wc_add_notice( __( 'Please enter your email address for this payment method.', 'libre-bite' ), 'error' );
 		}
 	}
