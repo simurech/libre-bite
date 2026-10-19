@@ -563,8 +563,17 @@ body .lbite-menu-view .lbite-menu-item__add:disabled { opacity: .6; }
 	position: absolute;
 	top: 10px;
 	right: 12px;
-	width: 34px;
-	height: 34px;
+	/* Feste Masse samt padding:0 und Flex-Zentrierung: Theme-Buttons bringen eigenes
+	   Padding/min-height mit, der Knopf wurde dadurch zur Ellipse. */
+	box-sizing: border-box !important;
+	width: 34px !important;
+	height: 34px !important;
+	min-width: 34px !important;
+	min-height: 34px !important;
+	padding: 0 !important;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
 	border: none;
 	border-radius: 50%;
 	background: rgba(255, 255, 255, .9);
@@ -588,7 +597,9 @@ body .lbite-menu-view .lbite-menu-item__add:disabled { opacity: .6; }
 .lbite-menu-modal__img { width: 100%; aspect-ratio: 1; object-fit: cover; }
 
 .lbite-menu-modal__body { padding: 20px; }
-.lbite-menu-modal__img + * { margin-top: 0; }
+/* Titel braucht oben Luft zum Bild, wie links/rechts/unten durch das Body-Padding. */
+body .lbite-menu-view .lbite-menu-modal__img + .lbite-menu-modal__title,
+.lbite-menu-modal__img + .lbite-menu-modal__title { margin-top: 20px !important; }
 
 body .lbite-menu-view .lbite-menu-modal__title { font-size: 20px; font-weight: 700; margin-bottom: 6px !important; }
 .lbite-menu-modal__desc { color: var(--lbite-menu-muted); font-size: 14px; line-height: 1.55; margin-bottom: 14px; }

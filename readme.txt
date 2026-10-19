@@ -279,6 +279,7 @@ Yes. English is the source language, and the plugin ships with complete translat
 
 = 3.6.21 =
 * Feature: Sold-out dishes in the menu view are now marked with a badge and a disabled button, listed last in their category; sold-out variations can no longer be selected.
+* Fix: In the variation popup the title no longer touches the image and the close button is a true circle again.
 
 = 3.6.20 =
 * Fix: The active category button in the menu navigation bar was invisible when primary brand colour and bar were the same colour; it now uses the accent colour.
