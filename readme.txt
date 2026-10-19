@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.18
+Stable tag: 3.6.19
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -277,6 +277,9 @@ Yes. English is the source language, and the plugin ships with complete translat
 
 == Changelog ==
 
+= 3.6.19 =
+* Changed: Updated Freemius SDK to the latest version.
+
 = 3.6.18 =
 * Fix: Headings in the optimized checkout were unreadable when the secondary brand colour is very light.
 
@@ -307,35 +310,5 @@ Yes. English is the source language, and the plugin ships with complete translat
 = 3.6.10 =
 * Fix: Variable products couldn't be added to the cart from the menu view popup, plus several smaller visual polish fixes.
 
-= 3.6.9 =
-* Feature: New settings to hide the Kanban back button and to block cancelling orders from the board.
-
-= 3.6.8 =
-* Fix: The location filter bar ignored the "Location Selection" setting; several menu view visual fixes.
-
-= 3.6.7 =
-* Feature: Menu view now matches shop-page availability behaviour instead of hiding location-excluded products.
-
-= 3.6.6 =
-* Fix: Menu view's mobile thumbnail sizing.
-
-= 3.6.5 =
-* Fix: Missing hover colors and inconsistent filter pill styling across the menu view and branding preview.
-
-= 3.6.4 =
-* Fix: Branded buttons became unreadable with light brand colors; reservation form and stamp card ignored branding.
-
-= 3.6.3 =
-* Fix: Currency symbol display and variant add-to-cart in the menu view popup; new compact mobile layout.
-
-= 3.6.2 =
-* Fix: Dietary filter placement, sticky bar styling, and variant price display in the menu view.
-
-= 3.6.1 =
-* Feature: Dietary filter, location switcher and shop-archive redirect added to the menu view; several fixes.
-
-= 3.6.0 =
-* Feature: Menu view slide-in cart, branding now reaches all frontend shortcodes, new Default Location setting.
-
 = Older versions =
-* For the full changelog of versions before 3.6.0, see the release history: https://github.com/simurech/libre-bite/releases
+* For the full changelog of versions before 3.6.10, see the release history: https://github.com/simurech/libre-bite/releases
