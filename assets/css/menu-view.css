@@ -942,3 +942,43 @@ body.lbite-menu-cart-open { overflow: hidden; }
 		padding: 12px;
 	}
 }
+
+/* ── Ausverkauft ────────────────────────────────────────────────────── */
+
+.lbite-menu-item { position: relative; }
+
+.lbite-menu-item--soldout .lbite-menu-item__media img,
+.lbite-menu-item--soldout .lbite-menu-item__name,
+.lbite-menu-item--soldout .lbite-menu-item__desc,
+.lbite-menu-item--soldout .lbite-menu-item__price {
+	opacity: .55;
+}
+
+.lbite-menu-item--soldout .lbite-menu-item__media img { filter: grayscale(.8); }
+
+body .lbite-menu-view .lbite-menu-item__soldout-badge {
+	position: absolute;
+	top: 12px;
+	left: 12px;
+	z-index: 2;
+	padding: 4px 12px;
+	border-radius: 999px;
+	background: #1d2327;
+	color: #fff !important;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1.4;
+}
+
+body .lbite-menu-view .lbite-menu-item__add:disabled {
+	background: var(--lbite-menu-border);
+	color: var(--lbite-menu-muted) !important;
+	cursor: not-allowed;
+	opacity: 1;
+}
+
+body .lbite-menu-view .lbite-menu-modal__variation-btn.is-soldout,
+body .lbite-menu-view .lbite-menu-modal__variation-btn:disabled {
+	opacity: .5;
+	cursor: not-allowed;
+}

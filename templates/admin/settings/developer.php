@@ -31,6 +31,7 @@ $lbite_rest_hooks = array(
 	array( 'lbite_stampcard_reward_issued', '$user_id, $code', __( 'A stamp card voucher is issued.', 'libre-bite' ) ),
 	array( 'lbite_menu_item_before_title', '$product, $location_id', __( 'Menu view: before a dish title, e.g. for tag badges.', 'libre-bite' ) ),
 	array( 'lbite_menu_item_after_desc', '$product, $location_id', __( 'Menu view: after a dish description, e.g. for icon rows.', 'libre-bite' ) ),
+	array( 'lbite_menu_sold_out_last (filter)', '$enabled', __( 'Menu view: move sold-out dishes to the end of their category (default true).', 'libre-bite' ) ),
 );
 ?>
 <div class="lbite-settings-card">

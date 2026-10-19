@@ -606,6 +606,11 @@
 						.attr( 'data-variation-id', variation.id );
 					$vbtn.append( $( '<span class="lbite-menu-modal__variation-btn-label"></span>' ).text( variation.label || value ) );
 					$vbtn.append( $( '<span class="lbite-menu-modal__variation-btn-price"></span>' ).text( variation.price ) );
+					if ( variation.in_stock === false ) {
+						// Ausverkaufte Variante: sichtbar, aber nicht wählbar.
+						$vbtn.prop( 'disabled', true ).addClass( 'is-soldout' );
+						$vbtn.find( '.lbite-menu-modal__variation-btn-price' ).text( lbiteMenu.strings.soldOut );
+					}
 					$btnGroup.append( $vbtn );
 				} );
 

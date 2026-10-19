@@ -7253,3 +7253,11 @@ msgstr ""
 #: templates/admin/settings/products-menu.php:82
 msgid "The menu is a standalone layout and does not run WooCommerce loop hooks. Badges or icons your theme adds to products in the shop (for example tag labels or allergen icons) therefore do not appear here automatically. Developers can output them through the hooks lbite_menu_item_before_title and lbite_menu_item_after_desc, listed under Settings → Developer."
 msgstr ""
+
+#: templates/frontend/menu-view.php
+msgid "Sold out"
+msgstr ""
+
+#: templates/frontend/menu-view.php
+msgid "Menu view: move sold-out dishes to the end of their category (default true)."
+msgstr ""

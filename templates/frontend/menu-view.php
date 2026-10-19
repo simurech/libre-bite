@@ -162,12 +162,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 						// Am gewählten Standort ausgeschlossene Artikel bleiben sichtbar,
 						// statt komplett zu verschwinden (Nutzer-Fund 2026-09-29) - wie im
 						// Shop markiert nur eine Klasse + ein Hinweis-Badge sie.
+						$lbite_in_stock  = $lbite_product->is_in_stock();
 						$lbite_available = ! $lbite_location_id || ! class_exists( 'LBite_Locations' )
 							|| LBite_Locations::is_product_available_at_location( $lbite_pid, $lbite_location_id );
 						?>
-						<article class="lbite-menu-item<?php echo $lbite_available ? '' : ' lbite-unavailable'; ?>" data-product-id="<?php echo esc_attr( $lbite_pid ); ?>"
+						<article class="lbite-menu-item<?php echo $lbite_available ? '' : ' lbite-unavailable'; ?><?php echo $lbite_in_stock ? '' : ' lbite-menu-item--soldout'; ?>" data-product-id="<?php echo esc_attr( $lbite_pid ); ?>"
 							data-needs-options="<?php echo $lbite_needs_mod ? '1' : '0'; ?>"
 							data-diet="<?php echo esc_attr( implode( ' ', $lbite_diet ) ); ?>">
+
+							<?php if ( ! $lbite_in_stock ) : ?>
+								<span class="lbite-menu-item__soldout-badge"><?php esc_html_e( 'Sold out', 'libre-bite' ); ?></span>
+							<?php endif; ?>
 
 							<?php if ( $lbite_menu_show_images ) : ?>
 								<div class="lbite-menu-item__media">
@@ -207,9 +212,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 								<div class="lbite-menu-item__foot">
 									<span class="lbite-menu-item__price"><?php echo wp_kses_post( LBite_Menu_View::get_display_price_html( $lbite_product ) ); ?></span>
-									<button type="button" class="lbite-menu-item__add"
+									<button type="button" class="lbite-menu-item__add"<?php echo $lbite_in_stock ? '' : ' disabled'; ?>
 										aria-label="<?php echo esc_attr( sprintf( /* translators: %s: product name */ __( 'Add %s', 'libre-bite' ), $lbite_product->get_name() ) ); ?>">
-										<?php echo $lbite_needs_mod ? esc_html__( 'Choose', 'libre-bite' ) : esc_html__( 'Add', 'libre-bite' ); ?>
+										<?php echo ! $lbite_in_stock ? esc_html__( 'Sold out', 'libre-bite' ) : ( $lbite_needs_mod ? esc_html__( 'Choose', 'libre-bite' ) : esc_html__( 'Add', 'libre-bite' ) ); ?>
 									</button>
 								</div>
 

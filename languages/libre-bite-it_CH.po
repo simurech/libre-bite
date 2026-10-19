@@ -7088,3 +7088,11 @@ msgstr "Integrazione con il tema"
 #: templates/admin/settings/products-menu.php:82
 msgid "The menu is a standalone layout and does not run WooCommerce loop hooks. Badges or icons your theme adds to products in the shop (for example tag labels or allergen icons) therefore do not appear here automatically. Developers can output them through the hooks lbite_menu_item_before_title and lbite_menu_item_after_desc, listed under Settings → Developer."
 msgstr "Il menu è un layout autonomo e non esegue gli hook di loop di WooCommerce. I badge o le icone che il tema aggiunge ai prodotti nello shop (ad es. etichette dei tag o icone degli allergeni) non compaiono quindi automaticamente qui. Gli sviluppatori possono mostrarli tramite gli hook lbite_menu_item_before_title e lbite_menu_item_after_desc, elencati in Impostazioni → Sviluppatore."
+
+#: templates/frontend/menu-view.php
+msgid "Sold out"
+msgstr "Esaurito"
+
+#: templates/frontend/menu-view.php
+msgid "Menu view: move sold-out dishes to the end of their category (default true)."
+msgstr "Vista menu: spostare i piatti esauriti in fondo alla categoria (predefinito: vero)."

@@ -175,6 +175,7 @@ class LBite_Menu_View {
 					'close'        => __( 'Close', 'libre-bite' ),
 					'total'        => __( 'Total', 'libre-bite' ),
 					'chooseOption' => __( 'Please choose an option.', 'libre-bite' ),
+					'soldOut'      => __( 'Sold out', 'libre-bite' ),
 					'options'      => __( 'Options', 'libre-bite' ),
 					/* translators: %s: comma-separated list of active dietary filter labels */
 					'noMatch'      => __( 'No products in this category match the selected filter: %s', 'libre-bite' ),
@@ -324,6 +325,15 @@ class LBite_Menu_View {
 
 		$sections = array_values( $grouped );
 
+		// Ausverkaufte Artikel bleiben sichtbar (sofern WooCommerce sie nicht ohnehin
+		// ausblendet), rutschen aber innerhalb ihrer Kategorie ans Ende.
+		if ( apply_filters( 'lbite_menu_sold_out_last', true ) ) {
+			foreach ( $sections as $lbite_key => $lbite_section ) {
+				$sections[ $lbite_key ]['products'] = self::sort_sold_out_last( $lbite_section['products'] );
+			}
+			$uncategorised = self::sort_sold_out_last( $uncategorised );
+		}
+
 		usort(
 			$sections,
 			function ( $a, $b ) {
@@ -339,6 +349,27 @@ class LBite_Menu_View {
 		}
 
 		return $sections;
+	}
+
+	/**
+	 * Verfügbare Artikel vor ausverkauften einordnen, Reihenfolge sonst unverändert.
+	 *
+	 * @param WC_Product[] $products Artikel einer Kategorie.
+	 * @return WC_Product[]
+	 */
+	private static function sort_sold_out_last( $products ) {
+		$in_stock = array();
+		$sold_out = array();
+
+		foreach ( $products as $product ) {
+			if ( $product->is_in_stock() ) {
+				$in_stock[] = $product;
+			} else {
+				$sold_out[] = $product;
+			}
+		}
+
+		return array_merge( $in_stock, $sold_out );
 	}
 
 	/**
@@ -586,6 +617,7 @@ class LBite_Menu_View {
 					'id'         => (int) $variation['variation_id'],
 					'attributes' => $variation['attributes'],
 					'label'      => implode( ', ', $lbite_variation_labels ),
+					'in_stock'   => ! empty( $variation['is_in_stock'] ),
 					// html_entity_decode() nötig, da Preise ohne eigenes Unicode-Zeichen
 					// (z.B. CHF) als HTML-Entity kommen; JS-textContent dekodiert
 					// Entities nie (Nutzer-Fund 2026-09-29, gleiches Muster wie in

@@ -7088,3 +7088,11 @@ msgstr "Intégration au thème"
 #: templates/admin/settings/products-menu.php:82
 msgid "The menu is a standalone layout and does not run WooCommerce loop hooks. Badges or icons your theme adds to products in the shop (for example tag labels or allergen icons) therefore do not appear here automatically. Developers can output them through the hooks lbite_menu_item_before_title and lbite_menu_item_after_desc, listed under Settings → Developer."
 msgstr "La carte est une mise en page autonome et n'exécute pas les hooks de boucle WooCommerce. Les badges ou icônes que votre thème ajoute aux produits dans la boutique (par ex. étiquettes de tags ou icônes d'allergènes) n'apparaissent donc pas ici automatiquement. Les développeurs peuvent les afficher via les hooks lbite_menu_item_before_title et lbite_menu_item_after_desc, listés sous Réglages → Développeur."
+
+#: templates/frontend/menu-view.php
+msgid "Sold out"
+msgstr "Épuisé"
+
+#: templates/frontend/menu-view.php
+msgid "Menu view: move sold-out dishes to the end of their category (default true)."
+msgstr "Vue du menu : placer les plats épuisés à la fin de leur catégorie (par défaut : vrai)."
