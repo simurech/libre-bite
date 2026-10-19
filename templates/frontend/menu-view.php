@@ -178,13 +178,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php endif; ?>
 
 							<div class="lbite-menu-item__body">
-								<h3 class="lbite-menu-item__name"><?php echo esc_html( $lbite_product->get_name() ); ?></h3>
+								<?php
+									// Erweiterungspunkt: Themes/Plugins können hier eigene Markierungen
+									// (z. B. Tag-Kapseln) ausgeben. Dieses Template feuert die
+									// WooCommerce-Loop-Hooks nicht, sonst fehlten sie hier.
+									do_action( 'lbite_menu_item_before_title', $lbite_product, $lbite_location_id );
+									?>
+									<h3 class="lbite-menu-item__name"><?php echo esc_html( $lbite_product->get_name() ); ?></h3>
 
 								<?php if ( $lbite_product->get_short_description() ) : ?>
 									<p class="lbite-menu-item__desc">
 										<?php echo esc_html( wp_strip_all_tags( $lbite_product->get_short_description() ) ); ?>
 									</p>
 								<?php endif; ?>
+
+								<?php do_action( 'lbite_menu_item_after_desc', $lbite_product, $lbite_location_id ); ?>
 
 								<?php if ( ! empty( $lbite_diet ) && lbite_feature_enabled( 'enable_dietary_labels' ) && class_exists( 'LBite_Nutritional_Info' ) ) : ?>
 									<?php $lbite_diet_labels = LBite_Nutritional_Info::get_dietary_list(); ?>

@@ -77,6 +77,14 @@ $lbite_all_pages       = get_pages( array( 'post_status' => 'publish' ) );
 				</p>
 			</td>
 		</tr>
+		<tr>
+			<th><?php esc_html_e( 'Theme Integration', 'libre-bite' ); ?></th>
+			<td>
+				<p class="description">
+					<?php esc_html_e( 'The menu is a standalone layout and does not run WooCommerce loop hooks. Badges or icons your theme adds to products in the shop (for example tag labels or allergen icons) therefore do not appear here automatically. Developers can output them through the hooks lbite_menu_item_before_title and lbite_menu_item_after_desc, listed under Settings → Developer.', 'libre-bite' ); ?>
+				</p>
+			</td>
+		</tr>
 	</table>
 	<?php endif; ?>
 

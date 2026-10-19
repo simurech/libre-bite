@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.19
+Stable tag: 3.6.20
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -276,6 +276,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.20 =
+* Fix: The active category button in the menu navigation bar was invisible when primary brand colour and bar were the same colour; it now uses the accent colour.
+* Feature: New hooks lbite_menu_item_before_title and lbite_menu_item_after_desc let themes add badges or icons to menu items.
 
 = 3.6.19 =
 * Changed: Updated Freemius SDK to the latest version.

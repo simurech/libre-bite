@@ -7072,3 +7072,19 @@ msgstr "Disattiva per un menu solo testuale, senza foto."
 
 #~ msgid "https://github.com/simurech/libre-bite"
 #~ msgstr "https://github.com/simurech/libre-bite"
+
+#: templates/admin/settings/developer.php:32
+msgid "Menu view: before a dish title, e.g. for tag badges."
+msgstr "Vista menu: prima del titolo di un piatto, ad es. per badge di tag."
+
+#: templates/admin/settings/developer.php:32
+msgid "Menu view: after a dish description, e.g. for icon rows."
+msgstr "Vista menu: dopo la descrizione di un piatto, ad es. per righe di icone."
+
+#: templates/admin/settings/products-menu.php:82
+msgid "Theme Integration"
+msgstr "Integrazione con il tema"
+
+#: templates/admin/settings/products-menu.php:82
+msgid "The menu is a standalone layout and does not run WooCommerce loop hooks. Badges or icons your theme adds to products in the shop (for example tag labels or allergen icons) therefore do not appear here automatically. Developers can output them through the hooks lbite_menu_item_before_title and lbite_menu_item_after_desc, listed under Settings → Developer."
+msgstr "Il menu è un layout autonomo e non esegue gli hook di loop di WooCommerce. I badge o le icone che il tema aggiunge ai prodotti nello shop (ad es. etichette dei tag o icone degli allergeni) non compaiono quindi automaticamente qui. Gli sviluppatori possono mostrarli tramite gli hook lbite_menu_item_before_title e lbite_menu_item_after_desc, elencati in Impostazioni → Sviluppatore."

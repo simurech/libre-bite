@@ -327,6 +327,7 @@
 					const $link = $( this );
 					const isActive = $link.attr( 'href' ) === '#' + currentId;
 					$link.toggleClass( 'is-active', isActive );
+						$link.attr( 'aria-current', isActive ? 'true' : null );
 					if ( isActive ) {
 						self.scrollNavToActive( $link );
 					}

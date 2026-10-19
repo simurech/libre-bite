@@ -57,6 +57,8 @@ class LBite_Branding {
 		if ( $lbite_accent ) {
 			$lbite_tokens['--lbite-color-accent']       = $lbite_accent;
 			$lbite_tokens['--lbite-color-accent-hover'] = self::shade_hex_color( $lbite_accent, -0.18 );
+			// Schriftfarbe auf Akzentflächen (z. B. aktiver Chip der Menü-Leiste).
+			$lbite_tokens['--lbite-color-accent-contrast'] = self::contrast_color( $lbite_accent );
 		}
 
 		return $lbite_tokens;

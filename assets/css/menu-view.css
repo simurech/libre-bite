@@ -15,6 +15,9 @@
 	--lbite-menu-primary: var(--lbite-color-primary, #0073aa);
 	--lbite-menu-primary-hover: var(--lbite-color-primary-hover, #005a87);
 	--lbite-menu-primary-contrast: var(--lbite-color-primary-contrast, #fff);
+	--lbite-menu-accent: var(--lbite-color-accent, #00a32a);
+	--lbite-menu-accent-hover: var(--lbite-color-accent-hover, #007a20);
+	--lbite-menu-accent-contrast: var(--lbite-color-accent-contrast, #1d2327);
 	--lbite-menu-surface: #ffffff;
 	--lbite-menu-canvas: #f6f7f9;
 	--lbite-menu-border: #e3e6ea;
@@ -156,10 +159,20 @@ body .lbite-menu-view .lbite-menu-nav__item {
    dem Scroll-Spy in menu-view.js dazu (initScrollSpy()): markiert jetzt den
    gerade sichtbaren Abschnitt automatisch, unabhängig von einem Klick
    (Nutzer-Fund 2026-09-29). */
-body .lbite-menu-view .lbite-menu-nav__item:hover,
+/* Die Leiste selbst trägt die Primärfarbe, ein Chip in Primär(-Hover) würde
+   mit ihr verschmelzen (bei Schwarz/Schwarz wirkte der aktive Chip wie
+   "nicht vorhanden"). Aktiv und Hover nutzen deshalb die Akzentfarbe, dazu
+   Schriftschnitt und Ring, damit der Zustand nicht allein an der Farbe hängt. */
+body .lbite-menu-view .lbite-menu-nav__item:hover {
+	background: var(--lbite-menu-accent-hover);
+	color: var(--lbite-menu-accent-contrast);
+}
+
 body .lbite-menu-view .lbite-menu-nav__item.is-active {
-	background: var(--lbite-menu-primary-hover);
-	color: var(--lbite-menu-primary-contrast);
+	background: var(--lbite-menu-accent);
+	color: var(--lbite-menu-accent-contrast);
+	font-weight: 700;
+	box-shadow: 0 0 0 2px var(--lbite-menu-surface);
 }
 
 /* ── Standort-Umschalter ───────────────────────────────────────────── */

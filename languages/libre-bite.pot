@@ -7237,3 +7237,19 @@ msgstr ""
 #: includes/modules/checkout/class-checkout.php
 msgid "Please enter your email address for this payment method."
 msgstr ""
+
+#: templates/admin/settings/developer.php:32
+msgid "Menu view: before a dish title, e.g. for tag badges."
+msgstr ""
+
+#: templates/admin/settings/developer.php:32
+msgid "Menu view: after a dish description, e.g. for icon rows."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php:82
+msgid "Theme Integration"
+msgstr ""
+
+#: templates/admin/settings/products-menu.php:82
+msgid "The menu is a standalone layout and does not run WooCommerce loop hooks. Badges or icons your theme adds to products in the shop (for example tag labels or allergen icons) therefore do not appear here automatically. Developers can output them through the hooks lbite_menu_item_before_title and lbite_menu_item_after_desc, listed under Settings → Developer."
+msgstr ""

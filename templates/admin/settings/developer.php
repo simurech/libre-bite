@@ -29,6 +29,8 @@ $lbite_rest_hooks = array(
 	array( 'lbite_reservation_created', '$reservation_id, $data', __( 'A reservation request comes in.', 'libre-bite' ) ),
 	array( 'lbite_reservation_board_data (filter)', '$data, $reservation_id', __( 'Card data on the reservation board before output.', 'libre-bite' ) ),
 	array( 'lbite_stampcard_reward_issued', '$user_id, $code', __( 'A stamp card voucher is issued.', 'libre-bite' ) ),
+	array( 'lbite_menu_item_before_title', '$product, $location_id', __( 'Menu view: before a dish title, e.g. for tag badges.', 'libre-bite' ) ),
+	array( 'lbite_menu_item_after_desc', '$product, $location_id', __( 'Menu view: after a dish description, e.g. for icon rows.', 'libre-bite' ) ),
 );
 ?>
 <div class="lbite-settings-card">
