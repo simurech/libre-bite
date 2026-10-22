@@ -7261,3 +7261,23 @@ msgstr ""
 #: templates/frontend/menu-view.php
 msgid "Menu view: move sold-out dishes to the end of their category (default true)."
 msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "This quantity is not available."
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Decrease quantity"
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Increase quantity"
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Remove item"
+msgstr ""
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Could not update your order. Please try again."
+msgstr ""

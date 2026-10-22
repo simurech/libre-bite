@@ -7097,3 +7097,23 @@ msgstr "Ausverkauft"
 #: templates/frontend/menu-view.php
 msgid "Menu view: move sold-out dishes to the end of their category (default true)."
 msgstr "Menüansicht: ausverkaufte Gerichte ans Ende ihrer Kategorie verschieben (Standard: wahr)."
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "This quantity is not available."
+msgstr "Diese Menge ist nicht verfügbar."
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Decrease quantity"
+msgstr "Menge verringern"
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Increase quantity"
+msgstr "Menge erhöhen"
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Remove item"
+msgstr "Artikel entfernen"
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Could not update your order. Please try again."
+msgstr "Ihre Bestellung konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."

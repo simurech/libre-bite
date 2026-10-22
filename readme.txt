@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 3.6.22
+Stable tag: 3.6.23
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -276,6 +276,9 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.23 =
+* Feature: The order panel of the menu view now lets guests change quantities and remove items.
 
 = 3.6.22 =
 * Fix: In the variation popup the title no longer touches the image and the close button is a true circle again.

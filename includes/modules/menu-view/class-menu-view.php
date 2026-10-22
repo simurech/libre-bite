@@ -56,6 +56,8 @@ class LBite_Menu_View {
 		$this->loader->add_action( 'wp_ajax_nopriv_lbite_menu_product', $this, 'ajax_get_product' );
 		$this->loader->add_action( 'wp_ajax_lbite_menu_cart', $this, 'ajax_get_cart' );
 		$this->loader->add_action( 'wp_ajax_nopriv_lbite_menu_cart', $this, 'ajax_get_cart' );
+		$this->loader->add_action( 'wp_ajax_lbite_menu_cart_update', $this, 'ajax_update_cart_item' );
+		$this->loader->add_action( 'wp_ajax_nopriv_lbite_menu_cart_update', $this, 'ajax_update_cart_item' );
 		$this->loader->add_action( 'template_redirect', $this, 'maybe_redirect_archives_to_menu' );
 	}
 
@@ -171,6 +173,7 @@ class LBite_Menu_View {
 					'error'        => __( 'Could not add the item. Please try again.', 'libre-bite' ),
 					'cart'         => __( 'Your order', 'libre-bite' ),
 					'emptyCart'    => __( 'Nothing in your order yet.', 'libre-bite' ),
+					'cartError'    => __( 'Could not update your order. Please try again.', 'libre-bite' ),
 					'checkout'     => __( 'Go to checkout', 'libre-bite' ),
 					'close'        => __( 'Close', 'libre-bite' ),
 					'total'        => __( 'Total', 'libre-bite' ),
@@ -490,12 +493,63 @@ class LBite_Menu_View {
 	public function ajax_get_cart() {
 		check_ajax_referer( 'lbite_frontend_nonce', 'nonce' );
 
+		wp_send_json_success( self::get_cart_payload() );
+	}
+
+	/**
+	 * AJAX: Menge einer Warenkorb-Position ändern oder die Position entfernen
+	 *
+	 * Menge 0 entfernt die Position. Eine Erhöhung wird gegen Lagerbestand
+	 * und die Höchstmenge des Produkts geprüft, sonst liesse sich der
+	 * Bestand über das Panel umgehen. Antwort ist der aktualisierte Warenkorb.
+	 */
+	public function ajax_update_cart_item() {
+		check_ajax_referer( 'lbite_frontend_nonce', 'nonce' );
+
 		if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
-			wp_send_json_success(
-				array(
-					'count' => 0,
-					'html'  => '',
-				)
+			wp_send_json_error();
+		}
+
+		$key = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
+		$qty = isset( $_POST['quantity'] ) ? absint( wp_unslash( $_POST['quantity'] ) ) : 0;
+
+		$cart = WC()->cart;
+		$item = $cart->get_cart_item( $key );
+
+		if ( '' === $key || empty( $item ) ) {
+			wp_send_json_error();
+		}
+
+		if ( $qty < 1 ) {
+			$cart->remove_cart_item( $key );
+		} else {
+			$product = isset( $item['data'] ) ? $item['data'] : null;
+			$max     = $product ? $product->get_max_purchase_quantity() : -1;
+
+			if ( $product && ( ( $max > 0 && $qty > $max ) || ! $product->has_enough_stock( $qty ) ) ) {
+				wp_send_json_error(
+					array(
+						'message' => __( 'This quantity is not available.', 'libre-bite' ),
+					)
+				);
+			}
+
+			$cart->set_quantity( $key, $qty );
+		}
+
+		wp_send_json_success( self::get_cart_payload() );
+	}
+
+	/**
+	 * Baut Anzahl und HTML des Warenkorb-Panels aus dem echten Warenkorb
+	 *
+	 * @return array{count:int,html:string}
+	 */
+	private static function get_cart_payload() {
+		if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+			return array(
+				'count' => 0,
+				'html'  => '',
 			);
 		}
 
@@ -503,25 +557,22 @@ class LBite_Menu_View {
 		$items = $cart->get_cart();
 
 		if ( empty( $items ) ) {
-			wp_send_json_success(
-				array(
-					'count' => 0,
-					'html'  => '',
-				)
+			return array(
+				'count' => 0,
+				'html'  => '',
 			);
 		}
 
 		$html = '<ul class="lbite-menu-cart__items">';
 
-		foreach ( $items as $item ) {
+		foreach ( $items as $cart_item_key => $item ) {
 			$product = isset( $item['data'] ) ? $item['data'] : null;
 
 			if ( ! $product ) {
 				continue;
 			}
 
-			$html .= '<li class="lbite-menu-cart__item">';
-			$html .= '<span class="lbite-menu-cart__qty">' . esc_html( $item['quantity'] ) . '&times;</span>';
+			$html .= '<li class="lbite-menu-cart__item" data-key="' . esc_attr( $cart_item_key ) . '">';
 			$html .= '<span class="lbite-menu-cart__name">' . esc_html( $product->get_name() );
 
 			// Gewählte Zusatzoptionen mit anzeigen – sonst wäre im Warenkorb
@@ -546,6 +597,17 @@ class LBite_Menu_View {
 			$html .= '<span class="lbite-menu-cart__price">'
 				. wp_kses_post( $cart->get_product_subtotal( $product, $item['quantity'] ) )
 				. '</span>';
+
+			// Mengensteuerung: Minus bei Menge 1 entfernt die Position.
+			$html .= '<span class="lbite-menu-cart__stepper">';
+			$html .= '<button type="button" class="lbite-menu-cart__step" data-lbite-step="-1" aria-label="'
+				. esc_attr__( 'Decrease quantity', 'libre-bite' ) . '">&minus;</button>';
+			$html .= '<span class="lbite-menu-cart__qty">' . esc_html( $item['quantity'] ) . '</span>';
+			$html .= '<button type="button" class="lbite-menu-cart__step" data-lbite-step="1" aria-label="'
+				. esc_attr__( 'Increase quantity', 'libre-bite' ) . '">+</button>';
+			$html .= '</span>';
+			$html .= '<button type="button" class="lbite-menu-cart__remove" aria-label="'
+				. esc_attr__( 'Remove item', 'libre-bite' ) . '">&times;</button>';
 			$html .= '</li>';
 		}
 
@@ -554,11 +616,9 @@ class LBite_Menu_View {
 			. esc_html__( 'Total', 'libre-bite' )
 			. '</span><strong>' . wp_kses_post( $cart->get_cart_subtotal() ) . '</strong></div>';
 
-		wp_send_json_success(
-			array(
-				'count' => (int) $cart->get_cart_contents_count(),
-				'html'  => $html,
-			)
+		return array(
+			'count' => (int) $cart->get_cart_contents_count(),
+			'html'  => $html,
 		);
 	}
 

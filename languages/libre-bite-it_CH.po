@@ -7096,3 +7096,23 @@ msgstr "Esaurito"
 #: templates/frontend/menu-view.php
 msgid "Menu view: move sold-out dishes to the end of their category (default true)."
 msgstr "Vista menu: spostare i piatti esauriti in fondo alla categoria (predefinito: vero)."
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "This quantity is not available."
+msgstr "Questa quantità non è disponibile."
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Decrease quantity"
+msgstr "Diminuisci la quantità"
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Increase quantity"
+msgstr "Aumenta la quantità"
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Remove item"
+msgstr "Rimuovi l’articolo"
+
+#: includes/modules/menu-view/class-menu-view.php
+msgid "Could not update your order. Please try again."
+msgstr "Impossibile aggiornare l’ordine. Riprova."

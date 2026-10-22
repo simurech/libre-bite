@@ -90,6 +90,16 @@
 				self.toggleCart( false );
 			} );
 
+			// Mengensteuerung und Entfernen im Warenkorb-Panel
+			this.$root.on( 'click', '.lbite-menu-cart__step', function () {
+				const $item = $( this ).closest( '.lbite-menu-cart__item' );
+				const current = parseInt( $item.find( '.lbite-menu-cart__qty' ).text(), 10 ) || 1;
+				self.updateCartItem( $item, Math.max( 0, current + parseInt( $( this ).data( 'lbite-step' ), 10 ) ) );
+			} );
+			this.$root.on( 'click', '.lbite-menu-cart__remove', function () {
+				self.updateCartItem( $( this ).closest( '.lbite-menu-cart__item' ), 0 );
+			} );
+
 			// Hinzufügen aus dem Modal
 			this.$root.on( 'click', '.lbite-menu-modal__add', function () {
 				self.submitModal( $( this ) );
@@ -896,9 +906,9 @@
 		},
 
 		refreshCart: function () {
-			const $toggle = $( '#lbite-menu-cart-toggle' );
+			const self = this;
 
-			if ( $toggle.length === 0 ) {
+			if ( $( '#lbite-menu-cart-toggle' ).length === 0 ) {
 				return;
 			}
 
@@ -906,24 +916,68 @@
 				action: 'lbite_menu_cart',
 				nonce: lbiteMenu.nonce
 			} ).done( function ( response ) {
-				if ( ! response || ! response.success ) {
-					return;
+				if ( response && response.success ) {
+					self.renderCart( response.data );
 				}
-
-				const data = response.data;
-
-				if ( ! data.count ) {
-					$toggle.attr( 'hidden', true );
-					$( '#lbite-menu-cart-body' ).html(
-						$( '<p class="lbite-menu-cart__empty"></p>' ).text( lbiteMenu.strings.emptyCart )
-					);
-					return;
-				}
-
-				$toggle.removeAttr( 'hidden' );
-				$toggle.find( '.lbite-menu-cart-toggle__count' ).text( data.count );
-				$( '#lbite-menu-cart-body' ).html( data.html );
 			} );
+		},
+
+		renderCart: function ( data ) {
+			const $toggle = $( '#lbite-menu-cart-toggle' );
+
+			if ( ! data.count ) {
+				$toggle.attr( 'hidden', true );
+				$( '#lbite-menu-cart-body' ).html(
+					$( '<p class="lbite-menu-cart__empty"></p>' ).text( lbiteMenu.strings.emptyCart )
+				);
+				return;
+			}
+
+			$toggle.removeAttr( 'hidden' );
+			$toggle.find( '.lbite-menu-cart-toggle__count' ).text( data.count );
+			$( '#lbite-menu-cart-body' ).html( data.html );
+		},
+
+		// Menge ändern bzw. Position entfernen (quantity 0). Der Server prüft
+		// Lagerbestand und liefert den neuen Warenkorb zurück.
+		updateCartItem: function ( $item, quantity ) {
+			const self = this;
+			const $body = $( '#lbite-menu-cart-body' );
+
+			$body.addClass( 'is-busy' ).find( 'button' ).prop( 'disabled', true );
+
+			$.post( lbiteMenu.ajaxUrl, {
+				action: 'lbite_menu_cart_update',
+				nonce: lbiteMenu.nonce,
+				key: $item.data( 'key' ),
+				quantity: quantity
+			} ).done( function ( response ) {
+				if ( response && response.success ) {
+					self.renderCart( response.data );
+					// Theme-Warenkorbzähler und Fragmente nachziehen
+					$( document.body ).trigger( 'wc_fragment_refresh' );
+
+					if ( ! response.data.count ) {
+						self.toggleCart( false );
+					}
+					return;
+				}
+
+				self.cartNotice( response && response.data && response.data.message );
+			} ).fail( function () {
+				self.cartNotice();
+			} ).always( function () {
+				$body.removeClass( 'is-busy' ).find( 'button' ).prop( 'disabled', false );
+			} );
+		},
+
+		cartNotice: function ( message ) {
+			const $body = $( '#lbite-menu-cart-body' );
+
+			$body.find( '.lbite-menu-cart__notice' ).remove();
+			$( '<p class="lbite-menu-cart__notice" role="alert"></p>' )
+				.text( message || lbiteMenu.strings.cartError )
+				.prependTo( $body );
 		},
 
 		toggleCart: function ( open ) {
