@@ -5,7 +5,6 @@
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
  * Version:           3.6.24
  * Requires at least: 6.0
- * Tested up to:      7.1
  * Requires PHP:      8.3
  * Requires Plugins:  woocommerce
  * Author:            Pulacha Labs
