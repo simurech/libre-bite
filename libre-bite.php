@@ -3,10 +3,10 @@
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://wordpress.org/plugins/libre-bite/
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
- * Version:           3.6.23
+ * Version:           3.6.24
  * Requires at least: 6.0
  * Tested up to:      7.1
- * Requires PHP:      8.1
+ * Requires PHP:      8.3
  * Requires Plugins:  woocommerce
  * Author:            Pulacha Labs
  * Author URI:        https://pulacha-labs.ch/
@@ -15,7 +15,7 @@
  * Text Domain:       libre-bite
  * Domain Path:       /languages
  * WC requires at least: 8.0
- * WC tested up to: 10.7.0
+ * WC tested up to: 11.3.1
  * @fs_premium_only /includes/modules/nutritional-info/, /includes/modules/reservations/, /includes/modules/tables/, /templates/checkout-optimized.php, /templates/thankyou-optimized.php, /templates/admin/reservation-board.php, /templates/admin/table-plan.php, /templates/frontend/reservation-form.php, /assets/js/reservation-form.js, /assets/js/checkout-tip.js, /assets/js/checkout-optimized-receipt.js, /assets/js/admin-tables.js, /assets/js/admin-table-plan.js, /assets/js/reservation-board.js, /assets/css/reservation-form.css, /assets/css/checkout-optimized.css, /assets/css/thankyou-optimized.css, /assets/css/admin-tables.css, /assets/css/admin-table-plan.css, /assets/css/admin-reservation-board.css
  */
 
@@ -79,7 +79,7 @@ if ( function_exists( 'lbite_freemius' ) ) {
 }
 
 // Plugin-Konstanten definieren
-define( 'LBITE_VERSION', '3.6.23' );
+define( 'LBITE_VERSION', '3.6.24' );
 define( 'LBITE_PLUGIN_FILE', __FILE__ );
 define( 'LBITE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LBITE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

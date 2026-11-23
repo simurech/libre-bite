@@ -4,9 +4,9 @@ Donate link: https://github.com/simurech/libre-bite
 Tags: woocommerce, restaurant, pos, ordering, reservations
 Requires at least: 6.0
 Tested up to: 7.1
-Requires PHP: 8.1
+Requires PHP: 8.3
 Requires Plugins: woocommerce
-Stable tag: 3.6.23
+Stable tag: 3.6.24
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -261,7 +261,7 @@ Libre Bite uses Freemius for license management and delivery of Pro features. Da
 
 * WordPress 6.0 or higher
 * WooCommerce 8.0 or higher
-* PHP 8.1 or higher (PHP 8.2+ recommended)
+* PHP 8.3 or higher
 * A modern browser for Kanban board and POS interface
 
 = Is Libre Bite available in multiple languages? =
@@ -276,6 +276,9 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.24 =
+* Changed: Minimum PHP version raised to 8.3 (older PHP versions no longer receive security fixes); tested with WooCommerce 11.3.
 
 = 3.6.23 =
 * Feature: The order panel of the menu view now lets guests change quantities and remove items.
