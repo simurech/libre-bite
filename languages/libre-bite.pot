@@ -7306,3 +7306,105 @@ msgstr ""
 #: templates/admin/statistics.php
 msgid "Fulfilment"
 msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Z reports"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Cash Report"
+msgstr ""
+
+#: templates/admin/settings/pos.php
+msgid "Cash Report (X/Z)"
+msgstr ""
+
+#: templates/admin/settings/pos.php
+msgid "Interim report and end-of-day close per location: revenue by payment method, VAT, tips, cancellations, expected and counted cash. Not a certified cash register system."
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Period"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Gross revenue"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Discounts"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Cancelled orders"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Opening float"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Cash sales"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Expected cash in drawer"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Counted cash"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Difference"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "This report supports your daily cash count. It is not a certified cash register system: in Germany (KassenSichV/TSE) and Austria (RKSV) additional certified hardware or services are required by law."
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Z report saved. A new period has started."
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Back to current period"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "X report (current period)"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Close the day (Z report)"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Optional. Count the drawer and enter the amount to see the difference."
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Close the day now? The Z report cannot be changed afterwards."
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Save Z report"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Previous Z reports"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "No Z reports yet."
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Report"
+msgstr ""
+
+#. translators: 1: report number, 2: location name, 3: date.
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+#, php-format
+msgid "Z report #%1$d – %2$s – %3$s"
+msgstr ""

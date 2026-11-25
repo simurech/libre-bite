@@ -54,6 +54,13 @@ foreach ( $lbite_pos_methods_default as $lbite_pos_def ) {
 	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 
+	$lbite_toggle_key             = 'enable_cash_reports';
+	$lbite_toggle_label           = __( 'Cash Report (X/Z)', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Interim report and end-of-day close per location: revenue by payment method, VAT, tips, cancellations, expected and counted cash. Not a certified cash register system.', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
 	$lbite_toggle_key             = 'enable_open_tabs';
 	$lbite_toggle_label           = __( 'Open Tabs (Table Service)', 'libre-bite' );
 	$lbite_toggle_description     = lbite_feature_enabled( 'enable_table_ordering' )

@@ -143,19 +143,27 @@ class LBite_Installer {
 		global $wpdb;
 
 		// 1. Custom Post Types löschen (Standorte, Produkt-Optionen).
-		$post_types = array( 'lbite_location', 'oos_location', 'lbite_product_option', 'oos_product_option', 'lbite_table', 'lbite_reservation' );
+		$post_types = array( 'lbite_location', 'oos_location', 'lbite_product_option', 'oos_product_option', 'lbite_table', 'lbite_reservation', 'lbite_z_report' );
 		foreach ( $post_types as $post_type ) {
-			// Begrenzt auf 500 zur Sicherheit, in der Regel gibt es nicht so viele Standorte/Optionen.
-			$posts = get_posts(
-				array(
-					'post_type'   => $post_type,
-					'numberposts' => 500,
-					'fields'      => 'ids',
-					'post_status' => 'any',
-				)
-			);
-			foreach ( $posts as $post_id ) {
-				wp_delete_post( $post_id, true );
+			// In Blöcken zu 500 löschen, bis nichts mehr übrig ist: Z-Berichte
+			// (ein Eintrag pro Tag und Standort) überschreiten 500 nach gut einem Jahr.
+			// Die Obergrenze an Durchläufen verhindert eine Endlosschleife, falls
+			// ein Löschvorgang fehlschlägt.
+			for ( $lbite_round = 0; $lbite_round < 100; $lbite_round++ ) {
+				$posts = get_posts(
+					array(
+						'post_type'   => $post_type,
+						'numberposts' => 500,
+						'fields'      => 'ids',
+						'post_status' => 'any',
+					)
+				);
+				if ( empty( $posts ) ) {
+					break;
+				}
+				foreach ( $posts as $post_id ) {
+					wp_delete_post( $post_id, true );
+				}
 			}
 		}
 

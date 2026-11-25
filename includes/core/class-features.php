@@ -80,6 +80,13 @@ class LBite_Features {
 			'label'       => 'Open Tabs (Table Service)',
 			'description' => 'Keep orders open per table and add items until the guests pay',
 		),
+		'enable_cash_reports'       => array(
+			'group'       => 'order_system',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Cash Report (X/Z)',
+			'description' => 'Interim and end-of-day cash reports per location with counted cash and difference',
+		),
 		'enable_service_calls'      => array(
 			'group'       => 'order_system',
 			'default'     => false,

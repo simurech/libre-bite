@@ -211,6 +211,15 @@ class LBite_Plugin {
 				}
 			}
 
+			// Kassenabschluss X/Z (F25), Suffix __premium_only wie bei den übrigen Pro-Modulen.
+			if ( lbite_feature_enabled( 'enable_cash_reports' ) ) {
+				$lbite_cash_file = LBITE_PLUGIN_DIR . 'includes/modules/cash-reports/class-cash-reports__premium_only.php';
+				if ( file_exists( $lbite_cash_file ) ) {
+					require_once $lbite_cash_file;
+					$this->modules['cash-reports'] = new LBite_Cash_Reports( $this->loader );
+				}
+			}
+
 			// Lieferung Stufe 1 (F44). Suffix __premium_only: Freemius entfernt
 			// die Datei aus dem Gratis-Build.
 			if ( lbite_feature_enabled( 'enable_delivery' ) ) {

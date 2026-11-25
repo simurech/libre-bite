@@ -7148,3 +7148,105 @@ msgstr "Bestellungen nach Bestellart"
 #: templates/admin/statistics.php
 msgid "Fulfilment"
 msgstr "Bestellart"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Z reports"
+msgstr "Z-Berichte"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Cash Report"
+msgstr "Kassenabschluss"
+
+#: templates/admin/settings/pos.php
+msgid "Cash Report (X/Z)"
+msgstr "Kassenabschluss (X/Z)"
+
+#: templates/admin/settings/pos.php
+msgid "Interim report and end-of-day close per location: revenue by payment method, VAT, tips, cancellations, expected and counted cash. Not a certified cash register system."
+msgstr "Zwischenbericht und Tagesabschluss pro Standort: Umsatz nach Zahlungsart, MwSt., Trinkgeld, Stornos, Soll- und gezählter Kassenbestand. Kein zertifiziertes Kassensystem."
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Period"
+msgstr "Zeitraum"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Gross revenue"
+msgstr "Bruttoumsatz"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Discounts"
+msgstr "Rabatte"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Cancelled orders"
+msgstr "Stornierte Bestellungen"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Opening float"
+msgstr "Wechselgeld (Anfangsbestand)"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Cash sales"
+msgstr "Bareinnahmen"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Expected cash in drawer"
+msgstr "Soll-Bestand in der Kasse"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Counted cash"
+msgstr "Gezählter Bestand"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Difference"
+msgstr "Differenz"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "This report supports your daily cash count. It is not a certified cash register system: in Germany (KassenSichV/TSE) and Austria (RKSV) additional certified hardware or services are required by law."
+msgstr "Dieser Bericht unterstützt deinen täglichen Kassensturz. Er ist kein zertifiziertes Kassensystem: In Deutschland (KassenSichV/TSE) und Österreich (RKSV) sind zusätzlich zertifizierte Geräte oder Dienste gesetzlich vorgeschrieben."
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Z report saved. A new period has started."
+msgstr "Z-Bericht gespeichert. Ein neuer Zeitraum hat begonnen."
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Back to current period"
+msgstr "Zurück zum laufenden Zeitraum"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "X report (current period)"
+msgstr "X-Bericht (laufender Zeitraum)"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Close the day (Z report)"
+msgstr "Tagesabschluss (Z-Bericht)"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Optional. Count the drawer and enter the amount to see the difference."
+msgstr "Optional. Zähl die Kasse und trag den Betrag ein, um die Differenz zu sehen."
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Close the day now? The Z report cannot be changed afterwards."
+msgstr "Tag jetzt abschließen? Der Z-Bericht kann danach nicht mehr geändert werden."
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Save Z report"
+msgstr "Z-Bericht speichern"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Previous Z reports"
+msgstr "Bisherige Z-Berichte"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "No Z reports yet."
+msgstr "Noch keine Z-Berichte."
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Report"
+msgstr "Bericht"
+
+#. translators: 1: report number, 2: location name, 3: date.
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+#, php-format
+msgid "Z report #%1$d – %2$s – %3$s"
+msgstr "Z-Bericht Nr. %1$d – %2$s – %3$s"

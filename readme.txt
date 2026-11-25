@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 3.9.0
+Stable tag: 3.10.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,9 @@ A guided 3-step booking form for guests — date & party size, contact details, 
 
 **Table Ordering (QR Code)**
 Generate a QR code for each table. Guests scan it and order directly — no address or pickup time fields required. Orders appear in the dashboard with the table name.
+
+**Cash Report (X/Z)**
+Interim and end-of-day reports per location: revenue by payment method (including split payments), VAT, tips, discounts, rounding and cancellations, expected cash, counted cash and difference. Z reports are numbered, cannot be edited afterwards, and can be printed or exported as CSV. Not a certified cash register system (e.g. no TSE for Germany).
 
 **Delivery**
 Offer delivery per location: delivery area by postcode (exact, prefix or range), delivery fee, free delivery from a set amount, minimum order value and extra lead time. Guests choose pickup or delivery in the checkout; the address appears on the order board and the delivery note.
@@ -282,6 +285,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.10.0 =
+* Feature: Cash report (Pro) – X report and numbered, unchangeable Z report per location with payment methods, VAT, tips, cancellations, expected and counted cash; print and CSV.
+* Fix: Uninstalling with data removal now deletes all plugin records, not just the first 500 per type.
 
 = 3.9.0 =
 * Feature: Delivery (Pro) – delivery area by postcode, delivery fee, free delivery threshold, minimum order value and lead time per location; address on the order board and delivery note.

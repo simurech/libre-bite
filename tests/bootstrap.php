@@ -19,3 +19,4 @@ require_once $lbite_root . '/includes/modules/promotions/class-promotions.php';
 require_once $lbite_root . '/includes/modules/checkout/class-checkout.php';
 require_once $lbite_root . '/includes/admin/class-admin.php';
 require_once $lbite_root . '/includes/modules/delivery/class-delivery__premium_only.php';
+require_once $lbite_root . '/includes/modules/cash-reports/class-cash-reports__premium_only.php';

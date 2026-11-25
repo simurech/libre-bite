@@ -458,6 +458,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			$lbite_features['enable_pos'] = isset( $_POST['lbite_feature_toggle']['enable_pos'] );
 			$lbite_features['enable_split_payment'] = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_split_payment'] );
 			$lbite_features['enable_open_tabs'] = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_open_tabs'] );
+			$lbite_features['enable_cash_reports'] = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_cash_reports'] );
 			update_option( 'lbite_features', $lbite_features );
 
 			$lbite_pos_defaults = array(
