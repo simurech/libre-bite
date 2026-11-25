@@ -517,9 +517,22 @@ class LBite_Order_Dashboard {
 			}
 		}
 
-		return array(
-			'orders'           => $orders_by_status,
-			'completed_counts' => $completed_counts,
+		/**
+		 * Board-Daten eines Standorts vor der Ausgabe (AJAX und REST).
+		 *
+		 * Andockpunkt für Zusatzinformationen auf dem Board, z. B. offene
+		 * Kellnerrufe (LBite_Service_Calls).
+		 *
+		 * @param array $data        Board-Daten (orders, completed_counts).
+		 * @param int   $location_id Standort-ID.
+		 */
+		return apply_filters(
+			'lbite_board_data',
+			array(
+				'orders'           => $orders_by_status,
+				'completed_counts' => $completed_counts,
+			),
+			$location_id
 		);
 	}
 

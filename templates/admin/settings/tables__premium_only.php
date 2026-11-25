@@ -25,6 +25,13 @@ $lbite_pages                  = get_pages();
 	$lbite_toggle_is_pro          = true;
 	$lbite_toggle_premium_allowed = true;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
+	$lbite_toggle_key             = 'enable_service_calls';
+	$lbite_toggle_label           = __( 'Waiter Call', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Guests at a table can tap "Call staff" or "Request bill". The call appears on the order board (with sound) and on the floor plan until someone marks it as done.', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = true;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 	?>
 
 	<table class="form-table">

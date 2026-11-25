@@ -7126,3 +7126,57 @@ msgstr ""
 #: templates/admin/settings/branding.php
 msgid "This color is too light to be readable on a white background. Headings and lines will use dark grey instead, so the color itself will hardly be visible to your guests."
 msgstr ""
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Staff requested"
+msgstr ""
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Bill requested"
+msgstr ""
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Thank you – the staff has been notified."
+msgstr ""
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "The staff has already been notified and is on the way."
+msgstr ""
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "That did not work. Please try again or wave to the staff."
+msgstr ""
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Table service"
+msgstr ""
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Call staff"
+msgstr ""
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Request bill"
+msgstr ""
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Done"
+msgstr ""
+
+#. translators: %d: minutes since the guest called.
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+#, php-format
+msgid "%d min ago"
+msgstr ""
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "just now"
+msgstr ""
+
+#: templates/admin/settings/tables__premium_only.php
+msgid "Waiter Call"
+msgstr ""
+
+#: templates/admin/settings/tables__premium_only.php
+msgid "Guests at a table can tap \"Call staff\" or \"Request bill\". The call appears on the order board (with sound) and on the floor plan until someone marks it as done."
+msgstr ""

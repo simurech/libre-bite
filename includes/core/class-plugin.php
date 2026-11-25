@@ -210,6 +210,17 @@ class LBite_Plugin {
 					$this->modules['reservation-dashboard'] = new LBite_Reservation_Dashboard( $this->loader );
 				}
 			}
+
+			// Kellnerruf (F48): setzt die Tischerkennung per QR-Code voraus. Die
+			// Datei trägt das Suffix __premium_only, damit Freemius sie aus dem
+			// Gratis-Build entfernt.
+			if ( lbite_feature_enabled( 'enable_service_calls' ) && lbite_feature_enabled( 'enable_table_ordering' ) ) {
+				$lbite_service_calls_file = LBITE_PLUGIN_DIR . 'includes/modules/service-calls/class-service-calls__premium_only.php';
+				if ( file_exists( $lbite_service_calls_file ) ) {
+					require_once $lbite_service_calls_file;
+					$this->modules['service-calls'] = new LBite_Service_Calls( $this->loader );
+				}
+			}
 		}
 	}
 

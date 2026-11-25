@@ -365,3 +365,18 @@
 .lbite-fp-canvas.has-floor-plan .lbite-fp-table {
 	box-shadow: var(--lbite-shadow-md, 0 4px 8px rgba(16, 24, 40, .2));
 }
+
+/* Kellnerruf (Pro, F48): pulsierender Rahmen, damit ein Ruf auch auf einem
+   vollen Plan auffällt. */
+.lbite-fp-table--call {
+	box-shadow: 0 0 0 4px #dba617;
+	animation: lbite-fp-call-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes lbite-fp-call-pulse {
+	50% { box-shadow: 0 0 0 8px rgba(219, 166, 23, .35); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.lbite-fp-table--call { animation: none; }
+}

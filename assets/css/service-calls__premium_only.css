@@ -1,0 +1,93 @@
+/**
+ * Kellnerruf-Leiste für Gäste am Tisch (F48, Pro)
+ *
+ * Schwebt unten mittig, damit sie auf dem Handy mit dem Daumen erreichbar
+ * ist, aber den Warenkorb-Knopf der Menü-Ansicht (unten rechts) nicht verdeckt.
+ */
+.lbite-service-call {
+	position: fixed;
+	left: 50%;
+	bottom: 16px;
+	z-index: 9990;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	max-width: calc(100vw - 32px);
+	padding: 8px 10px;
+	border-radius: 999px;
+	background: #fff;
+	box-shadow: 0 6px 24px rgba(16, 24, 40, .18);
+	transform: translateX(-50%);
+	font-size: 14px;
+	line-height: 1.3;
+}
+
+.lbite-service-call__table {
+	padding: 0 6px;
+	font-weight: 700;
+	color: #1d2327;
+}
+
+body .lbite-service-call .lbite-service-call__button {
+	min-height: 40px;
+	margin: 0;
+	padding: 8px 14px;
+	border: none;
+	border-radius: 999px;
+	background: var(--lbite-color-primary, #0073aa);
+	color: var(--lbite-color-primary-contrast, #fff);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.2;
+	letter-spacing: normal;
+	text-transform: none;
+	cursor: pointer;
+}
+
+body .lbite-service-call .lbite-service-call__button:hover:not(:disabled) {
+	background: var(--lbite-color-primary-hover, #005a87);
+}
+
+body .lbite-service-call .lbite-service-call__button:focus-visible {
+	outline: 2px solid var(--lbite-color-primary, #0073aa);
+	outline-offset: 2px;
+}
+
+body .lbite-service-call .lbite-service-call__button:disabled {
+	opacity: .55;
+	cursor: default;
+}
+
+.lbite-service-call__status:empty {
+	display: none;
+}
+
+.lbite-service-call__status {
+	flex-basis: 100%;
+	text-align: center;
+	font-size: 13px;
+	color: #1d2327;
+}
+
+.lbite-service-call.is-confirmed {
+	border-radius: 18px;
+}
+
+.lbite-service-call.is-error .lbite-service-call__status {
+	color: #b32d2e;
+}
+
+.lbite-service-call.is-confirmed .lbite-service-call__status {
+	color: #00701a;
+}
+
+@media (max-width: 480px) {
+	.lbite-service-call {
+		left: 16px;
+		right: 16px;
+		border-radius: 18px;
+		transform: none;
+	}
+}

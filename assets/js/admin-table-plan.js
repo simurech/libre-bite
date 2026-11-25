@@ -334,6 +334,16 @@
 							t.orderData = null;
 							t.el.classList.add('lbite-fp-table--free');
 						}
+
+						// Kellnerruf (Pro, F48): Tisch zusätzlich hervorheben, unabhängig
+						// davon, ob am Tisch schon eine Bestellung offen ist.
+						const calls = (response.data.service_calls || {})[t.id];
+						t.el.classList.toggle('lbite-fp-table--call', !!calls);
+						if (calls) {
+							t.el.setAttribute('title', calls.join(', '));
+						} else {
+							t.el.removeAttribute('title');
+						}
 					});
 				}
 			});

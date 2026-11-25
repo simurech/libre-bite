@@ -6968,3 +6968,57 @@ msgstr "Für Überschriften und die Linie über dem Gesamtbetrag. Sehr helle Far
 #: templates/admin/settings/branding.php
 msgid "This color is too light to be readable on a white background. Headings and lines will use dark grey instead, so the color itself will hardly be visible to your guests."
 msgstr "Diese Farbe ist auf weissem Hintergrund zu hell, um lesbar zu sein. Überschriften und Linien verwenden stattdessen Dunkelgrau – die Farbe selbst ist für deine Gäste also kaum sichtbar."
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Staff requested"
+msgstr "Bedienung gerufen"
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Bill requested"
+msgstr "Rechnung verlangt"
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Thank you – the staff has been notified."
+msgstr "Danke – das Personal ist informiert."
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "The staff has already been notified and is on the way."
+msgstr "Das Personal ist bereits informiert und unterwegs."
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "That did not work. Please try again or wave to the staff."
+msgstr "Das hat nicht geklappt. Bitte versuch es nochmals oder wink dem Personal."
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Table service"
+msgstr "Bedienung am Tisch"
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Call staff"
+msgstr "Bedienung rufen"
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Request bill"
+msgstr "Rechnung bitte"
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Done"
+msgstr "Erledigt"
+
+#. translators: %d: minutes since the guest called.
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+#, php-format
+msgid "%d min ago"
+msgstr "vor %d Min."
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "just now"
+msgstr "gerade eben"
+
+#: templates/admin/settings/tables__premium_only.php
+msgid "Waiter Call"
+msgstr "Kellnerruf"
+
+#: templates/admin/settings/tables__premium_only.php
+msgid "Guests at a table can tap \"Call staff\" or \"Request bill\". The call appears on the order board (with sound) and on the floor plan until someone marks it as done."
+msgstr "Gäste am Tisch können «Bedienung rufen» oder «Rechnung bitte» antippen. Der Ruf erscheint im Bestell-Board (mit Ton) und im Tischplan, bis ihn jemand als erledigt markiert."

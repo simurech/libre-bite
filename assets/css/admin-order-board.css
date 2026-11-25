@@ -798,3 +798,44 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 .lbite-kanban-card {
 	position: relative;
 }
+
+/* Kellnerrufe (Pro, F48): eigene Leiste über dem Board, damit ein Ruf nicht
+   zwischen den Bestellkarten untergeht. Statusfarben als Schrift, Flächen
+   über die *-soft-Token – so bleibt der Kontrast im dunklen Schema erhalten. */
+.lbite-service-calls {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0 0 12px;
+}
+
+.lbite-service-call-alert {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	border: 2px solid var(--lbite-warning, #9a6700);
+	border-radius: 8px;
+	background: var(--lbite-warning-soft, #fff6e0);
+	color: var(--lbite-text, #1d2327);
+	font-size: 15px;
+	animation: lbite-service-call-pulse 1.6s ease-in-out 3;
+}
+
+.lbite-service-call-alert--bill {
+	border-color: var(--lbite-info, #2271b1);
+	background: var(--lbite-info-soft, #eaf2fa);
+}
+
+.lbite-service-call-alert__age {
+	color: var(--lbite-text-muted, #646970);
+	font-size: 13px;
+}
+
+@keyframes lbite-service-call-pulse {
+	50% { box-shadow: 0 0 0 4px rgba(154, 103, 0, .25); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.lbite-service-call-alert { animation: none; }
+}

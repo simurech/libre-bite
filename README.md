@@ -6,8 +6,8 @@
 
 **Die WooCommerce-Erweiterung für Restaurants, Take-Aways, Cafés und Bars.**
 
-[![Stable Tag](https://img.shields.io/badge/stable-3.7.0-blue.svg)](https://github.com/simurech/libre-bite/releases)
-[![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)](https://wordpress.org/)
+[![Stable Tag](https://img.shields.io/badge/stable-3.8.0-blue.svg)](https://github.com/simurech/libre-bite/releases)
+[![WordPress](https://img.shields.io/badge/WordPress-6.2%2B-21759b.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.0%2B-96588a.svg)](https://woocommerce.com/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-8892be.svg)](https://php.net/)
 [![Lizenz](https://img.shields.io/badge/Lizenz-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
@@ -75,7 +75,7 @@ libre-bite/
 
 | Komponente | Minimum | Empfohlen |
 |---|---|---|
-| WordPress | 6.0 | Aktuellste Version |
+| WordPress | 6.2 | Aktuellste Version |
 | WooCommerce | 8.0 | Aktuellste Version |
 | PHP | 7.4 | 8.3+ |
 | MySQL | 5.6 | 8.0+ / MariaDB 10.4+ |

@@ -6967,3 +6967,57 @@ msgstr "Per i titoli e la linea sopra il totale dell’ordine. I colori molto ch
 #: templates/admin/settings/branding.php
 msgid "This color is too light to be readable on a white background. Headings and lines will use dark grey instead, so the color itself will hardly be visible to your guests."
 msgstr "Questo colore è troppo chiaro per essere leggibile su sfondo bianco. Titoli e linee useranno invece il grigio scuro, quindi il colore stesso sarà appena visibile per i tuoi ospiti."
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Staff requested"
+msgstr "Servizio richiesto"
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Bill requested"
+msgstr "Conto richiesto"
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Thank you – the staff has been notified."
+msgstr "Grazie – il personale è stato avvisato."
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "The staff has already been notified and is on the way."
+msgstr "Il personale è già stato avvisato e sta arrivando."
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "That did not work. Please try again or wave to the staff."
+msgstr "Non ha funzionato. Riprova oppure fai un cenno al personale."
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Table service"
+msgstr "Servizio al tavolo"
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Call staff"
+msgstr "Chiama il servizio"
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Request bill"
+msgstr "Il conto, per favore"
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "Done"
+msgstr "Fatto"
+
+#. translators: %d: minutes since the guest called.
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+#, php-format
+msgid "%d min ago"
+msgstr "%d min fa"
+
+#: includes/modules/service-calls/class-service-calls__premium_only.php
+msgid "just now"
+msgstr "proprio ora"
+
+#: templates/admin/settings/tables__premium_only.php
+msgid "Waiter Call"
+msgstr "Chiamata cameriere"
+
+#: templates/admin/settings/tables__premium_only.php
+msgid "Guests at a table can tap \"Call staff\" or \"Request bill\". The call appears on the order board (with sound) and on the floor plan until someone marks it as done."
+msgstr "Gli ospiti al tavolo possono toccare «Chiama il servizio» o «Il conto, per favore». La chiamata compare sulla bacheca degli ordini (con un suono) e sulla pianta dei tavoli finché qualcuno non la segna come evasa."

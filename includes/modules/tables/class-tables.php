@@ -364,6 +364,12 @@ class LBite_Tables {
 			wp_send_json_success( array( 'statuses' => array() ) );
 		}
 
+		// Standort-Beschränkung von Managern auch hier durchsetzen – sonst
+		// liess sich die Belegung fremder Filialen per Direktaufruf lesen.
+		if ( ! LBite_Access::can_access_location( $location_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
+		}
+
 		// Aktive Bestellungen für diesen Standort laden
 		$orders = wc_get_orders(
 			array(
@@ -409,7 +415,13 @@ class LBite_Tables {
 			);
 		}
 
-		wp_send_json_success( array( 'statuses' => $statuses ) );
+		/**
+		 * Antwort des Tischplan-Status vor der Ausgabe, z. B. für Kellnerrufe.
+		 *
+		 * @param array $response    Antwort mit 'statuses' (je Tisch-ID).
+		 * @param int   $location_id Standort-ID.
+		 */
+		wp_send_json_success( apply_filters( 'lbite_table_status_response', array( 'statuses' => $statuses ), $location_id ) );
 	}
 
 	/**

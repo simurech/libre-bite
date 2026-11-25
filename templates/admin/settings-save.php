@@ -535,6 +535,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			if ( $lbite_premium_allowed ) {
 				$lbite_features = get_option( 'lbite_features', array() );
 				$lbite_features['enable_table_ordering'] = isset( $_POST['lbite_feature_toggle']['enable_table_ordering'] );
+				$lbite_features['enable_service_calls']  = isset( $_POST['lbite_feature_toggle']['enable_service_calls'] );
 				update_option( 'lbite_features', $lbite_features );
 				$lbite_tbl_values = lbite_enforce_pro_options( array(
 					'lbite_table_order_page_id' => isset( $_POST['lbite_table_order_page_id'] ) ? intval( wp_unslash( $_POST['lbite_table_order_page_id'] ) ) : 0,

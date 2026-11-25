@@ -375,6 +375,7 @@
 							this.completedOffsets[key] = 3;
 						});
 						this.renderOrders(response.data.orders, silent);
+						this.renderServiceCalls(response.data);
 						// Bei stillem Refresh: extra geladene abgeschlossene Bestellungen neu abrufen.
 						if (silent) {
 							Object.keys(prevOffsets).forEach(key => {
@@ -1189,6 +1190,59 @@
 		/**
 		 * Sound abspielen
 		 */
+		/**
+		 * Offene Kellnerrufe (Pro, F48) über dem Board anzeigen.
+		 *
+		 * Die Daten kommen nur, wenn das Pro-Modul aktiv ist (Filter
+		 * lbite_board_data); ohne sie bleibt der Bereich leer und unsichtbar.
+		 * Neue Rufe lösen denselben Ton aus wie neue Bestellungen.
+		 */
+		renderServiceCalls: function(data) {
+			const calls   = (data && Array.isArray(data.service_calls)) ? data.service_calls : [];
+			const strings = (data && data.service_call_strings) || {};
+			let $box = $('#lbite-service-calls');
+
+			if (!$box.length) {
+				$box = $('<div id="lbite-service-calls" class="lbite-service-calls" role="status" aria-live="polite"></div>');
+				$('#lbite-kanban-board').before($box);
+			}
+
+			this.knownCallIds = this.knownCallIds || null;
+			const ids = calls.map(c => c.id);
+			if (this.knownCallIds !== null && ids.some(id => this.knownCallIds.indexOf(id) === -1)) {
+				this.playNotificationSound();
+			}
+			this.knownCallIds = ids;
+
+			$box.empty().toggle(calls.length > 0);
+
+			calls.forEach(call => {
+				const age = call.age_minutes > 0
+					? String(strings.minutes || '%d min ago').replace('%d', call.age_minutes)
+					: (strings.now || 'just now');
+				const $item = $('<div class="lbite-service-call-alert"></div>')
+					.toggleClass('lbite-service-call-alert--bill', call.type === 'bill')
+					.html(
+						'<span class="lbite-service-call-alert__icon dashicons ' + (call.type === 'bill' ? 'dashicons-money-alt' : 'dashicons-bell') + '" aria-hidden="true"></span>' +
+						'<strong>' + escapeHtml(call.table) + '</strong> ' +
+						'<span>' + escapeHtml(call.type_label) + '</span> ' +
+						'<span class="lbite-service-call-alert__age">' + escapeHtml(age) + '</span>'
+					);
+				const $done = $('<button type="button" class="button button-small lbite-service-call-alert__done"></button>')
+					.text(strings.done || 'Done')
+					.on('click', () => {
+						$done.prop('disabled', true);
+						$.post(lbiteDashboard.ajaxUrl, {
+							action: 'lbite_resolve_service_call',
+							nonce: lbiteDashboard.nonce,
+							call_id: call.id
+						}).always(() => this.loadOrders(true));
+					});
+				$item.append($done);
+				$box.append($item);
+			});
+		},
+
 		playNotificationSound: function() {
 			if (this.soundEnabled && this.audio) {
 				this.audio.currentTime = 0;

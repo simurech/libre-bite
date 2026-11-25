@@ -2,11 +2,11 @@
 Contributors: simon61
 Donate link: https://github.com/simurech/libre-bite
 Tags: woocommerce, restaurant, pos, ordering, reservations
-Requires at least: 6.0
+Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 3.7.0
+Stable tag: 3.8.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,9 @@ A guided 3-step booking form for guests — date & party size, contact details, 
 
 **Table Ordering (QR Code)**
 Generate a QR code for each table. Guests scan it and order directly — no address or pickup time fields required. Orders appear in the dashboard with the table name.
+
+**Waiter Call**
+Guests at a QR table tap "Call staff" or "Request bill". The call shows up on the order board with a sound and pulses on the floor plan until someone marks it as done.
 
 **Multi-Location Management**
 Manage an unlimited number of branches. Each location gets its own Kanban board, POS configuration, and separate order flow — managed centrally via one WordPress installation.
@@ -259,7 +262,7 @@ Libre Bite uses Freemius for license management and delivery of Pro features. Da
 
 = What are the minimum requirements? =
 
-* WordPress 6.0 or higher
+* WordPress 6.2 or higher
 * WooCommerce 8.0 or higher
 * PHP 7.4 or higher (8.3+ recommended)
 * A modern browser for Kanban board and POS interface
@@ -276,6 +279,11 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.8.0 =
+* Feature: Waiter call (Pro) – guests at a QR table can call the staff or request the bill; calls appear on the order board with sound and on the floor plan.
+* Fix: The floor plan status now respects the location restrictions of managers.
+* Changed: Minimum WordPress version corrected to 6.2, the minimum of WooCommerce 8.0; verified automatically together with PHP 7.4 compatibility.
 
 = 3.7.0 =
 * Changed: The secondary color is now used for headings and the line above the order total; very light colors fall back to dark grey so both stay visible.

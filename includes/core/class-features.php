@@ -80,6 +80,13 @@ class LBite_Features {
 			'label'       => 'Open Tabs (Table Service)',
 			'description' => 'Keep orders open per table and add items until the guests pay',
 		),
+		'enable_service_calls'      => array(
+			'group'       => 'order_system',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Waiter Call',
+			'description' => 'Guests at a QR table can call the staff or request the bill',
+		),
 		'enable_guest_notes'        => array(
 			'group'       => 'order_system',
 			'default'     => false,
