@@ -75,6 +75,18 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				$lbite_features['enable_allergens']        = isset( $_POST['lbite_feature_toggle']['enable_allergens'] );
 				$lbite_features['enable_dietary_labels']   = isset( $_POST['lbite_feature_toggle']['enable_dietary_labels'] );
 				$lbite_features['enable_dietary_filter']   = isset( $_POST['lbite_feature_toggle']['enable_dietary_filter'] );
+
+				// Eigene Ernährungsformen. Nur speichern, wenn die Tabelle im Formular war.
+				if ( isset( $_POST['lbite_dietary_rows_present'] ) ) {
+					if ( ! class_exists( 'LBite_Nutritional_Info' ) && file_exists( LBITE_PLUGIN_DIR . 'includes/modules/nutritional-info/class-nutritional-info.php' ) ) {
+						require_once LBITE_PLUGIN_DIR . 'includes/modules/nutritional-info/class-nutritional-info.php';
+					}
+					if ( class_exists( 'LBite_Nutritional_Info' ) ) {
+						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird in sanitize_dietary_rows() Feld für Feld bereinigt.
+						$lbite_diet_rows = isset( $_POST['lbite_dietary_rows'] ) && is_array( $_POST['lbite_dietary_rows'] ) ? wp_unslash( $_POST['lbite_dietary_rows'] ) : array();
+						update_option( 'lbite_dietary_labels', LBite_Nutritional_Info::sanitize_dietary_rows( $lbite_diet_rows ) );
+					}
+				}
 			} else {
 				$lbite_features['enable_nutritional_info'] = false;
 				$lbite_features['enable_allergens']        = false;

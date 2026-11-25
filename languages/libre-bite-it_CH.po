@@ -7249,3 +7249,23 @@ msgstr "Rapporto"
 #, php-format
 msgid "Z report #%1$d – %2$s – %3$s"
 msgstr "Rapporto Z n. %1$d – %2$s – %3$s"
+
+#: templates/admin/settings/products-nutrition.php
+msgid "Dietary labels"
+msgstr "Regimi alimentari"
+
+#: templates/admin/settings/products-nutrition.php
+msgid "Rename, remove or add labels. Existing labels keep their internal key so products stay assigned. If you remove all labels, the default list is used again."
+msgstr "Rinomina, rimuovi o aggiungi etichette. Le etichette esistenti mantengono la loro chiave interna, così i prodotti restano assegnati. Se rimuovi tutte le etichette, torna a valere l’elenco predefinito."
+
+#: templates/admin/settings/products-nutrition.php
+msgid "Key"
+msgstr "Chiave"
+
+#: templates/admin/settings/products-nutrition.php
+msgid "New label, e.g. Halal"
+msgstr "Nuova etichetta, ad es. Halal"
+
+#: templates/admin/settings/products-nutrition.php
+msgid "automatic"
+msgstr "automatica"

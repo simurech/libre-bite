@@ -7408,3 +7408,23 @@ msgstr ""
 #, php-format
 msgid "Z report #%1$d – %2$s – %3$s"
 msgstr ""
+
+#: templates/admin/settings/products-nutrition.php
+msgid "Dietary labels"
+msgstr ""
+
+#: templates/admin/settings/products-nutrition.php
+msgid "Rename, remove or add labels. Existing labels keep their internal key so products stay assigned. If you remove all labels, the default list is used again."
+msgstr ""
+
+#: templates/admin/settings/products-nutrition.php
+msgid "Key"
+msgstr ""
+
+#: templates/admin/settings/products-nutrition.php
+msgid "New label, e.g. Halal"
+msgstr ""
+
+#: templates/admin/settings/products-nutrition.php
+msgid "automatic"
+msgstr ""

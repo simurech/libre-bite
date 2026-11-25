@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 3.10.0
+Stable tag: 3.11.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -285,6 +285,9 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.11.0 =
+* Feature: Dietary labels are now configurable (Pro) – rename, remove or add your own labels such as Halal; existing product assignments are kept.
 
 = 3.10.0 =
 * Feature: Cash report (Pro) – X report and numbered, unchangeable Z report per location with payment methods, VAT, tips, cancellations, expected and counted cash; print and CSV.

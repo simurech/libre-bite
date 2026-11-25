@@ -290,6 +290,33 @@ class LBite_Nutritional_Info {
 	 * @return array Schlüssel => Bezeichnung.
 	 */
 	public static function get_dietary_list() {
+		$defaults = self::get_default_dietary_list();
+		$custom   = get_option( 'lbite_dietary_labels', array() );
+
+		if ( ! is_array( $custom ) || empty( $custom ) ) {
+			return $defaults;
+		}
+
+		// Eigene Liste in der gespeicherten Reihenfolge. Leere Bezeichnung bei
+		// einem Standardeintrag = übersetzte Standardbezeichnung behalten.
+		$list = array();
+		foreach ( $custom as $key => $label ) {
+			$key = sanitize_key( $key );
+			if ( '' === $key ) {
+				continue;
+			}
+			$list[ $key ] = '' !== (string) $label ? (string) $label : ( isset( $defaults[ $key ] ) ? $defaults[ $key ] : $key );
+		}
+
+		return $list ? $list : $defaults;
+	}
+
+	/**
+	 * Mitgelieferte Ernährungsformen (Standard, solange keine eigene Liste gespeichert ist).
+	 *
+	 * @return array<string,string>
+	 */
+	public static function get_default_dietary_list() {
 		return array(
 			'vegan'        => __( 'Vegan', 'libre-bite' ),
 			'vegetarian'   => __( 'Vegetarian', 'libre-bite' ),
@@ -298,6 +325,53 @@ class LBite_Nutritional_Info {
 			'spicy'        => __( 'Spicy', 'libre-bite' ),
 			'alcohol_free' => __( 'Alcohol-free', 'libre-bite' ),
 		);
+	}
+
+	/**
+	 * Formularzeilen der Einstellungsseite in eine gespeicherte Liste überführen.
+	 *
+	 * Bestehende Schlüssel bleiben unverändert (sonst verlören Produkte ihre
+	 * Zuordnung), neue Schlüssel entstehen aus der Bezeichnung. Höchstens 20
+	 * Einträge, Bezeichnungen höchstens 40 Zeichen. Eine leere Liste bedeutet
+	 * «Standard verwenden».
+	 *
+	 * @param mixed $rows Zeilen [ { key, label, remove } ].
+	 * @return array<string,string>
+	 */
+	public static function sanitize_dietary_rows( $rows ) {
+		$result = array();
+		if ( ! is_array( $rows ) ) {
+			return $result;
+		}
+
+		foreach ( $rows as $row ) {
+			if ( ! is_array( $row ) || ! empty( $row['remove'] ) ) {
+				continue;
+			}
+
+			$label = isset( $row['label'] ) ? trim( sanitize_text_field( $row['label'] ) ) : '';
+			$label = function_exists( 'mb_substr' ) ? mb_substr( $label, 0, 40 ) : substr( $label, 0, 40 );
+			$key   = isset( $row['key'] ) ? sanitize_key( $row['key'] ) : '';
+
+			if ( '' === $key ) {
+				if ( '' === $label ) {
+					continue; // Leere neue Zeile.
+				}
+				$key = str_replace( '-', '_', sanitize_key( remove_accents( str_replace( ' ', '_', $label ) ) ) );
+			}
+
+			if ( '' === $key || isset( $result[ $key ] ) ) {
+				continue;
+			}
+
+			$result[ $key ] = $label;
+
+			if ( count( $result ) >= 20 ) {
+				break;
+			}
+		}
+
+		return $result;
 	}
 
 	/**
