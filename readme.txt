@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 3.8.0
+Stable tag: 3.9.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,9 @@ A guided 3-step booking form for guests — date & party size, contact details, 
 
 **Table Ordering (QR Code)**
 Generate a QR code for each table. Guests scan it and order directly — no address or pickup time fields required. Orders appear in the dashboard with the table name.
+
+**Delivery**
+Offer delivery per location: delivery area by postcode (exact, prefix or range), delivery fee, free delivery from a set amount, minimum order value and extra lead time. Guests choose pickup or delivery in the checkout; the address appears on the order board and the delivery note.
 
 **Waiter Call**
 Guests at a QR table tap "Call staff" or "Request bill". The call shows up on the order board with a sound and pulses on the floor plan until someone marks it as done.
@@ -279,6 +282,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.9.0 =
+* Feature: Delivery (Pro) – delivery area by postcode, delivery fee, free delivery threshold, minimum order value and lead time per location; address on the order board and delivery note.
+* Feature: Statistics show orders by fulfilment (pickup, delivery, at the table).
 
 = 3.8.0 =
 * Feature: Waiter call (Pro) – guests at a QR table can call the staff or request the bill; calls appear on the order board with sound and on the floor plan.

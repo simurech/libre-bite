@@ -839,3 +839,27 @@ body.lbite-board-fullscreen-active .lbite-kanban-cards {
 @media (prefers-reduced-motion: reduce) {
 	.lbite-service-call-alert { animation: none; }
 }
+
+/* Lieferung (Pro, F44) */
+.lbite-badge-delivery {
+	background: var(--lbite-info-soft, #eaf4fb);
+	color: var(--lbite-info, #0b6aa2);
+}
+
+.lbite-kanban-card-delivery {
+	margin: 6px 0;
+	padding: 6px 8px;
+	border-radius: 6px;
+	background: var(--lbite-surface-muted, #f6f7f7);
+	color: var(--lbite-text, #1d2327);
+	font-size: 13px;
+}
+
+.lbite-kanban-card-delivery__phone {
+	white-space: nowrap;
+}
+
+.lbite-kanban-card-delivery__notes {
+	margin-top: 2px;
+	color: var(--lbite-text-muted, #646970);
+}

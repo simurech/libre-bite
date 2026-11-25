@@ -527,7 +527,10 @@
 			} else {
 				$badge.append($('<span class="lbite-order-type-now lbite-badge-chip"></span>').text(`🔥 ${lbiteDashboard.strings.asap || 'ASAP'}`));
 			}
-			if (order.table_id) {
+			if (order.delivery) {
+				// Lieferung (Pro, F44): Bezeichnung kommt mit den Kartendaten.
+				$badge.append($('<span class="lbite-badge-chip lbite-badge-delivery"></span>').text(`🛵 ${order.delivery.label}`));
+			} else if (order.table_id) {
 				const tableLabel = `🪑 ${order.table_name || lbiteDashboard.strings.table || 'Table'}`;
 				$badge.append($('<span class="lbite-badge-chip lbite-badge-table"></span>').text(tableLabel));
 			} else if (order.service_type === 'dine_in') {
@@ -575,6 +578,18 @@
 				$items.append($itemDiv);
 			});
 			$card.append($items);
+
+			// Lieferadresse (Pro, F44)
+			if (order.delivery && order.delivery.address) {
+				const $delivery = $('<div class="lbite-kanban-card-delivery"></div>').text(`📍 ${order.delivery.address}`);
+				if (order.delivery.phone) {
+					$delivery.append($('<a class="lbite-kanban-card-delivery__phone"></a>').attr('href', 'tel:' + String(order.delivery.phone).replace(/[^+\d]/g, '')).text(` ☎ ${order.delivery.phone}`));
+				}
+				if (order.delivery.notes) {
+					$delivery.append($('<div class="lbite-kanban-card-delivery__notes"></div>').text(order.delivery.notes));
+				}
+				$card.append($delivery);
+			}
 
 			// Notizen (kompakt, nur wenn vorhanden)
 			if (order.notes) {

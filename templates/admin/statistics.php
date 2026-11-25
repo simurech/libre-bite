@@ -253,6 +253,11 @@ $lbite_source_totals  = array( // POS vs. Website; feste zwei Schlüssel statt d
 	'pos'     => array( 'count' => 0, 'revenue' => 0.0 ),
 	'website' => array( 'count' => 0, 'revenue' => 0.0 ),
 );
+$lbite_fulfilment_totals = array( // Abholung / Lieferung (F44) / am Tisch; feste Reihenfolge.
+	'pickup'   => array( 'count' => 0, 'revenue' => 0.0 ),
+	'delivery' => array( 'count' => 0, 'revenue' => 0.0 ),
+	'table'    => array( 'count' => 0, 'revenue' => 0.0 ),
+);
 // Zubereitungszeit "jetzt zubereiten" -> "abgeschlossen", pro Standort und gesamt.
 // Nur Bestellungen mit beiden Zeitstempeln (_lbite_preparing_started_at +
 // WooCommerce date_completed) fliessen ein, siehe
@@ -300,6 +305,17 @@ foreach ( $lbite_stat_batch as $lbite_order ) {
 	$lbite_source_key = 'pos' === $lbite_order->get_meta( '_lbite_order_source' ) ? 'pos' : 'website';
 	$lbite_source_totals[ $lbite_source_key ]['count']++;
 	$lbite_source_totals[ $lbite_source_key ]['revenue'] += (float) $lbite_order->get_total();
+
+	// Bestellart: Lieferung (F44) hat Vorrang, dann Tisch (QR, Tab oder Kasse mit Tisch).
+	if ( 'delivery' === $lbite_order->get_meta( '_lbite_fulfilment' ) ) {
+		$lbite_fulfilment_key = 'delivery';
+	} elseif ( $lbite_order->get_meta( '_lbite_table_id' ) || 'dine_in' === $lbite_order->get_meta( '_lbite_service_type' ) ) {
+		$lbite_fulfilment_key = 'table';
+	} else {
+		$lbite_fulfilment_key = 'pickup';
+	}
+	$lbite_fulfilment_totals[ $lbite_fulfilment_key ]['count']++;
+	$lbite_fulfilment_totals[ $lbite_fulfilment_key ]['revenue'] += (float) $lbite_order->get_total();
 
 	// Tagesverlauf für das Diagramm.
 	$lbite_created = $lbite_order->get_date_created();
@@ -775,6 +791,49 @@ $lbite_export_url = wp_nonce_url(
 							<div style="background:#2271b1; border-radius:4px; height:8px; width:<?php echo esc_attr( $lbite_src_share ); ?>%;"></div>
 						</div>
 						<?php echo esc_html( $lbite_src_share ); ?>%
+					</div>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+	<?php endif; ?>
+
+	<!-- Bestellungen nach Bestellart -->
+	<?php if ( $lbite_total_orders > 0 && $lbite_fulfilment_totals['delivery']['count'] + $lbite_fulfilment_totals['table']['count'] > 0 ) :
+		$lbite_fulfilment_labels = array(
+			'pickup'   => __( 'Pickup', 'libre-bite' ),
+			'delivery' => __( 'Delivery', 'libre-bite' ),
+			'table'    => __( 'At the table', 'libre-bite' ),
+		);
+	?>
+	<h2><?php esc_html_e( 'Orders by Fulfilment', 'libre-bite' ); ?></h2>
+	<table class="widefat" style="max-width: 560px; margin-bottom: 32px;">
+		<thead>
+			<tr>
+				<th><?php esc_html_e( 'Fulfilment', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Orders', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Revenue', 'libre-bite' ); ?></th>
+				<th><?php esc_html_e( 'Share', 'libre-bite' ); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ( $lbite_fulfilment_totals as $lbite_ff_key => $lbite_ff_d ) :
+				if ( 0 === $lbite_ff_d['count'] ) {
+					continue;
+				}
+				$lbite_ff_share = round( $lbite_ff_d['count'] / $lbite_total_orders * 100, 1 );
+			?>
+			<tr>
+				<td><strong><?php echo esc_html( $lbite_fulfilment_labels[ $lbite_ff_key ] ); ?></strong></td>
+				<td><?php echo esc_html( $lbite_ff_d['count'] ); ?></td>
+				<td><?php echo wp_kses_post( wc_price( $lbite_ff_d['revenue'] ) ); ?></td>
+				<td>
+					<div style="display:flex; align-items:center; gap:8px;">
+						<div style="background:#e1e1e1; border-radius:4px; height:8px; width:80px;">
+							<div style="background:#2271b1; border-radius:4px; height:8px; width:<?php echo esc_attr( $lbite_ff_share ); ?>%;"></div>
+						</div>
+						<?php echo esc_html( $lbite_ff_share ); ?>%
 					</div>
 				</td>
 			</tr>

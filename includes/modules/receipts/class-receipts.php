@@ -308,10 +308,19 @@ class LBite_Receipts {
 			// get_formatted_billing_address() trennt die Zeilen mit <br/>.
 			// wp_strip_all_tags() würde daraus eine einzige Zeile machen –
 			// die Zeilenumbrüche müssen vorher gerettet werden.
-			$address = str_replace( array( '<br/>', '<br />', '<br>' ), "\n", $order->get_formatted_billing_address() );
+			// Bei Lieferungen (F44) zählt die Lieferadresse, nicht die Rechnungsadresse.
+			$formatted = 'delivery' === $order->get_meta( '_lbite_fulfilment' ) && $order->get_formatted_shipping_address()
+				? $order->get_formatted_shipping_address()
+				: $order->get_formatted_billing_address();
+			$address   = str_replace( array( '<br/>', '<br />', '<br>' ), "\n", $formatted );
 			$address = trim( wp_strip_all_tags( $address ) );
 			if ( '' !== $address ) {
 				$rows[] = array( __( 'Address', 'libre-bite' ), $address );
+			}
+
+			$delivery_notes = (string) $order->get_meta( '_lbite_delivery_notes' );
+			if ( '' !== $delivery_notes ) {
+				$rows[] = array( __( 'Delivery notes', 'libre-bite' ), $delivery_notes );
 			}
 		}
 

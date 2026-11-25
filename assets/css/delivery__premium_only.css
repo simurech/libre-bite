@@ -1,0 +1,59 @@
+/**
+ * Auswahl «Abholung / Lieferung» im Checkout (F44, Pro)
+ */
+.lbite-fulfilment {
+	margin: 0 0 24px;
+	padding: 16px;
+	border: 1px solid #e3e6ea;
+	border-radius: 8px;
+	background: #fff;
+}
+
+.lbite-fulfilment__label {
+	margin: 0 0 10px;
+	font-weight: 600;
+	color: var(--lbite-color-secondary-text, #1d2327);
+}
+
+.lbite-fulfilment__options {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.lbite-fulfilment__option {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 44px;
+	padding: 8px 16px;
+	border: 1px solid #c3c4c7;
+	border-radius: 999px;
+	cursor: pointer;
+}
+
+.lbite-fulfilment__option:has(input:checked) {
+	border-color: var(--lbite-color-primary, #0073aa);
+	background: var(--lbite-color-primary-soft, #eaf2fa);
+	font-weight: 600;
+}
+
+.lbite-fulfilment__delivery {
+	margin-top: 16px;
+}
+
+.lbite-fulfilment__delivery[hidden] {
+	display: none;
+}
+
+.lbite-fulfilment__delivery::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.lbite-fulfilment__info {
+	margin: 0 0 12px;
+	font-size: 14px;
+	color: #50575e;
+}

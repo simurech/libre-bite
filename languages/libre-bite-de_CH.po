@@ -7022,3 +7022,129 @@ msgstr "Kellnerruf"
 #: templates/admin/settings/tables__premium_only.php
 msgid "Guests at a table can tap \"Call staff\" or \"Request bill\". The call appears on the order board (with sound) and on the floor plan until someone marks it as done."
 msgstr "Gäste am Tisch können «Bedienung rufen» oder «Rechnung bitte» antippen. Der Ruf erscheint im Bestell-Board (mit Ton) und im Tischplan, bis ihn jemand als erledigt markiert."
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Delivery"
+msgstr "Lieferung"
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Offer delivery from this location"
+msgstr "Ab diesem Standort liefern"
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Delivery area (postcodes)"
+msgstr "Liefergebiet (Postleitzahlen)"
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "One per line: 8000 (exact), 80* (all starting with 80) or 8000-8099 (range)."
+msgstr "Eine pro Zeile: 8000 (genau), 80* (alle, die mit 80 beginnen) oder 8000-8099 (Bereich)."
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Delivery fee"
+msgstr "Liefergebühr"
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Free delivery from"
+msgstr "Gratis-Lieferung ab"
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "0 = delivery is never free."
+msgstr "0 = Lieferung ist nie gratis."
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Additional lead time"
+msgstr "Zusätzliche Vorlaufzeit"
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Added to the preparation time for the earliest delivery time."
+msgstr "Wird für die früheste Lieferzeit zur Zubereitungszeit addiert."
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Pickup or delivery?"
+msgstr "Abholen oder liefern lassen?"
+
+#. translators: %s: delivery fee incl. currency.
+#: includes/modules/delivery/class-delivery__premium_only.php
+#, php-format
+msgid "Delivery fee %s"
+msgstr "Liefergebühr %s"
+
+#. translators: %s: amount incl. currency.
+#: includes/modules/delivery/class-delivery__premium_only.php
+#, php-format
+msgid "free from %s"
+msgstr "gratis ab %s"
+
+#. translators: %s: amount incl. currency.
+#: includes/modules/delivery/class-delivery__premium_only.php
+#, php-format
+msgid "minimum order %s"
+msgstr "Mindestbestellwert %s"
+
+#. translators: %d: minutes.
+#: includes/modules/delivery/class-delivery__premium_only.php
+#, php-format
+msgid "about %d minutes longer than pickup"
+msgstr "etwa %d Minuten länger als bei Abholung"
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Street and number"
+msgstr "Strasse und Nummer"
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Postcode"
+msgstr "PLZ"
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Phone for the driver"
+msgstr "Telefon für den Kurier"
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Delivery notes (floor, doorbell …)"
+msgstr "Hinweise zur Lieferung (Stockwerk, Klingel …)"
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Delivery is not available from the selected location."
+msgstr "Vom gewählten Standort aus ist keine Lieferung möglich."
+
+#: includes/modules/delivery/class-delivery__premium_only.php
+msgid "Please enter the complete delivery address and a phone number."
+msgstr "Bitte geben Sie die vollständige Lieferadresse und eine Telefonnummer an."
+
+#. translators: %s: postcode.
+#: includes/modules/delivery/class-delivery__premium_only.php
+#, php-format
+msgid "Unfortunately we do not deliver to %s. You are welcome to pick up your order."
+msgstr "Nach %s liefern wir leider nicht. Gerne können Sie Ihre Bestellung abholen."
+
+#. translators: %s: minimum order value incl. currency.
+#: includes/modules/delivery/class-delivery__premium_only.php
+#, php-format
+msgid "The minimum order value for delivery is %s."
+msgstr "Der Mindestbestellwert für eine Lieferung beträgt %s."
+
+#. translators: %s: earliest delivery time.
+#: includes/modules/delivery/class-delivery__premium_only.php
+#, php-format
+msgid "The earliest possible delivery time is %s. Please choose a later time."
+msgstr "Die früheste Lieferzeit ist %s. Bitte wählen Sie eine spätere Zeit."
+
+#: includes/modules/receipts/class-receipts.php
+msgid "Delivery notes"
+msgstr "Hinweise zur Lieferung"
+
+#: templates/admin/settings/checkout-mode.php
+msgid "Let guests choose delivery in the checkout. Delivery area, fee, minimum order value and lead time are set per location (Locations → edit → Delivery)."
+msgstr "Gäste können im Checkout eine Lieferung wählen. Liefergebiet, Gebühr, Mindestbestellwert und Vorlaufzeit stellen Sie pro Standort ein (Standorte → bearbeiten → Lieferung)."
+
+#: templates/admin/statistics.php
+msgid "At the table"
+msgstr "Am Tisch"
+
+#: templates/admin/statistics.php
+msgid "Orders by Fulfilment"
+msgstr "Bestellungen nach Bestellart"
+
+#: templates/admin/statistics.php
+msgid "Fulfilment"
+msgstr "Bestellart"

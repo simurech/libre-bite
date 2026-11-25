@@ -155,6 +155,13 @@ class LBite_Features {
 			'label'       => 'Multiple Tax Rates',
 			'description' => 'Apply a different tax class per order type (Takeaway vs. Dine-in).',
 		),
+		'enable_delivery'           => array(
+			'group'       => 'checkout',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Delivery',
+			'description' => 'Delivery area by postcode, delivery fee, minimum order value and lead time per location',
+		),
 		'enable_order_type_selection' => array(
 			'group'       => 'checkout',
 			'default'     => false,

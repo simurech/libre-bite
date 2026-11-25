@@ -36,6 +36,13 @@ $lbite_email_req_gateways = get_option( 'lbite_email_required_gateways', array()
 	$lbite_toggle_is_pro          = true;
 	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
+	$lbite_toggle_key             = 'enable_delivery';
+	$lbite_toggle_label           = __( 'Delivery', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Let guests choose delivery in the checkout. Delivery area, fee, minimum order value and lead time are set per location (Locations → edit → Delivery).', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = $lbite_premium_allowed;
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 	?>
 
 	<?php if ( $lbite_premium_allowed && lbite_feature_enabled( 'enable_optimized_checkout' ) ) : ?>

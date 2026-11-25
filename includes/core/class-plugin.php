@@ -211,6 +211,16 @@ class LBite_Plugin {
 				}
 			}
 
+			// Lieferung Stufe 1 (F44). Suffix __premium_only: Freemius entfernt
+			// die Datei aus dem Gratis-Build.
+			if ( lbite_feature_enabled( 'enable_delivery' ) ) {
+				$lbite_delivery_file = LBITE_PLUGIN_DIR . 'includes/modules/delivery/class-delivery__premium_only.php';
+				if ( file_exists( $lbite_delivery_file ) ) {
+					require_once $lbite_delivery_file;
+					$this->modules['delivery'] = new LBite_Delivery( $this->loader );
+				}
+			}
+
 			// Kellnerruf (F48): setzt die Tischerkennung per QR-Code voraus. Die
 			// Datei trägt das Suffix __premium_only, damit Freemius sie aus dem
 			// Gratis-Build entfernt.

@@ -112,9 +112,11 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			if ( $lbite_premium_allowed ) {
 				$lbite_features['enable_optimized_checkout']   = isset( $_POST['lbite_feature_toggle']['enable_optimized_checkout'] );
 				$lbite_features['enable_order_type_selection'] = isset( $_POST['lbite_feature_toggle']['enable_order_type_selection'] );
+				$lbite_features['enable_delivery']             = isset( $_POST['lbite_feature_toggle']['enable_delivery'] );
 			} else {
 				$lbite_features['enable_optimized_checkout']   = false;
 				$lbite_features['enable_order_type_selection'] = false;
+				$lbite_features['enable_delivery']             = false;
 			}
 			update_option( 'lbite_features', $lbite_features );
 
