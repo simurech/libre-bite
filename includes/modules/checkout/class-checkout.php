@@ -497,7 +497,11 @@ class LBite_Checkout {
 						LBITE_PLUGIN_URL . 'assets/js/checkout-tip.js',
 						array( 'jquery' ),
 						LBITE_VERSION,
-						true
+						// Nicht render-blockierend laden (WP 6.3+; ältere Versionen lesen das Array als in_footer = true).
+						array(
+							'in_footer' => true,
+							'strategy'  => 'defer',
+						)
 					);
 				}
 			}
@@ -966,6 +970,7 @@ class LBite_Checkout {
 		// loggt ihn dabei sofort ein, wodurch dieselbe Nonce (an den vorher
 		// abgemeldeten Zustand gebunden) nicht mehr verifiziert (Audit
 		// 26.09.2026, AP-09).
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce prüft WooCommerce beim Absenden des Checkouts.
 		$lbite_posted_location_id = isset( $_POST['lbite_location_id'] ) ? intval( wp_unslash( $_POST['lbite_location_id'] ) ) : 0;
 		$location_id              = $this->resolve_effective_location_id( $lbite_posted_location_id );
 
@@ -989,6 +994,7 @@ class LBite_Checkout {
 		if ( ! lbite_feature_enabled( 'enable_location_selector' ) ) {
 			$order_type = 'now';
 		} else {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce prüft WooCommerce beim Absenden des Checkouts.
 			$order_type = isset( $_POST['lbite_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_type'] ) ) : '';
 
 			// Fallback: Session verwenden wenn POST leer.
@@ -1000,6 +1006,7 @@ class LBite_Checkout {
 		if ( $order_type ) {
 			$order->update_meta_data( '_lbite_order_type', $order_type );
 
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce prüft WooCommerce beim Absenden des Checkouts.
 			$pickup_time = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
 
 			// Fallback: Session verwenden.

@@ -180,9 +180,20 @@ $plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'li
 			<?php
 			$log_file = WP_CONTENT_DIR . '/debug.log';
 			if ( file_exists( $log_file ) ) :
-				$log_content = file_get_contents( $log_file );
-				$log_lines   = explode( "\n", $log_content );
-				$last_lines  = array_slice( $log_lines, -50 );
+				// Nur das Ende der Datei lesen: debug.log wächst auf manchen
+				// Installationen auf Hunderte MB, ein vollständiges Einlesen
+				// sprengte dann das Speicherlimit der Seite. 64 KB reichen für
+				// 50 Zeilen bei weitem.
+				$log_content = '';
+				$log_size    = (int) filesize( $log_file );
+				$log_handle  = fopen( $log_file, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Lokale Datei, WP_Filesystem bietet kein Lesen ab Offset.
+				if ( $log_handle ) {
+					fseek( $log_handle, max( 0, $log_size - 65536 ) );
+					$log_content = (string) stream_get_contents( $log_handle );
+					fclose( $log_handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- siehe fopen().
+				}
+				$log_lines  = explode( "\n", $log_content );
+				$last_lines = array_slice( $log_lines, -50 );
 				?>
 				<textarea readonly style="width: 100%; height: 300px; font-family: monospace; font-size: 12px;"><?php echo esc_textarea( implode( "\n", $last_lines ) ); ?></textarea>
 				<p class="description">

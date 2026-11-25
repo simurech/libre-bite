@@ -431,6 +431,7 @@ class LBite_Menu_Schedule {
 		}
 
 		$raw = isset( $_POST['lbite_menu_schedule'] ) && is_array( $_POST['lbite_menu_schedule'] )
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird unmittelbar danach von einem eigenen Sanitizer bzw. Typ-Cast bereinigt.
 			? wp_unslash( $_POST['lbite_menu_schedule'] )
 			: array();
 
@@ -481,6 +482,7 @@ class LBite_Menu_Schedule {
 		}
 
 		$raw = isset( $_POST['lbite_menu_schedule'] ) && is_array( $_POST['lbite_menu_schedule'] )
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird unmittelbar danach von einem eigenen Sanitizer bzw. Typ-Cast bereinigt.
 			? wp_unslash( $_POST['lbite_menu_schedule'] )
 			: array();
 

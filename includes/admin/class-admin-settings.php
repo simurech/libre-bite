@@ -542,6 +542,7 @@ class LBite_Admin_Settings {
 	 * @param string $shortcode   Shortcode, der als Seiteninhalt eingesetzt wird.
 	 */
 	public static function save_shortcode_page_picker( $option_name, $post_field, $title, $shortcode ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce prüft der aufrufende Speicher-Handler (check_admin_referer).
 		if ( ! isset( $_POST[ $post_field ] ) ) {
 			return;
 		}

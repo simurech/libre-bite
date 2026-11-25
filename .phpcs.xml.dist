@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+	PHPCS-Regeln für Libre Bite (läuft im Workflow quality.yml).
+
+	Bewusst auf Sicherheit, Datenbank, Übersetzung und Präfixe beschränkt statt
+	des vollen WordPress-Extra-Satzes: Formatierungsregeln würden Tausende reine
+	Stilmeldungen erzeugen und echte Funde verdecken. Jede Ausnahme im Code ist
+	mit `phpcs:ignore … - Begründung` dokumentiert.
+-->
+<ruleset name="Libre Bite">
+	<file>libre-bite.php</file>
+	<file>includes</file>
+	<file>templates</file>
+
+	<arg name="extensions" value="php"/>
+	<arg value="s"/>
+
+	<rule ref="WordPress.Security"/>
+	<rule ref="WordPress.DB"/>
+	<rule ref="WordPress.PHP.DontExtract"/>
+	<rule ref="WordPress.PHP.RestrictedPHPFunctions"/>
+	<rule ref="WordPress.WP.AlternativeFunctions"/>
+	<rule ref="WordPress.WP.DeprecatedFunctions"/>
+	<rule ref="WordPress.WP.EnqueuedResources"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="libre-bite"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="lbite"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

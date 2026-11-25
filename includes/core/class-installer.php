@@ -181,7 +181,7 @@ class LBite_Installer {
 		$lbite_orders_meta_table = $wpdb->prefix . 'wc_orders_meta';
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $lbite_orders_meta_table ) ) === $lbite_orders_meta_table ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Tabellenname aus $wpdb->prefix, keine Benutzereingabe.
 			$wpdb->query( $wpdb->prepare( "DELETE FROM {$lbite_orders_meta_table} WHERE meta_key LIKE %s", $wpdb->esc_like( '_lbite_' ) . '%' ) );
 		}
 

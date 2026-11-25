@@ -22,12 +22,12 @@ jobs:
         continue-on-error: true
         uses: wordpress/plugin-check-action@v1
         with:
-          exclude-directories: .github,scripts
-          exclude-files: .gitignore,.distignore
+          exclude-directories: .github,scripts,tests
+          exclude-files: .gitignore,.distignore,phpunit.xml.dist,.phpcs.xml.dist
 
       - name: Run Plugin Check (second attempt)
         if: steps.first_attempt.outcome == 'failure'
         uses: wordpress/plugin-check-action@v1
         with:
-          exclude-directories: .github,scripts
-          exclude-files: .gitignore,.distignore
+          exclude-directories: .github,scripts,tests
+          exclude-files: .gitignore,.distignore,phpunit.xml.dist,.phpcs.xml.dist

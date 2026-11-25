@@ -271,6 +271,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 					'label'               => isset( $_POST['lbite_kanban_active_label'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_kanban_active_label'] ) ) : __( 'Prepare Now', 'libre-bite' ),
 					'counts_as_completed' => false,
 				);
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird unmittelbar danach von einem eigenen Sanitizer bzw. Typ-Cast bereinigt.
 				foreach ( wp_unslash( $_POST['columns'] ) as $lbite_custom_col ) {
 					$lbite_kanban_full[] = $lbite_custom_col;
 				}
@@ -286,6 +287,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		case 'orders_receipts':
 			if ( class_exists( 'LBite_Receipts' ) ) {
 				$lbite_receipt_raw = isset( $_POST['lbite_receipt_fields'] ) && is_array( $_POST['lbite_receipt_fields'] )
+					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird unmittelbar danach von einem eigenen Sanitizer bzw. Typ-Cast bereinigt.
 					? wp_unslash( $_POST['lbite_receipt_fields'] )
 					: array();
 				update_option( LBite_Receipts::OPTION_FIELDS, LBite_Receipts::sanitize_fields( $lbite_receipt_raw ) );
@@ -349,6 +351,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				update_option( 'lbite_sms_template', $lbite_sms_values['lbite_sms_template'] );
 				update_option( 'lbite_sms_trigger_status', $lbite_sms_values['lbite_sms_trigger_status'] );
 
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird unmittelbar danach von einem eigenen Sanitizer bzw. Typ-Cast bereinigt.
 				$lbite_sms_token = isset( $_POST['lbite_sms_auth_token'] ) ? trim( (string) wp_unslash( $_POST['lbite_sms_auth_token'] ) ) : '';
 				if ( '' !== $lbite_sms_token && $lbite_premium_allowed ) {
 					update_option( 'lbite_sms_auth_token', LBite_SMS::encrypt( $lbite_sms_token ) );
@@ -369,6 +372,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				require_once LBITE_PLUGIN_DIR . 'includes/modules/order-bumps/class-order-bumps.php';
 			}
 			$lbite_bump_raw = isset( $_POST['lbite_order_bumps'] ) && is_array( $_POST['lbite_order_bumps'] )
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird unmittelbar danach von einem eigenen Sanitizer bzw. Typ-Cast bereinigt.
 				? wp_unslash( $_POST['lbite_order_bumps'] )
 				: array();
 			$lbite_bump_val = lbite_enforce_pro_options(
@@ -387,6 +391,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				require_once LBITE_PLUGIN_DIR . 'includes/modules/promotions/class-promotions.php';
 			}
 			$lbite_promo_val = lbite_enforce_pro_options(
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird unmittelbar danach von einem eigenen Sanitizer bzw. Typ-Cast bereinigt.
 				array( 'lbite_promotions' => LBite_Promotions::sanitize_rules( isset( $_POST['lbite_promotions'] ) && is_array( $_POST['lbite_promotions'] ) ? wp_unslash( $_POST['lbite_promotions'] ) : array() ) )
 			);
 			update_option( 'lbite_promotions', $lbite_promo_val['lbite_promotions'] );
@@ -398,6 +403,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				require_once LBITE_PLUGIN_DIR . 'includes/modules/promotions/class-promotions.php';
 			}
 			$lbite_banner_val = lbite_enforce_pro_options(
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird unmittelbar danach von einem eigenen Sanitizer bzw. Typ-Cast bereinigt.
 				array( 'lbite_promo_banner' => LBite_Promotions::sanitize_banner( isset( $_POST['lbite_promo_banner'] ) && is_array( $_POST['lbite_promo_banner'] ) ? wp_unslash( $_POST['lbite_promo_banner'] ) : array() ) )
 			);
 			update_option( 'lbite_promo_banner', $lbite_banner_val['lbite_promo_banner'] );
@@ -419,6 +425,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			// intval()+min(100,...) galt bisher für beide Typen gleich und
 			// verstümmelte Fixbeträge (Audit 26.09.2026, AP-11).
 			$lbite_stamp_discount_type = ( isset( $_POST['lbite_stampcard_discount_type'] ) && 'fixed' === $_POST['lbite_stampcard_discount_type'] ) ? 'fixed' : 'percent';
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird unmittelbar danach von einem eigenen Sanitizer bzw. Typ-Cast bereinigt.
 			$lbite_stamp_discount_raw  = isset( $_POST['lbite_stampcard_discount'] ) ? (float) wp_unslash( $_POST['lbite_stampcard_discount'] ) : 50;
 			$lbite_stamp_discount      = 'percent' === $lbite_stamp_discount_type
 				? min( 100, max( 1, $lbite_stamp_discount_raw ) )
@@ -428,9 +435,11 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				array(
 					'lbite_stampcard_target'           => isset( $_POST['lbite_stampcard_target'] ) ? max( 2, intval( wp_unslash( $_POST['lbite_stampcard_target'] ) ) ) : 10,
 					'lbite_stampcard_discount'         => $lbite_stamp_discount,
+					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird unmittelbar danach von einem eigenen Sanitizer bzw. Typ-Cast bereinigt.
 					'lbite_stampcard_min_total'        => isset( $_POST['lbite_stampcard_min_total'] ) ? max( 0, (float) wp_unslash( $_POST['lbite_stampcard_min_total'] ) ) : 0,
 					'lbite_stampcard_validity_days'    => isset( $_POST['lbite_stampcard_validity_days'] ) ? max( 1, intval( wp_unslash( $_POST['lbite_stampcard_validity_days'] ) ) ) : 90,
 					'lbite_stampcard_discount_type'    => $lbite_stamp_discount_type,
+					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird unmittelbar danach von einem eigenen Sanitizer bzw. Typ-Cast bereinigt.
 					'lbite_stampcard_max_amount'       => isset( $_POST['lbite_stampcard_max_amount'] ) ? max( 0, (float) wp_unslash( $_POST['lbite_stampcard_max_amount'] ) ) : 0,
 					'lbite_stampcard_limit_categories' => $lbite_stamp_cats,
 					'lbite_stampcard_limit_to_one_item' => isset( $_POST['lbite_stampcard_limit_to_one_item'] ) ? 1 : 0,
@@ -580,12 +589,15 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			// 2026-09-28). Jeder Aufruf ist bedingt und wirkungslos, wenn das
 			// jeweilige Plugin nicht installiert ist.
 			if ( has_action( 'litespeed_purge_all' ) ) {
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Fremder Hook (WooCommerce bzw. Cache-Plugin), kein eigener.
 				do_action( 'litespeed_purge_all' );
 			}
 			if ( has_action( 'w3tc_flush_all' ) ) {
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Fremder Hook (WooCommerce bzw. Cache-Plugin), kein eigener.
 				do_action( 'w3tc_flush_all' );
 			}
 			if ( has_action( 'wp_rocket_clean_domain' ) ) {
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Fremder Hook (WooCommerce bzw. Cache-Plugin), kein eigener.
 				do_action( 'wp_rocket_clean_domain' );
 			}
 			if ( function_exists( 'wp_cache_clear_cache' ) ) {

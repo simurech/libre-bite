@@ -1,0 +1,146 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  # Syntax auf allen unterstützten PHP-Versionen – hält die Angabe
+  # "Requires PHP: 7.4" ehrlich.
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.1', '8.3', '8.5' ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: php -l
+        run: |
+          find libre-bite.php includes templates tests -name '*.php' -print0 \
+            | xargs -0 -n1 php -l > /tmp/lint.txt 2>&1 || true
+          if grep -E 'Parse error|Fatal error' /tmp/lint.txt; then exit 1; fi
+          echo "$(grep -c 'No syntax errors' /tmp/lint.txt) Dateien ohne Syntaxfehler"
+
+  # PHPCompatibility 10 kennt PHP-8-Syntax; die stabile 9.3.5 nicht und
+  # meldete fälschlich "keine Funde". Die trim()-Hinweise zum Seitenvorschub
+  # ab PHP 8.6 sind reine Verhaltensinformation und werden ausgeblendet.
+  php-compatibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer
+      - name: Werkzeuge installieren
+        run: |
+          mkdir -p /tmp/qa && cd /tmp/qa
+          composer init -q -n --name=lbite/qa
+          composer config minimum-stability dev
+          composer config prefer-stable true
+          composer config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer require -q -n "phpcompatibility/phpcompatibility-wp:^3.0@alpha"
+      - name: PHPCompatibility (PHP 7.4 und neuer)
+        run: |
+          /tmp/qa/vendor/bin/phpcs -d memory_limit=2G --standard=PHPCompatibilityWP \
+            --runtime-set testVersion 7.4- --extensions=php -n \
+            --exclude=PHPCompatibility.ParameterValues.ChangedTrimDefaultCharacters \
+            libre-bite.php includes templates
+
+  phpcs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer
+      - name: WordPress Coding Standards installieren
+        run: |
+          mkdir -p /tmp/wpcs && cd /tmp/wpcs
+          composer init -q -n --name=lbite/wpcs
+          composer config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer require -q -n "wp-coding-standards/wpcs:^3.1"
+      - name: PHPCS (Sicherheit, Datenbank, Übersetzung, Präfixe)
+        run: /tmp/wpcs/vendor/bin/phpcs -d memory_limit=2G -n --standard=.phpcs.xml.dist
+
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.3', '8.5' ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: phpunit:9.6
+      - name: Logik-Tests
+        run: phpunit
+
+  # Echte Installation auf den ältesten deklarierten Versionen: aktivieren,
+  # Admin-Seiten und eine Frontend-Seite aufrufen, auf PHP-Fehler prüfen.
+  minimum-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: libre-bite
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: wp-env-Konfiguration
+        run: |
+          mkdir -p min-env
+          cat > min-env/.wp-env.json <<'JSON'
+          {
+            "core": "WordPress/WordPress#6.2",
+            "phpVersion": "7.4",
+            "testsEnvironment": false,
+            "plugins": [
+              "https://downloads.wordpress.org/plugin/woocommerce.8.0.0.zip",
+              "../libre-bite"
+            ],
+            "config": { "WP_DEBUG": true, "WP_DEBUG_DISPLAY": true }
+          }
+          JSON
+      - name: Umgebung starten (mit einem zweiten Anlauf bei Netzwerkfehlern)
+        working-directory: min-env
+        run: npx -y @wordpress/env@10 start || npx -y @wordpress/env@10 start
+      - name: Aktivierung und Versionen
+        working-directory: min-env
+        run: |
+          npx -y @wordpress/env@10 run cli wp plugin activate woocommerce libre-bite
+          npx -y @wordpress/env@10 run cli wp eval 'echo "WP " . get_bloginfo("version") . " / WC " . WC()->version . " / PHP " . PHP_VERSION . " / LB " . LBITE_VERSION . PHP_EOL;'
+          npx -y @wordpress/env@10 run cli wp post create --post_type=page --post_status=publish --post_title=Standorte --post_name=lbite-smoke --post_content='[lbite_location_selector]'
+      - name: Seiten aufrufen und auf PHP-Fehler prüfen
+        run: |
+          B=http://localhost:8888
+          curl -s -c /tmp/c -b /tmp/c -o /dev/null "$B/wp-login.php"
+          # Zugangsdaten der flüchtigen wp-env-Umgebung (Standardwerte von wp-env).
+          curl -s -c /tmp/c -b /tmp/c -o /dev/null --data 'log=admin&pwd=password&testcookie=1' "$B/wp-login.php"
+          FAIL=0
+          for P in "wp-admin/index.php" "wp-admin/admin.php?page=libre-bite" "wp-admin/admin.php?page=lbite-order-board" \
+                   "wp-admin/admin.php?page=lbite-pos" "wp-admin/admin.php?page=lbite-statistics" "wp-admin/admin.php?page=lbite-settings" \
+                   "wp-admin/admin.php?page=lbite-setup" "wp-admin/edit.php?post_type=lbite_location" "lbite-smoke/" "shop/"; do
+            BODY=$(curl -s -L -b /tmp/c "$B/$P")
+            if echo "$BODY" | grep -q 'Fatal error\|<b>Warning</b>\|<b>Notice</b>\|<b>Deprecated</b>\|critical error'; then
+              echo "::error::PHP-Meldung auf $P"; echo "$BODY" | grep -o '<b>[A-Za-z ]*</b>:.\{0,300\}' | head -5; FAIL=1
+            elif echo "$BODY" | grep -q 'id="loginform"'; then
+              echo "::error::$P leitete zur Anmeldung um"; FAIL=1
+            else
+              echo "ok: $P"
+            fi
+          done
+          exit $FAIL

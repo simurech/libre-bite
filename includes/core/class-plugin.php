@@ -57,6 +57,16 @@ class LBite_Plugin {
 	}
 
 	/**
+	 * Versionszähler für den Zwischenspeicher des Dashboard-Widgets erhöhen.
+	 *
+	 * Ein Zähler statt gezieltem Löschen: Die Schlüssel hängen von Standort und
+	 * Tag ab, ein Hochzählen erwischt alle auf einmal.
+	 */
+	public static function bump_location_stats_cache() {
+		update_option( 'lbite_widget_stats_ver', (int) get_option( 'lbite_widget_stats_ver', 0 ) + 1, false );
+	}
+
+	/**
 	 * Abhängigkeiten laden
 	 */
 	private function load_dependencies() {
@@ -78,6 +88,12 @@ class LBite_Plugin {
 		// Checkout etc.) nie den Änderungszeitpunkt als Cache-Schlüssel und
 		// jede Korrektur erreicht den Browser erst nach einem harten Neuladen
 		// (Nutzer-Fund 2026-09-28).
+		// Zwischenspeicher des Dashboard-Widgets ungültig machen. Hier statt in
+		// LBite_Admin, weil Statuswechsel auch im Frontend (Checkout, Zahlungs-
+		// Webhooks) und per REST geschehen, wo das Admin-Modul nicht geladen ist.
+		$this->loader->add_action( 'woocommerce_order_status_changed', 'LBite_Plugin', 'bump_location_stats_cache' );
+		$this->loader->add_action( 'lbite_order_status_changed', 'LBite_Plugin', 'bump_location_stats_cache' );
+
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
 			require_once LBITE_PLUGIN_DIR . 'includes/admin/class-admin.php';
 			$this->loader->add_filter( 'style_loader_src', 'LBite_Admin', 'bust_asset_cache_during_development' );

@@ -643,73 +643,90 @@ class LBite_Admin {
 			. '</tr></thead><tbody>';
 
 		foreach ( $lbite_locations as $lbite_loc ) {
-			// Bestellungen + Umsatz heute - gleiches Statusfilter wie die Statistik-Seite.
-			$lbite_today_orders = wc_get_orders(
-				array(
-					'type'       => 'shop_order',
-					'status'     => array( 'wc-completed', 'wc-processing' ),
-					'date_after' => $lbite_today_start,
-					'limit'      => -1,
-					'return'     => 'objects',
-					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Bestellfilterung nach Standort, auf ein einziges Kalendertag begrenzt.
-					'meta_query' => array(
-						array(
-							'key'   => '_lbite_location_id',
-							'value' => $lbite_loc->ID,
+			// Zwischenspeicher: Das Widget erscheint bei jedem Aufruf von /wp-admin/
+			// und lud pro Standort zwei Bestellabfragen mit vollen Objekten.
+			// Der Versionszähler wird bei jedem Statuswechsel erhöht (siehe
+			// LBite_Plugin::bump_location_stats_cache()), die Laufzeit begrenzt Restfälle.
+			$lbite_cache_key = 'lbite_widget_stats_' . md5( $lbite_loc->ID . '|' . $lbite_today_start . '|' . (int) get_option( 'lbite_widget_stats_ver', 0 ) );
+			$lbite_cached    = get_transient( $lbite_cache_key );
+
+			if ( is_array( $lbite_cached ) && 4 === count( $lbite_cached ) ) {
+				list( $lbite_order_count, $lbite_revenue, $lbite_wait_seconds_total, $lbite_wait_sample_count ) = $lbite_cached;
+			} else {
+				// Bestellungen + Umsatz heute - gleiches Statusfilter wie die Statistik-Seite.
+				$lbite_today_orders = wc_get_orders(
+					array(
+						'type'       => 'shop_order',
+						'status'     => array( 'wc-completed', 'wc-processing' ),
+						'date_after' => $lbite_today_start,
+						'limit'      => -1,
+						'return'     => 'objects',
+						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Bestellfilterung nach Standort, auf ein einziges Kalendertag begrenzt.
+						'meta_query' => array(
+							array(
+								'key'   => '_lbite_location_id',
+								'value' => $lbite_loc->ID,
+							),
 						),
-					),
-				)
-			);
+					)
+				);
 
-			$lbite_order_count = count( $lbite_today_orders );
-			$lbite_revenue     = 0.0;
-			foreach ( $lbite_today_orders as $lbite_order ) {
-				$lbite_revenue += (float) $lbite_order->get_total();
-			}
-
-			// Ø Wartezeit "jetzt zubereiten" -> "abgeschlossen", rollierend letzte 7 Tage.
-			// EXISTS-Filter statt Roh-SQL: nur Bestellungen mit gesetzter
-			// _lbite_preparing_started_at-Meta kommen für die Auswertung infrage.
-			$lbite_wait_orders = wc_get_orders(
-				array(
-					'type'       => 'shop_order',
-					'status'     => array( 'completed' ),
-					'date_after' => $lbite_week_start,
-					'limit'      => 200,
-					'return'     => 'objects',
-					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Bestellfilterung nach Standort, auf 200 Einträge begrenzt.
-					'meta_query' => array(
-						array(
-							'key'   => '_lbite_location_id',
-							'value' => $lbite_loc->ID,
-						),
-						array(
-							'key'     => '_lbite_preparing_started_at',
-							'compare' => 'EXISTS',
-						),
-					),
-				)
-			);
-
-			$lbite_wait_seconds_total = 0;
-			$lbite_wait_sample_count  = 0;
-			foreach ( $lbite_wait_orders as $lbite_order ) {
-				$lbite_started_at = $lbite_order->get_meta( '_lbite_preparing_started_at', true );
-				$lbite_completed  = $lbite_order->get_date_completed();
-
-				if ( ! $lbite_started_at || ! $lbite_completed ) {
-					continue;
+				$lbite_order_count = count( $lbite_today_orders );
+				$lbite_revenue     = 0.0;
+				foreach ( $lbite_today_orders as $lbite_order ) {
+					$lbite_revenue += (float) $lbite_order->get_total();
 				}
 
-				$lbite_started_ts = lbite_local_time_to_timestamp( $lbite_started_at );
-				$lbite_diff       = $lbite_completed->getTimestamp() - $lbite_started_ts;
+				// Ø Wartezeit "jetzt zubereiten" -> "abgeschlossen", rollierend letzte 7 Tage.
+				// EXISTS-Filter statt Roh-SQL: nur Bestellungen mit gesetzter
+				// _lbite_preparing_started_at-Meta kommen für die Auswertung infrage.
+				$lbite_wait_orders = wc_get_orders(
+					array(
+						'type'       => 'shop_order',
+						'status'     => array( 'completed' ),
+						'date_after' => $lbite_week_start,
+						'limit'      => 200,
+						'return'     => 'objects',
+						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Bestellfilterung nach Standort, auf 200 Einträge begrenzt.
+						'meta_query' => array(
+							array(
+								'key'   => '_lbite_location_id',
+								'value' => $lbite_loc->ID,
+							),
+							array(
+								'key'     => '_lbite_preparing_started_at',
+								'compare' => 'EXISTS',
+							),
+						),
+					)
+				);
 
-				if ( $lbite_started_ts <= 0 || $lbite_diff < 0 ) {
-					continue;
+				$lbite_wait_seconds_total = 0;
+				$lbite_wait_sample_count  = 0;
+				foreach ( $lbite_wait_orders as $lbite_order ) {
+					$lbite_started_at = $lbite_order->get_meta( '_lbite_preparing_started_at', true );
+					$lbite_completed  = $lbite_order->get_date_completed();
+
+					if ( ! $lbite_started_at || ! $lbite_completed ) {
+						continue;
+					}
+
+					$lbite_started_ts = lbite_local_time_to_timestamp( $lbite_started_at );
+					$lbite_diff       = $lbite_completed->getTimestamp() - $lbite_started_ts;
+
+					if ( $lbite_started_ts <= 0 || $lbite_diff < 0 ) {
+						continue;
+					}
+
+					$lbite_wait_seconds_total += $lbite_diff;
+					$lbite_wait_sample_count++;
 				}
 
-				$lbite_wait_seconds_total += $lbite_diff;
-				$lbite_wait_sample_count++;
+				set_transient(
+					$lbite_cache_key,
+					array( $lbite_order_count, $lbite_revenue, $lbite_wait_seconds_total, $lbite_wait_sample_count ),
+					5 * MINUTE_IN_SECONDS
+				);
 			}
 
 			$lbite_wait_display = $lbite_wait_sample_count
@@ -1721,7 +1738,7 @@ class LBite_Admin {
 	 * @return array Validierte Items [{id, quantity, meta, option_ids, note}].
 	 */
 	private function parse_cart_items_from_post() {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON wird nach dem Decode Feld für Feld validiert.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- JSON wird nach dem Decode Feld für Feld validiert. Nonce und Capability prüft der aufrufende AJAX-Handler.
 		$cart_items_raw = isset( $_POST['cart_items'] ) ? wp_unslash( $_POST['cart_items'] ) : '';
 
 		if ( empty( $cart_items_raw ) ) {
@@ -1949,6 +1966,7 @@ class LBite_Admin {
 	 * @return WC_Order
 	 */
 	private function get_validated_open_tab_order( $expected_location_id = 0 ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce und Capability prüft der aufrufende AJAX-Handler.
 		$order_id = isset( $_POST['order_id'] ) ? intval( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : false;
 
@@ -2116,10 +2134,11 @@ class LBite_Admin {
 	 */
 	private function parse_split_payments( array $allowed_payment_methods ) {
 		$split_payments = array();
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce und Capability prüft der aufrufende AJAX-Handler.
 		if ( ! lbite_feature_enabled( 'enable_split_payment' ) || empty( $_POST['split_payments'] ) ) {
 			return $split_payments;
 		}
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON wird nach dem Decode Feld für Feld validiert.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- JSON wird nach dem Decode Feld für Feld validiert. Nonce und Capability prüft der aufrufende AJAX-Handler.
 		$split_payments_raw     = wp_unslash( $_POST['split_payments'] );
 		$split_payments_decoded = json_decode( $split_payments_raw, true );
 		if ( ! is_array( $split_payments_decoded ) ) {

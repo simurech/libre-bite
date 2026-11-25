@@ -456,7 +456,11 @@ class LBite_Reservations {
 			LBITE_PLUGIN_URL . 'assets/js/reservation-form.js',
 			array( 'jquery' ),
 			LBITE_VERSION,
-			true
+			// Nicht render-blockierend laden (WP 6.3+; ältere Versionen lesen das Array als in_footer = true).
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
 		);
 
 		wp_localize_script(

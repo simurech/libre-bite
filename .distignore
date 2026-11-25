@@ -15,3 +15,6 @@ build
 scripts
 messages.mo
 languages/update-translations.py
+tests
+phpunit.xml.dist
+.phpcs.xml.dist
