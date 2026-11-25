@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 3.6.25
+Stable tag: 3.6.26
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -276,6 +276,11 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.26 =
+* Changed: The dashboard widget caches its figures for five minutes and refreshes on every status change.
+* Changed: Menu view, reservation form and tip script no longer block page rendering.
+* Fix: The debug page no longer loads the whole debug.log into memory.
 
 = 3.6.25 =
 * Changed: Minimum PHP version lowered to 7.4 (compatibility verified); PHP 8.3 or newer remains recommended.
