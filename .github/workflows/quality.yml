@@ -91,6 +91,10 @@ jobs:
 
   # Echte Installation auf den ältesten deklarierten Versionen: aktivieren,
   # Admin-Seiten und eine Frontend-Seite aufrufen, auf PHP-Fehler prüfen.
+  # PHP 8.1 statt 7.4: Die PHP-7.4-Images basieren auf Debian 11, dessen
+  # Sicherheits-Paketquelle archiviert ist (apt liefert 404) – PHP 7.4 lässt
+  # sich in Docker nicht mehr aufbauen. PHP 7.4 decken lint, php-compatibility
+  # und phpunit direkt auf dem Runner ab.
   minimum-versions:
     runs-on: ubuntu-latest
     steps:
@@ -106,7 +110,8 @@ jobs:
           cat > min-env/.wp-env.json <<'JSON'
           {
             "core": "WordPress/WordPress#6.2",
-            "phpVersion": "7.4",
+            "phpVersion": "8.1",
+            "testsEnvironment": false,
             "plugins": [
               "https://downloads.wordpress.org/plugin/woocommerce.8.0.0.zip",
               "../libre-bite"
@@ -116,13 +121,13 @@ jobs:
           JSON
       - name: Umgebung starten (mit einem zweiten Anlauf bei Netzwerkfehlern)
         working-directory: min-env
-        run: npx -y @wordpress/env@10 start || npx -y @wordpress/env@10 start
+        run: npx -y @wordpress/env@12.2.0 start || npx -y @wordpress/env@12.2.0 start
       - name: Aktivierung und Versionen
         working-directory: min-env
         run: |
-          npx -y @wordpress/env@10 run cli wp plugin activate woocommerce libre-bite
-          npx -y @wordpress/env@10 run cli wp eval 'echo "WP " . get_bloginfo("version") . " / WC " . WC()->version . " / PHP " . PHP_VERSION . " / LB " . LBITE_VERSION . PHP_EOL;'
-          npx -y @wordpress/env@10 run cli wp post create --post_type=page --post_status=publish --post_title=Standorte --post_name=lbite-smoke --post_content='[lbite_location_selector]'
+          npx -y @wordpress/env@12.2.0 run cli wp plugin activate woocommerce libre-bite
+          npx -y @wordpress/env@12.2.0 run cli wp eval 'echo "WP " . get_bloginfo("version") . " / WC " . WC()->version . " / PHP " . PHP_VERSION . " / LB " . LBITE_VERSION . PHP_EOL;'
+          npx -y @wordpress/env@12.2.0 run cli wp post create --post_type=page --post_status=publish --post_title=Standorte --post_name=lbite-smoke --post_content='[lbite_location_selector]'
       - name: Seiten aufrufen und auf PHP-Fehler prüfen
         run: |
           B=http://localhost:8888
@@ -134,8 +139,11 @@ jobs:
                    "wp-admin/admin.php?page=lbite-pos" "wp-admin/admin.php?page=lbite-statistics" "wp-admin/admin.php?page=lbite-settings" \
                    "wp-admin/admin.php?page=lbite-setup" "wp-admin/edit.php?post_type=lbite_location" "lbite-smoke/" "shop/"; do
             BODY=$(curl -s -L -b /tmp/c "$B/$P")
-            if echo "$BODY" | grep -q 'Fatal error\|<b>Warning</b>\|<b>Notice</b>\|<b>Deprecated</b>\|critical error'; then
-              echo "::error::PHP-Meldung auf $P"; echo "$BODY" | grep -o '<b>[A-Za-z ]*</b>:.\{0,300\}' | head -5; FAIL=1
+            # Fehler zählen nur, wenn sie aus Libre-Bite-Dateien stammen: WP 6.2 meldet
+            # unter PHP 8.1 eigene Veraltungen, die nichts mit dem Plugin zu tun haben.
+            OWN=$(echo "$BODY" | grep -o '<b>[A-Za-z ]*</b>:[^<]*<b>[^<]*libre-bite[^<]*</b>' | head -5)
+            if echo "$BODY" | grep -q 'critical error\|Fatal error' || [ -n "$OWN" ]; then
+              echo "::error::PHP-Meldung auf $P"; echo "$OWN"; echo "$BODY" | grep -o 'Fatal error.\{0,300\}' | head -3; FAIL=1
             elif echo "$BODY" | grep -q 'id="loginform"'; then
               echo "::error::$P leitete zur Anmeldung um"; FAIL=1
             else
