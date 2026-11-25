@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $lbite_is_admin        = current_user_can( 'manage_options' );
-$lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+$lbite_premium_allowed = lbite_has_pro_license();
 
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur Anzeigesteuerung.
 $lbite_active_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'locations';

@@ -17,7 +17,7 @@ $lbite_timeslot_int      = get_option( 'lbite_timeslot_interval', 15 );
 $lbite_slot_buffer_start = get_option( 'lbite_slot_buffer_start', 0 );
 $lbite_max_per_slot      = get_option( 'lbite_max_orders_per_slot', 0 );
 $lbite_slot_buffer_end   = get_option( 'lbite_slot_buffer_end', 0 );
-$lbite_is_premium_loc    = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+$lbite_is_premium_loc    = lbite_has_pro_license();
 $lbite_all_pages         = get_pages( array( 'post_status' => 'publish' ) );
 ?>
 <form method="post">

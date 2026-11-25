@@ -4,9 +4,9 @@ Donate link: https://github.com/simurech/libre-bite
 Tags: woocommerce, restaurant, pos, ordering, reservations
 Requires at least: 6.0
 Tested up to: 7.1
-Requires PHP: 8.3
+Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 3.6.24
+Stable tag: 3.6.25
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -261,7 +261,7 @@ Libre Bite uses Freemius for license management and delivery of Pro features. Da
 
 * WordPress 6.0 or higher
 * WooCommerce 8.0 or higher
-* PHP 8.3 or higher
+* PHP 7.4 or higher (8.3+ recommended)
 * A modern browser for Kanban board and POS interface
 
 = Is Libre Bite available in multiple languages? =
@@ -276,6 +276,13 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.6.25 =
+* Changed: Minimum PHP version lowered to 7.4 (compatibility verified); PHP 8.3 or newer remains recommended.
+* Fix: Pro features without a valid license now consistently fall back to the free behavior (manager assignments, admin receipts, pickup reminders); the pricing page is shown again after a license expires.
+* Fix: The standard checkout no longer fills in a placeholder email for offline payments.
+* Fix: Order panel of the menu view: smaller quantity buttons and a clearly visible, centered close button.
+* Fix: The setup assistant shows its page title again; CSV export prepared for PHP 8.4+.
 
 = 3.6.24 =
 * Changed: Minimum PHP version raised to 8.3 (older PHP versions no longer receive security fixes); tested with WooCommerce 11.3.

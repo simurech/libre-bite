@@ -130,13 +130,6 @@ msgstr "Produkt-Add-ons"
 msgid "Allergen Matrix"
 msgstr "Allergen-Matrix"
 
-#: includes/admin/class-admin.php:335 includes/admin/class-admin.php:336
-#: includes/admin/class-admin.php:2251 includes/admin/class-admin.php:2253
-#: templates/admin/admin-settings.php:193 templates/admin/dashboard.php:88
-#: templates/admin/help-admin.php:32 templates/admin/help-staff.php:26
-msgid "Help & Support"
-msgstr "Hilfe & Support"
-
 #: includes/admin/class-admin.php:345 includes/admin/class-admin.php:346
 #: templates/admin/dashboard.php:78
 #: templates/admin/help-partials/orders.php:172
@@ -391,10 +384,6 @@ msgstr "Überfällig"
 msgid "min"
 msgstr "Min."
 
-#: includes/admin/class-admin.php:1054
-msgid "Print (right-click to choose a template)"
-msgstr "Drucken (Rechtsklick für Vorlagenauswahl)"
-
 #: includes/admin/class-admin.php:1055
 msgid "Could not create the receipt"
 msgstr "Der Beleg konnte nicht erstellt werden"
@@ -572,18 +561,6 @@ msgstr "Hilfe"
 msgid "Close"
 msgstr "Schließen"
 
-#: includes/admin/class-admin.php:2260
-msgid "First check the help area – you'll find guides for all features there."
-msgstr "Schauen Sie zuerst in den Hilfe-Bereich – dort finden Sie Anleitungen zu allen Funktionen."
-
-#: includes/admin/class-admin.php:2264
-msgid "Open Help Area"
-msgstr "Hilfe-Bereich öffnen"
-
-#: includes/admin/class-admin.php:2270
-msgid "Didn't find what you're looking for?"
-msgstr "Nicht fündig geworden?"
-
 #: includes/admin/class-admin.php:2373
 msgid "Receipt"
 msgstr "Beleg"
@@ -665,10 +642,6 @@ msgstr "Einrichtung"
 #: includes/admin/class-setup-wizard.php:146
 msgid "WooCommerce is active"
 msgstr "WooCommerce ist aktiv"
-
-#: includes/admin/class-setup-wizard.php:148
-msgid "Libre Bite is a WooCommerce extension and cannot work without it."
-msgstr "Libre Bite ist eine WooCommerce-Erweiterung und kann ohne WooCommerce nicht arbeiten."
 
 #. translators: %s: PHP version
 #: includes/admin/class-setup-wizard.php:160
@@ -884,14 +857,6 @@ msgstr "Zeitfenster-Intervall"
 #: includes/admin/class-setup-wizard.php:793
 msgid "The spacing between selectable pickup times."
 msgstr "Der Abstand zwischen den wählbaren Abholzeiten."
-
-#: includes/admin/class-setup-wizard.php:805
-msgid "Round the final amount to 5 cents"
-msgstr "Endbetrag auf 5 Rappen runden"
-
-#: includes/admin/class-setup-wizard.php:806
-msgid "Needed for cash payment in Switzerland. The module switch alone does not round yet — this is the setting that does it."
-msgstr "Für Barzahlung in der Schweiz nötig. Der Modulschalter allein rundet noch nicht — das tut erst diese Einstellung."
 
 #: includes/admin/class-setup-wizard.php:814
 msgid "Opening hours, pickup windows and holidays belong to each location and are edited under Locations."
@@ -2528,18 +2493,6 @@ msgstr "Wird zur Rechnung hinzugefügt:"
 msgid "No open tabs"
 msgstr "Keine offenen Tabs"
 
-#: includes/modules/pos/class-pos.php:595
-msgid "POS Order"
-msgstr "POS-Bestellung"
-
-#: includes/modules/pos/class-pos.php:602
-msgid "Order successfully created"
-msgstr "Bestellung erfolgreich erstellt"
-
-#: includes/modules/pos/class-pos.php:612
-msgid "Error creating order: "
-msgstr "Fehler beim Erstellen der Bestellung: "
-
 #: includes/modules/product-options/class-product-options.php:74
 msgid "Product Option"
 msgstr "Produkt-Add-on"
@@ -2854,10 +2807,6 @@ msgstr "Zu viele Anfragen. Bitte versuchen Sie es später erneut."
 msgid "Please fill in all required fields."
 msgstr "Bitte füllen Sie alle Pflichtfelder aus."
 
-#: includes/modules/reservations/class-reservations.php:600
-msgid "The date cannot be in the past."
-msgstr "Das Datum darf nicht in der Vergangenheit liegen."
-
 #. translators: %d: number of seats
 #: includes/modules/reservations/class-reservations.php:615
 #, php-format
@@ -2987,12 +2936,6 @@ msgstr "Ihre Stempelkarte"
 #, php-format
 msgid "%1$d of %2$d stamps collected"
 msgstr "%1$d von %2$d Stempeln gesammelt"
-
-#. translators: 1: discount percentage, 2: coupon code
-#: includes/modules/stampcard/class-stampcard.php:267
-#, php-format
-msgid "Your reward is ready: %1$d%% off with the code %2$s"
-msgstr "Ihre Belohnung ist bereit: %1$d%% Rabatt mit dem Code %2$s"
 
 #. translators: 1: remaining stamps, 2: discount percentage
 #: includes/modules/stampcard/class-stampcard.php:279
@@ -3386,10 +3329,6 @@ msgstr "Checkout-Felder verwalten"
 msgid "Here you can specify which fields should be displayed in checkout and customize field labels."
 msgstr "Hier können Sie festlegen, welche Felder im Checkout angezeigt werden, und die Feldbezeichnungen anpassen."
 
-#: templates/admin/checkout-fields.php:107
-msgid "General Settings"
-msgstr "Allgemeine Einstellungen"
-
 #: templates/admin/checkout-fields.php:118
 msgid "Show \"Ship to a different address\" option"
 msgstr "Option «An andere Adresse liefern» anzeigen"
@@ -3501,10 +3440,6 @@ msgstr "Tischreservierungen anzeigen und verwalten."
 #: templates/admin/dashboard.php:79
 msgid "Revenue and order statistics per location and time period."
 msgstr "Umsatz- und Bestellstatistiken pro Standort und Zeitraum."
-
-#: templates/admin/dashboard.php:89
-msgid "Documentation, guides, and support contact."
-msgstr "Dokumentation, Anleitungen und Support-Kontakt."
 
 #: templates/admin/dashboard.php:98
 msgid "Configure features, locations, checkout, branding, and more."
@@ -4211,10 +4146,6 @@ msgstr "Preise & Steuern"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: templates/admin/settings-tabbed.php:37
-msgid "Roles & Menus"
-msgstr "Rollen & Menüs"
-
 #: templates/admin/settings-tabbed.php:39
 msgid "Data"
 msgstr "Daten"
@@ -4226,14 +4157,6 @@ msgstr "Willkommen bei Libre Bite!"
 #: templates/admin/settings-tabbed.php:475
 msgid "Configure each area of the plugin using the tabs below. Core features are active by default – you can adjust them at any time."
 msgstr "Konfigurieren Sie jeden Bereich des Plugins mit den Tabs unten. Kernfunktionen sind standardmässig aktiv – Sie können dies jederzeit anpassen."
-
-#: templates/admin/settings-tabbed.php:479
-msgid "Run the setup assistant"
-msgstr "Einrichtungsassistenten starten"
-
-#: templates/admin/settings-tabbed.php:482
-msgid "Two minutes, and it can create a sample menu so you are not starting from an empty shop."
-msgstr "Zwei Minuten, und er kann eine Beispielkarte anlegen, damit Sie nicht vor einem leeren Shop stehen."
 
 #: templates/admin/settings-tabbed.php:487
 msgid "Dismiss"
@@ -4286,10 +4209,6 @@ msgstr "Keine Zahlungsarten gefunden. Bitte zuerst WooCommerce-Zahlungsarten kon
 #: templates/admin/settings-tabbed.php:636
 msgid "The email field is shown in the optimized checkout only for the selected payment methods."
 msgstr "Das E-Mail-Feld wird im optimierten Checkout nur für die gewählten Zahlungsarten angezeigt."
-
-#: templates/admin/settings-tabbed.php:641
-msgid "Tip Settings"
-msgstr "Trinkgeld-Einstellungen"
 
 #: templates/admin/settings-tabbed.php:643
 msgid "Tip Title"
@@ -4372,17 +4291,9 @@ msgstr "Produkt-ID"
 msgid "Optional text, e.g. “Fries with that?”"
 msgstr "Optionaler Text, z. B. «Pommes dazu?»"
 
-#: templates/admin/settings-tabbed.php:786
-msgid "Product not found."
-msgstr "Produkt nicht gefunden."
-
 #: templates/admin/settings-tabbed.php:802
 msgid "Fields in Standard Checkout"
 msgstr "Felder im Standard-Checkout"
-
-#: templates/admin/settings-tabbed.php:803
-msgid "Choose which fields and options are displayed at checkout."
-msgstr "Wählen Sie, welche Felder und Optionen im Checkout angezeigt werden."
 
 #: templates/admin/settings-tabbed.php:816
 msgid "Price Rounding"
@@ -4514,10 +4425,6 @@ msgstr "Spalte entfernen"
 #: templates/admin/settings-tabbed.php:1004
 msgid "Add column"
 msgstr "Spalte hinzufügen"
-
-#: templates/admin/settings-tabbed.php:1005
-msgid "Drag rows to reorder. Minimum 2, maximum 5 columns."
-msgstr "Zeilen zum Neuanordnen ziehen. Minimum 2, maximum 5 Spalten."
 
 #: templates/admin/settings-tabbed.php:1010
 msgid "Drag & Drop"
@@ -4750,10 +4657,6 @@ msgstr "Für Texte und sekundäre Elemente."
 msgid "Accent Color"
 msgstr "Akzentfarbe"
 
-#: templates/admin/settings/branding.php:108
-msgid "For success and confirmation elements."
-msgstr "Für Erfolgs- und Bestätigungselemente."
-
 #: templates/admin/settings/branding.php:112
 msgid "Inherit from Theme"
 msgstr "Vom Theme übernehmen"
@@ -4875,14 +4778,6 @@ msgstr "Bitte beachten:"
 #: templates/admin/settings/notifications.php:156
 msgid "A message can only be sent if the order has a phone number. The phone field is optional in the standard checkout and is removed entirely in table ordering and in the optimised checkout — in those cases no SMS will go out."
 msgstr "Eine Nachricht kann nur gesendet werden, wenn die Bestellung eine Telefonnummer enthält. Das Telefonfeld ist im Standard-Checkout optional und wird bei Tischbestellung sowie im optimierten Checkout ganz entfernt — in diesen Fällen geht keine SMS hinaus."
-
-#: templates/admin/settings/notifications.php:161
-msgid "Enable SMS"
-msgstr "SMS aktivieren"
-
-#: templates/admin/settings/notifications.php:167
-msgid "Send text messages via Twilio"
-msgstr "Textnachrichten über Twilio senden"
 
 #: templates/admin/settings/notifications.php:170
 msgid "Credentials are stored."
@@ -5173,10 +5068,6 @@ msgstr "Wird als einmalig einlösbarer WooCommerce-Gutschein ausgestellt, gebund
 msgid "Orders below this value do not earn a stamp. 0 means every order counts."
 msgstr "Bestellungen unter diesem Wert geben keinen Stempel. 0 bedeutet, jede Bestellung zählt."
 
-#: templates/admin/settings/receipts.php:29
-msgid "Receipt Templates"
-msgstr "Bon-Vorlagen"
-
 #: templates/admin/settings/receipts.php:31
 msgid "Choose which information appears on which printed document. The kitchen needs items, notes and allergens but no prices; the guest needs prices but no preparation notes; the driver needs the address and phone number."
 msgstr "Legen Sie fest, welche Angabe auf welchem Ausdruck erscheint. Die Küche braucht Positionen, Notizen und Allergene, aber keine Preise; der Gast braucht Preise, aber keine Zubereitungsnotizen; der Fahrer braucht Adresse und Telefonnummer."
@@ -5281,10 +5172,6 @@ msgstr "Diese Funktion ist in Libre Bite Pro verfügbar. Starten Sie Ihre kosten
 msgid "7-day free trial · No credit card required"
 msgstr "7-Tage-Gratis-Testphase · Keine Kreditkarte erforderlich"
 
-#: templates/admin/setup-wizard.php:34
-msgid "Setup steps"
-msgstr "Einrichtungsschritte"
-
 #: templates/admin/setup-wizard.php:35
 msgid "Welcome"
 msgstr "Willkommen"
@@ -5292,14 +5179,6 @@ msgstr "Willkommen"
 #: templates/admin/setup-wizard.php:36
 msgid "Check"
 msgstr "Prüfung"
-
-#: templates/admin/setup-wizard.php:37
-msgid "Modules"
-msgstr "Module"
-
-#: templates/admin/setup-wizard.php:38
-msgid "Sample data"
-msgstr "Beispieldaten"
 
 #: templates/admin/setup-wizard.php:44
 msgid "Welcome to Libre Bite"
@@ -5312,14 +5191,6 @@ msgstr "Diese kurze Einrichtung bringt Ihren Betrieb zum Laufen. Sie dauert etwa
 #: templates/admin/setup-wizard.php:49
 msgid "Check that your shop is ready to take orders"
 msgstr "Prüfen, ob Ihr Shop bereit ist, Bestellungen anzunehmen"
-
-#: templates/admin/setup-wizard.php:50
-msgid "Pick the modules your business actually needs"
-msgstr "Die Module wählen, die Ihr Betrieb tatsächlich braucht"
-
-#: templates/admin/setup-wizard.php:51
-msgid "Optionally start with a sample menu instead of an empty shop"
-msgstr "Auf Wunsch mit einer Beispielkarte statt einem leeren Shop starten"
 
 #: templates/admin/setup-wizard.php:55
 msgid "Skip setup"
@@ -5336,10 +5207,6 @@ msgstr "Systemprüfung"
 #: templates/admin/setup-wizard.php:65
 msgid "A quick look at whether everything Libre Bite relies on is in place."
 msgstr "Ein kurzer Blick darauf, ob alles vorhanden ist, worauf Libre Bite aufbaut."
-
-#: templates/admin/setup-wizard.php:84
-msgid "WooCommerce must be installed and active before Libre Bite can do anything. Please take care of that first."
-msgstr "WooCommerce muss installiert und aktiv sein, bevor Libre Bite irgendetwas tun kann. Bitte zuerst darum kümmern."
 
 #: templates/admin/setup-wizard.php:90 templates/admin/setup-wizard.php:117
 #: templates/admin/setup-wizard.php:199 templates/admin/setup-wizard.php:230
@@ -5464,10 +5331,6 @@ msgstr "Umsatzverlauf"
 msgid "Revenue by Location"
 msgstr "Umsatz nach Standort"
 
-#: templates/admin/statistics.php:541
-msgid "Payment Methods (POS)"
-msgstr "Zahlungsarten (Kassensystem)"
-
 #: templates/admin/statistics.php:567
 msgid "Share"
 msgstr "Anteil"
@@ -5583,17 +5446,9 @@ msgstr "Zeiten, zu denen Support verfügbar ist"
 msgid "Additional Information"
 msgstr "Zusätzliche Informationen"
 
-#: templates/admin/support-settings.php:90
-msgid "Billing Note"
-msgstr "Hinweis zur Verrechnung"
-
 #: templates/admin/support-settings.php:97
 msgid "E.g. Support is billed at hourly rate (CHF 120.-/hour)"
 msgstr "z.B. Support wird nach Aufwand verrechnet (CHF 120.-/Stunde)"
-
-#: templates/admin/support-settings.php:98
-msgid "Information about support billing (appears on help pages)"
-msgstr "Informationen zur Support-Verrechnung (erscheint auf Hilfe-Seiten)"
 
 #: templates/admin/support-settings.php:104
 msgid "Additional Text"
@@ -6226,10 +6081,6 @@ msgstr "Kontaktdaten und Konditionen für Support-Anfragen."
 #: templates/admin/settings-tabbed.php
 msgid "Marketing"
 msgstr "Marketing"
-
-#: templates/admin/settings-tabbed.php
-msgid "Advanced"
-msgstr "Erweitert"
 
 #: templates/admin/settings-tabbed.php
 msgid "Developer"

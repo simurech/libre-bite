@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+$lbite_premium_allowed = lbite_has_pro_license();
 ?>
 <p class="description lbite-settings-intro">
 	<?php esc_html_e( 'Show calories and nutritional values, allergen warnings, and dietary labels (vegan, gluten-free, etc.) on product pages.', 'libre-bite' ); ?>

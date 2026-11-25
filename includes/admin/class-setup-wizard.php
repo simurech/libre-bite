@@ -78,7 +78,7 @@ class LBite_Setup_Wizard {
 	 * «nicht berechtigt» ab – auch für Administratoren.
 	 */
 	public function register_page() {
-		add_submenu_page(
+		$hook = add_submenu_page(
 			null,
 			__( 'Setup', 'libre-bite' ),
 			__( 'Setup', 'libre-bite' ),
@@ -86,6 +86,19 @@ class LBite_Setup_Wizard {
 			self::PAGE,
 			array( $this, 'render' )
 		);
+
+		// Seiten ohne Menüeintrag findet get_admin_page_title() nicht – der
+		// Browser-Tab blieb leer und admin-header.php übergab null an
+		// strip_tags() (Deprecated-Meldung ab PHP 8.1). Titel darum selbst setzen.
+		if ( $hook ) {
+			add_action(
+				'load-' . $hook,
+				static function () {
+					global $title;
+					$title = __( 'Setup', 'libre-bite' ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Seitentitel für Seite ohne Menüeintrag.
+				}
+			);
+		}
 	}
 
 	/**
@@ -727,7 +740,7 @@ class LBite_Setup_Wizard {
 	 * @return bool
 	 */
 	private static function premium_available() {
-		return function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+		return lbite_has_pro_license();
 	}
 
 	/**

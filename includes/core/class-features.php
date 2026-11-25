@@ -330,8 +330,7 @@ class LBite_Features {
 	private function load_features() {
 		$saved_features  = get_option( 'lbite_features', array() );
 		$defaults        = self::get_default_values();
-		$premium_allowed = function_exists( 'lbite_freemius' )
-			&& lbite_freemius()->can_use_premium_code__premium_only();
+		$premium_allowed = lbite_has_pro_license();
 
 		foreach ( self::$feature_definitions as $key => $definition ) {
 			$value = isset( $saved_features[ $key ] )
@@ -662,6 +661,33 @@ function lbite_feature_enabled( $feature ) {
 }
 
 /**
+ * Prüft, ob Pro-Funktionen genutzt werden dürfen: Pro-Code installiert UND
+ * gültige Lizenz oder laufender Trial.
+ *
+ * Einzige Stelle für die Lizenzprüfung ausserhalb von lbite_feature_enabled().
+ * `is__premium_only()` allein prüft nur die Code-Variante – nach Lizenzablauf
+ * oder mit dem Pro-Code von GitHub wäre sonst alles weiter freigeschaltet.
+ *
+ * Aufbau bewusst so gewählt: Der Freemius-Generator entfernt im Gratis-Build
+ * nur `if`-Blöcke, deren alleinige Bedingung `is__premium_only()` ist. Kombinierte
+ * Bedingungen und Zuweisungen bleiben stehen (nachgewiesen im ausgelieferten
+ * Free-Build 3.6.23). Im Gratis-Build bleibt so nur `return false;` übrig.
+ *
+ * @return bool
+ */
+function lbite_has_pro_license() {
+	if ( ! function_exists( 'lbite_freemius' ) ) {
+		return false;
+	}
+
+	if ( lbite_freemius()->is__premium_only() ) {
+		return (bool) lbite_freemius()->can_use_premium_code();
+	}
+
+	return false;
+}
+
+/**
  * Premium-Options in einem Settings-Array auf Default zwingen (für Free-Installationen)
  *
  * Alle Keys aus LBite_Features::get_premium_only_options() werden auf ihren Default-Wert
@@ -672,10 +698,7 @@ function lbite_feature_enabled( $feature ) {
  * @return array Bereinigtes Wertearray
  */
 function lbite_enforce_pro_options( array $values ) {
-	$premium_allowed = function_exists( 'lbite_freemius' )
-		&& lbite_freemius()->can_use_premium_code__premium_only();
-
-	if ( $premium_allowed ) {
+	if ( lbite_has_pro_license() ) {
 		return $values;
 	}
 

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+$lbite_premium_allowed = lbite_has_pro_license();
 $lbite_menu_page_id    = get_option( 'lbite_menu_page_id', 0 );
 $lbite_all_pages       = get_pages( array( 'post_status' => 'publish' ) );
 ?>

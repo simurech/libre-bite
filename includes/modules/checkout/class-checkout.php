@@ -148,21 +148,26 @@ class LBite_Checkout {
 		}
 
 		// Schweizer MWST-Umschaltung (Premium)
-		if ( lbite_freemius()->is__premium_only() && lbite_feature_enabled( 'enable_swiss_vat' ) ) {
-			$this->loader->add_filter( 'woocommerce_product_get_tax_class', $this, 'filter_swiss_vat_tax_class__premium_only', 10, 2 );
-			// Varianten nutzen ggf. einen eigenen Filter-Hook.
-			$this->loader->add_filter( 'woocommerce_product_variation_get_tax_class', $this, 'filter_swiss_vat_tax_class__premium_only', 10, 2 );
-			// Priorität 20: Steuerklasse auf Cart-Items setzen bevor WC die Totale berechnet.
-			$this->loader->add_action( 'woocommerce_before_calculate_totals', $this, 'apply_vat_tax_class_to_cart__premium_only', 20 );
-			// Priorität 5: vor dem Add-on-Hook (Prio 10 in class-product-options.php).
-			$this->loader->add_action( 'woocommerce_checkout_create_order_line_item', $this, 'correct_line_item_subtotal_for_vat__premium_only', 5, 4 );
-		}
+		// Verschachtelt statt mit && verknüpft: Der Freemius-Generator entfernt nur
+		// if-Blöcke mit is__premium_only() als alleiniger Bedingung. Die Lizenz
+		// prüft lbite_feature_enabled().
+		if ( lbite_freemius()->is__premium_only() ) {
+			if ( lbite_feature_enabled( 'enable_swiss_vat' ) ) {
+				$this->loader->add_filter( 'woocommerce_product_get_tax_class', $this, 'filter_swiss_vat_tax_class__premium_only', 10, 2 );
+				// Varianten nutzen ggf. einen eigenen Filter-Hook.
+				$this->loader->add_filter( 'woocommerce_product_variation_get_tax_class', $this, 'filter_swiss_vat_tax_class__premium_only', 10, 2 );
+				// Priorität 20: Steuerklasse auf Cart-Items setzen bevor WC die Totale berechnet.
+				$this->loader->add_action( 'woocommerce_before_calculate_totals', $this, 'apply_vat_tax_class_to_cart__premium_only', 20 );
+				// Priorität 5: vor dem Add-on-Hook (Prio 10 in class-product-options.php).
+				$this->loader->add_action( 'woocommerce_checkout_create_order_line_item', $this, 'correct_line_item_subtotal_for_vat__premium_only', 5, 4 );
+			}
 
-		// Bestelltyp-Auswahl im Checkout (Premium)
-		if ( lbite_freemius()->is__premium_only() && lbite_feature_enabled( 'enable_order_type_selection' ) ) {
-			$this->loader->add_action( 'woocommerce_checkout_before_order_review', $this, 'render_order_type_selector__premium_only' );
-			$this->loader->add_action( 'woocommerce_checkout_update_order_review', $this, 'save_order_type_to_session__premium_only' );
-			$this->loader->add_action( 'woocommerce_checkout_create_order', $this, 'save_order_type_to_order__premium_only', 10, 2 );
+			// Bestelltyp-Auswahl im Checkout (Premium)
+			if ( lbite_feature_enabled( 'enable_order_type_selection' ) ) {
+				$this->loader->add_action( 'woocommerce_checkout_before_order_review', $this, 'render_order_type_selector__premium_only' );
+				$this->loader->add_action( 'woocommerce_checkout_update_order_review', $this, 'save_order_type_to_session__premium_only' );
+				$this->loader->add_action( 'woocommerce_checkout_create_order', $this, 'save_order_type_to_order__premium_only', 10, 2 );
+			}
 		}
 	}
 
@@ -471,14 +476,20 @@ class LBite_Checkout {
 		// Checkout JS-Dateien
 		// Premium-Assets nur in Premium-Version laden (dieser Block wird in Gratis-Version entfernt).
 		if ( lbite_freemius()->is__premium_only() ) {
+			// Nur im optimierten Checkout: Das Script setzt bei Offline-Gateways
+			// eine Platzhalter-E-Mail und hebelte so im normalen WooCommerce-
+			// Checkout die Pflichtprüfung des E-Mail-Felds aus. Die Lizenz
+			// prüft lbite_feature_enabled().
 			if ( is_checkout() ) {
-				wp_enqueue_script(
-					'lbite-checkout-receipt',
-					LBITE_PLUGIN_URL . 'assets/js/checkout-optimized-receipt.js',
-					array( 'jquery' ),
-					LBITE_VERSION,
-					true
-				);
+				if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
+					wp_enqueue_script(
+						'lbite-checkout-receipt',
+						LBITE_PLUGIN_URL . 'assets/js/checkout-optimized-receipt.js',
+						array( 'jquery' ),
+						LBITE_VERSION,
+						true
+					);
+				}
 
 				if ( lbite_feature_enabled( 'enable_tips' ) ) {
 					wp_enqueue_script(
@@ -1609,7 +1620,7 @@ class LBite_Checkout {
 		// (Audit 26.09.2026, AP-17).
 		$buffer_start = 0;
 		$buffer_end   = 0;
-		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() ) {
+		if ( lbite_has_pro_license() ) {
 			$buffer_start = LBite_Locations::get_time_setting( $location_id, 'slot_buffer_start', 0 );
 			$buffer_end   = LBite_Locations::get_time_setting( $location_id, 'slot_buffer_end', 0 );
 		}

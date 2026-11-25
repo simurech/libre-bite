@@ -124,11 +124,15 @@ class LBite_Admin {
 
 		// Beleg-Versand (Premium): AJAX immer registrieren – wird von Kanban-Board und
 		// Bestellansicht benötigt, unabhängig vom aktiven Checkout-Modus.
-		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) {
-			$this->loader->add_action( 'wp_ajax_lbite_admin_send_receipt', $this, 'ajax_admin_send_receipt__premium_only' );
-			// Beleg-Metabox nur wenn Optimierter Checkout aktiv.
-			if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
-				$this->loader->add_action( 'add_meta_boxes', $this, 'add_receipt_metabox__premium_only' );
+		// Alleinige Bedingung im äusseren if, damit der Freemius-Generator den
+		// Block im Gratis-Build entfernt; die Lizenz wird innen geprüft.
+		if ( lbite_freemius()->is__premium_only() ) {
+			if ( lbite_has_pro_license() ) {
+				$this->loader->add_action( 'wp_ajax_lbite_admin_send_receipt', $this, 'ajax_admin_send_receipt__premium_only' );
+				// Beleg-Metabox nur wenn Optimierter Checkout aktiv.
+				if ( lbite_feature_enabled( 'enable_optimized_checkout' ) ) {
+					$this->loader->add_action( 'add_meta_boxes', $this, 'add_receipt_metabox__premium_only' );
+				}
 			}
 		}
 	}
@@ -459,8 +463,9 @@ class LBite_Admin {
 			array( $this, 'render_statistics_page' )
 		);
 
-		// Pricing / Upgrade (Nur wenn nicht Premium)
-		if ( function_exists( 'lbite_freemius' ) && ! lbite_freemius()->is_premium() ) {
+		// Pricing / Upgrade: auch in der Pro-Variante ohne gültige Lizenz zeigen,
+		// sonst fehlt nach Lizenzablauf der Weg zur Verlängerung.
+		if ( ! lbite_has_pro_license() ) {
 			add_submenu_page(
 				'libre-bite',
 				__( 'Upgrade to Pro', 'libre-bite' ),
@@ -1175,7 +1180,7 @@ class LBite_Admin {
 				}
 			}
 
-			$lbite_is_premium   = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+			$lbite_is_premium   = lbite_has_pro_license();
 			$lbite_custom_sound = get_option( 'lbite_notification_sound', '' );
 			$lbite_sound_url    = ( $lbite_is_premium && ! empty( $lbite_custom_sound ) )
 				? $lbite_custom_sound

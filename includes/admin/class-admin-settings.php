@@ -43,7 +43,10 @@ class LBite_Admin_Settings {
 		$this->loader->add_action( 'admin_init', $this, 'save_role_names' );
 		$this->loader->add_action( 'admin_init', $this, 'save_menu_visibility' );
 		if ( lbite_freemius()->is__premium_only() ) {
-			$this->loader->add_action( 'admin_init', $this, 'save_manager_assignments__premium_only' );
+			// Lizenz zusätzlich prüfen: is__premium_only() kennt nur die Code-Variante.
+			if ( lbite_has_pro_license() ) {
+				$this->loader->add_action( 'admin_init', $this, 'save_manager_assignments__premium_only' );
+			}
 		}
 
 		// Plugin-Name überschreiben

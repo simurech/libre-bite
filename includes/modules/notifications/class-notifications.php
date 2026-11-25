@@ -61,6 +61,12 @@ class LBite_Notifications {
 	 * Pickup-Reminder versenden (nur Premium)
 	 */
 	public function send_pickup_reminders__premium_only() {
+		// Der Cron-Eintrag überlebt einen Lizenzablauf; ohne diese Prüfung
+		// liefen die Erinnerungen danach unbegrenzt weiter.
+		if ( ! lbite_feature_enabled( 'enable_pickup_reminders' ) ) {
+			return;
+		}
+
 		if ( ! get_option( 'lbite_email_pickup_reminder', true ) ) {
 			return;
 		}

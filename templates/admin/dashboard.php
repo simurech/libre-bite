@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $lbite_plugin_name     = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) );
 $lbite_can_manage      = current_user_can( 'lbite_manage_settings' );
 $lbite_can_locations   = current_user_can( 'lbite_manage_locations' );
-$lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+$lbite_premium_allowed = lbite_has_pro_license();
 
 // Leerzustände für neue Installationen: ohne Standort und ohne aktive
 // Zahlungsart kann noch keine einzige Bestellung durchlaufen, das war

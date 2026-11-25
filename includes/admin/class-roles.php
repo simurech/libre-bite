@@ -105,8 +105,15 @@ class LBite_Roles {
 		// Die Manager-Rolle gehört zum Pro-Umfang. Ohne diesen Aufruf entsteht sie erst,
 		// wenn jemand die Rollen-Einstellungen öffnet – bis dahin landen zugewiesene
 		// Benutzer ganz ohne Rolle und kommen nicht einmal ins Backend.
-		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->is__premium_only() ) {
-			self::create_manager_role__premium_only();
+		// Bewusst nach Code-Variante statt nach Lizenz: Die Rolle selbst schaltet
+		// nichts frei (Standort-Zuweisungen sind lizenzgeprüft), muss aber nach
+		// einer Lizenzverlängerung ohne erneute Aktivierung vorhanden sein.
+		// Alleinige Bedingung, damit der Freemius-Generator den Block im
+		// Gratis-Build entfernt.
+		if ( function_exists( 'lbite_freemius' ) ) {
+			if ( lbite_freemius()->is__premium_only() ) {
+				self::create_manager_role__premium_only();
+			}
 		}
 	}
 

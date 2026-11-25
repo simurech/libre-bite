@@ -18,7 +18,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
 }
 
-$lbite_mgr_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+$lbite_mgr_premium = lbite_has_pro_license();
 ?>
 <p class="description lbite-settings-intro">
 	<?php esc_html_e( 'Assign one or more locations to each manager or shop manager — they can only see and manage orders for checked locations, no checks means unrestricted. Administrators and staff are listed for a full overview but managed differently (see below).', 'libre-bite' ); ?>

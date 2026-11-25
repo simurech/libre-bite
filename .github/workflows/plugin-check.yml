@@ -13,7 +13,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Der Aufbau der wp-env-Umgebung lädt Pakete von GitHub und Packagist.
+      # Ein einzelner Netzwerkfehler (z. B. HTTP 504 beim Composer-Download)
+      # liess den Lauf rot werden, ohne dass am Plugin etwas falsch war.
+      # Darum ein zweiter Anlauf, bevor der Job als fehlgeschlagen gilt.
       - name: Run Plugin Check
+        id: first_attempt
+        continue-on-error: true
+        uses: wordpress/plugin-check-action@v1
+        with:
+          exclude-directories: .github,scripts
+          exclude-files: .gitignore,.distignore
+
+      - name: Run Plugin Check (second attempt)
+        if: steps.first_attempt.outcome == 'failure'
         uses: wordpress/plugin-check-action@v1
         with:
           exclude-directories: .github,scripts

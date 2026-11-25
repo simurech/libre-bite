@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$lbite_premium_allowed = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+$lbite_premium_allowed = lbite_has_pro_license();
 
 if ( lbite_feature_enabled( 'enable_sound_notifications' ) && $lbite_premium_allowed ) {
 	wp_enqueue_media();

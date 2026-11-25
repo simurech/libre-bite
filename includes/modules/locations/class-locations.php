@@ -599,7 +599,7 @@ class LBite_Locations {
 			}
 		}
 
-		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() ) {
+		if ( lbite_has_pro_license() ) {
 			if ( isset( $_POST['lbite_location_slot_buffer_start'] ) ) {
 				$buf = sanitize_text_field( wp_unslash( $_POST['lbite_location_slot_buffer_start'] ) );
 				if ( '' === $buf || ! is_numeric( $buf ) ) {
@@ -663,7 +663,7 @@ class LBite_Locations {
 		$global_start    = (int) get_option( 'lbite_slot_buffer_start', 0 );
 		$global_end      = (int) get_option( 'lbite_slot_buffer_end', 0 );
 
-		$is_premium = function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only();
+		$is_premium = lbite_has_pro_license();
 		?>
 		<p class="description" style="margin-bottom:12px;">
 			<?php esc_html_e( 'These settings override the global defaults for this location only. Leave blank to use the global value.', 'libre-bite' ); ?>
@@ -1933,7 +1933,7 @@ class LBite_Locations {
 		// `can_use_premium_code__premium_only()` prüft zusätzlich Lizenz/Trial.
 		// Ohne diese Korrektur blieb das Standort-Limit auf dem GitHub-Pro-Build
 		// nach Ablauf des Trials dauerhaft unwirksam (Audit 26.09.2026, AP-17).
-		if ( function_exists( 'lbite_freemius' ) && lbite_freemius()->can_use_premium_code__premium_only() ) {
+		if ( lbite_has_pro_license() ) {
 			return;
 		}
 
@@ -2011,7 +2011,7 @@ class LBite_Locations {
 	 * statt stiller Weiterbetrieb (Audit 26.09.2026, AP-17).
 	 */
 	public function show_lapsed_license_locations_notice() {
-		if ( ! function_exists( 'lbite_freemius' ) || lbite_freemius()->can_use_premium_code__premium_only() ) {
+		if ( lbite_has_pro_license() ) {
 			return;
 		}
 

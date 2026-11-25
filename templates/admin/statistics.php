@@ -488,7 +488,7 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 		__( 'Order Type', 'libre-bite' ),
 		__( 'Source', 'libre-bite' ),
 		__( 'Products', 'libre-bite' ),
-	), ';' );
+	), ';', '"', '' ); // Escape-Zeichen leer: RFC-4180-konform, ab PHP 8.4 Pflichtangabe.
 	// Eigene, von der Aggregation oben unabhängige Batches – der
 	// Standortfilter läuft bereits als meta_query in $lbite_query_args
 	// (Audit 26.09.2026, AP-14).
@@ -538,7 +538,7 @@ if ( isset( $_GET['lbite_export'] ) && 'csv' === sanitize_key( wp_unslash( $_GET
 			$lbite_csv_stype,
 			$lbite_csv_source,
 			implode( ' | ', $lbite_csv_items ),
-		), ';' );
+		), ';', '"', '' ); // Escape-Zeichen leer: RFC-4180-konform, ab PHP 8.4 Pflichtangabe.
 	}
 
 		$lbite_csv_batch_page++;
