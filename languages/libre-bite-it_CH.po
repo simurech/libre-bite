@@ -4648,10 +4648,6 @@ msgstr "Colore principale per pulsanti ed elementi importanti."
 msgid "Secondary Color"
 msgstr "Colore secondario"
 
-#: templates/admin/settings/branding.php:101
-msgid "For texts and secondary elements."
-msgstr "Per i testi e gli elementi secondari."
-
 #: templates/admin/settings/branding.php:105
 msgid "Accent Color"
 msgstr "Colore di accento"
@@ -4685,10 +4681,6 @@ msgstr "Anteprima in diretta"
 #: templates/checkout-location-time.php:201 templates/location-modal.php:48
 msgid "Order Now"
 msgstr "Ordina ora"
-
-#: templates/admin/settings/branding.php:151
-msgid "Secondary text and links"
-msgstr "Testi e link secondari"
 
 #: templates/admin/settings/branding.php:199
 msgid "Use Logo"
@@ -6967,3 +6959,11 @@ msgstr "Rimuovi l’articolo"
 #: includes/modules/menu-view/class-menu-view.php
 msgid "Could not update your order. Please try again."
 msgstr "Impossibile aggiornare l’ordine. Riprova."
+
+#: templates/admin/settings/branding.php
+msgid "For headings and the line above the order total. Very light colors are replaced by dark grey for text so it stays readable."
+msgstr "Per i titoli e la linea sopra il totale dell’ordine. I colori molto chiari vengono sostituiti dal grigio scuro per il testo, così da restare leggibile."
+
+#: templates/admin/settings/branding.php
+msgid "This color is too light to be readable on a white background. Headings and lines will use dark grey instead, so the color itself will hardly be visible to your guests."
+msgstr "Questo colore è troppo chiaro per essere leggibile su sfondo bianco. Titoli e linee useranno invece il grigio scuro, quindi il colore stesso sarà appena visibile per i tuoi ospiti."

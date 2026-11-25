@@ -6,7 +6,7 @@ Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 3.6.26
+Stable tag: 3.7.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -276,6 +276,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 3.7.0 =
+* Changed: The secondary color is now used for headings and the line above the order total; very light colors fall back to dark grey so both stay visible.
+* Feature: The branding settings warn when the secondary color is too light, and the live preview shows where the color appears in the shop.
 
 = 3.6.26 =
 * Changed: The dashboard widget caches its figures for five minutes and refreshes on every status change.

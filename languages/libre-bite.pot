@@ -4791,10 +4791,6 @@ msgstr ""
 msgid "Secondary Color"
 msgstr ""
 
-#: templates/admin/settings/branding.php:101
-msgid "For texts and secondary elements."
-msgstr ""
-
 #: templates/admin/settings/branding.php:105
 msgid "Accent Color"
 msgstr ""
@@ -4828,10 +4824,6 @@ msgstr ""
 #: templates/checkout-location-time.php:201
 #: templates/location-modal.php:48
 msgid "Order Now"
-msgstr ""
-
-#: templates/admin/settings/branding.php:151
-msgid "Secondary text and links"
 msgstr ""
 
 #: templates/admin/settings/branding.php:199
@@ -7125,4 +7117,12 @@ msgstr ""
 
 #: includes/modules/menu-view/class-menu-view.php
 msgid "Could not update your order. Please try again."
+msgstr ""
+
+#: templates/admin/settings/branding.php
+msgid "For headings and the line above the order total. Very light colors are replaced by dark grey for text so it stays readable."
+msgstr ""
+
+#: templates/admin/settings/branding.php
+msgid "This color is too light to be readable on a white background. Headings and lines will use dark grey instead, so the color itself will hardly be visible to your guests."
 msgstr ""

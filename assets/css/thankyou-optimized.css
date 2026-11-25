@@ -296,7 +296,7 @@ a.lbite-maps-link:hover {
 .lbite-total-row td {
 	font-size: 18px;
 	padding-top: 12px;
-	border-top: 2px solid var(--lbite-color-secondary, #23282d);
+	border-top: 2px solid var(--lbite-color-secondary-text, var(--lbite-color-secondary, #23282d)); /* Lesbare Variante: helle Sekundärfarben (z. B. #fefefe) waren unsichtbar. */
 }
 
 .lbite-total-row td:first-child {

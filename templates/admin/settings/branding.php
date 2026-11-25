@@ -98,7 +98,10 @@ $lbite_color_presets = array(
 			<th><?php esc_html_e( 'Secondary Color', 'libre-bite' ); ?></th>
 			<td>
 				<input type="text" name="lbite_color_secondary" value="<?php echo esc_attr( $lbite_color_secondary ); ?>" class="lbite-color-picker" data-default-color="#23282d">
-				<p class="description"><?php esc_html_e( 'For texts and secondary elements.', 'libre-bite' ); ?></p>
+				<p class="description"><?php esc_html_e( 'For headings and the line above the order total. Very light colors are replaced by dark grey for text so it stays readable.', 'libre-bite' ); ?></p>
+				<p id="lbite-secondary-contrast-warning" class="lbite-color-warning" style="display: none; margin: 8px 0 0; padding: 8px 12px; border-left: 4px solid #dba617; background: #fcf9e8; color: #1d2327;">
+					<?php esc_html_e( 'This color is too light to be readable on a white background. Headings and lines will use dark grey instead, so the color itself will hardly be visible to your guests.', 'libre-bite' ); ?>
+				</p>
 			</td>
 		</tr>
 		<tr>
@@ -149,13 +152,20 @@ $lbite_color_presets = array(
 	<div id="lbite-preview-header" style="background: <?php echo esc_attr( $lbite_color_primary ); ?>; display: flex; align-items: center; padding: 0 16px; height: 48px;">
 		<span id="lbite-preview-brand-name" style="color: #fff; font-weight: 700; font-size: 16px;"><?php echo esc_html( $lbite_brand_name ?: __( 'Brand Name', 'libre-bite' ) ); ?></span>
 	</div>
-	<div id="lbite-preview-secondary-bar" style="background: <?php echo esc_attr( $lbite_color_secondary ); ?>; height: 6px;"></div>
+	<?php
+	// Vorschau zeigt die Sekundärfarbe dort, wo der Shop sie tatsächlich nutzt:
+	// Überschrift und Linie über der Gesamtsumme – jeweils in der lesbaren
+	// Variante aus LBite_Branding (siehe --lbite-color-secondary-text).
+	$lbite_preview_tokens    = LBite_Branding::get_tokens();
+	$lbite_preview_secondary = isset( $lbite_preview_tokens['--lbite-color-secondary-text'] ) ? $lbite_preview_tokens['--lbite-color-secondary-text'] : '#1d2327';
+	$lbite_preview_contrast  = isset( $lbite_preview_tokens['--lbite-color-primary-contrast'] ) ? $lbite_preview_tokens['--lbite-color-primary-contrast'] : '#ffffff';
+	?>
 	<div style="padding: 16px;">
-		<div style="display: flex; gap: 8px; margin-bottom: 12px;">
-			<button type="button" id="lbite-preview-btn-main" style="flex: 1; padding: 10px; background: <?php echo esc_attr( $lbite_color_primary ); ?>; color: #fff; border: none; border-radius: 4px; cursor: default; font-weight: 600;"><?php esc_html_e( 'Order Now', 'libre-bite' ); ?></button>
-			<button type="button" id="lbite-preview-btn-secondary" style="flex: 1; padding: 10px; background: <?php echo esc_attr( $lbite_color_secondary ); ?>; color: #fff; border: none; border-radius: 4px; cursor: default;"><?php esc_html_e( 'Back', 'libre-bite' ); ?></button>
+		<h3 id="lbite-preview-heading" style="margin: 0 0 10px; font-size: 15px; color: <?php echo esc_attr( $lbite_preview_secondary ); ?>;"><?php esc_html_e( 'Your order', 'libre-bite' ); ?></h3>
+		<div id="lbite-preview-total" style="display: flex; justify-content: space-between; padding-top: 8px; margin-bottom: 14px; border-top: 2px solid <?php echo esc_attr( $lbite_preview_secondary ); ?>; font-weight: 700; color: var(--lbite-text, #1d2327);">
+			<span><?php esc_html_e( 'Total', 'libre-bite' ); ?></span><span>24.50</span>
 		</div>
-		<p id="lbite-preview-secondary-text" style="color: <?php echo esc_attr( $lbite_color_secondary ); ?>; margin: 0; font-size: 13px;"><?php esc_html_e( 'Secondary text and links', 'libre-bite' ); ?></p>
+		<button type="button" id="lbite-preview-btn-main" style="width: 100%; padding: 10px; background: <?php echo esc_attr( $lbite_color_primary ); ?>; color: <?php echo esc_attr( $lbite_preview_contrast ); ?>; border: none; border-radius: 4px; cursor: default; font-weight: 600;"><?php esc_html_e( 'Order Now', 'libre-bite' ); ?></button>
 	</div>
 </div>
 
@@ -165,12 +175,27 @@ ob_start();
 jQuery(document).ready(function($) {
 	var lbiteLogoFrame;
 
+	// Gleiche Regel wie LBite_Branding::contrast_color() (WCAG-Relativluminanz,
+	// Schwelle 0.179) – Vorschau und Shop dürfen nicht auseinanderlaufen.
+	function lbiteIsLight(hex) {
+		var m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex || '');
+		if (!m) { return false; }
+		var lum = [m[1], m[2], m[3]].map(function(h) {
+			var c = parseInt(h, 16) / 255;
+			return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+		});
+		return (0.2126 * lum[0] + 0.7152 * lum[1] + 0.0722 * lum[2]) > 0.179;
+	}
+
 	function lbiteUpdatePreview(primary, secondary, accent) {
+		var secondaryText = lbiteIsLight(secondary) ? '#1d2327' : secondary;
+		var primaryText   = lbiteIsLight(primary) ? '#1d2327' : '#ffffff';
 		$('#lbite-preview-header').css('background', primary);
-		$('#lbite-preview-secondary-bar').css('background', secondary);
-		$('#lbite-preview-btn-main').css('background', primary);
-		$('#lbite-preview-btn-secondary').css('background', secondary);
-		$('#lbite-preview-secondary-text').css('color', secondary);
+		$('#lbite-preview-brand-name').css('color', primaryText);
+		$('#lbite-preview-btn-main').css({ background: primary, color: primaryText });
+		$('#lbite-preview-heading').css('color', secondaryText);
+		$('#lbite-preview-total').css('border-top-color', secondaryText);
+		$('#lbite-secondary-contrast-warning').toggle(lbiteIsLight(secondary));
 	}
 
 	$('.lbite-color-picker').wpColorPicker({
@@ -181,6 +206,12 @@ jQuery(document).ready(function($) {
 			lbiteUpdatePreview(primary, secondary, accent);
 		}
 	});
+
+	lbiteUpdatePreview(
+		$('input[name="lbite_color_primary"]').val(),
+		$('input[name="lbite_color_secondary"]').val(),
+		$('input[name="lbite_color_accent"]').val()
+	);
 
 	$('input[name="lbite_brand_name"]').on('input', function() {
 		var name = $(this).val() || '<?php echo esc_js( __( 'Brand Name', 'libre-bite' ) ); ?>';

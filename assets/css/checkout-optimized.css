@@ -447,7 +447,7 @@ body .lbite-checkout-optimized #order_review {
 
 /* Total-Zeile */
 .lbite-checkout-form .woocommerce-checkout-review-order-table tfoot .order-total {
-	border-top: 2px solid var(--lbite-color-secondary);
+	border-top: 2px solid var(--lbite-color-secondary-text, var(--lbite-color-secondary, #23282d)); /* Lesbare Variante: helle Sekundärfarben (z. B. #fefefe) waren unsichtbar. */
 }
 
 /* Payment Section */
