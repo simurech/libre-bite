@@ -324,6 +324,13 @@ class LBite_Features {
 			'label'       => 'Dim Future Pre-orders',
 			'description' => 'Grey out pre-orders with pickup time beyond preparation time in the Kanban board',
 		),
+		'enable_pickup_display'       => array(
+			'group'       => 'dashboard',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Pickup Display',
+			'description' => 'Full-screen page for a TV that shows which order numbers are being prepared and which are ready for pickup',
+		),
 		'enable_kanban_customization' => array(
 			'group'       => 'dashboard',
 			'default'     => false,

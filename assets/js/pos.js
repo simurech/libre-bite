@@ -95,6 +95,19 @@
 			this.applyLocationColor(initialLocation);
 			this.updateNoLocationState(!initialLocation);
 
+			// Direkt aus dem Tischplan: Tab zum Nachbuchen vorwählen oder das
+			// Zahlungsfenster eines Tabs öffnen (z. B. für Split-Zahlungen).
+			const lbiteParams = new URLSearchParams(window.location.search);
+			if (lbiteParams.get('lbite_tab')) {
+				this.setActiveTab(parseInt(lbiteParams.get('lbite_tab'), 10), lbiteParams.get('lbite_tab_table') || '');
+			} else if (lbiteParams.get('lbite_close_tab')) {
+				this.startCloseTab(parseInt(lbiteParams.get('lbite_close_tab'), 10));
+			}
+			if (lbiteParams.get('lbite_tab') || lbiteParams.get('lbite_close_tab')) {
+				['lbite_tab', 'lbite_tab_table', 'lbite_close_tab'].forEach((k) => lbiteParams.delete(k));
+				window.history.replaceState(null, '', window.location.pathname + '?' + lbiteParams.toString());
+			}
+
 			// Eingebettete Daten verwenden (kein HTTP-Request nötig)
 			if (lbitePos.preloadData && lbitePos.preloadData.products) {
 				this.usePreloadedData(lbitePos.preloadData);
@@ -365,6 +378,12 @@
 			$(document).on('click', '.lbite-tab-pay-close', function() {
 				const orderId = $(this).data('order-id');
 				POS.startCloseTab(orderId);
+			});
+			$(document).on('click', '.lbite-tab-walkout', function() {
+				const orderId = $(this).data('order-id');
+				if (confirm(lbitePos.strings.confirmWalkout || 'Mark this tab as unpaid?')) {
+					POS.walkoutTab(orderId);
+				}
 			});
 			$(document).on('click', '.lbite-tab-cancel', function() {
 				const orderId = $(this).data('order-id');
@@ -1210,6 +1229,11 @@
 						.text(lbitePos.strings.payClose || 'Pay / Close')
 				);
 				$actions.append(
+					$('<button type="button" class="button-link lbite-tab-walkout"></button>')
+						.attr('data-order-id', tab.order_id)
+						.text(lbitePos.strings.walkout || 'Left without paying')
+				);
+				$actions.append(
 					$('<button type="button" class="button-link lbite-tab-cancel"></button>')
 						.attr('data-order-id', tab.order_id)
 						.text(lbitePos.strings.cancelOrder || 'Cancel')
@@ -1243,7 +1267,7 @@
 		/**
 		 * Warenkorb als neuen Tab an einem Tisch eröffnen.
 		 */
-		openTab: function() {
+		openTab: function(force) {
 			if (this.cart.length === 0) {
 				window.lbiteNotify.error(lbitePos.strings.cartEmpty);
 				return;
@@ -1270,13 +1294,16 @@
 					cart_items: JSON.stringify(this.cart),
 					location_id: locationId,
 					table_id: tableId,
-					customer_name: customerName
+					customer_name: customerName,
+					force: force ? 1 : 0
 				},
 				success: (response) => {
 					if (response.success) {
 						window.lbiteNotify.success(lbitePos.strings.tabOpened || 'Tab opened');
 						this.clearCart();
 						this.refreshTabsBadge();
+					} else if (response.data && 'table_has_open_tab' === response.data.code) {
+						this.showTabConflict(response.data);
 					} else {
 						window.lbiteNotify.error(response.data.message || lbitePos.strings.orderError);
 					}
@@ -1286,6 +1313,60 @@
 				},
 				complete: () => {
 					this.hideLoading();
+				}
+			});
+		},
+
+		/**
+		 * Rückfrage bei bereits offenem Tab am Tisch: Runde auf den bestehenden
+		 * Tab buchen, bewusst einen zweiten öffnen oder zurück.
+		 *
+		 * @param {Object} data order_id, table_name, message vom Server.
+		 */
+		showTabConflict: function(data) {
+			const $modal = $('#lbite-tab-conflict-modal');
+			$('#lbite-tab-conflict-text').text(data.message || '');
+			$modal.fadeIn(150);
+			$modal.find('[data-lbite-conflict="add"]').trigger('focus');
+			$modal.off('click.lbiteConflict').on('click.lbiteConflict', '[data-lbite-conflict]', (e) => {
+				const choice = $(e.currentTarget).data('lbite-conflict');
+				$modal.fadeOut(150);
+				if ('add' === choice) {
+					// Warenkorb behalten und direkt als neue Runde nachbuchen.
+					this.activeTab = { orderId: data.order_id, tableName: data.table_name };
+					this.addToTab();
+				} else if ('force' === choice) {
+					this.openTab(true);
+				}
+			});
+		},
+
+		/**
+		 * Tab als «ohne Bezahlung gegangen» abschliessen.
+		 *
+		 * @param {number} orderId Bestell-ID.
+		 */
+		walkoutTab: function(orderId) {
+			$.ajax({
+				url: lbitePos.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'lbite_pos_tab_walkout',
+					nonce: lbitePos.nonce,
+					order_id: orderId,
+					location_id: $('#lbite-pos-location').val()
+				},
+				success: (response) => {
+					if (response.success) {
+						window.lbiteNotify.success(lbitePos.strings.walkoutDone || 'Tab marked as unpaid');
+						this.loadOpenTabs();
+						this.refreshTabsBadge();
+					} else {
+						window.lbiteNotify.error(response.data.message || lbitePos.strings.orderError);
+					}
+				},
+				error: () => {
+					window.lbiteNotify.error(lbitePos.strings.orderError);
 				}
 			});
 		},

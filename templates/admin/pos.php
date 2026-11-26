@@ -340,6 +340,25 @@ $lbite_pos_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol
 
 	<!-- Tabs-Panel -->
 	<?php if ( lbite_feature_enabled( 'enable_open_tabs' ) ) : ?>
+	<?php // Rückfrage, wenn am gewählten Tisch schon ein Tab offen ist. ?>
+	<div id="lbite-tab-conflict-modal" class="lbite-modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="lbite-tab-conflict-title">
+		<div class="lbite-modal-overlay" data-lbite-conflict="cancel"></div>
+		<div class="lbite-modal-content lbite-tab-conflict-content">
+			<div class="lbite-modal-header">
+				<h2 id="lbite-tab-conflict-title"><?php esc_html_e( 'Table already has an open tab', 'libre-bite' ); ?></h2>
+			</div>
+			<div class="lbite-modal-body">
+				<p id="lbite-tab-conflict-text"></p>
+				<p class="description"><?php esc_html_e( 'Usually a table has one tab. Add this round to the existing tab, or open a second tab only if the guests pay separately.', 'libre-bite' ); ?></p>
+			</div>
+			<div class="lbite-modal-footer">
+				<button type="button" class="button button-large" data-lbite-conflict="cancel"><?php esc_html_e( 'Back', 'libre-bite' ); ?></button>
+				<button type="button" class="button button-large" data-lbite-conflict="force"><?php esc_html_e( 'Open second tab', 'libre-bite' ); ?></button>
+				<button type="button" class="button button-primary button-large" data-lbite-conflict="add"><?php esc_html_e( 'Add to existing tab', 'libre-bite' ); ?></button>
+			</div>
+		</div>
+	</div>
+
 	<div id="lbite-pos-tabs-panel" class="lbite-modal" style="display: none;">
 		<div id="lbite-pos-tabs-panel-overlay" class="lbite-modal-overlay"></div>
 		<div class="lbite-modal-content lbite-tabs-panel-content">

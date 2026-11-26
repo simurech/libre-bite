@@ -38,6 +38,9 @@
 			}, { passive: false });
 			document.addEventListener('touchend', () => this.stopDrag());
 			document.addEventListener('click', (e) => {
+				// Ein Klick, der das Fenster selbst umbaut (z. B. «Bezahlen»), löst
+				// den Knopf aus dem DOM – das ist kein Klick ausserhalb.
+				if (!document.contains(e.target)) return;
 				if (!e.target.closest('#lbite-fp-popup') && !e.target.closest('.lbite-fp-table')) {
 					this.hidePopup();
 				}
@@ -382,6 +385,7 @@
 
 						// Kellnerruf (Pro, F48): Tisch zusätzlich hervorheben, unabhängig
 						// davon, ob am Tisch schon eine Bestellung offen ist.
+						t.calls = (response.data.service_call_items || {})[t.id] || [];
 						const calls = (response.data.service_calls || {})[t.id];
 						t.el.classList.toggle('lbite-fp-table--call', !!calls);
 						if (calls) {
@@ -432,59 +436,78 @@
 			const t = this.tables.find(t => t.id == tableId);
 			if (!t) return;
 
+			const S = lbiteFloorPlan.strings;
 			const tableName = t.el.querySelector('.lbite-fp-table-name').textContent;
 			const popup = document.createElement('div');
 			popup.id = 'lbite-fp-popup';
 			popup.className = 'lbite-fp-popup';
+			popup.setAttribute('role', 'dialog');
+			popup.setAttribute('aria-label', tableName);
 
-			if (t.orderData) {
-				const d = t.orderData;
-				popup.innerHTML = `
-					<div class="lbite-fp-popup-header">
-						<strong class="lbite-fp-popup-title">${this.escHtml(tableName)}</strong>
-						<button class="lbite-fp-popup-close" type="button">&times;</button>
-					</div>
-					<div class="lbite-fp-popup-body">
-						<div class="lbite-fp-popup-row">
-							<span class="lbite-fp-popup-label">${lbiteFloorPlan.strings.order}</span>
-							<a href="${lbiteFloorPlan.orderEditUrl.replace('%d', d.order_id)}" target="_blank" class="lbite-fp-popup-link">#${this.escHtml(String(d.order_number))}</a>
-						</div>
-						<div class="lbite-fp-popup-row">
-							<span class="lbite-fp-popup-label">${lbiteFloorPlan.strings.time}</span>
-							<span>${this.escHtml(d.time)}</span>
-						</div>
-						<div class="lbite-fp-popup-row">
-							<span class="lbite-fp-popup-label">${lbiteFloorPlan.strings.items}</span>
-							<span>${d.items_count}</span>
-						</div>
-						<div class="lbite-fp-popup-row">
-							<span class="lbite-fp-popup-label">${lbiteFloorPlan.strings.total}</span>
-							<span>${this.escHtml(d.total)}</span>
-						</div>
-						<div class="lbite-fp-popup-row">
-							<span class="lbite-fp-popup-label">${lbiteFloorPlan.strings.status}</span>
-							<span class="lbite-fp-popup-status lbite-fp-popup-status--${d.display_status}">${this.escHtml(d.status_label)}</span>
-						</div>
-						<div class="lbite-fp-popup-actions">
-							<a href="${lbiteFloorPlan.orderUrl}" class="button button-small">${lbiteFloorPlan.strings.viewOrder}</a>
-						</div>
-					</div>
-				`;
-			} else {
-				popup.innerHTML = `
-					<div class="lbite-fp-popup-header">
-						<strong class="lbite-fp-popup-title">${this.escHtml(tableName)}</strong>
-						<button class="lbite-fp-popup-close" type="button">&times;</button>
-					</div>
-					<div class="lbite-fp-popup-body">
-						<p class="lbite-fp-popup-free">${lbiteFloorPlan.strings.tableFree}</p>
-					</div>
-				`;
+			let body = '';
+
+			// Offene Kellnerrufe zuerst – sie sind der Grund, warum man hinsieht.
+			(t.calls || []).forEach((call) => {
+				body += `<div class="lbite-fp-popup-call">
+					<span>&#128276; ${this.escHtml(call.label)}</span>
+					<button type="button" class="button button-small" data-fp-action="resolve-call" data-call-id="${this.escHtml(call.id)}">${this.escHtml(S.callDone)} &#10003;</button>
+				</div>`;
+			});
+
+			const orders = (t.orderData && t.orderData.orders) || [];
+			if (!orders.length) {
+				body += `<p class="lbite-fp-popup-free">${S.tableFree}</p>`;
 			}
+
+			orders.forEach((o) => {
+				const items = (o.items || []).map(i =>
+					`<li><span class="lbite-fp-popup-qty">${this.escHtml(i.quantity)}&times;</span> ${this.escHtml(i.name)}</li>`
+				).join('');
+
+				let actions = '';
+				if (o.is_tab && lbiteFloorPlan.canPos) {
+					const addUrl = lbiteFloorPlan.posUrl + '&lbite_tab=' + encodeURIComponent(o.order_id) + '&lbite_tab_table=' + encodeURIComponent(tableName);
+					actions += `<a class="button button-small" href="${this.escHtml(addUrl)}">${S.addItems}</a>`;
+					actions += `<button type="button" class="button button-primary button-small" data-fp-action="pay" data-order-id="${o.order_id}">${S.payClose}</button>`;
+				}
+				if (o.next_key && lbiteFloorPlan.canManage) {
+					actions += `<button type="button" class="button button-small" data-fp-action="status" data-order-id="${o.order_id}" data-status="${this.escHtml(o.next_key)}">${this.escHtml(S.moveTo.replace('%s', o.next_label))}</button>`;
+				}
+				if (o.is_tab && lbiteFloorPlan.canPos) {
+					actions += `<button type="button" class="button-link lbite-fp-popup-walkout" data-fp-action="walkout" data-order-id="${o.order_id}">${S.walkout}</button>`;
+				}
+
+				body += `<section class="lbite-fp-popup-order" data-order-id="${o.order_id}">
+					<div class="lbite-fp-popup-row">
+						<a href="${lbiteFloorPlan.orderEditUrl.replace('%d', o.order_id)}" target="_blank" class="lbite-fp-popup-link">${o.is_tab ? this.escHtml(S.tab) + ' ' : ''}#${this.escHtml(String(o.order_number))}</a>
+						<span class="lbite-fp-popup-meta">${this.escHtml(o.time)}${o.board_label ? ' · ' + this.escHtml(o.board_label) : ''}</span>
+					</div>
+					<ul class="lbite-fp-popup-items">${items}</ul>
+					<div class="lbite-fp-popup-row lbite-fp-popup-total">
+						<span class="lbite-fp-popup-label">${S.total}</span>
+						<strong>${this.escHtml(o.total)}</strong>
+					</div>
+					<div class="lbite-fp-popup-actions">${actions}</div>
+				</section>`;
+			});
+
+			popup.innerHTML = `
+				<div class="lbite-fp-popup-header">
+					<strong class="lbite-fp-popup-title">${this.escHtml(tableName)}</strong>
+					<button class="lbite-fp-popup-close" type="button" aria-label="${this.escHtml(S.back)}">&times;</button>
+				</div>
+				<div class="lbite-fp-popup-body">${body}</div>
+				<p class="lbite-fp-popup-message" role="status"></p>
+			`;
 
 			document.body.appendChild(popup);
 			popup.querySelector('.lbite-fp-popup-close').addEventListener('click', () => this.hidePopup());
+			popup.addEventListener('click', (e) => this.onPopupAction(e, t, popup));
 
+			this.positionPopup(popup, el);
+		},
+
+		positionPopup(popup, el) {
 			// Position berechnen (neben dem Tisch-Element)
 			requestAnimationFrame(() => {
 				const elRect   = el.getBoundingClientRect();
@@ -504,6 +527,98 @@
 				popup.style.top  = top + 'px';
 				popup.classList.add('lbite-fp-popup--visible');
 			});
+		},
+
+		/**
+		 * Klicks auf Aktionen im Tischfenster.
+		 */
+		onPopupAction(e, t, popup) {
+			const btn = e.target.closest('[data-fp-action]');
+			if (!btn) return;
+
+			const S       = lbiteFloorPlan.strings;
+			const action  = btn.dataset.fpAction;
+			const orderId = btn.dataset.orderId;
+
+			if ('pay' === action) {
+				this.showPayChoice(btn.closest('.lbite-fp-popup-order'), orderId, t);
+				return;
+			}
+			if ('pay-back' === action) {
+				this.showPopup(t.id, t.el);
+				return;
+			}
+			if ('walkout' === action && !window.confirm(S.confirmWalkout)) {
+				return;
+			}
+
+			btn.disabled = true;
+			let request;
+			if ('pay-method' === action) {
+				request = this.posRequest('lbite_pos_close_tab', { order_id: orderId, payment_method: btn.dataset.method });
+			} else if ('walkout' === action) {
+				request = this.posRequest('lbite_pos_tab_walkout', { order_id: orderId });
+			} else if ('status' === action) {
+				request = this.restRequest('orders/' + encodeURIComponent(orderId) + '/status', { status: btn.dataset.status });
+			} else if ('resolve-call' === action) {
+				request = this.restRequest('service-calls/' + encodeURIComponent(btn.dataset.callId) + '/resolve', {});
+			} else {
+				return;
+			}
+
+			request.then(() => {
+				this.hidePopup();
+				this.loadStatuses();
+			}).catch((message) => {
+				btn.disabled = false;
+				const msg = popup.querySelector('.lbite-fp-popup-message');
+				if (msg) msg.textContent = message || S.actionError;
+			});
+		},
+
+		/**
+		 * Zahlungsart wählen, direkt im Tischfenster. Split bleibt der Kasse
+		 * vorbehalten, dort gibt es die Beträge je Zahlungsart.
+		 */
+		showPayChoice(section, orderId, t) {
+			const S = lbiteFloorPlan.strings;
+			const methods = (lbiteFloorPlan.payMethods || []).map(m =>
+				`<button type="button" class="button lbite-fp-pay-method" data-fp-action="pay-method" data-order-id="${orderId}" data-method="${this.escHtml(m.key)}"><span aria-hidden="true">${this.escHtml(m.icon)}</span> ${this.escHtml(m.label)}</button>`
+			).join('');
+			const splitUrl = lbiteFloorPlan.posUrl + '&lbite_close_tab=' + encodeURIComponent(orderId);
+			section.querySelector('.lbite-fp-popup-actions').innerHTML = `
+				<p class="lbite-fp-popup-label">${S.choosePay}</p>
+				<div class="lbite-fp-pay-methods">${methods}</div>
+				<div class="lbite-fp-pay-foot">
+					<button type="button" class="button-link" data-fp-action="pay-back">${S.back}</button>
+					<a class="button-link" href="${this.escHtml(splitUrl)}">${S.splitInPos}</a>
+				</div>`;
+		},
+
+		posRequest(action, data) {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					url: lbiteFloorPlan.ajaxUrl,
+					type: 'POST',
+					data: Object.assign({ action: action, nonce: lbiteFloorPlan.posNonce, location_id: this.currentLocationId }, data),
+					success: (r) => (r && r.success ? resolve(r.data) : reject(r && r.data && r.data.message)),
+					error: () => reject()
+				});
+			});
+		},
+
+		restRequest(path, body) {
+			return fetch(lbiteFloorPlan.restUrl + path, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': lbiteFloorPlan.restNonce },
+				body: JSON.stringify(body)
+			}).then((r) => r.json().then((json) => {
+				if (!r.ok) {
+					throw (json && json.message) || '';
+				}
+				return json;
+			}));
 		},
 
 		hidePopup() {

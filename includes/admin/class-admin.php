@@ -106,6 +106,11 @@ class LBite_Admin {
 		$this->loader->add_action( 'wp_ajax_lbite_pos_add_to_tab', $this, 'ajax_pos_add_to_tab' );
 		$this->loader->add_action( 'wp_ajax_lbite_pos_close_tab', $this, 'ajax_pos_close_tab' );
 		$this->loader->add_action( 'wp_ajax_lbite_pos_cancel_tab', $this, 'ajax_pos_cancel_tab' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_tab_walkout', $this, 'ajax_pos_tab_walkout' );
+		// Ein Tab ohne Bezahlung ist keine fehlgeschlagene Online-Zahlung: keine
+		// «Failed order»-Mails an Shop und Gast.
+		$this->loader->add_filter( 'woocommerce_email_enabled_failed_order', 'LBite_Admin', 'suppress_walkout_email', 10, 2 );
+		$this->loader->add_filter( 'woocommerce_email_enabled_customer_failed_order', 'LBite_Admin', 'suppress_walkout_email', 10, 2 );
 
 		// Bestellungs-Counter im Menü-Badge (nach Menü-Aufbau)
 		$this->loader->add_action( 'admin_menu', $this, 'inject_order_count_badge', 999 );
@@ -1812,6 +1817,53 @@ class LBite_Admin {
 	 *
 	 * @return array Liste gültiger Zahlungsart-Keys.
 	 */
+	/**
+	 * Aktive Kassen-Zahlungsarten mit Beschriftung und Symbol (Tischplan).
+	 *
+	 * @return array[] Liste aus [ 'key', 'label', 'icon' ].
+	 */
+	public static function get_active_pos_payment_methods() {
+		$icons  = array(
+			'cash'  => '💵',
+			'card'  => '💳',
+			'twint' => '📱',
+			'other' => '💱',
+		);
+		$labels = array(
+			'cash'  => __( 'Cash', 'libre-bite' ),
+			'card'  => __( 'Card', 'libre-bite' ),
+			'twint' => __( 'Twint', 'libre-bite' ),
+			'other' => __( 'Other', 'libre-bite' ),
+		);
+		$saved  = get_option( 'lbite_pos_payment_methods', array() );
+		if ( empty( $saved ) ) {
+			$saved = array_map(
+				function ( $key ) {
+					return array(
+						'key'     => $key,
+						'enabled' => true,
+					);
+				},
+				array_keys( $labels )
+			);
+		}
+
+		$methods = array();
+		foreach ( $saved as $method ) {
+			if ( empty( $method['enabled'] ) || empty( $method['key'] ) ) {
+				continue;
+			}
+			$key       = sanitize_key( $method['key'] );
+			$methods[] = array(
+				'key'   => $key,
+				'label' => ! empty( $method['label'] ) ? $method['label'] : ( isset( $labels[ $key ] ) ? $labels[ $key ] : $key ),
+				'icon'  => ! empty( $method['icon'] ) ? $method['icon'] : ( isset( $icons[ $key ] ) ? $icons[ $key ] : '💱' ),
+			);
+		}
+
+		return $methods;
+	}
+
 	private function get_allowed_payment_methods() {
 		$configured_methods = get_option( 'lbite_pos_payment_methods', array() );
 		return ! empty( $configured_methods )
@@ -1914,6 +1966,29 @@ class LBite_Admin {
 		}
 		if ( ! LBite_Access::can_access_location( $location_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
+		}
+
+		// Ein Tisch hat im Normalfall genau einen offenen Tab. Ein zweiter
+		// entsteht meist aus Versehen (falscher Tisch gewählt). Die Kasse fragt
+		// deshalb nach und schickt «force» nur, wenn das Personal ihn bewusst will.
+		if ( empty( $_POST['force'] ) ) {
+			$lbite_existing_tab = self::find_open_tab_for_table( $location_id, $table_id );
+			if ( $lbite_existing_tab ) {
+				$lbite_table_post = get_post( $table_id );
+				wp_send_json_error(
+					array(
+						'code'       => 'table_has_open_tab',
+						'order_id'   => $lbite_existing_tab->get_id(),
+						'table_name' => $lbite_table_post ? $lbite_table_post->post_title : '',
+						'message'    => sprintf(
+							/* translators: 1: table name, 2: current total of the open tab */
+							__( '%1$s already has an open tab (%2$s).', 'libre-bite' ),
+							$lbite_table_post ? $lbite_table_post->post_title : __( 'This table', 'libre-bite' ),
+							html_entity_decode( wp_strip_all_tags( $lbite_existing_tab->get_formatted_order_total() ), ENT_QUOTES, 'UTF-8' )
+						),
+					)
+				);
+			}
 		}
 
 		if ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) ) {
@@ -2152,6 +2227,107 @@ class LBite_Admin {
 		delete_transient( 'lbite_incoming_orders_count' );
 
 		wp_send_json_success( array( 'order_id' => $order->get_id() ) );
+	}
+
+	/**
+	 * Offener Tab eines Tisches, falls vorhanden.
+	 *
+	 * @param int $location_id Standort-ID.
+	 * @param int $table_id    Tisch-ID.
+	 * @return WC_Order|null
+	 */
+	public static function find_open_tab_for_table( $location_id, $table_id ) {
+		$orders = wc_get_orders(
+			array(
+				'limit'      => 1,
+				'status'     => array( 'wc-on-hold' ),
+				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- höchstens ein Treffer, eng gefiltert.
+					'relation' => 'AND',
+					array(
+						'key'   => '_lbite_tab_open',
+						'value' => '1',
+					),
+					array(
+						'key'   => '_lbite_location_id',
+						'value' => (int) $location_id,
+					),
+					array(
+						'key'   => '_lbite_table_id',
+						'value' => (int) $table_id,
+					),
+				),
+			)
+		);
+
+		return ! empty( $orders ) ? $orders[0] : null;
+	}
+
+	/**
+	 * AJAX: Offenen Tab als «Gast ist ohne Bezahlung gegangen» abschliessen.
+	 *
+	 * Status «failed» statt «cancelled»: WooCommerce bucht bei «cancelled» den
+	 * Lagerbestand zurück, obwohl die Ware verzehrt ist. Der Kassenabschluss
+	 * führt solche Bestellungen als eigene Zeile, nicht als Umsatz.
+	 */
+	public function ajax_pos_tab_walkout() {
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
+		}
+
+		if ( ! lbite_feature_enabled( 'enable_open_tabs' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Open Tabs is not enabled', 'libre-bite' ) ) );
+		}
+
+		$location_id = isset( $_POST['location_id'] ) ? intval( wp_unslash( $_POST['location_id'] ) ) : 0;
+		$order       = $this->get_validated_open_tab_order( $location_id );
+
+		self::mark_tab_walkout( $order );
+		delete_transient( 'lbite_incoming_orders_count' );
+
+		wp_send_json_success( array( 'order_id' => $order->get_id() ) );
+	}
+
+	/**
+	 * «Failed order»-Mails für Tabs ohne Bezahlung unterdrücken.
+	 *
+	 * @param bool          $enabled Mail aktiv.
+	 * @param WC_Order|null $order   Bestellung.
+	 * @return bool
+	 */
+	public static function suppress_walkout_email( $enabled, $order = null ) {
+		if ( $order instanceof WC_Order && '1' === (string) $order->get_meta( '_lbite_tab_walkout' ) ) {
+			return false;
+		}
+
+		return $enabled;
+	}
+
+	/**
+	 * Tab als unbezahlt verlassen markieren (gemeinsam für Kasse und Tischplan).
+	 *
+	 * @param WC_Order $order Offener Tab.
+	 */
+	public static function mark_tab_walkout( $order ) {
+		$order->delete_meta_data( '_lbite_tab_open' );
+		$order->update_meta_data( '_lbite_tab_walkout', '1' );
+		$order->update_status(
+			'failed',
+			sprintf(
+				/* translators: %s: name of the staff member */
+				__( 'Guest left without paying. Marked by %s.', 'libre-bite' ),
+				wp_get_current_user()->display_name
+			)
+		);
+
+		/**
+		 * Nachdem ein Tab als «ohne Bezahlung gegangen» markiert wurde.
+		 *
+		 * @param int      $order_id Bestell-ID.
+		 * @param WC_Order $order    Bestellobjekt.
+		 */
+		do_action( 'lbite_tab_walkout', $order->get_id(), $order );
 	}
 
 	/**

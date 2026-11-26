@@ -1124,3 +1124,16 @@ body.lbite-setup-screen {
 .lbite-dietary-table td {
 	vertical-align: middle;
 }
+
+/* Abholanzeige: Spalte und Titel nebeneinander (4.2.2) */
+.lbite-pd-setting-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 16px;
+	margin: 0 0 8px;
+}
+
+.lbite-pd-setting-row > label:first-child {
+	min-width: 180px;
+}

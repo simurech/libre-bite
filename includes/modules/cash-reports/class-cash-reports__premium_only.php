@@ -73,7 +73,7 @@ class LBite_Cash_Reports {
 	 *
 	 * Jede Zeile beschreibt eine Bestellung neutral, damit die Summierung
 	 * unabhängig von WooCommerce prüfbar ist:
-	 * - status:   'paid' oder 'cancelled'
+	 * - status:   'paid', 'cancelled' oder 'unpaid' (Gast ohne Bezahlung gegangen)
 	 * - total:    Bruttobetrag
 	 * - payments: [ Schlüssel => Betrag ] (Split-Zahlungen mehrere Einträge)
 	 * - tip, discount, rounding: Beträge (Rabatt positiv)
@@ -95,6 +95,8 @@ class LBite_Cash_Reports {
 			'rounding'        => 0.0,
 			'cancelled_count' => 0,
 			'cancelled_total' => 0.0,
+			'unpaid_count'    => 0,
+			'unpaid_total'    => 0.0,
 			'cash_sales'      => 0.0,
 			'opening_float'   => round( (float) $opening_float, 2 ),
 			'expected_cash'   => 0.0,
@@ -104,6 +106,13 @@ class LBite_Cash_Reports {
 			if ( 'cancelled' === $row['status'] ) {
 				$report['cancelled_count']++;
 				$report['cancelled_total'] += (float) $row['total'];
+				continue;
+			}
+
+			// Ohne Bezahlung gegangen: kein Umsatz, aber als Verlust sichtbar.
+			if ( 'unpaid' === $row['status'] ) {
+				$report['unpaid_count']++;
+				$report['unpaid_total'] += (float) $row['total'];
 				continue;
 			}
 
@@ -133,7 +142,7 @@ class LBite_Cash_Reports {
 		}
 
 		// Auf Rappen runden – Fliesskomma-Reste sollen im Bericht nicht auftauchen.
-		foreach ( array( 'gross', 'tips', 'discounts', 'rounding', 'cancelled_total', 'cash_sales' ) as $key ) {
+		foreach ( array( 'gross', 'tips', 'discounts', 'rounding', 'cancelled_total', 'unpaid_total', 'cash_sales' ) as $key ) {
 			$report[ $key ] = round( $report[ $key ], 2 );
 		}
 		$report['payments'] = array_map(
@@ -257,6 +266,9 @@ class LBite_Cash_Reports {
 	 */
 	private static function order_to_row( $order ) {
 		$status = in_array( $order->get_status(), array( 'cancelled', 'refunded', 'failed' ), true ) ? 'cancelled' : 'paid';
+		if ( '1' === (string) $order->get_meta( '_lbite_tab_walkout' ) ) {
+			$status = 'unpaid';
+		}
 		$total  = (float) $order->get_total();
 
 		// Zahlungsart: Kasse über _lbite_payment_method (inkl. Split), sonst das Gateway.
@@ -321,7 +333,7 @@ class LBite_Cash_Reports {
 			$orders = wc_get_orders(
 				array(
 					'type'         => 'shop_order',
-					'status'       => array( 'wc-processing', 'wc-completed', 'wc-on-hold', 'wc-cancelled', 'wc-refunded' ),
+					'status'       => array( 'wc-processing', 'wc-completed', 'wc-on-hold', 'wc-cancelled', 'wc-refunded', 'wc-failed' ),
 					'date_created' => $start . '...' . $until,
 					'limit'        => 200,
 					'paged'        => $page,
@@ -338,6 +350,11 @@ class LBite_Cash_Reports {
 			foreach ( $orders as $order ) {
 				// Offene Tabs (F_TAB) sind noch nicht bezahlt und gehören erst nach dem Abschluss in den Bericht.
 				if ( '1' === $order->get_meta( '_lbite_tab_open' ) ) {
+					continue;
+				}
+				// «failed» nur für Tabs ohne Bezahlung. Fehlgeschlagene Online-Zahlungen
+				// waren nie Teil des Berichts und bleiben es nicht.
+				if ( 'failed' === $order->get_status() && '1' !== (string) $order->get_meta( '_lbite_tab_walkout' ) ) {
 					continue;
 				}
 				$rows[] = self::order_to_row( $order );
@@ -489,6 +506,9 @@ class LBite_Cash_Reports {
 				<tr><th><?php esc_html_e( 'Discounts', 'libre-bite' ); ?></th><td><?php echo esc_html( self::money( $report['discounts'] ) ); ?></td></tr>
 				<tr><th><?php esc_html_e( 'Rounding', 'libre-bite' ); ?></th><td><?php echo esc_html( self::money( $report['rounding'] ) ); ?></td></tr>
 				<tr><th><?php esc_html_e( 'Cancelled orders', 'libre-bite' ); ?></th><td><?php echo esc_html( $report['cancelled_count'] . ' / ' . self::money( $report['cancelled_total'] ) ); ?></td></tr>
+				<?php if ( ! empty( $report['unpaid_count'] ) ) : ?>
+					<tr><th><?php esc_html_e( 'Left without paying', 'libre-bite' ); ?></th><td><?php echo esc_html( $report['unpaid_count'] . ' / ' . self::money( $report['unpaid_total'] ) ); ?></td></tr>
+				<?php endif; ?>
 				<tr><th><?php esc_html_e( 'Opening float', 'libre-bite' ); ?></th><td><?php echo esc_html( self::money( $report['opening_float'] ) ); ?></td></tr>
 				<tr><th><?php esc_html_e( 'Cash sales', 'libre-bite' ); ?></th><td><?php echo esc_html( self::money( $report['cash_sales'] ) ); ?></td></tr>
 				<tr><th><?php esc_html_e( 'Expected cash in drawer', 'libre-bite' ); ?></th><td><strong><?php echo esc_html( self::money( $report['expected_cash'] ) ); ?></strong></td></tr>
@@ -750,6 +770,8 @@ class LBite_Cash_Reports {
 		$rows[] = array( __( 'Discounts', 'libre-bite' ), $data['discounts'] );
 		$rows[] = array( __( 'Rounding', 'libre-bite' ), $data['rounding'] );
 		$rows[] = array( __( 'Cancelled orders', 'libre-bite' ), $data['cancelled_count'] . ' / ' . $data['cancelled_total'] );
+		// Ältere Z-Berichte kennen die Zeile noch nicht.
+		$rows[] = array( __( 'Left without paying', 'libre-bite' ), ( isset( $data['unpaid_count'] ) ? $data['unpaid_count'] : 0 ) . ' / ' . ( isset( $data['unpaid_total'] ) ? $data['unpaid_total'] : 0 ) );
 		$rows[] = array( __( 'Opening float', 'libre-bite' ), $data['opening_float'] );
 		$rows[] = array( __( 'Cash sales', 'libre-bite' ), $data['cash_sales'] );
 		$rows[] = array( __( 'Expected cash in drawer', 'libre-bite' ), $data['expected_cash'] );

@@ -262,6 +262,43 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 			$lbite_did_save = true;
 			break;
 
+		case 'orders_display':
+			$lbite_features = get_option( 'lbite_features', array() );
+			$lbite_features['enable_pickup_display'] = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_pickup_display'] );
+			update_option( 'lbite_features', $lbite_features );
+
+			// Die Felder erscheinen nur bei eingeschalteter Anzeige; fehlen sie,
+			// bleiben die gespeicherten Werte unverändert.
+			if ( $lbite_premium_allowed && isset( $_POST['lbite_pickup_display_form'] ) ) {
+				$lbite_pd_cols = isset( $_POST['lbite_pickup_display_columns'] ) && is_array( $_POST['lbite_pickup_display_columns'] )
+					? array_values( array_unique( array_map( 'sanitize_key', wp_unslash( $_POST['lbite_pickup_display_columns'] ) ) ) )
+					: array();
+				update_option( 'lbite_pickup_display_columns', $lbite_pd_cols );
+
+				$lbite_pd_labels = array();
+				if ( isset( $_POST['lbite_pickup_display_labels'] ) && is_array( $_POST['lbite_pickup_display_labels'] ) ) {
+					$lbite_pd_raw = map_deep( wp_unslash( $_POST['lbite_pickup_display_labels'] ), 'sanitize_text_field' );
+					foreach ( $lbite_pd_raw as $lbite_pd_key => $lbite_pd_label ) {
+						$lbite_pd_label = (string) $lbite_pd_label;
+						if ( '' !== $lbite_pd_label ) {
+							$lbite_pd_labels[ sanitize_key( $lbite_pd_key ) ] = $lbite_pd_label;
+						}
+					}
+				}
+				update_option( 'lbite_pickup_display_labels', $lbite_pd_labels );
+
+				$lbite_pd_minutes = isset( $_POST['lbite_pickup_display_minutes'] ) ? absint( $_POST['lbite_pickup_display_minutes'] ) : 15;
+				update_option( 'lbite_pickup_display_minutes', min( 240, max( 1, $lbite_pd_minutes ) ) );
+				update_option( 'lbite_pickup_display_title', isset( $_POST['lbite_pickup_display_title'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_display_title'] ) ) : '' );
+				update_option( 'lbite_pickup_display_sound', isset( $_POST['lbite_pickup_display_sound'] ) ? 1 : 0 );
+
+				if ( ! empty( $_POST['lbite_pickup_display_regenerate'] ) && class_exists( 'LBite_Pickup_Display' ) ) {
+					LBite_Pickup_Display::regenerate_key();
+				}
+			}
+			$lbite_did_save = true;
+			break;
+
 		case 'orders_columns':
 			$lbite_features = get_option( 'lbite_features', array() );
 			$lbite_features['enable_kanban_customization'] = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_kanban_customization'] );

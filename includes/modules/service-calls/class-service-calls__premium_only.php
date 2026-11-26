@@ -366,11 +366,18 @@ class LBite_Service_Calls {
 	 */
 	public function add_calls_to_table_plan( $response, $location_id ) {
 		$by_table = array();
+		$items    = array();
 		foreach ( self::get_calls_for_location( $location_id ) as $call ) {
 			$by_table[ $call['table_id'] ][] = $call['type_label'];
+			// Mit ID, damit der Tischplan den Ruf direkt erledigen kann.
+			$items[ $call['table_id'] ][] = array(
+				'id'    => $call['id'],
+				'label' => $call['type_label'],
+			);
 		}
 
-		$response['service_calls'] = $by_table;
+		$response['service_calls']      = $by_table;
+		$response['service_call_items'] = $items;
 
 		return $response;
 	}

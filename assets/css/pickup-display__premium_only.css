@@ -1,0 +1,161 @@
+/**
+ * Libre Bite – Abholanzeige (Fernseher/Monitor)
+ *
+ * Dunkler Hintergrund, sehr grosse Zahlen: auf mehrere Meter lesbar.
+ * Die letzte, abgeschlossene Spalte («abholbereit») hebt sich in der
+ * Branding-Primärfarbe ab.
+ */
+:root {
+	--lbite-pd-bg: #0f1419;
+	--lbite-pd-surface: #1b232c;
+	--lbite-pd-text: #f5f7fa;
+	--lbite-pd-muted: #9aa5b1;
+	--lbite-pd-ready: var(--lbite-color-primary, #2e7d32);
+	--lbite-pd-ready-text: var(--lbite-color-primary-contrast, #ffffff);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+}
+
+body.lbite-pd {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	background: var(--lbite-pd-bg);
+	color: var(--lbite-pd-text);
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	cursor: none;
+}
+
+.lbite-pd__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 2vh 3vw;
+}
+
+.lbite-pd__title {
+	margin: 0;
+	font-size: clamp(24px, 4vh, 56px);
+	font-weight: 700;
+}
+
+.lbite-pd__clock {
+	font-size: clamp(22px, 3.6vh, 48px);
+	font-variant-numeric: tabular-nums;
+	color: var(--lbite-pd-muted);
+}
+
+.lbite-pd__columns {
+	display: grid;
+	grid-template-columns: repeat(var(--lbite-pd-cols, 2), minmax(0, 1fr));
+	gap: 2vw;
+	flex: 1;
+	min-height: 0;
+	padding: 0 3vw 3vh;
+}
+
+.lbite-pd__column {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	padding: 2vh 2vw;
+	border-radius: 16px;
+	background: var(--lbite-pd-surface);
+}
+
+.lbite-pd__column.is-done {
+	background: var(--lbite-pd-ready);
+	color: var(--lbite-pd-ready-text);
+}
+
+.lbite-pd__column-title {
+	margin: 0 0 2vh;
+	font-size: clamp(22px, 4.2vh, 60px);
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.lbite-pd__numbers {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(clamp(90px, 14vh, 220px), 1fr));
+	align-content: start;
+	gap: 1.5vh 1.5vw;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	list-style: none;
+}
+
+.lbite-pd__number {
+	font-size: clamp(36px, 9vh, 140px);
+	font-weight: 800;
+	line-height: 1.05;
+	font-variant-numeric: tabular-nums;
+	text-align: center;
+}
+
+.lbite-pd__number.is-new {
+	animation: lbite-pd-pop 1.2s ease-out 3;
+}
+
+@keyframes lbite-pd-pop {
+	0%   { transform: scale(1); }
+	30%  { transform: scale(1.15); }
+	100% { transform: scale(1); }
+}
+
+.lbite-pd__empty {
+	font-size: clamp(18px, 3vh, 36px);
+	opacity: 0.6;
+}
+
+.lbite-pd__status:empty {
+	display: none;
+}
+
+.lbite-pd__status {
+	position: fixed;
+	right: 2vw;
+	bottom: 2vh;
+	margin: 0;
+	padding: 8px 14px;
+	border-radius: 8px;
+	background: #b32d2e;
+	color: #fff;
+	font-size: 18px;
+}
+
+.lbite-pd__sound {
+	position: fixed;
+	left: 50%;
+	bottom: 3vh;
+	transform: translateX(-50%);
+	padding: 14px 24px;
+	border: 0;
+	border-radius: 999px;
+	background: #fff;
+	color: #111;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+@media (orientation: portrait) {
+	.lbite-pd__columns {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.lbite-pd__number.is-new {
+		animation: none;
+	}
+}

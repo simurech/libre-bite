@@ -68,6 +68,24 @@ class CashReportTest extends TestCase {
 		$this->assertEqualsWithDelta( 10.00, $report['cash_sales'], 0.001, 'Stornierte Barbeträge gehören nicht in die Kasse.' );
 	}
 
+	public function test_unpaid_tabs_are_not_revenue() {
+		$report = LBite_Cash_Reports::aggregate(
+			array(
+				$this->row( array( 'total' => 20.00, 'payments' => array( 'cash' => 20.00 ) ) ),
+				$this->row( array( 'status' => 'unpaid', 'total' => 42.50, 'payments' => array() ) ),
+			),
+			0,
+			array( 'cash' )
+		);
+
+		$this->assertSame( 1, $report['orders'] );
+		$this->assertSame( 20.0, $report['gross'] );
+		$this->assertSame( 1, $report['unpaid_count'] );
+		$this->assertSame( 42.5, $report['unpaid_total'] );
+		$this->assertSame( 20.0, $report['expected_cash'] );
+		$this->assertSame( 0, $report['cancelled_count'] );
+	}
+
 	public function test_floating_point_noise_is_rounded() {
 		$rows = array();
 		for ( $i = 0; $i < 10; $i++ ) {

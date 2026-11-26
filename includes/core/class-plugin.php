@@ -218,6 +218,15 @@ class LBite_Plugin {
 				require_once $lbite_groups_file;
 			}
 
+			// Abholanzeige für einen Bildschirm im Lokal (Pro). Braucht die Bestellübersicht.
+			if ( lbite_feature_enabled( 'enable_pickup_display' ) && lbite_feature_enabled( 'enable_kanban_board' ) ) {
+				$lbite_display_file = LBITE_PLUGIN_DIR . 'includes/modules/pickup-display/class-pickup-display__premium_only.php';
+				if ( file_exists( $lbite_display_file ) ) {
+					require_once $lbite_display_file;
+					$this->modules['pickup-display'] = new LBite_Pickup_Display( $this->loader );
+				}
+			}
+
 			// Kassenabschluss X/Z (F25), Suffix __premium_only wie bei den übrigen Pro-Modulen.
 			if ( lbite_feature_enabled( 'enable_cash_reports' ) ) {
 				$lbite_cash_file = LBITE_PLUGIN_DIR . 'includes/modules/cash-reports/class-cash-reports__premium_only.php';

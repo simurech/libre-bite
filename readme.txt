@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 4.2.1
+Stable tag: 4.2.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -292,6 +292,12 @@ Yes. English is the source language, and the plugin ships with complete translat
 
 == Changelog ==
 
+= 4.2.2 =
+* Feature: Pickup display (Pro) – a full-screen page for a TV showing which order numbers are being prepared and which are ready, with selectable columns, guest-facing titles and an optional sound.
+* Feature: The table plan opens a table window with the items of each order and actions: add items, pay and close a tab, move an order to the next column, resolve waiter calls.
+* Feature: Open tabs can be closed as "Left without paying"; they are listed separately in the cash report and not counted as revenue.
+* Changed: Opening a second tab at a table that already has one asks whether to add the round to the existing tab.
+
 = 4.2.1 =
 * Changed: "Pay later (open tab)" sits next to "Split payment" in the POS payment dialog instead of the dialog footer.
 * Changed: Open tabs list their items per round, so several open tabs are easy to tell apart.
@@ -360,8 +366,5 @@ Yes. English is the source language, and the plugin ships with complete translat
 = 3.6.23 =
 * Feature: The order panel of the menu view now lets guests change quantities and remove items.
 
-= 3.6.22 =
-* Fix: In the variation popup the title no longer touches the image and the close button is a true circle again.
-
 = Older versions =
-* For the full changelog of versions before 3.6.22, see the release history: https://github.com/simurech/libre-bite/releases
+* For the full changelog of versions before 3.6.23, see the release history: https://github.com/simurech/libre-bite/releases

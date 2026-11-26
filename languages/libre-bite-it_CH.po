@@ -7606,3 +7606,135 @@ msgstr "Hai modifiche non salvate alla piantina dei tavoli."
 #: includes/modules/tables/class-tables.php
 msgid "Finish editing"
 msgstr "Termina modifica"
+
+#. translators: 1: table name, 2: current total of the open tab
+#: includes/admin/class-admin.php
+#, php-format
+msgid "%1$s already has an open tab (%2$s)."
+msgstr "%1$s ha già un conto aperto (%2$s)."
+
+#: templates/admin/settings/orders-display.php
+msgid "A full-screen page for a TV or monitor that shows guests which order numbers are being prepared and which are ready for pickup."
+msgstr "Una pagina a schermo intero per TV o monitor che mostra agli ospiti quali numeri d'ordine sono in preparazione e quali sono pronti per il ritiro."
+
+#: templates/admin/pos.php
+msgid "Add to existing tab"
+msgstr "Aggiungi al conto esistente"
+
+#: templates/admin/settings/orders-display.php
+msgid "After that, a number disappears from columns that count as completed."
+msgstr "Dopo questo tempo il numero scompare dalle colonne considerate completate."
+
+#: templates/admin/settings/orders-display.php
+msgid "Choose the columns to show and, if you like, a title for guests, e.g. \"Being prepared\" and \"Ready for pickup\". Columns that count as completed are highlighted."
+msgstr "Scegli le colonne da mostrare e, se vuoi, un titolo per gli ospiti, ad es. «In preparazione» e «Pronto per il ritiro». Le colonne considerate completate vengono evidenziate."
+
+#: includes/modules/pickup-display/class-pickup-display__premium_only.php
+msgid "Connection lost – retrying …"
+msgstr "Connessione persa – nuovo tentativo …"
+
+#: templates/admin/settings/orders-display.php
+msgid "Create new links (the current links stop working)"
+msgstr "Crea nuovi link (quelli attuali smetteranno di funzionare)"
+
+#: templates/admin/settings/orders-display.php
+msgid "Display links"
+msgstr "Link di visualizzazione"
+
+#: templates/admin/settings/orders-display.php
+msgid "Empty = name of the location."
+msgstr "Vuoto = nome della sede."
+
+#. translators: %s: name of the staff member
+#: includes/admin/class-admin.php
+#, php-format
+msgid "Guest left without paying. Marked by %s."
+msgstr "Ospite andato via senza pagare. Segnato da %s."
+
+#: includes/modules/tables/class-tables.php
+msgid "How does the guest pay?"
+msgstr "Come paga l'ospite?"
+
+#: includes/modules/pos/class-pos.php
+msgid "Left without paying"
+msgstr "Andato via senza pagare"
+
+#: includes/modules/pos/class-pos.php
+msgid "Mark this tab as unpaid because the guest left? It is closed and listed separately in the cash report."
+msgstr "Segnare questo conto come non pagato perché l'ospite è andato via? Viene chiuso e indicato separatamente nella chiusura di cassa."
+
+#. translators: %s: name of the next Order Board column
+#: includes/modules/tables/class-tables.php
+#, php-format
+msgid "Move to: %s"
+msgstr "Sposta in: %s"
+
+#: templates/admin/settings/orders-display.php
+msgid "Open display"
+msgstr "Apri visualizzazione"
+
+#: templates/admin/pos.php
+msgid "Open second tab"
+msgstr "Apri un secondo conto"
+
+#: templates/admin/settings/orders-display.php
+msgid "Open the link on the TV browser and switch it to full screen. The link contains a secret key – anyone with the link can see the order numbers."
+msgstr "Apri il link nel browser della TV e passa a schermo intero. Il link contiene una chiave segreta: chi lo conosce vede i numeri d'ordine."
+
+#: templates/admin/settings-tabbed.php
+msgid "Pickup Display"
+msgstr "Display ritiri"
+
+#: templates/admin/settings/orders-display.php
+msgid "Play a sound when an order becomes ready."
+msgstr "Riproduci un suono quando un ordine è pronto."
+
+#: templates/admin/settings/orders-display.php
+msgid "Show completed orders for"
+msgstr "Mostra gli ordini completati per"
+
+#: templates/admin/settings/orders-display.php
+msgid "Shows order numbers per Order Board column on a separate screen. Only numbers are shown – no names or amounts."
+msgstr "Mostra i numeri d'ordine per colonna della bacheca ordini su uno schermo separato. Solo numeri, nessun nome o importo."
+
+#: includes/modules/tables/class-tables.php
+msgid "Split payment in the POS"
+msgstr "Pagamento diviso nella cassa"
+
+#: includes/modules/pos/class-pos.php
+msgid "Tab marked as unpaid"
+msgstr "Conto segnato come non pagato"
+
+#: templates/admin/pos.php
+msgid "Table already has an open tab"
+msgstr "Il tavolo ha già un conto aperto"
+
+#: includes/modules/pickup-display/class-pickup-display__premium_only.php
+msgid "Tap to enable sound"
+msgstr "Tocca per attivare l'audio"
+
+#: includes/modules/tables/class-tables.php
+msgid "That did not work. Please try again."
+msgstr "Non ha funzionato. Riprova."
+
+#: includes/modules/pickup-display/class-pickup-display__premium_only.php
+msgid "This pickup display link is not valid. Copy the current link from the settings."
+msgstr "Questo link del display ritiri non è valido. Copia il link attuale dalle impostazioni."
+
+#: includes/admin/class-admin.php
+msgid "This table"
+msgstr "Questo tavolo"
+
+#: templates/admin/settings/orders-display.php
+msgid "Title"
+msgstr "Titolo"
+
+#. translators: %s: name of the Order Board column
+#: templates/admin/settings/orders-display.php
+#, php-format
+msgid "Title on the display for %s"
+msgstr "Titolo sul display per %s"
+
+#: templates/admin/pos.php
+msgid "Usually a table has one tab. Add this round to the existing tab, or open a second tab only if the guests pay separately."
+msgstr "Di solito un tavolo ha un solo conto. Aggiungi questo giro al conto esistente, oppure apri un secondo conto solo se gli ospiti pagano separatamente."

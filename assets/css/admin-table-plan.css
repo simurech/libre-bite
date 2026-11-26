@@ -289,8 +289,10 @@
 	border: 1px solid var(--lbite-border-strong, #c3c4c7);
 	border-radius: 6px;
 	box-shadow: 0 4px 20px rgba(0,0,0,.15);
-	min-width: 210px;
-	max-width: 270px;
+	min-width: 240px;
+	max-width: 320px;
+	max-height: calc(100vh - 20px);
+	overflow-y: auto;
 	font-size: 13px;
 	opacity: 0;
 	transition: opacity .15s;
@@ -367,9 +369,107 @@
 .lbite-fp-popup-status--ready     { background: #e0f2fe; color: #0077a8; }
 
 .lbite-fp-popup-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+	margin-top: 8px;
+}
+
+.lbite-fp-popup-actions:empty {
+	display: none;
+}
+
+/* Tischfenster mit Aktionen (4.2.2) */
+.lbite-fp-popup-order + .lbite-fp-popup-order {
 	margin-top: 10px;
 	padding-top: 10px;
 	border-top: 1px solid var(--lbite-border-subtle, #f0f0f1);
+}
+
+.lbite-fp-popup-meta {
+	color: var(--lbite-text-muted, #666);
+	font-size: 12px;
+}
+
+.lbite-fp-popup-items {
+	margin: 4px 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lbite-fp-popup-items li {
+	margin: 0;
+	line-height: 1.4;
+}
+
+.lbite-fp-popup-qty {
+	display: inline-block;
+	min-width: 2em;
+	font-weight: 600;
+}
+
+.lbite-fp-popup-total {
+	border-top: 1px dashed var(--lbite-border-subtle, #e0e0e0);
+	margin-top: 4px;
+	padding-top: 4px;
+}
+
+.lbite-fp-popup-actions .button {
+	min-height: 36px;
+	line-height: 1.2;
+}
+
+.lbite-fp-popup-walkout {
+	color: var(--lbite-danger, #b32d2e);
+	font-size: 12px;
+}
+
+.lbite-fp-popup-call {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin: 0 0 8px;
+	padding: 6px 8px;
+	border-radius: 4px;
+	background: #fff4e5;
+	color: #8a4b00;
+	font-weight: 600;
+}
+
+.lbite-fp-pay-methods {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 6px;
+	width: 100%;
+}
+
+.lbite-fp-pay-method {
+	min-height: 44px;
+	justify-content: center;
+}
+
+.lbite-fp-pay-foot {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	margin-top: 4px;
+}
+
+.lbite-fp-popup-actions > .lbite-fp-popup-label {
+	width: 100%;
+	margin: 0;
+}
+
+.lbite-fp-popup-message:empty {
+	display: none;
+}
+
+.lbite-fp-popup-message {
+	margin: 0;
+	padding: 0 12px 10px;
+	color: var(--lbite-danger, #b32d2e);
 }
 
 /* ════════════════════════════════════════════════════════════════════

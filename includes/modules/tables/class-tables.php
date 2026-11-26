@@ -168,6 +168,15 @@ class LBite_Tables {
 				'editUrl'      => admin_url( 'post.php?post=%d&action=edit' ),
 				'orderUrl'     => admin_url( 'admin.php?page=lbite-order-board' ),
 				'orderEditUrl' => admin_url( 'post.php?post=%d&action=edit' ),
+				// Aktionen im Tischfenster: Status über die REST-API, Tabs über die
+				// Kassen-Endpunkte (gleiche Prüfungen wie in der Kasse).
+				'restUrl'      => esc_url_raw( rest_url( 'lbite/v1/' ) ),
+				'restNonce'    => wp_create_nonce( 'wp_rest' ),
+				'canPos'       => current_user_can( 'lbite_use_pos' ) && lbite_feature_enabled( 'enable_open_tabs' ),
+				'posNonce'     => current_user_can( 'lbite_use_pos' ) ? wp_create_nonce( 'lbite_pos_nonce' ) : '',
+				'posUrl'       => admin_url( 'admin.php?page=lbite-pos' ),
+				'canManage'    => current_user_can( 'lbite_manage_orders' ),
+				'payMethods'   => class_exists( 'LBite_Admin' ) ? LBite_Admin::get_active_pos_payment_methods() : array(),
 				'strings'  => array(
 					'loading'     => __( 'Loading tables…', 'libre-bite' ),
 					'saving'      => __( 'Saving…', 'libre-bite' ),
@@ -188,6 +197,18 @@ class LBite_Tables {
 					'doneEditing' => __( 'Finish editing', 'libre-bite' ),
 					'editHint'    => __( 'Edit mode: drag tables, change shape and size with the buttons on each table.', 'libre-bite' ),
 					'unsaved'     => __( 'You have unsaved changes to the table plan.', 'libre-bite' ),
+					'tab'         => __( 'Open tab', 'libre-bite' ),
+					'addItems'    => __( 'Add items', 'libre-bite' ),
+					'payClose'    => __( 'Pay / Close', 'libre-bite' ),
+					'splitInPos'  => __( 'Split payment in the POS', 'libre-bite' ),
+					'walkout'     => __( 'Left without paying', 'libre-bite' ),
+					'confirmWalkout' => __( 'Mark this tab as unpaid because the guest left? It is closed and listed separately in the cash report.', 'libre-bite' ),
+					/* translators: %s: name of the next Order Board column */
+					'moveTo'      => __( 'Move to: %s', 'libre-bite' ),
+					'callDone'    => __( 'Done', 'libre-bite' ),
+					'actionError' => __( 'That did not work. Please try again.', 'libre-bite' ),
+					'back'        => __( 'Back', 'libre-bite' ),
+					'choosePay'   => __( 'How does the guest pay?', 'libre-bite' ),
 				),
 			)
 		);
@@ -399,9 +420,16 @@ class LBite_Tables {
 			'pending'    => __( 'Pending', 'libre-bite' ),
 		);
 
+		// Spalten der Bestellübersicht für «Status weiter» im Tischfenster.
+		$columns = class_exists( 'LBite_Order_Dashboard' ) ? array_values( LBite_Order_Dashboard::get_columns() ) : array();
+		$col_pos = array();
+		foreach ( $columns as $i => $column ) {
+			$col_pos[ $column['key'] ] = $i;
+		}
+
 		$statuses = array();
 		foreach ( $orders as $order ) {
-			$table_id = $order->get_meta( '_lbite_table_id' );
+			$table_id = (int) $order->get_meta( '_lbite_table_id' );
 			if ( ! $table_id ) {
 				continue;
 			}
@@ -409,19 +437,50 @@ class LBite_Tables {
 			$wc_status      = $order->get_status();
 			$display_status = 'processing' === $wc_status ? 'preparing' : 'occupied';
 			$date_created   = $order->get_date_created();
+			$total          = html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 
-			$statuses[ $table_id ] = array(
-				'order_id'       => $order->get_id(),
-				'order_number'   => $order->get_order_number(),
-				'wc_status'      => $wc_status,
-				'display_status' => $display_status,
-				'status_label'   => isset( $status_labels[ $wc_status ] ) ? $status_labels[ $wc_status ] : ucfirst( $wc_status ),
-				'time'           => $date_created ? $date_created->date_i18n( get_option( 'time_format' ) ) : '',
-				'items_count'    => count( $order->get_items() ),
-				// html_entity_decode() wandelt HTML-Entities (z.B. &nbsp; &#67;) in echte Zeichen um,
-			// damit escHtml() im JS nicht doppelt encoded.
-			'total'          => html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ),
+			$items = array();
+			foreach ( $order->get_items() as $item ) {
+				$items[] = array(
+					'name'     => $item->get_name(),
+					'quantity' => $item->get_quantity(),
+				);
+			}
+
+			$board_key  = (string) $order->get_meta( '_lbite_order_status' );
+			$board_pos  = isset( $col_pos[ $board_key ] ) ? $col_pos[ $board_key ] : -1;
+			$next       = ( $board_pos >= 0 && isset( $columns[ $board_pos + 1 ] ) ) ? $columns[ $board_pos + 1 ] : null;
+			$order_data = array(
+				'order_id'     => $order->get_id(),
+				'order_number' => $order->get_order_number(),
+				'is_tab'       => '1' === (string) $order->get_meta( '_lbite_tab_open' ),
+				'time'         => $date_created ? $date_created->date_i18n( get_option( 'time_format' ) ) : '',
+				'items'        => $items,
+				'total'        => $total,
+				'board_label'  => $board_pos >= 0 ? $columns[ $board_pos ]['label'] : '',
+				'next_key'     => $next ? $next['key'] : '',
+				'next_label'   => $next ? $next['label'] : '',
 			);
+
+			if ( ! isset( $statuses[ $table_id ] ) ) {
+				// Bisherige Felder der ersten Bestellung bleiben für Erweiterungen erhalten.
+				$statuses[ $table_id ] = array(
+					'order_id'       => $order->get_id(),
+					'order_number'   => $order->get_order_number(),
+					'wc_status'      => $wc_status,
+					'display_status' => $display_status,
+					'status_label'   => isset( $status_labels[ $wc_status ] ) ? $status_labels[ $wc_status ] : ucfirst( $wc_status ),
+					'time'           => $order_data['time'],
+					'items_count'    => count( $items ),
+					'total'          => $total,
+					'orders'         => array(),
+				);
+			} elseif ( 'preparing' === $display_status ) {
+				// Läuft an einem Tisch irgendetwas in der Küche, gilt er als «in Zubereitung».
+				$statuses[ $table_id ]['display_status'] = 'preparing';
+			}
+
+			$statuses[ $table_id ]['orders'][] = $order_data;
 		}
 
 		/**

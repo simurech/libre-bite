@@ -104,6 +104,11 @@ $lbite_tab_groups = array(
 				'icon'  => 'dashicons-columns',
 				'pro'   => true,
 			),
+			'orders_display' => array(
+				'label' => __( 'Pickup Display', 'libre-bite' ),
+				'icon'  => 'dashicons-desktop',
+				'pro'   => true,
+			),
 			'orders_receipts' => array(
 				'label' => __( 'Receipts', 'libre-bite' ),
 				'icon'  => 'dashicons-media-text',
@@ -351,6 +356,10 @@ $lbite_settings_url = admin_url( 'admin.php?page=lbite-settings' );
 
 				case 'orders_columns':
 					include LBITE_PLUGIN_DIR . 'templates/admin/settings/orders-columns.php';
+					break;
+
+				case 'orders_display':
+					include LBITE_PLUGIN_DIR . 'templates/admin/settings/orders-display.php';
 					break;
 
 				case 'orders_receipts':
