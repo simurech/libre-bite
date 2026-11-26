@@ -66,14 +66,14 @@ $lbite_tip_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol
 
 	<table class="form-table">
 	<tr>
-		<th><?php esc_html_e( 'Tip Title', 'libre-bite' ); ?></th>
+		<th><label for="lbite_tip_title"><?php esc_html_e( 'Tip Title', 'libre-bite' ); ?></label></th>
 		<td>
 			<input type="text" id="lbite_tip_title" name="lbite_tip_title" value="<?php echo esc_attr( $lbite_tip_title ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Add a tip?', 'libre-bite' ); ?>">
 			<p class="description"><?php esc_html_e( 'Heading shown above the tip options. Leave empty to use the default.', 'libre-bite' ); ?></p>
 		</td>
 	</tr>
 	<tr>
-		<th><?php esc_html_e( '"No Tip" Label', 'libre-bite' ); ?></th>
+		<th><label for="lbite_tip_label_none"><?php esc_html_e( '"No Tip" Label', 'libre-bite' ); ?></label></th>
 		<td>
 			<input type="text" id="lbite_tip_label_none" name="lbite_tip_label_none" value="<?php echo esc_attr( $lbite_tip_lbl_none ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'No tip', 'libre-bite' ); ?>">
 		</td>
@@ -95,34 +95,34 @@ $lbite_tip_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol
 	<tr>
 		<th><?php esc_html_e( 'Option 1', 'libre-bite' ); ?></th>
 		<td>
-			<input type="number" step="0.01" min="0" id="lbite_tip_percentage_1" name="lbite_tip_percentage_1" value="<?php echo esc_attr( $lbite_tip_pct_1 ); ?>" class="small-text">
+			<input type="number" step="0.01" min="0" id="lbite_tip_percentage_1" aria-label="<?php esc_attr_e( 'Option 1', 'libre-bite' ); ?>" name="lbite_tip_percentage_1" value="<?php echo esc_attr( $lbite_tip_pct_1 ); ?>" class="small-text">
 			<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( $lbite_tip_currency_symbol ) : '%'; ?></span>
 			&nbsp;&nbsp;
-			<input type="text" id="lbite_tip_label_1" name="lbite_tip_label_1" value="<?php echo esc_attr( $lbite_tip_lbl_1 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
+			<input type="text" id="lbite_tip_label_1" aria-label="<?php echo esc_attr( __( 'Option 1', 'libre-bite' ) . ' – ' . __( 'Label', 'libre-bite' ) ); ?>" name="lbite_tip_label_1" value="<?php echo esc_attr( $lbite_tip_lbl_1 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
 		</td>
 	</tr>
 	<tr>
 		<th><?php esc_html_e( 'Option 2', 'libre-bite' ); ?></th>
 		<td>
-			<input type="number" step="0.01" min="0" id="lbite_tip_percentage_2" name="lbite_tip_percentage_2" value="<?php echo esc_attr( $lbite_tip_pct_2 ); ?>" class="small-text">
+			<input type="number" step="0.01" min="0" id="lbite_tip_percentage_2" aria-label="<?php esc_attr_e( 'Option 2', 'libre-bite' ); ?>" name="lbite_tip_percentage_2" value="<?php echo esc_attr( $lbite_tip_pct_2 ); ?>" class="small-text">
 			<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( $lbite_tip_currency_symbol ) : '%'; ?></span>
 			&nbsp;&nbsp;
-			<input type="text" id="lbite_tip_label_2" name="lbite_tip_label_2" value="<?php echo esc_attr( $lbite_tip_lbl_2 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
+			<input type="text" id="lbite_tip_label_2" aria-label="<?php echo esc_attr( __( 'Option 2', 'libre-bite' ) . ' – ' . __( 'Label', 'libre-bite' ) ); ?>" name="lbite_tip_label_2" value="<?php echo esc_attr( $lbite_tip_lbl_2 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
 		</td>
 	</tr>
 	<tr>
 		<th><?php esc_html_e( 'Option 3', 'libre-bite' ); ?></th>
 		<td>
-			<input type="number" step="0.01" min="0" id="lbite_tip_percentage_3" name="lbite_tip_percentage_3" value="<?php echo esc_attr( $lbite_tip_pct_3 ); ?>" class="small-text">
+			<input type="number" step="0.01" min="0" id="lbite_tip_percentage_3" aria-label="<?php esc_attr_e( 'Option 3', 'libre-bite' ); ?>" name="lbite_tip_percentage_3" value="<?php echo esc_attr( $lbite_tip_pct_3 ); ?>" class="small-text">
 			<span class="lbite-tip-unit"><?php echo $lbite_tip_is_fixed ? esc_html( $lbite_tip_currency_symbol ) : '%'; ?></span>
 			&nbsp;&nbsp;
-			<input type="text" id="lbite_tip_label_3" name="lbite_tip_label_3" value="<?php echo esc_attr( $lbite_tip_lbl_3 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
+			<input type="text" id="lbite_tip_label_3" aria-label="<?php echo esc_attr( __( 'Option 3', 'libre-bite' ) . ' – ' . __( 'Label', 'libre-bite' ) ); ?>" name="lbite_tip_label_3" value="<?php echo esc_attr( $lbite_tip_lbl_3 ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Custom label (optional)', 'libre-bite' ); ?>">
 		</td>
 	</tr>
 	<tr>
-		<th><?php esc_html_e( 'Default Selection', 'libre-bite' ); ?></th>
+		<th><label for="lbite-tip-default-selection"><?php esc_html_e( 'Default Selection', 'libre-bite' ); ?></label></th>
 		<td>
-			<select name="lbite_tip_default_selection">
+			<select id="lbite-tip-default-selection" name="lbite_tip_default_selection">
 				<option value="none" <?php selected( $lbite_tip_select, 'none' ); ?>><?php esc_html_e( 'No Tip (Default)', 'libre-bite' ); ?></option>
 				<option value="percentage_1" <?php selected( $lbite_tip_select, 'percentage_1' ); ?>><?php esc_html_e( 'Option 1', 'libre-bite' ); ?></option>
 				<option value="percentage_2" <?php selected( $lbite_tip_select, 'percentage_2' ); ?>><?php esc_html_e( 'Option 2', 'libre-bite' ); ?></option>

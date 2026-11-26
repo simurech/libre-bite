@@ -7424,3 +7424,53 @@ msgstr "Un appel du serveur est marqué comme traité."
 #: templates/admin/settings/developer.php
 msgid "An end-of-day close (Z report) is saved."
 msgstr "Une clôture journalière (rapport Z) est enregistrée."
+
+#: includes/admin/class-admin.php
+msgid "Open requests on other days or at other locations:"
+msgstr "Demandes ouvertes à d’autres dates ou sur d’autres sites :"
+
+#. translators: %d: number of open reservation requests
+#: includes/admin/class-admin.php
+#, php-format
+msgid "%d open"
+msgstr "%d ouverte(s)"
+
+#. translators: %s: name of the option group
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "Rules of group \"%s\" apply"
+msgstr "Les règles du groupe « %s » s’appliquent"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "unnamed group"
+msgstr "groupe sans nom"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "An option in a group does not need to be ticked in the list above. Ticked options without a group can be added by guests without any rules."
+msgstr "Une option faisant partie d’un groupe n’a pas besoin d’être cochée dans la liste ci-dessus. Les options cochées sans groupe peuvent être ajoutées librement par les clients."
+
+#. translators: %d: number of the option group
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "Option group %d"
+msgstr "Groupe d’options %d"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Group name"
+msgstr "Nom du groupe"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Selection type"
+msgstr "Type de choix"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Add group"
+msgstr "Ajouter un groupe"
+
+#: includes/modules/product-options/class-product-options.php
+msgid "Extras without rules"
+msgstr "Extras sans règles"
+
+#: includes/modules/product-options/class-product-options.php
+msgid "Guests can add these freely. For rules such as \"choose 1\", put the options into a group below."
+msgstr "Les clients peuvent les ajouter librement. Pour des règles comme « choisir 1 », placez les options dans un groupe ci-dessous."

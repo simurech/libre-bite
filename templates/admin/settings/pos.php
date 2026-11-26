@@ -87,9 +87,9 @@ foreach ( $lbite_pos_methods_default as $lbite_pos_def ) {
 					<tbody>
 						<?php foreach ( $lbite_pos_payment_methods as $lbite_pm ) : ?>
 						<tr>
-							<td><input type="checkbox" name="lbite_pm_enabled[<?php echo esc_attr( $lbite_pm['key'] ); ?>]" value="1" <?php checked( $lbite_pm['enabled'] ); ?>></td>
-							<td><input type="text" name="lbite_pm_icon[<?php echo esc_attr( $lbite_pm['key'] ); ?>]" value="<?php echo esc_attr( $lbite_pm['icon'] ); ?>" class="small-text" style="width: 56px; text-align: center; font-size: 18px;"></td>
-							<td><input type="text" name="lbite_pm_label[<?php echo esc_attr( $lbite_pm['key'] ); ?>]" value="<?php echo esc_attr( $lbite_pm['label'] ); ?>" class="regular-text" style="max-width: 200px;"></td>
+							<td><input type="checkbox" aria-label="<?php echo esc_attr( $lbite_pm['label'] . ' – ' . __( 'Active', 'libre-bite' ) ); ?>" name="lbite_pm_enabled[<?php echo esc_attr( $lbite_pm['key'] ); ?>]" value="1" <?php checked( $lbite_pm['enabled'] ); ?>></td>
+							<td><input type="text" aria-label="<?php echo esc_attr( $lbite_pm['label'] . ' – ' . __( 'Icon', 'libre-bite' ) ); ?>" name="lbite_pm_icon[<?php echo esc_attr( $lbite_pm['key'] ); ?>]" value="<?php echo esc_attr( $lbite_pm['icon'] ); ?>" class="small-text" style="width: 56px; text-align: center; font-size: 18px;"></td>
+							<td><input type="text" aria-label="<?php echo esc_attr( $lbite_pm['label'] . ' – ' . __( 'Label', 'libre-bite' ) ); ?>" name="lbite_pm_label[<?php echo esc_attr( $lbite_pm['key'] ); ?>]" value="<?php echo esc_attr( $lbite_pm['label'] ); ?>" class="regular-text" style="max-width: 200px;"></td>
 						</tr>
 						<?php endforeach; ?>
 					</tbody>

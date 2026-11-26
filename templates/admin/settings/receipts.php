@@ -75,6 +75,7 @@ foreach ( array_keys( $lbite_types ) as $lbite_type ) {
 								class="lbite-receipt-field-toggle"
 								data-receipt-type="<?php echo esc_attr( $lbite_type ); ?>"
 								data-field="<?php echo esc_attr( $lbite_key ); ?>"
+								aria-label="<?php echo esc_attr( $lbite_def['label'] . ' – ' . $lbite_types[ $lbite_type ] ); ?>"
 								name="lbite_receipt_fields[<?php echo esc_attr( $lbite_type ); ?>][<?php echo esc_attr( $lbite_key ); ?>]"
 								value="1"
 								<?php checked( ! empty( $lbite_active[ $lbite_type ][ $lbite_key ] ) ); ?>

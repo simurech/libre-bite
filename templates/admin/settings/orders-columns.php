@@ -129,12 +129,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<td>
 				<?php if ( isset( $lbite_kanban_fixed[ LBite_Order_Dashboard::KEY_PREORDER ] ) ) : ?>
 				<p>
-					<input type="text" name="lbite_kanban_preorder_label" value="<?php echo esc_attr( $lbite_kanban_fixed[ LBite_Order_Dashboard::KEY_PREORDER ]['label'] ); ?>" class="regular-text" <?php disabled( ! $lbite_premium_allowed ); ?>>
+					<input type="text" aria-label="<?php esc_attr_e( 'Pre-orders', 'libre-bite' ); ?>" name="lbite_kanban_preorder_label" value="<?php echo esc_attr( $lbite_kanban_fixed[ LBite_Order_Dashboard::KEY_PREORDER ]['label'] ); ?>" class="regular-text" <?php disabled( ! $lbite_premium_allowed ); ?>>
 					<span class="description"><?php esc_html_e( 'Pre-orders — only shown because "Pre-orders" is enabled under Settings → Locations. Always the first column.', 'libre-bite' ); ?></span>
 				</p>
 				<?php endif; ?>
 				<p>
-					<input type="text" name="lbite_kanban_active_label" value="<?php echo esc_attr( $lbite_kanban_fixed[ LBite_Order_Dashboard::KEY_ACTIVE ]['label'] ); ?>" class="regular-text" <?php disabled( ! $lbite_premium_allowed ); ?>>
+					<input type="text" aria-label="<?php esc_attr_e( 'Prepare Now', 'libre-bite' ); ?>" name="lbite_kanban_active_label" value="<?php echo esc_attr( $lbite_kanban_fixed[ LBite_Order_Dashboard::KEY_ACTIVE ]['label'] ); ?>" class="regular-text" <?php disabled( ! $lbite_premium_allowed ); ?>>
 					<span class="description"><?php esc_html_e( 'Always present — every new order that is not a pre-order starts here.', 'libre-bite' ); ?></span>
 				</p>
 				<p class="description"><?php esc_html_e( 'These two columns cannot be removed, renamed to a different key, or reordered — they carry the automatic pre-order routing. You can still rename their label.', 'libre-bite' ); ?></p>
@@ -153,7 +153,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="lbite-kanban-column-row" data-index="<?php echo (int) $lbite_i; ?>">
 						<span class="dashicons dashicons-menu lbite-kanban-drag-handle"></span>
 						<input type="hidden" name="columns[<?php echo (int) $lbite_i; ?>][key]" value="<?php echo esc_attr( $lbite_col['key'] ); ?>">
-						<input type="text" name="columns[<?php echo (int) $lbite_i; ?>][label]" value="<?php echo esc_attr( $lbite_col['label'] ); ?>" class="regular-text" <?php disabled( ! $lbite_premium_allowed ); ?>>
+						<input type="text" aria-label="<?php esc_attr_e( 'Label', 'libre-bite' ); ?>" name="columns[<?php echo (int) $lbite_i; ?>][label]" value="<?php echo esc_attr( $lbite_col['label'] ); ?>" class="regular-text" <?php disabled( ! $lbite_premium_allowed ); ?>>
 						<label>
 							<input type="checkbox" name="columns[<?php echo (int) $lbite_i; ?>][counts_as_completed]" value="1" <?php checked( $lbite_col['counts_as_completed'] ); ?> <?php disabled( ! $lbite_premium_allowed ); ?>>
 							<?php esc_html_e( 'Counts as completed', 'libre-bite' ); ?>

@@ -66,7 +66,7 @@ $lbite_stamp_limit_cats = array_map( 'strval', (array) get_option( 'lbite_stampc
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Stamps needed', 'libre-bite' ); ?></th>
+			<th><label for="lbite_stampcard_target"><?php esc_html_e( 'Stamps needed', 'libre-bite' ); ?></label></th>
 			<td>
 				<input type="number" min="2" id="lbite_stampcard_target" name="lbite_stampcard_target" class="small-text"
 					value="<?php echo esc_attr( get_option( 'lbite_stampcard_target', 10 ) ); ?>" <?php disabled( ! $lbite_premium_allowed ); ?>>
@@ -86,16 +86,16 @@ $lbite_stamp_limit_cats = array_map( 'strval', (array) get_option( 'lbite_stampc
 					<?php esc_html_e( 'Fixed amount off', 'libre-bite' ); ?>
 				</label>
 				<br>
-				<input type="number" min="1" <?php echo 'percent' === $lbite_stamp_type ? 'max="100"' : ''; ?> step="0.01" id="lbite_stampcard_discount" name="lbite_stampcard_discount" class="small-text"
+				<input type="number" min="1" <?php echo 'percent' === $lbite_stamp_type ? 'max="100"' : ''; ?> step="0.01" id="lbite_stampcard_discount" aria-label="<?php esc_attr_e( 'Discount', 'libre-bite' ); ?>" name="lbite_stampcard_discount" class="small-text"
 					value="<?php echo esc_attr( get_option( 'lbite_stampcard_discount', 50 ) ); ?>" <?php disabled( ! $lbite_premium_allowed ); ?>>
 				<span id="lbite-stampcard-discount-unit"><?php echo 'percent' === $lbite_stamp_type ? '%' : esc_html( get_woocommerce_currency() ); ?></span>
 				<p class="description"><?php esc_html_e( 'Issued as a single-use WooCommerce coupon, tied to the guest’s email address so it cannot be passed on.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr id="lbite-stampcard-max-amount-row" <?php echo 'percent' === $lbite_stamp_type ? '' : 'style="display:none;"'; ?>>
-			<th><?php esc_html_e( 'Maximum amount', 'libre-bite' ); ?></th>
+			<th><label for="lbite-stampcard-max-amount"><?php esc_html_e( 'Maximum amount', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="number" step="0.01" min="0" name="lbite_stampcard_max_amount" class="small-text"
+				<input id="lbite-stampcard-max-amount" type="number" step="0.01" min="0" name="lbite_stampcard_max_amount" class="small-text"
 					value="<?php echo esc_attr( get_option( 'lbite_stampcard_max_amount', 0 ) ); ?>" <?php disabled( ! $lbite_premium_allowed ); ?>>
 				<p class="description"><?php esc_html_e( 'Caps a percentage reward, e.g. 100% off but never more than 19.00. 0 means no cap.', 'libre-bite' ); ?></p>
 			</td>
@@ -131,17 +131,17 @@ $lbite_stamp_limit_cats = array_map( 'strval', (array) get_option( 'lbite_stampc
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Minimum order value', 'libre-bite' ); ?></th>
+			<th><label for="lbite-stampcard-min-total"><?php esc_html_e( 'Minimum order value', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="number" step="0.01" min="0" name="lbite_stampcard_min_total" class="small-text"
+				<input id="lbite-stampcard-min-total" type="number" step="0.01" min="0" name="lbite_stampcard_min_total" class="small-text"
 					value="<?php echo esc_attr( get_option( 'lbite_stampcard_min_total', 0 ) ); ?>" <?php disabled( ! $lbite_premium_allowed ); ?>>
 				<p class="description"><?php esc_html_e( 'Orders below this value do not earn a stamp. 0 means every order counts.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Voucher valid for', 'libre-bite' ); ?></th>
+			<th><label for="lbite-stampcard-validity-days"><?php esc_html_e( 'Voucher valid for', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="number" min="1" name="lbite_stampcard_validity_days" class="small-text"
+				<input id="lbite-stampcard-validity-days" type="number" min="1" name="lbite_stampcard_validity_days" class="small-text"
 					value="<?php echo esc_attr( get_option( 'lbite_stampcard_validity_days', 90 ) ); ?>" <?php disabled( ! $lbite_premium_allowed ); ?>>
 				<?php esc_html_e( 'days', 'libre-bite' ); ?>
 			</td>

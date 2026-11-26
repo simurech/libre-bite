@@ -51,7 +51,7 @@ $lbite_sms_trigger    = (string) get_option( 'lbite_sms_trigger_status', '' );
 	<input type="hidden" name="lbite_sections[]" value="sound">
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Notification Sound', 'libre-bite' ); ?></th>
+			<th><label for="lbite_notification_sound"><?php esc_html_e( 'Notification Sound', 'libre-bite' ); ?></label></th>
 			<td>
 				<?php if ( $lbite_premium_allowed ) : ?>
 				<div style="display: flex; align-items: center; gap: 10px;">

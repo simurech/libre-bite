@@ -152,11 +152,65 @@ class LBite_Reservation_Dashboard {
 
 		wp_send_json_success(
 			array(
-				'reservations' => $reservations,
-				'tables'       => $tables,
-				'statuses'     => LBite_Reservations::get_statuses(),
+				'reservations'      => $reservations,
+				'tables'            => $tables,
+				'statuses'          => LBite_Reservations::get_statuses(),
+				'pending_elsewhere' => self::get_pending_elsewhere( $location_id, $date ),
 			)
 		);
+	}
+
+	/**
+	 * Offene Anfragen an anderen Tagen oder Standorten.
+	 *
+	 * Das Menü-Badge zählt alle offenen Anfragen. Ohne diesen Hinweis wirkt
+	 * die Tagesansicht leer, obwohl Anfragen auf eine Bestätigung warten.
+	 *
+	 * @param int    $location_id Aktuell angezeigter Standort.
+	 * @param string $date        Aktuell angezeigtes Datum (Y-m-d).
+	 * @return array<int, array{date:string,date_label:string,location_id:int,location:string,count:int}>
+	 */
+	public static function get_pending_elsewhere( $location_id, $date ) {
+		$ids = get_posts(
+			array(
+				'post_type'      => LBite_Reservations::POST_TYPE,
+				'post_status'    => 'publish',
+				'posts_per_page' => 200,
+				'fields'         => 'ids',
+				'no_found_rows'  => true,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Offene Anfragen für den Hinweis; auf 200 begrenzt.
+				'meta_query'     => array(
+					array(
+						'key'   => '_lbite_reservation_status',
+						'value' => 'pending',
+					),
+				),
+			)
+		);
+
+		$groups = array();
+		foreach ( $ids as $id ) {
+			$res_date = (string) get_post_meta( $id, '_lbite_reservation_date', true );
+			$res_loc  = (int) get_post_meta( $id, '_lbite_location_id', true );
+			if ( '' === $res_date || ( $res_date === $date && $res_loc === (int) $location_id ) ) {
+				continue;
+			}
+			$key = $res_date . '|' . $res_loc;
+			if ( ! isset( $groups[ $key ] ) ) {
+				$timestamp      = strtotime( $res_date );
+				$groups[ $key ] = array(
+					'date'        => $res_date,
+					'date_label'  => $timestamp ? date_i18n( get_option( 'date_format' ), $timestamp ) : $res_date,
+					'location_id' => $res_loc,
+					'location'    => $res_loc ? get_the_title( $res_loc ) : '',
+					'count'       => 0,
+				);
+			}
+			++$groups[ $key ]['count'];
+		}
+
+		ksort( $groups );
+		return array_slice( array_values( $groups ), 0, 5 );
 	}
 
 	/**

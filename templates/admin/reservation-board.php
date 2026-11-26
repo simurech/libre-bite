@@ -42,7 +42,7 @@ $lbite_saved_location = get_user_meta( get_current_user_id(), 'lbite_reservation
 
 		<div class="lbite-res-date-nav">
 			<button type="button" id="lbite-res-date-prev" class="button" title="<?php esc_attr_e( 'Previous Day', 'libre-bite' ); ?>">&#8249;</button>
-			<input type="date" id="lbite-res-date" value="<?php echo esc_attr( gmdate( 'Y-m-d' ) ); ?>">
+			<input type="date" id="lbite-res-date" aria-label="<?php esc_attr_e( 'Date', 'libre-bite' ); ?>" value="<?php echo esc_attr( gmdate( 'Y-m-d' ) ); ?>">
 			<button type="button" id="lbite-res-date-next" class="button" title="<?php esc_attr_e( 'Next Day', 'libre-bite' ); ?>">&#8250;</button>
 			<button type="button" id="lbite-res-date-today" class="button"><?php esc_html_e( 'Today', 'libre-bite' ); ?></button>
 		</div>
@@ -64,6 +64,8 @@ $lbite_saved_location = get_user_meta( get_current_user_id(), 'lbite_reservation
 			<span class="spinner is-active"></span>
 			<?php esc_html_e( 'Loading…', 'libre-bite' ); ?>
 		</div>
+
+		<div id="lbite-res-pending-elsewhere" class="notice notice-info inline lbite-res-pending-elsewhere" style="display:none;" role="status"></div>
 
 		<div id="lbite-reservation-list"></div>
 

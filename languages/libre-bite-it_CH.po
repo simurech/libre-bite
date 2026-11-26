@@ -7424,3 +7424,53 @@ msgstr "Una chiamata cameriere viene segnata come evasa."
 #: templates/admin/settings/developer.php
 msgid "An end-of-day close (Z report) is saved."
 msgstr "Una chiusura giornaliera (rapporto Z) viene salvata."
+
+#: includes/admin/class-admin.php
+msgid "Open requests on other days or at other locations:"
+msgstr "Richieste aperte in altri giorni o in altre sedi:"
+
+#. translators: %d: number of open reservation requests
+#: includes/admin/class-admin.php
+#, php-format
+msgid "%d open"
+msgstr "%d aperte"
+
+#. translators: %s: name of the option group
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "Rules of group \"%s\" apply"
+msgstr "Valgono le regole del gruppo «%s»"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "unnamed group"
+msgstr "gruppo senza nome"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "An option in a group does not need to be ticked in the list above. Ticked options without a group can be added by guests without any rules."
+msgstr "Un’opzione in un gruppo non deve essere selezionata nell’elenco sopra. Le opzioni selezionate senza gruppo possono essere aggiunte liberamente dagli ospiti."
+
+#. translators: %d: number of the option group
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "Option group %d"
+msgstr "Gruppo di opzioni %d"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Group name"
+msgstr "Nome del gruppo"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Selection type"
+msgstr "Tipo di scelta"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Add group"
+msgstr "Aggiungi gruppo"
+
+#: includes/modules/product-options/class-product-options.php
+msgid "Extras without rules"
+msgstr "Extra senza regole"
+
+#: includes/modules/product-options/class-product-options.php
+msgid "Guests can add these freely. For rules such as \"choose 1\", put the options into a group below."
+msgstr "Gli ospiti possono aggiungerle liberamente. Per regole come «scegli 1», metti le opzioni in un gruppo qui sotto."

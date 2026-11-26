@@ -106,6 +106,7 @@ else :
 										<td style="text-align:center;">
 											<input type="checkbox"
 												name="lbite_manager_locations[<?php echo esc_attr( $lbite_mgr->ID ); ?>][]"
+												aria-label="<?php echo esc_attr( $lbite_mgr->display_name . ' – ' . get_the_title( $lbite_loc ) ); ?>"
 												value="<?php echo esc_attr( $lbite_loc->ID ); ?>"
 												<?php checked( $lbite_row_is_admin || in_array( (string) $lbite_loc->ID, $lbite_assigned, true ) ); ?>
 												<?php disabled( $lbite_row_is_admin ); ?>>

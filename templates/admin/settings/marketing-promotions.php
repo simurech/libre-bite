@@ -100,7 +100,7 @@ $lbite_promo_days  = array(
 				<tr>
 					<th><?php esc_html_e( 'Name', 'libre-bite' ); ?></th>
 					<td>
-						<input type="text" name="<?php echo esc_attr( $lbite_name ); ?>[label]" class="regular-text"
+						<input type="text" aria-label="<?php esc_attr_e( 'Name', 'libre-bite' ); ?>" name="<?php echo esc_attr( $lbite_name ); ?>[label]" class="regular-text"
 							value="<?php echo esc_attr( isset( $lbite_rule['label'] ) ? $lbite_rule['label'] : '' ); ?>"
 							placeholder="<?php esc_attr_e( 'e.g. Happy Hour', 'libre-bite' ); ?>"
 							<?php disabled( ! $lbite_premium_allowed ); ?>>
@@ -110,7 +110,7 @@ $lbite_promo_days  = array(
 				<tr>
 					<th><?php esc_html_e( 'Type', 'libre-bite' ); ?></th>
 					<td>
-						<select name="<?php echo esc_attr( $lbite_name ); ?>[type]" <?php disabled( ! $lbite_premium_allowed ); ?>>
+						<select aria-label="<?php esc_attr_e( 'Type', 'libre-bite' ); ?>" name="<?php echo esc_attr( $lbite_name ); ?>[type]" <?php disabled( ! $lbite_premium_allowed ); ?>>
 							<?php foreach ( $lbite_promo_types as $lbite_tk => $lbite_tl ) : ?>
 								<option value="<?php echo esc_attr( $lbite_tk ); ?>"
 									<?php selected( isset( $lbite_rule['type'] ) ? $lbite_rule['type'] : '', $lbite_tk ); ?>>
@@ -123,7 +123,7 @@ $lbite_promo_days  = array(
 				<tr>
 					<th><?php esc_html_e( 'Discount', 'libre-bite' ); ?></th>
 					<td>
-						<input type="number" step="0.01" min="0" name="<?php echo esc_attr( $lbite_name ); ?>[amount]" class="small-text"
+						<input type="number" step="0.01" min="0" aria-label="<?php esc_attr_e( 'Discount', 'libre-bite' ); ?>" name="<?php echo esc_attr( $lbite_name ); ?>[amount]" class="small-text"
 							value="<?php echo esc_attr( isset( $lbite_rule['amount'] ) ? $lbite_rule['amount'] : '' ); ?>"
 							<?php disabled( ! $lbite_premium_allowed ); ?>>
 						<label style="margin-left:10px;">
@@ -142,7 +142,7 @@ $lbite_promo_days  = array(
 								name="<?php echo esc_attr( $lbite_name ); ?>[product_ids]"
 								value="<?php echo esc_attr( implode( ',', isset( $lbite_rule['product_ids'] ) ? $lbite_rule['product_ids'] : array() ) ); ?>">
 							<span class="lbite-product-picker__selected"></span>
-							<input type="text" class="regular-text lbite-product-picker__search"
+							<input type="text" class="regular-text lbite-product-picker__search" aria-label="<?php esc_attr_e( 'Search products…', 'libre-bite' ); ?>"
 								placeholder="<?php esc_attr_e( 'Search products…', 'libre-bite' ); ?>"
 								autocomplete="off"
 								<?php disabled( ! $lbite_premium_allowed ); ?>>
@@ -175,10 +175,10 @@ $lbite_promo_days  = array(
 				<tr>
 					<th><?php esc_html_e( 'Buy / free', 'libre-bite' ); ?></th>
 					<td>
-						<input type="number" min="2" name="<?php echo esc_attr( $lbite_name ); ?>[buy_qty]" class="small-text"
+						<input type="number" min="2" aria-label="<?php esc_attr_e( 'Buy / free', 'libre-bite' ); ?>" name="<?php echo esc_attr( $lbite_name ); ?>[buy_qty]" class="small-text"
 							value="<?php echo esc_attr( isset( $lbite_rule['buy_qty'] ) ? $lbite_rule['buy_qty'] : 3 ); ?>"
 							<?php disabled( ! $lbite_premium_allowed ); ?>>
-						<input type="number" min="1" name="<?php echo esc_attr( $lbite_name ); ?>[free_qty]" class="small-text"
+						<input type="number" min="1" aria-label="<?php esc_attr_e( 'Free', 'libre-bite' ); ?>" name="<?php echo esc_attr( $lbite_name ); ?>[free_qty]" class="small-text"
 							value="<?php echo esc_attr( isset( $lbite_rule['free_qty'] ) ? $lbite_rule['free_qty'] : 1 ); ?>"
 							<?php disabled( ! $lbite_premium_allowed ); ?>>
 						<p class="description"><?php esc_html_e( 'Only for “buy several, pay for fewer”. Example 3 and 1 means: three in the basket, the cheapest one is free.', 'libre-bite' ); ?></p>
@@ -187,7 +187,7 @@ $lbite_promo_days  = array(
 				<tr>
 					<th><?php esc_html_e( 'Minimum order value', 'libre-bite' ); ?></th>
 					<td>
-						<input type="number" step="0.01" min="0" name="<?php echo esc_attr( $lbite_name ); ?>[min_total]" class="small-text"
+						<input type="number" step="0.01" min="0" aria-label="<?php esc_attr_e( 'Minimum order value', 'libre-bite' ); ?>" name="<?php echo esc_attr( $lbite_name ); ?>[min_total]" class="small-text"
 							value="<?php echo esc_attr( isset( $lbite_rule['min_total'] ) ? $lbite_rule['min_total'] : '' ); ?>"
 							<?php disabled( ! $lbite_premium_allowed ); ?>>
 						<p class="description"><?php esc_html_e( 'Only for “discount on the whole order”.', 'libre-bite' ); ?></p>

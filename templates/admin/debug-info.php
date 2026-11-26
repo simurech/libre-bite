@@ -195,7 +195,7 @@ $plugin_name = apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'li
 				$log_lines  = explode( "\n", $log_content );
 				$last_lines = array_slice( $log_lines, -50 );
 				?>
-				<textarea readonly style="width: 100%; height: 300px; font-family: monospace; font-size: 12px;"><?php echo esc_textarea( implode( "\n", $last_lines ) ); ?></textarea>
+				<textarea readonly aria-label="<?php esc_attr_e( 'Debug Log (last 50 lines)', 'libre-bite' ); ?>" style="width: 100%; height: 300px; font-family: monospace; font-size: 12px;"><?php echo esc_textarea( implode( "\n", $last_lines ) ); ?></textarea>
 				<p class="description">
 					<?php
 					/* translators: %s: path to debug.log file */

@@ -1134,6 +1134,7 @@ class LBite_Admin {
 						'countsAsCompleted' => __( 'Counts as completed', 'libre-bite' ),
 						'scheduleFrom'      => __( 'From', 'libre-bite' ),
 						'scheduleTo'        => __( 'To', 'libre-bite' ),
+						'label'             => __( 'Label', 'libre-bite' ),
 					),
 				)
 			);
@@ -1329,11 +1330,14 @@ class LBite_Admin {
 					'nonce'           => wp_create_nonce( 'lbite_reservation_board_nonce' ),
 					'refreshInterval' => (int) get_option( 'lbite_reservation_refresh_interval', 60 ) * 1000,
 					'strings'         => array(
-						'reservation'  => __( 'Reservation', 'libre-bite' ),
-						'reservations' => __( 'Reservations', 'libre-bite' ),
-						'table'        => __( 'Table', 'libre-bite' ),
-						'noTable'      => __( 'No table', 'libre-bite' ),
-						'knownGuest'   => __( 'Returning guest', 'libre-bite' ),
+						'reservation'      => __( 'Reservation', 'libre-bite' ),
+						'reservations'     => __( 'Reservations', 'libre-bite' ),
+						'table'            => __( 'Table', 'libre-bite' ),
+						'noTable'          => __( 'No table', 'libre-bite' ),
+						'knownGuest'       => __( 'Returning guest', 'libre-bite' ),
+						'pendingElsewhere' => __( 'Open requests on other days or at other locations:', 'libre-bite' ),
+						/* translators: %d: number of open reservation requests */
+						'pendingCount'     => __( '%d open', 'libre-bite' ),
 					),
 				)
 			);

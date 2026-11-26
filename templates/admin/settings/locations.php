@@ -44,9 +44,9 @@ $lbite_all_pages         = get_pages( array( 'post_status' => 'publish' ) );
 	<h2><?php esc_html_e( 'Location Page', 'libre-bite' ); ?></h2>
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Location Page', 'libre-bite' ); ?></th>
+			<th><label for="lbite-location-page-id"><?php esc_html_e( 'Location Page', 'libre-bite' ); ?></label></th>
 			<td>
-				<select name="lbite_location_page_id">
+				<select id="lbite-location-page-id" name="lbite_location_page_id">
 					<option value="0"><?php esc_html_e( '-- Please select --', 'libre-bite' ); ?></option>
 					<option value="create_new"><?php esc_html_e( '+ Create New Page', 'libre-bite' ); ?></option>
 					<?php foreach ( $lbite_all_pages as $lbite_page ) : ?>
@@ -73,9 +73,9 @@ $lbite_all_pages         = get_pages( array( 'post_status' => 'publish' ) );
 		</tr>
 		<?php if ( count( $lbite_all_locations ) > 1 ) : ?>
 		<tr>
-			<th><?php esc_html_e( 'Default Location', 'libre-bite' ); ?></th>
+			<th><label for="lbite-default-location-id"><?php esc_html_e( 'Default Location', 'libre-bite' ); ?></label></th>
 			<td>
-				<select name="lbite_default_location_id">
+				<select id="lbite-default-location-id" name="lbite_default_location_id">
 					<option value="0"><?php esc_html_e( '-- Automatic --', 'libre-bite' ); ?></option>
 					<?php foreach ( $lbite_all_locations as $lbite_loc ) : ?>
 						<option value="<?php echo esc_attr( $lbite_loc->ID ); ?>" <?php selected( $lbite_default_location, $lbite_loc->ID ); ?>>
@@ -106,40 +106,36 @@ $lbite_all_pages         = get_pages( array( 'post_status' => 'publish' ) );
 	</p>
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Preparation Time', 'libre-bite' ); ?></th>
+			<th><label for="lbite-preparation-time"><?php esc_html_e( 'Preparation Time', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="number" min="0" name="lbite_preparation_time" value="<?php echo esc_attr( $lbite_preparation_time ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+				<input id="lbite-preparation-time" type="number" min="0" name="lbite_preparation_time" value="<?php echo esc_attr( $lbite_preparation_time ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'Pre-orders are automatically moved from "Pre-orders" to "Prepare Now" X minutes before pickup time.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Time Slot Interval', 'libre-bite' ); ?></th>
+			<th><label for="lbite-timeslot-interval"><?php esc_html_e( 'Time Slot Interval', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="number" min="5" step="5" name="lbite_timeslot_interval" value="<?php echo esc_attr( $lbite_timeslot_int ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+				<input id="lbite-timeslot-interval" type="number" min="5" step="5" name="lbite_timeslot_interval" value="<?php echo esc_attr( $lbite_timeslot_int ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'Distance between time slots for pre-orders.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th>
-				<?php esc_html_e( 'Slot Buffer Start', 'libre-bite' ); ?>
+			<th><label for="lbite-slot-buffer-start"><?php esc_html_e( 'Slot Buffer Start', 'libre-bite' ); ?>
 				<?php if ( ! $lbite_is_premium_loc ) : ?>
 					<span class="lbite-pro-badge">Pro</span>
-				<?php endif; ?>
-			</th>
+				<?php endif; ?></label></th>
 			<td>
-				<input type="number" min="0" step="5" name="lbite_slot_buffer_start" value="<?php echo esc_attr( $lbite_slot_buffer_start ); ?>" class="small-text" <?php echo $lbite_is_premium_loc ? '' : 'disabled'; ?>> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+				<input id="lbite-slot-buffer-start" type="number" min="0" step="5" name="lbite_slot_buffer_start" value="<?php echo esc_attr( $lbite_slot_buffer_start ); ?>" class="small-text" <?php echo $lbite_is_premium_loc ? '' : 'disabled'; ?>> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'Cut off the first N minutes from each time window. Example: with 30 minutes, a window from 11:00 only shows slots from 11:30 onwards.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th>
-				<?php esc_html_e( 'Slot Buffer End', 'libre-bite' ); ?>
+			<th><label for="lbite-slot-buffer-end"><?php esc_html_e( 'Slot Buffer End', 'libre-bite' ); ?>
 				<?php if ( ! $lbite_is_premium_loc ) : ?>
 					<span class="lbite-pro-badge">Pro</span>
-				<?php endif; ?>
-			</th>
+				<?php endif; ?></label></th>
 			<td>
-				<input type="number" min="0" step="5" name="lbite_slot_buffer_end" value="<?php echo esc_attr( $lbite_slot_buffer_end ); ?>" class="small-text" <?php echo $lbite_is_premium_loc ? '' : 'disabled'; ?>> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+				<input id="lbite-slot-buffer-end" type="number" min="0" step="5" name="lbite_slot_buffer_end" value="<?php echo esc_attr( $lbite_slot_buffer_end ); ?>" class="small-text" <?php echo $lbite_is_premium_loc ? '' : 'disabled'; ?>> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'Cut off the last N minutes from each time window. Example: with 30 minutes, a window until 22:00 only shows slots up to 21:30.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
@@ -158,14 +154,12 @@ $lbite_all_pages         = get_pages( array( 'post_status' => 'publish' ) );
 			</td>
 		</tr>
 		<tr>
-			<th>
-				<?php esc_html_e( 'Max Orders per Time Slot', 'libre-bite' ); ?>
+			<th><label for="lbite-max-orders-per-slot"><?php esc_html_e( 'Max Orders per Time Slot', 'libre-bite' ); ?>
 				<?php if ( ! $lbite_is_premium_loc ) : ?>
 					<span class="lbite-pro-badge">Pro</span>
-				<?php endif; ?>
-			</th>
+				<?php endif; ?></label></th>
 			<td>
-				<input type="number" min="0" name="lbite_max_orders_per_slot" value="<?php echo esc_attr( $lbite_max_per_slot ); ?>" class="small-text" <?php echo $lbite_is_premium_loc ? '' : 'disabled'; ?>>
+				<input id="lbite-max-orders-per-slot" type="number" min="0" name="lbite_max_orders_per_slot" value="<?php echo esc_attr( $lbite_max_per_slot ); ?>" class="small-text" <?php echo $lbite_is_premium_loc ? '' : 'disabled'; ?>>
 				<p class="description"><?php esc_html_e( 'Once a time slot has reached this many orders it disappears from the checkout, so the kitchen is not flooded at peak times. Set to 0 for no limit.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>

@@ -267,15 +267,38 @@ class LBite_Option_Groups {
 	 */
 	public static function render_admin( $post, array $options ) {
 		$groups   = self::get_for_product( $post->ID );
-		$groups[] = array();
-		$groups[] = array();
+		$existing = count( $groups );
+		// Leere Vorlagen bis zum Maximum; sichtbar ist nur eine, wenn es noch
+		// keine Gruppe gibt. Weitere blendet «Add group» ein.
+		while ( count( $groups ) < self::MAX_GROUPS ) {
+			$groups[] = array();
+		}
+
+		wp_enqueue_script(
+			'lbite-admin-option-groups',
+			LBITE_PLUGIN_URL . 'assets/js/admin-option-groups__premium_only.js',
+			array(),
+			LBITE_VERSION,
+			true
+		);
+		wp_localize_script(
+			'lbite-admin-option-groups',
+			'lbiteOptionGroupsAdmin',
+			array(
+				/* translators: %s: name of the option group */
+				'inGroup'  => __( 'Rules of group "%s" apply', 'libre-bite' ),
+				'unnamed'  => __( 'unnamed group', 'libre-bite' ),
+			)
+		);
 		?>
 		<hr>
 		<h4 style="margin-bottom: 4px;"><?php esc_html_e( 'Option groups', 'libre-bite' ); ?></h4>
 		<p class="description"><?php esc_html_e( 'Group options with rules, e.g. "Sauce: choose 1" or "Toppings: up to 4, 2 included". The cheapest choices count as included. Each option can belong to one group per product.', 'libre-bite' ); ?></p>
+		<p class="description"><?php esc_html_e( 'An option in a group does not need to be ticked in the list above. Ticked options without a group can be added by guests without any rules.', 'libre-bite' ); ?></p>
+		<div id="lbite-option-groups-admin">
 		<?php foreach ( $groups as $index => $g ) : ?>
 			<?php
-			$g = wp_parse_args(
+			$g      = wp_parse_args(
 				$g,
 				array(
 					'id'         => '',
@@ -287,15 +310,25 @@ class LBite_Option_Groups {
 					'option_ids' => array(),
 				)
 			);
-			$n = 'lbite_option_groups[' . (int) $index . ']';
+			$n      = 'lbite_option_groups[' . (int) $index . ']';
+			$uid    = 'lbite-og-' . (int) $index;
+			$hidden = $index >= max( 1, $existing );
 			?>
-			<fieldset style="margin: 12px 0; padding: 10px; border: 1px solid #dcdcde; border-radius: 4px;">
+			<fieldset class="lbite-og-admin-group" data-index="<?php echo esc_attr( $index ); ?>" style="margin: 12px 0; padding: 10px; border: 1px solid #dcdcde; border-radius: 4px;" <?php echo $hidden ? 'hidden' : ''; ?>>
+				<legend class="screen-reader-text">
+					<?php
+					/* translators: %d: number of the option group */
+					echo esc_html( sprintf( __( 'Option group %d', 'libre-bite' ), $index + 1 ) );
+					?>
+				</legend>
 				<input type="hidden" name="<?php echo esc_attr( $n ); ?>[id]" value="<?php echo esc_attr( $g['id'] ); ?>">
 				<p style="margin-top: 0;">
-					<input type="text" name="<?php echo esc_attr( $n ); ?>[label]" value="<?php echo esc_attr( $g['label'] ); ?>" placeholder="<?php esc_attr_e( 'Group name, e.g. Sauce', 'libre-bite' ); ?>" style="width: 100%;">
+					<label class="screen-reader-text" for="<?php echo esc_attr( $uid ); ?>-label"><?php esc_html_e( 'Group name', 'libre-bite' ); ?></label>
+					<input type="text" id="<?php echo esc_attr( $uid ); ?>-label" class="lbite-og-admin-label" name="<?php echo esc_attr( $n ); ?>[label]" value="<?php echo esc_attr( $g['label'] ); ?>" placeholder="<?php esc_attr_e( 'Group name, e.g. Sauce', 'libre-bite' ); ?>" style="width: 100%;">
 				</p>
 				<p>
-					<select name="<?php echo esc_attr( $n ); ?>[type]">
+					<label class="screen-reader-text" for="<?php echo esc_attr( $uid ); ?>-type"><?php esc_html_e( 'Selection type', 'libre-bite' ); ?></label>
+					<select id="<?php echo esc_attr( $uid ); ?>-type" name="<?php echo esc_attr( $n ); ?>[type]">
 						<option value="multiple" <?php selected( $g['type'], 'multiple' ); ?>><?php esc_html_e( 'Several choices', 'libre-bite' ); ?></option>
 						<option value="single" <?php selected( $g['type'], 'single' ); ?>><?php esc_html_e( 'One choice', 'libre-bite' ); ?></option>
 					</select>
@@ -306,9 +339,13 @@ class LBite_Option_Groups {
 				<p class="description" style="margin: 0 0 6px;"><?php esc_html_e( 'Min 0 = optional, Max 0 = unlimited.', 'libre-bite' ); ?></p>
 				<div style="max-height: 160px; overflow-y: auto;">
 					<?php foreach ( $options as $option ) : ?>
+						<?php $price = (float) get_post_meta( $option->ID, '_lbite_price', true ); ?>
 						<label style="display: inline-block; margin: 0 12px 4px 0;">
-							<input type="checkbox" name="<?php echo esc_attr( $n ); ?>[option_ids][]" value="<?php echo esc_attr( $option->ID ); ?>" <?php checked( in_array( (int) $option->ID, array_map( 'intval', (array) $g['option_ids'] ), true ) ); ?>>
+							<input type="checkbox" class="lbite-og-admin-option" data-option-id="<?php echo esc_attr( $option->ID ); ?>" name="<?php echo esc_attr( $n ); ?>[option_ids][]" value="<?php echo esc_attr( $option->ID ); ?>" <?php checked( in_array( (int) $option->ID, array_map( 'intval', (array) $g['option_ids'] ), true ) ); ?>>
 							<?php echo esc_html( $option->post_title ); ?>
+							<?php if ( $price > 0 ) : ?>
+								<span style="color: #646970;">(+<?php echo wp_kses_post( wc_price( $price ) ); ?>)</span>
+							<?php endif; ?>
 						</label>
 					<?php endforeach; ?>
 				</div>
@@ -317,6 +354,8 @@ class LBite_Option_Groups {
 				<?php endif; ?>
 			</fieldset>
 		<?php endforeach; ?>
+		</div>
+		<p><button type="button" class="button" id="lbite-og-admin-add"><?php esc_html_e( 'Add group', 'libre-bite' ); ?></button></p>
 		<?php
 	}
 

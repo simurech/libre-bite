@@ -7425,3 +7425,53 @@ msgstr "Ein Kellnerruf wird als erledigt markiert."
 #: templates/admin/settings/developer.php
 msgid "An end-of-day close (Z report) is saved."
 msgstr "Ein Tagesabschluss (Z-Bericht) wird gespeichert."
+
+#: includes/admin/class-admin.php
+msgid "Open requests on other days or at other locations:"
+msgstr "Offene Anfragen an anderen Tagen oder Standorten:"
+
+#. translators: %d: number of open reservation requests
+#: includes/admin/class-admin.php
+#, php-format
+msgid "%d open"
+msgstr "%d offen"
+
+#. translators: %s: name of the option group
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "Rules of group \"%s\" apply"
+msgstr "Es gelten die Regeln der Gruppe «%s»"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "unnamed group"
+msgstr "unbenannte Gruppe"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "An option in a group does not need to be ticked in the list above. Ticked options without a group can be added by guests without any rules."
+msgstr "Eine Option in einer Gruppe muss oben nicht angehakt sein. Angehakte Optionen ohne Gruppe können Gäste ohne Regeln dazuwählen."
+
+#. translators: %d: number of the option group
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "Option group %d"
+msgstr "Optionsgruppe %d"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Group name"
+msgstr "Gruppenname"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Selection type"
+msgstr "Auswahlart"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Add group"
+msgstr "Gruppe hinzufügen"
+
+#: includes/modules/product-options/class-product-options.php
+msgid "Extras without rules"
+msgstr "Extras ohne Regeln"
+
+#: includes/modules/product-options/class-product-options.php
+msgid "Guests can add these freely. For rules such as \"choose 1\", put the options into a group below."
+msgstr "Gäste können diese frei dazuwählen. Für Regeln wie «1 wählen» die Optionen unten in eine Gruppe legen."

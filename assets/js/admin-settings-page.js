@@ -136,7 +136,7 @@ jQuery(document).ready(function($) {
 				'<div class="lbite-kanban-column-row" data-index="' + nextIndex + '">' +
 					'<span class="dashicons dashicons-menu lbite-kanban-drag-handle"></span>' +
 					'<input type="hidden" name="columns[' + nextIndex + '][key]" value="">' +
-					'<input type="text" name="columns[' + nextIndex + '][label]" class="regular-text">' +
+					'<input type="text" name="columns[' + nextIndex + '][label]" class="regular-text" aria-label="' + $('<div>').text((lbiteAdminSettings.strings && lbiteAdminSettings.strings.label) || 'Label').html() + '">' +
 					'<label><input type="checkbox" name="columns[' + nextIndex + '][counts_as_completed]" value="1"> ' + countsLabel + '</label>' +
 					'<button type="button" class="button lbite-kanban-remove-column">&times;</button>' +
 				'</div>'

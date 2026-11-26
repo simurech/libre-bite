@@ -55,7 +55,7 @@ $lbite_promo_days   = array(
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Text', 'libre-bite' ); ?></th>
+			<th><label for="lbite_promo_banner_text"><?php esc_html_e( 'Text', 'libre-bite' ); ?></label></th>
 			<td>
 				<input type="text" id="lbite_promo_banner_text" name="lbite_promo_banner[text]" class="large-text"
 					value="<?php echo esc_attr( $lbite_promo_banner['text'] ); ?>"
@@ -64,9 +64,9 @@ $lbite_promo_days   = array(
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Link', 'libre-bite' ); ?></th>
+			<th><label for="lbite-promo-banner-link"><?php esc_html_e( 'Link', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="url" name="lbite_promo_banner[link]" class="regular-text"
+				<input id="lbite-promo-banner-link" type="url" name="lbite_promo_banner[link]" class="regular-text"
 					value="<?php echo esc_attr( $lbite_promo_banner['link'] ); ?>"
 					<?php disabled( ! $lbite_premium_allowed ); ?>>
 				<p class="description"><?php esc_html_e( 'Optional. Leave empty for plain text.', 'libre-bite' ); ?></p>

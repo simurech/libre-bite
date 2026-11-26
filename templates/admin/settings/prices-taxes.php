@@ -43,9 +43,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Takeaway Tax Class', 'libre-bite' ); ?></th>
+			<th><label for="lbite-tax-class-takeaway"><?php esc_html_e( 'Takeaway Tax Class', 'libre-bite' ); ?></label></th>
 			<td>
-				<select name="lbite_tax_class_takeaway">
+				<select id="lbite-tax-class-takeaway" name="lbite_tax_class_takeaway">
 					<?php foreach ( $lbite_wc_tax_classes as $lbite_slug => $lbite_name ) :
 						$lbite_value = ( '' === $lbite_slug ) ? '' : sanitize_title( $lbite_name );
 					?>
@@ -58,9 +58,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Dine-in Tax Class', 'libre-bite' ); ?></th>
+			<th><label for="lbite-tax-class-dine-in"><?php esc_html_e( 'Dine-in Tax Class', 'libre-bite' ); ?></label></th>
 			<td>
-				<select name="lbite_tax_class_dine_in">
+				<select id="lbite-tax-class-dine-in" name="lbite_tax_class_dine_in">
 					<?php foreach ( $lbite_wc_tax_classes as $lbite_slug => $lbite_name ) :
 						$lbite_value = ( '' === $lbite_slug ) ? '' : sanitize_title( $lbite_name );
 					?>

@@ -56,9 +56,9 @@ $lbite_all_pages       = get_pages( array( 'post_status' => 'publish' ) );
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Menu Page', 'libre-bite' ); ?></th>
+			<th><label for="lbite-menu-page-id"><?php esc_html_e( 'Menu Page', 'libre-bite' ); ?></label></th>
 			<td>
-				<select name="lbite_menu_page_id">
+				<select id="lbite-menu-page-id" name="lbite_menu_page_id">
 					<option value="0"><?php esc_html_e( '-- Please select --', 'libre-bite' ); ?></option>
 					<option value="create_new"><?php esc_html_e( '+ Create New Page', 'libre-bite' ); ?></option>
 					<?php foreach ( $lbite_all_pages as $lbite_page ) : ?>

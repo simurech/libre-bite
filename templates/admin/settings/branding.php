@@ -36,9 +36,9 @@ $lbite_color_presets = array(
 	<h2><?php esc_html_e( 'Plugin Identity', 'libre-bite' ); ?></h2>
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Plugin Name', 'libre-bite' ); ?></th>
+			<th><label for="lbite-custom-plugin-name"><?php esc_html_e( 'Plugin Name', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="text" name="lbite_custom_plugin_name" value="<?php echo esc_attr( $lbite_custom_plugin_name ); ?>" class="regular-text" placeholder="Libre Bite">
+				<input id="lbite-custom-plugin-name" type="text" name="lbite_custom_plugin_name" value="<?php echo esc_attr( $lbite_custom_plugin_name ); ?>" class="regular-text" placeholder="Libre Bite">
 				<p class="description"><?php esc_html_e( 'Replaces "Libre Bite" throughout the admin menu and pages. Leave empty to use the default name.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
@@ -47,9 +47,9 @@ $lbite_color_presets = array(
 	<h2><?php esc_html_e( 'Storefront Branding', 'libre-bite' ); ?></h2>
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Brand Name', 'libre-bite' ); ?></th>
+			<th><label for="lbite-brand-name"><?php esc_html_e( 'Brand Name', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="text" name="lbite_brand_name" value="<?php echo esc_attr( $lbite_brand_name ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'E.g. My Restaurant', 'libre-bite' ); ?>">
+				<input id="lbite-brand-name" type="text" name="lbite_brand_name" value="<?php echo esc_attr( $lbite_brand_name ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'E.g. My Restaurant', 'libre-bite' ); ?>">
 				<p class="description"><?php esc_html_e( 'Displayed on the confirmation page and in emails.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
@@ -88,16 +88,16 @@ $lbite_color_presets = array(
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Primary Color', 'libre-bite' ); ?></th>
+			<th><label for="lbite-color-primary"><?php esc_html_e( 'Primary Color', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="text" name="lbite_color_primary" value="<?php echo esc_attr( $lbite_color_primary ); ?>" class="lbite-color-picker" data-default-color="#0073aa">
+				<input id="lbite-color-primary" type="text" name="lbite_color_primary" value="<?php echo esc_attr( $lbite_color_primary ); ?>" class="lbite-color-picker" data-default-color="#0073aa">
 				<p class="description"><?php esc_html_e( 'Main color for buttons and important elements.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Secondary Color', 'libre-bite' ); ?></th>
+			<th><label for="lbite-color-secondary"><?php esc_html_e( 'Secondary Color', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="text" name="lbite_color_secondary" value="<?php echo esc_attr( $lbite_color_secondary ); ?>" class="lbite-color-picker" data-default-color="#23282d">
+				<input id="lbite-color-secondary" type="text" name="lbite_color_secondary" value="<?php echo esc_attr( $lbite_color_secondary ); ?>" class="lbite-color-picker" data-default-color="#23282d">
 				<p class="description"><?php esc_html_e( 'For headings and the line above the order total. Very light colors are replaced by dark grey for text so it stays readable.', 'libre-bite' ); ?></p>
 				<p id="lbite-secondary-contrast-warning" class="lbite-color-warning" style="display: none; margin: 8px 0 0; padding: 8px 12px; border-left: 4px solid #dba617; background: #fcf9e8; color: #1d2327;">
 					<?php esc_html_e( 'This color is too light to be readable on a white background. Headings and lines will use dark grey instead, so the color itself will hardly be visible to your guests.', 'libre-bite' ); ?>
@@ -105,9 +105,9 @@ $lbite_color_presets = array(
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Accent Color', 'libre-bite' ); ?></th>
+			<th><label for="lbite-color-accent"><?php esc_html_e( 'Accent Color', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="text" name="lbite_color_accent" value="<?php echo esc_attr( $lbite_color_accent ); ?>" class="lbite-color-picker" data-default-color="#00a32a">
+				<input id="lbite-color-accent" type="text" name="lbite_color_accent" value="<?php echo esc_attr( $lbite_color_accent ); ?>" class="lbite-color-picker" data-default-color="#00a32a">
 				<p class="description"><?php esc_html_e( 'Used only for the success icon and discount amount on the optimized checkout\'s order confirmation page (Pro feature). Most buttons use the Primary Color instead.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
@@ -129,7 +129,7 @@ $lbite_color_presets = array(
 	</p>
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Colour Scheme', 'libre-bite' ); ?></th>
+			<th><label for="lbite_admin_theme"><?php esc_html_e( 'Colour Scheme', 'libre-bite' ); ?></label></th>
 			<td>
 				<?php $lbite_theme_current = LBite_Admin::get_admin_theme(); ?>
 				<select name="lbite_admin_theme" id="lbite_admin_theme">

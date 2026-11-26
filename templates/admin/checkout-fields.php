@@ -174,10 +174,11 @@ $default_fields = array(
 								<?php esc_html_e( 'If disabled, the notes field will not be shown in checkout.', 'libre-bite' ); ?>
 							</p>
 							<div style="margin-top: 10px; margin-left: 30px;">
-								<label style="display: block; margin-bottom: 5px;">
+								<label for="lbite-order-comments-label" style="display: block; margin-bottom: 5px;">
 									<strong><?php esc_html_e( 'Label:', 'libre-bite' ); ?></strong>
 								</label>
 								<input type="text"
+									id="lbite-order-comments-label"
 									name="lbite_order_comments_label"
 									value="<?php echo esc_attr( isset( $saved_fields['_order_comments_label'] ) ? $saved_fields['_order_comments_label'] : '' ); ?>"
 									placeholder="<?php esc_attr_e( 'Order Notes', 'libre-bite' ); ?>"
@@ -188,10 +189,11 @@ $default_fields = array(
 								</p>
 							</div>
 							<div style="margin-top: 10px; margin-left: 30px;">
-								<label style="display: block; margin-bottom: 5px;">
+								<label for="lbite-order-comments-placeholder" style="display: block; margin-bottom: 5px;">
 									<strong><?php esc_html_e( 'Placeholder:', 'libre-bite' ); ?></strong>
 								</label>
 								<input type="text"
+									id="lbite-order-comments-placeholder"
 									name="lbite_order_comments_placeholder"
 									value="<?php echo esc_attr( isset( $saved_fields['_order_comments_placeholder'] ) ? $saved_fields['_order_comments_placeholder'] : '' ); ?>"
 									placeholder="<?php esc_attr_e( 'Notes about your order, e.g. special delivery instructions.', 'libre-bite' ); ?>"
@@ -205,10 +207,11 @@ $default_fields = array(
 					</tr>
 					<tr>
 						<td style="padding: 10px; border-top: 1px solid #ddd;">
-							<label style="display: block; margin-bottom: 5px;">
+							<label for="lbite-billing-details-title" style="display: block; margin-bottom: 5px;">
 								<strong><?php esc_html_e( 'Override Billing Details Title', 'libre-bite' ); ?></strong>
 							</label>
 							<input type="text"
+								id="lbite-billing-details-title"
 								name="lbite_billing_details_title"
 								value="<?php echo esc_attr( isset( $saved_fields['_billing_details_title'] ) ? $saved_fields['_billing_details_title'] : '' ); ?>"
 								placeholder="<?php esc_attr_e( 'Billing Details', 'libre-bite' ); ?>"
@@ -253,6 +256,7 @@ $default_fields = array(
 									<div style="margin-top: 5px; margin-left: 30px;">
 										<input type="text"
 											name="checkout_fields[billing][<?php echo esc_attr( $field_id ); ?>][label]"
+											aria-label="<?php echo esc_attr( $field_label . ' – ' . __( 'Custom label (optional)', 'libre-bite' ) ); ?>"
 											value="<?php echo esc_attr( $custom_label ); ?>"
 											placeholder="<?php echo esc_attr( $field_label ); ?>"
 											class="regular-text"
@@ -292,6 +296,7 @@ $default_fields = array(
 									<div style="margin-top: 5px; margin-left: 30px;">
 										<input type="text"
 											name="checkout_fields[shipping][<?php echo esc_attr( $field_id ); ?>][label]"
+											aria-label="<?php echo esc_attr( $field_label . ' – ' . __( 'Custom label (optional)', 'libre-bite' ) ); ?>"
 											value="<?php echo esc_attr( $custom_label ); ?>"
 											placeholder="<?php echo esc_attr( $field_label ); ?>"
 											class="regular-text"

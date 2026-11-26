@@ -146,10 +146,62 @@
 				self.tables   = response.data.tables   || [];
 				self.statuses = response.data.statuses || {};
 				self.renderReservations(response.data.reservations || []);
+				self.renderPendingElsewhere(response.data.pending_elsewhere || []);
 			}).fail(function() {
 				self.isLoading = false;
 				self.hideLoading();
 			});
+		},
+
+		/**
+		 * Hinweis auf offene Anfragen an anderen Tagen/Standorten.
+		 *
+		 * Ein Klick springt direkt zum Tag und Standort der Anfrage.
+		 *
+		 * @param {Array} groups  [{date, date_label, location_id, location, count}]
+		 */
+		renderPendingElsewhere: function(groups) {
+			const $box = $('#lbite-res-pending-elsewhere');
+			const s    = lbiteReservationBoard.strings;
+			const self = this;
+
+			$box.empty();
+			if (!groups.length) {
+				$box.hide();
+				return;
+			}
+
+			const $p = $('<p></p>').append($('<strong></strong>').text(s.pendingElsewhere)).append(' ');
+			groups.forEach(function(g, i) {
+				const label = g.date_label + (g.location ? ' · ' + g.location : '') + ' (' + String(s.pendingCount).replace('%d', g.count) + ')';
+				const $btn  = $('<button type="button" class="button-link"></button>').text(label);
+				$btn.on('click', function() {
+					self.jumpTo(g.date, g.location_id);
+				});
+				if (i > 0) {
+					$p.append(', ');
+				}
+				$p.append($btn);
+			});
+			$box.append($p).show();
+		},
+
+		/**
+		 * Zu Datum und Standort wechseln.
+		 *
+		 * @param {string} date        Y-m-d
+		 * @param {number} locationId  Standort-ID
+		 */
+		jumpTo: function(date, locationId) {
+			this.currentDate = date;
+			$('#lbite-res-date').val(date);
+			const $loc = $('#lbite-res-board-location');
+			if (locationId && String(locationId) !== String(this.currentLocationId) && $loc.find('option[value="' + locationId + '"]').length) {
+				// Der Change-Handler speichert den Standort und lädt neu.
+				$loc.val(String(locationId)).trigger('change');
+				return;
+			}
+			this.loadReservations();
 		},
 
 		/**
@@ -269,8 +321,9 @@
 
 			// Tisch-Dropdown
 			const $tableRow    = $('<div>').addClass('lbite-res-card__table-row');
-			const $tableLabel  = $('<label>').text(lbiteReservationBoard.strings.table + ': ');
-			const $tableSelect = $('<select>').addClass('lbite-res-table-select').attr('data-id', res.id);
+			const selectId     = 'lbite-res-table-' + res.id;
+			const $tableLabel  = $('<label>').attr('for', selectId).text(lbiteReservationBoard.strings.table + ': ');
+			const $tableSelect = $('<select>').addClass('lbite-res-table-select').attr({ id: selectId, 'data-id': res.id });
 
 			$('<option>').val('0').text('— ' + lbiteReservationBoard.strings.noTable + ' —').appendTo($tableSelect);
 

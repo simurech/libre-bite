@@ -36,9 +36,9 @@ $lbite_pages                  = get_pages();
 
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Table Order Page', 'libre-bite' ); ?></th>
+			<th><label for="lbite-table-order-page-id"><?php esc_html_e( 'Table Order Page', 'libre-bite' ); ?></label></th>
 			<td>
-				<select name="lbite_table_order_page_id">
+				<select id="lbite-table-order-page-id" name="lbite_table_order_page_id">
 					<option value="0"><?php esc_html_e( '— Select page —', 'libre-bite' ); ?></option>
 					<?php foreach ( $lbite_pages as $lbite_p ) : ?>
 						<option value="<?php echo esc_attr( $lbite_p->ID ); ?>" <?php selected( $lbite_table_order_page, $lbite_p->ID ); ?>>
@@ -50,9 +50,9 @@ $lbite_pages                  = get_pages();
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Table Sort Order', 'libre-bite' ); ?></th>
+			<th><label for="lbite-table-dropdown-sort"><?php esc_html_e( 'Table Sort Order', 'libre-bite' ); ?></label></th>
 			<td>
-				<select name="lbite_table_dropdown_sort">
+				<select id="lbite-table-dropdown-sort" name="lbite_table_dropdown_sort">
 					<option value="natural" <?php selected( $lbite_table_dropdown_sort, 'natural' ); ?>><?php esc_html_e( 'Alphabetical with natural number sort (1, 2, 10, 11)', 'libre-bite' ); ?></option>
 					<option value="menu_order" <?php selected( $lbite_table_dropdown_sort, 'menu_order' ); ?>><?php esc_html_e( 'Menu order (drag to reorder in table list)', 'libre-bite' ); ?></option>
 				</select>

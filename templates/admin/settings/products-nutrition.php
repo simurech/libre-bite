@@ -79,7 +79,7 @@ $lbite_premium_allowed = lbite_has_pro_license();
 				<?php foreach ( $lbite_diet_list as $lbite_diet_key => $lbite_diet_label ) : ?>
 					<tr>
 						<td>
-							<input type="text" class="regular-text" maxlength="40" name="lbite_dietary_rows[<?php echo esc_attr( $lbite_diet_row ); ?>][label]"
+							<input type="text" class="regular-text" maxlength="40" aria-label="<?php esc_attr_e( 'Label', 'libre-bite' ); ?>" name="lbite_dietary_rows[<?php echo esc_attr( $lbite_diet_row ); ?>][label]"
 								value="<?php echo esc_attr( isset( $lbite_diet_custom[ $lbite_diet_key ] ) ? $lbite_diet_custom[ $lbite_diet_key ] : ( isset( $lbite_diet_defaults[ $lbite_diet_key ] ) ? '' : $lbite_diet_label ) ); ?>"
 								placeholder="<?php echo esc_attr( $lbite_diet_label ); ?>">
 							<input type="hidden" name="lbite_dietary_rows[<?php echo esc_attr( $lbite_diet_row ); ?>][key]" value="<?php echo esc_attr( $lbite_diet_key ); ?>">
@@ -91,7 +91,7 @@ $lbite_premium_allowed = lbite_has_pro_license();
 				<?php endforeach; ?>
 				<?php for ( $lbite_i = 0; $lbite_i < 3; $lbite_i++, $lbite_diet_row++ ) : ?>
 					<tr>
-						<td><input type="text" class="regular-text" maxlength="40" name="lbite_dietary_rows[<?php echo esc_attr( $lbite_diet_row ); ?>][label]" value="" placeholder="<?php esc_attr_e( 'New label, e.g. Halal', 'libre-bite' ); ?>"></td>
+						<td><input type="text" class="regular-text" maxlength="40" aria-label="<?php esc_attr_e( 'Label', 'libre-bite' ); ?>" name="lbite_dietary_rows[<?php echo esc_attr( $lbite_diet_row ); ?>][label]" value="" placeholder="<?php esc_attr_e( 'New label, e.g. Halal', 'libre-bite' ); ?>"></td>
 						<td><em><?php esc_html_e( 'automatic', 'libre-bite' ); ?></em></td>
 						<td></td>
 					</tr>

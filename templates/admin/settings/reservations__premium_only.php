@@ -29,9 +29,9 @@ $lbite_res_show_notes = ! isset( $lbite_res_fields['notes']['enabled'] ) || $lbi
 
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Reservations Overview Refresh Interval', 'libre-bite' ); ?></th>
+			<th><label for="lbite-reservation-refresh-interval"><?php esc_html_e( 'Reservations Overview Refresh Interval', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="number" min="10" name="lbite_reservation_refresh_interval" value="<?php echo esc_attr( $lbite_res_refresh ); ?>" class="small-text">
+				<input id="lbite-reservation-refresh-interval" type="number" min="10" name="lbite_reservation_refresh_interval" value="<?php echo esc_attr( $lbite_res_refresh ); ?>" class="small-text">
 				<?php esc_html_e( 'Seconds', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'How often the reservations overview is updated. Default: 60 seconds.', 'libre-bite' ); ?></p>
 			</td>

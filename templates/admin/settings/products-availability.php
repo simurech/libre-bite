@@ -61,12 +61,10 @@ $lbite_availability_hint_style = get_option( 'lbite_availability_hint_style', 'p
 
 	<table class="form-table">
 		<tr>
-			<th>
-				<?php esc_html_e( 'Availability Hint Style', 'libre-bite' ); ?>
+			<th><label for="lbite_availability_hint_style"><?php esc_html_e( 'Availability Hint Style', 'libre-bite' ); ?>
 				<?php if ( ! $lbite_premium_allowed ) : ?>
 					<span class="lbite-pro-badge">Pro</span>
-				<?php endif; ?>
-			</th>
+				<?php endif; ?></label></th>
 			<td>
 				<select id="lbite_availability_hint_style" name="lbite_availability_hint_style" <?php echo $lbite_premium_allowed ? '' : 'disabled'; ?>>
 					<option value="popup" <?php selected( $lbite_availability_hint_style, 'popup' ); ?>><?php esc_html_e( 'Popup (icon + hover/click popup)', 'libre-bite' ); ?></option>

@@ -49,9 +49,9 @@ $lbite_email_req_gateways = get_option( 'lbite_email_required_gateways', array()
 	<input type="hidden" name="lbite_sections[]" value="checkout_mode">
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Checkout Mode', 'libre-bite' ); ?></th>
+			<th><label for="lbite-checkout-mode"><?php esc_html_e( 'Checkout Mode', 'libre-bite' ); ?></label></th>
 			<td>
-				<select name="lbite_checkout_mode">
+				<select id="lbite-checkout-mode" name="lbite_checkout_mode">
 					<option value="standard" <?php selected( $lbite_checkout_mode, 'standard' ); ?>><?php esc_html_e( 'Standard (all WooCommerce fields)', 'libre-bite' ); ?></option>
 					<option value="optimized" <?php selected( $lbite_checkout_mode, 'optimized' ); ?>><?php esc_html_e( 'Optimized (name + receipt option only)', 'libre-bite' ); ?></option>
 				</select>

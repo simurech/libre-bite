@@ -35,9 +35,9 @@ $lbite_sound_repeat = (int) get_option( 'lbite_sound_repeat_interval', 0 );
 
 	<table class="form-table">
 		<tr>
-			<th><?php esc_html_e( 'Order Overview Refresh Interval', 'libre-bite' ); ?></th>
+			<th><label for="lbite-dashboard-refresh-interval"><?php esc_html_e( 'Order Overview Refresh Interval', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="number" min="10" name="lbite_dashboard_refresh_interval" value="<?php echo esc_attr( $lbite_refresh ); ?>" class="small-text"> <?php esc_html_e( 'Seconds', 'libre-bite' ); ?>
+				<input id="lbite-dashboard-refresh-interval" type="number" min="10" name="lbite_dashboard_refresh_interval" value="<?php echo esc_attr( $lbite_refresh ); ?>" class="small-text"> <?php esc_html_e( 'Seconds', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'How often the order overview checks for new orders.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
@@ -52,23 +52,23 @@ $lbite_sound_repeat = (int) get_option( 'lbite_sound_repeat_interval', 0 );
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Amber After', 'libre-bite' ); ?></th>
+			<th><label for="lbite-kds-warn-minutes"><?php esc_html_e( 'Amber After', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="number" min="0" name="lbite_kds_warn_minutes" value="<?php echo esc_attr( $lbite_kds_warn ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+				<input id="lbite-kds-warn-minutes" type="number" min="0" name="lbite_kds_warn_minutes" value="<?php echo esc_attr( $lbite_kds_warn ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'Leave at 0 to use the preparation time configured for each location.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Red After', 'libre-bite' ); ?></th>
+			<th><label for="lbite-kds-late-minutes"><?php esc_html_e( 'Red After', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="number" min="0" name="lbite_kds_late_minutes" value="<?php echo esc_attr( $lbite_kds_late ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
+				<input id="lbite-kds-late-minutes" type="number" min="0" name="lbite_kds_late_minutes" value="<?php echo esc_attr( $lbite_kds_late ); ?>" class="small-text"> <?php esc_html_e( 'Minutes', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'Leave at 0 to use one and a half times the amber threshold.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Repeat Alert Sound', 'libre-bite' ); ?></th>
+			<th><label for="lbite-sound-repeat-interval"><?php esc_html_e( 'Repeat Alert Sound', 'libre-bite' ); ?></label></th>
 			<td>
-				<input type="number" min="0" name="lbite_sound_repeat_interval" value="<?php echo esc_attr( $lbite_sound_repeat ); ?>" class="small-text"> <?php esc_html_e( 'Seconds', 'libre-bite' ); ?>
+				<input id="lbite-sound-repeat-interval" type="number" min="0" name="lbite_sound_repeat_interval" value="<?php echo esc_attr( $lbite_sound_repeat ); ?>" class="small-text"> <?php esc_html_e( 'Seconds', 'libre-bite' ); ?>
 				<p class="description"><?php esc_html_e( 'Repeat the alert sound while orders are still waiting in the first column. Moving an order onwards acknowledges it and stops the sound. Set to 0 to play the sound only once per new order.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>

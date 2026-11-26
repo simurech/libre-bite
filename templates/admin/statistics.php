@@ -590,7 +590,7 @@ $lbite_export_url = wp_nonce_url(
 		<?php endforeach; ?>
 
 		<?php if ( ! empty( $lbite_stat_locations ) ) : ?>
-		<span style="margin-left: 12px; color: var(--lbite-text-muted, #50575e);"><?php esc_html_e( 'Location:', 'libre-bite' ); ?></span>
+		<label for="lbite-stat-location" style="margin-left: 12px; color: var(--lbite-text-muted, #50575e);"><?php esc_html_e( 'Location:', 'libre-bite' ); ?></label>
 		<select id="lbite-stat-location" onchange="window.location.href=this.value;" style="min-height: 32px; font-size: 13px;">
 			<option value="<?php echo esc_url( add_query_arg( 'lbite_location', '' ) ); ?>" <?php selected( $lbite_filter_loc, 0 ); ?>>
 				<?php esc_html_e( 'All Locations', 'libre-bite' ); ?>

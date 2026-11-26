@@ -226,12 +226,17 @@ class LBite_Product_Options {
 			return;
 		}
 
+		if ( self::groups_available() ) {
+			echo '<h4 style="margin: 0 0 4px;">' . esc_html__( 'Extras without rules', 'libre-bite' ) . '</h4>';
+			echo '<p class="description" style="margin-top: 0;">' . esc_html__( 'Guests can add these freely. For rules such as "choose 1", put the options into a group below.', 'libre-bite' ) . '</p>';
+		}
+
 		echo '<div style="max-height: 300px; overflow-y: auto;">';
 		foreach ( $options as $option ) {
 			$checked = in_array( $option->ID, $selected_options, true );
 			$price   = get_post_meta( $option->ID, '_lbite_price', true );
 			?>
-			<label style="display: block; margin-bottom: 8px; padding: 5px; background: #f9f9f9; border-radius: 3px;">
+			<label class="lbite-flat-option" data-option-id="<?php echo esc_attr( $option->ID ); ?>" style="display: block; margin-bottom: 8px; padding: 5px; background: #f9f9f9; border-radius: 3px;">
 				<input type="checkbox" name="lbite_product_options[]" value="<?php echo esc_attr( $option->ID ); ?>" <?php checked( $checked ); ?>>
 				<strong><?php echo esc_html( $option->post_title ); ?></strong>
 				<?php if ( $price ) : ?>
@@ -240,6 +245,7 @@ class LBite_Product_Options {
 				<?php if ( $option->post_content ) : ?>
 					<br><span style="font-size: 12px; color: #666;"><?php echo esc_html( wp_trim_words( $option->post_content, 15 ) ); ?></span>
 				<?php endif; ?>
+				<span class="lbite-flat-option__group" style="display: none; font-size: 12px; color: #2271b1;"></span>
 			</label>
 			<?php
 		}

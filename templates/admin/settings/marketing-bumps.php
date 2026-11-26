@@ -64,7 +64,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							name="lbite_order_bumps[<?php echo (int) $lbite_i; ?>][product_id]"
 							value="<?php echo $lbite_bump_pid ? esc_attr( $lbite_bump_pid ) : ''; ?>">
 						<span class="lbite-product-picker__selected"></span>
-						<input type="text" class="regular-text lbite-product-picker__search"
+						<input type="text" class="regular-text lbite-product-picker__search" aria-label="<?php esc_attr_e( 'Search products…', 'libre-bite' ); ?>"
 							placeholder="<?php esc_attr_e( 'Search products…', 'libre-bite' ); ?>"
 							autocomplete="off"
 							<?php echo $lbite_bump_pid ? 'hidden' : ''; ?>
@@ -74,6 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<br>
 					<input type="text"
 						name="lbite_order_bumps[<?php echo (int) $lbite_i; ?>][text]"
+						aria-label="<?php esc_attr_e( 'Text', 'libre-bite' ); ?>"
 						value="<?php echo esc_attr( $lbite_bump_text ); ?>"
 						class="regular-text"
 						placeholder="<?php esc_attr_e( 'Optional text, e.g. “Fries with that?”', 'libre-bite' ); ?>"

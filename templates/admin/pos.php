@@ -288,7 +288,7 @@ $lbite_pos_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol
 					<div class="lbite-split-row" data-method="<?php echo esc_attr( $lbite_pm['key'] ); ?>">
 						<span class="lbite-split-row-icon"><?php echo esc_html( ! empty( $lbite_pm['icon'] ) ? $lbite_pm['icon'] : ( $lbite_default_icons[ $lbite_pm['key'] ] ?? '💱' ) ); ?></span>
 						<span class="lbite-split-row-label"><?php echo esc_html( $lbite_pm['label'] ); ?></span>
-						<input type="number" step="0.05" min="0" class="lbite-split-amount" data-method="<?php echo esc_attr( $lbite_pm['key'] ); ?>" value="">
+						<input type="number" step="0.05" min="0" class="lbite-split-amount" aria-label="<?php echo esc_attr( $lbite_pm['label'] ); ?>" data-method="<?php echo esc_attr( $lbite_pm['key'] ); ?>" value="">
 						<button type="button" class="button lbite-split-rest" data-method="<?php echo esc_attr( $lbite_pm['key'] ); ?>"><?php esc_html_e( 'Rest', 'libre-bite' ); ?></button>
 					</div>
 					<?php endforeach; ?>

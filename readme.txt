@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 4.0.1
+Stable tag: 4.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -292,6 +292,11 @@ Yes. English is the source language, and the plugin ships with complete translat
 
 == Changelog ==
 
+= 4.1.0 =
+* Feature: The reservation overview points to open requests on other days or at other locations and jumps there with one click.
+* Changed: Product editor separates extras without rules from option groups, shows which group an option belongs to and adds groups on demand.
+* Changed: Accessibility – all settings fields, the POS split payment, statistics and reservation controls now have proper labels for screen readers.
+
 = 4.0.1 =
 * Fix: Delivery fees no longer appear as add-ons in the statistics.
 * Changed: Long waiting times on the order board are shown in hours or days instead of minutes.
@@ -351,8 +356,5 @@ Yes. English is the source language, and the plugin ships with complete translat
 * Fix: The active category button in the menu navigation bar was invisible when primary brand colour and bar were the same colour; it now uses the accent colour.
 * Feature: New hooks lbite_menu_item_before_title and lbite_menu_item_after_desc let themes add badges or icons to menu items.
 
-= 3.6.19 =
-* Changed: Updated Freemius SDK to the latest version.
-
 = Older versions =
-* For the full changelog of versions before 3.6.19, see the release history: https://github.com/simurech/libre-bite/releases
+* For the full changelog of versions before 3.6.20, see the release history: https://github.com/simurech/libre-bite/releases
