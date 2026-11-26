@@ -1144,7 +1144,7 @@ class LBite_Order_Dashboard {
 	public function add_order_meta_box() {
 		add_meta_box(
 			'lbite_order_dashboard_status',
-			__( 'Dashboard Status', 'libre-bite' ),
+			apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) ),
 			array( $this, 'render_order_meta_box' ),
 			'shop_order',
 			'side',
@@ -1155,12 +1155,59 @@ class LBite_Order_Dashboard {
 		$screen = class_exists( '\Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController' ) ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order';
 		add_meta_box(
 			'lbite_order_dashboard_status',
-			__( 'Dashboard Status', 'libre-bite' ),
+			apply_filters( 'lbite_plugin_display_name', __( 'Libre Bite', 'libre-bite' ) ),
 			array( $this, 'render_order_meta_box' ),
 			$screen,
 			'side',
 			'high'
 		);
+	}
+
+	/**
+	 * Libre-Bite-Angaben einer Bestellung als Zeilen für die Meta-Box.
+	 *
+	 * @param WC_Order $order Bestellung.
+	 * @return array<int, array{0:string,1:string}> Paare aus Bezeichnung und Wert.
+	 */
+	public static function get_order_detail_rows( $order ) {
+		$rows = array();
+
+		$location_id = (int) $order->get_meta( '_lbite_location_id', true );
+		if ( $location_id ) {
+			$rows[] = array( __( 'Location', 'libre-bite' ), get_the_title( $location_id ) );
+		}
+
+		$order_type  = $order->get_meta( '_lbite_order_type', true );
+		$pickup_time = $order->get_meta( '_lbite_pickup_time', true );
+		$is_delivery = 'delivery' === $order->get_meta( '_lbite_fulfilment', true );
+		if ( 'later' === $order_type && $pickup_time ) {
+			$rows[] = array(
+				$is_delivery ? __( 'Delivery Time', 'libre-bite' ) : __( 'Pickup Time', 'libre-bite' ),
+				date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), lbite_local_time_to_timestamp( $pickup_time ) ),
+			);
+		} elseif ( $order_type ) {
+			$rows[] = array( __( 'Order Type', 'libre-bite' ), __( 'ASAP', 'libre-bite' ) );
+		}
+
+		if ( $is_delivery ) {
+			$rows[] = array( __( 'Fulfilment', 'libre-bite' ), __( 'Delivery', 'libre-bite' ) );
+			$notes  = (string) $order->get_meta( '_lbite_delivery_notes', true );
+			if ( '' !== $notes ) {
+				$rows[] = array( __( 'Delivery notes', 'libre-bite' ), $notes );
+			}
+		}
+
+		$table_id   = (int) $order->get_meta( '_lbite_table_id', true );
+		$table_name = $table_id ? get_the_title( $table_id ) : (string) $order->get_meta( '_lbite_checkout_table_number', true );
+		if ( '' !== $table_name ) {
+			$rows[] = array( __( 'Table', 'libre-bite' ), $table_name );
+		}
+
+		if ( 'pos' === $order->get_meta( '_lbite_order_source', true ) ) {
+			$rows[] = array( __( 'Source', 'libre-bite' ), __( 'POS', 'libre-bite' ) );
+		}
+
+		return $rows;
 	}
 
 	/**
@@ -1191,6 +1238,20 @@ class LBite_Order_Dashboard {
 				</span>
 			</p>
 
+			<?php
+			// Bestellangaben, die WooCommerce selbst nicht anzeigt (Meta mit
+			// Unterstrich sind in «Benutzerdefinierte Felder» ausgeblendet).
+			$lbite_details = self::get_order_detail_rows( $order );
+			if ( $lbite_details ) :
+				?>
+				<dl class="lbite-order-details">
+					<?php foreach ( $lbite_details as $lbite_detail ) : ?>
+						<dt><?php echo esc_html( $lbite_detail[0] ); ?></dt>
+						<dd><?php echo esc_html( $lbite_detail[1] ); ?></dd>
+					<?php endforeach; ?>
+				</dl>
+			<?php endif; ?>
+
 			<?php if ( $status_changed ) : ?>
 				<p>
 					<small><?php esc_html_e( 'Last Changed:', 'libre-bite' ); ?><br>
@@ -1210,7 +1271,10 @@ class LBite_Order_Dashboard {
 		.lbite-status-incoming { background: #f0f0f0; color: #333; }
 		.lbite-status-preparing { background: #fff3cd; color: #856404; }
 		.lbite-status-ready { background: #d1ecf1; color: #0c5460; }
-		.lbite-status-completed { background: #d4edda; color: #155724; }';
+		.lbite-status-completed { background: #d4edda; color: #155724; }
+		.lbite-order-details { margin: 0 0 12px; }
+		.lbite-order-details dt { font-weight: 600; margin-top: 8px; }
+		.lbite-order-details dd { margin: 2px 0 0; white-space: pre-line; }';
 		wp_add_inline_style( 'wp-admin', $meta_box_css );
 		?>
 		<?php

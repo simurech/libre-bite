@@ -1118,8 +1118,27 @@
 			const ratio = Math.max(0, Math.min(1, minutes / lateAt));
 			$timer.css('--lbite-timer-progress', (ratio * 360) + 'deg');
 
-			$timer.find('.lbite-order-timer__value')
-				.text(minutes + ' ' + (lbiteDashboard.strings.minutesShort || 'min'));
+			$timer.find('.lbite-order-timer__value').text(this.formatWait(minutes));
+		},
+
+		/**
+		 * Wartezeit kompakt darstellen: unter einer Stunde in Minuten, danach
+		 * Stunden:Minuten, ab einem Tag in Tagen. Liegengebliebene Bestellungen
+		 * zeigen so «3 d» statt «4320 min».
+		 *
+		 * @param {number} minutes Wartezeit in Minuten.
+		 * @return {string}
+		 */
+		formatWait: function(minutes) {
+			const s = lbiteDashboard.strings || {};
+			if (minutes < 60) {
+				return minutes + ' ' + (s.minutesShort || 'min');
+			}
+			if (minutes < 1440) {
+				const m = minutes % 60;
+				return Math.floor(minutes / 60) + ':' + (m < 10 ? '0' : '') + m + ' ' + (s.hoursShort || 'h');
+			}
+			return Math.floor(minutes / 1440) + ' ' + (s.daysShort || 'd');
 		},
 
 		/**

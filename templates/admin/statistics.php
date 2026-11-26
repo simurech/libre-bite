@@ -388,6 +388,12 @@ foreach ( $lbite_stat_batch as $lbite_order ) {
 			continue;
 		}
 
+		// Liefergebühr ist kein Add-on – sie steht bei «Orders by Fulfilment».
+		// Ältere Bestellungen ohne Kennzeichnung über den Gebührennamen erkennen.
+		if ( $lbite_fee->get_meta( '_lbite_delivery_fee' ) || ( 'delivery' === $lbite_order->get_meta( '_lbite_fulfilment' ) && __( 'Delivery fee', 'libre-bite' ) === $lbite_fn ) ) {
+			continue;
+		}
+
 		// Trinkgeld und Rundungsbeträge ausblenden.
 		if ( $lbite_tip_amount > 0 && abs( $lbite_fee_total - $lbite_tip_amount ) < 0.01 ) {
 			continue;

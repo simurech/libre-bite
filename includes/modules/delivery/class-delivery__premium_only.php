@@ -57,6 +57,7 @@ class LBite_Delivery {
 		$this->loader->add_action( 'woocommerce_cart_calculate_fees', $this, 'add_delivery_fee', 8 );
 		$this->loader->add_action( 'woocommerce_checkout_process', $this, 'validate_checkout' );
 		$this->loader->add_action( 'woocommerce_checkout_create_order', $this, 'save_to_order', 10, 2 );
+		$this->loader->add_action( 'woocommerce_checkout_create_order_fee_item', $this, 'mark_fee_item', 10, 4 );
 		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_assets' );
 
 		// Personal.
@@ -469,6 +470,24 @@ class LBite_Delivery {
 		}
 
 		$cart->add_fee( __( 'Delivery fee', 'libre-bite' ), $fee, $taxable, $tax_class );
+	}
+
+	/**
+	 * Liefergebühr in der Bestellung kennzeichnen.
+	 *
+	 * Die Statistik erkennt sie so ohne Vergleich mit dem übersetzten
+	 * Gebührennamen und zählt sie nicht als Add-on.
+	 *
+	 * @param WC_Order_Item_Fee $item    Gebührenposition.
+	 * @param string            $fee_key Schlüssel der Gebühr im Warenkorb.
+	 * @param object            $fee     Gebühr aus dem Warenkorb.
+	 * @param WC_Order          $order   Bestellung.
+	 */
+	public function mark_fee_item( $item, $fee_key, $fee, $order ) {
+		unset( $fee_key, $order );
+		if ( isset( $fee->name ) && __( 'Delivery fee', 'libre-bite' ) === $fee->name ) {
+			$item->add_meta_data( '_lbite_delivery_fee', '1', true );
+		}
 	}
 
 	/**

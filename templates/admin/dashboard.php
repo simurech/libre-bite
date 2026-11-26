@@ -93,6 +93,17 @@ if ( lbite_feature_enabled( 'enable_pos' ) ) {
 	);
 }
 
+// Kassenabschluss (Pro) – nur wenn das Modul geladen und eingeschaltet ist.
+if ( class_exists( 'LBite_Cash_Reports' ) && lbite_feature_enabled( 'enable_cash_reports' ) && current_user_can( LBite_Cash_Reports::CAPABILITY ) ) {
+	$lbite_tiles[] = array(
+		'icon'  => 'dashicons-money-alt',
+		'title' => __( 'Cash Report', 'libre-bite' ),
+		'desc'  => __( 'Interim report and end-of-day close per location.', 'libre-bite' ),
+		'url'   => admin_url( 'admin.php?page=lbite-cash-report' ),
+		'color' => 'var(--lbite-accent-green, #007f26)',
+	);
+}
+
 // Admin-Bereich
 if ( $lbite_can_locations ) {
 	$lbite_tiles[] = array(

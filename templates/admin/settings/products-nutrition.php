@@ -67,7 +67,7 @@ $lbite_premium_allowed = lbite_has_pro_license();
 		<input type="hidden" name="lbite_dietary_rows_present" value="1">
 		<h2><?php esc_html_e( 'Dietary labels', 'libre-bite' ); ?></h2>
 		<p class="description" style="max-width: 640px;"><?php esc_html_e( 'Rename, remove or add labels. Existing labels keep their internal key so products stay assigned. If you remove all labels, the default list is used again.', 'libre-bite' ); ?></p>
-		<table class="widefat striped" style="max-width: 640px; margin: 12px 0 24px;">
+		<table class="widefat striped lbite-dietary-table" style="max-width: 640px; margin: 12px 0 24px;">
 			<thead>
 				<tr>
 					<th><?php esc_html_e( 'Label', 'libre-bite' ); ?></th>

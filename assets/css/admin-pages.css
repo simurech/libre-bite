@@ -1119,3 +1119,8 @@ body.lbite-setup-screen {
 .lbite-wizard__skip:hover {
 	color: var(--lbite-text, #1d2327);
 }
+
+/* Ernährungsformen: Schlüssel und Entfernen-Feld auf Höhe des Eingabefelds */
+.lbite-dietary-table td {
+	vertical-align: middle;
+}

@@ -18,6 +18,10 @@ $lbite_rest_routes = array(
 	array( 'GET', '/orders?location_id=N', 'lbite_view_orders', __( 'Board data for one location.', 'libre-bite' ) ),
 	array( 'POST/PUT', '/orders/<id>/status', 'lbite_manage_orders', __( 'Set the Kanban status of an order.', 'libre-bite' ) ),
 );
+if ( lbite_feature_enabled( 'enable_service_calls' ) ) {
+	$lbite_rest_routes[] = array( 'GET', '/service-calls?location_id=N', 'lbite_view_orders', __( 'Open waiter calls of one location.', 'libre-bite' ) );
+	$lbite_rest_routes[] = array( 'POST', '/service-calls/<uuid>/resolve', 'lbite_manage_orders', __( 'Mark a waiter call as done.', 'libre-bite' ) );
+}
 
 $lbite_rest_hooks = array(
 	array( 'lbite_order_status_changed', '$order_id, $new_status, $old_status, $order', __( 'After every Kanban status change (AJAX and REST).', 'libre-bite' ) ),
@@ -32,6 +36,12 @@ $lbite_rest_hooks = array(
 	array( 'lbite_menu_item_before_title', '$product, $location_id', __( 'Menu view: before a dish title, e.g. for tag badges.', 'libre-bite' ) ),
 	array( 'lbite_menu_item_after_desc', '$product, $location_id', __( 'Menu view: after a dish description, e.g. for icon rows.', 'libre-bite' ) ),
 	array( 'lbite_menu_sold_out_last (filter)', '$enabled', __( 'Menu view: move sold-out dishes to the end of their category (default true).', 'libre-bite' ) ),
+	array( 'lbite_board_data (filter)', '$data, $location_id', __( 'Order board data before output (AJAX and REST).', 'libre-bite' ) ),
+	array( 'lbite_dashboard_order_data (filter)', '$data, $order', __( 'Data of a single order card on the order board.', 'libre-bite' ) ),
+	array( 'lbite_table_status_response (filter)', '$response, $location_id', __( 'Response of the table plan status.', 'libre-bite' ) ),
+	array( 'lbite_service_call_created', '$call, $location_id', __( 'A guest at a table calls staff or asks for the bill.', 'libre-bite' ) ),
+	array( 'lbite_service_call_resolved', '$call', __( 'A waiter call is marked as done.', 'libre-bite' ) ),
+	array( 'lbite_z_report_created', '$post_id, $report, $location_id', __( 'An end-of-day close (Z report) is saved.', 'libre-bite' ) ),
 );
 ?>
 <div class="lbite-settings-card">

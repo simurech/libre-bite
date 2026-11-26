@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 4.0.0
+Stable tag: 4.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -292,6 +292,13 @@ Yes. English is the source language, and the plugin ships with complete translat
 
 == Changelog ==
 
+= 4.0.1 =
+* Fix: Delivery fees no longer appear as add-ons in the statistics.
+* Changed: Long waiting times on the order board are shown in hours or days instead of minutes.
+* Changed: The order screen shows location, pickup or delivery time, delivery notes and table.
+* Changed: Cash Report sits below the POS in the menu and has a dashboard tile; Statistics comes before Support.
+* Changed: The developer page lists the waiter call routes and the new hooks.
+
 = 4.0.0 =
 * Feature: Option groups (Pro) – one or several choices, minimum, maximum and included choices per group, enforced on the product page, in the menu view and in the POS.
 * Changed: Product options are validated on the server before an order or tab round is booked.
@@ -347,8 +354,5 @@ Yes. English is the source language, and the plugin ships with complete translat
 = 3.6.19 =
 * Changed: Updated Freemius SDK to the latest version.
 
-= 3.6.18 =
-* Fix: Headings in the optimized checkout were unreadable when the secondary brand colour is very light.
-
 = Older versions =
-* For the full changelog of versions before 3.6.18, see the release history: https://github.com/simurech/libre-bite/releases
+* For the full changelog of versions before 3.6.19, see the release history: https://github.com/simurech/libre-bite/releases

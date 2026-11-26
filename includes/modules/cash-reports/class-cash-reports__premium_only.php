@@ -404,6 +404,40 @@ class LBite_Cash_Reports {
 			self::PAGE,
 			array( $this, 'render_page' )
 		);
+		self::move_menu_entry_after_pos();
+	}
+
+	/**
+	 * Menüeintrag direkt unter die Kasse stellen.
+	 *
+	 * Die Seite wird erst nach dem Hauptmenü registriert und landete sonst
+	 * hinter den Einstellungen. Fehlt die Kasse, bleibt die Reihenfolge.
+	 */
+	private static function move_menu_entry_after_pos() {
+		global $submenu;
+		if ( empty( $submenu['libre-bite'] ) || ! is_array( $submenu['libre-bite'] ) ) {
+			return;
+		}
+		$items = array_values( $submenu['libre-bite'] );
+		$own   = null;
+		$pos   = null;
+		foreach ( $items as $index => $item ) {
+			if ( isset( $item[2] ) && self::PAGE === $item[2] ) {
+				$own = $index;
+			} elseif ( isset( $item[2] ) && 'lbite-pos' === $item[2] ) {
+				$pos = $index;
+			}
+		}
+		if ( null === $own || null === $pos ) {
+			return;
+		}
+		$entry = $items[ $own ];
+		unset( $items[ $own ] );
+		$items = array_values( $items );
+		$pos   = $own < $pos ? $pos - 1 : $pos;
+		array_splice( $items, $pos + 1, 0, array( $entry ) );
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Reihenfolge des eigenen Untermenüs.
+		$submenu['libre-bite'] = $items;
 	}
 
 	/**

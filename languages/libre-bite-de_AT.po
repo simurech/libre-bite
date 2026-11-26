@@ -2288,11 +2288,6 @@ msgstr "Storniert über Dashboard"
 msgid "Order successfully cancelled"
 msgstr "Bestellung erfolgreich storniert"
 
-#: includes/modules/order-dashboard/class-order-dashboard.php:942
-#: includes/modules/order-dashboard/class-order-dashboard.php:953
-msgid "Dashboard Status"
-msgstr "Dashboard-Status"
-
 #: includes/modules/order-dashboard/class-order-dashboard.php:983
 msgid "Current Status:"
 msgstr "Aktueller Status:"
@@ -7380,3 +7375,53 @@ msgstr "Bitte prüfen Sie die gewählten Optionen."
 #: includes/modules/product-options/class-product-options.php
 msgid "None"
 msgstr "Keine"
+
+#. translators: Short unit for hours in the waiting time badge.
+#: includes/admin/class-admin.php
+msgid "h"
+msgstr "Std."
+
+#. translators: Short unit for days in the waiting time badge.
+#: includes/admin/class-admin.php
+msgid "d"
+msgstr "T."
+
+#: includes/modules/order-dashboard/class-order-dashboard.php
+msgid "Delivery Time"
+msgstr "Lieferzeit"
+
+#: templates/admin/dashboard.php
+msgid "Interim report and end-of-day close per location."
+msgstr "Zwischenbericht und Tagesabschluss je Standort."
+
+#: templates/admin/settings/developer.php
+msgid "Open waiter calls of one location."
+msgstr "Offene Kellnerrufe eines Standorts."
+
+#: templates/admin/settings/developer.php
+msgid "Mark a waiter call as done."
+msgstr "Kellnerruf als erledigt markieren."
+
+#: templates/admin/settings/developer.php
+msgid "Order board data before output (AJAX and REST)."
+msgstr "Daten der Bestellübersicht vor der Ausgabe (AJAX und REST)."
+
+#: templates/admin/settings/developer.php
+msgid "Data of a single order card on the order board."
+msgstr "Daten einer einzelnen Bestellkarte in der Bestellübersicht."
+
+#: templates/admin/settings/developer.php
+msgid "Response of the table plan status."
+msgstr "Antwort des Tischplan-Status."
+
+#: templates/admin/settings/developer.php
+msgid "A guest at a table calls staff or asks for the bill."
+msgstr "Ein Gast am Tisch ruft das Personal oder verlangt die Rechnung."
+
+#: templates/admin/settings/developer.php
+msgid "A waiter call is marked as done."
+msgstr "Ein Kellnerruf wird als erledigt markiert."
+
+#: templates/admin/settings/developer.php
+msgid "An end-of-day close (Z report) is saved."
+msgstr "Ein Tagesabschluss (Z-Bericht) wird gespeichert."

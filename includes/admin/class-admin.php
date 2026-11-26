@@ -443,16 +443,6 @@ class LBite_Admin {
 		// SUPPORT
 		// ============================================
 
-		// Support - für alle sichtbar, zeigt die in den Einstellungen hinterlegten Kontaktdaten
-		add_submenu_page(
-			'libre-bite',
-			__( 'Support', 'libre-bite' ),
-			__( 'Support', 'libre-bite' ),
-			'lbite_view_dashboard',
-			'lbite-support',
-			array( $this, 'render_support_page' )
-		);
-
 		// Statistik – nur für Admin und Manager (lbite_view_statistics)
 		add_submenu_page(
 			'libre-bite',
@@ -461,6 +451,17 @@ class LBite_Admin {
 			'lbite_view_statistics',
 			'lbite-statistics',
 			array( $this, 'render_statistics_page' )
+		);
+
+		// Support nach den Auswertungen – für alle sichtbar, zeigt die in den
+		// Einstellungen hinterlegten Kontaktdaten.
+		add_submenu_page(
+			'libre-bite',
+			__( 'Support', 'libre-bite' ),
+			__( 'Support', 'libre-bite' ),
+			'lbite_view_dashboard',
+			'lbite-support',
+			array( $this, 'render_support_page' )
 		);
 
 		// Pricing / Upgrade: auch in der Pro-Variante ohne gültige Lizenz zeigen,
@@ -1288,7 +1289,11 @@ class LBite_Admin {
 						'waiting'            => __( 'Waiting time', 'libre-bite' ),
 						'overdue'            => __( 'Overdue', 'libre-bite' ),
 						'minutesShort'       => __( 'min', 'libre-bite' ),
-						'printReceipt'       => __( 'Print', 'libre-bite' ),
+						/* translators: Short unit for hours in the waiting time badge. */
+						'hoursShort'         => __( 'h', 'libre-bite' ),
+						/* translators: Short unit for days in the waiting time badge. */
+						'daysShort'          => __( 'd', 'libre-bite' ),
+						'printReceipt'      => __( 'Print', 'libre-bite' ),
 						'moreActions'        => __( 'More actions', 'libre-bite' ),
 						'printError'         => __( 'Could not create the receipt', 'libre-bite' ),
 						'popupBlocked'       => __( 'Please allow pop-ups for this site to print', 'libre-bite' ),
