@@ -1,8 +1,66 @@
-/* Reservierungsübersicht CSS */
+/* Reservierungsübersicht CSS
+ *
+ * Kopf und Steuerleiste im selben Stil wie Kasse und Bestellübersicht
+ * (4.2.4). Die Seite nutzt dieselben Klassennamen wie die Bestellübersicht,
+ * deren Stylesheet hier aber nicht geladen wird – deshalb eigene Regeln. */
+
+.lbite-reservation-board .lbite-board-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 20px;
+}
+
+.lbite-reservation-board .lbite-board-header h1 {
+	margin: 0;
+	padding: 9px 0 4px;
+}
+
+.wp-core-ui .lbite-res-all-link.button {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 40px;
+	padding: 0 14px;
+}
+
+.wp-core-ui .lbite-res-all-link .dashicons {
+	position: static;
+	width: 18px;
+	height: 18px;
+	font-size: 18px;
+	line-height: 18px;
+}
 
 .lbite-res-board-controls {
+	display: flex;
 	flex-wrap: wrap;
-	gap: 15px;
+	align-items: center;
+	gap: 10px 24px;
+	margin-bottom: 20px;
+	padding: 15px 20px;
+	border: 1px solid var(--lbite-border-strong, #ccd0d4);
+	border-radius: 4px;
+	background: var(--lbite-surface, #fff);
+	font-size: 13px;
+}
+
+.lbite-res-location-label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.lbite-res-board-controls select {
+	min-width: 200px;
+	max-width: 300px;
+	height: 40px;
+	min-height: 40px;
+	padding: 0 24px 0 12px;
+	border: 1px solid var(--lbite-text-subtle, #8c8f94);
+	border-radius: 4px;
+	font-size: 14px;
 }
 
 .lbite-res-date-nav {
@@ -11,12 +69,33 @@
 	gap: 6px;
 }
 
+.lbite-res-date-label {
+	margin-right: 2px;
+}
+
 .lbite-res-date-nav input[type="date"] {
-	padding: 4px 8px;
+	height: 40px;
+	padding: 0 10px;
 	border: 1px solid var(--lbite-text-subtle, #8c8f94);
-	border-radius: 3px;
+	border-radius: 4px;
 	font-size: 14px;
 	line-height: 1.4;
+}
+
+.wp-core-ui .lbite-res-date-nav .button {
+	min-width: 40px;
+	min-height: 40px;
+	padding: 0 12px;
+	font-size: 16px;
+	line-height: 38px;
+}
+
+.wp-core-ui .lbite-res-date-nav #lbite-res-date-today {
+	font-size: 13px;
+}
+
+.lbite-res-pending-elsewhere {
+	margin: 0 0 16px !important;
 }
 
 .lbite-res-count-badge {

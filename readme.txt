@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 4.2.3
+Stable tag: 4.2.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -267,6 +267,10 @@ Yes. Libre Bite is fully compatible with WooCommerce High-Performance Order Stor
 
 Yes, since version 4.2.0. Location, order type, pickup time, table, delivery, tips and order bumps appear above the contact details in the Checkout block and are validated when the order is placed. Only the optimized checkout (Pro) still needs the classic shortcode `[woocommerce_checkout]`, because it replaces the classic checkout template; Libre Bite shows a notice if both are combined. Note that field visibility in the Checkout block is configured in the block editor, not in the Libre Bite checkout field settings, and item notes are only available in the classic cart.
 
+= Can I use Libre Bite in Germany or Austria? =
+
+Yes for online ordering, QR table ordering, the order board, reservations and the table plan. For sales recorded at the counter POS, Germany (KassenSichV) and Austria (RKSV) require a certified fiscal solution — a technical security device (TSE) in Germany, a signature unit and registration in Austria. Libre Bite does not include such a certification yet, so in these countries counter sales must be recorded with a compliant cash register. The cash report (X/Z) is a counting aid, not a fiscal record. Please check your obligations with your tax advisor. Switzerland has no comparable requirement.
+
 = Can I manage multiple restaurant locations? =
 
 Multi-location management is included in the Pro version. The free version supports a single location with full configuration of address, opening hours, and order routing.
@@ -309,6 +313,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 7. **Waiter Call** — Guests at a QR table call the staff or request the bill; the call appears on the order board (Pro).
 
 == Changelog ==
+
+= 4.2.4 =
+* Changed: The Support page explains who to contact and what to include; administrators see who can view the page, where the details come from and system details for requests.
+* Changed: The reservation overview uses the same header and toolbar style as the POS and Order Overview; the beta label is gone.
 
 = 4.2.3 =
 * Changed: The cash report explains the current status (X report) and the day closing (Z report) in plain words; payment method rows always show their name.
@@ -384,8 +392,5 @@ Yes. English is the source language, and the plugin ships with complete translat
 * Fix: Order panel of the menu view: smaller quantity buttons and a clearly visible, centered close button.
 * Fix: The setup assistant shows its page title again; CSV export prepared for PHP 8.4+.
 
-= 3.6.24 =
-* Changed: Minimum PHP version raised to 8.3 (older PHP versions no longer receive security fixes); tested with WooCommerce 11.3.
-
 = Older versions =
-* For the full changelog of versions before 3.6.24, see the release history: https://github.com/simurech/libre-bite/releases
+* For the full changelog of versions before 3.6.25, see the release history: https://github.com/simurech/libre-bite/releases

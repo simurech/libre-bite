@@ -21,15 +21,16 @@ $lbite_saved_location = get_user_meta( get_current_user_id(), 'lbite_reservation
 
 <div class="wrap lbite-reservation-board">
 	<div class="lbite-board-header">
-		<h1><?php esc_html_e( 'Reservations', 'libre-bite' ); ?> <span class="lbite-beta-badge"><?php esc_html_e( 'Beta', 'libre-bite' ); ?></span></h1>
-		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_reservation' ) ); ?>" class="button">
+		<h1><?php esc_html_e( 'Reservations', 'libre-bite' ); ?></h1>
+		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=lbite_reservation' ) ); ?>" class="button lbite-res-all-link">
+			<span class="dashicons dashicons-list-view" aria-hidden="true"></span>
 			<?php esc_html_e( 'All Reservations', 'libre-bite' ); ?>
 		</a>
 	</div>
 
 	<div class="lbite-board-controls lbite-res-board-controls">
-		<label>
-			<?php esc_html_e( 'Location:', 'libre-bite' ); ?>
+		<label class="lbite-res-location-label">
+			<strong><?php esc_html_e( 'Location:', 'libre-bite' ); ?></strong>
 			<select id="lbite-res-board-location">
 				<option value=""><?php esc_html_e( 'Please select a location', 'libre-bite' ); ?></option>
 				<?php foreach ( $lbite_locations as $lbite_location ) : ?>
@@ -41,9 +42,10 @@ $lbite_saved_location = get_user_meta( get_current_user_id(), 'lbite_reservation
 		</label>
 
 		<div class="lbite-res-date-nav">
-			<button type="button" id="lbite-res-date-prev" class="button" title="<?php esc_attr_e( 'Previous Day', 'libre-bite' ); ?>">&#8249;</button>
+			<strong class="lbite-res-date-label"><?php esc_html_e( 'Date', 'libre-bite' ); ?>:</strong>
+			<button type="button" id="lbite-res-date-prev" class="button" title="<?php esc_attr_e( 'Previous Day', 'libre-bite' ); ?>" aria-label="<?php esc_attr_e( 'Previous Day', 'libre-bite' ); ?>">&#8249;</button>
 			<input type="date" id="lbite-res-date" aria-label="<?php esc_attr_e( 'Date', 'libre-bite' ); ?>" value="<?php echo esc_attr( gmdate( 'Y-m-d' ) ); ?>">
-			<button type="button" id="lbite-res-date-next" class="button" title="<?php esc_attr_e( 'Next Day', 'libre-bite' ); ?>">&#8250;</button>
+			<button type="button" id="lbite-res-date-next" class="button" title="<?php esc_attr_e( 'Next Day', 'libre-bite' ); ?>" aria-label="<?php esc_attr_e( 'Next Day', 'libre-bite' ); ?>">&#8250;</button>
 			<button type="button" id="lbite-res-date-today" class="button"><?php esc_html_e( 'Today', 'libre-bite' ); ?></button>
 		</div>
 

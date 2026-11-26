@@ -4099,10 +4099,6 @@ msgstr "Produkt konfigurieren"
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: templates/admin/reservation-board.php:24 templates/admin/table-plan.php:26
-msgid "Beta"
-msgstr "Beta"
-
 #: templates/admin/reservation-board.php:26
 msgid "All Reservations"
 msgstr "Alle Reservierungen"
@@ -6041,11 +6037,6 @@ msgid "Show stored notes and allergies for returning guests. Notes live on the c
 msgstr "Zeigt gespeicherte Notizen und Allergien für wiederkehrende Gäste. Notizen hängen am Kundenprofil und erscheinen im Reservierungsboard, wenn die Telefonnummer zu einem bestehenden Kunden passt."
 
 #: templates/admin/support-page.php
-#, php-format
-msgid "You can edit these details under %s."
-msgstr "Diese Angaben lassen sich unter %s bearbeiten."
-
-#: templates/admin/support-page.php
 msgid "Settings → Support"
 msgstr "Einstellungen → Support"
 
@@ -6704,10 +6695,6 @@ msgstr "Betrifft nur deine eigene Ansicht der Libre-Bite-Seiten, nicht den Shop,
 #: templates/admin/settings/branding.php:138
 msgid "This is a personal setting — it follows your account, so a kitchen tablet and an office computer can differ."
 msgstr "Diese Einstellung ist persönlich und hängt an deinem Konto – Küchen-Tablet und Bürorechner dürfen sich also unterscheiden."
-
-#: templates/admin/support-page.php:27
-msgid "Questions or a problem with an order? Get in touch using the details below."
-msgstr "Fragen oder Probleme mit einer Bestellung? Melde dich über die untenstehenden Kontaktdaten."
 
 #: templates/admin/support-settings.php:26
 msgid "Configure the support contact information shown on the Support page — visible to your entire staff, including roles without access to Settings."
@@ -7777,3 +7764,105 @@ msgstr "So funktioniert der Kassenabschluss"
 #, php-format
 msgid "of which %s"
 msgstr "davon %s"
+
+#: templates/admin/support-page.php
+msgid "A screenshot, if possible"
+msgstr "Wenn möglich einen Screenshot"
+
+#: templates/admin/support-page.php
+msgid "Everyone who works with Libre Bite: staff, location managers, shop managers and administrators. They all see the same contact details above. Only this box is shown to administrators alone."
+msgstr "Alle, die mit Libre Bite arbeiten: Personal, Standortleitung, Shop-Manager und Administratoren. Alle sehen dieselben Kontaktdaten oben. Nur dieser Kasten ist allein für Administratoren sichtbar."
+
+#: templates/admin/support-page.php
+msgid "For administrators"
+msgstr "Für Administratoren"
+
+#: templates/admin/support-page.php
+msgid "Help with Libre Bite itself"
+msgstr "Hilfe zu Libre Bite selbst"
+
+#. translators: 1: Libre Bite version, 2: WordPress version, 3: WooCommerce version, 4: PHP version
+#: templates/admin/support-page.php
+#, php-format
+msgid "Libre Bite %1$s · WordPress %2$s · WooCommerce %3$s · PHP %4$s"
+msgstr "Libre Bite %1$s · WordPress %2$s · WooCommerce %3$s · PHP %4$s"
+
+#: templates/admin/support-page.php
+msgid "No support contact is set yet. Your staff currently sees the WordPress administrator email address."
+msgstr "Es ist noch kein Support-Kontakt hinterlegt. Dein Personal sieht zurzeit die E-Mail-Adresse des WordPress-Administrators."
+
+#: templates/admin/support-page.php
+msgid "Only visible to administrators"
+msgstr "Nur für Administratoren sichtbar"
+
+#: templates/admin/support-page.php
+msgid "Please include in your message:"
+msgstr "Bitte gib in deiner Nachricht an:"
+
+#. translators: %s: link to the developer website
+#: templates/admin/support-page.php
+#, php-format
+msgid "Pro licence, setup or managed hosting: %s"
+msgstr "Pro-Lizenz, Einrichtung oder betreutes Hosting: %s"
+
+#. translators: %s: link to the WordPress.org support forum
+#: templates/admin/support-page.php
+#, php-format
+msgid "Questions about the free version: %s"
+msgstr "Fragen zur kostenlosen Version: %s"
+
+#: templates/admin/support-page.php
+msgid "Settings → Developer"
+msgstr "Einstellungen → Entwickler"
+
+#: templates/admin/support-page.php
+msgid "So we can help quickly"
+msgstr "Damit wir schnell helfen können"
+
+#: templates/admin/support-page.php
+msgid "Something does not work as expected, or you have a question about orders, the POS or reservations? Contact the person who looks after Libre Bite in your business."
+msgstr "Funktioniert etwas nicht wie erwartet, oder hast du eine Frage zu Bestellungen, Kasse oder Reservierungen? Wende dich an die Person, die Libre Bite in deinem Betrieb betreut."
+
+#: templates/admin/support-page.php
+msgid "System details for support requests"
+msgstr "Systemangaben für Supportanfragen"
+
+#. translators: %s: link to the Developer settings tab
+#: templates/admin/support-page.php
+#, php-format
+msgid "The full debug information (with error log) is under %s."
+msgstr "Die vollständigen Debug-Informationen (mit Fehlerprotokoll) findest du unter %s."
+
+#: templates/admin/support-page.php
+msgid "The order number and location, if an order is affected"
+msgstr "Bestellnummer und Standort, wenn eine Bestellung betroffen ist"
+
+#: templates/admin/support-page.php
+msgid "The page where it happened (for example POS, Order Overview, checkout)"
+msgstr "Die Seite, auf der es passiert ist (zum Beispiel Kasse, Bestellübersicht, Checkout)"
+
+#: templates/admin/support-page.php
+msgid "Tip: many display problems are solved by reloading the page. If several devices are affected, check the internet connection first."
+msgstr "Tipp: Viele Anzeigeprobleme verschwinden nach einem Neuladen der Seite. Sind mehrere Geräte betroffen, zuerst die Internetverbindung prüfen."
+
+#: templates/admin/support-page.php
+msgid "What you wanted to do and what happened instead"
+msgstr "Was du tun wolltest und was stattdessen passiert ist"
+
+#: templates/admin/support-page.php
+msgid "Who sees this page?"
+msgstr "Wer sieht diese Seite?"
+
+#: templates/admin/support-page.php
+msgid "WordPress.org support forum"
+msgstr "Support-Forum auf WordPress.org"
+
+#. translators: %s: link to the Support settings tab
+#: templates/admin/support-page.php
+#, php-format
+msgid "You set the contact details, support hours and conditions under %s – for example your own phone number, your IT partner or the agency that set up your shop."
+msgstr "Kontaktdaten, Supportzeiten und Konditionen legst du unter %s fest – zum Beispiel deine eigene Telefonnummer, deinen IT-Partner oder die Agentur, die deinen Shop eingerichtet hat."
+
+#: templates/admin/support-page.php
+msgid "Your contact"
+msgstr "Dein Kontakt"

@@ -1137,3 +1137,80 @@ body.lbite-setup-screen {
 .lbite-pd-setting-row > label:first-child {
 	min-width: 180px;
 }
+
+/* Support-Seite (4.2.4): Kontakt und Hinweise nebeneinander, Admin-Bereich
+   mit klarer Kennzeichnung, dass nur Administratoren ihn sehen. */
+.lbite-support-page .lbite-support-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 20px;
+	max-width: 1000px;
+}
+
+.lbite-support-page .lbite-settings-card {
+	margin: 0;
+}
+
+.lbite-support-page .lbite-support-preview-content h2,
+.lbite-support-page .lbite-settings-card > h2 {
+	margin-top: 0;
+	font-size: 16px;
+}
+
+.lbite-support-page .lbite-support-preview-content p {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.lbite-support-list {
+	margin: 0 0 12px 18px;
+	list-style: disc;
+}
+
+.lbite-support-list li {
+	margin-bottom: 4px;
+}
+
+.lbite-support-page .lbite-support-admin {
+	max-width: 1000px;
+	margin-top: 20px;
+	border-left: 4px solid var(--lbite-color-primary, #2271b1);
+}
+
+.lbite-support-admin h2 {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+}
+
+.lbite-support-admin h3 {
+	margin: 18px 0 6px;
+	font-size: 14px;
+}
+
+.lbite-support-admin-badge {
+	padding: 2px 10px;
+	border-radius: 999px;
+	background: var(--lbite-surface-muted, #f0f0f1);
+	color: var(--lbite-text-muted, #50575e);
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.lbite-support-versions {
+	padding: 8px 12px;
+	border-radius: 4px;
+	background: var(--lbite-surface-muted, #f6f7f7);
+	font-family: Menlo, Consolas, monospace;
+	font-size: 12px;
+}
+
+/* Auf der Support-Seite selbst ohne den grauen Vorschau-Rahmen der Einstellungen. */
+.lbite-support-page .lbite-support-preview {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+}
