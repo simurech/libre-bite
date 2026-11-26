@@ -409,7 +409,9 @@ class LBite_Admin {
 				'libre-bite',
 				__( 'Table Plan', 'libre-bite' ),
 				__( 'Table Plan', 'libre-bite' ),
-				'lbite_manage_locations',
+				// Ansehen darf das Servicepersonal (Belegung, offene Bestellungen),
+				// die Anordnung ändern nur, wer Standorte verwaltet (Bearbeitungsmodus).
+				'lbite_view_orders',
 				'lbite-floor-plan',
 				array( $this, 'render_floor_plan_page' )
 			);
@@ -802,7 +804,7 @@ class LBite_Admin {
 	 * Tischplan-Seite rendern
 	 */
 	public function render_floor_plan_page() {
-		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
+		if ( ! current_user_can( 'lbite_view_orders' ) ) {
 			wp_die( esc_html__( 'You do not have permission to access this page.', 'libre-bite' ) );
 		}
 		include LBITE_PLUGIN_DIR . 'templates/admin/table-plan.php';

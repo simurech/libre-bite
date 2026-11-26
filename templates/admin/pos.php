@@ -288,12 +288,29 @@ $lbite_pos_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol
 					</div>
 				</div>
 
-				<?php if ( lbite_feature_enabled( 'enable_split_payment' ) ) : ?>
-				<div class="lbite-split-payment-toggle-row">
+				<?php
+				// Alternativen zur Sofortzahlung direkt unter den Zahlungsarten, nicht
+				// unten im Fuss: «Später bezahlen» übersah man dort leicht.
+				$lbite_has_split = lbite_feature_enabled( 'enable_split_payment' );
+				$lbite_has_tabs  = lbite_feature_enabled( 'enable_open_tabs' );
+				?>
+				<?php if ( $lbite_has_split || $lbite_has_tabs ) : ?>
+				<div class="lbite-split-payment-toggle-row lbite-payment-alt-actions">
+					<?php if ( $lbite_has_split ) : ?>
 					<button type="button" class="button" id="lbite-split-payment-toggle">
 						<?php esc_html_e( 'Split payment', 'libre-bite' ); ?>
 					</button>
+					<?php endif; ?>
+					<?php if ( $lbite_has_tabs ) : ?>
+					<button type="button" class="button" id="lbite-payment-modal-open-tab">
+						<span class="dashicons dashicons-clock" aria-hidden="true"></span>
+						<?php esc_html_e( 'Pay later (open tab)', 'libre-bite' ); ?>
+					</button>
+					<?php endif; ?>
 				</div>
+				<?php endif; ?>
+
+				<?php if ( $lbite_has_split ) : ?>
 				<div id="lbite-split-payment-panel" class="lbite-split-payment-panel" style="display: none;">
 					<?php foreach ( $lbite_active_pm as $lbite_pm ) : ?>
 					<div class="lbite-split-row" data-method="<?php echo esc_attr( $lbite_pm['key'] ); ?>">
@@ -314,11 +331,6 @@ $lbite_pos_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol
 				<button type="button" class="button button-large" id="lbite-payment-modal-cancel">
 					<?php esc_html_e( 'Back', 'libre-bite' ); ?>
 				</button>
-				<?php if ( lbite_feature_enabled( 'enable_open_tabs' ) ) : ?>
-				<button type="button" class="button button-large" id="lbite-payment-modal-open-tab">
-					<?php esc_html_e( 'Open tab', 'libre-bite' ); ?>
-				</button>
-				<?php endif; ?>
 				<button type="button" class="button button-primary button-hero" id="lbite-payment-modal-confirm">
 					<?php esc_html_e( 'Payment Confirmed – Create Order', 'libre-bite' ); ?>
 				</button>

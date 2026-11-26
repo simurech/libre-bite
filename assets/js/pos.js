@@ -1169,8 +1169,33 @@
 				$header.append($('<span class="lbite-tab-card-time"></span>').text(tab.created));
 				$card.append($header);
 
-				const roundLabel = (lbitePos.strings.round || 'Round') + ' ' + tab.round_count;
-				$card.append($('<div class="lbite-tab-card-body"></div>').text(`${tab.item_count} × — ${roundLabel}`));
+				if (tab.customer_name) {
+					$card.append($('<div class="lbite-tab-card-customer"></div>').text(tab.customer_name));
+				}
+
+				// Artikel kompakt nach Runde, damit sich mehrere offene Tabs
+				// ohne Öffnen auseinanderhalten lassen.
+				const rounds = {};
+				(tab.items || []).forEach((item) => {
+					const r = item.round > 0 ? item.round : 1;
+					(rounds[r] = rounds[r] || []).push(item);
+				});
+				const roundKeys = Object.keys(rounds).map(Number).sort((a, b) => a - b);
+				const $items = $('<div class="lbite-tab-card-items"></div>');
+				roundKeys.forEach((r) => {
+					if (roundKeys.length > 1) {
+						$items.append($('<div class="lbite-tab-card-round"></div>')
+							.text((lbitePos.strings.round || 'Round') + ' ' + r));
+					}
+					const $ul = $('<ul class="lbite-tab-card-list"></ul>');
+					rounds[r].forEach((item) => {
+						$ul.append($('<li></li>')
+							.append($('<span class="lbite-tab-card-qty"></span>').text(item.quantity + '×'))
+							.append($('<span class="lbite-tab-card-name"></span>').text(item.name)));
+					});
+					$items.append($ul);
+				});
+				$card.append($items);
 				$card.append($('<div class="lbite-tab-card-total"></div>').text(tab.total));
 
 				const $actions = $('<div class="lbite-tab-card-actions"></div>');

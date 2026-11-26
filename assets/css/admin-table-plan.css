@@ -160,9 +160,34 @@
 	z-index: 20;
 }
 
-.lbite-fp-table:hover .lbite-fp-table-controls {
+/* Steuerleiste nur im Bearbeitungsmodus, dann dauerhaft sichtbar (auch auf
+   Touch-Geräten ohne Hover). Ausserhalb bleibt sie ganz weg. */
+.lbite-fp-canvas:not(.is-editing) .lbite-fp-table-controls {
+	display: none;
+}
+
+.lbite-fp-canvas.is-editing .lbite-fp-table-controls {
 	opacity: 1;
 	pointer-events: auto;
+}
+
+.lbite-fp-canvas.is-editing {
+	outline: 2px dashed var(--lbite-color-primary, #0073aa);
+	outline-offset: 4px;
+}
+
+.lbite-fp-canvas.is-editing .lbite-fp-table {
+	cursor: move;
+}
+
+.lbite-fp-canvas:not(.is-editing) .lbite-fp-table {
+	cursor: pointer;
+}
+
+#lbite-fp-edit-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
 }
 
 .lbite-fp-ctrl {
@@ -379,4 +404,9 @@
 
 @media (prefers-reduced-motion: reduce) {
 	.lbite-fp-table--call { animation: none; }
+}
+
+/* WordPress setzt .button auf inline-block und überstimmt damit [hidden]. */
+#lbite-fp-save[hidden] {
+	display: none;
 }

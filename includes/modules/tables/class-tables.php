@@ -184,6 +184,10 @@ class LBite_Tables {
 					'total'       => __( 'Total', 'libre-bite' ),
 					'status'      => __( 'Status', 'libre-bite' ),
 					'viewOrder'   => __( 'Show in Order Overview', 'libre-bite' ),
+					'editLayout'  => __( 'Edit layout', 'libre-bite' ),
+					'doneEditing' => __( 'Finish editing', 'libre-bite' ),
+					'editHint'    => __( 'Edit mode: drag tables, change shape and size with the buttons on each table.', 'libre-bite' ),
+					'unsaved'     => __( 'You have unsaved changes to the table plan.', 'libre-bite' ),
 				),
 			)
 		);
@@ -195,7 +199,7 @@ class LBite_Tables {
 	public function ajax_get_floor_plan_tables() {
 		check_ajax_referer( 'lbite_admin_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'lbite_manage_locations' ) ) {
+		if ( ! current_user_can( 'lbite_view_orders' ) ) {
 			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
 		}
 
@@ -203,6 +207,11 @@ class LBite_Tables {
 
 		if ( ! $location_id ) {
 			wp_send_json_error( array( 'message' => __( 'No location specified', 'libre-bite' ) ) );
+		}
+
+		// Servicepersonal sieht nur die Standorte, denen es zugewiesen ist.
+		if ( ! LBite_Access::can_access_location( $location_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
 		}
 
 		// Letzten Standort merken

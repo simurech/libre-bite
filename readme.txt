@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 4.2.0
+Stable tag: 4.2.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -292,6 +292,12 @@ Yes. English is the source language, and the plugin ships with complete translat
 
 == Changelog ==
 
+= 4.2.1 =
+* Changed: "Pay later (open tab)" sits next to "Split payment" in the POS payment dialog instead of the dialog footer.
+* Changed: Open tabs list their items per round, so several open tabs are easy to tell apart.
+* Changed: The table plan has an edit mode; moving tables and changing shape or size is only possible while it is on, and changes are saved when leaving it.
+* Changed: Service staff can open the table plan for their assigned locations; editing the layout stays with location managers.
+
 = 4.2.0 =
 * Feature: Official support for the WooCommerce Checkout block – location, pickup time, order type, table, delivery, tips and order bumps work in the block checkout.
 * Feature: WordPress Abilities API (WordPress 6.9+) – locations, open orders, order status and pickup times as abilities for AI assistants and tools (Pro).
@@ -357,8 +363,5 @@ Yes. English is the source language, and the plugin ships with complete translat
 = 3.6.22 =
 * Fix: In the variation popup the title no longer touches the image and the close button is a true circle again.
 
-= 3.6.21 =
-* Feature: Sold-out dishes in the menu view are now marked with a badge and a disabled button, listed last in their category; sold-out variations can no longer be selected.
-
 = Older versions =
-* For the full changelog of versions before 3.6.21, see the release history: https://github.com/simurech/libre-bite/releases
+* For the full changelog of versions before 3.6.22, see the release history: https://github.com/simurech/libre-bite/releases

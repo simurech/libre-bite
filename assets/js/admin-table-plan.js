@@ -13,6 +13,7 @@
 		lastDragMoved: false,
 		statusInterval: null,
 		popupTableId: null,
+		editMode: false,
 
 		init() {
 			this.canvas = document.getElementById('lbite-fp-canvas');
@@ -48,7 +49,8 @@
 				this.currentLocationId = e.target.value;
 				this.isDirty = false;
 				this.clearCanvas();
-				document.getElementById('lbite-fp-save').disabled = true;
+				const saveBtn = document.getElementById('lbite-fp-save');
+				if (saveBtn) saveBtn.disabled = true;
 				document.getElementById('lbite-fp-status').textContent = '';
 				this.stopStatusRefresh();
 				if (this.currentLocationId) {
@@ -56,8 +58,49 @@
 				}
 			});
 
-			document.getElementById('lbite-fp-save').addEventListener('click', () => this.savePositions());
+			const saveBtn = document.getElementById('lbite-fp-save');
+			if (saveBtn) {
+				saveBtn.addEventListener('click', () => this.savePositions());
+			}
 			document.getElementById('lbite-fp-refresh').addEventListener('click', () => this.loadStatuses());
+
+			const editBtn = document.getElementById('lbite-fp-edit-toggle');
+			if (editBtn) {
+				editBtn.addEventListener('click', () => this.setEditMode(!this.editMode));
+			}
+
+			// Ungespeicherte Positionen nicht stillschweigend verlieren.
+			window.addEventListener('beforeunload', (e) => {
+				if (this.isDirty) {
+					e.preventDefault();
+					e.returnValue = lbiteFloorPlan.strings.unsaved;
+				}
+			});
+		},
+
+		/**
+		 * Bearbeitungsmodus ein- oder ausschalten. Beim Verlassen werden offene
+		 * Änderungen gespeichert, damit kein Zwischenstand verloren geht.
+		 */
+		setEditMode(on) {
+			const editBtn = document.getElementById('lbite-fp-edit-toggle');
+			const saveBtn = document.getElementById('lbite-fp-save');
+			if (!editBtn) return;
+
+			if (!on && this.isDirty) {
+				this.savePositions();
+			}
+
+			this.editMode = on;
+			this.hidePopup();
+			this.canvas.classList.toggle('is-editing', on);
+			editBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+			editBtn.classList.toggle('button-primary', on);
+			editBtn.querySelector('.lbite-fp-edit-label').textContent = on ? lbiteFloorPlan.strings.doneEditing : lbiteFloorPlan.strings.editLayout;
+			if (saveBtn) {
+				saveBtn.hidden = !on;
+			}
+			document.getElementById('lbite-fp-status').textContent = on ? lbiteFloorPlan.strings.editHint : '';
 		},
 
 		clearCanvas() {
@@ -151,10 +194,10 @@
 					<div class="lbite-fp-table-name">${this.escHtml(data.title)}</div>
 					${seatsHtml}
 				</div>
-				<div class="lbite-fp-table-controls" aria-hidden="true">
-					<button class="lbite-fp-ctrl lbite-fp-ctrl-shape" type="button" title="${lbiteFloorPlan.strings.toggleShape}">&#9680;</button>
-					<button class="lbite-fp-ctrl lbite-fp-ctrl-size" type="button" title="${lbiteFloorPlan.strings.cycleSize}">&#8862;</button>
-					<a class="lbite-fp-ctrl" href="${lbiteFloorPlan.editUrl.replace('%d', data.id)}" target="_blank" title="${lbiteFloorPlan.strings.editTable}">&#9998;</a>
+				<div class="lbite-fp-table-controls">
+					<button class="lbite-fp-ctrl lbite-fp-ctrl-shape" type="button" title="${lbiteFloorPlan.strings.toggleShape}" aria-label="${lbiteFloorPlan.strings.toggleShape}">&#9680;</button>
+					<button class="lbite-fp-ctrl lbite-fp-ctrl-size" type="button" title="${lbiteFloorPlan.strings.cycleSize}" aria-label="${lbiteFloorPlan.strings.cycleSize}">&#8862;</button>
+					<a class="lbite-fp-ctrl" href="${lbiteFloorPlan.editUrl.replace('%d', data.id)}" target="_blank" title="${lbiteFloorPlan.strings.editTable}" aria-label="${lbiteFloorPlan.strings.editTable}">&#9998;</a>
 				</div>
 			`;
 
@@ -168,12 +211,12 @@
 			});
 
 			el.addEventListener('mousedown', (e) => {
-				if (e.target.closest('.lbite-fp-ctrl')) return;
+				if (!this.editMode || e.target.closest('.lbite-fp-ctrl')) return;
 				this.startDrag(e, data.id, el);
 				e.preventDefault();
 			});
 			el.addEventListener('touchstart', (e) => {
-				if (e.target.closest('.lbite-fp-ctrl')) return;
+				if (!this.editMode || e.target.closest('.lbite-fp-ctrl')) return;
 				this.startDrag(e.touches[0], data.id, el);
 			}, { passive: true });
 
@@ -183,6 +226,8 @@
 					this.lastDragMoved = false;
 					return;
 				}
+				// Im Bearbeitungsmodus geht es um die Anordnung, nicht um Bestellungen.
+				if (this.editMode) return;
 				this.togglePopup(data.id, el);
 			});
 
@@ -227,8 +272,7 @@
 			const t = this.tables.find(t => t.id == this.dragState.tableId);
 			if (t) { t.x = x; t.y = y; }
 
-			this.isDirty = true;
-			document.getElementById('lbite-fp-save').disabled = false;
+			this.markDirty();
 		},
 
 		stopDrag() {
@@ -259,7 +303,8 @@
 
 		markDirty() {
 			this.isDirty = true;
-			document.getElementById('lbite-fp-save').disabled = false;
+			const saveBtn = document.getElementById('lbite-fp-save');
+			if (saveBtn) saveBtn.disabled = false;
 		},
 
 		savePositions() {

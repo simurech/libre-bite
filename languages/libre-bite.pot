@@ -5610,10 +5610,6 @@ msgstr ""
 msgid "This is how support information will be displayed on the help pages:"
 msgstr ""
 
-#: templates/admin/table-plan.php:28
-msgid "Drag tables to the desired position. Click on a table to see the current order."
-msgstr ""
-
 #: templates/admin/table-plan.php:35
 #: templates/frontend/reservation-form.php:55
 msgid "— Select Location —"
@@ -5641,10 +5637,6 @@ msgstr ""
 
 #: templates/admin/table-plan.php:69
 msgid "Ready"
-msgstr ""
-
-#: templates/admin/table-plan.php:70
-msgid "Hover over table → change shape (◐) and size (⊞) · Auto-refresh every 30 sec."
 msgstr ""
 
 #: templates/checkout-location-time.php:20
@@ -7744,4 +7736,32 @@ msgstr ""
 
 #: includes/modules/checkout/class-checkout-blocks.php
 msgid "Unknown action."
+msgstr ""
+
+#: templates/admin/table-plan.php
+msgid "Auto-refresh every 30 sec."
+msgstr ""
+
+#: templates/admin/table-plan.php
+msgid "Click on a table to see the current order. To move tables or change their shape and size, turn on the edit mode."
+msgstr ""
+
+#: templates/admin/table-plan.php
+msgid "Edit layout"
+msgstr ""
+
+#: includes/modules/tables/class-tables.php
+msgid "Edit mode: drag tables, change shape and size with the buttons on each table."
+msgstr ""
+
+#: templates/admin/pos.php
+msgid "Pay later (open tab)"
+msgstr ""
+
+#: includes/modules/tables/class-tables.php
+msgid "You have unsaved changes to the table plan."
+msgstr ""
+
+#: includes/modules/tables/class-tables.php
+msgid "Finish editing"
 msgstr ""
