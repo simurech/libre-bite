@@ -7866,3 +7866,75 @@ msgstr "Kontaktdaten, Supportzeiten und Konditionen legen Sie unter %s fest – 
 #: templates/admin/support-page.php
 msgid "Your contact"
 msgstr "Ihr Kontakt"
+
+#: includes/admin/class-admin.php
+msgid "Accept"
+msgstr "Akzeptieren"
+
+#: includes/admin/class-admin.php
+msgid "Cancel reservation"
+msgstr "Reservierung stornieren"
+
+#: includes/admin/class-admin.php
+msgid "Cancel this confirmed reservation?"
+msgstr "Diese bestätigte Reservierung stornieren?"
+
+#: includes/admin/class-admin.php
+msgid "Decline"
+msgstr "Ablehnen"
+
+#: includes/admin/class-admin.php
+msgid "Decline this reservation request?"
+msgstr "Diese Reservierungsanfrage ablehnen?"
+
+#: templates/admin/settings/reservations__premium_only.php
+msgid "Emails to the guest"
+msgstr "E-Mails an den Gast"
+
+#: includes/modules/reservations/class-reservations.php
+msgid "Good news: your reservation is confirmed. We look forward to your visit."
+msgstr "Gute Nachricht: Ihre Reservierung ist bestätigt. Wir freuen uns auf Ihren Besuch."
+
+#: includes/admin/class-admin.php
+msgid "Guest arrived"
+msgstr "Gast ist da"
+
+#: templates/admin/settings/reservations__premium_only.php
+msgid "Inform the guest by email when a reservation is accepted, declined or cancelled"
+msgstr "Gast per E-Mail informieren, wenn eine Reservierung akzeptiert, abgelehnt oder storniert wird"
+
+#: includes/admin/class-admin.php
+msgid "Reopen"
+msgstr "Wieder öffnen"
+
+#: includes/admin/class-admin.php
+msgid "Status updated – the guest has been informed by email."
+msgstr "Status geändert – der Gast wurde per E-Mail informiert."
+
+#: templates/admin/settings/reservations__premium_only.php
+msgid "The guest always receives an email when the request arrives. Turn this off if you prefer to confirm by phone."
+msgstr "Beim Eingang der Anfrage erhält der Gast immer eine E-Mail. Schalten Sie dies aus, wenn Sie lieber telefonisch bestätigen."
+
+#: includes/admin/class-admin.php
+msgid "The guest is informed by email."
+msgstr "Der Gast wird per E-Mail informiert."
+
+#: includes/modules/reservations/class-reservations.php
+msgid "Unfortunately we cannot accept your reservation request for this time. Feel free to choose another time or contact us directly."
+msgstr "Leider können wir Ihre Reservierungsanfrage für diesen Zeitpunkt nicht annehmen. Wählen Sie gerne eine andere Zeit oder kontaktieren Sie uns direkt."
+
+#. translators: %s: website name
+#: includes/modules/reservations/class-reservations.php
+#, php-format
+msgid "Your reservation at %s has been cancelled"
+msgstr "Ihre Reservierung bei %s wurde storniert"
+
+#. translators: %s: website name
+#: includes/modules/reservations/class-reservations.php
+#, php-format
+msgid "Your reservation at %s is confirmed"
+msgstr "Ihre Reservierung bei %s ist bestätigt"
+
+#: includes/modules/reservations/class-reservations.php
+msgid "Your reservation has been cancelled. If this is a mistake, please contact us."
+msgstr "Ihre Reservierung wurde storniert. Falls das ein Irrtum ist, kontaktieren Sie uns bitte."

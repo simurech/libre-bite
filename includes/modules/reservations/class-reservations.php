@@ -271,8 +271,7 @@ class LBite_Reservations {
 		if ( isset( $_POST['lbite_reservation_status'] ) ) {
 			$lbite_status = sanitize_key( wp_unslash( $_POST['lbite_reservation_status'] ) );
 			if ( array_key_exists( $lbite_status, self::get_statuses() ) ) {
-				update_post_meta( $post_id, '_lbite_reservation_status', $lbite_status );
-				delete_transient( 'lbite_pending_reservations_count' );
+				self::set_status( $post_id, $lbite_status );
 			}
 		}
 	}
@@ -796,6 +795,140 @@ class LBite_Reservations {
 		);
 
 		return ! empty( $existing );
+	}
+
+	/**
+	 * Status einer Reservierung ändern und den Gast informieren.
+	 *
+	 * Einzige Stelle für Statuswechsel (Reservierungsübersicht und
+	 * Bearbeitungsseite), damit die Mails an den Gast nicht davon abhängen,
+	 * wo das Personal den Status ändert.
+	 *
+	 * @param int    $reservation_id Reservierung.
+	 * @param string $new_status     Neuer Status.
+	 * @return bool  True, wenn der Gast per Mail informiert wurde.
+	 */
+	public static function set_status( $reservation_id, $new_status ) {
+		$old_status = (string) get_post_meta( $reservation_id, '_lbite_reservation_status', true );
+		$old_status = '' !== $old_status ? $old_status : 'pending';
+
+		if ( $old_status === $new_status ) {
+			return false;
+		}
+
+		update_post_meta( $reservation_id, '_lbite_reservation_status', $new_status );
+		delete_transient( 'lbite_pending_reservations_count' );
+
+		$notified = false;
+		if ( '0' !== (string) get_option( 'lbite_reservation_status_emails', 1 ) ) {
+			if ( 'confirmed' === $new_status ) {
+				$notified = self::send_status_email( $reservation_id, 'confirmed' );
+			} elseif ( 'cancelled' === $new_status && in_array( $old_status, array( 'pending', 'confirmed' ), true ) ) {
+				// Aus «ausstehend» ist es eine Absage, aus «bestätigt» eine Stornierung.
+				$notified = self::send_status_email( $reservation_id, 'pending' === $old_status ? 'declined' : 'cancelled' );
+			}
+		}
+
+		/**
+		 * Nach dem Statuswechsel einer Reservierung.
+		 *
+		 * @param int    $reservation_id Reservierung.
+		 * @param string $new_status     Neuer Status.
+		 * @param string $old_status     Bisheriger Status.
+		 * @param bool   $notified       Gast wurde per Mail informiert.
+		 */
+		do_action( 'lbite_reservation_status_changed', $reservation_id, $new_status, $old_status, $notified );
+
+		return $notified;
+	}
+
+	/**
+	 * Mail an den Gast bei Bestätigung, Absage oder Stornierung.
+	 *
+	 * @param int    $reservation_id Reservierung.
+	 * @param string $type           'confirmed', 'declined' oder 'cancelled'.
+	 * @return bool
+	 */
+	private static function send_status_email( $reservation_id, $type ) {
+		$email = (string) get_post_meta( $reservation_id, '_lbite_reservation_email', true );
+		if ( ! is_email( $email ) ) {
+			return false;
+		}
+
+		// In der Sprache der Website schreiben, nicht in der des Personals,
+		// das gerade klickt (Admin-Konten stehen oft auf Englisch).
+		$switched = switch_to_locale( get_locale() );
+
+		$site     = get_bloginfo( 'name' );
+		$name     = (string) get_post_meta( $reservation_id, '_lbite_reservation_name', true );
+		$date     = (string) get_post_meta( $reservation_id, '_lbite_reservation_date', true );
+		$time     = (string) get_post_meta( $reservation_id, '_lbite_reservation_time', true );
+		$guests   = (int) get_post_meta( $reservation_id, '_lbite_reservation_guests', true );
+		$location = get_post( (int) get_post_meta( $reservation_id, '_lbite_location_id', true ) );
+		$table_id = (int) get_post_meta( $reservation_id, '_lbite_table_id', true );
+
+		if ( 'confirmed' === $type ) {
+			/* translators: %s: website name */
+			$subject = sprintf( __( 'Your reservation at %s is confirmed', 'libre-bite' ), $site );
+			$intro   = __( 'Good news: your reservation is confirmed. We look forward to your visit.', 'libre-bite' );
+		} elseif ( 'declined' === $type ) {
+			/* translators: %s: website name */
+			$subject = sprintf( __( 'Your reservation request at %s', 'libre-bite' ), $site );
+			$intro   = __( 'Unfortunately we cannot accept your reservation request for this time. Feel free to choose another time or contact us directly.', 'libre-bite' );
+		} else {
+			/* translators: %s: website name */
+			$subject = sprintf( __( 'Your reservation at %s has been cancelled', 'libre-bite' ), $site );
+			$intro   = __( 'Your reservation has been cancelled. If this is a mistake, please contact us.', 'libre-bite' );
+		}
+
+		/* translators: %s: name of the guest */
+		$message  = sprintf( __( 'Hello %s,', 'libre-bite' ), $name ) . "\n\n";
+		$message .= $intro . "\n\n";
+		$message .= "---\n";
+		if ( $location ) {
+			/* translators: %s: location name */
+			$message .= sprintf( __( 'Location: %s', 'libre-bite' ), $location->post_title ) . "\n";
+			$address  = class_exists( 'LBite_Locations' ) ? LBite_Locations::get_formatted_address( $location->ID ) : '';
+			if ( $address ) {
+				$message .= $address . "\n";
+			}
+		}
+		if ( 'confirmed' === $type && $table_id && get_post( $table_id ) ) {
+			/* translators: %s: table name */
+			$message .= sprintf( __( 'Table: %s', 'libre-bite' ), get_post( $table_id )->post_title ) . "\n";
+		}
+		/* translators: %s: date */
+		$message .= sprintf( __( 'Date: %s', 'libre-bite' ), $date ? date_i18n( get_option( 'date_format' ), strtotime( $date ) ) : '' ) . "\n";
+		/* translators: %s: time */
+		$message .= sprintf( __( 'Time: %s', 'libre-bite' ), $time ) . "\n";
+		/* translators: %d: number of guests */
+		$message .= sprintf( __( 'Guests: %d', 'libre-bite' ), $guests ) . "\n";
+		$message .= "---\n\n";
+		$message .= $site;
+
+		/**
+		 * Mail an den Gast bei einem Statuswechsel anpassen.
+		 *
+		 * @param array  $mail           [ 'to', 'subject', 'message' ].
+		 * @param string $type           'confirmed', 'declined' oder 'cancelled'.
+		 * @param int    $reservation_id Reservierung.
+		 */
+		$mail = apply_filters(
+			'lbite_reservation_status_email',
+			array(
+				'to'      => $email,
+				'subject' => $subject,
+				'message' => $message,
+			),
+			$type,
+			$reservation_id
+		);
+
+		if ( $switched ) {
+			restore_previous_locale();
+		}
+
+		return (bool) wp_mail( $mail['to'], $mail['subject'], $mail['message'], array( 'Content-Type: text/plain; charset=UTF-8' ) );
 	}
 
 	/**

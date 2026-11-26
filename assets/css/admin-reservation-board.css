@@ -171,24 +171,45 @@
 
 .lbite-res-status-badge {
 	margin-left: auto;
-	color: var(--lbite-text-on-primary, #fff) !important;
-	border: none !important;
-	padding: 4px 12px !important;
-	border-radius: 12px !important;
-	font-size: 12px !important;
-	font-weight: 600 !important;
-	cursor: pointer;
-	white-space: nowrap;
+	padding: 4px 12px;
+	border-radius: 12px;
+	color: #fff;
+	font-size: 12px;
+	font-weight: 600;
 	line-height: 1.4;
+	white-space: nowrap;
 }
 
-.lbite-res-status-badge:hover {
-	opacity: 0.85;
+/* Aktionen je Status (4.2.5): statt den Status-Knopf reihum zu klicken. */
+.lbite-res-card__actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 16px;
+	border-top: 1px solid var(--lbite-border, #e0e0e0);
 }
 
-.lbite-res-status-badge:disabled {
-	opacity: 0.6;
-	cursor: not-allowed;
+.wp-core-ui .lbite-res-action.button {
+	min-height: 36px;
+	padding: 0 14px;
+	line-height: 34px;
+}
+
+.wp-core-ui .lbite-res-action--danger.button {
+	border-color: #d63638;
+	color: #b32d2e;
+}
+
+.wp-core-ui .lbite-res-action--danger.button:hover {
+	border-color: #b32d2e;
+	background: #fcf0f1;
+	color: #8a2424;
+}
+
+.lbite-res-card__mail-hint {
+	color: var(--lbite-text-muted, #646970);
+	font-size: 12px;
 }
 
 .lbite-res-card__body {
@@ -266,9 +287,9 @@
 
 /* Touch-Optimierung: grössere Trefferflächen auf Tablet */
 @media (hover: none) and (pointer: coarse) {
-	.lbite-res-status-badge {
-		padding: 8px 16px !important;
-		font-size: 14px !important;
+	.wp-core-ui .lbite-res-action.button {
+		min-height: 44px;
+		line-height: 42px;
 	}
 
 	.lbite-res-table-select {

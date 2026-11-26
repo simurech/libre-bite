@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 4.2.4
+Stable tag: 4.2.5
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -314,6 +314,11 @@ Yes. English is the source language, and the plugin ships with complete translat
 
 == Changelog ==
 
+= 4.2.5 =
+* Changed: Reservation cards have clear buttons (Accept, Decline, Guest arrived, Cancel) instead of a status badge that cycled through states on click.
+* Feature: Guests receive an email when their reservation is accepted, declined or cancelled (can be turned off in the reservation settings).
+* Fix: Emails created while the site switches language now use the plugin's bundled translations.
+
 = 4.2.4 =
 * Changed: The Support page explains who to contact and what to include; administrators see who can view the page, where the details come from and system details for requests.
 * Changed: The reservation overview uses the same header and toolbar style as the POS and Order Overview; the beta label is gone.
@@ -385,12 +390,5 @@ Yes. English is the source language, and the plugin ships with complete translat
 * Changed: Menu view, reservation form and tip script no longer block page rendering.
 * Fix: The debug page no longer loads the whole debug.log into memory.
 
-= 3.6.25 =
-* Changed: Minimum PHP version lowered to 7.4 (compatibility verified); PHP 8.3 or newer remains recommended.
-* Fix: Pro features without a valid license now consistently fall back to the free behavior (manager assignments, admin receipts, pickup reminders); the pricing page is shown again after a license expires.
-* Fix: The standard checkout no longer fills in a placeholder email for offline payments.
-* Fix: Order panel of the menu view: smaller quantity buttons and a clearly visible, centered close button.
-* Fix: The setup assistant shows its page title again; CSV export prepared for PHP 8.4+.
-
 = Older versions =
-* For the full changelog of versions before 3.6.25, see the release history: https://github.com/simurech/libre-bite/releases
+* For the full changelog of versions before 3.6.26, see the release history: https://github.com/simurech/libre-bite/releases

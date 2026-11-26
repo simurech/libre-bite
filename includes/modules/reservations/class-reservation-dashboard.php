@@ -239,10 +239,20 @@ class LBite_Reservation_Dashboard {
 			wp_send_json_error( array( 'message' => __( 'Reservation not found', 'libre-bite' ) ) );
 		}
 
-		update_post_meta( $reservation_id, '_lbite_reservation_status', $status );
-		delete_transient( 'lbite_pending_reservations_count' );
+		// Standort-Beschränkung auch beim Ändern durchsetzen.
+		$lbite_res_location = (int) get_post_meta( $reservation_id, '_lbite_location_id', true );
+		if ( $lbite_res_location && ! LBite_Access::can_access_location( $lbite_res_location ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
+		}
 
-		wp_send_json_success( array( 'status' => $status ) );
+		$notified = LBite_Reservations::set_status( $reservation_id, $status );
+
+		wp_send_json_success(
+			array(
+				'status'   => $status,
+				'notified' => $notified,
+			)
+		);
 	}
 
 	/**

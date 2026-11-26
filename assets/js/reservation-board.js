@@ -266,15 +266,13 @@
 			$('<span>').addClass('lbite-res-card__time').text(res.time).appendTo($header);
 			$('<span>').addClass('lbite-res-card__guests').text(res.guests + ' P').appendTo($header);
 
-			const $statusBtn = $('<button>')
-				.addClass('lbite-res-status-badge button')
-				.attr('type', 'button')
-				.attr('data-id', res.id)
-				.attr('data-current', res.status)
+			// Status nur als Anzeige; geändert wird über die Knöpfe unten.
+			const $statusBadge = $('<span>')
+				.addClass('lbite-res-status-badge')
 				.css('background-color', statusColor)
 				.text(statusLabel);
 
-			$header.append($statusBtn);
+			$header.append($statusBadge);
 			$card.append($header);
 
 			// --- Rumpf: Name, Telefon, Notiz, Tisch-Dropdown ---
@@ -342,45 +340,34 @@
 			$body.append($tableRow);
 			$card.append($body);
 
-			// --- Events ---
-
-			// Status-Badge: zyklisch weiterschalten (Ausstehend → Bestätigt → Abgeschlossen → Storniert)
-			$statusBtn.on('click', function() {
-				const id = parseInt($(this).data('id'), 10);
-				if (self.pendingActions.has('status_' + id)) {
-					return;
-				}
-
-				const statusOrder = ['pending', 'confirmed', 'completed', 'cancelled'];
-				const current     = $(this).data('current');
-				const nextIdx     = (statusOrder.indexOf(current) + 1) % statusOrder.length;
-				const next        = statusOrder[nextIdx];
-
-				self.pendingActions.add('status_' + id);
-				$statusBtn.prop('disabled', true);
-
-				$.post(lbiteReservationBoard.ajaxUrl, {
-					action:          'lbite_update_reservation_status',
-					nonce:           lbiteReservationBoard.nonce,
-					reservation_id:  id,
-					status:          next
-				}, function(resp) {
-					self.pendingActions.delete('status_' + id);
-
-					if (resp.success) {
-						$statusBtn
-							.text(self.statuses[next] || next)
-							.css('background-color', statusColors[next] || '#999')
-							.attr('data-current', next)
-							.prop('disabled', false);
-					} else {
-						$statusBtn.prop('disabled', false);
-					}
-				}).fail(function() {
-					self.pendingActions.delete('status_' + id);
-					$statusBtn.prop('disabled', false);
-				});
+			// --- Aktionen je Status ---
+			const S = lbiteReservationBoard.strings;
+			const actionsByStatus = {
+				pending:   [ { to: 'confirmed', label: S.accept, primary: true }, { to: 'cancelled', label: S.decline, confirm: S.confirmDecline } ],
+				confirmed: [ { to: 'completed', label: S.arrived, primary: true }, { to: 'cancelled', label: S.cancel, confirm: S.confirmCancel } ],
+				cancelled: [ { to: 'pending', label: S.reopen } ],
+				completed: [ { to: 'confirmed', label: S.reopen } ]
+			};
+			const $actions = $('<div>').addClass('lbite-res-card__actions');
+			(actionsByStatus[res.status] || []).forEach(function(action) {
+				$('<button>')
+					.attr('type', 'button')
+					.addClass('button lbite-res-action' + (action.primary ? ' button-primary' : '') + ('cancelled' === action.to ? ' lbite-res-action--danger' : ''))
+					.text(action.label)
+					.on('click', function() {
+						if (action.confirm && ! window.confirm(action.confirm)) {
+							return;
+						}
+						self.changeStatus(res.id, action.to, $actions);
+					})
+					.appendTo($actions);
 			});
+			if (lbiteReservationBoard.emailsEnabled && 'pending' === res.status) {
+				$('<span>').addClass('lbite-res-card__mail-hint').text(S.mailHint).appendTo($actions);
+			}
+			$card.append($actions);
+
+			// --- Events ---
 
 			// Tisch-Zuweisung per Dropdown
 			$tableSelect.on('change', function() {
@@ -411,6 +398,45 @@
 		/**
 		 * Auto-Refresh starten
 		 */
+		/**
+		 * Status ändern; der Server informiert den Gast per Mail.
+		 *
+		 * @param {number} id       Reservierung.
+		 * @param {string} status   Neuer Status.
+		 * @param {jQuery} $actions Knopfleiste (wird währenddessen gesperrt).
+		 */
+		changeStatus: function(id, status, $actions) {
+			const self = this;
+			if (self.pendingActions.has('status_' + id)) {
+				return;
+			}
+			self.pendingActions.add('status_' + id);
+			$actions.find('button').prop('disabled', true);
+
+			$.post(lbiteReservationBoard.ajaxUrl, {
+				action:         'lbite_update_reservation_status',
+				nonce:          lbiteReservationBoard.nonce,
+				reservation_id: id,
+				status:         status
+			}).done(function(resp) {
+				if (resp && resp.success) {
+					if (window.lbiteNotify) {
+						window.lbiteNotify.success(resp.data.notified ? lbiteReservationBoard.strings.savedMailed : lbiteReservationBoard.strings.saved);
+					}
+					self.loadReservations(true);
+				} else if (window.lbiteNotify) {
+					window.lbiteNotify.error((resp && resp.data && resp.data.message) || lbiteReservationBoard.strings.error);
+				}
+			}).fail(function() {
+				if (window.lbiteNotify) {
+					window.lbiteNotify.error(lbiteReservationBoard.strings.error);
+				}
+			}).always(function() {
+				self.pendingActions.delete('status_' + id);
+				$actions.find('button').prop('disabled', false);
+			});
+		},
+
 		startAutoRefresh: function() {
 			const self     = this;
 			const interval = lbiteReservationBoard.refreshInterval || 60000;

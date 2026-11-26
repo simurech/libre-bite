@@ -628,6 +628,9 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 						'notes' => array( 'enabled' => isset( $_POST['lbite_reservation_fields']['notes'] ) ),
 					)
 				);
+				if ( isset( $_POST['lbite_reservation_emails_form'] ) ) {
+					update_option( 'lbite_reservation_status_emails', isset( $_POST['lbite_reservation_status_emails'] ) ? 1 : 0 );
+				}
 			}
 			$lbite_did_save = true;
 			break;

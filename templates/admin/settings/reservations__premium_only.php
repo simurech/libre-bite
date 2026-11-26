@@ -51,6 +51,17 @@ $lbite_res_show_notes = ! isset( $lbite_res_fields['notes']['enabled'] ) || $lbi
 				<p class="description"><?php esc_html_e( 'Both fields are optional for the guest either way — hide them here to keep the form as short as possible.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
+		<tr>
+			<th><?php esc_html_e( 'Emails to the guest', 'libre-bite' ); ?></th>
+			<td>
+				<input type="hidden" name="lbite_reservation_emails_form" value="1">
+				<label>
+					<input type="checkbox" name="lbite_reservation_status_emails" value="1" <?php checked( '0' !== (string) get_option( 'lbite_reservation_status_emails', 1 ) ); ?>>
+					<?php esc_html_e( 'Inform the guest by email when a reservation is accepted, declined or cancelled', 'libre-bite' ); ?>
+				</label>
+				<p class="description"><?php esc_html_e( 'The guest always receives an email when the request arrives. Turn this off if you prefer to confirm by phone.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
 	</table>
 
 	<hr style="margin: 24px 0;">

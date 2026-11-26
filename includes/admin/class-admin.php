@@ -1346,7 +1346,19 @@ class LBite_Admin {
 						'pendingElsewhere' => __( 'Open requests on other days or at other locations:', 'libre-bite' ),
 						/* translators: %d: number of open reservation requests */
 						'pendingCount'     => __( '%d open', 'libre-bite' ),
+						'accept'           => __( 'Accept', 'libre-bite' ),
+						'decline'          => __( 'Decline', 'libre-bite' ),
+						'arrived'          => __( 'Guest arrived', 'libre-bite' ),
+						'cancel'           => __( 'Cancel reservation', 'libre-bite' ),
+						'reopen'           => __( 'Reopen', 'libre-bite' ),
+						'mailHint'         => __( 'The guest is informed by email.', 'libre-bite' ),
+						'confirmDecline'   => __( 'Decline this reservation request?', 'libre-bite' ),
+						'confirmCancel'    => __( 'Cancel this confirmed reservation?', 'libre-bite' ),
+						'saved'            => __( 'Status updated', 'libre-bite' ),
+						'savedMailed'      => __( 'Status updated – the guest has been informed by email.', 'libre-bite' ),
+						'error'            => __( 'That did not work. Please try again.', 'libre-bite' ),
 					),
+					'emailsEnabled'   => '0' !== (string) get_option( 'lbite_reservation_status_emails', 1 ),
 				)
 			);
 		}

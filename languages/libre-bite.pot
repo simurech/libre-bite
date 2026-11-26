@@ -8023,3 +8023,75 @@ msgstr ""
 #: templates/admin/support-page.php
 msgid "Your contact"
 msgstr ""
+
+#: includes/admin/class-admin.php
+msgid "Accept"
+msgstr ""
+
+#: includes/admin/class-admin.php
+msgid "Cancel reservation"
+msgstr ""
+
+#: includes/admin/class-admin.php
+msgid "Cancel this confirmed reservation?"
+msgstr ""
+
+#: includes/admin/class-admin.php
+msgid "Decline"
+msgstr ""
+
+#: includes/admin/class-admin.php
+msgid "Decline this reservation request?"
+msgstr ""
+
+#: templates/admin/settings/reservations__premium_only.php
+msgid "Emails to the guest"
+msgstr ""
+
+#: includes/modules/reservations/class-reservations.php
+msgid "Good news: your reservation is confirmed. We look forward to your visit."
+msgstr ""
+
+#: includes/admin/class-admin.php
+msgid "Guest arrived"
+msgstr ""
+
+#: templates/admin/settings/reservations__premium_only.php
+msgid "Inform the guest by email when a reservation is accepted, declined or cancelled"
+msgstr ""
+
+#: includes/admin/class-admin.php
+msgid "Reopen"
+msgstr ""
+
+#: includes/admin/class-admin.php
+msgid "Status updated – the guest has been informed by email."
+msgstr ""
+
+#: templates/admin/settings/reservations__premium_only.php
+msgid "The guest always receives an email when the request arrives. Turn this off if you prefer to confirm by phone."
+msgstr ""
+
+#: includes/admin/class-admin.php
+msgid "The guest is informed by email."
+msgstr ""
+
+#: includes/modules/reservations/class-reservations.php
+msgid "Unfortunately we cannot accept your reservation request for this time. Feel free to choose another time or contact us directly."
+msgstr ""
+
+#. translators: %s: website name
+#: includes/modules/reservations/class-reservations.php
+#, php-format
+msgid "Your reservation at %s has been cancelled"
+msgstr ""
+
+#. translators: %s: website name
+#: includes/modules/reservations/class-reservations.php
+#, php-format
+msgid "Your reservation at %s is confirmed"
+msgstr ""
+
+#: includes/modules/reservations/class-reservations.php
+msgid "Your reservation has been cancelled. If this is a mistake, please contact us."
+msgstr ""

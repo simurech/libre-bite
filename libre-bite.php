@@ -3,7 +3,7 @@
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://wordpress.org/plugins/libre-bite/
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
- * Version:           4.2.4
+ * Version:           4.2.5
  * Requires at least: 6.2
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -78,7 +78,7 @@ if ( function_exists( 'lbite_freemius' ) ) {
 }
 
 // Plugin-Konstanten definieren
-define( 'LBITE_VERSION', '4.2.4' );
+define( 'LBITE_VERSION', '4.2.5' );
 define( 'LBITE_PLUGIN_FILE', __FILE__ );
 define( 'LBITE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LBITE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -132,9 +132,12 @@ spl_autoload_register( function ( $class ) {
 /**
  * Übersetzungen laden
  */
-function lbite_load_textdomain() {
+function lbite_load_textdomain( $locale = '' ) {
+	if ( ! is_string( $locale ) || '' === $locale ) {
+		$locale = determine_locale();
+	}
 	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- 'plugin_locale' ist ein WordPress-Core-Hook (Standard-i18n-Pattern), kein eigener Hook.
-	$locale = apply_filters( 'plugin_locale', determine_locale(), 'libre-bite' );
+	$locale = apply_filters( 'plugin_locale', $locale, 'libre-bite' );
 
 	// WP.org language pack first: WordPress' translation loader (seit 6.5,
 	// WP_Translation_Controller) sucht eine Zeichenkette in der Reihenfolge,
@@ -159,6 +162,22 @@ function lbite_load_textdomain() {
 	}
 }
 add_action( 'plugins_loaded', 'lbite_load_textdomain', 10 );
+
+/**
+ * Übersetzungen nach einem Sprachwechsel neu laden.
+ *
+ * switch_to_locale() verwirft alle geladenen Textdomains und lädt danach nur
+ * Dateien aus wp-content/languages nach. Die mitgelieferten Übersetzungen in
+ * languages/ fielen dabei weg – Mails an Gäste (z. B. Reservierungsbestätigung
+ * in der Sprache der Website) blieben dann englisch.
+ *
+ * @param string $locale Neue Sprache.
+ */
+function lbite_reload_textdomain_on_switch( $locale ) {
+	unload_textdomain( 'libre-bite', true );
+	lbite_load_textdomain( (string) $locale );
+}
+add_action( 'change_locale', 'lbite_reload_textdomain_on_switch' );
 
 /**
  * Hauptklasse des Plugins laden und initialisieren
