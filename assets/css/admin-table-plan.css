@@ -92,14 +92,30 @@
    im dunklen Schema die helle Schrift und die Tischnamen standen mit einem
    Kontrast von 1.17 praktisch unsichtbar auf der Kachel. */
 .lbite-fp-table--free,
-.lbite-fp-table--occupied,
-.lbite-fp-table--preparing,
-.lbite-fp-table--ready { color: #1d2327; }
+.lbite-fp-table--reserved,
+.lbite-fp-table--ordered,
+.lbite-fp-table--served { color: #1d2327; }
 
-.lbite-fp-table--free      { border-color: #46b450; background: #f0fff4; }
-.lbite-fp-table--occupied  { border-color: #dc3232; background: #fef2f2; }
-.lbite-fp-table--preparing { border-color: #ffb900; background: #fffbeb; }
-.lbite-fp-table--ready     { border-color: #00a0d2; background: #e0f2fe; }
+/* Tischzustand (4.3.0): grün frei, violett reserviert, rot bestellt und noch
+   nicht geliefert, orange geliefert und noch nicht bezahlt. */
+.lbite-fp-table--free     { border-color: #46b450; background: #f0fff4; }
+.lbite-fp-table--reserved { border-color: #8250df; background: #f5f0ff; }
+.lbite-fp-table--ordered  { border-color: #dc3232; background: #fef2f2; }
+.lbite-fp-table--served   { border-color: #e07b00; background: #fff4e5; }
+
+/* Wartezeit auf dem Tisch, Stufen wie im Bestellboard. */
+.lbite-fp-table-timer {
+	margin-top: 2px;
+	padding: 1px 6px;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, .85);
+	font-size: 11px;
+	font-weight: 600;
+	color: #1d2327;
+	font-variant-numeric: tabular-nums;
+}
+.lbite-fp-table-timer.is-warn { background: #fcf0c3; color: #6b4e00; }
+.lbite-fp-table-timer.is-late { background: #b32d2e; color: #fff; }
 
 /* Hover + Drag */
 .lbite-fp-table:hover {
@@ -184,10 +200,33 @@
 	cursor: pointer;
 }
 
-#lbite-fp-edit-toggle {
+/* Knöpfe der Werkzeugleiste: gleiche Höhe, Symbol mittig. WordPress gibt
+   Dashicons in .button eine eigene Zeilenhöhe und einen Versatz (4.2.6). */
+.wp-core-ui .lbite-fp-toolbar-right .button {
 	display: inline-flex;
 	align-items: center;
-	gap: 4px;
+	justify-content: center;
+	gap: 6px;
+	min-height: 36px;
+	padding: 0 12px;
+	line-height: 1;
+	vertical-align: middle;
+}
+
+.wp-core-ui .lbite-fp-toolbar-right .button .dashicons {
+	position: static;
+	top: auto;
+	width: 18px;
+	height: 18px;
+	margin: 0;
+	font-size: 18px;
+	line-height: 18px;
+}
+
+.wp-core-ui #lbite-fp-refresh.button {
+	width: 36px;
+	padding: 0;
+	font-size: 18px;
 }
 
 .lbite-fp-ctrl {
@@ -266,15 +305,14 @@
 	border: 2px solid currentColor;
 }
 
-.lbite-fp-legend-item.lbite-fp-legend--free      { color: #46b450; }
-.lbite-fp-legend-item.lbite-fp-legend--occupied   { color: #dc3232; }
-.lbite-fp-legend-item.lbite-fp-legend--preparing  { color: #ffb900; }
-.lbite-fp-legend-item.lbite-fp-legend--ready      { color: #00a0d2; }
+/* Legendentext in normaler Schriftfarbe, nur das Kästchen trägt die Farbe. */
+.lbite-fp-legend-item { color: var(--lbite-text, #1d2327); }
 
-.lbite-fp-legend--free::before      { background: #f0fff4; }
-.lbite-fp-legend--occupied::before  { background: #fef2f2; }
-.lbite-fp-legend--preparing::before { background: #fffbeb; }
-.lbite-fp-legend--ready::before     { background: #e0f2fe; }
+.lbite-fp-legend--free::before     { border-color: #46b450; background: #f0fff4; }
+.lbite-fp-legend--reserved::before { border-color: #8250df; background: #f5f0ff; }
+.lbite-fp-legend--ordered::before  { border-color: #dc3232; background: #fef2f2; }
+.lbite-fp-legend--served::before   { border-color: #e07b00; background: #fff4e5; }
+.lbite-fp-legend--call::before     { border-color: #2271b1; background: transparent; box-shadow: 0 0 0 2px #2271b1; }
 
 .lbite-fp-legend-hint {
 	color: var(--lbite-text-muted, #777);
@@ -364,9 +402,39 @@
 	font-weight: 600;
 }
 
-.lbite-fp-popup-status--occupied  { background: #fef2f2; color: #dc3232; }
-.lbite-fp-popup-status--preparing { background: #fffbeb; color: #996800; }
-.lbite-fp-popup-status--ready     { background: #e0f2fe; color: #0077a8; }
+/* Zustand in Worten im Tischfenster. */
+.lbite-fp-popup-state {
+	margin: 0 0 8px;
+	padding: 4px 10px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #1d2327;
+}
+.lbite-fp-popup-state--reserved { background: #f5f0ff; border-left: 4px solid #8250df; }
+.lbite-fp-popup-state--ordered  { background: #fef2f2; border-left: 4px solid #dc3232; }
+.lbite-fp-popup-state--served   { background: #fff4e5; border-left: 4px solid #e07b00; }
+
+.lbite-fp-popup-hint,
+.lbite-fp-popup-note {
+	margin: 6px 0 0;
+	font-size: 12px;
+	color: var(--lbite-text-muted, #646970);
+}
+
+.lbite-fp-popup-res {
+	margin-top: 10px;
+	padding-top: 8px;
+	border-top: 1px solid var(--lbite-border, #dcdcde);
+}
+.lbite-fp-popup-res-item + .lbite-fp-popup-res-item {
+	margin-top: 8px;
+}
+
+.lbite-fp-move-select {
+	width: 100%;
+	margin: 4px 0 8px;
+}
 
 .lbite-fp-popup-actions {
 	display: flex;
@@ -491,15 +559,15 @@
 	box-shadow: var(--lbite-shadow-md, 0 4px 8px rgba(16, 24, 40, .2));
 }
 
-/* Kellnerruf (Pro, F48): pulsierender Rahmen, damit ein Ruf auch auf einem
-   vollen Plan auffällt. */
+/* Kellnerruf (Pro, F48): pulsierender blauer Rahmen, damit ein Ruf auch auf
+   einem vollen Plan auffällt und sich vom Orange «geliefert» abhebt. */
 .lbite-fp-table--call {
-	box-shadow: 0 0 0 4px #dba617;
+	box-shadow: 0 0 0 4px #2271b1;
 	animation: lbite-fp-call-pulse 1.4s ease-in-out infinite;
 }
 
 @keyframes lbite-fp-call-pulse {
-	50% { box-shadow: 0 0 0 8px rgba(219, 166, 23, .35); }
+	50% { box-shadow: 0 0 0 8px rgba(34, 113, 177, .35); }
 }
 
 @media (prefers-reduced-motion: reduce) {

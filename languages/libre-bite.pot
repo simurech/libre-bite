@@ -8095,3 +8095,142 @@ msgstr ""
 #: includes/modules/reservations/class-reservations.php
 msgid "Your reservation has been cancelled. If this is a mistake, please contact us."
 msgstr ""
+
+#, php-format
+msgid "%d guests"
+msgstr ""
+
+#, php-format
+msgid "%d min"
+msgstr ""
+
+msgid "After scanning the table QR code, guests see a small bar at the bottom of every shop page with a button to call the staff – also after ordering, for three hours. The call appears on the order board (with sound) and in the table plan until someone marks it as done."
+msgstr ""
+
+msgid "Change table"
+msgstr ""
+
+msgid "Close table bill"
+msgstr ""
+
+msgid "Each table has its own QR code. After scanning, the order is linked to the table for three hours – guests can order another round from the same phone."
+msgstr ""
+
+msgid "From this point, a table with a confirmed reservation turns purple in the table plan, so nobody seats walk-in guests there. Default: 60 minutes."
+msgstr ""
+
+msgid "Guest is calling"
+msgstr ""
+
+msgid "Guests ordering by QR code always pay online right away. Payment methods without immediate payment (cash on delivery, bank transfer, cheque) are hidden for table orders, so nobody can order to someone else's table without paying."
+msgstr ""
+
+msgid "How table ordering works"
+msgstr ""
+
+msgid "Inform the guest by email when a reservation is accepted, declined, cancelled or marked as no-show"
+msgstr ""
+
+msgid "Label of the button. Leave empty for the standard text."
+msgstr ""
+
+msgid "Mark as no-show? The guest is informed by email and the table becomes free."
+msgstr ""
+
+msgid "Move the tab to which table?"
+msgstr ""
+
+msgid "Need help?"
+msgstr ""
+
+msgid "No-show"
+msgstr ""
+
+msgid "Not paid yet"
+msgstr ""
+
+msgid "Ordered, not yet served"
+msgstr ""
+
+msgid "Paid"
+msgstr ""
+
+msgid "Paying at the end is done by the staff: open a tab for the table in the POS, add rounds and close the table bill there with any payment method."
+msgstr ""
+
+msgid "Please choose a table of this location."
+msgstr ""
+
+msgid "Request"
+msgstr ""
+
+msgid "Reservations today"
+msgstr ""
+
+msgid "Reserved"
+msgstr ""
+
+msgid "Served, not yet paid"
+msgstr ""
+
+msgid "Short text next to the button. Leave empty for the standard text in the language of the website."
+msgstr ""
+
+msgid "Show as reserved in the table plan"
+msgstr ""
+
+#, php-format
+msgid "Tab moved from %1$s to %2$s."
+msgstr ""
+
+msgid "Tap a table to see its orders and reservations, add items or close the table bill. The kitchen marks orders as served on the Order Board. To move tables or change their shape and size, turn on the edit mode."
+msgstr ""
+
+msgid "The kitchen marks orders as served on the Order Board."
+msgstr ""
+
+msgid "The table plan shows each table at a glance: green = free, purple = reserved, red = ordered and not yet served (with waiting time), orange = served but not yet paid. The kitchen marks orders as served on the Order Board."
+msgstr ""
+
+msgid "This table already has an open tab."
+msgstr ""
+
+msgid "Waiter call: button"
+msgstr ""
+
+msgid "Waiter call: text"
+msgstr ""
+
+msgid "We kept your table for you, but unfortunately you did not arrive. The reservation has been released. If you cannot make it next time, please let us know – then we can offer the table to other guests."
+msgstr ""
+
+#, php-format
+msgid "We missed you at %s"
+msgstr ""
+
+msgid "late"
+msgstr ""
+
+msgid "minutes before the reservation"
+msgstr ""
+
+msgid "No online payment method is active. Guests ordering by table QR code cannot complete their order until you activate one (for example card, TWINT or PayPal) under WooCommerce → Settings → Payments."
+msgstr ""
+
+msgid "A tab is closed because the guest left without paying."
+msgstr ""
+
+msgid "An open tab is moved to another table."
+msgstr ""
+
+msgid "How long a guest stays linked to a table after scanning or ordering, in seconds (default 3 hours)."
+msgstr ""
+
+msgid "Payment methods never offered to guests ordering by table QR code (default: cod, cheque, bacs)."
+msgstr ""
+
+msgid "After every reservation status change, including no-show."
+msgstr ""
+
+msgid "A guest at a table calls the staff."
+msgstr ""

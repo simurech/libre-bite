@@ -57,9 +57,17 @@ $lbite_res_show_notes = ! isset( $lbite_res_fields['notes']['enabled'] ) || $lbi
 				<input type="hidden" name="lbite_reservation_emails_form" value="1">
 				<label>
 					<input type="checkbox" name="lbite_reservation_status_emails" value="1" <?php checked( '0' !== (string) get_option( 'lbite_reservation_status_emails', 1 ) ); ?>>
-					<?php esc_html_e( 'Inform the guest by email when a reservation is accepted, declined or cancelled', 'libre-bite' ); ?>
+					<?php esc_html_e( 'Inform the guest by email when a reservation is accepted, declined, cancelled or marked as no-show', 'libre-bite' ); ?>
 				</label>
 				<p class="description"><?php esc_html_e( 'The guest always receives an email when the request arrives. Turn this off if you prefer to confirm by phone.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="lbite-reservation-plan-lead"><?php esc_html_e( 'Show as reserved in the table plan', 'libre-bite' ); ?></label></th>
+			<td>
+				<input id="lbite-reservation-plan-lead" type="number" min="0" max="720" name="lbite_reservation_plan_lead" value="<?php echo esc_attr( (int) get_option( 'lbite_reservation_plan_lead', 60 ) ); ?>" class="small-text">
+				<?php esc_html_e( 'minutes before the reservation', 'libre-bite' ); ?>
+				<p class="description"><?php esc_html_e( 'From this point, a table with a confirmed reservation turns purple in the table plan, so nobody seats walk-in guests there. Default: 60 minutes.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
 	</table>

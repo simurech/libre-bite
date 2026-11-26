@@ -365,23 +365,19 @@
 				},
 				success: (response) => {
 					if (!response.success) return;
-					const statuses = response.data.statuses;
+					const statuses = response.data.statuses || {};
 
 					this.tables.forEach(t => {
 						t.el.classList.remove(
 							'lbite-fp-table--free',
-							'lbite-fp-table--occupied',
-							'lbite-fp-table--preparing',
-							'lbite-fp-table--ready'
+							'lbite-fp-table--reserved',
+							'lbite-fp-table--ordered',
+							'lbite-fp-table--served'
 						);
-						const s = statuses[t.id];
-						if (s) {
-							t.orderData = s;
-							t.el.classList.add(`lbite-fp-table--${s.display_status}`);
-						} else {
-							t.orderData = null;
-							t.el.classList.add('lbite-fp-table--free');
-						}
+						const s = statuses[t.id] || null;
+						t.orderData = s;
+						t.el.classList.add('lbite-fp-table--' + (s ? s.state : 'free'));
+						this.renderTimer(t);
 
 						// Kellnerruf (Pro, F48): Tisch zusätzlich hervorheben, unabhängig
 						// davon, ob am Tisch schon eine Bestellung offen ist.
@@ -396,6 +392,27 @@
 					});
 				}
 			});
+		},
+
+		/**
+		 * Wartezeit auf dem Tisch: nur bei «bestellt», Stufen wie im Bestellboard.
+		 */
+		renderTimer(t) {
+			let timer = t.el.querySelector('.lbite-fp-table-timer');
+			const s = t.orderData;
+			if (!s || 'ordered' !== s.state || !s.since_ts) {
+				if (timer) timer.remove();
+				return;
+			}
+			if (!timer) {
+				timer = document.createElement('div');
+				timer.className = 'lbite-fp-table-timer';
+				t.el.querySelector('.lbite-fp-table-inner').appendChild(timer);
+			}
+			const minutes = Math.max(0, Math.floor((Date.now() / 1000 - s.since_ts) / 60));
+			timer.textContent = lbiteFloorPlan.strings.minutes.replace('%d', minutes);
+			timer.classList.toggle('is-warn', minutes >= s.warn_at && minutes < s.late_at);
+			timer.classList.toggle('is-late', minutes >= s.late_at);
 		},
 
 		startStatusRefresh() {
@@ -454,8 +471,21 @@
 				</div>`;
 			});
 
-			const orders = (t.orderData && t.orderData.orders) || [];
-			if (!orders.length) {
+			const s      = t.orderData || {};
+			const orders = s.orders || [];
+			const state  = s.state || 'free';
+
+			// Zustand in Worten, damit die Farbe nicht die einzige Information ist.
+			const stateLabels = { ordered: S.stateOrdered, served: S.stateServed, reserved: S.stateReserved };
+			if (stateLabels[state]) {
+				let extra = '';
+				if ('ordered' === state && s.since_ts) {
+					extra = ' · ' + S.minutes.replace('%d', Math.max(0, Math.floor((Date.now() / 1000 - s.since_ts) / 60)));
+				}
+				body += `<p class="lbite-fp-popup-state lbite-fp-popup-state--${state}">${this.escHtml(stateLabels[state] + extra)}</p>`;
+			}
+
+			if (!orders.length && 'reserved' !== state) {
 				body += `<p class="lbite-fp-popup-free">${S.tableFree}</p>`;
 			}
 
@@ -464,19 +494,20 @@
 					`<li><span class="lbite-fp-popup-qty">${this.escHtml(i.quantity)}&times;</span> ${this.escHtml(i.name)}</li>`
 				).join('');
 
+				// Kellner ergänzen und rechnen ab – beides in der Kasse, dort gibt es
+				// alle Zahlungsarten, Split und den Beleg. Den Küchenstand ändert
+				// nur das Bestellboard.
 				let actions = '';
 				if (o.is_tab && lbiteFloorPlan.canPos) {
-					const addUrl = lbiteFloorPlan.posUrl + '&lbite_tab=' + encodeURIComponent(o.order_id) + '&lbite_tab_table=' + encodeURIComponent(tableName);
+					const addUrl   = lbiteFloorPlan.posUrl + '&lbite_tab=' + encodeURIComponent(o.order_id) + '&lbite_tab_table=' + encodeURIComponent(tableName);
+					const closeUrl = lbiteFloorPlan.posUrl + '&lbite_close_tab=' + encodeURIComponent(o.order_id);
 					actions += `<a class="button button-small" href="${this.escHtml(addUrl)}">${S.addItems}</a>`;
-					actions += `<button type="button" class="button button-primary button-small" data-fp-action="pay" data-order-id="${o.order_id}">${S.payClose}</button>`;
-				}
-				if (o.next_key && lbiteFloorPlan.canManage) {
-					actions += `<button type="button" class="button button-small" data-fp-action="status" data-order-id="${o.order_id}" data-status="${this.escHtml(o.next_key)}">${this.escHtml(S.moveTo.replace('%s', o.next_label))}</button>`;
-				}
-				if (o.is_tab && lbiteFloorPlan.canPos) {
+					actions += `<a class="button button-primary button-small" href="${this.escHtml(closeUrl)}">${S.closeBill}</a>`;
+					actions += `<button type="button" class="button button-small" data-fp-action="move-choose" data-order-id="${o.order_id}">${S.moveTable}</button>`;
 					actions += `<button type="button" class="button-link lbite-fp-popup-walkout" data-fp-action="walkout" data-order-id="${o.order_id}">${S.walkout}</button>`;
 				}
 
+				const payLabel = o.is_paid ? S.paid : S.unpaid;
 				body += `<section class="lbite-fp-popup-order" data-order-id="${o.order_id}">
 					<div class="lbite-fp-popup-row">
 						<a href="${lbiteFloorPlan.orderEditUrl.replace('%d', o.order_id)}" target="_blank" class="lbite-fp-popup-link">${o.is_tab ? this.escHtml(S.tab) + ' ' : ''}#${this.escHtml(String(o.order_number))}</a>
@@ -484,12 +515,48 @@
 					</div>
 					<ul class="lbite-fp-popup-items">${items}</ul>
 					<div class="lbite-fp-popup-row lbite-fp-popup-total">
-						<span class="lbite-fp-popup-label">${S.total}</span>
+						<span class="lbite-fp-popup-label">${S.total} · ${this.escHtml(payLabel)}</span>
 						<strong>${this.escHtml(o.total)}</strong>
 					</div>
-					<div class="lbite-fp-popup-actions">${actions}</div>
+					${actions ? `<div class="lbite-fp-popup-actions">${actions}</div>` : ''}
 				</section>`;
 			});
+
+			if (orders.some(o => !o.delivered)) {
+				body += `<p class="lbite-fp-popup-hint">${S.kitchenHint}</p>`;
+			}
+
+			// Reservierungen von heute an diesem Tisch.
+			const reservations = s.reservations || [];
+			if (reservations.length) {
+				body += `<section class="lbite-fp-popup-res"><p class="lbite-fp-popup-label">${S.reservations}</p>`;
+				reservations.forEach((r) => {
+					const flags = [];
+					if ('pending' === r.status) flags.push(S.pendingReq);
+					if (r.is_late) flags.push(S.late);
+
+					let resActions = '';
+					if (lbiteFloorPlan.canReserve) {
+						if ('pending' === r.status) {
+							resActions += `<button type="button" class="button button-primary button-small" data-fp-action="res-status" data-res-id="${r.id}" data-status="confirmed">${S.accept}</button>`;
+							resActions += `<button type="button" class="button button-small" data-fp-action="res-status" data-res-id="${r.id}" data-status="cancelled" data-confirm="decline">${S.decline}</button>`;
+						} else if ('confirmed' === r.status) {
+							resActions += `<button type="button" class="button button-primary button-small" data-fp-action="res-status" data-res-id="${r.id}" data-status="completed">${S.seated}</button>`;
+							resActions += `<button type="button" class="button button-small" data-fp-action="res-status" data-res-id="${r.id}" data-status="no_show" data-confirm="noshow">${S.noShow}</button>`;
+						}
+					}
+
+					body += `<div class="lbite-fp-popup-res-item">
+						<div class="lbite-fp-popup-row">
+							<strong>${this.escHtml(r.time)} · ${this.escHtml(r.name)}</strong>
+							<span class="lbite-fp-popup-meta">${this.escHtml(S.guests.replace('%d', r.guests))}${flags.length ? ' · ' + this.escHtml(flags.join(' · ')) : ''}</span>
+						</div>
+						${r.notes ? `<p class="lbite-fp-popup-note">${this.escHtml(r.notes)}</p>` : ''}
+						${resActions ? `<div class="lbite-fp-popup-actions">${resActions}</div>` : ''}
+					</div>`;
+				});
+				body += '</section>';
+			}
 
 			popup.innerHTML = `
 				<div class="lbite-fp-popup-header">
@@ -540,26 +607,38 @@
 			const action  = btn.dataset.fpAction;
 			const orderId = btn.dataset.orderId;
 
-			if ('pay' === action) {
-				this.showPayChoice(btn.closest('.lbite-fp-popup-order'), orderId, t);
+			if ('move-choose' === action) {
+				this.showMoveChoice(btn.closest('.lbite-fp-popup-order'), orderId, t);
 				return;
 			}
-			if ('pay-back' === action) {
+			if ('move-back' === action) {
 				this.showPopup(t.id, t.el);
 				return;
 			}
 			if ('walkout' === action && !window.confirm(S.confirmWalkout)) {
 				return;
 			}
+			if ('res-status' === action) {
+				const confirmText = { decline: S.confirmDecline, noshow: S.confirmNoShow }[btn.dataset.confirm];
+				if (confirmText && !window.confirm(confirmText)) {
+					return;
+				}
+			}
 
 			btn.disabled = true;
 			let request;
-			if ('pay-method' === action) {
-				request = this.posRequest('lbite_pos_close_tab', { order_id: orderId, payment_method: btn.dataset.method });
+			if ('move-confirm' === action) {
+				const select = popup.querySelector('.lbite-fp-move-select');
+				request = this.posRequest('lbite_pos_move_tab', { order_id: orderId, table_id: select ? select.value : 0 });
 			} else if ('walkout' === action) {
 				request = this.posRequest('lbite_pos_tab_walkout', { order_id: orderId });
-			} else if ('status' === action) {
-				request = this.restRequest('orders/' + encodeURIComponent(orderId) + '/status', { status: btn.dataset.status });
+			} else if ('res-status' === action) {
+				request = this.ajaxRequest({
+					action: 'lbite_update_reservation_status',
+					nonce: lbiteFloorPlan.resNonce,
+					reservation_id: btn.dataset.resId,
+					status: btn.dataset.status
+				});
 			} else if ('resolve-call' === action) {
 				request = this.restRequest('service-calls/' + encodeURIComponent(btn.dataset.callId) + '/resolve', {});
 			} else {
@@ -577,30 +656,41 @@
 		},
 
 		/**
-		 * Zahlungsart wählen, direkt im Tischfenster. Split bleibt der Kasse
-		 * vorbehalten, dort gibt es die Beträge je Zahlungsart.
+		 * Tisch wechseln: Zieltisch wählen. Belegte Tische (offene Bestellung)
+		 * stehen am Ende, der Server lehnt einen Tisch mit eigenem Tab ab.
 		 */
-		showPayChoice(section, orderId, t) {
+		showMoveChoice(section, orderId, t) {
 			const S = lbiteFloorPlan.strings;
-			const methods = (lbiteFloorPlan.payMethods || []).map(m =>
-				`<button type="button" class="button lbite-fp-pay-method" data-fp-action="pay-method" data-order-id="${orderId}" data-method="${this.escHtml(m.key)}"><span aria-hidden="true">${this.escHtml(m.icon)}</span> ${this.escHtml(m.label)}</button>`
-			).join('');
-			const splitUrl = lbiteFloorPlan.posUrl + '&lbite_close_tab=' + encodeURIComponent(orderId);
+			const options = this.tables
+				.filter(other => other.id != t.id)
+				.map(other => {
+					const name  = other.el.querySelector('.lbite-fp-table-name').textContent;
+					const state = other.orderData ? other.orderData.state : 'free';
+					return { id: other.id, name, busy: 'ordered' === state || 'served' === state };
+				})
+				.sort((a, b) => (a.busy - b.busy) || a.name.localeCompare(b.name, undefined, { numeric: true }))
+				.map(o => `<option value="${this.escHtml(o.id)}">${this.escHtml(o.name)}${o.busy ? ' (' + this.escHtml(S.stateOrdered) + ')' : ''}</option>`)
+				.join('');
+
 			section.querySelector('.lbite-fp-popup-actions').innerHTML = `
-				<p class="lbite-fp-popup-label">${S.choosePay}</p>
-				<div class="lbite-fp-pay-methods">${methods}</div>
+				<label class="lbite-fp-popup-label" for="lbite-fp-move-select">${S.chooseTable}</label>
+				<select id="lbite-fp-move-select" class="lbite-fp-move-select">${options}</select>
 				<div class="lbite-fp-pay-foot">
-					<button type="button" class="button-link" data-fp-action="pay-back">${S.back}</button>
-					<a class="button-link" href="${this.escHtml(splitUrl)}">${S.splitInPos}</a>
+					<button type="button" class="button-link" data-fp-action="move-back">${S.back}</button>
+					<button type="button" class="button button-primary button-small" data-fp-action="move-confirm" data-order-id="${orderId}">${S.moveTable}</button>
 				</div>`;
 		},
 
 		posRequest(action, data) {
+			return this.ajaxRequest(Object.assign({ action: action, nonce: lbiteFloorPlan.posNonce, location_id: this.currentLocationId }, data));
+		},
+
+		ajaxRequest(data) {
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					url: lbiteFloorPlan.ajaxUrl,
 					type: 'POST',
-					data: Object.assign({ action: action, nonce: lbiteFloorPlan.posNonce, location_id: this.currentLocationId }, data),
+					data: data,
 					success: (r) => (r && r.success ? resolve(r.data) : reject(r && r.data && r.data.message)),
 					error: () => reject()
 				});

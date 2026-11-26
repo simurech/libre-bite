@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 4.2.5
+Stable tag: 4.3.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,10 +98,10 @@ A browser signal tone when a new order arrives on the Kanban board, so the kitch
 = Pro Features (Subscription required) =
 
 **Reservations**
-A guided 3-step booking form for guests — date & party size, contact details, confirmation. Reservations land on their own dashboard, get auto-released or manually confirmed, and can be assigned to a specific table.
+A guided 3-step booking form for guests — date & party size, contact details, confirmation. Reservations land on their own dashboard, get auto-released or manually confirmed, and can be assigned to a specific table. Guests are informed by email when their reservation is accepted, declined, cancelled or marked as no-show, and today's reservations also appear in the table plan.
 
 **Table Ordering (QR Code)**
-Generate a QR code for each table. Guests scan it and order directly — no address or pickup time fields required. Orders appear in the dashboard with the table name.
+Generate a QR code for each table. Guests scan it and order directly — no address or pickup time fields required — and pay online right away. For three hours their phone stays linked to the table, so they can order another round without scanning again. Orders appear in the dashboard with the table name.
 
 **Option Groups**
 Turn add-ons into rule-based groups per product: one or several choices, minimum and maximum, and a number of included choices (the cheapest ones are free). Example: "Sauce: choose 1", "Toppings: up to 4, 2 included". The rules apply on the product page, in the menu view and in the POS alike.
@@ -113,16 +113,16 @@ Interim and end-of-day reports per location: revenue by payment method (includin
 Offer delivery per location: delivery area by postcode (exact, prefix or range), delivery fee, free delivery from a set amount, minimum order value and extra lead time. Guests choose pickup or delivery in the checkout; the address appears on the order board and the delivery note.
 
 **Open Tabs & Split Payment**
-Keep a table's bill open over several rounds and settle it later with one or several payment methods. The POS warns before a second tab is opened at the same table, and a tab can be closed as "left without paying" — listed separately in the cash report, not counted as revenue.
+Keep a table's bill open over several rounds and settle it later with one or several payment methods. The POS warns before a second tab is opened at the same table, a tab can move to another table when guests change seats, and it can be closed as "left without paying" — listed separately in the cash report, not counted as revenue.
 
 **Table Plan**
-A live floor plan of each location, optionally on top of your own floor plan image. Tap a table to see its orders with all items, take payment, move an order to the next column or resolve a waiter call — without switching pages. Moving tables and changing their shape or size happens in a separate edit mode.
+A live floor plan of each location, optionally on top of your own floor plan image. Each table shows its state at a glance: free, reserved, ordered and not yet served (with waiting time) or served but not yet paid. Tap a table to see its orders and today's reservations, add items, close the table bill in the POS, move a tab to another table, seat guests or mark a no-show, and resolve waiter calls. Moving tables and changing their shape or size happens in a separate edit mode.
 
 **Pickup Display**
 A full-screen page for a TV or monitor that shows guests which order numbers are being prepared and which are ready for pickup. Choose the columns and their titles, how long ready numbers stay visible, and an optional sound. Only numbers are shown — no names or amounts.
 
 **Waiter Call**
-Guests at a QR table tap "Call staff" or "Request bill". The call shows up on the order board with a sound and pulses on the floor plan until someone marks it as done.
+After scanning the table QR code, guests see a small bar with a "Call staff" button on every shop page — also after ordering. The call shows up on the order board with a sound and pulses on the floor plan until someone marks it as done. Text and button label can be changed in the settings.
 
 **Multi-Location Management**
 Manage an unlimited number of branches. Each location gets its own Kanban board, POS configuration, and separate order flow — managed centrally via one WordPress installation.
@@ -257,7 +257,15 @@ Libre Bite uses WooCommerce's standard payment system. Any WooCommerce-compatibl
 
 = Can customers pay in cash or at the counter? =
 
-Yes. WooCommerce includes offline payment methods such as "Cash on Delivery" or "Pay in Person". You can rename and configure these freely — for example "Pay at pickup" or "Pay at the counter".
+Yes. WooCommerce includes offline payment methods such as "Cash on Delivery" or "Pay in Person". You can rename and configure these freely — for example "Pay at pickup" or "Pay at the counter". For orders placed by QR code at a table, these methods are hidden on purpose (see below).
+
+= How does ordering at the table work? =
+
+Each table has its own QR code. Guests scan it, order and pay online right away; for three hours their phone stays linked to the table, so they can order another round and call the staff without scanning again. Paying at the end is done by the staff: open a tab for the table in the POS, add rounds and close the table bill with any payment method. Offline payment methods are hidden for QR orders so that nobody can order to someone else's table without paying.
+
+= What do the colours in the table plan mean? =
+
+Green: free. Purple: a confirmed reservation starts soon (60 minutes by default, adjustable). Red: ordered and not yet served, with the waiting time. Orange: served but not yet paid. The kitchen marks orders as served on the Order Board; served and paid tables count as free.
 
 = Is the plugin compatible with WooCommerce HPOS? =
 
@@ -313,6 +321,18 @@ Yes. English is the source language, and the plugin ships with complete translat
 7. **Waiter Call** — Guests at a QR table call the staff or request the bill; the call appears on the order board (Pro).
 
 == Changelog ==
+
+= 4.3.0 =
+* Changed: The table plan shows a calculated state per table – free, reserved, ordered with waiting time, served but not yet paid – instead of the raw order status.
+* Changed: The table window offers add items, close table bill (in the POS), change table and left without paying; kitchen status changes stay on the Order Board.
+* Feature: Today's reservations appear in the table window, with accept, decline, guest arrived and no-show.
+* Feature: New reservation status "No-show", with an optional email to the guest.
+* Feature: Open tabs can be moved to another table.
+* Changed: The kitchen can mark an open tab as served on the Order Board; it stays unpaid until the bill is closed in the POS.
+* Changed: Guests ordering by table QR code always pay online right away; offline payment methods are hidden for table orders.
+* Changed: The table link stays valid for three hours after scanning or the last order, so guests can order another round and call the staff without scanning again.
+* Changed: The waiter call bar has one "Call staff" button with an editable text; "Request bill" was removed.
+* Fix: Orders from the block checkout now keep their table.
 
 = 4.2.5 =
 * Changed: Reservation cards have clear buttons (Accept, Decline, Guest arrived, Cancel) instead of a status badge that cycled through states on click.
@@ -385,10 +405,6 @@ Yes. English is the source language, and the plugin ships with complete translat
 * Changed: The secondary color is now used for headings and the line above the order total; very light colors fall back to dark grey so both stay visible.
 * Feature: The branding settings warn when the secondary color is too light, and the live preview shows where the color appears in the shop.
 
-= 3.6.26 =
-* Changed: The dashboard widget caches its figures for five minutes and refreshes on every status change.
-* Changed: Menu view, reservation form and tip script no longer block page rendering.
-* Fix: The debug page no longer loads the whole debug.log into memory.
 
 = Older versions =
-* For the full changelog of versions before 3.6.26, see the release history: https://github.com/simurech/libre-bite/releases
+* For the full changelog of versions before 3.7.0, see the release history: https://github.com/simurech/libre-bite/releases

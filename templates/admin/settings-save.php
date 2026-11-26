@@ -610,6 +610,12 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				) );
 				update_option( 'lbite_table_order_page_id', $lbite_tbl_values['lbite_table_order_page_id'] );
 				update_option( 'lbite_table_dropdown_sort', $lbite_tbl_values['lbite_table_dropdown_sort'] );
+				foreach ( array( 'hint' => 60, 'button' => 40 ) as $lbite_sc_key => $lbite_sc_max ) {
+					if ( isset( $_POST[ 'lbite_service_call_' . $lbite_sc_key ] ) ) {
+						$lbite_sc_value = sanitize_text_field( wp_unslash( $_POST[ 'lbite_service_call_' . $lbite_sc_key ] ) );
+						update_option( 'lbite_service_call_' . $lbite_sc_key, mb_substr( $lbite_sc_value, 0, $lbite_sc_max ) );
+					}
+				}
 			}
 			$lbite_did_save = true;
 			break;
@@ -630,6 +636,9 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				);
 				if ( isset( $_POST['lbite_reservation_emails_form'] ) ) {
 					update_option( 'lbite_reservation_status_emails', isset( $_POST['lbite_reservation_status_emails'] ) ? 1 : 0 );
+				}
+				if ( isset( $_POST['lbite_reservation_plan_lead'] ) ) {
+					update_option( 'lbite_reservation_plan_lead', min( 720, max( 0, intval( wp_unslash( $_POST['lbite_reservation_plan_lead'] ) ) ) ) );
 				}
 			}
 			$lbite_did_save = true;

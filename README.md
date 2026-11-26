@@ -6,7 +6,7 @@
 
 **Die WooCommerce-Erweiterung für Restaurants, Take-Aways, Cafés und Bars.**
 
-[![Stable Tag](https://img.shields.io/badge/stable-4.2.5-blue.svg)](https://github.com/simurech/libre-bite/releases)
+[![Stable Tag](https://img.shields.io/badge/stable-4.3.0-blue.svg)](https://github.com/simurech/libre-bite/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-6.2%2B-21759b.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.0%2B-96588a.svg)](https://woocommerce.com/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-8892be.svg)](https://php.net/)
@@ -33,14 +33,14 @@
 
 **Pro:**
 - Reservierungen — 3-Schritte-Formular, automatische Freigabe, Tischzuweisung, eigenes Dashboard
-- Tischbestellung per QR-Code
+- Tischbestellung per QR-Code — Gäste bezahlen sofort online, Bezahlen am Schluss läuft über offene Tabs des Personals
 - Mehrere Standorte zentral aus einer WordPress-Installation
 - Stempelkarte mit automatisch generiertem Rabattgutschein
 - Aktionen (Mengenrabatt, BOGO, Warenkorbschwelle) & Ankündigungsleiste
 - Theme-unabhängige Menü-Ansicht (`[lbite_menu]`) mit Einstellungen für Darstellung, Spalten und Bildformat
 - Ernährungsform-Kennzeichnung, Filter sowie Nährwert- und Allergenangaben
 - Split-Payment und offene Tabs an der Kasse, inkl. Warnung bei doppeltem Tab und Abschluss «ohne Bezahlung gegangen»
-- Tischplan mit Live-Status und Tischfenster (Bezahlen, Status weiter, Kellnerruf erledigen), Bearbeitungsmodus für die Anordnung
+- Tischplan mit Tischzustand auf einen Blick (frei, reserviert, bestellt mit Wartezeit, serviert und unbezahlt), Tischfenster (Positionen hinzufügen, Tisch-Rechnung abschliessen, Tisch wechseln, Reservierungen, Kellnerruf erledigen), Bearbeitungsmodus für die Anordnung
 - Abholanzeige für einen Fernseher (Bestellnummern «in Zubereitung» / «abholbereit»)
 - Lieferung mit Liefergebiet, Gebühr und Mindestbestellwert
 - Kassenabschluss (X-/Z-Bericht) und Kellnerruf am QR-Tisch

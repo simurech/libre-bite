@@ -34,6 +34,7 @@ class LBite_Reservations {
 			'confirmed' => __( 'Confirmed', 'libre-bite' ),
 			'cancelled' => __( 'Cancelled', 'libre-bite' ),
 			'completed' => __( 'Completed', 'libre-bite' ),
+			'no_show'   => __( 'No-show', 'libre-bite' ),
 		);
 	}
 
@@ -332,6 +333,7 @@ class LBite_Reservations {
 					'confirmed' => '#27ae60',
 					'cancelled' => '#e74c3c',
 					'completed' => '#3498db',
+					'no_show'   => '#8c8f94',
 				);
 				$lbite_color = $lbite_colors[ $lbite_status ] ?? '#999';
 				printf(
@@ -787,8 +789,8 @@ class LBite_Reservations {
 					),
 					array(
 						'key'     => '_lbite_reservation_status',
-						'value'   => 'cancelled',
-						'compare' => '!=',
+						'value'   => array( 'cancelled', 'no_show' ),
+						'compare' => 'NOT IN',
 					),
 				),
 			)
@@ -826,6 +828,8 @@ class LBite_Reservations {
 			} elseif ( 'cancelled' === $new_status && in_array( $old_status, array( 'pending', 'confirmed' ), true ) ) {
 				// Aus «ausstehend» ist es eine Absage, aus «bestätigt» eine Stornierung.
 				$notified = self::send_status_email( $reservation_id, 'pending' === $old_status ? 'declined' : 'cancelled' );
+			} elseif ( 'no_show' === $new_status && 'confirmed' === $old_status ) {
+				$notified = self::send_status_email( $reservation_id, 'no_show' );
 			}
 		}
 
@@ -846,7 +850,7 @@ class LBite_Reservations {
 	 * Mail an den Gast bei Bestätigung, Absage oder Stornierung.
 	 *
 	 * @param int    $reservation_id Reservierung.
-	 * @param string $type           'confirmed', 'declined' oder 'cancelled'.
+	 * @param string $type           'confirmed', 'declined', 'cancelled' oder 'no_show'.
 	 * @return bool
 	 */
 	private static function send_status_email( $reservation_id, $type ) {
@@ -875,6 +879,10 @@ class LBite_Reservations {
 			/* translators: %s: website name */
 			$subject = sprintf( __( 'Your reservation request at %s', 'libre-bite' ), $site );
 			$intro   = __( 'Unfortunately we cannot accept your reservation request for this time. Feel free to choose another time or contact us directly.', 'libre-bite' );
+		} elseif ( 'no_show' === $type ) {
+			/* translators: %s: website name */
+			$subject = sprintf( __( 'We missed you at %s', 'libre-bite' ), $site );
+			$intro   = __( 'We kept your table for you, but unfortunately you did not arrive. The reservation has been released. If you cannot make it next time, please let us know – then we can offer the table to other guests.', 'libre-bite' );
 		} else {
 			/* translators: %s: website name */
 			$subject = sprintf( __( 'Your reservation at %s has been cancelled', 'libre-bite' ), $site );
@@ -910,7 +918,7 @@ class LBite_Reservations {
 		 * Mail an den Gast bei einem Statuswechsel anpassen.
 		 *
 		 * @param array  $mail           [ 'to', 'subject', 'message' ].
-		 * @param string $type           'confirmed', 'declined' oder 'cancelled'.
+		 * @param string $type           'confirmed', 'declined', 'cancelled' oder 'no_show'.
 		 * @param int    $reservation_id Reservierung.
 		 */
 		$mail = apply_filters(

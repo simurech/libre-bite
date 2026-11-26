@@ -564,6 +564,7 @@ class LBite_Checkout {
 				),
 				'hasLocation'   => ( WC()->session ? ! empty( WC()->session->get( 'lbite_location_id' ) ) : false ),
 				'locationId'    => ( WC()->session ? WC()->session->get( 'lbite_location_id' ) : null ),
+				'locationName'  => ( WC()->session && WC()->session->get( 'lbite_location_id' ) ? get_the_title( (int) WC()->session->get( 'lbite_location_id' ) ) : '' ),
 				'orderType'     => ( WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now' ),
 			)
 		);
@@ -696,6 +697,7 @@ class LBite_Checkout {
 					),
 					'hasLocation'   => ( WC()->session ? ! empty( WC()->session->get( 'lbite_location_id' ) ) : false ),
 					'locationId'    => ( WC()->session ? WC()->session->get( 'lbite_location_id' ) : null ),
+					'locationName'  => ( WC()->session && WC()->session->get( 'lbite_location_id' ) ? get_the_title( (int) WC()->session->get( 'lbite_location_id' ) ) : '' ),
 					'orderType'     => ( WC()->session ? WC()->session->get( 'lbite_order_type', 'now' ) : 'now' ),
 				)
 			);

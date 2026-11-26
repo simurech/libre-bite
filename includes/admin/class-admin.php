@@ -107,6 +107,7 @@ class LBite_Admin {
 		$this->loader->add_action( 'wp_ajax_lbite_pos_close_tab', $this, 'ajax_pos_close_tab' );
 		$this->loader->add_action( 'wp_ajax_lbite_pos_cancel_tab', $this, 'ajax_pos_cancel_tab' );
 		$this->loader->add_action( 'wp_ajax_lbite_pos_tab_walkout', $this, 'ajax_pos_tab_walkout' );
+		$this->loader->add_action( 'wp_ajax_lbite_pos_move_tab', $this, 'ajax_pos_move_tab' );
 		// Ein Tab ohne Bezahlung ist keine fehlgeschlagene Online-Zahlung: keine
 		// «Failed order»-Mails an Shop und Gast.
 		$this->loader->add_filter( 'woocommerce_email_enabled_failed_order', 'LBite_Admin', 'suppress_walkout_email', 10, 2 );
@@ -1350,6 +1351,8 @@ class LBite_Admin {
 						'decline'          => __( 'Decline', 'libre-bite' ),
 						'arrived'          => __( 'Guest arrived', 'libre-bite' ),
 						'cancel'           => __( 'Cancel reservation', 'libre-bite' ),
+						'noShow'           => __( 'No-show', 'libre-bite' ),
+						'confirmNoShow'    => __( 'Mark as no-show? The guest is informed by email and the table becomes free.', 'libre-bite' ),
 						'reopen'           => __( 'Reopen', 'libre-bite' ),
 						'mailHint'         => __( 'The guest is informed by email.', 'libre-bite' ),
 						'confirmDecline'   => __( 'Decline this reservation request?', 'libre-bite' ),
@@ -2136,6 +2139,20 @@ class LBite_Admin {
 			$this->add_cart_items_to_order( $order, $cart_items, $round );
 
 			$order->update_meta_data( '_lbite_tab_round_count', $round );
+			// Zeitpunkt der letzten Runde: Grundlage der Wartezeit im Tischplan.
+			$order->update_meta_data( '_lbite_tab_round_at', current_time( 'mysql' ) );
+
+			// Neue Runde geht wieder in die Küche, auch wenn die vorige schon
+			// als geliefert markiert war.
+			if ( class_exists( 'LBite_Order_Dashboard' ) ) {
+				$lbite_columns = LBite_Order_Dashboard::get_columns_by_key();
+				$lbite_current = (string) $order->get_meta( '_lbite_order_status', true );
+				if ( isset( $lbite_columns[ $lbite_current ] ) && $lbite_columns[ $lbite_current ]['counts_as_completed'] ) {
+					$order->update_meta_data( '_lbite_order_status', LBite_Order_Dashboard::KEY_ACTIVE );
+					$order->update_meta_data( '_lbite_status_changed', current_time( 'mysql' ) );
+				}
+			}
+
 			$order->calculate_totals();
 
 			if ( class_exists( 'LBite_Checkout' ) ) {
@@ -2202,7 +2219,16 @@ class LBite_Admin {
 			$order->update_meta_data( '_lbite_split_payments', $split_payments );
 		}
 		$order->delete_meta_data( '_lbite_tab_open' );
-		$order->update_status( 'processing', __( 'Tab closed via POS.', 'libre-bite' ) );
+
+		// Hat die Küche alles geliefert, ist der Tab mit der Zahlung erledigt.
+		// Sonst bleibt er bezahlt in Arbeit, bis die Küche ihn abschliesst.
+		$lbite_delivered = false;
+		if ( class_exists( 'LBite_Order_Dashboard' ) ) {
+			$lbite_columns   = LBite_Order_Dashboard::get_columns_by_key();
+			$lbite_current   = (string) $order->get_meta( '_lbite_order_status', true );
+			$lbite_delivered = isset( $lbite_columns[ $lbite_current ] ) && $lbite_columns[ $lbite_current ]['counts_as_completed'];
+		}
+		$order->update_status( $lbite_delivered ? 'completed' : 'processing', __( 'Tab closed via POS.', 'libre-bite' ) );
 
 		delete_transient( 'lbite_incoming_orders_count' );
 
@@ -2213,6 +2239,78 @@ class LBite_Admin {
 		 * @param WC_Order $order    Bestellobjekt.
 		 */
 		do_action( 'lbite_tab_closed', $order->get_id(), $order );
+
+		wp_send_json_success( array( 'order_id' => $order->get_id() ) );
+	}
+
+	/**
+	 * AJAX: Offenen Tab auf einen anderen Tisch verschieben (Gäste wechseln den Tisch).
+	 *
+	 * Nur innerhalb desselben Standorts und nur auf einen Tisch ohne eigenen
+	 * offenen Tab – zwei Tabs zusammenzulegen ist ein eigenes Thema.
+	 */
+	public function ajax_pos_move_tab() {
+		check_ajax_referer( 'lbite_pos_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'lbite_use_pos' ) ) {
+			wp_send_json_error( array( 'message' => __( 'No permission', 'libre-bite' ) ) );
+		}
+
+		if ( ! lbite_feature_enabled( 'enable_open_tabs' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Open Tabs is not enabled', 'libre-bite' ) ) );
+		}
+
+		$order        = $this->get_validated_open_tab_order();
+		$location_id  = (int) $order->get_meta( '_lbite_location_id', true );
+		$new_table_id = isset( $_POST['table_id'] ) ? intval( wp_unslash( $_POST['table_id'] ) ) : 0;
+		$old_table_id = (int) $order->get_meta( '_lbite_table_id', true );
+
+		if ( ! class_exists( 'LBite_Tables' ) || ! LBite_Tables::is_valid_table( $new_table_id, $location_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Please choose a table of this location.', 'libre-bite' ) ) );
+		}
+		if ( $new_table_id === $old_table_id ) {
+			wp_send_json_success( array( 'order_id' => $order->get_id() ) );
+		}
+
+		$existing = wc_get_orders(
+			array(
+				'limit'      => 1,
+				'return'     => 'ids',
+				'status'     => array( 'on-hold' ),
+				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Ein Treffer genügt, eng begrenzt.
+					array(
+						'key'   => '_lbite_table_id',
+						'value' => $new_table_id,
+					),
+					array(
+						'key'   => '_lbite_tab_open',
+						'value' => '1',
+					),
+				),
+			)
+		);
+		if ( ! empty( $existing ) ) {
+			wp_send_json_error( array( 'message' => __( 'This table already has an open tab.', 'libre-bite' ) ) );
+		}
+
+		$new_name = get_the_title( $new_table_id );
+		$old_name = $old_table_id ? get_the_title( $old_table_id ) : '';
+
+		$order->update_meta_data( '_lbite_table_id', $new_table_id );
+		$order->update_meta_data( '_lbite_table_name', $new_name );
+		/* translators: 1: previous table, 2: new table */
+		$order->add_order_note( sprintf( __( 'Tab moved from %1$s to %2$s.', 'libre-bite' ), $old_name, $new_name ) );
+		$order->save();
+
+		/**
+		 * Nach dem Verschieben eines offenen Tabs auf einen anderen Tisch.
+		 *
+		 * @param int      $order_id     Bestell-ID.
+		 * @param int      $new_table_id Neuer Tisch.
+		 * @param int      $old_table_id Bisheriger Tisch.
+		 * @param WC_Order $order        Bestellobjekt.
+		 */
+		do_action( 'lbite_tab_moved', $order->get_id(), $new_table_id, $old_table_id, $order );
 
 		wp_send_json_success( array( 'order_id' => $order->get_id() ) );
 	}

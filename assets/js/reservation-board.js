@@ -248,7 +248,8 @@
 				pending:   '#f39c12',
 				confirmed: '#27ae60',
 				cancelled: '#e74c3c',
-				completed: '#3498db'
+				completed: '#3498db',
+				no_show:   '#8c8f94'
 			};
 
 			const statusColor = statusColors[res.status] || '#999';
@@ -344,9 +345,10 @@
 			const S = lbiteReservationBoard.strings;
 			const actionsByStatus = {
 				pending:   [ { to: 'confirmed', label: S.accept, primary: true }, { to: 'cancelled', label: S.decline, confirm: S.confirmDecline } ],
-				confirmed: [ { to: 'completed', label: S.arrived, primary: true }, { to: 'cancelled', label: S.cancel, confirm: S.confirmCancel } ],
+				confirmed: [ { to: 'completed', label: S.arrived, primary: true }, { to: 'no_show', label: S.noShow, confirm: S.confirmNoShow }, { to: 'cancelled', label: S.cancel, confirm: S.confirmCancel } ],
 				cancelled: [ { to: 'pending', label: S.reopen } ],
-				completed: [ { to: 'confirmed', label: S.reopen } ]
+				completed: [ { to: 'confirmed', label: S.reopen } ],
+				no_show:   [ { to: 'confirmed', label: S.reopen } ]
 			};
 			const $actions = $('<div>').addClass('lbite-res-card__actions');
 			(actionsByStatus[res.status] || []).forEach(function(action) {

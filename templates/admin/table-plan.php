@@ -35,7 +35,7 @@ $lbite_selected_location = intval( get_user_meta( get_current_user_id(), '_lbite
 <div class="wrap lbite-admin-wrap">
 	<h1><?php esc_html_e( 'Table Plan', 'libre-bite' ); ?></h1>
 	<p class="description">
-		<?php esc_html_e( 'Click on a table to see the current order. To move tables or change their shape and size, turn on the edit mode.', 'libre-bite' ); ?>
+		<?php esc_html_e( 'Tap a table to see its orders and reservations, add items or close the table bill. The kitchen marks orders as served on the Order Board. To move tables or change their shape and size, turn on the edit mode.', 'libre-bite' ); ?>
 	</p>
 
 	<div class="lbite-fp-toolbar">
@@ -85,9 +85,14 @@ $lbite_selected_location = intval( get_user_meta( get_current_user_id(), '_lbite
 
 	<div id="lbite-fp-legend" class="lbite-fp-legend" style="display:none;">
 		<span class="lbite-fp-legend-item lbite-fp-legend--free"><?php esc_html_e( 'Free', 'libre-bite' ); ?></span>
-		<span class="lbite-fp-legend-item lbite-fp-legend--occupied"><?php esc_html_e( 'Occupied', 'libre-bite' ); ?></span>
-		<span class="lbite-fp-legend-item lbite-fp-legend--preparing"><?php esc_html_e( 'Preparing', 'libre-bite' ); ?></span>
-		<span class="lbite-fp-legend-item lbite-fp-legend--ready"><?php esc_html_e( 'Ready', 'libre-bite' ); ?></span>
+		<?php if ( lbite_feature_enabled( 'enable_reservations' ) ) : ?>
+			<span class="lbite-fp-legend-item lbite-fp-legend--reserved"><?php esc_html_e( 'Reserved', 'libre-bite' ); ?></span>
+		<?php endif; ?>
+		<span class="lbite-fp-legend-item lbite-fp-legend--ordered"><?php esc_html_e( 'Ordered, not yet served', 'libre-bite' ); ?></span>
+		<span class="lbite-fp-legend-item lbite-fp-legend--served"><?php esc_html_e( 'Served, not yet paid', 'libre-bite' ); ?></span>
+		<?php if ( lbite_feature_enabled( 'enable_service_calls' ) ) : ?>
+			<span class="lbite-fp-legend-item lbite-fp-legend--call"><?php esc_html_e( 'Guest is calling', 'libre-bite' ); ?></span>
+		<?php endif; ?>
 		<span class="lbite-fp-legend-hint"><?php esc_html_e( 'Auto-refresh every 30 sec.', 'libre-bite' ); ?></span>
 	</div>
 </div>

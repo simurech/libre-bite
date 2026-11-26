@@ -2,7 +2,7 @@
  * Kellnerruf für Gäste am Tisch (F48, Pro)
  *
  * Bewusst ohne jQuery: läuft auf beliebigen Theme-Seiten und soll das
- * Laden nicht verzögern. Nach einem Ruf bleiben die Knöpfe eine Minute
+ * Laden nicht verzögern. Nach einem Ruf bleibt der Knopf eine Minute
  * gesperrt, damit niemand aus Ungeduld mehrfach tippt.
  */
 (function () {

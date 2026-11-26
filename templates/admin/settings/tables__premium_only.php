@@ -28,7 +28,7 @@ $lbite_pages                  = get_pages();
 
 	$lbite_toggle_key             = 'enable_service_calls';
 	$lbite_toggle_label           = __( 'Waiter Call', 'libre-bite' );
-	$lbite_toggle_description     = __( 'Guests at a table can tap "Call staff" or "Request bill". The call appears on the order board (with sound) and on the floor plan until someone marks it as done.', 'libre-bite' );
+	$lbite_toggle_description     = __( 'After scanning the table QR code, guests see a small bar at the bottom of every shop page with a button to call the staff – also after ordering, for three hours. The call appears on the order board (with sound) and in the table plan until someone marks it as done.', 'libre-bite' );
 	$lbite_toggle_is_pro          = true;
 	$lbite_toggle_premium_allowed = true;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
@@ -59,7 +59,49 @@ $lbite_pages                  = get_pages();
 				<p class="description"><?php esc_html_e( 'Controls how tables are sorted in the checkout dropdown.', 'libre-bite' ); ?></p>
 			</td>
 		</tr>
+		<tr>
+			<th><label for="lbite-service-call-hint"><?php esc_html_e( 'Waiter call: text', 'libre-bite' ); ?></label></th>
+			<td>
+				<input id="lbite-service-call-hint" type="text" class="regular-text" name="lbite_service_call_hint" value="<?php echo esc_attr( get_option( 'lbite_service_call_hint', '' ) ); ?>" placeholder="<?php esc_attr_e( 'Need help?', 'libre-bite' ); ?>" maxlength="60">
+				<p class="description"><?php esc_html_e( 'Short text next to the button. Leave empty for the standard text in the language of the website.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="lbite-service-call-button"><?php esc_html_e( 'Waiter call: button', 'libre-bite' ); ?></label></th>
+			<td>
+				<input id="lbite-service-call-button" type="text" class="regular-text" name="lbite_service_call_button" value="<?php echo esc_attr( get_option( 'lbite_service_call_button', '' ) ); ?>" placeholder="<?php esc_attr_e( 'Call staff', 'libre-bite' ); ?>" maxlength="40">
+				<p class="description"><?php esc_html_e( 'Label of the button. Leave empty for the standard text.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
 	</table>
+
+	<?php
+	// Ohne Zahlungsart mit Sofortzahlung können QR-Gäste nicht abschliessen.
+	$lbite_instant_gateways = array();
+	if ( function_exists( 'WC' ) && WC()->payment_gateways() ) {
+		$lbite_deferred = (array) apply_filters( 'lbite_table_deferred_gateways', array( 'cod', 'cheque', 'bacs' ) );
+		foreach ( WC()->payment_gateways()->payment_gateways() as $lbite_gw_id => $lbite_gw ) {
+			if ( 'yes' === $lbite_gw->enabled && ! in_array( $lbite_gw_id, $lbite_deferred, true ) ) {
+				$lbite_instant_gateways[] = $lbite_gw_id;
+			}
+		}
+	}
+	if ( lbite_feature_enabled( 'enable_table_ordering' ) && empty( $lbite_instant_gateways ) ) :
+		?>
+		<div class="notice notice-warning inline">
+			<p><?php esc_html_e( 'No online payment method is active. Guests ordering by table QR code cannot complete their order until you activate one (for example card, TWINT or PayPal) under WooCommerce → Settings → Payments.', 'libre-bite' ); ?></p>
+		</div>
+	<?php endif; ?>
+
+	<div class="lbite-settings-card">
+		<h3><?php esc_html_e( 'How table ordering works', 'libre-bite' ); ?></h3>
+		<ul>
+			<li><?php esc_html_e( 'Each table has its own QR code. After scanning, the order is linked to the table for three hours – guests can order another round from the same phone.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Guests ordering by QR code always pay online right away. Payment methods without immediate payment (cash on delivery, bank transfer, cheque) are hidden for table orders, so nobody can order to someone else\'s table without paying.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'Paying at the end is done by the staff: open a tab for the table in the POS, add rounds and close the table bill there with any payment method.', 'libre-bite' ); ?></li>
+			<li><?php esc_html_e( 'The table plan shows each table at a glance: green = free, purple = reserved, red = ordered and not yet served (with waiting time), orange = served but not yet paid. The kitchen marks orders as served on the Order Board.', 'libre-bite' ); ?></li>
+		</ul>
+	</div>
 
 	<?php submit_button( __( 'Save', 'libre-bite' ), 'primary', 'lbite_save_settings' ); ?>
 </form>

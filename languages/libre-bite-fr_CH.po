@@ -7937,3 +7937,142 @@ msgstr "Votre réservation chez %s est confirmée"
 #: includes/modules/reservations/class-reservations.php
 msgid "Your reservation has been cancelled. If this is a mistake, please contact us."
 msgstr "Votre réservation a été annulée. S'il s'agit d'une erreur, merci de nous contacter."
+
+#, php-format
+msgid "%d guests"
+msgstr "%d personnes"
+
+#, php-format
+msgid "%d min"
+msgstr "%d min"
+
+msgid "After scanning the table QR code, guests see a small bar at the bottom of every shop page with a button to call the staff – also after ordering, for three hours. The call appears on the order board (with sound) and in the table plan until someone marks it as done."
+msgstr "Après avoir scanné le code QR de la table, les clients voient en bas de chaque page de la boutique une petite barre avec un bouton pour appeler le service – également après la commande, pendant trois heures. L'appel apparaît dans le tableau des commandes (avec son) et sur le plan des tables jusqu'à ce que quelqu'un le marque comme traité."
+
+msgid "Change table"
+msgstr "Changer de table"
+
+msgid "Close table bill"
+msgstr "Clôturer l'addition de la table"
+
+msgid "Each table has its own QR code. After scanning, the order is linked to the table for three hours – guests can order another round from the same phone."
+msgstr "Chaque table a son propre code QR. Après le scan, la commande est liée à la table pendant trois heures – les clients peuvent commander une nouvelle tournée depuis le même téléphone."
+
+msgid "From this point, a table with a confirmed reservation turns purple in the table plan, so nobody seats walk-in guests there. Default: 60 minutes."
+msgstr "À partir de ce moment, une table avec une réservation confirmée devient violette sur le plan des tables, afin que personne n'y installe des clients de passage. Par défaut : 60 minutes."
+
+msgid "Guest is calling"
+msgstr "Un client appelle"
+
+msgid "Guests ordering by QR code always pay online right away. Payment methods without immediate payment (cash on delivery, bank transfer, cheque) are hidden for table orders, so nobody can order to someone else's table without paying."
+msgstr "Les clients qui commandent par code QR paient toujours immédiatement en ligne. Les moyens de paiement sans paiement immédiat (paiement à la livraison, virement, chèque) sont masqués pour les commandes à table, afin que personne ne puisse commander pour la table d'un autre sans payer."
+
+msgid "How table ordering works"
+msgstr "Fonctionnement de la commande à table"
+
+msgid "Inform the guest by email when a reservation is accepted, declined, cancelled or marked as no-show"
+msgstr "Informer le client par e-mail lorsqu'une réservation est acceptée, refusée, annulée ou marquée comme non honorée"
+
+msgid "Label of the button. Leave empty for the standard text."
+msgstr "Libellé du bouton. Laisser vide pour le texte standard."
+
+msgid "Mark as no-show? The guest is informed by email and the table becomes free."
+msgstr "Marquer comme non honorée ? Le client est informé par e-mail et la table est libérée."
+
+msgid "Move the tab to which table?"
+msgstr "Déplacer l'addition vers quelle table ?"
+
+msgid "Need help?"
+msgstr "Besoin d'aide ?"
+
+msgid "No-show"
+msgstr "Non honorée"
+
+msgid "Not paid yet"
+msgstr "Pas encore payé"
+
+msgid "Ordered, not yet served"
+msgstr "Commandé, pas encore servi"
+
+msgid "Paid"
+msgstr "Payé"
+
+msgid "Paying at the end is done by the staff: open a tab for the table in the POS, add rounds and close the table bill there with any payment method."
+msgstr "Le paiement à la fin passe par le personnel : ouvrir une addition pour la table dans la caisse, ajouter des tournées et y clôturer l'addition avec n'importe quel moyen de paiement."
+
+msgid "Please choose a table of this location."
+msgstr "Veuillez choisir une table de cet emplacement."
+
+msgid "Request"
+msgstr "Demande"
+
+msgid "Reservations today"
+msgstr "Réservations du jour"
+
+msgid "Reserved"
+msgstr "Réservée"
+
+msgid "Served, not yet paid"
+msgstr "Servi, pas encore payé"
+
+msgid "Short text next to the button. Leave empty for the standard text in the language of the website."
+msgstr "Texte court à côté du bouton. Laisser vide pour le texte standard dans la langue du site."
+
+msgid "Show as reserved in the table plan"
+msgstr "Afficher comme réservée sur le plan des tables"
+
+#, php-format
+msgid "Tab moved from %1$s to %2$s."
+msgstr "Addition déplacée de %1$s vers %2$s."
+
+msgid "Tap a table to see its orders and reservations, add items or close the table bill. The kitchen marks orders as served on the Order Board. To move tables or change their shape and size, turn on the edit mode."
+msgstr "Touchez une table pour voir ses commandes et réservations, ajouter des articles ou clôturer l'addition de la table. La cuisine marque les commandes comme servies dans le tableau des commandes. Pour déplacer des tables ou modifier leur forme et leur taille, activez le mode édition."
+
+msgid "The kitchen marks orders as served on the Order Board."
+msgstr "La cuisine marque les commandes comme servies dans le tableau des commandes."
+
+msgid "The table plan shows each table at a glance: green = free, purple = reserved, red = ordered and not yet served (with waiting time), orange = served but not yet paid. The kitchen marks orders as served on the Order Board."
+msgstr "Le plan des tables montre chaque table d'un coup d'œil : vert = libre, violet = réservée, rouge = commandé et pas encore servi (avec temps d'attente), orange = servi mais pas encore payé. La cuisine marque les commandes comme servies dans le tableau des commandes."
+
+msgid "This table already has an open tab."
+msgstr "Cette table a déjà une addition ouverte."
+
+msgid "Waiter call: button"
+msgstr "Appel du service : bouton"
+
+msgid "Waiter call: text"
+msgstr "Appel du service : texte"
+
+msgid "We kept your table for you, but unfortunately you did not arrive. The reservation has been released. If you cannot make it next time, please let us know – then we can offer the table to other guests."
+msgstr "Nous avons gardé votre table, mais vous n'êtes malheureusement pas venu. La réservation a été libérée. Si vous ne pouvez pas venir une prochaine fois, merci de nous prévenir – nous pourrons alors proposer la table à d'autres clients."
+
+#, php-format
+msgid "We missed you at %s"
+msgstr "Vous nous avez manqué chez %s"
+
+msgid "late"
+msgstr "en retard"
+
+msgid "minutes before the reservation"
+msgstr "minutes avant la réservation"
+
+msgid "No online payment method is active. Guests ordering by table QR code cannot complete their order until you activate one (for example card, TWINT or PayPal) under WooCommerce → Settings → Payments."
+msgstr "Aucun moyen de paiement en ligne n'est actif. Les clients qui commandent par code QR de table ne peuvent pas finaliser leur commande tant que vous n'en activez pas un (par exemple carte, TWINT ou PayPal) sous WooCommerce → Réglages → Paiements."
+
+msgid "A tab is closed because the guest left without paying."
+msgstr "Une addition est clôturée parce que le client est parti sans payer."
+
+msgid "An open tab is moved to another table."
+msgstr "Une addition ouverte est déplacée vers une autre table."
+
+msgid "How long a guest stays linked to a table after scanning or ordering, in seconds (default 3 hours)."
+msgstr "Durée pendant laquelle un client reste lié à une table après le scan ou la commande, en secondes (par défaut 3 heures)."
+
+msgid "Payment methods never offered to guests ordering by table QR code (default: cod, cheque, bacs)."
+msgstr "Moyens de paiement jamais proposés aux clients qui commandent par code QR de table (par défaut : cod, cheque, bacs)."
+
+msgid "After every reservation status change, including no-show."
+msgstr "Après chaque changement de statut d'une réservation, y compris non honorée."
+
+msgid "A guest at a table calls the staff."
+msgstr "Un client à table appelle le service."

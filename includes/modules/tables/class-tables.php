@@ -75,6 +75,14 @@ class LBite_Tables {
 
 		// Bestellung: Tisch-ID speichern
 		$this->loader->add_action( 'woocommerce_checkout_create_order', $this, 'add_table_meta_to_order', 10, 2 );
+		// Block-Checkout: dieselbe Tisch-Zuordnung (fehlte bis 4.2.x).
+		$this->loader->add_action( 'lbite_blocks_checkout_order', $this, 'add_table_meta_to_order', 10, 2 );
+
+		// Tischzuordnung nach 3 Stunden verfallen lassen.
+		$this->loader->add_action( 'template_redirect', $this, 'expire_table_session', 5 );
+
+		// QR-Gäste bezahlen immer sofort.
+		$this->loader->add_filter( 'woocommerce_available_payment_gateways', $this, 'filter_table_payment_gateways', 100 );
 
 		// Dashboard: Tisch-Name anzeigen
 		$this->loader->add_filter( 'lbite_dashboard_order_data', $this, 'add_table_name_to_dashboard_data', 10, 2 );
@@ -175,9 +183,33 @@ class LBite_Tables {
 				'canPos'       => current_user_can( 'lbite_use_pos' ) && lbite_feature_enabled( 'enable_open_tabs' ),
 				'posNonce'     => current_user_can( 'lbite_use_pos' ) ? wp_create_nonce( 'lbite_pos_nonce' ) : '',
 				'posUrl'       => admin_url( 'admin.php?page=lbite-pos' ),
-				'canManage'    => current_user_can( 'lbite_manage_orders' ),
-				'payMethods'   => class_exists( 'LBite_Admin' ) ? LBite_Admin::get_active_pos_payment_methods() : array(),
+				// Reservierungen im Tischfenster: gleicher Endpunkt wie die
+				// Reservierungsübersicht (Statuswechsel inkl. Mail an den Gast).
+				'canReserve'   => lbite_feature_enabled( 'enable_reservations' ) && current_user_can( 'lbite_manage_reservations' ),
+				'resNonce'     => current_user_can( 'lbite_manage_reservations' ) ? wp_create_nonce( 'lbite_reservation_board_nonce' ) : '',
 				'strings'  => array(
+					'stateOrdered'  => __( 'Ordered, not yet served', 'libre-bite' ),
+					'stateServed'   => __( 'Served, not yet paid', 'libre-bite' ),
+					'stateReserved' => __( 'Reserved', 'libre-bite' ),
+					/* translators: %d: minutes */
+					'minutes'       => __( '%d min', 'libre-bite' ),
+					'paid'          => __( 'Paid', 'libre-bite' ),
+					'unpaid'        => __( 'Not paid yet', 'libre-bite' ),
+					'closeBill'     => __( 'Close table bill', 'libre-bite' ),
+					'moveTable'     => __( 'Change table', 'libre-bite' ),
+					'chooseTable'   => __( 'Move the tab to which table?', 'libre-bite' ),
+					'reservations'  => __( 'Reservations today', 'libre-bite' ),
+					/* translators: %d: number of guests */
+					'guests'        => __( '%d guests', 'libre-bite' ),
+					'pendingReq'    => __( 'Request', 'libre-bite' ),
+					'late'          => __( 'late', 'libre-bite' ),
+					'seated'        => __( 'Guest arrived', 'libre-bite' ),
+					'noShow'        => __( 'No-show', 'libre-bite' ),
+					'confirmNoShow' => __( 'Mark as no-show? The guest is informed by email and the table becomes free.', 'libre-bite' ),
+					'accept'        => __( 'Accept', 'libre-bite' ),
+					'decline'       => __( 'Decline', 'libre-bite' ),
+					'confirmDecline' => __( 'Decline this reservation request?', 'libre-bite' ),
+					'kitchenHint'   => __( 'The kitchen marks orders as served on the Order Board.', 'libre-bite' ),
 					'loading'     => __( 'Loading tables…', 'libre-bite' ),
 					'saving'      => __( 'Saving…', 'libre-bite' ),
 					'saved'       => __( 'Saved ✓', 'libre-bite' ),
@@ -199,16 +231,11 @@ class LBite_Tables {
 					'unsaved'     => __( 'You have unsaved changes to the table plan.', 'libre-bite' ),
 					'tab'         => __( 'Open tab', 'libre-bite' ),
 					'addItems'    => __( 'Add items', 'libre-bite' ),
-					'payClose'    => __( 'Pay / Close', 'libre-bite' ),
-					'splitInPos'  => __( 'Split payment in the POS', 'libre-bite' ),
 					'walkout'     => __( 'Left without paying', 'libre-bite' ),
 					'confirmWalkout' => __( 'Mark this tab as unpaid because the guest left? It is closed and listed separately in the cash report.', 'libre-bite' ),
-					/* translators: %s: name of the next Order Board column */
-					'moveTo'      => __( 'Move to: %s', 'libre-bite' ),
 					'callDone'    => __( 'Done', 'libre-bite' ),
 					'actionError' => __( 'That did not work. Please try again.', 'libre-bite' ),
 					'back'        => __( 'Back', 'libre-bite' ),
-					'choosePay'   => __( 'How does the guest pay?', 'libre-bite' ),
 				),
 			)
 		);
@@ -400,12 +427,49 @@ class LBite_Tables {
 			wp_send_json_error( array( 'message' => __( 'No permission for this location', 'libre-bite' ) ) );
 		}
 
-		// Aktive Bestellungen für diesen Standort laden
+		$statuses = self::compute_table_states( $location_id );
+
+		/**
+		 * Antwort des Tischplan-Status vor der Ausgabe, z. B. für Kellnerrufe.
+		 *
+		 * @param array $response    Antwort mit 'statuses' (je Tisch-ID).
+		 * @param int   $location_id Standort-ID.
+		 */
+		wp_send_json_success( apply_filters( 'lbite_table_status_response', array( 'statuses' => $statuses ), $location_id ) );
+	}
+
+	/**
+	 * Zustand aller Tische eines Standorts berechnen.
+	 *
+	 * Die Farbe im Tischplan kommt nicht mehr direkt aus dem WooCommerce-Status,
+	 * sondern aus Küchenstand (Board-Spalte), Zahlung und Reservierungen:
+	 *
+	 * - ordered  (rot, mit Wartezeit): mindestens eine Bestellung steht in einer
+	 *   Board-Spalte, die nicht als «abgeschlossen» zählt.
+	 * - served   (orange): alles geliefert, aber mindestens eine Bestellung
+	 *   unbezahlt (offener Tab).
+	 * - reserved (violett): bestätigte Reservierung im Vorlauf, keine Bestellung.
+	 * - free     (grün): sonst. Geliefert und bezahlt gilt als frei.
+	 *
+	 * Tische ohne Bestellung, aber mit Reservierungen von heute erscheinen mit
+	 * Zustand «free», damit das Tischfenster die Reservierung zeigen kann.
+	 *
+	 * @param int $location_id Standort-ID.
+	 * @return array Je Tisch-ID: state, since_ts, warn_at, late_at, orders, reservations.
+	 */
+	public static function compute_table_states( $location_id ) {
+		$location_id = (int) $location_id;
+
+		$columns_by_key = class_exists( 'LBite_Order_Dashboard' ) ? LBite_Order_Dashboard::get_columns_by_key() : array();
+
+		// Gleiche Auswahl wie die Bestellübersicht: in Arbeit (processing) und
+		// offene Tabs (on-hold). Abgeschlossene Bestellungen sind bezahlt und
+		// geliefert, «pending» ist eine abgebrochene Online-Zahlung.
 		$orders = wc_get_orders(
 			array(
-				'limit'      => 100,
-				'status'     => array( 'wc-processing', 'wc-on-hold', 'wc-pending' ),
-				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'limit'      => 200,
+				'status'     => array( 'processing', 'on-hold' ),
+				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Auf einen Standort und 200 Einträge begrenzt.
 					array(
 						'key'   => '_lbite_location_id',
 						'value' => $location_id,
@@ -414,30 +478,31 @@ class LBite_Tables {
 			)
 		);
 
-		$status_labels = array(
-			'processing' => __( 'Preparing', 'libre-bite' ),
-			'on-hold'    => __( 'New', 'libre-bite' ),
-			'pending'    => __( 'Pending', 'libre-bite' ),
-		);
-
-		// Spalten der Bestellübersicht für «Status weiter» im Tischfenster.
-		$columns = class_exists( 'LBite_Order_Dashboard' ) ? array_values( LBite_Order_Dashboard::get_columns() ) : array();
-		$col_pos = array();
-		foreach ( $columns as $i => $column ) {
-			$col_pos[ $column['key'] ] = $i;
-		}
-
-		$statuses = array();
+		$states = array();
 		foreach ( $orders as $order ) {
 			$table_id = (int) $order->get_meta( '_lbite_table_id' );
 			if ( ! $table_id ) {
 				continue;
 			}
 
-			$wc_status      = $order->get_status();
-			$display_status = 'processing' === $wc_status ? 'preparing' : 'occupied';
-			$date_created   = $order->get_date_created();
-			$total          = html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+			$is_tab    = '1' === (string) $order->get_meta( '_lbite_tab_open' );
+			$board_key = (string) $order->get_meta( '_lbite_order_status' );
+			$column    = isset( $columns_by_key[ $board_key ] ) ? $columns_by_key[ $board_key ] : null;
+			$delivered = $column && ! empty( $column['counts_as_completed'] );
+			$paid      = ! $is_tab && $order->is_paid();
+
+			// Geliefert und bezahlt: Für den Tisch erledigt.
+			if ( $delivered && $paid ) {
+				continue;
+			}
+
+			// Wartezeit ab Bestellung bzw. ab der letzten Runde eines Tabs.
+			$since    = $order->get_date_created() ? $order->get_date_created()->getTimestamp() : time();
+			$round_at = (string) $order->get_meta( '_lbite_tab_round_at' );
+			if ( $round_at ) {
+				$round_ts = lbite_local_time_to_timestamp( $round_at );
+				$since    = $round_ts ? max( $since, $round_ts ) : $since;
+			}
 
 			$items = array();
 			foreach ( $order->get_items() as $item ) {
@@ -447,49 +512,158 @@ class LBite_Tables {
 				);
 			}
 
-			$board_key  = (string) $order->get_meta( '_lbite_order_status' );
-			$board_pos  = isset( $col_pos[ $board_key ] ) ? $col_pos[ $board_key ] : -1;
-			$next       = ( $board_pos >= 0 && isset( $columns[ $board_pos + 1 ] ) ) ? $columns[ $board_pos + 1 ] : null;
-			$order_data = array(
-				'order_id'     => $order->get_id(),
-				'order_number' => $order->get_order_number(),
-				'is_tab'       => '1' === (string) $order->get_meta( '_lbite_tab_open' ),
-				'time'         => $date_created ? $date_created->date_i18n( get_option( 'time_format' ) ) : '',
-				'items'        => $items,
-				'total'        => $total,
-				'board_label'  => $board_pos >= 0 ? $columns[ $board_pos ]['label'] : '',
-				'next_key'     => $next ? $next['key'] : '',
-				'next_label'   => $next ? $next['label'] : '',
-			);
-
-			if ( ! isset( $statuses[ $table_id ] ) ) {
-				// Bisherige Felder der ersten Bestellung bleiben für Erweiterungen erhalten.
-				$statuses[ $table_id ] = array(
-					'order_id'       => $order->get_id(),
-					'order_number'   => $order->get_order_number(),
-					'wc_status'      => $wc_status,
-					'display_status' => $display_status,
-					'status_label'   => isset( $status_labels[ $wc_status ] ) ? $status_labels[ $wc_status ] : ucfirst( $wc_status ),
-					'time'           => $order_data['time'],
-					'items_count'    => count( $items ),
-					'total'          => $total,
-					'orders'         => array(),
-				);
-			} elseif ( 'preparing' === $display_status ) {
-				// Läuft an einem Tisch irgendetwas in der Küche, gilt er als «in Zubereitung».
-				$statuses[ $table_id ]['display_status'] = 'preparing';
+			if ( ! isset( $states[ $table_id ] ) ) {
+				$states[ $table_id ] = self::empty_table_state();
 			}
 
-			$statuses[ $table_id ]['orders'][] = $order_data;
+			$states[ $table_id ]['orders'][] = array(
+				'order_id'     => $order->get_id(),
+				'order_number' => $order->get_order_number(),
+				'is_tab'       => $is_tab,
+				'is_paid'      => $paid,
+				'delivered'    => $delivered,
+				'time'         => $order->get_date_created() ? $order->get_date_created()->date_i18n( get_option( 'time_format' ) ) : '',
+				'items'        => $items,
+				'total'        => html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ),
+				'board_label'  => $column ? $column['label'] : '',
+			);
+
+			if ( ! $delivered ) {
+				// Küche hat Vorrang: Rot, Wartezeit der ältesten offenen Bestellung.
+				$states[ $table_id ]['state']    = 'ordered';
+				$current_since                   = $states[ $table_id ]['since_ts'];
+				$states[ $table_id ]['since_ts'] = $current_since ? min( $current_since, $since ) : $since;
+			} elseif ( 'ordered' !== $states[ $table_id ]['state'] ) {
+				$states[ $table_id ]['state'] = 'served';
+			}
 		}
 
-		/**
-		 * Antwort des Tischplan-Status vor der Ausgabe, z. B. für Kellnerrufe.
-		 *
-		 * @param array $response    Antwort mit 'statuses' (je Tisch-ID).
-		 * @param int   $location_id Standort-ID.
-		 */
-		wp_send_json_success( apply_filters( 'lbite_table_status_response', array( 'statuses' => $statuses ), $location_id ) );
+		// Reservierungen von heute je Tisch.
+		$lead_minutes = max( 0, (int) get_option( 'lbite_reservation_plan_lead', 60 ) );
+		foreach ( self::get_today_reservations( $location_id ) as $reservation ) {
+			$table_id = $reservation['table_id'];
+			if ( ! isset( $states[ $table_id ] ) ) {
+				$states[ $table_id ] = self::empty_table_state();
+			}
+			$states[ $table_id ]['reservations'][] = $reservation;
+
+			$in_window = 'confirmed' === $reservation['status']
+				&& $reservation['ts'] - $lead_minutes * MINUTE_IN_SECONDS <= time();
+			if ( $in_window && 'free' === $states[ $table_id ]['state'] ) {
+				$states[ $table_id ]['state'] = 'reserved';
+			}
+		}
+
+		// Schwellen der Wartezeit wie im Bestellboard (F49): eigene Werte oder
+		// Zubereitungszeit des Standorts, Rot beim Anderthalbfachen.
+		$warn = (int) get_option( 'lbite_kds_warn_minutes', 0 );
+		if ( ! $warn && class_exists( 'LBite_Locations' ) ) {
+			$warn = (int) LBite_Locations::get_time_setting( $location_id, 'preparation_time', 15 );
+		}
+		$warn = $warn > 0 ? $warn : 10;
+		$late = (int) get_option( 'lbite_kds_late_minutes', 0 );
+		$late = $late > $warn ? $late : (int) round( $warn * 1.5 );
+		$late = $late > $warn ? $late : $warn + 1;
+
+		foreach ( $states as &$state ) {
+			$state['warn_at'] = $warn;
+			$state['late_at'] = $late;
+		}
+		unset( $state );
+
+		return $states;
+	}
+
+	/**
+	 * Leerer Tischzustand.
+	 *
+	 * @return array
+	 */
+	private static function empty_table_state() {
+		return array(
+			'state'        => 'free',
+			'since_ts'     => 0,
+			'warn_at'      => 0,
+			'late_at'      => 0,
+			'orders'       => array(),
+			'reservations' => array(),
+		);
+	}
+
+	/**
+	 * Offene Reservierungen von heute mit Tischzuweisung.
+	 *
+	 * Ausstehende Anfragen und bestätigte Reservierungen, die noch nicht länger
+	 * als eine Stunde vorbei sind – danach erwartet niemand mehr die Gäste,
+	 * und das Personal markiert sie als «nicht erschienen».
+	 *
+	 * @param int $location_id Standort-ID.
+	 * @return array[]
+	 */
+	private static function get_today_reservations( $location_id ) {
+		if ( ! lbite_feature_enabled( 'enable_reservations' ) || ! class_exists( 'LBite_Reservations' ) ) {
+			return array();
+		}
+
+		$today = wp_date( 'Y-m-d' );
+		$posts = get_posts(
+			array(
+				'post_type'      => LBite_Reservations::POST_TYPE,
+				'post_status'    => 'any',
+				'posts_per_page' => 100,
+				'no_found_rows'  => true,
+				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Ein Standort, ein Tag.
+					array(
+						'key'   => '_lbite_location_id',
+						'value' => (int) $location_id,
+					),
+					array(
+						'key'   => '_lbite_reservation_date',
+						'value' => $today,
+					),
+					array(
+						'key'     => '_lbite_reservation_status',
+						'value'   => array( 'pending', 'confirmed' ),
+						'compare' => 'IN',
+					),
+				),
+			)
+		);
+
+		$result = array();
+		foreach ( $posts as $post ) {
+			$table_id = (int) get_post_meta( $post->ID, '_lbite_table_id', true );
+			$time     = (string) get_post_meta( $post->ID, '_lbite_reservation_time', true );
+			$dt       = DateTimeImmutable::createFromFormat( 'Y-m-d H:i', $today . ' ' . substr( $time, 0, 5 ), wp_timezone() );
+			if ( ! $table_id || ! $dt ) {
+				continue;
+			}
+			$ts = $dt->getTimestamp();
+			if ( $ts < time() - HOUR_IN_SECONDS ) {
+				continue;
+			}
+			$status   = (string) get_post_meta( $post->ID, '_lbite_reservation_status', true );
+			$result[] = array(
+				'id'       => $post->ID,
+				'table_id' => $table_id,
+				'status'   => $status,
+				'ts'       => $ts,
+				'time'     => wp_date( get_option( 'time_format' ), $ts ),
+				'name'     => (string) get_post_meta( $post->ID, '_lbite_reservation_name', true ),
+				'guests'   => (int) get_post_meta( $post->ID, '_lbite_reservation_guests', true ),
+				'notes'    => (string) get_post_meta( $post->ID, '_lbite_reservation_notes', true ),
+				'is_late'  => 'confirmed' === $status && $ts < time(),
+			);
+		}
+
+		usort(
+			$result,
+			function ( $a, $b ) {
+				return $a['ts'] - $b['ts'];
+			}
+		);
+
+		return $result;
 	}
 
 	/**
@@ -560,8 +734,106 @@ class LBite_Tables {
 
 		if ( $table_id && self::is_valid_table( $table_id, $location_id ) && WC()->session ) {
 			WC()->session->set( 'lbite_table_id', $table_id );
+			WC()->session->set( 'lbite_table_set_at', time() );
 			WC()->session->set( 'lbite_service_type', 'dine_in' );
 		}
+	}
+
+	/**
+	 * Wie lange die Tischzuordnung nach Scan oder letzter Bestellung gilt.
+	 *
+	 * @return int Sekunden.
+	 */
+	public static function get_session_ttl() {
+		/**
+		 * Gültigkeit der Tischzuordnung in Sekunden (Default 3 Stunden).
+		 *
+		 * @param int $ttl Sekunden.
+		 */
+		return max( 0, (int) apply_filters( 'lbite_table_session_ttl', 3 * HOUR_IN_SECONDS ) );
+	}
+
+	/**
+	 * Tisch-ID aus der Sitzung, verfallene Zuordnungen werden entfernt.
+	 *
+	 * Die Zuordnung bleibt nach einer Bestellung erhalten, damit der Gast eine
+	 * weitere Runde bestellen und das Personal rufen kann, ohne neu zu
+	 * scannen. Unbedenklich, weil Gäste per QR-Code immer sofort bezahlen
+	 * (siehe filter_table_payment_gateways()).
+	 *
+	 * @return int 0 ohne gültige Zuordnung.
+	 */
+	public static function get_session_table_id() {
+		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+			return 0;
+		}
+
+		$table_id = (int) WC()->session->get( 'lbite_table_id' );
+		if ( ! $table_id ) {
+			return 0;
+		}
+
+		$set_at = (int) WC()->session->get( 'lbite_table_set_at' );
+		if ( ! $set_at ) {
+			// Sitzung aus einer älteren Version: ab jetzt zählen.
+			WC()->session->set( 'lbite_table_set_at', time() );
+			return $table_id;
+		}
+
+		if ( time() - $set_at > self::get_session_ttl() ) {
+			WC()->session->__unset( 'lbite_table_id' );
+			WC()->session->__unset( 'lbite_table_set_at' );
+			WC()->session->__unset( 'lbite_service_type' );
+			return 0;
+		}
+
+		return $table_id;
+	}
+
+	/**
+	 * Bei jedem Seitenaufruf verfallene Tischzuordnungen entfernen, damit alle
+	 * Stellen, die die Sitzung direkt lesen, nur gültige Tische sehen.
+	 */
+	public function expire_table_session() {
+		if ( is_admin() ) {
+			return;
+		}
+		self::get_session_table_id();
+	}
+
+	/**
+	 * Zahlungsarten ohne Sofortzahlung bei Tischbestellungen ausblenden.
+	 *
+	 * Gäste, die per QR-Code bestellen, bezahlen immer sofort online. Ein noch
+	 * offener, alter Link würde sonst unbezahlte Bestellungen an einen fremden
+	 * Tisch erlauben. «Später bezahlen» gibt es nur über das Personal (offener
+	 * Tab in der Kasse).
+	 *
+	 * Wirkt zugleich serverseitig: Klassischer Checkout und Store API lehnen
+	 * eine Zahlungsart ab, die hier nicht mehr verfügbar ist.
+	 *
+	 * @param array $gateways Verfügbare Zahlungsarten.
+	 * @return array
+	 */
+	public function filter_table_payment_gateways( $gateways ) {
+		if ( ! is_array( $gateways ) || ( is_admin() && ! wp_doing_ajax() ) ) {
+			return $gateways;
+		}
+		if ( ! self::get_session_table_id() ) {
+			return $gateways;
+		}
+
+		/**
+		 * Zahlungsarten, die bei Tischbestellungen per QR-Code nicht angeboten werden.
+		 *
+		 * @param string[] $ids Gateway-IDs (Nachnahme/Bezahlung vor Ort, Scheck, Überweisung).
+		 */
+		$deferred = (array) apply_filters( 'lbite_table_deferred_gateways', array( 'cod', 'cheque', 'bacs' ) );
+		foreach ( $deferred as $gateway_id ) {
+			unset( $gateways[ $gateway_id ] );
+		}
+
+		return $gateways;
 	}
 
 	/**
@@ -597,23 +869,22 @@ class LBite_Tables {
 	/**
 	 * Tisch-ID zur Bestellung hinzufügen
 	 */
-	public function add_table_meta_to_order( $order, $data ) {
-		if ( ! WC()->session ) {
+	public function add_table_meta_to_order( $order, $data = array() ) {
+		$table_id = self::get_session_table_id();
+		if ( ! $table_id ) {
 			return;
 		}
 
-		$table_id = WC()->session->get( 'lbite_table_id' );
-		if ( $table_id ) {
-			$order->update_meta_data( '_lbite_table_id', $table_id );
-			
-			$table = get_post( $table_id );
-			if ( $table ) {
-				$order->update_meta_data( '_lbite_table_name', $table->post_title );
-			}
-			
-			// Nach Bestellung aus Session entfernen
-			WC()->session->__unset( 'lbite_table_id' );
+		$order->update_meta_data( '_lbite_table_id', $table_id );
+
+		$table = get_post( $table_id );
+		if ( $table ) {
+			$order->update_meta_data( '_lbite_table_name', $table->post_title );
 		}
+
+		// Zuordnung bleibt für weitere Runden und den Kellnerruf erhalten;
+		// die Frist läuft ab der letzten Bestellung neu.
+		WC()->session->set( 'lbite_table_set_at', time() );
 	}
 
 	/**

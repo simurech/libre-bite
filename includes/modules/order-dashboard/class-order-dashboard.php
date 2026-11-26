@@ -439,6 +439,7 @@ class LBite_Order_Dashboard {
 		);
 
 		// Process active orders.
+		$delivered_tabs = array();
 		foreach ( $orders_active as $order ) {
 			$lbite_status = $order->get_meta( '_lbite_order_status', true );
 
@@ -466,6 +467,16 @@ class LBite_Order_Dashboard {
 				}
 			}
 
+			// Ausnahme: Ein offener Tab, den die Küche als geliefert markiert hat, steht
+			// in seiner «abgeschlossen»-Spalte, bis die Kasse ihn abrechnet. Er kommt
+			// nach den abgeschlossenen Bestellungen, damit er nach dem Umkehren oben
+			// steht und nicht hinter «nur die letzten 3» verschwindet.
+			if ( isset( $columns_by_key[ $lbite_status ] ) && $columns_by_key[ $lbite_status ]['counts_as_completed']
+				&& '1' === (string) $order->get_meta( '_lbite_tab_open', true ) ) {
+				$delivered_tabs[ $lbite_status ][] = $this->format_order_for_dashboard( $order );
+				continue;
+			}
+
 			// Sicherheitsnetz: Zielspalte muss existieren und darf nicht als «abgeschlossen» zählen
 			// (eine aktive WC-Bestellung gehört nie in eine completed-Spalte).
 			if ( ! isset( $columns_by_key[ $lbite_status ] ) || $columns_by_key[ $lbite_status ]['counts_as_completed'] ) {
@@ -483,6 +494,10 @@ class LBite_Order_Dashboard {
 			if ( isset( $columns_by_key[ $lbite_status ] ) && $columns_by_key[ $lbite_status ]['counts_as_completed'] ) {
 				$orders_by_status[ $lbite_status ][] = $this->format_order_for_dashboard( $order );
 			}
+		}
+
+		foreach ( $delivered_tabs as $lbite_key => $lbite_tabs ) {
+			$orders_by_status[ $lbite_key ] = array_merge( $orders_by_status[ $lbite_key ], $lbite_tabs );
 		}
 
 		// Vorbestellungen ausblenden wenn Option deaktiviert (Pro).
@@ -772,18 +787,13 @@ class LBite_Order_Dashboard {
 
 		$target_counts_as_completed = $columns_by_key[ $new_status ]['counts_as_completed'];
 
-		// Offene Tabs (F_TAB) dürfen erst nach dem Abschluss in der POS-Oberfläche in eine
-		// «abgeschlossen»-Spalte verschoben werden – sonst bleibt _lbite_tab_open gesetzt, obwohl
-		// die Bestellung im Kanban bereits als fertig gilt.
-		if ( $target_counts_as_completed && '1' === (string) $order->get_meta( '_lbite_tab_open', true ) ) {
-			return new WP_Error(
-				'lbite_tab_open',
-				__( 'Close the tab in the POS first', 'libre-bite' ),
-				array( 'status' => 409 )
-			);
-		}
+		// Offene Tabs (F_TAB) dürfen in eine «abgeschlossen»-Spalte: Für die Küche
+		// ist die Runde damit geliefert. Bezahlt ist der Tab aber erst nach dem
+		// Abschluss in der Kasse – der WooCommerce-Status bleibt deshalb «on-hold»,
+		// und der Tischplan zeigt den Tisch als «geliefert, nicht bezahlt».
+		$is_open_tab = '1' === (string) $order->get_meta( '_lbite_tab_open', true );
 
-		$old_status              = $order->get_meta( '_lbite_order_status', true );
+		$old_status             = $order->get_meta( '_lbite_order_status', true );
 		$old_counts_as_completed = isset( $columns_by_key[ $old_status ] ) && $columns_by_key[ $old_status ]['counts_as_completed'];
 
 		$order->update_meta_data( '_lbite_order_status', $new_status );
@@ -795,6 +805,13 @@ class LBite_Order_Dashboard {
 
 		// Menü-Badge-Cache invalidieren.
 		delete_transient( 'lbite_incoming_orders_count' );
+
+		// Offener Tab: WooCommerce-Status bleibt «on-hold», bis die Kasse den Tab
+		// abschliesst (LBite_Admin::ajax_pos_close_tab()).
+		if ( $is_open_tab ) {
+			$target_counts_as_completed = false;
+			$old_counts_as_completed    = false;
+		}
 
 		if ( $target_counts_as_completed ) {
 			// In eine «abgeschlossen»-Spalte verschoben - WooCommerce-Status entsprechend setzen.

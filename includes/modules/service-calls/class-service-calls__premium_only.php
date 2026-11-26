@@ -159,10 +159,12 @@ class LBite_Service_Calls {
 			return null;
 		}
 
-		$table_id    = (int) WC()->session->get( 'lbite_table_id' );
+		// Tischzuordnung gilt 3 Stunden ab Scan bzw. letzter Bestellung – so bleibt
+		// die Leiste auch nach dem Bestellen sichtbar.
+		$table_id    = class_exists( 'LBite_Tables' ) ? LBite_Tables::get_session_table_id() : 0;
 		$location_id = (int) WC()->session->get( 'lbite_location_id' );
 
-		if ( ! $table_id || ! $location_id || ! class_exists( 'LBite_Tables' ) || ! LBite_Tables::is_valid_table( $table_id, $location_id ) ) {
+		if ( ! $table_id || ! $location_id || ! LBite_Tables::is_valid_table( $table_id, $location_id ) ) {
 			return null;
 		}
 
@@ -215,13 +217,35 @@ class LBite_Service_Calls {
 			return;
 		}
 		?>
+		// Nur noch ein Knopf: «Rechnung anfordern» passt nicht, wenn Gäste per
+		// QR-Code ohnehin sofort online bezahlen. Typ «bill» bleibt für ältere
+		// Rufe lesbar (get_types()).
+		?>
 		<div class="lbite-service-call" role="region" aria-label="<?php esc_attr_e( 'Table service', 'libre-bite' ); ?>">
+			<span class="lbite-service-call__hint"><?php echo esc_html( self::get_text( 'hint' ) ); ?></span>
+			<button type="button" class="lbite-service-call__button" data-lbite-call="waiter"><?php echo esc_html( self::get_text( 'button' ) ); ?></button>
 			<span class="lbite-service-call__table"><?php echo esc_html( get_the_title( $session['table_id'] ) ); ?></span>
-			<button type="button" class="lbite-service-call__button" data-lbite-call="waiter"><?php esc_html_e( 'Call staff', 'libre-bite' ); ?></button>
-			<button type="button" class="lbite-service-call__button" data-lbite-call="bill"><?php esc_html_e( 'Request bill', 'libre-bite' ); ?></button>
 			<span class="lbite-service-call__status" role="status" aria-live="polite"></span>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Text der Gast-Leiste: eigener Wert aus den Einstellungen oder Standard.
+	 *
+	 * @param string $key 'hint' oder 'button'.
+	 * @return string
+	 */
+	public static function get_text( $key ) {
+		$defaults = array(
+			'hint'   => __( 'Need help?', 'libre-bite' ),
+			'button' => __( 'Call staff', 'libre-bite' ),
+		);
+		if ( ! isset( $defaults[ $key ] ) ) {
+			return '';
+		}
+		$custom = trim( (string) get_option( 'lbite_service_call_' . $key, '' ) );
+		return '' !== $custom ? $custom : $defaults[ $key ];
 	}
 
 	/**

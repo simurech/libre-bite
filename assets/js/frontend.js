@@ -241,6 +241,14 @@
 		},
 
 		apply: function() {
+			// Die Sitzung hat Vorrang: Ein QR-Code oder Direktlink setzt den
+			// Standort serverseitig, der Browser-Speicher kennt noch den alten.
+			if (typeof lbiteData !== 'undefined' && lbiteData.locationId) {
+				try {
+					localStorage.setItem('lbite_location_id', String(lbiteData.locationId));
+					localStorage.setItem('lbite_location_name', lbiteData.locationName || '');
+				} catch (e) { /* Speicher gesperrt: Anzeige folgt trotzdem der Sitzung. */ }
+			}
 			var locationId   = parseInt(localStorage.getItem('lbite_location_id') || '0', 10);
 			var locationName = localStorage.getItem('lbite_location_name') || '';
 			var $notice      = $('#lbite-location-notice');
