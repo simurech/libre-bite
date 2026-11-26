@@ -286,6 +286,9 @@ Yes. English is the source language, and the plugin ships with complete translat
 2. **POS Interface** — Integrated Point of Sale for walk-in customers and counter orders.
 3. **Theme-independent Menu View** — Category navigation, product cards, and a popup for variations and add-ons, rendered without touching your theme (Pro).
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
+5. **Option Groups** — Rule-based add-ons in the menu view: required single choice, toppings with a maximum and included choices (Pro).
+6. **Delivery** — Guests choose pickup or delivery; delivery area, fee, free-delivery threshold and minimum order value per location (Pro).
+7. **Waiter Call** — Guests at a QR table call the staff or request the bill; the call appears on the order board (Pro).
 
 == Changelog ==
 
@@ -347,32 +350,5 @@ Yes. English is the source language, and the plugin ships with complete translat
 = 3.6.18 =
 * Fix: Headings in the optimized checkout were unreadable when the secondary brand colour is very light.
 
-= 3.6.17 =
-* Fix: The email field in the optimized checkout could disappear after WooCommerce refreshed the payment area; the email is now also checked on the server for the selected payment methods.
-* Fix: The immediate-order notice showed "Opens tomorrow" for a location that has not opened yet; it now shows the opening date.
-* Fix: Brand colours were overridden by the default blue in the optimized checkout.
-* Fix: The menu category bar slid under a sticky site header; it now keeps clear of it (optional `sticky_offset` shortcode attribute).
-
-= 3.6.16 =
-* Changed: Updated readme, GitHub description and WordPress.org listing assets (banner, screenshots).
-
-= 3.6.15 =
-* Fix: The "Add" button in the menu view's product popup could be hidden below the screen on longer content until scrolling all the way down.
-
-= 3.6.14 =
-* Fix: Inconsistent checkout layout when changing location/time, and a mismatched location photo size.
-
-= 3.6.13 =
-* Feature: Sticky category bar highlights the visible section while scrolling; new setting to hide images in the menu grid.
-
-= 3.6.12 =
-* Fix: Category navigation scroll offset and the menu view's overly narrow max width.
-
-= 3.6.11 =
-* Fix: Adding a variable product to the cart from the menu view still failed in some cases; root cause resolved in WooCommerce's add-to-cart handling.
-
-= 3.6.10 =
-* Fix: Variable products couldn't be added to the cart from the menu view popup, plus several smaller visual polish fixes.
-
 = Older versions =
-* For the full changelog of versions before 3.6.10, see the release history: https://github.com/simurech/libre-bite/releases
+* For the full changelog of versions before 3.6.18, see the release history: https://github.com/simurech/libre-bite/releases
