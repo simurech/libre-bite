@@ -19,8 +19,8 @@ $lbite_pos_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol
 <div class="wrap lbite-pos">
 	<div class="lbite-pos-header">
 		<h1><?php esc_html_e( 'POS System', 'libre-bite' ); ?></h1>
-		<button type="button" id="lbite-pos-fullscreen" class="button button-large" title="Vollbild">
-			<span class="dashicons dashicons-editor-expand"></span>
+		<button type="button" id="lbite-pos-fullscreen" class="button button-large lbite-fullscreen-btn" title="<?php esc_attr_e( 'Fullscreen', 'libre-bite' ); ?>" aria-label="<?php esc_attr_e( 'Fullscreen', 'libre-bite' ); ?>">
+			<span class="dashicons dashicons-editor-expand" aria-hidden="true"></span>
 		</button>
 	</div>
 

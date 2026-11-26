@@ -70,12 +70,31 @@ class LBite_Pickup_Display {
 	}
 
 	/**
+	 * Ist die Anzeige ohne Schlüssel erreichbar?
+	 *
+	 * Auf Wunsch des Betriebs: Ein langer Schlüssel lässt sich mit einer
+	 * Fernbedienung kaum eintippen, und die Seite zeigt nur Bestellnummern
+	 * (nur lesend, keine Namen oder Beträge).
+	 *
+	 * @return bool
+	 */
+	public static function is_public() {
+		return '1' === (string) get_option( 'lbite_pickup_display_public', 0 );
+	}
+
+	/**
 	 * Adresse der Anzeige für einen Standort.
+	 *
+	 * Ohne Schlüssel kurz: /?lbite_pickup_display=<Standort-ID>.
 	 *
 	 * @param int $location_id Standort-ID.
 	 * @return string
 	 */
 	public static function get_url( $location_id ) {
+		if ( self::is_public() ) {
+			return add_query_arg( self::QUERY_VAR, (int) $location_id, home_url( '/' ) );
+		}
+
 		return add_query_arg(
 			array(
 				self::QUERY_VAR => self::get_key(),
@@ -195,6 +214,10 @@ class LBite_Pickup_Display {
 	 * @return bool
 	 */
 	public static function is_valid_request( $key, $location_id ) {
+		if ( self::is_public() ) {
+			return class_exists( 'LBite_Locations' ) && LBite_Locations::is_valid_location( (int) $location_id );
+		}
+
 		return '' !== (string) $key
 			&& hash_equals( self::get_key(), (string) $key )
 			&& class_exists( 'LBite_Locations' )
@@ -219,7 +242,8 @@ class LBite_Pickup_Display {
 				'args'                => array(
 					'key'         => array(
 						'type'     => 'string',
-						'required' => true,
+						'required' => false,
+						'default'  => '',
 					),
 					'location_id' => array(
 						'type'     => 'integer',
@@ -272,6 +296,12 @@ class LBite_Pickup_Display {
 
 		$key         = sanitize_text_field( wp_unslash( $_GET[ self::QUERY_VAR ] ) );
 		$location_id = isset( $_GET['location'] ) ? absint( $_GET['location'] ) : 0;
+
+		// Kurzer Link ohne Schlüssel: der Wert ist die Standort-ID.
+		if ( self::is_public() && ! $location_id ) {
+			$location_id = absint( $key );
+			$key         = '';
+		}
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		if ( ! self::is_valid_request( $key, $location_id ) ) {
@@ -302,6 +332,10 @@ class LBite_Pickup_Display {
 					)
 				),
 				'interval' => 5000,
+				// Uhr wie in Einstellungen → Allgemein → Zeitformat, nicht wie
+				// die Sprache des Fernseh-Browsers (oft Englisch mit AM/PM).
+				'hour12'   => (bool) preg_match( '/[ghaA]/', (string) get_option( 'time_format', 'H:i' ) ),
+				'timezone' => wp_timezone_string(),
 				'sound'    => '0' !== (string) get_option( 'lbite_pickup_display_sound', 1 ) ? LBITE_PLUGIN_URL . 'assets/sounds/notification.mp3' : '',
 				'strings'  => array(
 					'offline'     => __( 'Connection lost – retrying …', 'libre-bite' ),

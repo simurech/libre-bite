@@ -291,6 +291,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 				update_option( 'lbite_pickup_display_minutes', min( 240, max( 1, $lbite_pd_minutes ) ) );
 				update_option( 'lbite_pickup_display_title', isset( $_POST['lbite_pickup_display_title'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_display_title'] ) ) : '' );
 				update_option( 'lbite_pickup_display_sound', isset( $_POST['lbite_pickup_display_sound'] ) ? 1 : 0 );
+				update_option( 'lbite_pickup_display_public', isset( $_POST['lbite_pickup_display_public'] ) ? 1 : 0 );
 
 				if ( ! empty( $_POST['lbite_pickup_display_regenerate'] ) && class_exists( 'LBite_Pickup_Display' ) ) {
 					LBite_Pickup_Display::regenerate_key();

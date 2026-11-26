@@ -7339,14 +7339,6 @@ msgid "Back to current period"
 msgstr ""
 
 #: includes/modules/cash-reports/class-cash-reports__premium_only.php
-msgid "X report (current period)"
-msgstr ""
-
-#: includes/modules/cash-reports/class-cash-reports__premium_only.php
-msgid "Close the day (Z report)"
-msgstr ""
-
-#: includes/modules/cash-reports/class-cash-reports__premium_only.php
 msgid "Optional. Count the drawer and enter the amount to see the difference."
 msgstr ""
 
@@ -7896,4 +7888,50 @@ msgstr ""
 
 #: templates/admin/pos.php
 msgid "Usually a table has one tab. Add this round to the existing tab, or open a second tab only if the guests pay separately."
+msgstr ""
+
+#: templates/admin/settings/orders-display.php
+msgid "Show without key (short link)"
+msgstr ""
+
+#: templates/admin/settings/orders-display.php
+msgid "Makes the link short enough to type with a TV remote. Anyone who knows the address of your website can then see the order numbers – no names or amounts, and nothing can be changed."
+msgstr ""
+
+#: templates/admin/settings/orders-display.php
+msgid "Open the link on the TV browser and switch it to full screen."
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Change money that was in the drawer at the start of the day."
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Current status (X report)"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Current status (X report): everything sold since the last day closing. You can look at it as often as you like – it changes nothing."
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Day closing (Z report)"
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Day closing (Z report): at the end of the day, count the cash drawer and save the Z report. The figures are stored as a numbered record that cannot be changed, and a new period starts."
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Expected cash in drawer = change money at the start of the day + cash sales. If you enter the counted amount, the difference shows whether the drawer is correct."
+msgstr ""
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "How the cash report works"
+msgstr ""
+
+#. translators: %s: payment method, e.g. Cash
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+#, php-format
+msgid "of which %s"
 msgstr ""

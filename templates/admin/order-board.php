@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wrap lbite-order-board">
 	<div class="lbite-board-header">
 		<h1><?php esc_html_e( 'Order Overview', 'libre-bite' ); ?></h1>
-		<button type="button" id="lbite-board-fullscreen" class="button button-large" title="Vollbild">
-			<span class="dashicons dashicons-editor-expand"></span>
+		<button type="button" id="lbite-board-fullscreen" class="button button-large lbite-fullscreen-btn" title="<?php esc_attr_e( 'Fullscreen', 'libre-bite' ); ?>" aria-label="<?php esc_attr_e( 'Fullscreen', 'libre-bite' ); ?>">
+			<span class="dashicons dashicons-editor-expand" aria-hidden="true"></span>
 		</button>
 	</div>
 
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 	<div class="lbite-board-controls">
 		<label>
-			<?php esc_html_e( 'Location:', 'libre-bite' ); ?>
+			<strong><?php esc_html_e( 'Location:', 'libre-bite' ); ?></strong>
 			<?php if ( $lbite_is_location_locked || $lbite_is_single_location ) : ?>
 				<?php $lbite_locked_post = $lbite_is_location_locked ? get_post( $lbite_assigned_location ) : $lbite_locations[0]; ?>
 				<span class="lbite-location-locked"><?php echo esc_html( $lbite_locked_post ? $lbite_locked_post->post_title : '' ); ?></span>
@@ -52,8 +52,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</label>
 
 		<?php if ( lbite_feature_enabled( 'enable_table_ordering' ) ) : ?>
-		<label style="margin-left: 10px;">
-			<?php esc_html_e( 'Filter:', 'libre-bite' ); ?>
+		<label class="lbite-board-filter-label">
+			<strong><?php esc_html_e( 'Filter:', 'libre-bite' ); ?></strong>
 			<select id="lbite-board-filter">
 				<option value="all"><?php esc_html_e( 'All Orders', 'libre-bite' ); ?></option>
 				<option value="table"><?php esc_html_e( 'Table Orders Only', 'libre-bite' ); ?></option>

@@ -96,11 +96,28 @@ $lbite_display_active  = lbite_feature_enabled( 'enable_pickup_display' ) && cla
 							<a class="button" href="<?php echo esc_url( $lbite_pd_url ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Open display', 'libre-bite' ); ?></a>
 						</p>
 					<?php endforeach; ?>
-					<p class="description"><?php esc_html_e( 'Open the link on the TV browser and switch it to full screen. The link contains a secret key – anyone with the link can see the order numbers.', 'libre-bite' ); ?></p>
-					<label>
-						<input type="checkbox" name="lbite_pickup_display_regenerate" value="1">
-						<?php esc_html_e( 'Create new links (the current links stop working)', 'libre-bite' ); ?>
-					</label>
+					<p class="description">
+						<?php
+						if ( LBite_Pickup_Display::is_public() ) {
+							esc_html_e( 'Open the link on the TV browser and switch it to full screen.', 'libre-bite' );
+						} else {
+							esc_html_e( 'Open the link on the TV browser and switch it to full screen. The link contains a secret key – anyone with the link can see the order numbers.', 'libre-bite' );
+						}
+						?>
+					</p>
+					<p>
+						<label>
+							<input type="checkbox" name="lbite_pickup_display_public" value="1" <?php checked( LBite_Pickup_Display::is_public() ); ?>>
+							<?php esc_html_e( 'Show without key (short link)', 'libre-bite' ); ?>
+						</label>
+					</p>
+					<p class="description"><?php esc_html_e( 'Makes the link short enough to type with a TV remote. Anyone who knows the address of your website can then see the order numbers – no names or amounts, and nothing can be changed.', 'libre-bite' ); ?></p>
+					<?php if ( ! LBite_Pickup_Display::is_public() ) : ?>
+						<label>
+							<input type="checkbox" name="lbite_pickup_display_regenerate" value="1">
+							<?php esc_html_e( 'Create new links (the current links stop working)', 'libre-bite' ); ?>
+						</label>
+					<?php endif; ?>
 				</td>
 			</tr>
 		</table>

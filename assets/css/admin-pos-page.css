@@ -575,19 +575,7 @@
 	margin: 0;
 }
 
-#lbite-pos-fullscreen {
-	display: flex;
-	align-items: center;
-	gap: 5px;
-	min-height: 44px;
-	padding: 8px 16px;
-}
-
-#lbite-pos-fullscreen .dashicons {
-	font-size: 20px;
-	width: 20px;
-	height: 20px;
-}
+/* Vollbild-Knopf: siehe .lbite-fullscreen-btn in admin-design-system.css */
 
 /* Touch-Optimierung */
 .lbite-pos-product-item {

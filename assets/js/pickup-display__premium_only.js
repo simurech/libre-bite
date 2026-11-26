@@ -24,8 +24,17 @@
 	var first = true;
 
 	function tickClock() {
-		var now = new Date();
-		clock.textContent = now.toLocaleTimeString( document.documentElement.lang || undefined, { hour: '2-digit', minute: '2-digit' } );
+		var opts = { hour: '2-digit', minute: '2-digit', hour12: !! cfg.hour12 };
+		// Zeitzone der Website, nicht die des Geräts (Fernseher stehen oft auf UTC).
+		if ( cfg.timezone && /\//.test( cfg.timezone ) ) {
+			opts.timeZone = cfg.timezone;
+		}
+		try {
+			clock.textContent = new Date().toLocaleTimeString( document.documentElement.lang || undefined, opts );
+		} catch ( e ) {
+			delete opts.timeZone;
+			clock.textContent = new Date().toLocaleTimeString( document.documentElement.lang || undefined, opts );
+		}
 	}
 
 	function unlockSound() {

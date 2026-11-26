@@ -25,7 +25,7 @@ $lbite_heading = '' !== $lbite_display_title ? $lbite_display_title : $lbite_dis
 <body class="lbite-pd">
 	<header class="lbite-pd__header">
 		<h1 class="lbite-pd__title"><?php echo esc_html( $lbite_heading ); ?></h1>
-		<div class="lbite-pd__clock" id="lbite-pd-clock" aria-hidden="true"></div>
+		<div class="lbite-pd__clock" id="lbite-pd-clock" aria-hidden="true"><?php echo esc_html( wp_date( get_option( 'time_format', 'H:i' ) ) ); ?></div>
 	</header>
 
 	<main class="lbite-pd__columns" id="lbite-pd-columns" style="--lbite-pd-cols: <?php echo esc_attr( max( 1, count( $lbite_display_data['columns'] ) ) ); ?>;">

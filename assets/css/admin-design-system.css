@@ -1482,3 +1482,28 @@ body.lbite-theme-dark #wpbody-content .wp-list-table a {
 		border-color: var(--lbite-color-primary);
 	}
 }
+
+/* Vollbild-Knopf in Kasse und Bestellübersicht: quadratisch, Symbol exakt
+   mittig. WordPress gibt Dashicons in .button eine eigene Zeilenhöhe und
+   einen Versatz nach unten, das wird hier neutralisiert (4.2.3). */
+.wp-core-ui .button.lbite-fullscreen-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	min-width: 44px;
+	height: 44px;
+	min-height: 44px;
+	padding: 0;
+}
+
+.wp-core-ui .button.lbite-fullscreen-btn .dashicons {
+	position: static;
+	top: auto;
+	width: 20px;
+	height: 20px;
+	margin: 0;
+	font-size: 20px;
+	line-height: 20px;
+	vertical-align: middle;
+}

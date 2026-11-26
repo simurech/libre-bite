@@ -7180,14 +7180,6 @@ msgid "Back to current period"
 msgstr "Retour à la période en cours"
 
 #: includes/modules/cash-reports/class-cash-reports__premium_only.php
-msgid "X report (current period)"
-msgstr "Rapport X (période en cours)"
-
-#: includes/modules/cash-reports/class-cash-reports__premium_only.php
-msgid "Close the day (Z report)"
-msgstr "Clôture journalière (rapport Z)"
-
-#: includes/modules/cash-reports/class-cash-reports__premium_only.php
 msgid "Optional. Count the drawer and enter the amount to see the difference."
 msgstr "Facultatif. Comptez la caisse et saisissez le montant pour voir l’écart."
 
@@ -7738,3 +7730,49 @@ msgstr "Titre affiché pour %s"
 #: templates/admin/pos.php
 msgid "Usually a table has one tab. Add this round to the existing tab, or open a second tab only if the guests pay separately."
 msgstr "En général, une table a une seule note. Ajoutez cette tournée à la note existante, ou ouvrez une deuxième note uniquement si les clients paient séparément."
+
+#: templates/admin/settings/orders-display.php
+msgid "Show without key (short link)"
+msgstr "Afficher sans clé (lien court)"
+
+#: templates/admin/settings/orders-display.php
+msgid "Makes the link short enough to type with a TV remote. Anyone who knows the address of your website can then see the order numbers – no names or amounts, and nothing can be changed."
+msgstr "Rend le lien assez court pour le saisir avec la télécommande. Toute personne qui connaît l'adresse de votre site voit alors les numéros de commande – ni noms ni montants, et rien ne peut être modifié."
+
+#: templates/admin/settings/orders-display.php
+msgid "Open the link on the TV browser and switch it to full screen."
+msgstr "Ouvrez le lien dans le navigateur de la TV et passez en plein écran."
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Change money that was in the drawer at the start of the day."
+msgstr "Monnaie présente dans la caisse au début de la journée."
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Current status (X report)"
+msgstr "État actuel (rapport X)"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Current status (X report): everything sold since the last day closing. You can look at it as often as you like – it changes nothing."
+msgstr "État actuel (rapport X) : tout ce qui a été vendu depuis la dernière clôture. Vous pouvez le consulter aussi souvent que vous le souhaitez – il ne modifie rien."
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Day closing (Z report)"
+msgstr "Clôture journalière (rapport Z)"
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Day closing (Z report): at the end of the day, count the cash drawer and save the Z report. The figures are stored as a numbered record that cannot be changed, and a new period starts."
+msgstr "Clôture journalière (rapport Z) : en fin de journée, comptez la caisse et enregistrez le rapport Z. Les chiffres sont conservés dans un document numéroté et non modifiable, et une nouvelle période commence."
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "Expected cash in drawer = change money at the start of the day + cash sales. If you enter the counted amount, the difference shows whether the drawer is correct."
+msgstr "Espèces attendues en caisse = monnaie de départ + ventes en espèces. Si vous saisissez le montant compté, la différence montre si la caisse est juste."
+
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+msgid "How the cash report works"
+msgstr "Fonctionnement du rapport de caisse"
+
+#. translators: %s: payment method, e.g. Cash
+#: includes/modules/cash-reports/class-cash-reports__premium_only.php
+#, php-format
+msgid "of which %s"
+msgstr "dont %s"

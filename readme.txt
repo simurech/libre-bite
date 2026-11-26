@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 4.2.2
+Stable tag: 4.2.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,12 @@ Built-in support for the Swiss rounding rule (5-cent rounding). Indispensable fo
 **Pickup Time Slots**
 Customers choose a time slot for pickup directly during checkout. Relieve peak hours and better manage kitchen capacity.
 
+**Classic and Block Checkout**
+Location, pickup or pre-order time and the order type appear in the classic WooCommerce checkout and in the Checkout block alike, and are validated when the order is placed.
+
+**Statistics & CSV Export**
+Revenue over time and by location, orders by source and fulfilment, payment methods, top products, add-ons, promotions and average preparation time for any period — exportable as CSV.
+
 **Product Options**
 Add configurable options to any WooCommerce product — sizes, sauces, toppings, preparation notes — with optional price markups.
 
@@ -106,6 +112,15 @@ Interim and end-of-day reports per location: revenue by payment method (includin
 **Delivery**
 Offer delivery per location: delivery area by postcode (exact, prefix or range), delivery fee, free delivery from a set amount, minimum order value and extra lead time. Guests choose pickup or delivery in the checkout; the address appears on the order board and the delivery note.
 
+**Open Tabs & Split Payment**
+Keep a table's bill open over several rounds and settle it later with one or several payment methods. The POS warns before a second tab is opened at the same table, and a tab can be closed as "left without paying" — listed separately in the cash report, not counted as revenue.
+
+**Table Plan**
+A live floor plan of each location, optionally on top of your own floor plan image. Tap a table to see its orders with all items, take payment, move an order to the next column or resolve a waiter call — without switching pages. Moving tables and changing their shape or size happens in a separate edit mode.
+
+**Pickup Display**
+A full-screen page for a TV or monitor that shows guests which order numbers are being prepared and which are ready for pickup. Choose the columns and their titles, how long ready numbers stay visible, and an optional sound. Only numbers are shown — no names or amounts.
+
 **Waiter Call**
 Guests at a QR table tap "Call staff" or "Request bill". The call shows up on the order board with a sound and pulses on the floor plan until someone marks it as done.
 
@@ -131,7 +146,7 @@ Rule-based offers WooCommerce does not know by itself: buy several pay for fewer
 One stamp per completed order, then a discount voucher. Guests grasp "every tenth order is cheaper" immediately.
 
 **Theme-independent Menu View**
-Output your menu in its own layout — category navigation, product cards, a dialog for variations and add-ons, and a slide-in order panel. Works with any theme, no template editing required.
+Output your menu in its own layout — category navigation, product cards, a dialog for variations and add-ons, and a slide-in order panel. Choose cards or a compact list, the number of columns, image format and whether descriptions show. Works with any theme, no template editing required.
 
 **Dietary Labels & Filter**
 Label dishes as vegan, vegetarian, gluten-free and more. Guests filter the menu without reloading the page.
@@ -150,6 +165,9 @@ Keep allergies and preferences on the customer account and show them to staff wh
 
 **SMS Notifications**
 Send a short text message when an order is ready. Uses your own Twilio account — no order or customer data passes through us.
+
+**WordPress Abilities API**
+On WordPress 6.9 and newer, Libre Bite registers abilities for locations, open orders, order status and pickup times, so AI assistants and automation tools can work with your restaurant data — with the same permissions as your staff.
 
 **Customizable Kanban Columns**
 Rename, add, remove and reorder the columns of the Kanban order board to match your own workflow — mark any number of columns as "completed", add a one-step back button per order card, and optionally enable drag & drop between columns (Pro).
@@ -292,6 +310,12 @@ Yes. English is the source language, and the plugin ships with complete translat
 
 == Changelog ==
 
+= 4.2.3 =
+* Changed: The cash report explains the current status (X report) and the day closing (Z report) in plain words; payment method rows always show their name.
+* Changed: The Order Overview header uses the same compact style as the POS, and the fullscreen button icon is centred.
+* Changed: The pickup display can optionally be opened without a key, with a short link that is easy to type on a TV remote.
+* Fix: The clock on the pickup display follows the WordPress time format and the site's time zone instead of the TV browser's language.
+
 = 4.2.2 =
 * Feature: Pickup display (Pro) – a full-screen page for a TV showing which order numbers are being prepared and which are ready, with selectable columns, guest-facing titles and an optional sound.
 * Feature: The table plan opens a table window with the items of each order and actions: add items, pay and close a tab, move an order to the next column, resolve waiter calls.
@@ -363,8 +387,5 @@ Yes. English is the source language, and the plugin ships with complete translat
 = 3.6.24 =
 * Changed: Minimum PHP version raised to 8.3 (older PHP versions no longer receive security fixes); tested with WooCommerce 11.3.
 
-= 3.6.23 =
-* Feature: The order panel of the menu view now lets guests change quantities and remove items.
-
 = Older versions =
-* For the full changelog of versions before 3.6.23, see the release history: https://github.com/simurech/libre-bite/releases
+* For the full changelog of versions before 3.6.24, see the release history: https://github.com/simurech/libre-bite/releases

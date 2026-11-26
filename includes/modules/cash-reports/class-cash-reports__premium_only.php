@@ -388,7 +388,8 @@ class LBite_Cash_Reports {
 		}
 
 		foreach ( (array) get_option( 'lbite_pos_payment_methods', array() ) as $method ) {
-			if ( isset( $method['key'], $method['label'] ) && $method['key'] === $key ) {
+			// Leere Beschriftung = Standardname, sonst erschiene eine Zeile ohne Titel.
+			if ( isset( $method['key'], $method['label'] ) && $method['key'] === $key && '' !== trim( (string) $method['label'] ) ) {
 				return $method['label'];
 			}
 		}
@@ -497,7 +498,12 @@ class LBite_Cash_Reports {
 				<tr><th><?php esc_html_e( 'Orders', 'libre-bite' ); ?></th><td><?php echo esc_html( $report['orders'] ); ?></td></tr>
 				<tr><th><?php esc_html_e( 'Gross revenue', 'libre-bite' ); ?></th><td><strong><?php echo esc_html( self::money( $report['gross'] ) ); ?></strong></td></tr>
 				<?php foreach ( $report['payments'] as $key => $amount ) : ?>
-					<tr><th style="padding-left: 24px;"><?php echo esc_html( self::payment_label( $key ) ); ?></th><td><?php echo esc_html( self::money( $amount ) ); ?></td></tr>
+					<tr><th style="padding-left: 24px;">
+						<?php
+						/* translators: %s: payment method, e.g. Cash */
+						echo esc_html( sprintf( __( 'of which %s', 'libre-bite' ), self::payment_label( $key ) ) );
+						?>
+					</th><td><?php echo esc_html( self::money( $amount ) ); ?></td></tr>
 				<?php endforeach; ?>
 				<?php foreach ( $report['taxes'] as $label => $amount ) : ?>
 					<tr><th><?php echo esc_html( $label ); ?></th><td><?php echo esc_html( self::money( $amount ) ); ?></td></tr>
@@ -569,6 +575,18 @@ class LBite_Cash_Reports {
 				</select>
 			</form>
 
+			<?php if ( ! $view_id ) : ?>
+				<?php // Kurze Erklärung für Betriebe ohne Erfahrung mit Registrierkassen. ?>
+				<div class="lbite-cash-help" style="max-width: 640px; margin: 0 0 20px; padding: 12px 16px; border: 1px solid var(--lbite-border, #dcdcde); border-radius: 6px; background: var(--lbite-surface, #fff);">
+					<p style="margin-top: 0;"><strong><?php esc_html_e( 'How the cash report works', 'libre-bite' ); ?></strong></p>
+					<ul style="margin: 0 0 0 18px; list-style: disc;">
+						<li><?php esc_html_e( 'Current status (X report): everything sold since the last day closing. You can look at it as often as you like – it changes nothing.', 'libre-bite' ); ?></li>
+						<li><?php esc_html_e( 'Day closing (Z report): at the end of the day, count the cash drawer and save the Z report. The figures are stored as a numbered record that cannot be changed, and a new period starts.', 'libre-bite' ); ?></li>
+						<li><?php esc_html_e( 'Expected cash in drawer = change money at the start of the day + cash sales. If you enter the counted amount, the difference shows whether the drawer is correct.', 'libre-bite' ); ?></li>
+					</ul>
+				</div>
+			<?php endif; ?>
+
 			<?php
 			if ( $view_id ) :
 				$z = get_post( $view_id );
@@ -587,11 +605,11 @@ class LBite_Cash_Reports {
 			else :
 				$report = self::build_report( $location_id, $float );
 				?>
-				<h2><?php esc_html_e( 'X report (current period)', 'libre-bite' ); ?></h2>
+				<h2><?php esc_html_e( 'Current status (X report)', 'libre-bite' ); ?></h2>
 				<?php self::render_report_table( $report ); ?>
 				<p><button type="button" class="button" onclick="window.print()"><?php esc_html_e( 'Print', 'libre-bite' ); ?></button></p>
 
-				<h2><?php esc_html_e( 'Close the day (Z report)', 'libre-bite' ); ?></h2>
+				<h2><?php esc_html_e( 'Day closing (Z report)', 'libre-bite' ); ?></h2>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="max-width: 640px;">
 					<?php wp_nonce_field( 'lbite_close_cash_day' ); ?>
 					<input type="hidden" name="action" value="lbite_close_cash_day">
@@ -599,7 +617,10 @@ class LBite_Cash_Reports {
 					<table class="form-table">
 						<tr>
 							<th><label for="lbite-opening-float"><?php esc_html_e( 'Opening float', 'libre-bite' ); ?></label></th>
-							<td><input type="number" step="0.05" min="0" id="lbite-opening-float" name="opening_float" value="<?php echo esc_attr( $float ); ?>" class="small-text"> <?php echo esc_html( get_woocommerce_currency() ); ?></td>
+							<td>
+								<input type="number" step="0.05" min="0" id="lbite-opening-float" name="opening_float" value="<?php echo esc_attr( $float ); ?>" class="small-text"> <?php echo esc_html( get_woocommerce_currency() ); ?>
+								<p class="description"><?php esc_html_e( 'Change money that was in the drawer at the start of the day.', 'libre-bite' ); ?></p>
+							</td>
 						</tr>
 						<tr>
 							<th><label for="lbite-counted-cash"><?php esc_html_e( 'Counted cash', 'libre-bite' ); ?></label></th>
