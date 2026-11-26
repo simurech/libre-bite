@@ -434,6 +434,36 @@ class LBite_Menu_View {
 	 * ═════════════════════════════════════════════════════════════════ */
 
 	/**
+	 * Darstellungs-Einstellungen der Menü-Ansicht.
+	 *
+	 * @return array{layout:string,columns:string,image_ratio:string,description:bool,cart:bool}
+	 */
+	public static function get_display_settings() {
+		$layout = (string) get_option( 'lbite_menu_layout', 'grid' );
+		$ratio  = (string) get_option( 'lbite_menu_image_ratio', 'square' );
+
+		return array(
+			'layout'      => in_array( $layout, array( 'grid', 'list' ), true ) ? $layout : 'grid',
+			'columns'     => self::sanitize_columns( get_option( 'lbite_menu_columns', 'auto' ) ),
+			'image_ratio' => in_array( $ratio, array( 'square', 'landscape' ), true ) ? $ratio : 'square',
+			'description' => '0' !== (string) get_option( 'lbite_menu_show_description', 1 ),
+			'cart'        => '0' !== (string) get_option( 'lbite_menu_show_cart', 1 ),
+		);
+	}
+
+	/**
+	 * Spaltenzahl des Rasters: «auto» oder 2–4.
+	 *
+	 * @param mixed $value Rohwert.
+	 * @return string
+	 */
+	public static function sanitize_columns( $value ) {
+		$value = (string) $value;
+
+		return in_array( $value, array( '2', '3', '4' ), true ) ? $value : 'auto';
+	}
+
+	/**
 	 * Shortcode rendern
 	 *
 	 * @param array $atts Attribute.
@@ -448,18 +478,27 @@ class LBite_Menu_View {
 			return '';
 		}
 
+		// Leere Attribute übernehmen die Einstellungen (Einstellungen →
+		// Produkte → Menü-Darstellung). Ein Attribut im Shortcode hat Vorrang,
+		// so können zwei Seiten das Menü unterschiedlich zeigen.
+		$lbite_settings = self::get_display_settings();
+
 		$atts = shortcode_atts(
 			array(
-				'layout'        => 'grid',
-				'cart'          => 'yes',
+				'layout'        => '',
+				'cart'          => '',
+				'columns'       => '',
 				'sticky_offset' => '',
 			),
 			$atts,
 			self::SHORTCODE
 		);
 
-		$lbite_layout = in_array( $atts['layout'], array( 'grid', 'list' ), true ) ? $atts['layout'] : 'grid';
-		$lbite_cart   = 'no' !== $atts['cart'];
+		$lbite_layout  = in_array( $atts['layout'], array( 'grid', 'list' ), true ) ? $atts['layout'] : $lbite_settings['layout'];
+		$lbite_cart    = '' === $atts['cart'] ? $lbite_settings['cart'] : 'no' !== $atts['cart'];
+		$lbite_columns = '' === $atts['columns'] ? $lbite_settings['columns'] : self::sanitize_columns( $atts['columns'] );
+		$lbite_ratio   = $lbite_settings['image_ratio'];
+		$lbite_desc    = $lbite_settings['description'];
 
 		// Fester Abstand der Kategorien-Leiste zum Fensterrand (px). Leer =
 		// automatische Erkennung eines Sticky-Headers der Seite im Browser

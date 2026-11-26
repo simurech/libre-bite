@@ -86,7 +86,7 @@ $lbite_pos_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol
 
 		<?php if ( $lbite_show_table ) : ?>
 		<div id="lbite-pos-table-selector-container" style="display:none;">
-			<label for="lbite-pos-table">
+			<label for="lbite-pos-table-trigger" class="lbite-pos-table-label">
 				<strong><?php esc_html_e( 'Table (optional):', 'libre-bite' ); ?></strong>
 			</label>
 			<select id="lbite-pos-table" class="lbite-pos-table-select" style="display:none;">
@@ -114,7 +114,18 @@ $lbite_pos_currency_symbol = html_entity_decode( get_woocommerce_currency_symbol
 				}
 				?>
 			</select>
-			<div id="lbite-pos-table-grid" class="lbite-pos-table-grid"></div>
+			<?php
+			// Kompakter Knopf mit Auswahlfenster statt einer Knopfreihe im Kopf:
+			// die Kopfzeile bleibt gleich hoch, egal wie viele Tische es gibt.
+			?>
+			<button type="button" id="lbite-pos-table-trigger" class="lbite-pos-table-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="lbite-pos-table-popover">
+				<span class="dashicons dashicons-grid-view" aria-hidden="true"></span>
+				<span id="lbite-pos-table-trigger-label"><?php esc_html_e( 'No table', 'libre-bite' ); ?></span>
+				<span class="dashicons dashicons-arrow-down-alt2" aria-hidden="true"></span>
+			</button>
+			<div id="lbite-pos-table-popover" class="lbite-pos-table-popover" hidden>
+				<div id="lbite-pos-table-grid" class="lbite-pos-table-grid" role="group" aria-label="<?php esc_attr_e( 'Table', 'libre-bite' ); ?>"></div>
+			</div>
 		</div>
 		<?php endif; ?>
 

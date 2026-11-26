@@ -319,6 +319,11 @@ class LBite_Delivery {
 			return;
 		}
 
+		// Im Block-Checkout zeichnet checkout-blocks-pro__premium_only.js die Felder.
+		if ( class_exists( 'LBite_Checkout_Blocks' ) && LBite_Checkout_Blocks::is_block_checkout() ) {
+			return;
+		}
+
 		wp_enqueue_style( 'lbite-delivery', LBITE_PLUGIN_URL . 'assets/css/delivery__premium_only.css', array(), LBITE_VERSION );
 		wp_enqueue_script(
 			'lbite-delivery',
@@ -424,6 +429,30 @@ class LBite_Delivery {
 		parse_str( (string) $post_data, $parsed );
 
 		$fulfilment = isset( $parsed['lbite_fulfilment'] ) && 'delivery' === $parsed['lbite_fulfilment'] ? 'delivery' : 'pickup';
+
+		$address = array();
+		foreach ( array( 'address', 'postcode', 'city', 'phone', 'notes' ) as $key ) {
+			$address[ $key ] = isset( $parsed[ 'lbite_delivery_' . $key ] ) ? sanitize_text_field( wp_unslash( $parsed[ 'lbite_delivery_' . $key ] ) ) : '';
+		}
+
+		self::set_session( $fulfilment, $address );
+	}
+
+	/**
+	 * Abholung/Lieferung und Lieferadresse in die Session schreiben.
+	 *
+	 * Gemeinsam für den klassischen Checkout (update_order_review) und den
+	 * Block-Checkout (Store API).
+	 *
+	 * @param string $fulfilment 'pickup' oder 'delivery'.
+	 * @param array  $address    address, postcode, city, phone, notes (bereinigt).
+	 */
+	public static function set_session( $fulfilment, array $address ) {
+		if ( ! WC()->session ) {
+			return;
+		}
+
+		$fulfilment = 'delivery' === $fulfilment ? 'delivery' : 'pickup';
 		WC()->session->set( 'lbite_fulfilment', $fulfilment );
 
 		// Lieferung gilt als Mitnahme: Steuersatz der Artikel und der Gebühr
@@ -432,11 +461,123 @@ class LBite_Delivery {
 			WC()->session->set( 'lbite_service_type', 'takeaway' );
 		}
 
-		$address = array();
+		$clean = array();
 		foreach ( array( 'address', 'postcode', 'city', 'phone', 'notes' ) as $key ) {
-			$address[ $key ] = isset( $parsed[ 'lbite_delivery_' . $key ] ) ? sanitize_text_field( wp_unslash( $parsed[ 'lbite_delivery_' . $key ] ) ) : '';
+			$clean[ $key ] = isset( $address[ $key ] ) ? sanitize_text_field( (string) $address[ $key ] ) : '';
 		}
-		WC()->session->set( 'lbite_delivery', $address );
+		WC()->session->set( 'lbite_delivery', $clean );
+	}
+
+	/**
+	 * Lieferstatus für den Block-Checkout.
+	 *
+	 * @return array|null Null, wenn der gewählte Standort nicht liefert.
+	 */
+	public static function get_block_state() {
+		$location_id = self::get_delivery_location_id();
+		if ( ! $location_id ) {
+			return null;
+		}
+
+		$s     = self::get_settings( $location_id );
+		$parts = array();
+		if ( $s['fee'] > 0 ) {
+			/* translators: %s: delivery fee incl. currency. */
+			$parts[] = sprintf( __( 'Delivery fee %s', 'libre-bite' ), wp_strip_all_tags( wc_price( $s['fee'] ) ) );
+		}
+		if ( $s['free_from'] > 0 ) {
+			/* translators: %s: amount incl. currency. */
+			$parts[] = sprintf( __( 'free from %s', 'libre-bite' ), wp_strip_all_tags( wc_price( $s['free_from'] ) ) );
+		}
+		if ( $s['min_total'] > 0 ) {
+			/* translators: %s: amount incl. currency. */
+			$parts[] = sprintf( __( 'minimum order %s', 'libre-bite' ), wp_strip_all_tags( wc_price( $s['min_total'] ) ) );
+		}
+		if ( $s['lead_time'] > 0 ) {
+			/* translators: %d: minutes. */
+			$parts[] = sprintf( __( 'about %d minutes longer than pickup', 'libre-bite' ), $s['lead_time'] );
+		}
+
+		return array(
+			'selected' => self::is_delivery_selected() ? 'delivery' : 'pickup',
+			'address'  => self::get_session_address(),
+			// Klartext für das Script: wc_price() liefert das Währungszeichen als HTML-Entität.
+			'info'     => html_entity_decode( implode( ' · ', $parts ), ENT_QUOTES, 'UTF-8' ),
+		);
+	}
+
+	/**
+	 * Lieferangaben prüfen.
+	 *
+	 * @param array  $v           address, postcode, city, phone.
+	 * @param string $order_type  'now' oder 'later'.
+	 * @param string $pickup_time Gewählte Zeit (Y-m-d H:i).
+	 * @return string Fehlermeldung oder leer.
+	 */
+	public static function get_validation_error( array $v, $order_type, $pickup_time ) {
+		$location_id = self::get_delivery_location_id();
+		if ( ! $location_id ) {
+			return __( 'Delivery is not available from the selected location.', 'libre-bite' );
+		}
+
+		$s = self::get_settings( $location_id );
+		foreach ( array( 'address', 'postcode', 'city', 'phone' ) as $key ) {
+			if ( empty( $v[ $key ] ) ) {
+				return __( 'Please enter the complete delivery address and a phone number.', 'libre-bite' );
+			}
+		}
+
+		if ( ! self::postcode_matches( $v['postcode'], $s['postcodes'] ) ) {
+			/* translators: %s: postcode. */
+			return sprintf( __( 'Unfortunately we do not deliver to %s. You are welcome to pick up your order.', 'libre-bite' ), $v['postcode'] );
+		}
+
+		$goods = (float) WC()->cart->get_subtotal() + (float) WC()->cart->get_subtotal_tax();
+		if ( $s['min_total'] > 0 && $goods < $s['min_total'] ) {
+			/* translators: %s: minimum order value incl. currency. */
+			return sprintf( __( 'The minimum order value for delivery is %s.', 'libre-bite' ), wp_strip_all_tags( wc_price( $s['min_total'] ) ) );
+		}
+
+		// Vorbestellung: gewählte Zeit muss die zusätzliche Vorlaufzeit erlauben.
+		if ( 'later' === $order_type && '' !== (string) $pickup_time && $s['lead_time'] > 0 && function_exists( 'lbite_local_time_to_timestamp' ) ) {
+			$prep     = LBite_Locations::get_time_setting( $location_id, 'preparation_time', 30 );
+			$earliest = time() + ( $prep + $s['lead_time'] ) * MINUTE_IN_SECONDS;
+			$chosen   = lbite_local_time_to_timestamp( $pickup_time );
+			if ( $chosen > 0 && $chosen < $earliest ) {
+				/* translators: %s: earliest delivery time. */
+				return sprintf( __( 'The earliest possible delivery time is %s. Please choose a later time.', 'libre-bite' ), wp_date( get_option( 'time_format' ), $earliest ) );
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Fehler der Lieferangaben aus der Session (Block-Checkout).
+	 *
+	 * @param string $order_type  'now' oder 'later'.
+	 * @param string $pickup_time Gewählte Zeit.
+	 * @return string Fehlermeldung oder leer, auch wenn keine Lieferung gewählt ist.
+	 */
+	public static function get_session_validation_error( $order_type, $pickup_time ) {
+		if ( ! WC()->session || 'delivery' !== WC()->session->get( 'lbite_fulfilment' ) ) {
+			return '';
+		}
+
+		return self::get_validation_error( self::get_session_address(), $order_type, $pickup_time );
+	}
+
+	/**
+	 * Lieferung aus der Session in die Bestellung schreiben (Block-Checkout).
+	 *
+	 * @param WC_Order $order Bestellung.
+	 */
+	public static function apply_session_to_order( $order ) {
+		if ( ! self::is_delivery_selected() ) {
+			return;
+		}
+
+		self::apply_to_order( $order, self::get_session_address() );
 	}
 
 	/**
@@ -500,50 +641,20 @@ class LBite_Delivery {
 			return;
 		}
 
-		$location_id = self::get_delivery_location_id();
-		if ( ! $location_id ) {
-			wc_add_notice( __( 'Delivery is not available from the selected location.', 'libre-bite' ), 'error' );
-			return;
-		}
-
-		$s = self::get_settings( $location_id );
 		$v = array();
 		foreach ( array( 'address', 'postcode', 'city', 'phone' ) as $key ) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce prüft WooCommerce beim Absenden des Checkouts.
 			$v[ $key ] = isset( $_POST[ 'lbite_delivery_' . $key ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'lbite_delivery_' . $key ] ) ) : '';
 		}
 
-		if ( in_array( '', $v, true ) ) {
-			wc_add_notice( __( 'Please enter the complete delivery address and a phone number.', 'libre-bite' ), 'error' );
-			return;
-		}
-
-		if ( ! self::postcode_matches( $v['postcode'], $s['postcodes'] ) ) {
-			/* translators: %s: postcode. */
-			wc_add_notice( sprintf( __( 'Unfortunately we do not deliver to %s. You are welcome to pick up your order.', 'libre-bite' ), $v['postcode'] ), 'error' );
-			return;
-		}
-
-		$goods = (float) WC()->cart->get_subtotal() + (float) WC()->cart->get_subtotal_tax();
-		if ( $s['min_total'] > 0 && $goods < $s['min_total'] ) {
-			/* translators: %s: minimum order value incl. currency. */
-			wc_add_notice( sprintf( __( 'The minimum order value for delivery is %s.', 'libre-bite' ), wp_strip_all_tags( wc_price( $s['min_total'] ) ) ), 'error' );
-			return;
-		}
-
-		// Vorbestellung: gewählte Zeit muss die zusätzliche Vorlaufzeit erlauben.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce prüft WooCommerce beim Absenden des Checkouts.
 		$order_type = isset( $_POST['lbite_order_type'] ) ? sanitize_key( wp_unslash( $_POST['lbite_order_type'] ) ) : '';
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce prüft WooCommerce beim Absenden des Checkouts.
 		$pickup_time = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
-		if ( 'later' === $order_type && '' !== $pickup_time && $s['lead_time'] > 0 && function_exists( 'lbite_local_time_to_timestamp' ) ) {
-			$prep     = LBite_Locations::get_time_setting( $location_id, 'preparation_time', 30 );
-			$earliest = time() + ( $prep + $s['lead_time'] ) * MINUTE_IN_SECONDS;
-			$chosen   = lbite_local_time_to_timestamp( $pickup_time );
-			if ( $chosen > 0 && $chosen < $earliest ) {
-				/* translators: %s: earliest delivery time. */
-				wc_add_notice( sprintf( __( 'The earliest possible delivery time is %s. Please choose a later time.', 'libre-bite' ), wp_date( get_option( 'time_format' ), $earliest ) ), 'error' );
-			}
+
+		$error = self::get_validation_error( $v, $order_type, $pickup_time );
+		if ( '' !== $error ) {
+			wc_add_notice( $error, 'error' );
 		}
 	}
 
@@ -566,6 +677,16 @@ class LBite_Delivery {
 			$v[ $key ] = isset( $_POST[ 'lbite_delivery_' . $key ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'lbite_delivery_' . $key ] ) ) : '';
 		}
 
+		self::apply_to_order( $order, $v );
+	}
+
+	/**
+	 * Lieferadresse und Kennzeichnung in die Bestellung schreiben.
+	 *
+	 * @param WC_Order $order Bestellung.
+	 * @param array    $v     address, postcode, city, phone, notes.
+	 */
+	private static function apply_to_order( $order, array $v ) {
 		$order->set_shipping_first_name( $order->get_billing_first_name() );
 		$order->set_shipping_last_name( $order->get_billing_last_name() );
 		$order->set_shipping_address_1( $v['address'] );

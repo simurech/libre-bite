@@ -208,10 +208,10 @@ $lbite_tiles = array_merge( $lbite_tiles, $lbite_inactive_tiles );
 		</div>
 	<?php endif; ?>
 
-	<?php if ( $lbite_can_manage && function_exists( 'lbite_checkout_uses_blocks' ) && lbite_checkout_uses_blocks() ) : ?>
+	<?php if ( $lbite_can_manage && function_exists( 'lbite_checkout_block_conflict' ) && lbite_checkout_block_conflict() ) : ?>
 		<div class="notice notice-warning">
 			<p>
-				<?php esc_html_e( 'Your checkout page uses the WooCommerce Checkout block. Libre Bite currently only works with the classic checkout shortcode.', 'libre-bite' ); ?>
+				<?php esc_html_e( 'The optimized checkout only works with the classic checkout shortcode. With the block, guests see the regular block checkout with the Libre Bite order options instead.', 'libre-bite' ); ?>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=lbite-settings&tab=checkout_mode' ) ); ?>"><?php esc_html_e( 'Learn more', 'libre-bite' ); ?></a>
 			</p>
 		</div>

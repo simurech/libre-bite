@@ -164,6 +164,8 @@ class LBite_POS {
 				'strings'        => array(
 					'offSchedule'         => __( 'This product is outside its scheduled availability right now.', 'libre-bite' ),
 					'offScheduleShort'    => __( 'Off-menu', 'libre-bite' ),
+					/* translators: %s: lowest price of a product with variations */
+					'fromPrice'           => __( 'From %s', 'libre-bite' ),
 					'addToCart'           => __( 'Add to Cart', 'libre-bite' ),
 					'removeFromCart'      => __( 'Remove', 'libre-bite' ),
 					'orderCreated'        => __( 'Order created', 'libre-bite' ),

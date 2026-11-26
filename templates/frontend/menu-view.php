@@ -3,7 +3,7 @@
  * Menü-Ansicht – Ausgabe
  *
  * Erwartet aus dem Shortcode-Kontext: $lbite_sections, $lbite_layout,
- * $lbite_cart, $lbite_location_id.
+ * $lbite_cart, $lbite_columns, $lbite_ratio, $lbite_desc, $lbite_location_id.
  *
  * @package LibreBite
  */
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="lbite-menu-view lbite-menu-view--<?php echo esc_attr( $lbite_layout ); ?>" data-lbite-menu<?php echo '' !== $lbite_sticky_offset ? ' data-sticky-offset="' . esc_attr( $lbite_sticky_offset ) . '"' : ''; ?>>
+<div class="lbite-menu-view lbite-menu-view--<?php echo esc_attr( $lbite_layout ); ?> lbite-menu-view--cols-<?php echo esc_attr( $lbite_columns ); ?> lbite-menu-view--img-<?php echo esc_attr( $lbite_ratio ); ?>" data-lbite-menu<?php echo '' !== $lbite_sticky_offset ? ' data-sticky-offset="' . esc_attr( $lbite_sticky_offset ) . '"' : ''; ?>>
 
 	<?php
 	// Standort-Umschalter fehlte hier bisher komplett (Nutzer-Fund 2026-09-28):
@@ -191,7 +191,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									?>
 									<h3 class="lbite-menu-item__name"><?php echo esc_html( $lbite_product->get_name() ); ?></h3>
 
-								<?php if ( $lbite_product->get_short_description() ) : ?>
+								<?php if ( $lbite_desc && $lbite_product->get_short_description() ) : ?>
 									<p class="lbite-menu-item__desc">
 										<?php echo esc_html( wp_strip_all_tags( $lbite_product->get_short_description() ) ); ?>
 									</p>
@@ -210,6 +210,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</div>
 								<?php endif; ?>
 
+								<?php
+								// Verfügbarkeits-Hinweis über Preis und Knopf: so stehen Preis,
+								// Knopf und Detail-Link auf allen Karten einer Reihe auf gleicher
+								// Höhe, auch wenn nur einzelne Karten den Hinweis tragen.
+								if ( class_exists( 'LBite_Locations' ) ) :
+									LBite_Locations::render_availability_hint( $lbite_product, true );
+								endif;
+								?>
+
 								<div class="lbite-menu-item__foot">
 									<span class="lbite-menu-item__price"><?php echo wp_kses_post( LBite_Menu_View::get_display_price_html( $lbite_product ) ); ?></span>
 									<button type="button" class="lbite-menu-item__add"<?php echo $lbite_in_stock ? '' : ' disabled'; ?>
@@ -217,10 +226,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 										<?php echo ! $lbite_in_stock ? esc_html__( 'Sold out', 'libre-bite' ) : ( $lbite_needs_mod ? esc_html__( 'Choose', 'libre-bite' ) : esc_html__( 'Add', 'libre-bite' ) ); ?>
 									</button>
 								</div>
-
-								<?php if ( class_exists( 'LBite_Locations' ) ) : ?>
-									<?php LBite_Locations::render_availability_hint( $lbite_product, true ); ?>
-								<?php endif; ?>
 
 								<a class="lbite-menu-item__details" href="<?php echo esc_url( get_permalink( $lbite_pid ) ); ?>">
 									<?php esc_html_e( 'View product details', 'libre-bite' ); ?>

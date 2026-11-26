@@ -6476,17 +6476,9 @@ msgstr "Rimuove «Download» e «Indirizzi» da «Il mio account»."
 msgid "Removes \"Downloads\" and \"Addresses\" from My Account if you sell no digital products and offer no shipping."
 msgstr "Rimuove «Download» e «Indirizzi» da «Il mio account» se non vendi prodotti digitali e non offri spedizioni."
 
-#: templates/admin/settings/checkout-mode.php:57
-msgid "The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode %s, not the WooCommerce Checkout Block."
-msgstr "Il checkout ottimizzato funziona solo con lo shortcode WooCommerce classico. La tua pagina di pagamento deve contenere lo shortcode %s, non il blocco Checkout di WooCommerce."
-
 #: includes/admin/class-admin.php:224
 msgid "Libre Bite: your checkout uses the WooCommerce Checkout block."
 msgstr "Libre Bite: la tua cassa utilizza il blocco Checkout di WooCommerce."
-
-#: includes/admin/class-admin.php:225
-msgid "Libre Bite currently only works with the classic checkout. Orders placed through the block do not get a location and will not appear on the Order Board."
-msgstr "Libre Bite attualmente funziona solo con il checkout classico. Gli ordini effettuati tramite il blocco non ricevono una sede e non compaiono nella bacheca ordini."
 
 #: includes/admin/class-admin.php:228
 msgid "Option A (recommended):"
@@ -6511,14 +6503,6 @@ msgstr "Modifica pagina di pagamento"
 #: includes/admin/class-admin.php:245
 msgid "Check again"
 msgstr "Controlla di nuovo"
-
-#: includes/admin/class-setup-wizard.php:190
-msgid "Checkout uses the classic shortcode"
-msgstr "Il checkout usa lo shortcode classico"
-
-#: includes/admin/class-setup-wizard.php:192
-msgid "Your checkout page uses the WooCommerce Checkout block. Libre Bite currently only works with the classic checkout: edit the \"Checkout\" page and switch the block back to the classic shortcode, or replace it with a Shortcode block containing [woocommerce_checkout]."
-msgstr "La tua pagina di pagamento usa il blocco Checkout di WooCommerce. Libre Bite attualmente funziona solo con il checkout classico: modifica la pagina «Pagamento» e riporta il blocco allo shortcode classico, oppure sostituiscilo con un blocco Shortcode contenente [woocommerce_checkout]."
 
 #: includes/admin/class-admin.php:1109
 msgid "More actions"
@@ -6687,10 +6671,6 @@ msgstr "Al momento non è attivo nessun metodo di pagamento per la cassa – il 
 #: templates/admin/dashboard.php:195
 msgid "Enable a payment method"
 msgstr "Attiva un metodo di pagamento"
-
-#: templates/admin/dashboard.php:203
-msgid "Your checkout page uses the WooCommerce Checkout block. Libre Bite currently only works with the classic checkout shortcode."
-msgstr "La tua pagina di checkout utilizza il blocco checkout di WooCommerce. Libre Bite al momento funziona solo con lo shortcode di checkout classico."
 
 #: templates/admin/dashboard.php:204
 msgid "Learn more"
@@ -7474,3 +7454,135 @@ msgstr "Extra senza regole"
 #: includes/modules/product-options/class-product-options.php
 msgid "Guests can add these freely. For rules such as \"choose 1\", put the options into a group below."
 msgstr "Gli ospiti possono aggiungerle liberamente. Per regole come «scegli 1», metti le opzioni in un gruppo qui sotto."
+
+#. translators: %s: shortcode example
+#: templates/admin/settings/products-menu.php
+#, php-format
+msgid "A single page can override these settings in its shortcode, for example %s."
+msgstr "Una singola pagina può sovrascrivere queste impostazioni nel suo shortcode, ad esempio %s."
+
+#: templates/admin/settings/products-menu.php
+msgid "Applies to the card layout on large screens. Tablets show at most two columns, phones one."
+msgstr "Vale per la vista a schede sugli schermi grandi. I tablet mostrano al massimo due colonne, gli smartphone una."
+
+#: templates/admin/settings/products-menu.php
+msgid "Automatic (as many as fit)"
+msgstr "Automatico (quante ne entrano)"
+
+#: templates/admin/settings/products-menu.php
+msgid "Cards (grid)"
+msgstr "Schede (griglia)"
+
+#: includes/admin/class-setup-wizard.php
+msgid "Checkout matches the checkout mode"
+msgstr "Il checkout corrisponde alla modalità scelta"
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Column key, for example incoming, preparing or completed."
+msgstr "Chiave della colonna, ad esempio incoming, preparing o completed."
+
+#: templates/admin/settings/products-menu.php
+msgid "Columns"
+msgstr "Colonne"
+
+#: templates/admin/settings/products-menu.php
+msgid "Compact list"
+msgstr "Elenco compatto"
+
+#: includes/modules/checkout/class-checkout-blocks.php
+msgid "Could not save your selection. Please try again."
+msgstr "Non è stato possibile salvare la tua scelta. Riprova."
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Day in the format YYYY-MM-DD. Default: today."
+msgstr "Giorno nel formato AAAA-MM-GG. Predefinito: oggi."
+
+#: templates/admin/settings/products-menu.php
+msgid "Descriptions"
+msgstr "Descrizioni"
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Get open orders"
+msgstr "Recupera gli ordini aperti"
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Get pickup times"
+msgstr "Recupera gli orari di ritiro"
+
+#: includes/core/class-abilities__premium_only.php
+msgid "ID of the location."
+msgstr "ID della sede."
+
+#: templates/admin/settings/products-menu.php
+msgid "Image Format"
+msgstr "Formato immagine"
+
+#: templates/admin/settings/products-menu.php
+msgid "Landscape (4:3)"
+msgstr "Orizzontale (4:3)"
+
+#: templates/admin/settings/products-menu.php
+msgid "Layout"
+msgstr "Layout"
+
+#: includes/core/class-abilities__premium_only.php
+msgid "List locations"
+msgstr "Elenca le sedi"
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Lists the locations the current user may access, with their current opening status."
+msgstr "Elenca le sedi a cui l'utente attuale può accedere, con il loro stato di apertura attuale."
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Move an order on the Order Board"
+msgstr "Sposta un ordine nella bacheca ordini"
+
+#: includes/modules/checkout/class-checkout-blocks.php
+msgid "No pickup times available on this day."
+msgstr "Nessun orario di ritiro disponibile in questo giorno."
+
+#: templates/admin/settings/products-menu.php
+msgid "Order Panel"
+msgstr "Pannello ordine"
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Orders, locations and pickup times of the restaurant."
+msgstr "Ordini, sedi e orari di ritiro del ristorante."
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Returns the bookable pickup times of a location for one day, taking opening hours, holidays and slot capacity into account."
+msgstr "Restituisce gli orari di ritiro prenotabili di una sede per un giorno, tenendo conto di orari di apertura, festivi e capacità per fascia oraria."
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Returns the orders of a location as shown on the Order Board, grouped by column."
+msgstr "Restituisce gli ordini di una sede come nella bacheca ordini, raggruppati per colonna."
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Sets the Order Board column of an order, for example from incoming to preparing."
+msgstr "Imposta la colonna di un ordine nella bacheca ordini, ad esempio da «ricevuto» a «in preparazione»."
+
+#: templates/admin/settings/products-menu.php
+msgid "Show the order panel with the cart next to the menu."
+msgstr "Mostra il pannello ordine con il carrello accanto al menu."
+
+#: templates/admin/settings/products-menu.php
+msgid "Show the short description of each product."
+msgstr "Mostra la descrizione breve di ogni prodotto."
+
+#: templates/admin/settings/products-menu.php
+msgid "Square"
+msgstr "Quadrato"
+
+#. translators: %s: shortcode placeholder
+#: templates/admin/settings/checkout-mode.php
+#, php-format
+msgid "The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode %s, not the WooCommerce Checkout Block. All other Libre Bite checkout features also work with the block."
+msgstr "Il checkout ottimizzato funziona solo con lo shortcode WooCommerce classico. La tua pagina di pagamento deve contenere lo shortcode %s, non il blocco Checkout di WooCommerce. Tutte le altre funzioni di checkout di Libre Bite funzionano anche con il blocco."
+
+#: includes/admin/class-admin.php
+msgid "The optimized checkout only works with the classic checkout shortcode. With the block, guests see the regular block checkout with the Libre Bite order options instead."
+msgstr "Il checkout ottimizzato funziona solo con lo shortcode di checkout classico. Con il blocco, gli ospiti vedono invece il normale checkout a blocchi con le opzioni d'ordine di Libre Bite."
+
+#: includes/modules/checkout/class-checkout-blocks.php
+msgid "Unknown action."
+msgstr "Azione sconosciuta."

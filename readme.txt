@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 4.1.0
+Stable tag: 4.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -247,7 +247,7 @@ Yes. Libre Bite is fully compatible with WooCommerce High-Performance Order Stor
 
 = Does Libre Bite work with the WooCommerce Checkout block? =
 
-Not yet. Libre Bite's location selection, time slots, order bumps, and tip settings currently rely on the classic WooCommerce checkout. If your checkout page uses the Checkout block, edit that page, select the Checkout block, and use its sidebar option to switch back to the classic shortcode (or replace it with a Shortcode block containing `[woocommerce_checkout]`). Libre Bite shows an admin notice with the same instructions whenever it detects the block on your checkout page. Official Checkout block support is on the roadmap.
+Yes, since version 4.2.0. Location, order type, pickup time, table, delivery, tips and order bumps appear above the contact details in the Checkout block and are validated when the order is placed. Only the optimized checkout (Pro) still needs the classic shortcode `[woocommerce_checkout]`, because it replaces the classic checkout template; Libre Bite shows a notice if both are combined. Note that field visibility in the Checkout block is configured in the block editor, not in the Libre Bite checkout field settings, and item notes are only available in the classic cart.
 
 = Can I manage multiple restaurant locations? =
 
@@ -291,6 +291,14 @@ Yes. English is the source language, and the plugin ships with complete translat
 7. **Waiter Call** — Guests at a QR table call the staff or request the bill; the call appears on the order board (Pro).
 
 == Changelog ==
+
+= 4.2.0 =
+* Feature: Official support for the WooCommerce Checkout block – location, pickup time, order type, table, delivery, tips and order bumps work in the block checkout.
+* Feature: WordPress Abilities API (WordPress 6.9+) – locations, open orders, order status and pickup times as abilities for AI assistants and tools (Pro).
+* Feature: Menu view settings for layout, columns, image format, descriptions and order panel.
+* Changed: POS product tiles align images, names and prices; variable products show a starting price.
+* Changed: POS table selection opens a compact picker, so the header stays stable with many tables.
+* Fix: Menu view settings are no longer reset when saving with the menu view turned off.
 
 = 4.1.0 =
 * Feature: The reservation overview points to open requests on other days or at other locations and jumps there with one click.
@@ -352,9 +360,5 @@ Yes. English is the source language, and the plugin ships with complete translat
 = 3.6.21 =
 * Feature: Sold-out dishes in the menu view are now marked with a badge and a disabled button, listed last in their category; sold-out variations can no longer be selected.
 
-= 3.6.20 =
-* Fix: The active category button in the menu navigation bar was invisible when primary brand colour and bar were the same colour; it now uses the accent colour.
-* Feature: New hooks lbite_menu_item_before_title and lbite_menu_item_after_desc let themes add badges or icons to menu items.
-
 = Older versions =
-* For the full changelog of versions before 3.6.20, see the release history: https://github.com/simurech/libre-bite/releases
+* For the full changelog of versions before 3.6.21, see the release history: https://github.com/simurech/libre-bite/releases

@@ -64,7 +64,20 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 					__( 'Menu', 'libre-bite' ),
 					'[lbite_menu]'
 				);
-				update_option( 'lbite_menu_show_images', isset( $_POST['lbite_menu_show_images'] ) ? 1 : 0 );
+				// Die Darstellungsfelder erscheinen nur bei eingeschalteter Menü-Ansicht.
+				// Fehlen sie im Formular, bleiben die gespeicherten Werte unverändert –
+				// sonst setzte ein Speichern bei ausgeschaltetem Modul alle Häkchen zurück.
+				if ( isset( $_POST['lbite_menu_layout'] ) ) {
+					update_option( 'lbite_menu_show_images', isset( $_POST['lbite_menu_show_images'] ) ? 1 : 0 );
+					$lbite_menu_layout = sanitize_key( wp_unslash( $_POST['lbite_menu_layout'] ) );
+					update_option( 'lbite_menu_layout', in_array( $lbite_menu_layout, array( 'grid', 'list' ), true ) ? $lbite_menu_layout : 'grid' );
+					$lbite_menu_columns = isset( $_POST['lbite_menu_columns'] ) ? sanitize_key( wp_unslash( $_POST['lbite_menu_columns'] ) ) : 'auto';
+					update_option( 'lbite_menu_columns', in_array( $lbite_menu_columns, array( '2', '3', '4' ), true ) ? $lbite_menu_columns : 'auto' );
+					$lbite_menu_ratio = isset( $_POST['lbite_menu_image_ratio'] ) ? sanitize_key( wp_unslash( $_POST['lbite_menu_image_ratio'] ) ) : 'square';
+					update_option( 'lbite_menu_image_ratio', in_array( $lbite_menu_ratio, array( 'square', 'landscape' ), true ) ? $lbite_menu_ratio : 'square' );
+					update_option( 'lbite_menu_show_description', isset( $_POST['lbite_menu_show_description'] ) ? 1 : 0 );
+					update_option( 'lbite_menu_show_cart', isset( $_POST['lbite_menu_show_cart'] ) ? 1 : 0 );
+				}
 			}
 			$lbite_did_save = true;
 			break;

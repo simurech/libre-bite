@@ -43,7 +43,65 @@ $lbite_all_pages       = get_pages( array( 'post_status' => 'publish' ) );
 	</p>
 
 	<?php if ( lbite_feature_enabled( 'enable_menu_view' ) ) : ?>
+	<?php $lbite_menu_display = class_exists( 'LBite_Menu_View' ) ? LBite_Menu_View::get_display_settings() : array( 'layout' => 'grid', 'columns' => 'auto', 'image_ratio' => 'square', 'description' => true, 'cart' => true ); ?>
 	<table class="form-table">
+		<tr>
+			<th><label for="lbite-menu-layout"><?php esc_html_e( 'Layout', 'libre-bite' ); ?></label></th>
+			<td>
+				<select id="lbite-menu-layout" name="lbite_menu_layout">
+					<option value="grid" <?php selected( $lbite_menu_display['layout'], 'grid' ); ?>><?php esc_html_e( 'Cards (grid)', 'libre-bite' ); ?></option>
+					<option value="list" <?php selected( $lbite_menu_display['layout'], 'list' ); ?>><?php esc_html_e( 'Compact list', 'libre-bite' ); ?></option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="lbite-menu-columns"><?php esc_html_e( 'Columns', 'libre-bite' ); ?></label></th>
+			<td>
+				<select id="lbite-menu-columns" name="lbite_menu_columns">
+					<option value="auto" <?php selected( $lbite_menu_display['columns'], 'auto' ); ?>><?php esc_html_e( 'Automatic (as many as fit)', 'libre-bite' ); ?></option>
+					<?php foreach ( array( '2', '3', '4' ) as $lbite_cols ) : ?>
+						<option value="<?php echo esc_attr( $lbite_cols ); ?>" <?php selected( $lbite_menu_display['columns'], $lbite_cols ); ?>><?php echo esc_html( $lbite_cols ); ?></option>
+					<?php endforeach; ?>
+				</select>
+				<p class="description"><?php esc_html_e( 'Applies to the card layout on large screens. Tablets show at most two columns, phones one.', 'libre-bite' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="lbite-menu-image-ratio"><?php esc_html_e( 'Image Format', 'libre-bite' ); ?></label></th>
+			<td>
+				<select id="lbite-menu-image-ratio" name="lbite_menu_image_ratio">
+					<option value="square" <?php selected( $lbite_menu_display['image_ratio'], 'square' ); ?>><?php esc_html_e( 'Square', 'libre-bite' ); ?></option>
+					<option value="landscape" <?php selected( $lbite_menu_display['image_ratio'], 'landscape' ); ?>><?php esc_html_e( 'Landscape (4:3)', 'libre-bite' ); ?></option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th><?php esc_html_e( 'Descriptions', 'libre-bite' ); ?></th>
+			<td>
+				<label>
+					<input type="checkbox" name="lbite_menu_show_description" value="1" <?php checked( $lbite_menu_display['description'] ); ?>>
+					<?php esc_html_e( 'Show the short description of each product.', 'libre-bite' ); ?>
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<th><?php esc_html_e( 'Order Panel', 'libre-bite' ); ?></th>
+			<td>
+				<label>
+					<input type="checkbox" name="lbite_menu_show_cart" value="1" <?php checked( $lbite_menu_display['cart'] ); ?>>
+					<?php esc_html_e( 'Show the order panel with the cart next to the menu.', 'libre-bite' ); ?>
+				</label>
+				<p class="description">
+					<?php
+					printf(
+						/* translators: %s: shortcode example */
+						esc_html__( 'A single page can override these settings in its shortcode, for example %s.', 'libre-bite' ),
+						'<code>[lbite_menu layout="list" columns="3" cart="no"]</code>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed markup, not user input.
+					);
+					?>
+				</p>
+			</td>
+		</tr>
 		<tr>
 			<th><?php esc_html_e( 'Product Images', 'libre-bite' ); ?></th>
 			<td>

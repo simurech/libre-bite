@@ -114,7 +114,7 @@ class LBite_Order_Bumps {
 			return;
 		}
 
-		$offers = $this->get_available_bumps();
+		$offers = self::get_available_bumps();
 
 		if ( empty( $offers ) ) {
 			return;
@@ -155,7 +155,7 @@ class LBite_Order_Bumps {
 	 *
 	 * @return array Liste aus [ 'product' => WC_Product, 'text' => string ].
 	 */
-	private function get_available_bumps() {
+	public static function get_available_bumps() {
 		if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
 			return array();
 		}
@@ -215,12 +215,32 @@ class LBite_Order_Bumps {
 
 		$product_id = isset( $_POST['product_id'] ) ? absint( wp_unslash( $_POST['product_id'] ) ) : 0;
 
+		$error = self::add_to_cart( $product_id );
+		if ( '' !== $error ) {
+			wp_send_json_error( array( 'message' => $error ) );
+		}
+
+		wp_send_json_success( array( 'product_id' => $product_id ) );
+	}
+
+	/**
+	 * Konfiguriertes Angebot in den Warenkorb legen.
+	 *
+	 * Gemeinsam für den klassischen Checkout (AJAX) und den Block-Checkout
+	 * (Store API).
+	 *
+	 * @param int $product_id Produkt-ID.
+	 * @return string Fehlermeldung oder leer bei Erfolg.
+	 */
+	public static function add_to_cart( $product_id ) {
+		$product_id = absint( $product_id );
+
 		// Nur ausdrücklich konfigurierte Artikel zulassen – sonst liesse sich
 		// über diesen Endpunkt jedes beliebige Produkt einschleusen.
 		$allowed = wp_list_pluck( self::get_bumps(), 'product_id' );
 
 		if ( ! $product_id || ! in_array( $product_id, array_map( 'absint', $allowed ), true ) ) {
-			wp_send_json_error( array( 'message' => __( 'Unknown offer', 'libre-bite' ) ) );
+			return __( 'Unknown offer', 'libre-bite' );
 		}
 
 		// WooCommerce wertet diesen Filter an seinen eigenen Eintrittspunkten aus,
@@ -229,15 +249,13 @@ class LBite_Order_Bumps {
 		// ausserhalb seines Zeitfensters oder nur für die Kasse gedacht ist.
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Fremder Hook (WooCommerce bzw. Cache-Plugin), kein eigener.
 		if ( ! apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, 1 ) ) {
-			wp_send_json_error( array( 'message' => __( 'This item is not available right now.', 'libre-bite' ) ) );
+			return __( 'This item is not available right now.', 'libre-bite' );
 		}
 
-		$added = WC()->cart->add_to_cart( $product_id, 1 );
-
-		if ( ! $added ) {
-			wp_send_json_error( array( 'message' => __( 'Could not add the item', 'libre-bite' ) ) );
+		if ( ! WC()->cart->add_to_cart( $product_id, 1 ) ) {
+			return __( 'Could not add the item', 'libre-bite' );
 		}
 
-		wp_send_json_success( array( 'product_id' => $product_id ) );
+		return '';
 	}
 }

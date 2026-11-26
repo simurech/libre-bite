@@ -3,7 +3,7 @@
  * Plugin Name:       Libre Bite
  * Plugin URI:        https://wordpress.org/plugins/libre-bite/
  * Description:       Complete order and location management system for WooCommerce restaurants and food businesses.
- * Version:           4.1.0
+ * Version:           4.2.0
  * Requires at least: 6.2
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -78,7 +78,7 @@ if ( function_exists( 'lbite_freemius' ) ) {
 }
 
 // Plugin-Konstanten definieren
-define( 'LBITE_VERSION', '4.1.0' );
+define( 'LBITE_VERSION', '4.2.0' );
 define( 'LBITE_PLUGIN_FILE', __FILE__ );
 define( 'LBITE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LBITE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -268,11 +268,10 @@ function lbite_local_time_to_timestamp( $time_str ) {
 /**
  * HPOS- und Checkout-Block-Kompatibilität deklarieren
  *
- * cart_checkout_blocks ist bewusst als inkompatibel deklariert (siehe Audit
- * 26.09.2026, AP-02): alle Checkout-Erweiterungen (Standort, Zeitslot, Order
- * Bumps, Trinkgeld) hängen an klassischen WooCommerce-Hooks und laufen mit
- * dem Checkout-Block nicht. WooCommerce zeigt dafür selbst einen Hinweis im
- * Block-Editor; zusätzlich gibt es den nicht wegklickbaren Admin-Hinweis aus
+ * Seit 4.2.0 kompatibel mit dem Checkout-Block: LBite_Checkout_Blocks
+ * überträgt Standort, Zeitslot, Trinkgeld, Bestelltyp, Lieferung und
+ * Impulsangebote auf die Store API. Einzig der optimierte Checkout (Pro)
+ * braucht weiterhin den Shortcode, dafür warnt
  * LBite_Admin::render_checkout_block_notice().
  */
 add_action( 'before_woocommerce_init', function() {
@@ -285,7 +284,7 @@ add_action( 'before_woocommerce_init', function() {
 		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
 			'cart_checkout_blocks',
 			__FILE__,
-			false
+			true
 		);
 	}
 } );
@@ -308,6 +307,21 @@ function lbite_checkout_uses_blocks() {
 	}
 
 	return has_block( 'woocommerce/checkout', $checkout_page_id );
+}
+
+/**
+ * Passt die Kasse nicht zur gewählten Checkout-Variante?
+ *
+ * Seit 4.2.0 unterstützt Libre Bite den Checkout-Block. Nur der optimierte
+ * Checkout (Pro) ersetzt die klassische Vorlage und braucht deshalb weiterhin
+ * den Shortcode [woocommerce_checkout].
+ *
+ * @return bool
+ */
+function lbite_checkout_block_conflict() {
+	return lbite_checkout_uses_blocks()
+		&& lbite_feature_enabled( 'enable_optimized_checkout' )
+		&& 'optimized' === get_option( 'lbite_checkout_mode', 'standard' );
 }
 
 /**

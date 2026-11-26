@@ -247,6 +247,16 @@ class LBite_Plugin {
 					$this->modules['service-calls'] = new LBite_Service_Calls( $this->loader );
 				}
 			}
+
+			// WordPress-Abilities-API (ab WP 6.9, Kern von WP 7.0). Ohne die
+			// Funktionen der API registriert die Klasse nichts.
+			if ( lbite_has_pro_license() ) {
+				$lbite_abilities_file = LBITE_PLUGIN_DIR . 'includes/core/class-abilities__premium_only.php';
+				if ( file_exists( $lbite_abilities_file ) ) {
+					require_once $lbite_abilities_file;
+					$this->modules['abilities'] = new LBite_Abilities( $this->loader );
+				}
+			}
 		}
 	}
 

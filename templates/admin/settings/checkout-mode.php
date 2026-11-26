@@ -62,7 +62,7 @@ $lbite_email_req_gateways = get_option( 'lbite_email_required_gateways', array()
 						<?php
 						printf(
 							/* translators: %s: shortcode placeholder */
-							esc_html__( 'The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode %s, not the WooCommerce Checkout Block.', 'libre-bite' ),
+							esc_html__( 'The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode %s, not the WooCommerce Checkout Block. All other Libre Bite checkout features also work with the block.', 'libre-bite' ),
 							'<code>[woocommerce_checkout]</code>'
 						);
 						?>

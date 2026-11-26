@@ -169,6 +169,21 @@ class LBite_Checkout {
 				$this->loader->add_action( 'woocommerce_checkout_create_order', $this, 'save_order_type_to_order__premium_only', 10, 2 );
 			}
 		}
+
+		// WooCommerce-Checkout-Block (Store API). Nutzt dieselbe Prüf- und
+		// Speicherlogik wie der klassische Checkout.
+		require_once LBITE_PLUGIN_DIR . 'includes/modules/checkout/class-checkout-blocks.php';
+		new LBite_Checkout_Blocks( $this->loader, $this );
+
+		// Pro-Teil des Block-Checkouts (Trinkgeld, Bestelltyp, Lieferung,
+		// Impulsangebote). Die Datei fehlt im Gratis-Build.
+		if ( lbite_freemius()->is__premium_only() ) {
+			$lbite_blocks_pro_file = LBITE_PLUGIN_DIR . 'includes/modules/checkout/class-checkout-blocks-pro__premium_only.php';
+			if ( file_exists( $lbite_blocks_pro_file ) ) {
+				require_once $lbite_blocks_pro_file;
+				new LBite_Checkout_Blocks_Pro( $this->loader, $this );
+			}
+		}
 	}
 
 	/**
@@ -800,32 +815,92 @@ class LBite_Checkout {
 	}
 
 	/**
-	 * Standort & Zeit validieren
+	 * Standort & Zeit validieren (klassischer Checkout).
+	 *
+	 * Liest die Eingaben aus dem Formular und übergibt sie an
+	 * get_location_errors(), die auch der Block-Checkout nutzt.
 	 */
 	public function validate_location_time() {
-		$lbite_selector_enabled = lbite_feature_enabled( 'enable_location_selector' );
+		foreach ( $this->get_location_errors( $this->get_posted_input() ) as $lbite_message ) {
+			wc_add_notice( $lbite_message, 'error' );
+		}
+	}
 
-		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-		$location_id = isset( $_POST['lbite_location_id'] ) ? intval( wp_unslash( $_POST['lbite_location_id'] ) ) : 0;
-		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-		$order_type  = isset( $_POST['lbite_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_type'] ) ) : '';
+	/**
+	 * Eingaben des klassischen Checkout-Formulars, mit Session als Rückfall.
+	 *
+	 * @return array{location_id:int,order_type:string,pickup_time:string,service_type:string}
+	 */
+	private function get_posted_input() {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce prüft die Nonce beim Absenden des Checkouts.
+		$location_id  = isset( $_POST['lbite_location_id'] ) ? intval( wp_unslash( $_POST['lbite_location_id'] ) ) : 0;
+		$order_type   = isset( $_POST['lbite_order_type'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_order_type'] ) ) : '';
+		$pickup_time  = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
+		$service_type = isset( $_POST['lbite_service_type'] ) ? sanitize_key( wp_unslash( $_POST['lbite_service_type'] ) ) : '';
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
-		if ( $lbite_selector_enabled ) {
-			// Fallback auf Session – konsistent mit save_location_time_meta().
-			if ( ! $location_id && WC()->session ) {
-				$location_id = (int) WC()->session->get( 'lbite_location_id' );
-			}
-			if ( ! $order_type && WC()->session ) {
-				$order_type = WC()->session->get( 'lbite_order_type', 'now' );
-			}
+		// Fallback auf Session – konsistent mit save_location_time_meta().
+		if ( ! $location_id && WC()->session ) {
+			$location_id = (int) WC()->session->get( 'lbite_location_id' );
+		}
+		if ( ! $order_type && WC()->session ) {
+			$order_type = WC()->session->get( 'lbite_order_type', 'now' );
+		}
+		// QR-Code-Scan: Session-Wert als Fallback akzeptieren.
+		if ( ! $service_type && WC()->session ) {
+			$service_type = WC()->session->get( 'lbite_service_type', '' );
+		}
 
+		return array(
+			'location_id'  => $location_id,
+			'order_type'   => (string) $order_type,
+			'pickup_time'  => $pickup_time,
+			'service_type' => (string) $service_type,
+		);
+	}
+
+	/**
+	 * Eingaben aus der WC-Session (Block-Checkout).
+	 *
+	 * Der Block-Checkout schreibt jede Auswahl sofort über die Store API in die
+	 * Session (LBite_Checkout_Blocks), beim Absenden gilt deshalb nur sie.
+	 *
+	 * @return array{location_id:int,order_type:string,pickup_time:string,service_type:string}
+	 */
+	public static function get_session_input() {
+		$session = function_exists( 'WC' ) ? WC()->session : null;
+
+		return array(
+			'location_id'  => $session ? (int) $session->get( 'lbite_location_id' ) : 0,
+			'order_type'   => $session ? (string) $session->get( 'lbite_order_type', 'now' ) : 'now',
+			'pickup_time'  => $session ? (string) $session->get( 'lbite_pickup_time', '' ) : '',
+			'service_type' => $session ? (string) $session->get( 'lbite_service_type', '' ) : '',
+		);
+	}
+
+	/**
+	 * Standort, Bestellart und Abholzeit prüfen.
+	 *
+	 * Gemeinsame Prüfung für den klassischen Checkout und den Block-Checkout.
+	 *
+	 * @param array $input Eingaben (location_id, order_type, pickup_time, service_type).
+	 * @return string[] Fehlermeldungen, leer wenn alles stimmt.
+	 */
+	public function get_location_errors( array $input ) {
+		$errors       = array();
+		$location_id  = isset( $input['location_id'] ) ? (int) $input['location_id'] : 0;
+		$order_type   = isset( $input['order_type'] ) ? (string) $input['order_type'] : '';
+		$pickup_time  = isset( $input['pickup_time'] ) ? (string) $input['pickup_time'] : '';
+		$service_type = isset( $input['service_type'] ) ? (string) $input['service_type'] : '';
+
+		if ( lbite_feature_enabled( 'enable_location_selector' ) ) {
 			if ( ! $location_id || ! LBite_Locations::is_valid_location( $location_id ) ) {
-				wc_add_notice( __( 'Please select a location.', 'libre-bite' ), 'error' );
+				$errors[]    = __( 'Please select a location.', 'libre-bite' );
 				$location_id = 0;
 			}
 
 			if ( ! in_array( $order_type, array( 'now', 'later' ), true ) ) {
-				wc_add_notice( __( 'Please select an order type.', 'libre-bite' ), 'error' );
+				$errors[] = __( 'Please select an order type.', 'libre-bite' );
 			}
 		} else {
 			// Ohne Standortauswahl gibt es keine UI, über die ein Gast
@@ -837,11 +912,8 @@ class LBite_Checkout {
 			$order_type  = 'now';
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-		$pickup_time = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
-
 		if ( 'later' === $order_type && ! $pickup_time ) {
-			wc_add_notice( __( 'Please select a pickup time.', 'libre-bite' ), 'error' );
+			$errors[] = __( 'Please select a pickup time.', 'libre-bite' );
 		}
 
 		// Abholzeit vollständig validieren, nicht nur gegen die Kapazität:
@@ -850,20 +922,17 @@ class LBite_Checkout {
 		// akzeptierte der Checkout jede beliebige Zeichenkette als Abholzeit,
 		// solange die Kapazitätsprüfung bestand (Audit 26.09.2026, AP-09).
 		if ( 'later' === $order_type && $pickup_time && $location_id ) {
-			$lbite_pickup_dt = DateTime::createFromFormat( 'Y-m-d H:i', $pickup_time, wp_timezone() );
+			$lbite_pickup_dt    = DateTime::createFromFormat( 'Y-m-d H:i', $pickup_time, wp_timezone() );
 			$lbite_valid_format = $lbite_pickup_dt && $lbite_pickup_dt->format( 'Y-m-d H:i' ) === $pickup_time;
 
 			if ( ! $lbite_valid_format || $lbite_pickup_dt->getTimestamp() <= time() ) {
-				wc_add_notice( __( 'Please choose a valid pickup time in the future.', 'libre-bite' ), 'error' );
+				$errors[] = __( 'Please choose a valid pickup time in the future.', 'libre-bite' );
 			} elseif ( ! in_array( $pickup_time, wp_list_pluck( $this->get_available_timeslots( $location_id, substr( $pickup_time, 0, 10 ) ), 'value' ), true ) ) {
-				wc_add_notice( __( 'The selected pickup time is not available. Please choose another time.', 'libre-bite' ), 'error' );
+				$errors[] = __( 'The selected pickup time is not available. Please choose another time.', 'libre-bite' );
 			} elseif ( ! self::is_slot_available( $location_id, $pickup_time ) ) {
 				// Kapazität erneut prüfen: zwischen Auswahl und Absenden kann
 				// das Zeitfenster von jemand anderem belegt worden sein.
-				wc_add_notice(
-					__( 'This time slot has just been fully booked. Please choose another time.', 'libre-bite' ),
-					'error'
-				);
+				$errors[] = __( 'This time slot has just been fully booked. Please choose another time.', 'libre-bite' );
 			}
 		}
 
@@ -878,21 +947,15 @@ class LBite_Checkout {
 					$lbite_window_ok   = ! $lbite_active_from || $lbite_pickup_date >= $lbite_active_from;
 				}
 				if ( ! $lbite_window_ok ) {
-					wc_add_notice( $lbite_activation['text'], 'error' );
+					$errors[] = $lbite_activation['text'];
 				}
 			}
 		}
 
 		// Bestelltyp (Takeaway/Dine-in) prüfen wenn Feature aktiv.
 		if ( lbite_feature_enabled( 'enable_order_type_selection' ) && $location_id ) {
-			// phpcs:ignore WordPress.Security.NonceVerification -- WooCommerce handles nonce verification for checkout.
-			$service_type = isset( $_POST['lbite_service_type'] ) ? sanitize_key( wp_unslash( $_POST['lbite_service_type'] ) ) : '';
-			// QR-Code-Scan: Session-Wert als Fallback akzeptieren.
-			if ( ! $service_type && WC()->session ) {
-				$service_type = WC()->session->get( 'lbite_service_type', '' );
-			}
 			if ( ! in_array( $service_type, array( 'takeaway', 'dine_in' ), true ) ) {
-				wc_add_notice( __( 'Please select whether you want to take away or eat here.', 'libre-bite' ), 'error' );
+				$errors[] = __( 'Please select whether you want to take away or eat here.', 'libre-bite' );
 			}
 		}
 
@@ -901,7 +964,7 @@ class LBite_Checkout {
 			$lbite_opening_hours = LBite_Locations::get_opening_hours( $location_id );
 			$lbite_status        = LBite_Locations::get_location_status( $lbite_opening_hours, $location_id );
 			if ( $lbite_status && 'open' !== $lbite_status['type'] && 'closing-soon' !== $lbite_status['type'] ) {
-				wc_add_notice( __( 'The selected location is currently closed. Please select a pre-order time.', 'libre-bite' ), 'error' );
+				$errors[] = __( 'The selected location is currently closed. Please select a pre-order time.', 'libre-bite' );
 			}
 		}
 
@@ -910,17 +973,16 @@ class LBite_Checkout {
 			foreach ( WC()->cart->get_cart() as $cart_item ) {
 				if ( ! LBite_Locations::is_product_available_at_location( $cart_item['product_id'], $location_id ) ) {
 					$product = wc_get_product( $cart_item['product_id'] );
-					wc_add_notice(
-						sprintf(
-							/* translators: %s: product name */
-							__( '"%s" is not available at the selected location.', 'libre-bite' ),
-							$product ? $product->get_name() : $cart_item['product_id']
-						),
-						'error'
+					$errors[] = sprintf(
+						/* translators: %s: product name */
+						__( '"%s" is not available at the selected location.', 'libre-bite' ),
+						$product ? $product->get_name() : $cart_item['product_id']
 					);
 				}
 			}
 		}
+
+		return $errors;
 	}
 
 	/**
@@ -979,16 +1041,6 @@ class LBite_Checkout {
 			return;
 		}
 
-		if ( $location_id && LBite_Locations::is_valid_location( $location_id ) ) {
-			$order->update_meta_data( '_lbite_location_id', $location_id );
-
-			// Standort-Name speichern.
-			$location = get_post( $location_id );
-			if ( $location ) {
-				$order->update_meta_data( '_lbite_location_name', $location->post_title );
-			}
-		}
-
 		// Ohne Standortauswahl gibt es keine UI für "später" - Bestelltyp
 		// steht fest auf "jetzt" (Nutzer-Fund 2026-09-28).
 		if ( ! lbite_feature_enabled( 'enable_location_selector' ) ) {
@@ -1003,27 +1055,75 @@ class LBite_Checkout {
 			}
 		}
 
-		if ( $order_type ) {
-			$order->update_meta_data( '_lbite_order_type', $order_type );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce prüft WooCommerce beim Absenden des Checkouts.
+		$pickup_time = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
 
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce prüft WooCommerce beim Absenden des Checkouts.
-			$pickup_time = isset( $_POST['lbite_pickup_time'] ) ? sanitize_text_field( wp_unslash( $_POST['lbite_pickup_time'] ) ) : '';
+		// Fallback: Session verwenden.
+		if ( ! $pickup_time && WC()->session ) {
+			$pickup_time = (string) WC()->session->get( 'lbite_pickup_time' );
+		}
 
-			// Fallback: Session verwenden.
-			if ( ! $pickup_time && WC()->session ) {
-				$pickup_time = WC()->session->get( 'lbite_pickup_time' );
-			}
+		self::write_location_meta(
+			$order,
+			array(
+				'location_id' => $location_id,
+				'order_type'  => (string) $order_type,
+				'pickup_time' => $pickup_time,
+			)
+		);
 
-			if ( 'later' === $order_type && $pickup_time ) {
-				$order->update_meta_data( '_lbite_pickup_time', $pickup_time );
-				// Eigenes Datumsfeld für die Kapazitätszählung (Audit
-				// 26.09.2026, AP-13): count_orders_per_slot() filtert damit
-				// gezielt nach Abholdatum statt nach Erstellungsdatum.
-				$order->update_meta_data( '_lbite_pickup_date', substr( $pickup_time, 0, 10 ) );
+		$order->save();
+	}
+
+	/**
+	 * Standort, Bestellart und Abholzeit in die Bestellung schreiben.
+	 *
+	 * Gemeinsam für klassischen Checkout und Block-Checkout. Speichert nicht,
+	 * das übernimmt der Aufrufer.
+	 *
+	 * @param WC_Order $order Bestellung.
+	 * @param array    $input location_id (bereits aufgelöst), order_type, pickup_time.
+	 */
+	public static function write_location_meta( $order, array $input ) {
+		$location_id = isset( $input['location_id'] ) ? (int) $input['location_id'] : 0;
+		$order_type  = isset( $input['order_type'] ) ? (string) $input['order_type'] : '';
+		$pickup_time = isset( $input['pickup_time'] ) ? (string) $input['pickup_time'] : '';
+
+		if ( $location_id && LBite_Locations::is_valid_location( $location_id ) ) {
+			$order->update_meta_data( '_lbite_location_id', $location_id );
+
+			// Standort-Name speichern.
+			$location = get_post( $location_id );
+			if ( $location ) {
+				$order->update_meta_data( '_lbite_location_name', $location->post_title );
 			}
 		}
 
-		$order->save();
+		if ( ! $order_type ) {
+			return;
+		}
+
+		$order->update_meta_data( '_lbite_order_type', $order_type );
+
+		if ( 'later' === $order_type && $pickup_time ) {
+			$order->update_meta_data( '_lbite_pickup_time', $pickup_time );
+			// Eigenes Datumsfeld für die Kapazitätszählung (Audit
+			// 26.09.2026, AP-13): count_orders_per_slot() filtert damit
+			// gezielt nach Abholdatum statt nach Erstellungsdatum.
+			$order->update_meta_data( '_lbite_pickup_date', substr( $pickup_time, 0, 10 ) );
+		}
+	}
+
+	/**
+	 * Standort-ID auflösen, wie sie in die Bestellung kommt.
+	 *
+	 * Öffentliche Hülle um resolve_effective_location_id() für den Block-Checkout.
+	 *
+	 * @param int $location_id Gewählte Standort-ID oder 0.
+	 * @return int
+	 */
+	public function resolve_location_for_order( $location_id ) {
+		return $this->resolve_effective_location_id( (int) $location_id );
 	}
 
 	/**
@@ -1060,19 +1160,27 @@ class LBite_Checkout {
 			return;
 		}
 
+		// Block-Checkout: Die Auswahl liegt in der Session (LBite_Checkout_Blocks),
+		// es gibt kein Formular-POST mit WooCommerce-Nonce.
+		if ( ! isset( $_POST['woocommerce-process-checkout-nonce'] ) && ! isset( $_POST['security'] ) ) {
+			$lbite_session_tip = self::get_session_tip();
+			if ( $lbite_session_tip ) {
+				$this->add_tip_fee_amount( $this->calculate_tip_amount( $lbite_session_tip['type'], $lbite_session_tip['value'] ) );
+			}
+			return;
+		}
+
 		// WooCommerce-Nonce prüfen: entweder process_checkout oder update_order_review.
 		if ( isset( $_POST['woocommerce-process-checkout-nonce'] ) ) {
 			$nonce_value = sanitize_text_field( wp_unslash( $_POST['woocommerce-process-checkout-nonce'] ) );
 			if ( ! wp_verify_nonce( $nonce_value, 'woocommerce-process_checkout' ) ) {
 				return;
 			}
-		} elseif ( isset( $_POST['security'] ) ) {
+		} else {
 			$nonce_value = sanitize_text_field( wp_unslash( $_POST['security'] ) );
 			if ( ! wp_verify_nonce( $nonce_value, 'update-order-review' ) ) {
 				return;
 			}
-		} else {
-			return;
 		}
 
 		// Formulardaten ermitteln: Bei update_order_review als serialisierter String in post_data,
@@ -1093,28 +1201,107 @@ class LBite_Checkout {
 			return;
 		}
 
-		$tip_type   = sanitize_text_field( $form_data['lbite_tip_type'] );
-		$tip_amount = 0;
-		$tip_mode   = get_option( 'lbite_tip_mode', 'percentage' );
-
-		// Brutto-Zwischensumme (inkl. MwSt.) für prozentuale Trinkgeldberechnung.
-		$cart       = WC()->cart;
-		$cart_total = $cart->get_subtotal() + $cart->get_subtotal_tax();
+		$tip_type = sanitize_text_field( $form_data['lbite_tip_type'] );
+		$value    = 0;
 
 		if ( 'percentage' === $tip_type && isset( $form_data['lbite_tip_percentage'] ) ) {
-			$value      = floatval( $form_data['lbite_tip_percentage'] );
-			$tip_amount = 'fixed' === $tip_mode ? $value : ( $cart_total * $value ) / 100;
+			$value = floatval( $form_data['lbite_tip_percentage'] );
 		} elseif ( 'custom' === $tip_type && isset( $form_data['lbite_tip_custom'] ) ) {
-			$value      = floatval( $form_data['lbite_tip_custom'] );
-			$tip_amount = 'fixed' === $tip_mode ? $value : ( $cart_total * $value ) / 100;
+			$value = floatval( $form_data['lbite_tip_custom'] );
 		}
 
+		$this->add_tip_fee_amount( $this->calculate_tip_amount( $tip_type, $value ) );
+	}
+
+	/**
+	 * Trinkgeldbetrag aus Art und Wert berechnen.
+	 *
+	 * @param string $tip_type 'percentage' (Vorschlag) oder 'custom' (eigener Wert).
+	 * @param float  $value    Prozent oder fester Betrag, je nach lbite_tip_mode.
+	 * @return float
+	 */
+	public function calculate_tip_amount( $tip_type, $value ) {
+		if ( ! in_array( $tip_type, array( 'percentage', 'custom' ), true ) || ! WC()->cart ) {
+			return 0.0;
+		}
+
+		$value = max( 0, (float) $value );
+
+		// Brutto-Zwischensumme (inkl. MwSt.) für prozentuale Trinkgeldberechnung.
+		$cart_total = WC()->cart->get_subtotal() + WC()->cart->get_subtotal_tax();
+
+		return 'fixed' === get_option( 'lbite_tip_mode', 'percentage' ) ? $value : ( $cart_total * $value ) / 100;
+	}
+
+	/**
+	 * Trinkgeld als Gebühr in den Warenkorb legen.
+	 *
+	 * @param float $tip_amount Betrag.
+	 */
+	private function add_tip_fee_amount( $tip_amount ) {
 		if ( $tip_amount > 0 ) {
 			// Die Rundung übernimmt ausschliesslich apply_rounding_fee() bei Priorität 999.
 			// Früher rundete das Trinkgeld sich selbst auf Basis der blossen
 			// Zwischensumme; Aktionsrabatte und Versand blieben dabei aussen vor und
 			// das Endtotal war dann kein Vielfaches von 5 Rappen mehr.
 			WC()->cart->add_fee( __( 'Tip', 'libre-bite' ), $tip_amount );
+		}
+	}
+
+	/**
+	 * Im Block-Checkout gewähltes Trinkgeld aus der Session.
+	 *
+	 * @return array{type:string,value:float}|null
+	 */
+	public static function get_session_tip() {
+		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+			return null;
+		}
+
+		$tip = WC()->session->get( 'lbite_tip' );
+
+		// Noch keine Wahl getroffen: Standardauswahl aus den Einstellungen,
+		// wie sie der klassische Checkout vorauswählt.
+		if ( null === $tip ) {
+			$default = (string) get_option( 'lbite_tip_default_selection', 'none' );
+			if ( preg_match( '/^percentage_([123])$/', $default, $m ) ) {
+				$tip = array(
+					'type'  => 'percentage',
+					'value' => (float) get_option( 'lbite_tip_percentage_' . $m[1], 0 ),
+				);
+			}
+		}
+
+		if ( ! is_array( $tip ) || empty( $tip['type'] ) || ! in_array( $tip['type'], array( 'percentage', 'custom' ), true ) ) {
+			return null;
+		}
+
+		return array(
+			'type'  => $tip['type'],
+			'value' => (float) $tip['value'],
+		);
+	}
+
+	/**
+	 * Trinkgeld-Angaben in die Bestellung schreiben.
+	 *
+	 * @param WC_Order $order    Bestellung.
+	 * @param string   $tip_type 'percentage' oder 'custom'.
+	 * @param float    $value    Gewählter Wert.
+	 */
+	public static function write_tip_meta( $order, $tip_type, $value ) {
+		$order->update_meta_data( '_lbite_tip_type', $tip_type );
+		$order->update_meta_data( '_lbite_tip_percentage', (float) $value );
+
+		// Tatsächlichen Betrag aus der bereits erstellten Gebühr lesen,
+		// statt ihn hier ein zweites Mal zu berechnen (Drift-Risiko).
+		// _lbite_tip_amount wurde bisher nie geschrieben, die Statistik
+		// zählte Trinkgeld deshalb als Add-on (Audit 26.09.2026, AP-14).
+		foreach ( $order->get_fees() as $lbite_tip_fee ) {
+			if ( __( 'Tip', 'libre-bite' ) === $lbite_tip_fee->get_name() ) {
+				$order->update_meta_data( '_lbite_tip_amount', (float) $lbite_tip_fee->get_total() );
+				break;
+			}
 		}
 	}
 
@@ -1238,27 +1425,15 @@ class LBite_Checkout {
 
 		if ( isset( $_POST['lbite_tip_type'] ) && 'none' !== sanitize_text_field( wp_unslash( $_POST['lbite_tip_type'] ) ) ) {
 			$tip_type = sanitize_text_field( wp_unslash( $_POST['lbite_tip_type'] ) );
-			$order->update_meta_data( '_lbite_tip_type', $tip_type );
+			$value    = 0;
 
 			if ( 'percentage' === $tip_type && isset( $_POST['lbite_tip_percentage'] ) ) {
-				$percentage = floatval( wp_unslash( $_POST['lbite_tip_percentage'] ) );
-				$order->update_meta_data( '_lbite_tip_percentage', $percentage );
+				$value = floatval( wp_unslash( $_POST['lbite_tip_percentage'] ) );
 			} elseif ( 'custom' === $tip_type && isset( $_POST['lbite_tip_custom'] ) ) {
-				$percentage = floatval( wp_unslash( $_POST['lbite_tip_custom'] ) );
-				$order->update_meta_data( '_lbite_tip_percentage', $percentage );
+				$value = floatval( wp_unslash( $_POST['lbite_tip_custom'] ) );
 			}
 
-			// Tatsächlichen Betrag aus der bereits erstellten Gebühr lesen,
-			// statt ihn hier ein zweites Mal zu berechnen (Drift-Risiko).
-			// _lbite_tip_amount wurde bisher nie geschrieben, die Statistik
-			// zählte Trinkgeld deshalb als Add-on (Audit 26.09.2026, AP-14).
-			foreach ( $order->get_fees() as $lbite_tip_fee ) {
-				if ( __( 'Tip', 'libre-bite' ) === $lbite_tip_fee->get_name() ) {
-					$order->update_meta_data( '_lbite_tip_amount', (float) $lbite_tip_fee->get_total() );
-					break;
-				}
-			}
-
+			self::write_tip_meta( $order, $tip_type, $value );
 			$order->save();
 		}
 	}
@@ -1501,6 +1676,19 @@ class LBite_Checkout {
 		$timeslots = $this->apply_slot_capacity( $timeslots, $location_id );
 
 		wp_send_json_success( array( 'timeslots' => $timeslots ) );
+	}
+
+	/**
+	 * Buchbare Abholzeiten eines Tages (Öffnungszeiten, Feiertage, Kapazität).
+	 *
+	 * Dieselbe Liste wie ajax_get_timeslots(), für die Abilities-API.
+	 *
+	 * @param int    $location_id Standort-ID.
+	 * @param string $date        Datum (Y-m-d).
+	 * @return array Liste aus [ 'value' => 'Y-m-d H:i', 'label' => 'H:i' ].
+	 */
+	public function get_bookable_timeslots( $location_id, $date ) {
+		return $this->apply_slot_capacity( $this->get_available_timeslots( (int) $location_id, (string) $date ), (int) $location_id );
 	}
 
 	/**

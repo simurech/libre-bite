@@ -248,13 +248,12 @@ class LBite_Admin {
 	 * - Alle Admin-Menüs + Feature-Toggles, Admin-Einstellungen, Support-Einstellungen, Debug
 	 */
 	/**
-	 * Nicht wegklickbaren Hinweis anzeigen, solange die Kasse den
-	 * WooCommerce-Checkout-Block statt des klassischen Shortcodes nutzt.
+	 * Nicht wegklickbaren Hinweis anzeigen, wenn der optimierte Checkout
+	 * eingestellt ist, die Kasse aber den WooCommerce-Checkout-Block nutzt.
 	 *
-	 * Alle Checkout-Erweiterungen (Standort, Zeitslot, Order Bumps, Trinkgeld)
-	 * hängen an klassischen Hooks und laufen mit dem Block nicht - Bestellungen
-	 * bekommen dann keinen Standort und erscheinen nicht auf dem Kanban-Board
-	 * (Audit 26.09.2026, AP-02).
+	 * Seit 4.2.0 funktioniert der Block mit allen übrigen Checkout-Funktionen
+	 * (LBite_Checkout_Blocks). Der optimierte Checkout ersetzt dagegen die
+	 * klassische Vorlage und greift mit dem Block nicht.
 	 */
 	public function render_checkout_block_notice() {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
@@ -267,17 +266,17 @@ class LBite_Admin {
 			return;
 		}
 
-		if ( ! function_exists( 'lbite_checkout_uses_blocks' ) || ! lbite_checkout_uses_blocks() ) {
+		if ( ! function_exists( 'lbite_checkout_block_conflict' ) || ! lbite_checkout_block_conflict() ) {
 			return;
 		}
 
 		$lbite_checkout_edit_url = function_exists( 'wc_get_page_id' ) ? get_edit_post_link( wc_get_page_id( 'checkout' ), 'raw' ) : '';
 		$lbite_recheck_url       = remove_query_arg( array() );
 		?>
-		<div class="notice notice-error">
+		<div class="notice notice-warning">
 			<p>
 				<strong><?php esc_html_e( 'Libre Bite: your checkout uses the WooCommerce Checkout block.', 'libre-bite' ); ?></strong>
-				<?php esc_html_e( 'Libre Bite currently only works with the classic checkout. Orders placed through the block do not get a location and will not appear on the Order Board.', 'libre-bite' ); ?>
+				<?php esc_html_e( 'The optimized checkout only works with the classic checkout shortcode. With the block, guests see the regular block checkout with the Libre Bite order options instead.', 'libre-bite' ); ?>
 			</p>
 			<p>
 				<strong><?php esc_html_e( 'Option A (recommended):', 'libre-bite' ); ?></strong>
@@ -1101,6 +1100,8 @@ class LBite_Admin {
 					'saveSuccess'   => __( 'Successfully saved', 'libre-bite' ),
 					'saveError'     => __( 'Error saving', 'libre-bite' ),
 					'noTable'       => __( 'No table', 'libre-bite' ),
+					/* translators: %s: name of the selected table, or "No table" */
+					'tableLabel'    => __( 'Table: %s', 'libre-bite' ),
 				),
 			)
 		);

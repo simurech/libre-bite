@@ -22,6 +22,10 @@ jQuery(document).ready(function($) {
 	 * renderTableOptions() befüllt) — das Grid ist nur eine antippbare
 	 * Projektion davon, damit auf dem Tablet kein natives Dropdown nötig ist.
 	 */
+	function tableName($opt) {
+		return $.trim($opt.text().replace(/^[\u{1F534}\u{1F7E2}]\s*/u, ''));
+	}
+
 	function syncTableGrid() {
 		var $select = $('#lbite-pos-table');
 		var $grid = $('#lbite-pos-table-grid');
@@ -34,22 +38,67 @@ jQuery(document).ready(function($) {
 			var $opt = $(this);
 			var val = $opt.val();
 			var $btn = $('<button type="button" class="lbite-pos-table-btn"></button>')
-				.attr('data-value', val)
-				.text($opt.text());
+				.attr('data-value', val);
 			if ('' === val) {
-				$btn.addClass('lbite-pos-table-btn-none');
-			} else if ('1' === $opt.attr('data-occupied')) {
-				$btn.addClass('lbite-pos-table-btn-occupied');
+				$btn.addClass('lbite-pos-table-btn-none').text($opt.text());
+			} else {
+				// Status als eigener Punkt statt Emoji im Text: Emojis stellen
+				// nicht alle Systeme dar (Kassen-Tablets mit älterem Android).
+				var occupied = '1' === $opt.attr('data-occupied');
+				$btn.toggleClass('lbite-pos-table-btn-occupied', occupied)
+					.append($('<span class="lbite-pos-table-dot" aria-hidden="true"></span>'))
+					.append($('<span class="lbite-pos-table-name"></span>').text(tableName($opt)));
 			}
 			if (val === currentVal) {
 				$btn.addClass('active');
 			}
 			$grid.append($btn);
 		});
+
+		// Beschriftung des Knopfs: gewählter Tisch ohne Status-Emoji.
+		var $selected = $select.find('option:selected');
+		var name = $selected.length && $selected.val() ? tableName($selected) : '';
+		var noTable = (lbiteAdmin.strings && lbiteAdmin.strings.noTable) ? lbiteAdmin.strings.noTable : '';
+		$('#lbite-pos-table-trigger-label').text(name || noTable);
+		$('#lbite-pos-table-trigger').toggleClass('has-table', !!name);
 	}
+
+	var $trigger = $('#lbite-pos-table-trigger');
+	var $popover = $('#lbite-pos-table-popover');
+
+	function setPopover(open) {
+		if (!$popover.length) {
+			return;
+		}
+		$popover.prop('hidden', !open);
+		$trigger.attr('aria-expanded', open ? 'true' : 'false');
+		if (open) {
+			var $active = $popover.find('.lbite-pos-table-btn.active');
+			($active.length ? $active : $popover.find('.lbite-pos-table-btn').first()).trigger('focus');
+		}
+	}
+
+	$trigger.on('click', function(e) {
+		e.stopPropagation();
+		setPopover($popover.prop('hidden'));
+	});
+
+	// Ausserhalb klicken oder Escape schliesst das Auswahlfenster.
+	$(document).on('click', function(e) {
+		if (!$popover.prop('hidden') && !$(e.target).closest('#lbite-pos-table-popover, #lbite-pos-table-trigger').length) {
+			setPopover(false);
+		}
+	});
+	$(document).on('keydown', function(e) {
+		if ('Escape' === e.key && !$popover.prop('hidden')) {
+			setPopover(false);
+			$trigger.trigger('focus');
+		}
+	});
 
 	$(document).on('click', '.lbite-pos-table-btn', function() {
 		$('#lbite-pos-table').val($(this).attr('data-value')).trigger('change');
+		setPopover(false);
 	});
 
 	$('#lbite-pos-table').on('change', syncTableGrid);

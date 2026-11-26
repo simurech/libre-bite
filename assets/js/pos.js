@@ -501,19 +501,26 @@
 				$toggleLabel.append($('<span class="lbite-stock-toggle-slider"></span>'));
 				$item.append($toggleLabel);
 
+				// Bildfläche immer gleich gross, auch ohne Bild: so stehen Namen
+				// und Preise aller Kacheln einer Reihe auf derselben Höhe.
+				const $media = $('<div class="lbite-pos-product-media"></div>');
 				if (product.image) {
-					$item.append($('<img>')
+					$media.append($('<img>')
 						.attr('src', product.image)
-						.attr('alt', product.name));
+						.attr('alt', ''));
 				}
+				$item.append($media);
 
-				$item.append($('<div class="lbite-pos-product-name"></div>').text(product.name));
+				$item.append($('<div class="lbite-pos-product-name"></div>')
+					.text(product.name)
+					.attr('title', product.name));
 
-				// Preisspanne bei variablen Produkten
+				// Variable Produkte: «ab»-Preis in einer Zeile statt einer
+				// dreizeiligen Spanne, die die Kachel aufbläht.
 				const minPrice = parseFloat(product.price) || 0;
 				const maxPrice = parseFloat(product.max_price || product.price) || 0;
 				const priceText = (maxPrice > minPrice)
-					? this.formatPrice(minPrice) + ' – ' + this.formatPrice(maxPrice)
+					? (lbitePos.strings.fromPrice || 'From %s').replace('%s', this.formatPrice(minPrice))
 					: this.formatPrice(minPrice);
 				$item.append($('<div class="lbite-pos-product-price"></div>').text(priceText));
 

@@ -6635,16 +6635,8 @@ msgstr ""
 msgid "Removes \"Downloads\" and \"Addresses\" from My Account if you sell no digital products and offer no shipping."
 msgstr ""
 
-#: templates/admin/settings/checkout-mode.php:57
-msgid "The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode %s, not the WooCommerce Checkout Block."
-msgstr ""
-
 #: includes/admin/class-admin.php:224
 msgid "Libre Bite: your checkout uses the WooCommerce Checkout block."
-msgstr ""
-
-#: includes/admin/class-admin.php:225
-msgid "Libre Bite currently only works with the classic checkout. Orders placed through the block do not get a location and will not appear on the Order Board."
 msgstr ""
 
 #: includes/admin/class-admin.php:228
@@ -6669,14 +6661,6 @@ msgstr ""
 
 #: includes/admin/class-admin.php:245
 msgid "Check again"
-msgstr ""
-
-#: includes/admin/class-setup-wizard.php:190
-msgid "Checkout uses the classic shortcode"
-msgstr ""
-
-#: includes/admin/class-setup-wizard.php:192
-msgid "Your checkout page uses the WooCommerce Checkout block. Libre Bite currently only works with the classic checkout: edit the \"Checkout\" page and switch the block back to the classic shortcode, or replace it with a Shortcode block containing [woocommerce_checkout]."
 msgstr ""
 
 #: includes/admin/class-admin.php:1109
@@ -6847,10 +6831,6 @@ msgstr ""
 
 #: templates/admin/dashboard.php:195
 msgid "Enable a payment method"
-msgstr ""
-
-#: templates/admin/dashboard.php:203
-msgid "Your checkout page uses the WooCommerce Checkout block. Libre Bite currently only works with the classic checkout shortcode."
 msgstr ""
 
 #: templates/admin/dashboard.php:204
@@ -7632,4 +7612,136 @@ msgstr ""
 
 #: includes/modules/product-options/class-product-options.php
 msgid "Guests can add these freely. For rules such as \"choose 1\", put the options into a group below."
+msgstr ""
+
+#. translators: %s: shortcode example
+#: templates/admin/settings/products-menu.php
+#, php-format
+msgid "A single page can override these settings in its shortcode, for example %s."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Applies to the card layout on large screens. Tablets show at most two columns, phones one."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Automatic (as many as fit)"
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Cards (grid)"
+msgstr ""
+
+#: includes/admin/class-setup-wizard.php
+msgid "Checkout matches the checkout mode"
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Column key, for example incoming, preparing or completed."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Columns"
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Compact list"
+msgstr ""
+
+#: includes/modules/checkout/class-checkout-blocks.php
+msgid "Could not save your selection. Please try again."
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Day in the format YYYY-MM-DD. Default: today."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Descriptions"
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Get open orders"
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Get pickup times"
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "ID of the location."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Image Format"
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Landscape (4:3)"
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Layout"
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "List locations"
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Lists the locations the current user may access, with their current opening status."
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Move an order on the Order Board"
+msgstr ""
+
+#: includes/modules/checkout/class-checkout-blocks.php
+msgid "No pickup times available on this day."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Order Panel"
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Orders, locations and pickup times of the restaurant."
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Returns the bookable pickup times of a location for one day, taking opening hours, holidays and slot capacity into account."
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Returns the orders of a location as shown on the Order Board, grouped by column."
+msgstr ""
+
+#: includes/core/class-abilities__premium_only.php
+msgid "Sets the Order Board column of an order, for example from incoming to preparing."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Show the order panel with the cart next to the menu."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Show the short description of each product."
+msgstr ""
+
+#: templates/admin/settings/products-menu.php
+msgid "Square"
+msgstr ""
+
+#. translators: %s: shortcode placeholder
+#: templates/admin/settings/checkout-mode.php
+#, php-format
+msgid "The optimized checkout only works with the classic WooCommerce shortcode. Your checkout page must contain the shortcode %s, not the WooCommerce Checkout Block. All other Libre Bite checkout features also work with the block."
+msgstr ""
+
+#: includes/admin/class-admin.php
+msgid "The optimized checkout only works with the classic checkout shortcode. With the block, guests see the regular block checkout with the Libre Bite order options instead."
+msgstr ""
+
+#: includes/modules/checkout/class-checkout-blocks.php
+msgid "Unknown action."
 msgstr ""
