@@ -154,7 +154,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					foreach ( $lbite_section['products'] as $lbite_product ) :
 						$lbite_pid       = $lbite_product->get_id();
 						$lbite_needs_mod = $lbite_product->is_type( 'variable' )
-							|| ! empty( get_post_meta( $lbite_pid, '_lbite_product_options', true ) );
+							|| ( class_exists( 'LBite_Product_Options' ) && LBite_Product_Options::product_has_options( $lbite_pid ) );
 						$lbite_img       = wp_get_attachment_image_url( $lbite_product->get_image_id(), 'medium' );
 						$lbite_diet      = class_exists( 'LBite_Nutritional_Info' )
 							? LBite_Nutritional_Info::get_product_dietary( $lbite_pid )

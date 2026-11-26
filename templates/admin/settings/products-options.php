@@ -25,6 +25,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	$lbite_toggle_description = __( 'Allow customers to customize products with add-ons, variants, or extras.', 'libre-bite' );
 	$lbite_toggle_is_pro      = false;
 	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
+
+	$lbite_toggle_key             = 'enable_modifier_groups';
+	$lbite_toggle_label           = __( 'Option Groups', 'libre-bite' );
+	$lbite_toggle_description     = __( 'Group options per product with rules: one or several choices, minimum, maximum and a number of included choices (e.g. "Sauce: choose 1", "Toppings: up to 4, 2 included"). Set up in the product editor under Product Options.', 'libre-bite' );
+	$lbite_toggle_is_pro          = true;
+	$lbite_toggle_premium_allowed = lbite_has_pro_license();
+	include LBITE_PLUGIN_DIR . 'templates/admin/settings/_master-toggle.php';
 	?>
 
 	<?php if ( lbite_feature_enabled( 'enable_product_options' ) ) : ?>

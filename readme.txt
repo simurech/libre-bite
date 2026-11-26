@@ -6,7 +6,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 3.11.0
+Stable tag: 4.0.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,9 @@ A guided 3-step booking form for guests — date & party size, contact details, 
 
 **Table Ordering (QR Code)**
 Generate a QR code for each table. Guests scan it and order directly — no address or pickup time fields required. Orders appear in the dashboard with the table name.
+
+**Option Groups**
+Turn add-ons into rule-based groups per product: one or several choices, minimum and maximum, and a number of included choices (the cheapest ones are free). Example: "Sauce: choose 1", "Toppings: up to 4, 2 included". The rules apply on the product page, in the menu view and in the POS alike.
 
 **Cash Report (X/Z)**
 Interim and end-of-day reports per location: revenue by payment method (including split payments), VAT, tips, discounts, rounding and cancellations, expected cash, counted cash and difference. Z reports are numbered, cannot be edited afterwards, and can be printed or exported as CSV. Not a certified cash register system (e.g. no TSE for Germany).
@@ -285,6 +288,10 @@ Yes. English is the source language, and the plugin ships with complete translat
 4. **Module Settings** — Toggle individual features on or off depending on business needs.
 
 == Changelog ==
+
+= 4.0.0 =
+* Feature: Option groups (Pro) – one or several choices, minimum, maximum and included choices per group, enforced on the product page, in the menu view and in the POS.
+* Changed: Product options are validated on the server before an order or tab round is booked.
 
 = 3.11.0 =
 * Feature: Dietary labels are now configurable (Pro) – rename, remove or add your own labels such as Halal; existing product assignments are kept.

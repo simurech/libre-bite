@@ -1430,32 +1430,8 @@ class LBite_Admin {
 			}
 		}
 
-		// OOS Produkt-Optionen laden
-		$product_options = get_post_meta( $product->get_id(), '_lbite_product_options', true );
-		if ( ! empty( $product_options ) && is_array( $product_options ) ) {
-			foreach ( $product_options as $option_id ) {
-				$option_post = get_post( $option_id );
-				if ( ! $option_post ) {
-					continue;
-				}
-
-				// Einfaches Optionssystem (eine Option = eine Checkbox mit Preis)
-				$option_price = get_post_meta( $option_id, '_lbite_price', true );
-
-				$response['options'][] = array(
-					'id'       => $option_id,
-					'name'     => $option_post->post_title,
-					'type'     => 'checkbox',
-					'required' => false,
-					'choices'  => array(
-						array(
-							'label' => $option_post->post_title,
-							'price' => floatval( $option_price ),
-						),
-					),
-				);
-			}
-		}
+		// Optionsgruppen (F39). Ohne Pro eine regellose Gruppe aus der Optionsliste.
+		$response['groups'] = class_exists( 'LBite_Product_Options' ) ? LBite_Product_Options::get_groups_for_client( $product->get_id() ) : array();
 
 		wp_send_json_success( $response );
 
@@ -1519,6 +1495,11 @@ class LBite_Admin {
 			} else {
 				LBite_Checkout::set_pos_vat_context( $table_id ? 'dine_in' : 'takeaway' );
 			}
+		}
+
+		$lbite_options_check = $this->validate_cart_item_options( $cart_items );
+		if ( is_wp_error( $lbite_options_check ) ) {
+			wp_send_json_error( array( 'message' => $lbite_options_check->get_error_message() ) );
 		}
 
 		try {
@@ -1629,6 +1610,35 @@ class LBite_Admin {
 	}
 
 	/**
+	 * Optionsauswahl aller Positionen prüfen, bevor etwas gebucht wird (F39).
+	 *
+	 * Absichtlich vor dem Anlegen der Bestellung: Eine Ablehnung mitten in
+	 * add_cart_items_to_order() hinterliesse eine halbe Bestellung.
+	 *
+	 * @param array $cart_items Warenkorb-Items.
+	 * @return true|WP_Error
+	 */
+	private function validate_cart_item_options( array $cart_items ) {
+		if ( ! class_exists( 'LBite_Product_Options' ) ) {
+			return true;
+		}
+
+		foreach ( $cart_items as $item ) {
+			$ids = array_map( 'intval', isset( $item['option_ids'] ) ? (array) $item['option_ids'] : array() );
+			if ( empty( $ids ) && ! LBite_Product_Options::product_has_options( $item['id'] ) ) {
+				continue;
+			}
+
+			$result = LBite_Product_Options::evaluate_selection( $item['id'], $ids );
+			if ( ! $result['valid'] ) {
+				return new WP_Error( 'lbite_invalid_options', get_the_title( $item['id'] ) . ': ' . $result['message'] );
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Warenkorb-Positionen (Produkte, Add-ons, Notizen) einer Bestellung hinzufügen.
 	 *
 	 * Gemeinsam genutzt von ajax_pos_create_order() (regulärer POS-Bestellfluss) und den
@@ -1665,29 +1675,26 @@ class LBite_Admin {
 			// Add-ons als separate Gebührenpositionen erfassen (je Add-on eine eigene Zeile).
 			$addon_names_for_meta = array();
 			$fee_items_for_round  = array();
-			if ( ! empty( $item['option_ids'] ) ) {
-				// _lbite_product_options hängt am Eltern-Produkt; bei Varianten Parent-ID nutzen.
-				$options_lookup_id = $product->is_type( 'variation' ) ? $product->get_parent_id() : $item['id'];
-				$allowed_options   = get_post_meta( $options_lookup_id, '_lbite_product_options', true );
-				if ( ! is_array( $allowed_options ) ) {
-					$allowed_options = array();
+			if ( ! empty( $item['option_ids'] ) && class_exists( 'LBite_Product_Options' ) ) {
+				// Zentrale Auswertung (F39): prüft die Gruppenregeln und liefert den
+				// tatsächlich berechneten Preis je Option (inklusive Optionen = 0).
+				$opt_ids    = array_map( 'intval', (array) $item['option_ids'] );
+				$evaluation = LBite_Product_Options::evaluate_selection( $item['id'], $opt_ids );
+				if ( ! $evaluation['valid'] ) {
+					// Vorab in validate_cart_item_options() abgelehnt; hier nur Absicherung.
+					$opt_ids = array();
 				}
-				foreach ( $item['option_ids'] as $opt_id ) {
-					// Lose Prüfung: WP serialisiert Integers; JSON-Decode liefert ebenfalls Integers,
-					// aber beim Mischen von alten/neuen Datenbankwerten können Typen abweichen.
-					if ( ! in_array( $opt_id, $allowed_options ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-						continue;
-					}
-					$opt_price = get_post_meta( $opt_id, '_lbite_price', true );
+				foreach ( $opt_ids as $opt_id ) {
+					$opt_price = isset( $evaluation['charged'][ $opt_id ] ) ? (float) $evaluation['charged'][ $opt_id ] : 0.0;
 					$opt_name  = get_the_title( $opt_id );
 					if ( ! $opt_name ) {
 						$opt_name = __( 'Add-on', 'libre-bite' );
 					}
 					$addon_names_for_meta[] = $opt_name;
-					if ( $opt_price ) {
+					if ( $opt_price > 0 ) {
 						$fee_net = ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) )
-							? LBite_Checkout::gross_to_net_at_filtered_class( $product, floatval( $opt_price ) ) * $item['quantity']
-							: wc_get_price_excluding_tax( $product, array( 'price' => floatval( $opt_price ) ) ) * $item['quantity'];
+							? LBite_Checkout::gross_to_net_at_filtered_class( $product, $opt_price ) * $item['quantity']
+							: wc_get_price_excluding_tax( $product, array( 'price' => $opt_price ) ) * $item['quantity'];
 						$fee_item = new WC_Order_Item_Fee();
 						$fee_item->set_name( $opt_name );
 						$fee_item->set_amount( $fee_net );
@@ -1901,6 +1908,11 @@ class LBite_Admin {
 			LBite_Checkout::set_pos_vat_context( 'dine_in' );
 		}
 
+		$lbite_options_check = $this->validate_cart_item_options( $cart_items );
+		if ( is_wp_error( $lbite_options_check ) ) {
+			wp_send_json_error( array( 'message' => $lbite_options_check->get_error_message() ) );
+		}
+
 		try {
 			$order = wc_create_order();
 
@@ -2012,6 +2024,11 @@ class LBite_Admin {
 		if ( class_exists( 'LBite_Checkout' ) && lbite_feature_enabled( 'enable_swiss_vat' ) ) {
 			$service_type = $order->get_meta( '_lbite_service_type', true );
 			LBite_Checkout::set_pos_vat_context( 'dine_in' === $service_type ? 'dine_in' : 'takeaway' );
+		}
+
+		$lbite_options_check = $this->validate_cart_item_options( $cart_items );
+		if ( is_wp_error( $lbite_options_check ) ) {
+			wp_send_json_error( array( 'message' => $lbite_options_check->get_error_message() ) );
 		}
 
 		try {

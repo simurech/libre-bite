@@ -54,6 +54,8 @@ class LBite_Product_Options {
 		$this->loader->add_action( 'woocommerce_before_add_to_cart_button', $this, 'render_product_options' );
 
 		// Warenkorb
+		$this->loader->add_filter( 'woocommerce_add_to_cart_validation', $this, 'validate_add_to_cart', 20, 3 );
+		$this->loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_product_page_assets' );
 		$this->loader->add_filter( 'woocommerce_add_cart_item_data', $this, 'add_cart_item_data', 10, 2 );
 		$this->loader->add_filter( 'woocommerce_get_item_data', $this, 'display_cart_item_data', 10, 2 );
 		$this->loader->add_filter( 'woocommerce_add_cart_item', $this, 'add_cart_item_price', 10, 1 );
@@ -242,6 +244,11 @@ class LBite_Product_Options {
 			<?php
 		}
 		echo '</div>';
+
+		// Modifikator-Gruppen (Pro, F39). Die Klasse existiert nur im Pro-Build.
+		if ( self::groups_available() ) {
+			LBite_Option_Groups::render_admin( $post, $options );
+		}
 	}
 
 	/**
@@ -266,6 +273,280 @@ class LBite_Product_Options {
 			: array();
 
 		update_post_meta( $post_id, '_lbite_product_options', $options );
+
+		if ( self::groups_available() ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Wird in LBite_Option_Groups::sanitize_groups() Feld für Feld bereinigt.
+			$raw_groups = isset( $_POST['lbite_option_groups'] ) && is_array( $_POST['lbite_option_groups'] ) ? wp_unslash( $_POST['lbite_option_groups'] ) : array();
+			LBite_Option_Groups::save( $post_id, $raw_groups );
+		}
+	}
+
+	/*
+	 * ------------------------------------------------------------------
+	 * Gruppen (F39) – gemeinsame Grundlage für Produktseite, Warenkorb,
+	 * Menü-Ansicht und Kasse
+	 * ------------------------------------------------------------------
+	 */
+
+	/**
+	 * Sind Modifikator-Gruppen nutzbar (Pro-Build, Lizenz, Schalter)?
+	 *
+	 * @return bool
+	 */
+	public static function groups_available() {
+		return class_exists( 'LBite_Option_Groups' ) && lbite_feature_enabled( 'enable_modifier_groups' );
+	}
+
+	/**
+	 * Eltern-Produkt-ID (Optionen und Gruppen hängen immer am Eltern-Produkt).
+	 *
+	 * @param int $product_id Produkt- oder Varianten-ID.
+	 * @return int
+	 */
+	private static function base_product_id( $product_id ) {
+		$product_id = (int) $product_id;
+		if ( 'product_variation' === get_post_type( $product_id ) ) {
+			$parent = (int) wp_get_post_parent_id( $product_id );
+			if ( $parent ) {
+				return $parent;
+			}
+		}
+
+		return $product_id;
+	}
+
+	/**
+	 * Alle Gruppen eines Produkts, mit Optionsdaten.
+	 *
+	 * Die bisherige flache Optionsliste erscheint als regellose Gruppe
+	 * «Extras». Ohne Pro (oder ohne Lizenz) zählen auch die Optionen der
+	 * Gruppen als solche Extras – nichts verschwindet, nur die Regeln entfallen.
+	 *
+	 * @param int $product_id Produkt- oder Varianten-ID.
+	 * @return array[] Gruppen mit id, label, type, min, max, free, option_ids, options[id,name,price].
+	 */
+	public static function get_product_groups( $product_id ) {
+		$base   = self::base_product_id( $product_id );
+		$legacy = get_post_meta( $base, '_lbite_product_options', true );
+		$legacy = is_array( $legacy ) ? array_map( 'intval', $legacy ) : array();
+		$stored = get_post_meta( $base, '_lbite_option_groups', true );
+		$stored = is_array( $stored ) ? $stored : array();
+		$groups = array();
+
+		if ( self::groups_available() ) {
+			$groups = $stored;
+		} else {
+			foreach ( $stored as $g ) {
+				$legacy = array_merge( $legacy, array_map( 'intval', (array) $g['option_ids'] ) );
+			}
+		}
+
+		$in_groups = array();
+		foreach ( $groups as $g ) {
+			$in_groups = array_merge( $in_groups, array_map( 'intval', (array) $g['option_ids'] ) );
+		}
+		$extras = array_values( array_unique( array_diff( $legacy, $in_groups ) ) );
+		if ( $extras ) {
+			$groups[] = array(
+				'id'         => 'extras',
+				'label'      => __( 'Options', 'libre-bite' ),
+				'type'       => 'multiple',
+				'min'        => 0,
+				'max'        => 0,
+				'free'       => 0,
+				'option_ids' => $extras,
+			);
+		}
+
+		// Optionsdaten anhängen, nur veröffentlichte Optionen.
+		foreach ( $groups as $index => $g ) {
+			$options = array();
+			$ids     = array();
+			foreach ( (array) $g['option_ids'] as $option_id ) {
+				$option = get_post( (int) $option_id );
+				if ( ! $option || self::POST_TYPE !== $option->post_type || 'publish' !== $option->post_status ) {
+					continue;
+				}
+				$ids[]     = (int) $option_id;
+				$options[] = array(
+					'id'    => (int) $option_id,
+					'name'  => $option->post_title,
+					'price' => (float) get_post_meta( $option_id, '_lbite_price', true ),
+				);
+			}
+
+			if ( empty( $options ) ) {
+				unset( $groups[ $index ] );
+				continue;
+			}
+
+			$groups[ $index ]['option_ids'] = $ids;
+			$groups[ $index ]['options']    = $options;
+		}
+
+		return array_values( $groups );
+	}
+
+	/**
+	 * Gruppen für Oberflächen (Produktseite, Menü-Popup, Kasse) inklusive Texte.
+	 *
+	 * @param int $product_id Produkt- oder Varianten-ID.
+	 * @return array[]
+	 */
+	public static function get_groups_for_client( $product_id ) {
+		$groups = self::get_product_groups( $product_id );
+		$rules  = class_exists( 'LBite_Option_Groups' );
+
+		foreach ( $groups as $index => $g ) {
+			$groups[ $index ]['hint']      = $rules ? LBite_Option_Groups::hint( $g ) : '';
+			$groups[ $index ]['error_min'] = $rules ? LBite_Option_Groups::error_message( $g, 'min' ) : '';
+			$groups[ $index ]['error_max'] = $rules ? LBite_Option_Groups::error_message( $g, 'max' ) : '';
+		}
+
+		return $groups;
+	}
+
+	/**
+	 * Hat das Produkt überhaupt wählbare Optionen?
+	 *
+	 * @param int $product_id Produkt-ID.
+	 * @return bool
+	 */
+	public static function product_has_options( $product_id ) {
+		return ! empty( self::get_product_groups( $product_id ) );
+	}
+
+	/**
+	 * Auswahl prüfen und Preise berechnen (einzige Rechenstelle).
+	 *
+	 * @param int   $product_id Produkt- oder Varianten-ID.
+	 * @param int[] $selected   Gewählte Options-IDs.
+	 * @return array{valid:bool,message:string,extra:float,charged:array<int,float>}
+	 */
+	public static function evaluate_selection( $product_id, array $selected ) {
+		$groups = self::get_product_groups( $product_id );
+		$prices = array();
+		foreach ( $groups as $g ) {
+			foreach ( $g['options'] as $option ) {
+				$prices[ $option['id'] ] = $option['price'];
+			}
+		}
+
+		if ( class_exists( 'LBite_Option_Groups' ) ) {
+			$result = LBite_Option_Groups::evaluate( $groups, $prices, $selected );
+		} else {
+			// Gratis-Build: eine regellose Gruppe, Aufpreis = Summe.
+			$selected = array_values( array_unique( array_map( 'intval', $selected ) ) );
+			$result   = array(
+				'valid'   => ! array_diff( $selected, array_keys( $prices ) ),
+				'group'   => null,
+				'reason'  => null,
+				'extra'   => 0.0,
+				'charged' => array(),
+			);
+			foreach ( $selected as $id ) {
+				if ( isset( $prices[ $id ] ) ) {
+					$result['charged'][ $id ] = (float) $prices[ $id ];
+					$result['extra']         += (float) $prices[ $id ];
+				}
+			}
+		}
+
+		$message = '';
+		if ( ! $result['valid'] ) {
+			$message = __( 'Please check the selected options.', 'libre-bite' );
+			foreach ( $groups as $g ) {
+				if ( $g['id'] === $result['group'] && class_exists( 'LBite_Option_Groups' ) ) {
+					$message = LBite_Option_Groups::error_message( $g, $result['reason'] );
+				}
+			}
+		}
+
+		return array(
+			'valid'   => $result['valid'],
+			'message' => $message,
+			'extra'   => (float) $result['extra'],
+			'charged' => $result['charged'],
+		);
+	}
+
+	/**
+	 * Auswahl aus dem Formular lesen: Checkboxen (lbite_options[]) und
+	 * Einfachauswahl je Gruppe (lbite_options_g[gruppe]).
+	 *
+	 * @return int[]
+	 */
+	private static function get_posted_selection() {
+		$ids = array();
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Wird vom WooCommerce-Warenkorb nach eigener Prüfung aufgerufen.
+		if ( isset( $_POST['lbite_options'] ) && is_array( $_POST['lbite_options'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- siehe oben.
+			$ids = array_merge( $ids, array_map( 'intval', wp_unslash( $_POST['lbite_options'] ) ) );
+		}
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- siehe oben.
+		if ( isset( $_POST['lbite_options_g'] ) && is_array( $_POST['lbite_options_g'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- siehe oben.
+			$ids = array_merge( $ids, array_map( 'intval', wp_unslash( $_POST['lbite_options_g'] ) ) );
+		}
+
+		return array_values( array_unique( array_filter( $ids ) ) );
+	}
+
+	/**
+	 * Regeln beim Hinzufügen zum Warenkorb durchsetzen.
+	 *
+	 * Greift auch für die Menü-Ansicht und den AJAX-Knopf im Shop: Produkte
+	 * mit Pflichtgruppen lassen sich dort nicht ohne Auswahl hinzufügen,
+	 * WooCommerce leitet dann auf die Produktseite weiter.
+	 *
+	 * @param bool $passed     Bisheriges Ergebnis.
+	 * @param int  $product_id Produkt-ID.
+	 * @param int  $quantity   Menge.
+	 * @return bool
+	 */
+	public function validate_add_to_cart( $passed, $product_id, $quantity ) {
+		if ( ! $passed ) {
+			return $passed;
+		}
+
+		$selected = self::get_posted_selection();
+		if ( empty( $selected ) && ! self::product_has_options( $product_id ) ) {
+			return $passed;
+		}
+
+		$result = self::evaluate_selection( $product_id, $selected );
+		if ( ! $result['valid'] ) {
+			wc_add_notice( $result['message'], 'error' );
+			return false;
+		}
+
+		return $passed;
+	}
+
+	/**
+	 * Script für Gruppenregeln auf Produktseiten mit Optionen laden.
+	 */
+	public function enqueue_product_page_assets() {
+		if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+			return;
+		}
+
+		$product_id = get_queried_object_id();
+		if ( ! $product_id || ! self::product_has_options( $product_id ) ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'lbite-option-groups',
+			LBITE_PLUGIN_URL . 'assets/js/option-groups.js',
+			array(),
+			LBITE_VERSION,
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 	}
 
 	/**
@@ -278,44 +559,43 @@ class LBite_Product_Options {
 			return;
 		}
 
-		$product_options = get_post_meta( $product->get_id(), '_lbite_product_options', true );
-		if ( empty( $product_options ) || ! is_array( $product_options ) ) {
+		$groups = self::get_groups_for_client( $product->get_id() );
+		if ( empty( $groups ) ) {
 			return;
 		}
-
-		$options = get_posts(
-			array(
-				'post_type'      => self::POST_TYPE,
-				'posts_per_page' => 200, // Begrenzt für Performance.
-				'post__in'       => $product_options,
-				'orderby'        => 'title',
-				'order'          => 'ASC',
-			)
-		);
-
-		if ( empty( $options ) ) {
-			return;
-		}
-
 		?>
-		<div class="lbite-product-options" style="margin: 20px 0;">
-			<h4><?php esc_html_e( 'Options', 'libre-bite' ); ?></h4>
-			<?php foreach ( $options as $option ) : ?>
-				<?php
-				$price       = get_post_meta( $option->ID, '_lbite_price', true );
-				$description = $option->post_content;
-				?>
-				<label style="display: block; margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
-					<input type="checkbox" name="lbite_options[]" value="<?php echo esc_attr( $option->ID ); ?>" style="margin-right: 8px;">
-					<strong><?php echo esc_html( $option->post_title ); ?></strong>
-					<?php if ( $price ) : ?>
-						<span style="color: #666;">(+<?php echo wp_kses_post( wc_price( $price ) ); ?>)</span>
+		<div class="lbite-product-options lbite-option-groups" data-lbite-option-groups style="margin: 20px 0;">
+			<?php foreach ( $groups as $g ) : ?>
+				<?php $is_single = 'single' === $g['type']; ?>
+				<fieldset class="lbite-option-group" data-group="<?php echo esc_attr( $g['id'] ); ?>" data-min="<?php echo esc_attr( $g['min'] ); ?>" data-max="<?php echo esc_attr( $is_single ? 1 : $g['max'] ); ?>" data-free="<?php echo esc_attr( $g['free'] ); ?>" data-error-min="<?php echo esc_attr( $g['error_min'] ); ?>" data-error-max="<?php echo esc_attr( $g['error_max'] ); ?>" style="margin: 0 0 16px; padding: 0; border: 0;">
+					<legend style="font-weight: 600; margin-bottom: 6px;">
+						<?php echo esc_html( $g['label'] ); ?>
+						<?php if ( '' !== $g['hint'] ) : ?>
+							<span class="lbite-option-group__hint" style="font-weight: 400; color: #646970;">(<?php echo esc_html( $g['hint'] ); ?>)</span>
+						<?php endif; ?>
+					</legend>
+					<?php if ( $is_single && 0 === (int) $g['min'] ) : ?>
+						<label style="display: block; margin-bottom: 8px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
+							<input type="radio" name="lbite_options_g[<?php echo esc_attr( $g['id'] ); ?>]" value="" checked style="margin-right: 8px;">
+							<?php esc_html_e( 'None', 'libre-bite' ); ?>
+						</label>
 					<?php endif; ?>
-					<?php if ( $description ) : ?>
-						<br><span style="font-size: 13px; color: #666;"><?php echo esc_html( $description ); ?></span>
-					<?php endif; ?>
-				</label>
+					<?php foreach ( $g['options'] as $option ) : ?>
+						<label style="display: block; margin-bottom: 8px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
+							<?php if ( $is_single ) : ?>
+								<input type="radio" name="lbite_options_g[<?php echo esc_attr( $g['id'] ); ?>]" value="<?php echo esc_attr( $option['id'] ); ?>" data-price="<?php echo esc_attr( $option['price'] ); ?>" style="margin-right: 8px;">
+							<?php else : ?>
+								<input type="checkbox" name="lbite_options[]" value="<?php echo esc_attr( $option['id'] ); ?>" data-price="<?php echo esc_attr( $option['price'] ); ?>" style="margin-right: 8px;">
+							<?php endif; ?>
+							<strong><?php echo esc_html( $option['name'] ); ?></strong>
+							<?php if ( $option['price'] > 0 ) : ?>
+								<span style="color: #666;">(+<?php echo wp_kses_post( wc_price( $option['price'] ) ); ?>)</span>
+							<?php endif; ?>
+						</label>
+					<?php endforeach; ?>
+				</fieldset>
 			<?php endforeach; ?>
+			<p class="lbite-option-groups__error woocommerce-error" role="alert" hidden></p>
 		</div>
 		<?php
 	}
@@ -328,11 +608,11 @@ class LBite_Product_Options {
 	 * @return array
 	 */
 	public function add_cart_item_data( $cart_item_data, $product_id ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Hook wird von WooCommerce nach eigener Nonce-Pruefung aufgerufen.
-		if ( isset( $_POST['lbite_options'] ) && is_array( $_POST['lbite_options'] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Hook wird von WooCommerce nach eigener Nonce-Pruefung aufgerufen.
-			$options = array_map( 'intval', wp_unslash( $_POST['lbite_options'] ) );
-			if ( ! empty( $options ) ) {
+		$options = self::get_posted_selection();
+		if ( ! empty( $options ) ) {
+			// Nur IDs, die tatsächlich zu diesem Produkt gehören (validate_add_to_cart hat die Regeln geprüft).
+			$result = self::evaluate_selection( $product_id, $options );
+			if ( $result['valid'] ) {
 				$cart_item_data['lbite_options'] = $options;
 			}
 		}
@@ -350,12 +630,13 @@ class LBite_Product_Options {
 	public function display_cart_item_data( $item_data, $cart_item ) {
 		if ( ! empty( $cart_item['lbite_options'] ) ) {
 			$option_labels = array();
+			$charged       = self::evaluate_selection( $cart_item['product_id'], (array) $cart_item['lbite_options'] )['charged'];
 			foreach ( $cart_item['lbite_options'] as $option_id ) {
 				$option = get_post( $option_id );
 				if ( $option ) {
-					$price = get_post_meta( $option_id, '_lbite_price', true );
+					$price = isset( $charged[ (int) $option_id ] ) ? $charged[ (int) $option_id ] : 0;
 					$label = $option->post_title;
-					if ( $price ) {
+					if ( $price > 0 ) {
 						$label .= ' (+' . wp_strip_all_tags( wc_price( $price ) ) . ')';
 					}
 					$option_labels[] = $label;
@@ -380,13 +661,8 @@ class LBite_Product_Options {
 	 */
 	public function add_cart_item_price( $cart_item ) {
 		if ( ! empty( $cart_item['lbite_options'] ) ) {
-			$extra_price = 0;
-			foreach ( $cart_item['lbite_options'] as $option_id ) {
-				$price = get_post_meta( $option_id, '_lbite_price', true );
-				if ( $price ) {
-					$extra_price += floatval( $price );
-				}
-			}
+			// Gruppenregeln (Gratis-Optionen) über die zentrale Auswertung.
+			$extra_price = self::evaluate_selection( $cart_item['product_id'], (array) $cart_item['lbite_options'] )['extra'];
 
 			if ( $extra_price > 0 ) {
 				$cart_item['data']->set_price( $cart_item['data']->get_price() + $extra_price );
@@ -418,9 +694,11 @@ class LBite_Product_Options {
 		$addon_names = array();
 		$addon_items = array();
 
+		$charged = self::evaluate_selection( $values['product_id'], (array) $values['lbite_options'] )['charged'];
+
 		foreach ( $values['lbite_options'] as $option_id ) {
 			$option    = get_post( $option_id );
-			$opt_price = floatval( get_post_meta( $option_id, '_lbite_price', true ) );
+			$opt_price = isset( $charged[ (int) $option_id ] ) ? (float) $charged[ (int) $option_id ] : 0.0;
 			if ( ! $option ) {
 				continue;
 			}

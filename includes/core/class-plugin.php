@@ -211,6 +211,13 @@ class LBite_Plugin {
 				}
 			}
 
+			// Modifikator-Gruppen (F39): nur statische Hilfsklasse, die das
+			// Optionsmodul nutzt, sobald sie existiert und der Schalter aktiv ist.
+			$lbite_groups_file = LBITE_PLUGIN_DIR . 'includes/modules/product-options/class-option-groups__premium_only.php';
+			if ( file_exists( $lbite_groups_file ) ) {
+				require_once $lbite_groups_file;
+			}
+
 			// Kassenabschluss X/Z (F25), Suffix __premium_only wie bei den übrigen Pro-Modulen.
 			if ( lbite_feature_enabled( 'enable_cash_reports' ) ) {
 				$lbite_cash_file = LBITE_PLUGIN_DIR . 'includes/modules/cash-reports/class-cash-reports__premium_only.php';

@@ -7269,3 +7269,113 @@ msgstr "Nuova etichetta, ad es. Halal"
 #: templates/admin/settings/products-nutrition.php
 msgid "automatic"
 msgstr "automatica"
+
+#: templates/admin/settings/products-options.php
+msgid "Option Groups"
+msgstr "Gruppi di opzioni"
+
+#: templates/admin/settings/products-options.php
+msgid "Group options per product with rules: one or several choices, minimum, maximum and a number of included choices (e.g. \"Sauce: choose 1\", \"Toppings: up to 4, 2 included\"). Set up in the product editor under Product Options."
+msgstr "Raggruppa le opzioni per prodotto con regole: una o più scelte, minimo, massimo e numero di scelte incluse (ad es. «Salsa: scegli 1», «Condimenti: fino a 4, 2 inclusi»). Da configurare nell’editor del prodotto alla voce Opzioni prodotto."
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Choose 1"
+msgstr "Scegli 1"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Choose up to 1"
+msgstr "Al massimo 1"
+
+#. translators: %d: number of choices.
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "Choose %d"
+msgid_plural "Choose %d"
+msgstr[0] "Scegli %d"
+msgstr[1] "Scegli %d"
+
+#. translators: 1: minimum, 2: maximum number of choices.
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "Choose %1$d–%2$d"
+msgstr "Scegli da %1$d a %2$d"
+
+#. translators: %d: minimum number of choices.
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "Choose at least %d"
+msgstr "Almeno %d"
+
+#. translators: %d: maximum number of choices.
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "Up to %d"
+msgstr "Fino a %d"
+
+#. translators: %d: number of choices included in the price.
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "%d included"
+msgid_plural "%d included"
+msgstr[0] "%d inclusa"
+msgstr[1] "%d incluse"
+
+#. translators: 1: group name, 2: maximum number of choices.
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "%1$s: please choose at most %2$d."
+msgstr "%1$s: scegline al massimo %2$d."
+
+#. translators: 1: group name, 2: minimum number of choices.
+#: includes/modules/product-options/class-option-groups__premium_only.php
+#, php-format
+msgid "%1$s: please choose at least %2$d."
+msgstr "%1$s: scegline almeno %2$d."
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Option groups"
+msgstr "Gruppi di opzioni"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Group options with rules, e.g. \"Sauce: choose 1\" or \"Toppings: up to 4, 2 included\". The cheapest choices count as included. Each option can belong to one group per product."
+msgstr "Raggruppa le opzioni con regole, ad es. «Salsa: scegli 1» o «Condimenti: fino a 4, 2 inclusi». Le scelte più economiche contano come incluse. Ogni opzione può appartenere a un solo gruppo per prodotto."
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Group name, e.g. Sauce"
+msgstr "Nome del gruppo, ad es. Salsa"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Several choices"
+msgstr "Più scelte"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "One choice"
+msgstr "Una sola scelta"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Min"
+msgstr "Min."
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Max"
+msgstr "Max."
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Included"
+msgstr "Incluse"
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Min 0 = optional, Max 0 = unlimited."
+msgstr "Min. 0 = facoltativo, max. 0 = illimitato."
+
+#: includes/modules/product-options/class-option-groups__premium_only.php
+msgid "Remove group"
+msgstr "Rimuovi gruppo"
+
+#: includes/modules/product-options/class-product-options.php
+msgid "Please check the selected options."
+msgstr "Controlla le opzioni scelte."
+
+#: includes/modules/product-options/class-product-options.php
+msgid "None"
+msgstr "Nessuna"

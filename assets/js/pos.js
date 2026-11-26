@@ -684,33 +684,20 @@
 			$body.append($group);
 		}
 
-		// Optionen rendern (alle als eine «Add-ons»-Gruppe)
-		if (productData.options && productData.options.length > 0) {
-			const $group = $('<div class="lbite-option-group lbite-addons-group"></div>');
-			$group.append($('<div class="lbite-option-group-label"></div>').text(lbitePos.strings.addons || 'Add-ons'));
-
-			productData.options.forEach(option => {
-				const inputId = 'modal_choice_' + (choiceCounter++);
-				const price   = option.choices && option.choices[0] ? parseFloat(option.choices[0].price) : 0;
-
-				const $label = $('<label class="lbite-option-choice"></label>').attr('for', inputId);
-				const $input = $('<input type="checkbox">')
-					.attr('id', inputId)
-					.attr('name', 'option_' + option.id)
-					.val(option.name)
-					.attr('data-price', price)
-					.attr('data-option-id', option.id);
-
-				$label.append($input);
-				$label.append($('<span class="lbite-option-choice-label"></span>').text(option.name));
-
-				if (price > 0) {
-					$label.append($('<span class="lbite-option-choice-price"></span>').text('+' + this.formatPrice(price)));
-				}
-
-				$group.append($label);
+		// Optionsgruppen rendern (F39): Regeln (Min/Max, inklusive Optionen)
+		// setzt die gemeinsame Bibliothek option-groups.js durch.
+		if (productData.groups && productData.groups.length > 0 && window.LBiteOptionGroups) {
+			const groupsEl = window.LBiteOptionGroups.render(productData.groups, {
+				prefix: 'lbite-option-group',
+				groupClass: 'lbite-option-group lbite-addons-group',
+				labelClass: 'lbite-option-group-label',
+				optionClass: 'lbite-option-choice',
+				nameClass: 'lbite-option-choice-label',
+				priceClass: 'lbite-option-choice-price',
+				formatPrice: (n) => this.formatPrice(n),
+				noneLabel: lbitePos.strings.none || '—'
 			});
-			$body.append($group);
+			$body.append(groupsEl);
 		}
 
 		if ($body.is(':empty')) {
@@ -747,21 +734,21 @@
 				productPrice = parseFloat(selectedVariation.data('price'));
 			}
 
-			// Meta-String und Option-IDs sammeln
+			// Optionen über die gemeinsame Bibliothek: Regeln prüfen und den
+			// Aufpreis mit inklusiven Optionen berechnen wie der Server.
 			let meta = [];
 			let optionIds = [];
-
-			// Ausgewählte Optionen
-			$('#lbite-modal-body input:checked').each(function() {
-				if ($(this).attr('name') !== 'variation') {
-					const label = $(this).val();
-					const price = parseFloat($(this).data('price') || 0);
-					const optId  = parseInt($(this).data('option-id') || 0, 10);
-					meta.push(label);
-					productPrice += price;
-					if (optId) optionIds.push(optId);
+			const groupsEl = document.querySelector('#lbite-modal-body [data-lbite-option-groups]');
+			if (groupsEl && window.LBiteOptionGroups) {
+				const selection = window.LBiteOptionGroups.collect(groupsEl);
+				if (!selection.valid) {
+					window.lbiteNotify && window.lbiteNotify.error(selection.message);
+					return;
 				}
-			});
+				meta = selection.names;
+				optionIds = selection.ids;
+				productPrice += selection.extra;
+			}
 
 			// Zum Warenkorb hinzufügen
 			const metaString = meta.length > 0 ? meta.join(', ') : '';

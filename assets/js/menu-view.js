@@ -659,22 +659,14 @@
 				);
 			}
 
-			// Zusatzoptionen
-			if ( data.options && data.options.length ) {
-				const $group = $( '<div class="lbite-menu-modal__group"></div>' );
-				$group.append( $( '<span class="lbite-menu-modal__label"></span>' ).text( lbiteMenu.strings.options ) );
-				data.options.forEach( function ( option ) {
-					const $label = $( '<label class="lbite-menu-modal__option"></label>' );
-					$label.append(
-						$( '<input type="checkbox" class="lbite-menu-modal__opt">' ).val( option.id )
-					);
-					$label.append( $( '<span></span>' ).text( option.name ) );
-					if ( option.price > 0 ) {
-						$label.append( $( '<em></em>' ).text( '+' + option.price.toFixed( 2 ) ) );
-					}
-					$group.append( $label );
+			// Zusatzoptionen als Gruppen (F39): Regeln (Min/Max, inklusive
+			// Optionen) setzt die gemeinsame Bibliothek option-groups.js durch.
+			if ( data.groups && data.groups.length && window.LBiteOptionGroups ) {
+				const groupsEl = window.LBiteOptionGroups.render( data.groups, {
+					prefix: 'lbite-menu-options',
+					noneLabel: lbiteMenu.strings.none || '—'
 				} );
-				$form.append( $group );
+				$form.append( groupsEl );
 			}
 
 			$body.append( $form );
@@ -808,12 +800,16 @@
 				}
 			}
 
-			const options = [];
-			$form.find( '.lbite-menu-modal__opt:checked' ).each( function () {
-				options.push( $( this ).val() );
-			} );
-			if ( options.length ) {
-				extra[ 'lbite_options' ] = options;
+			const groupsEl = $form.find( '[data-lbite-option-groups]' ).get( 0 );
+			if ( groupsEl && window.LBiteOptionGroups ) {
+				const selection = window.LBiteOptionGroups.collect( groupsEl );
+				if ( ! selection.valid ) {
+					self.showError( selection.message || lbiteMenu.strings.chooseOption );
+					return;
+				}
+				if ( selection.ids.length ) {
+					extra[ 'lbite_options' ] = selection.ids;
+				}
 			}
 
 			// Kein Mengenfeld mehr im Popup (Nutzer-Fund 2026-09-29): ein Klick

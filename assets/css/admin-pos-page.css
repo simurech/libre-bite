@@ -1323,3 +1323,15 @@ body.lbite-fullscreen-active #lbite-pos-cart-items {
 	font-weight: 700;
 	line-height: 1;
 }
+
+/* Optionsgruppen (F39): Regelhinweis und gesperrte Auswahl bei erreichtem Maximum. */
+.lbite-option-group__hint {
+	font-weight: 400;
+	font-size: 14px;
+	color: var(--lbite-text-muted, #646970);
+}
+
+.lbite-option-choice.is-disabled {
+	opacity: .5;
+	cursor: default;
+}

@@ -150,10 +150,23 @@ class LBite_Menu_View {
 		// 2026-09-28).
 		wp_add_inline_style( 'lbite-menu-view', LBite_Branding::get_inline_css() );
 
+		// Gemeinsame Darstellung der Optionsgruppen (F39) – auch im Gratis-Build,
+		// dort mit einer einzigen regellosen Gruppe.
+		wp_register_script(
+			'lbite-option-groups',
+			LBITE_PLUGIN_URL . 'assets/js/option-groups.js',
+			array(),
+			LBITE_VERSION,
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
+
 		wp_enqueue_script(
 			'lbite-menu-view',
 			LBITE_PLUGIN_URL . 'assets/js/menu-view.js',
-			array( 'jquery' ),
+			array( 'jquery', 'lbite-option-groups' ),
 			LBITE_VERSION,
 			// Nicht render-blockierend laden (WP 6.3+; ältere Versionen lesen das Array als in_footer = true).
 			array(
@@ -184,6 +197,7 @@ class LBite_Menu_View {
 					'chooseOption' => __( 'Please choose an option.', 'libre-bite' ),
 					'soldOut'      => __( 'Sold out', 'libre-bite' ),
 					'options'      => __( 'Options', 'libre-bite' ),
+					'none'         => __( 'None', 'libre-bite' ),
 					/* translators: %s: comma-separated list of active dietary filter labels */
 					'noMatch'      => __( 'No products in this category match the selected filter: %s', 'libre-bite' ),
 					'showOnly'     => __( 'Show only available products', 'libre-bite' ),
@@ -691,24 +705,8 @@ class LBite_Menu_View {
 			}
 		}
 
-		$options    = array();
-		$option_ids = get_post_meta( $product->get_id(), '_lbite_product_options', true );
-
-		if ( is_array( $option_ids ) ) {
-			foreach ( $option_ids as $option_id ) {
-				$option = get_post( (int) $option_id );
-
-				if ( ! $option || 'publish' !== $option->post_status ) {
-					continue;
-				}
-
-				$options[] = array(
-					'id'    => (int) $option_id,
-					'name'  => $option->post_title,
-					'price' => (float) get_post_meta( $option_id, '_lbite_price', true ),
-				);
-			}
-		}
+		// Optionen als Gruppen (F39). Ohne Pro eine regellose Gruppe «Optionen».
+		$groups = class_exists( 'LBite_Product_Options' ) ? LBite_Product_Options::get_groups_for_client( $product->get_id() ) : array();
 
 		wp_send_json_success(
 			array(
@@ -720,7 +718,7 @@ class LBite_Menu_View {
 				'type'        => $product->get_type(),
 				'attributes'  => $product->is_type( 'variable' ) ? $product->get_variation_attributes() : array(),
 				'variations'  => $variations,
-				'options'     => $options,
+				'groups'      => $groups,
 			)
 		);
 	}

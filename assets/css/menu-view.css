@@ -619,6 +619,22 @@ body .lbite-menu-view .lbite-menu-modal__title { font-size: 20px; font-weight: 7
 
 .lbite-menu-modal__option em { margin-left: auto; font-style: normal; color: var(--lbite-menu-muted); }
 
+/* Optionsgruppen (F39) – gleiche Optik wie die bisherigen Zusatzoptionen. */
+.lbite-menu-options__group { margin-bottom: 14px; }
+.lbite-menu-options__label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+.lbite-menu-options__hint { font-weight: 400; color: var(--lbite-menu-muted); }
+.lbite-menu-options__option {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 9px 0;
+	border-bottom: 1px solid var(--lbite-menu-border);
+	font-size: 15px;
+	cursor: pointer;
+}
+.lbite-menu-options__option.is-disabled { opacity: .5; cursor: default; }
+.lbite-menu-options__price { margin-left: auto; font-style: normal; color: var(--lbite-menu-muted); }
+
 .lbite-menu-modal__variation-group {
 	display: flex;
 	flex-wrap: wrap;

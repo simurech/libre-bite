@@ -31,6 +31,7 @@ if ( isset( $_POST['lbite_save_settings'] ) && check_admin_referer( 'lbite_setti
 		case 'products_options':
 			$lbite_features                            = get_option( 'lbite_features', array() );
 			$lbite_features['enable_product_options']  = isset( $_POST['lbite_feature_toggle']['enable_product_options'] );
+			$lbite_features['enable_modifier_groups']  = $lbite_premium_allowed && isset( $_POST['lbite_feature_toggle']['enable_modifier_groups'] );
 			update_option( 'lbite_features', $lbite_features );
 			$lbite_did_save = true;
 			break;

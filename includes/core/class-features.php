@@ -217,6 +217,13 @@ class LBite_Features {
 		),
 
 		// Products
+		'enable_modifier_groups'    => array(
+			'group'       => 'products',
+			'default'     => false,
+			'premium'     => true,
+			'label'       => 'Option Groups',
+			'description' => 'Option groups per product with min/max rules and included choices',
+		),
 		'enable_product_options'    => array(
 			'group'       => 'products',
 			'default'     => true,

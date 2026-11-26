@@ -115,11 +115,14 @@ class LBite_POS {
 			LBITE_VERSION
 		);
 
+		// Gemeinsame Darstellung der Optionsgruppen (F39), siehe option-groups.js.
+		wp_register_script( 'lbite-option-groups', LBITE_PLUGIN_URL . 'assets/js/option-groups.js', array(), LBITE_VERSION, true );
+
 		// POS-spezifisches JS.
 		wp_enqueue_script(
 			'lbite-pos',
 			LBITE_PLUGIN_URL . 'assets/js/pos.js',
-			array( 'jquery' ),
+			array( 'jquery', 'lbite-option-groups' ),
 			LBITE_VERSION,
 			true
 		);
@@ -178,6 +181,7 @@ class LBite_POS {
 					'loadingProductDetails' => __( 'Loading product details...', 'libre-bite' ),
 					'errorLoadingDetails'   => __( 'Error loading product details', 'libre-bite' ),
 					'addons'                => __( 'Add-ons', 'libre-bite' ),
+					'none'                  => __( 'None', 'libre-bite' ),
 					'selectVariant'         => __( 'Select variant', 'libre-bite' ),
 					'outOfStock'            => __( 'Out of stock', 'libre-bite' ),
 					'markOutOfStock'           => __( 'Mark as out of stock', 'libre-bite' ),
